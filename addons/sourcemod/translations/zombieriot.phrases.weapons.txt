@@ -454,6 +454,11 @@
 		"it"		"RPG"
 		"ko" 		"RPG"
 	}
+	"Nuke Launcher"
+	{
+		"en"		"Nuke Launcher"
+		"ko" 		"핵 발사기"
+	}
 	"Peacock's Screw Ball Cannon"
 	{
 		"en"		"Peacock's Screw Ball Cannon"
