@@ -718,7 +718,7 @@ public Action CHIMERA_OnTakeDamage(int victim, int &attacker, int &inflictor, fl
 			float VecSelfNpcabs[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", VecSelfNpcabs);
 			TE_Particle("teleported_mvm_bot", VecSelfNpcabs, _, _, npc.index, 1, 0);
 			npc.Anger = true;
-			npc.m_flChargeVulnPhase = GetGameTime(npc.index) + 10.0;
+			npc.m_flChargeVulnPhase = GetGameTime() + 10.0;
 			npc.StopPathing();
 			npc.m_bisWalking = false;
 			npc.SetActivity("ACT_MP_STAND_LOSERSTATE");
@@ -829,7 +829,7 @@ bool CHIMERA_timeBased(int iNPC)
 	}
 	if(npc.m_flStunDuration)
 	{
-		if(npc.m_flStunDuration < GetGameTime())
+		if(npc.m_flStunDuration < GetGameTime(npc.index))
 		{
 			npc.m_flStunDuration = 0.0;
 			npc.StartPathing();
@@ -1064,8 +1064,7 @@ bool CHIMERA_RefractSpawners(int iNPC)
 			vecHit[0] += GetRandomInt(-50,50);
 			int projectile = npc.FireParticleRocket(vecHit, 0.0, 700.0, 1.0, "spell_teleport_black", false,_,true, vecHitPart);
 			
-			SDKUnhook(projectile, SDKHook_StartTouch, Rocket_Particle_StartTouch);
-			SDKHook(projectile, SDKHook_StartTouch, Chimera_RefragmentedProjectileSpawner);		
+			WandProjectile_ApplyFunctionToEntity(projectile, Chimera_RefragmentedProjectileSpawner);			
 			static float ang_Look[3];
 			GetEntPropVector(projectile, Prop_Send, "m_angRotation", ang_Look);
 			Initiate_HomingProjectile(projectile,

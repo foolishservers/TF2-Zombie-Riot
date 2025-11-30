@@ -368,7 +368,7 @@ public void Ruina_NPC_OnTakeDamage_Override(int victim, int &attacker, int &infl
 	Ruina_Npc_Shield_Logic(victim, damage, damageForce, GameTime);
 	Ruina_OnTakeDamage_Extra_Logic(victim, GameTime, damage);
 }
-void Ruina_Npc_Give_Shield(int client, float strenght)
+void Ruina_Npc_Give_Shield(int client, float strenght, bool ScaleWithPlayersAlive = false)
 {
 	float GameTime = GetGameTime();
 	if(fl_ruina_shield_break_timeout[client] > GameTime && !b_ruina_buff_override[client])
@@ -390,6 +390,10 @@ void Ruina_Npc_Give_Shield(int client, float strenght)
 			Shield_Power = 0.06;
 	}
 
+	if(ScaleWithPlayersAlive)
+	{
+		Shield_Power *= NpcDoHealthRegenScaling(client);
+	}
 	GrantEntityArmor(client, false, Shield_Power, strenght, 1);
 	
 	Ruina_Update_Shield(client);
@@ -1094,7 +1098,7 @@ enum struct Ruina_Projectiles
 		if(IsValidEntity(entity))
 		{
 			this.Projectile_Index = entity;
-			SetEntPropVector(entity, Prop_Send, "m_vInitialVelocity", Velocity);
+			SetEntPropVector(entity, Prop_Data, "m_vInitialVelocity", Velocity);
 
 			fl_ruina_Projectile_dmg[entity] = this.damage;
 			fl_ruina_Projectile_radius[entity] = this.radius;
@@ -1102,39 +1106,41 @@ enum struct Ruina_Projectiles
 			Func_Ruina_Proj_Touch[entity] = Custom_Projectile_Touch;
 			
 			SetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity", this.iNPC);
-			SetEntDataFloat(entity, FindSendPropInfo("CTFProjectile_Rocket", "m_iDeflected")+4, 0.0, true);	// Damage
 			SetTeam(entity, GetTeam(this.iNPC));
+			DispatchKeyValue(entity, "model", ENERGY_BALL_MODEL);
 			
-			TeleportEntity(entity, this.Start_Loc, this.Angles, NULL_VECTOR, true);
+			TeleportEntity(entity, NULL_VECTOR, this.Angles, NULL_VECTOR, true);
+			int frame = GetEntProp(entity, Prop_Send, "m_ubInterpolationFrame");
+			Custom_SDKCall_SetLocalOrigin(entity, this.Start_Loc);
 			DispatchSpawn(entity);
-
+			SetEntPropVector(entity, Prop_Send, "m_angRotation", this.Angles); //set it so it can be used
+			SetEntPropVector(entity, Prop_Data, "m_angRotation", this.Angles); 
 			if(!this.visible)
 			{
-				for(int i; i<4; i++) //This will make it so it doesnt override its collision box.
-				{
-					SetEntProp(entity, Prop_Send, "m_nModelIndexOverrides", g_rocket_particle, _, i);
-				}
-				SetEntityModel(entity, PARTICLE_ROCKET_MODEL);
-		
-				//Make it entirely invis. Shouldnt even render these 8 polygons.
-				SetEntProp(entity, Prop_Send, "m_fEffects", GetEntProp(entity, Prop_Send, "m_fEffects") &~ EF_NODRAW);
-
-				SetEntityRenderMode(entity, RENDER_NONE); //Make it entirely invis.
-				SetEntityRenderColor(entity, 255, 255, 255, 0);
+				SetEntityModel(entity, ENERGY_BALL_MODEL);
 			}
 
-			TeleportEntity(entity, NULL_VECTOR, NULL_VECTOR, Velocity, true);
+			Hook_DHook_UpdateTransmitState(entity);
+
+			SetEntityMoveType(entity, MOVETYPE_FLY);
+		//	RunScriptCode(entity, -1, -1, "self.SetMoveType(Constants.EMoveType.MOVETYPE_FLY, Constants.EMoveCollide.MOVECOLLIDE_FLY_CUSTOM)");	//do some weird script magic?
+			Custom_SetAbsVelocity(entity, Velocity);	//set speed
+			SetEntProp(entity, Prop_Send, "m_ubInterpolationFrame", frame);
+
 			SetEntityCollisionGroup(entity, 24); //our savior
 			Set_Projectile_Collision(entity); //If red, set to 27
 
-			if(h_NpcSolidHookType[entity] != 0)
-				DHookRemoveHookID(h_NpcSolidHookType[entity]);
-			h_NpcSolidHookType[entity] = 0;
-			h_NpcSolidHookType[entity] = g_DHookRocketExplode.HookEntity(Hook_Pre, entity, Ruina_RocketExplodePre);
-		//	SDKHook(entity, SDKHook_ShouldCollide, Never_ShouldCollide);
-			SDKHook(entity, SDKHook_StartTouch, Ruina_Projectile_Touch);
+			//so they dont get stuck on entities in the air.
+			SetEntProp(entity, Prop_Send, "m_usSolidFlags", FSOLID_NOT_SOLID | FSOLID_TRIGGER); 
 
-			
+			//detection
+			SDKHook(entity, SDKHook_Think, ProjectileBaseThink);
+			SDKHook(entity, SDKHook_ThinkPost, ProjectileBaseThinkPost);
+			CBaseCombatCharacter(entity).SetNextThink(GetGameTime());
+
+			WandProjectile_ApplyFunctionToEntity(entity, Ruina_Projectile_Touch);
+
+			SDKHook(entity, SDKHook_StartTouch, Wand_Base_StartTouch);
 
 			if(this.Time>0.0)
 			{
@@ -1180,9 +1186,12 @@ enum struct Ruina_Projectiles
 	}
 	void Velocity(float Vel[3])
 	{
-		Vel[0] = Cosine(DegToRad(this.Angles[0]))*Cosine(DegToRad(this.Angles[1]))*this.speed;
-		Vel[1] = Cosine(DegToRad(this.Angles[0]))*Sine(DegToRad(this.Angles[1]))*this.speed;
-		Vel[2] = Sine(DegToRad(this.Angles[0]))*-this.speed;
+		float speed = this.speed;
+		Rogue_Paradox_ProjectileSpeed(this.iNPC, speed);
+
+		Vel[0] = Cosine(DegToRad(this.Angles[0]))*Cosine(DegToRad(this.Angles[1]))*speed;
+		Vel[1] = Cosine(DegToRad(this.Angles[0]))*Sine(DegToRad(this.Angles[1]))*speed;
+		Vel[2] = Sine(DegToRad(this.Angles[0]))*-speed;
 	}
 }
 void Ruina_Projectile_Touch(int entity, int target)
@@ -1241,10 +1250,6 @@ void Ruina_Remove_Projectile(int entity)
 		RemoveEntity(particle);
 	}
 	RemoveEntity(entity);
-}
-public MRESReturn Ruina_RocketExplodePre(int entity)
-{
-	return MRES_Supercede;	//Don't even think about it mate
 }
 enum struct Ruina_Self_Defense
 {
@@ -1488,7 +1493,10 @@ static void Apply_Sickness(int iNPC, int Target)
 	//Ruina_Proper_To_Groud_Clip({24.0,24.0,24.0}, 300.0, end_point);
 
 	float Thickness = 6.0;
-	TE_SetupBeamRingPoint(end_point, Radius*2.0, 0.0, g_Ruina_BEAM_Laser, g_Ruina_HALO_Laser, 0, 1, time, Thickness, 0.75, color, 1, 0);
+	int Tempcolor[4];
+	Tempcolor = color;
+	Tempcolor [3] = 80;
+	TE_SetupBeamRingPoint(end_point, Radius*2.0, 0.0, g_Ruina_BEAM_Laser, g_Ruina_HALO_Laser, 0, 1, time, Thickness, 0.75, Tempcolor, 1, 0);
 	TE_SendToAll();
 	TE_SetupBeamRingPoint(end_point, Radius*2.0, Radius*2.0+0.5, g_Ruina_BEAM_Laser, g_Ruina_HALO_Laser, 0, 1, time, Thickness, 0.1, color, 1, 0);
 	TE_SendToAll();
@@ -1551,7 +1559,10 @@ Action Ruina_Mana_Sickness_Ion(Handle Timer, DataPack data)
 	float dmg 		= data.ReadFloat();
 
 	float Thickness = 6.0;
-	TE_SetupBeamRingPoint(end_point, 0.0, Radius*2.0, g_Ruina_BEAM_Laser, g_Ruina_HALO_Laser, 0, 1, 0.75, Thickness, 0.75, color, 1, 0);
+	int Tempcolor[4];
+	Tempcolor = color;
+	Tempcolor [3] = 80;
+	TE_SetupBeamRingPoint(end_point, 0.0, Radius*2.0, g_Ruina_BEAM_Laser, g_Ruina_HALO_Laser, 0, 1, 0.25, Thickness, 0.75, Tempcolor, 1, 0);
 	TE_SendToAll();
 
 	
@@ -1676,7 +1687,7 @@ Action Ruina_Generic_Ion(Handle Timer, DataPack data)
 		Ruina_AOE_Add_Mana_Sickness(end_point, iNPC, Radius, Sickness_Multi, Sickness_flat,Override);
 
 	float Thickness = 6.0;
-	TE_SetupBeamRingPoint(end_point, 0.0, Radius*2.0, g_Ruina_BEAM_Laser, g_Ruina_HALO_Laser, 0, 1, 0.75, Thickness, 0.75, color, 1, 0);
+	TE_SetupBeamRingPoint(end_point, 0.0, Radius*2.0, g_Ruina_BEAM_Laser, g_Ruina_HALO_Laser, 0, 1, 0.25, Thickness, 0.75, color, 1, 0);
 	TE_SendToAll();
 
 
@@ -1688,9 +1699,9 @@ Action Ruina_Generic_Ion(Handle Timer, DataPack data)
 		
 	int laser;
 	laser = ConnectWithBeam(-1, -1, color[0], color[1], color[2], 7.0, 7.0, 1.0, BEAM_COMBINE_BLACK, end_point, Sky_Loc);
-	CreateTimer(1.5, Timer_RemoveEntity, EntIndexToEntRef(laser), TIMER_FLAG_NO_MAPCHANGE);
+	CreateTimer(1.0, Timer_RemoveEntity, EntIndexToEntRef(laser), TIMER_FLAG_NO_MAPCHANGE);
 	laser = ConnectWithBeam(-1, -1, color[0], color[1], color[2], 5.0, 5.0, 0.1, LASERBEAM, end_point, Sky_Loc);
-	CreateTimer(1.5, Timer_RemoveEntity, EntIndexToEntRef(laser), TIMER_FLAG_NO_MAPCHANGE);
+	CreateTimer(1.0, Timer_RemoveEntity, EntIndexToEntRef(laser), TIMER_FLAG_NO_MAPCHANGE);
 
 	int particle = ParticleEffectAt(Sky_Loc, "kartimpacttrail", 1.0);
 	SetEdictFlags(particle, (GetEdictFlags(particle) | FL_EDICT_ALWAYS));	

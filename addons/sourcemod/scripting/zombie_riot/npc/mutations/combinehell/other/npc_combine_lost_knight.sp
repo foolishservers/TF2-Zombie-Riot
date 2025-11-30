@@ -162,14 +162,14 @@ methodmap LostKnight < CClotBody
 	
 	public LostKnight(float vecPos[3], float vecAng[3], int ally)
 	{
-		LostKnight npc = view_as<LostKnight>(CClotBody(vecPos, vecAng, COMBINE_CUSTOM_MODEL, "1.15", "90000", ally));
+		LostKnight npc = view_as<LostKnight>(CClotBody(vecPos, vecAng, COMBINE_CUSTOM_2_MODEL, "1.15", "90000", ally));
 		
 		i_NpcWeight[npc.index] = 2;
 		
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		SetVariantInt(1);
 		AcceptEntityInput(npc.index, "SetBodyGroup");			
-		int iActivity = npc.LookupActivity("ACT_TEUTON_NEW_WALK");
+		int iActivity = npc.LookupActivity("ACT_TEUTON_WALK_NEW");
 		if(iActivity > 0) npc.StartActivity(iActivity);
 		
 		npc.m_flNextMeleeAttack = 0.0;
@@ -257,7 +257,7 @@ public void LostKnight_ClotThink(int iNPC)
 			float DurationGive = 9999.0;
 			npc.m_flMeleeArmor = 0.25;
 			npc.m_flRangedArmor = 0.25;
-			ApplyStatusEffect(npc.index, npc.index, "Combine Command", DurationGive);
+			ApplyStatusEffect(npc.index, npc.index, "Mazeat Command", DurationGive);
 			ApplyStatusEffect(npc.index, npc.index, "War Cry", DurationGive);
 			ApplyStatusEffect(npc.index, npc.index, "Defensive Backup", DurationGive);
 			ApplyStatusEffect(npc.index, npc.index, "Godly Motivation", DurationGive);
@@ -285,7 +285,7 @@ public void LostKnight_ClotThink(int iNPC)
 		{
 			if(GetTeam(npc.index) == GetTeam(entitycount))
 			{
-				ApplyStatusEffect(npc.index, entitycount, "Combine Command", DurationGive);
+				ApplyStatusEffect(npc.index, entitycount, "Mazeat Command", DurationGive);
 				ApplyStatusEffect(npc.index, entitycount, "War Cry", DurationGive);
 				ApplyStatusEffect(npc.index, entitycount, "Defensive Backup", DurationGive);
 			}
@@ -303,7 +303,7 @@ public void LostKnight_ClotThink(int iNPC)
 	
 	if(npc.m_blPlayHurtAnimation)
 	{
-		npc.AddGesture("ACT_GESTURE_FLINCH_HEAD", false);
+		npc.AddGesture("ACT_HURT", false);
 		npc.m_blPlayHurtAnimation = false;
 		npc.PlayHurtSound();
 	}
@@ -363,7 +363,10 @@ public void LostKnight_ClotThink(int iNPC)
 					if (!npc.m_flAttackHappenswillhappen)
 					{
 						npc.m_flNextRangedSpecialAttack = GetGameTime(npc.index) + 2.0;
-						npc.AddGesture("ACT_MP_ATTACK_STAND_ITEM1");
+						if(!ShouldNpcDealBonusDamage(npc.m_iTarget))
+							npc.AddGesture("ACT_TEUTON_ATTACK_NEW", _,_,_, 1.1);
+						else
+							npc.AddGesture("ACT_TEUTON_ATTACK_CADE_NEW", _,_,_, 1.1);
 						npc.PlayMeleeSound();
 						npc.m_flAttackHappens = GetGameTime(npc.index)+0.4;
 						npc.m_flAttackHappens_bullshit = GetGameTime(npc.index)+0.54;

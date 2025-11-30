@@ -29,14 +29,6 @@ static char g_RangedReloadSound[][] = {
 
 void GiantRegeneration_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_DefaultMedic_DeathSounds));	   i++) { PrecacheSound(g_DefaultMedic_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_DefaultMedic_HurtSounds));		i++) { PrecacheSound(g_DefaultMedic_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeAttackSounds)); i++) { PrecacheSound(g_MeleeAttackSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds)); i++) { PrecacheSound(g_MeleeHitSounds[i]); }
-	for (int i = 0; i < (sizeof(g_RangedAttackSounds));   i++) { PrecacheSound(g_RangedAttackSounds[i]);   }
-	for (int i = 0; i < (sizeof(g_RangedReloadSound));   i++) { PrecacheSound(g_RangedReloadSound[i]);   }
-	PrecacheModel("models/player/medic.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Hijacked Red Pill");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_giant_regeneration");
@@ -45,7 +37,19 @@ void GiantRegeneration_OnMapStart_NPC()
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS;
 	data.Category = Type_Matrix;
 	data.Func = ClotSummon;
+	data.Precache = ClotPrecache;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
+	for (int i = 0; i < (sizeof(g_MeleeAttackSounds)); i++) { PrecacheSound(g_MeleeAttackSounds[i]); }
+	for (int i = 0; i < (sizeof(g_MeleeHitSounds)); i++) { PrecacheSound(g_MeleeHitSounds[i]); }
+	for (int i = 0; i < (sizeof(g_RangedAttackSounds));   i++) { PrecacheSound(g_RangedAttackSounds[i]);   }
+	for (int i = 0; i < (sizeof(g_RangedReloadSound));   i++) { PrecacheSound(g_RangedReloadSound[i]);   }
+	
+	Matrix_Shared_CorruptionPrecache();
 }
 
 
@@ -214,7 +218,7 @@ public void GiantRegeneration_ClotThink(int iNPC)
 			vecTarget2[2] += 300.0;
 			ApplyStatusEffect(npc.index, npc.index, "Hussar's Warscream", 10.0);
 			ApplyStatusEffect(npc.index, npc.index, "Ally Empowerment", 10.0);
-			ApplyStatusEffect(npc.index, npc.index, "Combine Command", 10.0);
+			ApplyStatusEffect(npc.index, npc.index, "Mazeat Command", 10.0);
 			ApplyStatusEffect(npc.index, npc.index, "Defensive Backup", 10.0);
 			npc.m_flRangedArmor = 0.65;
 			npc.m_flMeleeArmor = 0.65;
@@ -225,7 +229,7 @@ public void GiantRegeneration_ClotThink(int iNPC)
 			vecTarget2[2] += 300.0;
 			ApplyStatusEffect(npc.index, npc.index, "Hussar's Warscream", 10.0);
 			ApplyStatusEffect(npc.index, npc.index, "Ally Empowerment", 10.0);
-			ApplyStatusEffect(npc.index, npc.index, "Combine Command", 10.0);
+			ApplyStatusEffect(npc.index, npc.index, "Mazeat Command", 10.0);
 			ApplyStatusEffect(npc.index, npc.index, "Defensive Backup", 10.0);
 			ApplyStatusEffect(npc.index, npc.index, "Oceanic Scream", 10.0);
 			ApplyStatusEffect(npc.index, npc.index, "War Cry", 10.0);
@@ -238,7 +242,7 @@ public void GiantRegeneration_ClotThink(int iNPC)
 			vecTarget2[2] += 300.0;
 			ApplyStatusEffect(npc.index, npc.index, "Hussar's Warscream", 10.0);
 			ApplyStatusEffect(npc.index, npc.index, "Ally Empowerment", 10.0);
-			ApplyStatusEffect(npc.index, npc.index, "Combine Command", 10.0);
+			ApplyStatusEffect(npc.index, npc.index, "Mazeat Command", 10.0);
 			ApplyStatusEffect(npc.index, npc.index, "Defensive Backup", 10.0);
 			ApplyStatusEffect(npc.index, npc.index, "False Therapy", 10.0);
 			npc.m_flRangedArmor = 0.40;

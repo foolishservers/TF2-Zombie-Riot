@@ -1244,6 +1244,7 @@ void Store_PackMenu(int client, int index, int owneditemlevel = -1, int owner, b
 	if(!IsValidClient(client))
 		return;
 		
+	CheckClientLateJoin(client);
 	if(index > 0)
 	{
 		PapPreviewMode[client] = Preview;
@@ -1274,7 +1275,11 @@ void Store_PackMenu(int client, int index, int owneditemlevel = -1, int owner, b
 						cash = maxCash;
 					}
 					char buf[84];
-					if(PapPreviewMode[client])
+					if(!Preview && !b_AntiLateSpawn_Allow[client])
+					{
+						Format(buf, sizeof(buf), "%T", "Late Join Pap Menu", client);
+					}
+					else if(PapPreviewMode[client])
 					{
 						Format(buf, sizeof(buf), "%T", "Preview Mode Pap", client);
 						cash = 999999;
@@ -1481,6 +1486,8 @@ public int Store_PackMenuH(Menu menu, MenuAction action, int client, int choice)
 						owner = EntRefToEntIndex(values[2]);
 						if(IsValidClient(owner))
 							Building_GiveRewardsUse(client, owner, 150, true, 4.0, true);
+							
+						CheckClientLateJoin(client);
 					}
 				}
 				
@@ -2734,8 +2741,8 @@ void Store_RandomizeNPCStore(int StoreFlags, int addItem = 0, float override = -
 	//If we are in unlock mode, i.e. rogue2, then we want to have a minimim cash amount.
 	if(unlock)
 	{
-		if(GrigoriCashLogic < 5000)
-			GrigoriCashLogic = 5000;
+		if(GrigoriCashLogic < 3700)
+			GrigoriCashLogic = 3700;
 	}
 
 	
@@ -2830,7 +2837,7 @@ void Store_RandomizeNPCStore(int StoreFlags, int addItem = 0, float override = -
 					if(!item.NPCSeller && !item.RogueAlwaysSell)
 					{
 						item.GetItemInfo(0, info);
-						if(info.Cost > 0 && info.Cost_Unlock < (GrigoriCashLogic / 4))
+						if(info.Cost > 0 && info.Cost_Unlock < (GrigoriCashLogic / 3))
 							indexes[amount++] = i;
 					}
 					//if we assume a sale like this is happening, thenwe must reset all previously sold items!
@@ -3023,6 +3030,12 @@ void Store_Menu(int client)
 	}
 	else if(StoreItems && !IsVoteInProgress() && !Waves_CallVote(client))
 	{
+		if(BetWar_Mode())
+		{
+			RTSCamera_ShowMenu(client, 0);
+			return;
+		}
+
 		NPCOnly[client] = 0;
 		
 		if(ClientTutorialStep(client) == 1)
@@ -3073,6 +3086,41 @@ void Store_OpenGiftStore(int client, int entity, int price, bool barney)
 	}
 }*/
 
+
+int PassClientBoughtLateGame(int client)
+{
+
+	int CashUsedMust = RoundToNearest(float(CurrentCash) * 0.5);
+	if(CashUsedMust >= 40000)
+	{
+		//if they spend atleast 40k, allow at all times, this is beacuse there are sometimes wavesets
+		//or meme modes that give like a googleplex cash
+		CashUsedMust = 40000;
+	}
+
+	//enough cash was thrown away.
+	return (CashUsedMust - CashSpentTotal[client]);
+}
+
+void CheckClientLateJoin(int client, bool RespawnClient = true)
+{
+	if(b_AntiLateSpawn_Allow[client])
+		return;
+	//they joined late, make sure they buy something.
+
+	if(PassClientBoughtLateGame(client) > 0)
+		return;
+	b_AntiLateSpawn_Allow[client] = true;
+	//allow them to play.
+	if(!RespawnClient)
+		return;
+		
+	if(!Waves_Started())
+		DHook_RespawnPlayer(client);
+	else if(Waves_InSetup())
+		DHook_RespawnPlayer(client);
+
+}
 static void MenuPage(int client, int section)
 {
 	if(dieingstate[client] > 0) //They shall not enter the store if they are downed.
@@ -3092,6 +3140,7 @@ static void MenuPage(int client, int section)
 		CashSpent[client] = 0;
 		starterPlayer = false;
 	}
+	CheckClientLateJoin(client);
 	
 	if(CurrentMenuItem[client] != section)
 	{
@@ -3319,8 +3368,30 @@ static void MenuPage(int client, int section)
 
 					bool CanBePapped = false;
 					ItemInfo info2;
-					if(item.GetItemInfo(level, info2))
-						CanBePapped = true;
+
+					//allow inspecting kit children
+					if(item.ParentKit)
+					{
+						static Item subItem;
+						int length = StoreItems.Length;
+						for(int i; i < length; i++)
+						{
+							StoreItems.GetArray(i, subItem);
+							if(subItem.Section == section /*this is also just item index?*/)
+							{
+								if(subItem.GetItemInfo(level, info2))
+								{
+									CanBePapped = true;
+									break;
+								}
+							}
+						}
+					}
+					else
+					{
+						if(item.GetItemInfo(level, info2))
+							CanBePapped = true;
+					}
 					
 					bool tinker = Blacksmith_HasTinker(client, section);
 					
@@ -3743,7 +3814,7 @@ static void MenuPage(int client, int section)
 					}
 					else if(!item.WhiteOut && Rogue_UnlockStore() && !item.NPCSeller && !item.RogueAlwaysSell && !CvarInfiniteCash.BoolValue)
 					{
-						Format(buffer, sizeof(buffer), "%s [↓]", info.Custom_Name);
+						Format(buffer, sizeof(buffer), "%s [↑]", info.Custom_Name);
 					}
 					else if(!item.WhiteOut && info.Cost_Unlock > 1000 && !Rogue_UnlockStore() && info.Cost_Unlock > CurrentCash)
 					{
@@ -4145,6 +4216,7 @@ public int Store_MenuPage(Menu menu, MenuAction action, int client, int choice)
 					}
 					case -13:
 					{
+						c_WeaponUseAbilitiesHud[client][0] = 0;
 						Items_EncyclopediaMenu(client);
 					}
 					case -100:
@@ -4411,7 +4483,7 @@ public int Store_MenuItemInt(Menu menu, MenuAction action, int client, int choic
 						GetEntPropVector(client, Prop_Data, "m_vecAbsOrigin", VecOrigin);
 						VecOrigin[2] += 45.0;
 
-						Stock_SpawnGift(VecOrigin, GIFT_MODEL, 45.0, info.UnboxRarity -1); //since they are one lower
+						Stock_SpawnGift(VecOrigin, GIFT_MODEL, 45.0, view_as<ZRGiftRarity>(info.UnboxRarity -1)); //since they are one lower
 						
 						if(!CvarInfiniteCash.BoolValue)
 						{
@@ -4688,14 +4760,42 @@ public int Store_MenuItemInt(Menu menu, MenuAction action, int client, int choic
 
 					item.GetItemInfo(0, info);
 					int level = item.Owned[client];
+					bool OwnedBefore = view_as<bool>(item.Owned[client]);
 					if(level < 1 || NPCOnly[client] == 2 || NPCOnly[client] == 3)
 						level = 1;
 
 					//can be papped ? See if yes
 					ItemInfo info2;
-					if(item.GetItemInfo(level, info2))
+
+					//allow inspecting kit children
+					if(item.ParentKit)
 					{
-						Store_PackMenu(client, index, level, client, true);
+						static Item subItem;
+						int length = StoreItems.Length;
+						for(int i; i < length; i++)
+						{
+							StoreItems.GetArray(i, subItem);
+							if(subItem.Section == index)
+							{
+								if(subItem.GetItemInfo(level, info2))
+								{
+									if(!b_AntiLateSpawn_Allow[client] && OwnedBefore)
+										Store_PackMenu(client, i, level, client, false);
+									else
+										Store_PackMenu(client, i, level, client, true);
+
+									return 0;
+								}
+							}
+						}
+					}
+					else if(item.GetItemInfo(level, info2))
+					{
+						if(!b_AntiLateSpawn_Allow[client] && OwnedBefore)
+							Store_PackMenu(client, index, level, client, false);
+						else
+							Store_PackMenu(client, index, level, client, true);
+
 						return 0;
 					}
 				}
@@ -4939,25 +5039,7 @@ public int Store_LoadoutItem(Menu menu, MenuAction action, int client, int choic
 
 public bool Store_SayCommand(int client)
 {
-	/*
-	if(Level[client] < 5)
-	{
-		char buffer1[64], buffer2[256];
-		GetCmdArgString(buffer1, sizeof(buffer1));
-		strcopy(buffer2, sizeof(buffer2), "Basic Wand");
-		if(StrContains(buffer1, buffer2, false) != -1 || StrContains(buffer1, TranslateItemDescription(client, buffer2, ""), false) != -1)
-		{
-			XP[client] = LevelToXp(5);
-			Level[client] = 0; //Just incase.
-			Native_ZR_OnGetXP(client, XP[client], 1);
-			GiveXP(client, 0);
 
-			CancelClientMenu(client);
-			TutorialEndFully(client);
-			return true;
-		}
-	}
-	*/
 	if(!InLoadoutMenu[client])
 		return false;
 	
@@ -5232,7 +5314,7 @@ void Store_ApplyAttribs(int client)
 							{
 								map.SetValue(buffer1, info.Value2[a]);
 							}
-							else if(info.Attrib2[a] < 0 || info.Attrib2[a]==26 || (Attribute_IntAttribute(info.Attrib[a]) || (TF2Econ_GetAttributeDefinitionString(info.Attrib[a], "description_format", info.Classname, sizeof(info.Classname)) && StrContains(info.Classname, "additive")!=-1)))
+							else if(info.Attrib2[a] < 0 || info.Attrib2[a]==26 || (Attribute_IntAttribute(info.Attrib2[a]) || (TF2Econ_GetAttributeDefinitionString(info.Attrib2[a], "description_format", info.Classname, sizeof(info.Classname)) && StrContains(info.Classname, "additive")!=-1)))
 							{
 								map.SetValue(buffer1, value + info.Value2[a]);
 							}
@@ -5344,7 +5426,6 @@ void Store_GiveAll(int client, int health, bool removeWeapons = false)
 
 void Store_GiveAllInternal(int client, int health, bool removeWeapons = false)
 {
-	b_HasBeenHereSinceStartOfWave[client] = false;
 	TF2_RemoveCondition(client, TFCond_Taunting);
 	PreMedigunCheckAntiCrash(client);
 	if(!StoreItems)
@@ -5367,7 +5448,6 @@ void Store_GiveAllInternal(int client, int health, bool removeWeapons = false)
 
 	if(removeWeapons)
 	{
-		b_HasBeenHereSinceStartOfWave[client] = true; //If they arent a teuton!
 		TF2_RegeneratePlayer(client);
 		Manual_Impulse_101(client, health);
 		return;
@@ -5382,7 +5462,6 @@ void Store_GiveAllInternal(int client, int health, bool removeWeapons = false)
 	{
 		Store_RemoveSpecificItem(client, "Teutonic Longsword", false);
 	}
-	b_HasBeenHereSinceStartOfWave[client] = true; //If they arent a teuton!
 	//OverridePlayerModel(client);
 	//stickies can stay, we delete any non spike stickies.
 	for( int i = 1; i <= MAXENTITIES; i++ ) 
@@ -6200,6 +6279,7 @@ int Store_GiveItem(int client, int index, bool &use=false, bool &found=false)
 		Flagellant_Enable(client, entity);
 		Enable_Impact_Lance(client, entity);
 		Enable_Trash_Cannon(client, entity);
+		Enable_Raigeki(client, entity);
 		Enable_TornadoBlitz(client, entity);
 		Enable_Rusty_Rifle(client, entity);
 		Enable_Blitzkrieg_Kit(client, entity);
@@ -6236,6 +6316,9 @@ int Store_GiveItem(int client, int index, bool &use=false, bool &found=false)
 		Medigun_SetModeDo(client, entity);
 		Cheese_Enable(client, entity);
 		Ritualist_Enable(client, entity);
+		Enable_Sigil_Blade(client, entity);
+		Enable_KitOmega(client, entity);
+		Enable_PurgeKit(client, entity);
 
 		//give all revelant things back
 		WeaponSpawn_Reapply(client, entity, StoreWeapon[entity]);
@@ -6274,7 +6357,7 @@ int Store_GiveSpecificItem(int client, const char[] name)
 	return -1;
 }
 
-void Store_RemoveSpecificItem(int client, const char[] name, bool UpdateSlots = false)
+void Store_RemoveSpecificItem(int client, const char[] name, bool UpdateSlots = false, int CompareWeaponArray = -1)
 {
 	if(!StoreItems)
 		return;
@@ -6284,7 +6367,7 @@ void Store_RemoveSpecificItem(int client, const char[] name, bool UpdateSlots = 
 	for(int i; i<length; i++)
 	{
 		StoreItems.GetArray(i, item);
-		if(StrEqual(name, item.Name, false))
+		if(StrEqual(name, item.Name, false) || CompareWeaponArray == i)
 		{
 			static ItemInfo info;
 			item.GetItemInfo(0, info);
@@ -6554,6 +6637,11 @@ static void ItemCost(int client, Item item, int &cost)
 		{
 			cost = RoundToCeil(float(cost) * 0.7);
 		}
+		return;
+	}
+	if(!b_AntiLateSpawn_Allow[client])
+	{
+		//if they are joining late, give them no sales.
 		return;
 	}
 		

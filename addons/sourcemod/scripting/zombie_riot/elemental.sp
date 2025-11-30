@@ -13,6 +13,7 @@ enum				// Types
 	Element_Burger,		// 7
 	Element_Plasma,		// 8
 	Element_Warped,		// 9
+	Element_ManaOverflow,		// 10
 
 	Element_MAX
 }
@@ -28,7 +29,8 @@ static const char ElementName[][] =
 	"CO",
 	"FOOD",
 	"PL",
-	"WW"
+	"WW",
+	"MO"
 };
 
 static float LastTime[MAXENTITIES];
@@ -1060,7 +1062,7 @@ void Elemental_AddCorruptionDamage(int victim, int attacker, int damagebase, boo
 	}
 }
 
-static char g_Agent_Summons[][] =
+static const char g_Agent_Summons[][] =
 {
 	//wave 1-19 | 0-6
 	"npc_agent_john",
@@ -1157,6 +1159,18 @@ static void Matrix_Spawning(int entity, int count)
 		Waves_AddNextEnemy(enemy);
 	}
 	Zombies_Currently_Still_Ongoing += count;
+}
+
+void Matrix_Shared_CorruptionPrecache()
+{
+	if (g_PrecachedMatrixNPCs)
+		return;
+	
+	g_PrecachedMatrixNPCs = true;
+	
+	// This needs to be added to precache for every enemy that deals matrix corruption damage, so downloads of summons still go through properly when they show up in non-Raid Rush gamemodes
+	for (int i = 0; i < sizeof(g_Agent_Summons); i++)
+		NPC_GetByPlugin(g_Agent_Summons[i]);
 }
 
 void Elemental_AddBurgerDamage(int victim, int attacker, int damagebase)
@@ -1298,7 +1312,12 @@ void Elemental_AddPlasmicDamage(int victim, int attacker, int damagebase, int we
 		{
 			int trigger = Elemental_TriggerDamage(victim, Element_Plasma);
 			int newdmg = RoundToNearest(float(damage) * Cheese_GetPenalty(victim));
+
+			//if(b_thisNpcIsARaid[victim]) // was thinking but i'll just leave it here for later if needed
+				//newdmg += (newdmg * 0.15);
+
 			damage = newdmg;
+
 			LastTime[victim] = GetGameTime();
 			LastElement[victim] = Element_Plasma;
 			ElementDamage[victim][Element_Plasma] += damage;
@@ -1307,10 +1326,13 @@ void Elemental_AddPlasmicDamage(int victim, int attacker, int damagebase, int we
 				ElementDamage[victim][Element_Plasma] = 0;
 				float position[3];
 				GetEntPropVector(victim, Prop_Data, "m_vecAbsOrigin", position);
-				float meleepenalty = (b_thisNpcIsARaid[victim] ? 0.85 : 0.75);
-				float rangedpenalty = (b_thisNpcIsARaid[victim] ? 0.65 : 0.5);
-				float duration = (melee ? 2.0 : (b_thisNpcIsARaid[victim] ? 4.0 : 8.0));
+				float meleepenalty = (HasSpecificBuff(attacker, "Plasmatic Rampage") ? 0.9 : (b_thisNpcIsARaid[victim] ? 0.85 : 0.75));
+				float rangedpenalty = (HasSpecificBuff(attacker, "Plasmatic Rampage") ? 0.9 : (b_thisNpcIsARaid[victim] ? 0.65 : 0.5));
+				float duration = (HasSpecificBuff(attacker, "Plasmatic Rampage") ? 0.1 : (melee ? 2.0 : (b_thisNpcIsARaid[victim] ? 4.0 : 8.0)));
 				float healing = 20.0; // bleh
+				float Range = 200.0;
+				healing *= 0.75;
+				Range *= 1.25;
 
 				if(!b_NpcHasDied[attacker])
 				{
@@ -1320,25 +1342,23 @@ void Elemental_AddPlasmicDamage(int victim, int attacker, int damagebase, int we
 				{
 					if(IsValidEntity(weapon))
 					{
-						if(Attributes_Get(weapon, Attrib_PapNumber, 0.0) > 0)
-							healing *= Attributes_Get(weapon, Attrib_PapNumber, 0.0);
-
-						healing *= Attributes_GetOnWeapon(attacker, weapon, 8, true);
-						if(HasSpecificBuff(attacker, "Plasmatic Rampage"))
-						{
-							meleepenalty = 0.95;
-							rangedpenalty = 0.9;
-							duration = 0.1;
-						}
+						healing *= Attributes_GetOnPlayer(attacker, 8, true);
 					}
 				}
+
+				if(b_thisNpcIsARaid[victim])
+				{
+					healing *= 1.35;
+					Range += (Range *= 0.25);
+				}
+
 				Cheese_SetPenalty(victim, (melee ? meleepenalty : rangedpenalty));
 				f_ArmorCurrosionImmunity[victim][Element_Plasma] = GetGameTime() + duration;
-				PlasmicElemental_HealNearby(attacker, healing, position, 200.0, 0.5, 2, GetTeam(attacker));
+				PlasmicElemental_HealNearby(attacker, healing, position, Range, 0.5, 2, GetTeam(attacker));
 				position[2] += 10.0;
 				for(int i = 0; i < 2; i++)
 				{
-					Cheese_BeamEffect(position, 10.0, 250.0, 0.2, 3.0);
+					Cheese_BeamEffect(position, 10.0, Range, 0.2, 3.0);
 					position[2] += 32.5;
 				}
 				Cheese_PlaySplat(victim);
@@ -1368,10 +1388,7 @@ void Elemental_AddPlasmicDamage(int victim, int attacker, int damagebase, int we
 				{
 					if(IsValidEntity(weapon))
 					{
-						if(Attributes_Get(weapon, Attrib_PapNumber, 0.0) > 0)
-							healing *= Attributes_Get(weapon, Attrib_PapNumber, 0.0);
-
-						healing *= Attributes_GetOnWeapon(attacker, weapon, 8, true);
+						healing *= Attributes_GetOnPlayer(attacker, 8, true);
 					}
 				}
 				PlasmicElemental_HealNearby(attacker, healing, position, 200.0, 1.0, 2, GetTeam(attacker));
@@ -1582,4 +1599,91 @@ static void Warped_ClientDoEffets(int client)
 	{
 		SetEntProp(entity, Prop_Send, "m_fEffects", GetEntProp(entity, Prop_Send, "m_fEffects") | EF_NODRAW);
 	}
+}
+
+bool Elemental_AddManaOverflowDamage(int victim, int attacker, int damagebase, int type)
+{
+	//return true means this damage triggered mana overflow
+	//whicn means you can custom what else you can do when mana overflow triggered
+	//mana overflow will only trigger silenced and paralysis here
+	bool triggered = false;
+	int trigger = Elemental_TriggerDamage(victim, Element_ManaOverflow);
+	if(i_IsVehicle[victim])
+	{
+		victim = Vehicle_Driver(victim);
+		if(victim == -1)
+			return false;
+	}
+	
+	//if(b_NpcIsInvulnerable[victim])
+	//	return;
+	
+	int damage = RoundFloat(damagebase * fl_Extra_Damage[attacker]);
+	if(NpcStats_ElementalAmp(victim))
+	{
+		damage = RoundToNearest(float(damage) * 1.3);
+	}
+	if(!b_NpcHasDied[victim])	// NPCs
+	{
+		//players got their own Overmana Overload, so this is mainly targeted at npcs
+		damage -= RoundFloat(damage * GetEntPropFloat(victim, Prop_Data, "m_flElementRes", Element_ManaOverflow));
+		//damage -= fl_ruina_battery_max[victim] * 0.1;
+		if(fl_ruina_battery_max[victim] < 10000.0)
+			damage -= RoundToNearest(damage * (fl_ruina_battery_max[victim] / 20000.0));
+		else
+			damage -= RoundToNearest(damage * 0.4);
+		//most ruina npcs got less than 5000 max battery(some got 6000),no ruina npcs got more than 10000 max battery
+		//ruina raid bosses got 1000000.0 max battery
+		
+		/*
+		no need for further balance as elemental got its own balance
+		
+		if(b_thisNpcIsARaid[victim] || b_thisNpcIsABoss[victim])
+			damage = RoundToNearest(damage * 0.75);
+		if(b_thisNpcIsARaid[victim])
+			damage = RoundToNearest(damage * 0.5);
+		*/
+		
+		if(damage < 1)
+			return false;
+		
+		if(f_ArmorCurrosionImmunity[victim][Element_ManaOverflow] < GetGameTime())
+		{
+			LastTime[victim] = GetGameTime();
+			LastElement[victim] = Element_ManaOverflow;
+			ElementDamage[victim][Element_ManaOverflow] += damage;
+			if(ElementDamage[victim][Element_ManaOverflow] > trigger)
+			{
+				ElementDamage[victim][Element_ManaOverflow] = 0;
+				f_ArmorCurrosionImmunity[victim][Element_ManaOverflow] = GetGameTime() + (9.5 + (type * 0.5));
+				float duration;
+				if(b_thisNpcIsARaid[victim] || b_thisNpcIsABoss[victim])
+					duration = 1.0;
+				else
+					duration = 3.0;
+				ApplyStatusEffect(attacker,victim,"Silenced",duration * 2.0);
+				ApplyStatusEffect(attacker,victim,"Paralysis",duration);
+
+				triggered = true;
+			}
+
+			if(attacker && attacker <= MaxClients)
+				ApplyElementalEvent(victim, attacker, damage);
+		}
+		else
+		{
+			float speedUp = 0.05 * damage * 0.01 + (type * 0.05);
+			if(speedUp < 0.1)
+				speedUp = 0.0;
+			if(speedUp > 1.0)
+				speedUp = 1.0;
+			if(speedUp > 0.0)
+				f_ArmorCurrosionImmunity[victim][Element_ManaOverflow] -= speedUp;
+		}
+	}
+	else if(i_IsABuilding[victim])	// Buildings
+	{
+		IncreaseEntityDamageTakenBy(victim, (damage * 0.001), 5.0, true);
+	}
+	return triggered;
 }

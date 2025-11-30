@@ -388,6 +388,7 @@ methodmap Vincent < CClotBody
 			strcopy(music.Name, sizeof(music.Name), "CREATION OF HATRED");
 			strcopy(music.Artist, sizeof(music.Artist), "Exedious");
 			Music_SetRaidMusic(music);
+			RaidModeTime = GetGameTime() + 220.0;
 		}
 		else
 		{
@@ -869,6 +870,18 @@ public void Vincent_NPCDeath(int entity)
 		RemoveEntity(npc.m_iWearable5);
 	npc.StopPassiveSound();
 	
+	//delete all beacons on death
+	int a, entity1;
+	//slay previous bacons
+	while((entity1 = FindEntityByNPC(a)) != -1)
+	{
+		if(IsValidEntity(entity1) && i_NpcInternalId[entity1] == VincentBeaconID())
+		{
+			b_DissapearOnDeath[entity1] = true;
+			b_DoGibThisNpc[entity1] = true;
+			SmiteNpcToDeath(entity1);
+		}
+	}
 	ClearCustomFog(FogType_NPC);
 }
 
@@ -1736,7 +1749,7 @@ void VincentSpawnBeacons(int iNPC)
 	float distancelimit = VINCENT_MINIMUM_RANGE_BEACONS;
 	if(npc.Anger)
 	{
-		distancelimit *= 0.75;
+		distancelimit *= 0.9;
 	}
 	float pos[3];
 	float ang[3];

@@ -155,8 +155,9 @@ public void Rogue_UmbralKeycardBuffAlly(int entity, StringMap map)
 		{
 
 		//	fl_Extra_Speed[entity] 				*= 1.1;
-			fl_Extra_Damage[entity] 			*= 1.2;
-			RogueHelp_BodyHealth(entity, null, 1.2);
+			fl_Extra_Damage[entity] 			*= 1.1;
+			fl_Extra_MeleeArmor[entity]			*= 0.9;
+			fl_Extra_RangedArmor[entity] 		*= 0.9;
 		}
 	}
 }
@@ -167,8 +168,9 @@ public void Rogue_UmbralKeycardBuffEnemy(int entity)
 	{
 
 	//	fl_Extra_Speed[entity] 				*= 1.1;
-		fl_Extra_Damage[entity] 			*= 1.2;
-		RogueHelp_BodyHealth(entity, null, 1.2);
+		fl_Extra_Damage[entity] 			*= 1.1;
+		fl_Extra_MeleeArmor[entity]			*= 0.9;
+		fl_Extra_RangedArmor[entity] 		*= 0.9;
 	}
 }
 public void Rogue_Mazeat3_Enemy(int entity)
@@ -212,12 +214,12 @@ public void Rogue_Umbral6_Collect()
 
 public void Rogue_OldFan_Ally(int entity, StringMap map)
 {
-	RogueHelp_BodyDamage(entity, map, 1.5);
+	RogueHelp_BodyDamage(entity, map, 1.4);
 }
 
 public void Rogue_OldFan_Weapon(int entity)
 {
-	RogueHelp_WeaponDamage(entity, 1.5);
+	RogueHelp_WeaponDamage(entity, 1.4);
 }
 
 public void Rogue_ScoutScope_TakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon)

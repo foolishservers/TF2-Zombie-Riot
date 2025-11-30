@@ -31,7 +31,7 @@ void Vincent_Beacon_OnMapStart_NPC()
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_vincent_beacon");
 	strcopy(data.Icon, sizeof(data.Icon), "");
 	data.Flags = -1;
-	data.Category = 0;
+	data.Category = Type_Aperture;
 	data.Func = ClotSummon;
 	NPCID = NPC_Add(data);
 	PrecacheModel(Vincent_BEACON);
@@ -181,7 +181,7 @@ void VincentBeaconGiveArmor(int entity, int victim, float &healingammount)
 	{
 		ApplyStatusEffect(entity, victim, "Expidonsan Anger", 5.0);
 	}
-	ApplyStatusEffect(entity, victim, "Combine Command", 5.0);
+	ApplyStatusEffect(entity, victim, "Mazeat Command", 5.0);
 	ApplyStatusEffect(entity, victim, "Very Defensive Backup", 0.6);
 }
 
