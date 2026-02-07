@@ -1644,7 +1644,7 @@ static void AddEasyBobEnemy(int bobindx, const char[] plugin, const char[] name 
 	}
 	else
 	{
-		int postWaves = CurrentRound - Waves_GetMaxRound();
+		int postWaves = CurrentRound[Rounds_Default] - Waves_GetMaxRound();
 		Freeplay_AddEnemy(postWaves, enemy, count);
 		if(count > 0)
 		{

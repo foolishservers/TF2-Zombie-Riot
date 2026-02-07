@@ -125,7 +125,7 @@ methodmap CyberGrindGM < CClotBody
 			}
 			Waves_ClearWaves();
 			CurrentRound[Rounds_Default] = StringToInt(buffers[0])-1;
-			CurrentWave = -1;
+			CurrentWave[Rounds_Default] = -1;
 			Waves_Progress();
 			
 			b_NpcForcepowerupspawn[npc.index] = 0;
@@ -170,7 +170,7 @@ methodmap CyberGrindGM < CClotBody
 			}
 			Waves_ClearWaves();
 			CurrentRound[Rounds_Default] = iNextSetWave;
-			CurrentWave = -1;
+			CurrentWave[Rounds_Default] = -1;
 			Waves_Progress();
 			
 			b_NpcForcepowerupspawn[npc.index] = 0;
