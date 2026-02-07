@@ -222,6 +222,7 @@ methodmap CyberGrindGM < CClotBody
 			
 			if(CyberGrind_InternalDifficulty>2)
 			{
+				/*
 				switch(GetRandomInt(0, 8))
 				{
 					case 0: NPC_SpawnNext(true, true, 0);
@@ -234,6 +235,8 @@ methodmap CyberGrindGM < CClotBody
 					case 7: NPC_SpawnNext(true, true, 9);
 					case 8: NPC_SpawnNext(true, true, 10);
 				}
+				*/
+				NPC_SpawnNext(true, true);
 			}
 			WaveStart_SubWaveStart(GetGameTime() + 3000.0);
 			b_NpcForcepowerupspawn[npc.index] = 0;

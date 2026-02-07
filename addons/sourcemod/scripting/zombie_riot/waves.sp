@@ -276,13 +276,7 @@ public Action NpcEnemyAliveLimit(int client, int args)
 
 public Action Waves_ForcePanzer(int client, int args)
 {
-	char arg[20];
-	int index=0;
-	GetCmdArg(1, arg, sizeof(arg));
-	if(StringToIntEx(arg, index) <= 0 || index <= 0)
-		index=-1;
-
-	NPC_SpawnNext(true, true, index); //This will force spawn a panzer.
+	NPC_SpawnNext(true, true); //This will force spawn a panzer.
 	return Plugin_Handled;
 }
 public Action Waves_SkipVote(int client, int args)
@@ -1225,7 +1219,7 @@ void Waves_SetupMiniBosses(KeyValues map)
 		delete kv;
 }
 
-bool Waves_GetMiniBoss(MiniBoss boss, int RND = -1)
+bool Waves_GetMiniBoss(MiniBoss boss)
 {
 	if(!MiniBosses)
 		return false;
@@ -1234,24 +1228,35 @@ bool Waves_GetMiniBoss(MiniBoss boss, int RND = -1)
 	if(!length)
 		return false;
 	
-	int level;
-	for(int client = 1; client <= MaxClients; client++)
-	{
-		if(TeutonType[client] != TEUTON_WAITING && IsClientInGame(client) && GetClientTeam(client) == 2)
+	int count = -1;
+	if (CyberGrind_InternalDifficulty > 2) {
+		count = GetRandomInt(0, 8);
+		switch (count)
 		{
-			if(Level[client] > level)
-				level = Level[client];
+			case 3: count = 9;
+			case 8: count = 10;
 		}
 	}
+	else {
+		int level;
+		for(int client = 1; client <= MaxClients; client++)
+		{
+			if(TeutonType[client] != TEUTON_WAITING && IsClientInGame(client) && GetClientTeam(client) == 2)
+			{
+				if(Level[client] > level)
+					level = Level[client];
+			}
+		}
+		
+		level /= 3;
+		if(level < 1)
+			return false;
 
-	level /= 3;
-	if(level < 1)
-		return false;
-
-	if(length > level)
-		length = level;
+		if(length > level)
+			length = level;
+	}
 	
-	MiniBosses.GetArray((RND != -1 ? RND : GetURandomInt()) % length, boss);
+	MiniBosses.GetArray(count > -1 ? count : GetURandomInt() % length, boss);
 	return true;
 }
 
@@ -4528,11 +4533,11 @@ bool Waves_NextFreeplayCall(bool donotAdvanceRound)
 
 		if(Freeplay_ShouldMiniBoss())
 		{
-			NPC_SpawnNext(true, true, -1);
+			NPC_SpawnNext(true, true);
 		}
 		else
 		{
-			NPC_SpawnNext(false, false, -1);
+			NPC_SpawnNext(false, false);
 		}
 		
 		CurrentWave[Rounds_Default] = 9;

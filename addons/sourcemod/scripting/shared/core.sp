@@ -1305,7 +1305,7 @@ public void OnGameFrame()
 {
 #if defined ZR
 	int MaxLimitTest = 0;
-	while(NPC_SpawnNext(false, false, -1))
+	while(NPC_SpawnNext(false, false))
 	{
 		MaxLimitTest++;
 		//failsafe
