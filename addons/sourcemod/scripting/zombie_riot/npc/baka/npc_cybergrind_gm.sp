@@ -124,7 +124,7 @@ methodmap CyberGrindGM < CClotBody
 					Ammo_Count_Used[target] -= (CyberGrind_InternalDifficulty>2 ? 20 : 15);
 			}
 			Waves_ClearWaves();
-			CurrentRound = StringToInt(buffers[0])-1;
+			CurrentRound[Rounds_Default] = StringToInt(buffers[0])-1;
 			CurrentWave = -1;
 			Waves_Progress();
 			
@@ -169,7 +169,7 @@ methodmap CyberGrindGM < CClotBody
 				default:iNextSetWave=DifficultyGotoWave[0]; //CyberGrind_Normal
 			}
 			Waves_ClearWaves();
-			CurrentRound = iNextSetWave;
+			CurrentRound[Rounds_Default] = iNextSetWave;
 			CurrentWave = -1;
 			Waves_Progress();
 			
@@ -1059,7 +1059,7 @@ static void CyberGrindGM_ClotThink(int iNPC)
 					/*if(CyberGrind_Difficulty!=4)
 					{
 						Waves_ClearWaves();
-						CurrentRound = 2;
+						CurrentRound[Rounds_Default] = 2;
 						CurrentWave = -1;
 						Waves_Progress();
 					}*/
