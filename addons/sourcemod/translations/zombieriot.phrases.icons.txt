@@ -732,4 +732,9 @@
 		"en"		"An Infected Messenger Spawned has appeared."
 		"ko"		"감염된 전령병이 등장했습니다."
 	}
+	"Bandits Spawned"
+	{
+		"en"		"The bandits appeared."
+		"ko"		"밴딧들이 나타났습니다."
+	}
 }

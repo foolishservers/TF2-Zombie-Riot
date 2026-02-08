@@ -2,37 +2,50 @@
 #pragma newdecls required
 
 static const char g_DeathSounds[][] = {
-	"vo/pyro_paincrticialdeath01.mp3",
-	"vo/pyro_paincrticialdeath02.mp3",
-	"vo/pyro_paincrticialdeath03.mp3",
+	"vo/soldier_paincrticialdeath01.mp3",
+	"vo/soldier_paincrticialdeath02.mp3",
+	"vo/soldier_paincrticialdeath03.mp3",
 };
 
 static const char g_HurtSounds[][] = {
-	"vo/pyro_painsharp01.mp3",
-	"vo/pyro_painsharp02.mp3",
-	"vo/pyro_painsharp03.mp3",
-	"vo/pyro_painsharp04.mp3",
-	"vo/pyro_painsharp05.mp3",
+	"vo/soldier_painsharp01.mp3",
+	"vo/soldier_painsharp02.mp3",
+	"vo/soldier_painsharp03.mp3",
+	"vo/soldier_painsharp04.mp3",
+	"vo/soldier_painsharp05.mp3",
+	"vo/soldier_painsharp06.mp3",
+	"vo/soldier_painsharp07.mp3",
+	"vo/soldier_painsharp08.mp3",
 };
 
 static const char g_IdleSounds[][] = {
-	"vo/pyro_jeers01.mp3",	
-	"vo/pyro_jeers02.mp3",	
+	"vo/taunts/soldier_taunts01.mp3",
+	"vo/taunts/soldier_taunts09.mp3",
+	"vo/taunts/soldier_taunts14.mp3",
+	
 };
 
 static const char g_IdleAlertedSounds[][] = {
-	"vo/taunts/pyro_taunts01.mp3",
-	"vo/taunts/pyro_taunts02.mp3",
-	"vo/taunts/pyro_taunts03.mp3",
+	"vo/taunts/soldier_taunts19.mp3",
+	"vo/taunts/soldier_taunts20.mp3",
+	"vo/taunts/soldier_taunts21.mp3",
+	"vo/taunts/soldier_taunts18.mp3",
 };
 
 static const char g_MeleeHitSounds[][] = {
-	"weapons/axe_hit_flesh1.wav",
-	"weapons/axe_hit_flesh2.wav",
-	"weapons/axe_hit_flesh3.wav",
+	"weapons/boxing_gloves_hit1.wav",
+	"weapons/boxing_gloves_hit2.wav",
+	"weapons/boxing_gloves_hit3.wav",
+	"weapons/boxing_gloves_hit4.wav",
 };
 static const char g_MeleeAttackSounds[][] = {
-	"weapons/machete_swing.wav",
+	"weapons/boxing_gloves_swing1.wav",
+	"weapons/boxing_gloves_swing2.wav",
+	"weapons/boxing_gloves_swing4.wav",
+};
+
+static const char g_RangedAttackSounds[][] = {
+	"weapons/rocket_shoot.wav",
 };
 
 static const char g_MeleeMissSounds[][] = {
@@ -40,7 +53,7 @@ static const char g_MeleeMissSounds[][] = {
 	"weapons/bat_draw_swoosh2.wav",
 };
 
-void InfectedFireFighter_OnMapStart_NPC()
+void ZSSoldierGiant_OnMapStart_NPC()
 {
 	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
 	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
@@ -49,23 +62,25 @@ void InfectedFireFighter_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_MeleeHitSounds));	i++) { PrecacheSound(g_MeleeHitSounds[i]);	}
 	for (int i = 0; i < (sizeof(g_MeleeAttackSounds));	i++) { PrecacheSound(g_MeleeAttackSounds[i]);	}
 	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
-	PrecacheModel("models/player/pyro.mdl");
+	for (int i = 0; i < (sizeof(g_RangedAttackSounds));   i++) { PrecacheSound(g_RangedAttackSounds[i]);   }
 	NPCData data;
-	strcopy(data.Name, sizeof(data.Name), "Infected Fire Fighter");
-	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_firefighter");
-	strcopy(data.Icon, sizeof(data.Icon), "pyro");
+	strcopy(data.Name, sizeof(data.Name), "Soldier Giant Summoner");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_soldier_giant_grave");
+	strcopy(data.Icon, sizeof(data.Icon), "soldier_libertylauncher");
 	data.IconCustom = false;
-	data.Category = Type_GmodZS;
+	data.Flags = 0;
+	data.Category = Type_Common;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
-	return InfectedFireFighter(vecPos, vecAng, team);
+	return ZSSoldierGiant(vecPos, vecAng, team);
 }
-methodmap InfectedFireFighter < CClotBody
+methodmap ZSSoldierGiant < CClotBody
 {
+	
 	public void PlayIdleSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
@@ -109,6 +124,12 @@ methodmap InfectedFireFighter < CClotBody
 		
 
 	}
+	public void PlayRangedSound() {
+		EmitSoundToAll(g_RangedAttackSounds[GetRandomInt(0, sizeof(g_RangedAttackSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		
+
+	}
+
 	public void PlayMeleeHitSound() {
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 		
@@ -122,81 +143,72 @@ methodmap InfectedFireFighter < CClotBody
 	}
 	
 	
-	public InfectedFireFighter(float vecPos[3], float vecAng[3], int ally)
+	public ZSSoldierGiant(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedFireFighter npc = view_as<InfectedFireFighter>(CClotBody(vecPos, vecAng, "models/player/pyro.mdl", "1.0", "50000", ally, false, true));
+		ZSSoldierGiant npc = view_as<ZSSoldierGiant>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.35", "200000", ally, false, true));
 		
 		i_NpcWeight[npc.index] = 3;
 		
+		SetVariantInt(2);
+		AcceptEntityInput(npc.index, "SetBodyGroup");
+		
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
-		int iActivity = npc.LookupActivity("ACT_MP_RUN_MELEE");
+		int iActivity = npc.LookupActivity("ACT_MP_RUN_MELEE_ALLCLASS");
 		if(iActivity > 0) npc.StartActivity(iActivity);
-		
-		
 		
 		npc.m_flNextMeleeAttack = 0.0;
 		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
-		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
+		npc.m_iStepNoiseType = STEPSOUND_GIANT;	
 		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
 		
 
-		func_NPCDeath[npc.index] = InfectedFireFighter_NPCDeath;
-		func_NPCOnTakeDamage[npc.index] = InfectedFireFighter_OnTakeDamage;
-		func_NPCThink[npc.index] = InfectedFireFighter_ClotThink;		
-		
+		func_NPCDeath[npc.index] = ZSSoldierGiant_NPCDeath;
+		func_NPCOnTakeDamage[npc.index] = ZSSoldierGiant_OnTakeDamage;
+		func_NPCThink[npc.index] = ZSSoldierGiant_ClotThink;
+				
+		SDKHook(npc.index, SDKHook_OnTakeDamagePost, ZSSoldierGiant_ClotDamaged_Post);
 		
 		//IDLE
-		npc.m_flSpeed = 260.0;
-		npc.m_iState = 0;
-		
+		npc.m_bThisNpcIsABoss = true;
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.StartPathing();
 		
 		
+		GiveNpcOutLineLastOrBoss(npc.index, true);
+		npc.m_flSpeed = 200.0;
+		npc.g_TimesSummoned = 0;
 		
 		int skin = 5;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
 		
-		npc.m_iWearable1 = npc.EquipItem("head", "models/workshop/player/items/all_class/sum20_breadcrab/sum20_breadcrab_pyro.mdl");
+		npc.m_iWearable1 = npc.EquipItem("head", "models/player/items/soldier/soldier_zombie.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
 		
-		SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", 1);
-		
-		npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/player/items/all_class/pyro_hazmat/pyro_hazmat_pyro.mdl");
+		npc.m_iWearable2 = npc.EquipItem("head", "models/player/items/soldier/bucket.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable2, "SetModelScale");
-		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", 1);
-	
-		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", 1);
 		
-		npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/player/items/pyro/spr18_hot_case/spr18_hot_case.mdl");
+		npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_picket/c_picket.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable3, "SetModelScale");
-	
-		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 1);
 		
-		npc.m_iWearable4 = npc.EquipItem("head", "models/workshop/player/items/pyro/fall17_firemanns_essentials/fall17_firemanns_essentials.mdl");
+		npc.m_iWearable4 = npc.EquipItem("head", "models/player/items/all_class/mtp_bottle_soldier.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable4, "SetModelScale");
-		SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", 1);
 		
-		npc.m_iWearable5 = npc.EquipItem("head", "models/weapons/w_models/w_fireaxe.mdl");
-		SetVariantString("1.0");
-		AcceptEntityInput(npc.m_iWearable5, "SetModelScale");
+		SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", 1);
 		
 		return npc;
 	}
-	
-	
 }
 
 
-public void InfectedFireFighter_ClotThink(int iNPC)
+public void ZSSoldierGiant_ClotThink(int iNPC)
 {
-	InfectedFireFighter npc = view_as<InfectedFireFighter>(iNPC);
+	ZSSoldierGiant npc = view_as<ZSSoldierGiant>(iNPC);
 	
 	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
 	{
@@ -257,52 +269,57 @@ public void InfectedFireFighter_ClotThink(int iNPC)
 			} else {
 				npc.SetGoalEntity(PrimaryThreatIndex);
 			}
+			npc.StartPathing();
 			
 			//Target close enough to hit
 			if(flDistanceToTarget < 22500 || npc.m_flAttackHappenswillhappen)
 			{
 				//Look at target so we hit.
-			//	npc.FaceTowards(vecTarget, 1000.0);
+			//	npc.FaceTowards(vecTarget, 2000.0);
 				
 				//Can we attack right now?
 				if(npc.m_flNextMeleeAttack < GetGameTime(npc.index))
 				{
 					//Play attack ani
-					if (!npc.m_flAttackHappenswillhappen)
-					{
-						npc.AddGesture("ACT_MP_ATTACK_STAND_MELEE");
-						npc.PlayMeleeSound();
-						npc.m_flAttackHappens = GetGameTime(npc.index)+0.4;
-						npc.m_flAttackHappens_bullshit = GetGameTime(npc.index)+0.54;
-						npc.m_flAttackHappenswillhappen = true;
-					}
+				if (!npc.m_flAttackHappenswillhappen)
+				{
+					npc.AddGesture("ACT_MP_ATTACK_STAND_MELEE_ALLCLASS");
+					npc.PlayMeleeSound();
+					npc.m_flAttackHappens = GetGameTime(npc.index)+0.4;
+					npc.m_flAttackHappens_bullshit = GetGameTime(npc.index)+0.54;
+					npc.m_flAttackHappenswillhappen = true;
+				}
 						
-					if (npc.m_flAttackHappens < GetGameTime(npc.index) && npc.m_flAttackHappens_bullshit >= GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
-					{
+				if (npc.m_flAttackHappens < GetGameTime(npc.index) && npc.m_flAttackHappens_bullshit >= GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
+				{
 						Handle swingTrace;
 						npc.FaceTowards(vecTarget, 20000.0);
 						if(npc.DoSwingTrace(swingTrace, PrimaryThreatIndex,_,_,_,1))
-						{
-							int target = TR_GetEntityIndex(swingTrace);	
-							
-							float vecHit[3];
-							TR_GetEndPosition(vecHit, swingTrace);
-							
-							if(target > 0) 
 							{
+								int target = TR_GetEntityIndex(swingTrace);	
 								
-								if(!ShouldNpcDealBonusDamage(target))
+								float vecHit[3];
+								TR_GetEndPosition(vecHit, swingTrace);
+								
+								if(target > 0) 
 								{
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 175.0, DMG_CLUB, -1, _, vecHit);
-								//	TF2_IgnitePlayer(target, npc.index, 5.0);
-								}
-								else
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 2500.0, DMG_CLUB, -1, _, vecHit);
-								// Hit sound
-								npc.PlayMeleeHitSound();
-								
-							} 
-						}
+									
+									if(!ShouldNpcDealBonusDamage(target))
+										SDKHooks_TakeDamage(target, npc.index, npc.index, 150.0, DMG_CLUB, -1, _, vecHit);
+									else
+										SDKHooks_TakeDamage(target, npc.index, npc.index, 1500.0, DMG_CLUB, -1, _, vecHit);
+									
+									
+									Custom_Knockback(npc.index, target, 750.0);
+									
+									
+									// Hit particle
+									
+									
+									// Hit sound
+									npc.PlayMeleeHitSound();
+								} 
+							}
 						delete swingTrace;
 						npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.8;
 						npc.m_flAttackHappenswillhappen = false;
@@ -314,12 +331,14 @@ public void InfectedFireFighter_ClotThink(int iNPC)
 					}
 				}
 			}
-			else
+			else if(flDistanceToTarget > 22500 && npc.m_flAttackHappens_2 < GetGameTime(npc.index))
 			{
-				npc.StartPathing();
-				
+				npc.AddGesture("ACT_MP_THROW");
+				npc.m_flAttackHappens_2 = GetGameTime(npc.index) + 3.0;
+				npc.PlayRangedSound();
+				npc.FireRocket(vecTarget, 30.0, 600.0);
 			}
-		}
+	}
 	else
 	{
 		npc.StopPathing();
@@ -330,13 +349,13 @@ public void InfectedFireFighter_ClotThink(int iNPC)
 	npc.PlayIdleAlertSound();
 }
 
-public Action InfectedFireFighter_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+public Action ZSSoldierGiant_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
-	InfectedFireFighter npc = view_as<InfectedFireFighter>(victim);
+	ZSSoldierGiant npc = view_as<ZSSoldierGiant>(victim);
 		
 	if(attacker <= 0)
 		return Plugin_Continue;
-	
+		
 	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 	{
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
@@ -346,14 +365,58 @@ public Action InfectedFireFighter_OnTakeDamage(int victim, int &attacker, int &i
 	return Plugin_Changed;
 }
 
-public void InfectedFireFighter_NPCDeath(int entity)
+public void ZSSoldierGiant_ClotDamaged_Post(int victim, int attacker, int inflictor, float damage, int damagetype) 
 {
-	InfectedFireFighter npc = view_as<InfectedFireFighter>(entity);
+	ZSSoldierGiant npc = view_as<ZSSoldierGiant>(victim);
+	if(!NpcStats_IsEnemySilenced(npc.index))
+	{
+		int maxhealth = ReturnEntityMaxHealth(npc.index);
+		
+		float ratio = float(GetEntProp(npc.index, Prop_Data, "m_iHealth")) / float(maxhealth);
+		if(0.9-(npc.g_TimesSummoned*0.2) > ratio)
+		{
+			if(MaxEnemiesAllowedSpawnNext(1) <= (EnemyNpcAlive - EnemyNpcAliveStatic))
+			{
+				fl_TotalArmor[npc.index] = 0.5;
+				//grrr i cant spawn!!!!
+				//become fat.
+				return;
+			}
+			fl_TotalArmor[npc.index] = 1.0;
+			//yay i spawned, im now thinn :3
+			npc.g_TimesSummoned++;
+			maxhealth /= 7;
+			for(int i; i<1; i++)
+			{
+				float pos[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos);
+				float ang[3]; GetEntPropVector(npc.index, Prop_Data, "m_angRotation", ang);
+				
+				int spawn_index = NPC_CreateByName("npc_zombie_soldier_minion_grave", -1, pos, ang, GetTeam(npc.index));
+				if(spawn_index > MaxClients)
+				{
+					NpcStats_CopyStats(npc.index, spawn_index);
+					NpcAddedToZombiesLeftCurrently(spawn_index, true);
+					SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
+					SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
+				}
+			}
+		}
+	}
+	else
+	{
+		fl_TotalArmor[npc.index] = 1.0;
+	}
+}
+
+public void ZSSoldierGiant_NPCDeath(int entity)
+{
+	ZSSoldierGiant npc = view_as<ZSSoldierGiant>(entity);
 	if(!npc.m_bGib)
 	{
 		npc.PlayDeathSound();	
 	}
 
+	SDKUnhook(npc.index, SDKHook_OnTakeDamagePost, ZSSoldierGiant_ClotDamaged_Post);
 	
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
@@ -363,7 +426,4 @@ public void InfectedFireFighter_NPCDeath(int entity)
 		RemoveEntity(npc.m_iWearable3);
 	if(IsValidEntity(npc.m_iWearable4))
 		RemoveEntity(npc.m_iWearable4);
-	if(IsValidEntity(npc.m_iWearable5))
-		RemoveEntity(npc.m_iWearable5);
 }
-

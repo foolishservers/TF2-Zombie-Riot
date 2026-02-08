@@ -134,7 +134,7 @@ methodmap InfectedMessenger < CClotBody
 	
 	public InfectedMessenger(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedMessenger npc = view_as<InfectedMessenger>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "70000", ally));
+		InfectedMessenger npc = view_as<InfectedMessenger>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "100000", ally));
 		
 		SetVariantInt(2);
 		AcceptEntityInput(npc.index, "SetBodyGroup");
@@ -166,7 +166,6 @@ methodmap InfectedMessenger < CClotBody
 		g_infected_messenger_died=false;
 		g_infected_messenger_die=0.0;
 		AddNpcToAliveList(npc.index, 1);
-		npc.m_bStaticNPC = true;
 		b_ThisNpcIsImmuneToNuke[npc.index] = true;
 		b_ThisEntityIgnoredByOtherNpcsAggro[npc.index] = true;
 		
@@ -394,7 +393,7 @@ public Action InfectedMessenger_OnTakeDamage(int victim, int &attacker, int &inf
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
 	}
-	if((ReturnEntityMaxHealth(npc.index)/4) >= GetEntProp(npc.index, Prop_Data, "m_iHealth") && !npc.Anger) 
+	if((ReturnEntityMaxHealth(npc.index)/2) >= GetEntProp(npc.index, Prop_Data, "m_iHealth") && !npc.Anger) 
 	{
 		npc.Anger = true;
 		if(!npc.m_bAlliesSummoned)

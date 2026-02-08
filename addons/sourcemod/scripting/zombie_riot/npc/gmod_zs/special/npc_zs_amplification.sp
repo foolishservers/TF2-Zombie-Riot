@@ -194,7 +194,7 @@ public void Amplification_ClotThink(int iNPC)
 		{
 			KillFeed_SetKillIcon(npc.index, "saw_kill");
 			spawnRing_Vectors(vecMe, 100.0, 0.0, 0.0, 0.0, "materials/sprites/laserbeam.vmt", 255, 50, 50, 200, 1, 0.4, 6.0, 0.1, 1, 1000.0);
-			Explode_Logic_Custom(0.0, -1, npc.index, -1, vecMe, 400.0, _, _, true, _, false, _, Amplification_ExplodePost);
+			Explode_Logic_Custom(5.0, -1, npc.index, -1, vecMe, 400.0, _, _, true, _, false, _, Amplification_ExplodePost);
 		}
 	}
 	
@@ -281,6 +281,7 @@ public void Amplification_ExplodePost(int attacker, int victim, float damage, in
 	float vic_vec[3]; WorldSpaceCenter(victim, vic_vec);
 	ParticleEffectAt(vic_vec, "water_bulletsplash01", 1.5);
 	Elemental_AddPheromoneDamage(victim, attacker, view_as<Amplification>(attacker).m_bElite ? 15 : 12);
+	StartBleedingTimer(victim, attacker, 5.0, 2, -1, DMG_TRUEDAMAGE, 0);
 	// 400 x 0.2 x 0.15
 	// 500 x 0.2 x 0.15
 }

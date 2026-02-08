@@ -24,7 +24,7 @@ static const char g_MeleeHitSounds[][] = {
 	"weapons/boxing_gloves_hit4.wav",
 };
 
-void InfectedKamikaze_OnMapStart_NPC()
+void ManhattanParrot_OnMapStart_NPC()
 {
 	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
 	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
@@ -32,8 +32,8 @@ void InfectedKamikaze_OnMapStart_NPC()
 
 	
 	NPCData data;
-	strcopy(data.Name, sizeof(data.Name), "Infected Kamikaze Demo");
-	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_kamikaze_demo");
+	strcopy(data.Name, sizeof(data.Name), "Manhattan Parrot");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_manhattan_parrot");
 	strcopy(data.Icon, sizeof(data.Icon), "demo");
 	data.IconCustom = false;
 	data.Flags = 0;
@@ -44,9 +44,9 @@ void InfectedKamikaze_OnMapStart_NPC()
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
-	return InfectedKamikaze(vecPos, vecAng, team);
+	return ManhattanParrot(vecPos, vecAng, team);
 }
-methodmap InfectedKamikaze < CClotBody
+methodmap ManhattanParrot < CClotBody
 {
 	public void PlayIdleAlertSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
@@ -74,9 +74,9 @@ methodmap InfectedKamikaze < CClotBody
 		
 		
 	}
-	public InfectedKamikaze(float vecPos[3], float vecAng[3], int ally)
+	public ManhattanParrot(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedKamikaze npc = view_as<InfectedKamikaze>(CClotBody(vecPos, vecAng, "models/player/demo.mdl", "1.0", "3000", ally));
+		ManhattanParrot npc = view_as<ManhattanParrot>(CClotBody(vecPos, vecAng, "models/player/demo.mdl", "1.0", "6000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -94,27 +94,48 @@ methodmap InfectedKamikaze < CClotBody
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.StartPathing();
 		
-		func_NPCDeath[npc.index] = InfectedKamikaze_NPCDeath;
-		func_NPCOnTakeDamage[npc.index] = InfectedKamikaze_OnTakeDamage;
-		func_NPCThink[npc.index] = InfectedKamikaze_ClotThink;		
+		func_NPCDeath[npc.index] = ManhattanParrot_NPCDeath;
+		func_NPCOnTakeDamage[npc.index] = ManhattanParrot_OnTakeDamage;
+		func_NPCThink[npc.index] = ManhattanParrot_ClotThink;		
 		
 		npc.m_flMeleeArmor = 3.0;
 		npc.Anger = false;
 		
-		int skin = 5;
+		int skin = 1;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
-		
-		npc.m_iWearable2 = npc.EquipItem("head", "models/player/items/demo/demo_zombie.mdl");
-		SetVariantString("1.0");
-		AcceptEntityInput(npc.m_iWearable2, "SetModelScale");
 		
 		npc.m_iWearable1 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_caber/c_caber.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
 		
-		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", 1);
+		npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/player/items/demo/hw2013_manbird_of_aberdeen/hw2013_manbird_of_aberdeen.mdl");
+		SetVariantString("1.0");
+		AcceptEntityInput(npc.m_iWearable2, "SetModelScale");
 		
-		npc.m_flSpeed = 400.0;
+		npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/player/items/demo/sf14_explosive_mind/sf14_explosive_mind.mdl");
+		SetVariantString("1.0");
+		AcceptEntityInput(npc.m_iWearable3, "SetModelScale");
+		
+		npc.m_iWearable4 = npc.EquipItem("head", "models/workshop/player/items/demo/demo_dynamite/demo_dynamite.mdl");
+		SetVariantString("1.0");
+		AcceptEntityInput(npc.m_iWearable4, "SetModelScale");
+		
+		npc.m_iWearable5 = npc.EquipItem("head", "models/workshop/player/items/demo/hwn2016_aerobatics_demonstrator/hwn2016_aerobatics_demonstrator.mdl");
+		SetVariantString("1.0");
+		AcceptEntityInput(npc.m_iWearable5, "SetModelScale");
+		
+		npc.m_iWearable6 = npc.EquipItem("head", "models/workshop/player/items/demo/demo_booties/demo_booties.mdl");
+		SetVariantString("1.0");
+		AcceptEntityInput(npc.m_iWearable6, "SetModelScale");
+		
+		SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", skin);
+		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", skin);
+		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", skin);
+		SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", skin);
+		SetEntProp(npc.m_iWearable5, Prop_Send, "m_nSkin", skin);
+		SetEntProp(npc.m_iWearable6, Prop_Send, "m_nSkin", skin);
+		
+		npc.m_flSpeed = 280.0;
 		npc.StartPathing();
 		
 		return npc;
@@ -124,9 +145,9 @@ methodmap InfectedKamikaze < CClotBody
 }
 
 
-public void InfectedKamikaze_ClotThink(int iNPC)
+public void ManhattanParrot_ClotThink(int iNPC)
 {
-	InfectedKamikaze npc = view_as<InfectedKamikaze>(iNPC);
+	ManhattanParrot npc = view_as<ManhattanParrot>(iNPC);
 	
 	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
 	{
@@ -134,7 +155,7 @@ public void InfectedKamikaze_ClotThink(int iNPC)
 	}
 	
 	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
-	
+	float gameTime = GetGameTime(npc.index);
 	npc.Update();	
 		
 	if(npc.m_blPlayHurtAnimation)
@@ -144,8 +165,21 @@ public void InfectedKamikaze_ClotThink(int iNPC)
 		npc.PlayHurtSound();
 	}
 	
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
+	if(!npc.Anger)
 	{
+		if(npc.m_flNextThinkTime > gameTime)
+			return;
+	}
+	else
+	{
+		if(npc.m_flNextThinkTime > GetGameTime())
+			return;
+	}
+	if(npc.Anger)
+	{
+		RemoveSpecificBuff(npc.index, "Unstoppable Force");
+		SDKHooks_TakeDamage(npc.index, 0, 0, 200.0, DMG_BLAST);
+		SmiteNpcToDeath(npc.index);
 		return;
 	}
 	
@@ -250,39 +284,43 @@ public void InfectedKamikaze_ClotThink(int iNPC)
 	}
 	npc.PlayIdleAlertSound();
 }
-
-public Action InfectedKamikaze_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static void ManhattanParrot_DownedThink(int entity)
+{
+	ManhattanParrot npc = view_as<ManhattanParrot>(entity);
+	npc.SetActivity("ACT_MP_STUN_MIDDLE");
+	npc.AddGesture("ACT_MP_STUN_BEGIN");
+	npc.Update();
+	func_NPCThink[npc.index] = ManhattanParrot_ClotThink;
+}
+public Action ManhattanParrot_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	//Valid attackers only.
 	if(attacker <= 0)
 		return Plugin_Continue;
 		
-	InfectedKamikaze npc = view_as<InfectedKamikaze>(victim);
+	ManhattanParrot npc = view_as<ManhattanParrot>(victim);
 	
-	if(npc.Anger)
+	if(!npc.Anger && damage >= GetEntProp(npc.index, Prop_Data, "m_iHealth"))
 	{
-		if(attacker <= MaxClients && attacker > 0)
-		{
-			float chargerPos[3];
-			GetEntPropVector(victim, Prop_Data, "m_vecAbsOrigin", chargerPos);
-			if(b_BoundingBoxVariant[victim] == 1)
-			{
-				chargerPos[2] += 120.0;
-			}
-			else
-			{
-				chargerPos[2] += 82.0;
-			}
-			TE_ParticleInt(g_particleMissText, chargerPos);
-			TE_SendToClient(attacker);
-		}
-	
-		damage = 0.0;
-		npc.Anger = false;
-	}
-	else
-	{
+		SetEntProp(npc.index, Prop_Data, "m_iHealth", 1);
+		ApplyStatusEffect(npc.index, npc.index, "Unstoppable Force", 3.0);
+
 		npc.Anger = true;
+		npc.PlayHurtSound();
+		npc.StopPathing();
+		npc.m_flNextThinkTime = GetGameTime() + 2.0;
+
+		func_NPCThink[npc.index] = ManhattanParrot_DownedThink;
+		
+		float vecMe[3]; WorldSpaceCenter(npc.index, vecMe);
+		spawnRing_Vectors(vecMe, 200.0 * 2.0, 0.0, 0.0, 5.0, "materials/sprites/laserbeam.vmt", 0, 0, 212, 255, 1, 1.95, 5.0, 0.0, 1);
+		spawnRing_Vectors(vecMe, 0.0, 0.0, 0.0, 5.0, "materials/sprites/laserbeam.vmt", 0, 0, 212, 255, 1, 1.95, 5.0, 0.0, 1, 200.0 * 2.0);
+		
+		if(IsValidEntity(npc.m_iWearable1))
+			RemoveEntity(npc.m_iWearable1);
+		
+		damage = 0.0;
+		return Plugin_Handled;
 	}
 	
 	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
@@ -294,10 +332,10 @@ public Action InfectedKamikaze_OnTakeDamage(int victim, int &attacker, int &infl
 	return Plugin_Changed;
 }
 
-public void InfectedKamikaze_NPCDeath(int entity)
+public void ManhattanParrot_NPCDeath(int entity)
 {
-	InfectedKamikaze npc = view_as<InfectedKamikaze>(entity);
-	
+	ManhattanParrot npc = view_as<ManhattanParrot>(entity);
+	float vecMe[3]; WorldSpaceCenter(npc.index, vecMe);
 	if(!NpcStats_IsEnemySilenced(entity))
 	{
 		float startPosition[3];
@@ -319,18 +357,27 @@ public void InfectedKamikaze_NPCDeath(int entity)
 	{
 		npc.m_bDissapearOnDeath = false;
 	}
+	
+	TE_Particle("asplode_hoodoo", vecMe, NULL_VECTOR, NULL_VECTOR, _, _, _, _, _, _, _, _, _, _, 0.0);
+
+	b_NpcIsTeamkiller[npc.index] = true;
+	Explode_Logic_Custom(200.0, npc.index, npc.index, -1, vecMe, 200.0, 1.0, _, true, 40, _, _, _);
+	b_NpcIsTeamkiller[npc.index] = false;
 
 	
-	if(IsValidEntity(npc.m_iWearable2))
-		RemoveEntity(npc.m_iWearable2);
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
+	if(IsValidEntity(npc.m_iWearable2))
+		RemoveEntity(npc.m_iWearable2);
+	if(IsValidEntity(npc.m_iWearable3))
+		RemoveEntity(npc.m_iWearable3);
+	if(IsValidEntity(npc.m_iWearable4))
+		RemoveEntity(npc.m_iWearable4);
+	if(IsValidEntity(npc.m_iWearable5))
+		RemoveEntity(npc.m_iWearable5);
+	if(IsValidEntity(npc.m_iWearable6))
+		RemoveEntity(npc.m_iWearable6);
+	if(IsValidEntity(npc.m_iWearable7))
+		RemoveEntity(npc.m_iWearable7);
 }
-/*
-void DelayExplosiveMakeExplosion(DataPack pack)
-{
-	pack.Reset();
-	int iNpc = pack.ReadCell();
-	int client = pack.ReadCell();
-}
-*/
+

@@ -107,11 +107,8 @@ methodmap StoneAgeMaker < CClotBody
 		func_NPCOnTakeDamage[npc.index] = view_as<Function>(StoneAgeMaker_OnTakeDamage);
 		func_NPCThink[npc.index] = view_as<Function>(StoneAgeMaker_ClotThink);
 		
-		
-		
 		npc.StartPathing();
 		npc.m_flSpeed = 210.0;
-		
 		
 		int skin = 5;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
@@ -291,7 +288,7 @@ int StoneAgeMakerSelfDefense(StoneAgeMaker npc, float gameTime, float distance)
 	//Direct mode
 	if(gameTime > npc.m_flNextMeleeAttack)
 	{
-		if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 10.0))
+		if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 20.0))
 		{
 			float VecAim[3]; WorldSpaceCenter(npc.m_iTarget, VecAim );
 			npc.FaceTowards(VecAim, 20000.0);
@@ -300,7 +297,7 @@ int StoneAgeMakerSelfDefense(StoneAgeMaker npc, float gameTime, float distance)
 			{
 				npc.m_iTarget = Enemy_I_See;
 				npc.PlayMeleeSound();
-				float RocketDamage = 135.0;
+				float RocketDamage = 200.0;
 				float RocketSpeed = 500.0;
 				float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget );
 				float VecStart[3]; WorldSpaceCenter(npc.index, VecStart );
@@ -339,7 +336,7 @@ int StoneAgeMakerSelfDefense(StoneAgeMaker npc, float gameTime, float distance)
 	}
 	//No can shooty.
 	//Enemy is close enough.
-	if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 9.0))
+	if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 18.0))
 	{
 		if(Can_I_See_Enemy_Only(npc.index, npc.m_iTarget))
 		{

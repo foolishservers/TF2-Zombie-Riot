@@ -2,44 +2,46 @@
 #pragma newdecls required
 
 static const char g_DeathSounds[][] = {
-	"vo/InfectedEngineer_paincrticialdeath01.mp3",
-	"vo/InfectedEngineer_paincrticialdeath02.mp3",
-	"vo/InfectedEngineer_paincrticialdeath03.mp3",
+	"vo/soldier_paincrticialdeath01.mp3",
+	"vo/soldier_paincrticialdeath02.mp3",
+	"vo/soldier_paincrticialdeath03.mp3",
 };
 
 static const char g_HurtSounds[][] = {
-	"vo/InfectedEngineer_painsharp01.mp3",
-	"vo/InfectedEngineer_painsharp02.mp3",
-	"vo/InfectedEngineer_painsharp03.mp3",
-	"vo/InfectedEngineer_painsharp04.mp3",
-	"vo/InfectedEngineer_painsharp05.mp3",
-	"vo/InfectedEngineer_painsharp06.mp3",
-	"vo/InfectedEngineer_painsharp07.mp3",
-	"vo/InfectedEngineer_painsharp08.mp3",
+	"vo/soldier_painsharp01.mp3",
+	"vo/soldier_painsharp02.mp3",
+	"vo/soldier_painsharp03.mp3",
+	"vo/soldier_painsharp04.mp3",
+	"vo/soldier_painsharp05.mp3",
+	"vo/soldier_painsharp06.mp3",
+	"vo/soldier_painsharp07.mp3",
+	"vo/soldier_painsharp08.mp3",
 };
 
 static const char g_IdleSounds[][] = {
-	"vo/InfectedEngineer_standonthepoint01.mp3",
-	"vo/InfectedEngineer_standonthepoint02.mp3",
-	"vo/InfectedEngineer_standonthepoint03.mp3",
-	"vo/InfectedEngineer_standonthepoint04.mp3",
-	"vo/InfectedEngineer_standonthepoint05.mp3",
+	"vo/taunts/soldier_taunts01.mp3",
+	"vo/taunts/soldier_taunts09.mp3",
+	"vo/taunts/soldier_taunts14.mp3",
+	
 };
 
 static const char g_IdleAlertedSounds[][] = {
-	"vo/InfectedEngineer_battlecry01.mp3",
-	"vo/InfectedEngineer_battlecry03.mp3",
-	"vo/InfectedEngineer_battlecry04.mp3",
-	"vo/InfectedEngineer_battlecry05.mp3",
+	"vo/taunts/soldier_taunts19.mp3",
+	"vo/taunts/soldier_taunts20.mp3",
+	"vo/taunts/soldier_taunts21.mp3",
+	"vo/taunts/soldier_taunts18.mp3",
 };
 
 static const char g_MeleeHitSounds[][] = {
-	"weapons/cbar_hitbod1.wav",
-	"weapons/cbar_hitbod2.wav",
-	"weapons/cbar_hitbod3.wav",
+	"weapons/boxing_gloves_hit1.wav",
+	"weapons/boxing_gloves_hit2.wav",
+	"weapons/boxing_gloves_hit3.wav",
+	"weapons/boxing_gloves_hit4.wav",
 };
 static const char g_MeleeAttackSounds[][] = {
-	"weapons/machete_swing.wav",
+	"weapons/boxing_gloves_swing1.wav",
+	"weapons/boxing_gloves_swing2.wav",
+	"weapons/boxing_gloves_swing4.wav",
 };
 
 static const char g_MeleeMissSounds[][] = {
@@ -47,7 +49,7 @@ static const char g_MeleeMissSounds[][] = {
 	"weapons/bat_draw_swoosh2.wav",
 };
 
-void InfectedEngineer_OnMapStart_NPC()
+void ZSSoldierMinion_OnMapStart_NPC()
 {
 	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
 	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
@@ -56,14 +58,13 @@ void InfectedEngineer_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_MeleeHitSounds));	i++) { PrecacheSound(g_MeleeHitSounds[i]);	}
 	for (int i = 0; i < (sizeof(g_MeleeAttackSounds));	i++) { PrecacheSound(g_MeleeAttackSounds[i]);	}
 	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
-	PrecacheModel("models/player/Engineer.mdl");
 	NPCData data;
-	strcopy(data.Name, sizeof(data.Name), "Infected Engineer");
-	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_zombie_engineer");
-	strcopy(data.Icon, sizeof(data.Icon), "Engineer");
+	strcopy(data.Name, sizeof(data.Name), "Soldier Minion");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_soldier_minion_grave");
+	strcopy(data.Icon, sizeof(data.Icon), "soldier");
 	data.IconCustom = false;
 	data.Flags = 0;
-	data.Category = Type_GmodZS;
+	data.Category = Type_Common;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 
@@ -71,14 +72,15 @@ void InfectedEngineer_OnMapStart_NPC()
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
-	return InfectedEngineer(vecPos, vecAng, team);
+	return ZSSoldierMinion(vecPos, vecAng, team);
 }
-methodmap InfectedEngineer < CClotBody
+methodmap ZSSoldierMinion < CClotBody
 {
 	public void PlayIdleSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
 		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(24.0, 48.0);
 		
 
@@ -129,10 +131,9 @@ methodmap InfectedEngineer < CClotBody
 		
 		
 	}
-	
-	public InfectedEngineer(float vecPos[3], float vecAng[3], int ally)
+	public ZSSoldierMinion(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedEngineer npc = view_as<InfectedEngineer>(CClotBody(vecPos, vecAng, "models/player/engineer.mdl", "1.00", "20000", ally));
+		ZSSoldierMinion npc = view_as<ZSSoldierMinion>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "10", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -140,47 +141,50 @@ methodmap InfectedEngineer < CClotBody
 		
 		int iActivity = npc.LookupActivity("ACT_MP_RUN_MELEE");
 		if(iActivity > 0) npc.StartActivity(iActivity);
-	
-		func_NPCDeath[npc.index] = InfectedEngineer_NPCDeath;
-		func_NPCOnTakeDamage[npc.index] = InfectedEngineer_OnTakeDamage;
-		func_NPCThink[npc.index] = InfectedEngineer_ClotThink;		
+		
+		
+		
 		npc.m_flNextMeleeAttack = 0.0;
 		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
-
-		//IDLE
-		npc.m_iState = 0;
 		
+
+		func_NPCDeath[npc.index] = ZSSoldierMinion_NPCDeath;
+		func_NPCOnTakeDamage[npc.index] = ZSSoldierMinion_OnTakeDamage;
+		func_NPCThink[npc.index] = ZSSoldierMinion_ClotThink;		
+		
+		//IDLE
+		npc.m_flSpeed = 330.0;
+		npc.m_iState = 0;
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.StartPathing();
 		
-		npc.m_flSpeed = 180.0;
 		
 		int skin = 5;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
 		
-		npc.m_iWearable1 = npc.EquipItem("head", "models/weapons/c_models/c_pickaxe/c_pickaxe_s2.mdl", .model_size = 2.0);
+		npc.m_iWearable1 = npc.EquipItem("head", "models/player/items/soldier/soldier_zombie.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
 		
-		npc.m_iWearable2 = npc.EquipItem("head", "models/player/items/engineer/engineer_zombie.mdl");
+		npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_picket/c_picket.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable2, "SetModelScale");
 		
-		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", 1);
-		
-		npc.StartPathing();
+		SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", 1);
 		
 		return npc;
 	}
+	
+	
 }
 
 
-public void InfectedEngineer_ClotThink(int iNPC)
+public void ZSSoldierMinion_ClotThink(int iNPC)
 {
-	InfectedEngineer npc = view_as<InfectedEngineer>(iNPC);
+	ZSSoldierMinion npc = view_as<ZSSoldierMinion>(iNPC);
 	
 	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
 	{
@@ -208,17 +212,13 @@ public void InfectedEngineer_ClotThink(int iNPC)
 	
 	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
 	{
-		npc.m_iTarget = GetClosestTarget(npc.index,_,_,_,_,_,_,_,999999.9, true);
-		if(npc.m_iTarget < 1)
-		{
-			npc.m_iTarget = GetClosestTarget(npc.index);
-		}
+		npc.m_iTarget = GetClosestTarget(npc.index);
 		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
 	}
 	
 	int PrimaryThreatIndex = npc.m_iTarget;
 	
-	if(IsValidEnemy(npc.index, PrimaryThreatIndex))
+	if(IsValidEnemy(npc.index, PrimaryThreatIndex, true))
 	{
 			float vecTarget[3]; WorldSpaceCenter(PrimaryThreatIndex, vecTarget);
 		
@@ -245,9 +245,9 @@ public void InfectedEngineer_ClotThink(int iNPC)
 			} else {
 				npc.SetGoalEntity(PrimaryThreatIndex);
 			}
-			
+			npc.StartPathing();
 			//Target close enough to hit
-			if(flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED || npc.m_flAttackHappenswillhappen)
+			if(flDistanceToTarget < 7225)
 			{
 				//Look at target so we hit.
 			//	npc.FaceTowards(vecTarget, 1000.0);
@@ -256,54 +256,61 @@ public void InfectedEngineer_ClotThink(int iNPC)
 				if(npc.m_flNextMeleeAttack < GetGameTime(npc.index))
 				{
 					//Play attack ani
-					if (!npc.m_flAttackHappenswillhappen)
-					{
-						npc.AddGesture("ACT_MP_ATTACK_STAND_MELEE");
-						npc.PlayMeleeSound();
-						npc.m_flAttackHappens = GetGameTime(npc.index)+0.4;
-						npc.m_flAttackHappens_bullshit = GetGameTime(npc.index)+0.54;
-						npc.m_flAttackHappenswillhappen = true;
-					}
+				if (!npc.m_flAttackHappenswillhappen)
+				{
+					npc.AddGesture("ACT_MP_ATTACK_STAND_MELEE");
+					npc.PlayMeleeSound();
+					npc.m_flAttackHappens = GetGameTime(npc.index)+0.4;
+					npc.m_flAttackHappens_bullshit = GetGameTime(npc.index)+0.54;
+					npc.m_flAttackHappenswillhappen = true;
+				}
 						
-					if (npc.m_flAttackHappens < GetGameTime(npc.index) && npc.m_flAttackHappens_bullshit >= GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
-					{
+				if (npc.m_flAttackHappens < GetGameTime(npc.index) && npc.m_flAttackHappens_bullshit >= GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
+				{
 						Handle swingTrace;
 						npc.FaceTowards(vecTarget, 20000.0);
 						if(npc.DoSwingTrace(swingTrace, PrimaryThreatIndex))
-						{
-							int target = TR_GetEntityIndex(swingTrace);	
-							
-							float vecHit[3];
-							TR_GetEndPosition(vecHit, swingTrace);
-							
-							if(target > 0) 
 							{
-								if(!ShouldNpcDealBonusDamage(target))
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 10000.0, DMG_CLUB, -1, _, vecHit);
-								else
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 10000.0, DMG_CLUB, -1, _, vecHit);
-								// Hit sound
-								npc.PlayMeleeHitSound();
+								int target = TR_GetEntityIndex(swingTrace);	
 								
-							} 
-						}
+								float vecHit[3];
+								TR_GetEndPosition(vecHit, swingTrace);
+								
+								if(target > 0) 
+								{
+									
+									if(!ShouldNpcDealBonusDamage(target))
+										SDKHooks_TakeDamage(target, npc.index, npc.index, 100.0, DMG_CLUB, -1, _, vecHit);
+									else
+										SDKHooks_TakeDamage(target, npc.index, npc.index, 300.0, DMG_CLUB, -1, _, vecHit);
+									
+									// Hit particle
+									
+									
+									// Hit sound
+									npc.PlayMeleeHitSound();
+									
+									//Did we kill them?
+									int iHealthPost = GetEntProp(target, Prop_Data, "m_iHealth");
+									if(iHealthPost <= 0) 
+									{
+										//Yup, time to celebrate
+										npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST");
+									}
+								} 
+							}
 						delete swingTrace;
-						npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 3.0;
+						npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 1.0;
 						npc.m_flAttackHappenswillhappen = false;
 					}
 					else if (npc.m_flAttackHappens_bullshit < GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
 					{
 						npc.m_flAttackHappenswillhappen = false;
-						npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 3.0;
+						npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 1.0;
 					}
 				}
 			}
-			else
-			{
-				npc.StartPathing();
-				
-			}
-		}
+	}
 	else
 	{
 		npc.StopPathing();
@@ -314,9 +321,9 @@ public void InfectedEngineer_ClotThink(int iNPC)
 	npc.PlayIdleAlertSound();
 }
 
-public Action InfectedEngineer_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+public Action ZSSoldierMinion_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
-	InfectedEngineer npc = view_as<InfectedEngineer>(victim);
+	ZSSoldierMinion npc = view_as<ZSSoldierMinion>(victim);
 		
 	if(attacker <= 0)
 		return Plugin_Continue;
@@ -330,17 +337,18 @@ public Action InfectedEngineer_OnTakeDamage(int victim, int &attacker, int &infl
 	return Plugin_Changed;
 }
 
-public void InfectedEngineer_NPCDeath(int entity)
+
+public void ZSSoldierMinion_NPCDeath(int entity)
 {
-	InfectedEngineer npc = view_as<InfectedEngineer>(entity);
+	ZSSoldierMinion npc = view_as<ZSSoldierMinion>(entity);
 	if(!npc.m_bGib)
 	{
 		npc.PlayDeathSound();	
 	}
-
-	if(IsValidEntity(npc.m_iWearable2))
-		RemoveEntity(npc.m_iWearable2);
+	
+	
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
+	if(IsValidEntity(npc.m_iWearable2))
+		RemoveEntity(npc.m_iWearable2);
 }
-

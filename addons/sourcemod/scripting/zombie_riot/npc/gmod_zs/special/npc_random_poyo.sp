@@ -2,11 +2,11 @@
 #pragma newdecls required
 
 
-void ZombieSummonRandom_OnMapStart_NPC()
+void PoyoSummonRandom_OnMapStart_NPC()
 {
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Random Boss");
-	strcopy(data.Plugin, sizeof(data.Plugin), "npc_random_zombie");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_random_poyo");
 	strcopy(data.Icon, sizeof(data.Icon), "void_gate");
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS;
@@ -28,19 +28,18 @@ static void ClotPrecache()
 	NPC_GetByPlugin("npc_zs_howler");
 	NPC_GetByPlugin("npc_zs_zombine");
 	NPC_GetByPlugin("npc_zs_bonemesh");
-	NPC_GetByPlugin("npc_zs_red_marrow");
 }
 
-bool SameZombieDisallow[10];
+bool SamePoyoDisallow[9];
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
 {
-	return ZombieSummonRandom(vecPos, vecAng, team, data);
+	return PoyoSummonRandom(vecPos, vecAng, team, data);
 }
-methodmap ZombieSummonRandom < CClotBody
+methodmap PoyoSummonRandom < CClotBody
 {
-	public ZombieSummonRandom(float vecPos[3], float vecAng[3], int ally, const char[] data)
+	public PoyoSummonRandom(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
-		ZombieSummonRandom npc = view_as<ZombieSummonRandom>(CClotBody(vecPos, vecAng, "models/empty.mdl", "0.8", "700", ally));
+		PoyoSummonRandom npc = view_as<PoyoSummonRandom>(CClotBody(vecPos, vecAng, "models/empty.mdl", "0.8", "700", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 
@@ -51,13 +50,13 @@ methodmap ZombieSummonRandom < CClotBody
 		npc.m_iNpcStepVariation = 0;
 		npc.m_bDissapearOnDeath = true;
 
-		func_NPCDeath[npc.index] = view_as<Function>(ZombieSummonRandom_NPCDeath);
-		func_NPCThink[npc.index] = view_as<Function>(ZombieSummonRandom_ClotThink);
+		func_NPCDeath[npc.index] = view_as<Function>(PoyoSummonRandom_NPCDeath);
+		func_NPCThink[npc.index] = view_as<Function>(PoyoSummonRandom_ClotThink);
 
 		i_RaidGrantExtra[npc.index] = StringToInt(data);
 		if(i_RaidGrantExtra[npc.index] <= 40)
 		{
-			Zero(SameZombieDisallow);
+			Zero(SamePoyoDisallow);
 			//Reset
 		}
 
@@ -70,21 +69,21 @@ methodmap ZombieSummonRandom < CClotBody
 	}
 }
 
-public void ZombieSummonRandom_ClotThink(int iNPC)
+public void PoyoSummonRandom_ClotThink(int iNPC)
 {
 	SmiteNpcToDeath(iNPC);
 }
 
-public void ZombieSummonRandom_NPCDeath(int entity)
+public void PoyoSummonRandom_NPCDeath(int entity)
 {
-	ZombieSummonRandom npc = view_as<ZombieSummonRandom>(entity);
+	PoyoSummonRandom npc = view_as<PoyoSummonRandom>(entity);
 	float VecSelfNpcabs[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", VecSelfNpcabs);
 	//Spawns a random raid.
-	ZombieSummonRaidboss(entity);
+	PoyoSummonRaidboss(entity);
 }
 
 
-void ZombieSummonRaidboss(int ZombieSummonbase)
+void PoyoSummonRaidboss(int ZombieSummonbase)
 {
 	Enemy enemy;
 	enemy.Health = ReturnEntityMaxHealth(ZombieSummonbase);
@@ -103,12 +102,12 @@ void ZombieSummonRaidboss(int ZombieSummonbase)
 	
 	Format(CharData, sizeof(CharData), "sc%i;",i_RaidGrantExtra[ZombieSummonbase]);
 	int NumberRand;
-	SameZombieDisallow[0] = true;
-	while(SameZombieDisallow[NumberRand])
+	SamePoyoDisallow[0] = true;
+	while(SamePoyoDisallow[NumberRand])
 	{
 		NumberRand = GetRandomInt(1,10);
 	}
-	SameZombieDisallow[NumberRand] = true;
+	SamePoyoDisallow[NumberRand] = true;
 	switch(NumberRand)
 	{
 		case 1:
@@ -149,11 +148,6 @@ void ZombieSummonRaidboss(int ZombieSummonbase)
 		case 8:
 		{
 			PluginName = "npc_zs_bonemesh";
-			enemy.Is_Boss = 1;
-		}
-		case 9:
-		{
-			PluginName = "npc_zs_red_marrow";
 			enemy.Is_Boss = 1;
 		}
 	}

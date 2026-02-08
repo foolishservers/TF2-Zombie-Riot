@@ -227,9 +227,10 @@ static char g_10wave[][] = {
 	"npc_zs_shadow_walker",
 	"npc_zs_skeleton",
 	"npc_zs_gore_blaster",
-	"npc_fastzombie_fortified",
-	"npc_headcrabzombie_fortified",
 	"npc_torsoless_headcrabzombie",
+	"npc_fastzombie",
+	"npc_headcrabzombie",
+	"npc_zs_headcrab",
 };
 
 static char g_20wave[][] = {
@@ -240,6 +241,9 @@ static char g_20wave[][] = {
 	"npc_zs_gore_blaster",
 	"npc_zs_runner",
 	"npc_zs_spitter",
+	"npc_fastzombie_fortified",
+	"npc_headcrabzombie_fortified",
+	"npc_zs_fast_headcrab",
 };
 
 static char g_30wave[][] = {
@@ -254,15 +258,19 @@ static char g_30wave[][] = {
 	"npc_zs_zombie_soldier",
 	"npc_zs_zombie_soldier_pickaxe",
 	"npc_zs_zombie_spy",
-	"npc_zombie_pyro_giant_main",
+	"npc_infected_tomislav_main",
+	"npc_zs_hmo",
 	"npc_zombie_scout_grave",
 	"npc_zombie_soldier_grave",
 	"npc_zombie_spy_grave",
 	"npc_zombie_demo_main",
 	"npc_zombie_heavy_grave",
+	"npc_zombie_heavy_giant_grave",
+	"npc_sniper_main",
 };
 static char g_40wave[][] = {
 	"npc_zs_kamikaze_demo",
+	"npc_zs_manhattan_parrot",
 	"npc_zs_medic_healer",
 	"npc_zs_huntsman",
 	"npc_zs_zombie_demoknight",
@@ -276,7 +284,6 @@ static char g_40wave[][] = {
 	"npc_zs_cleaner",
 	"npc_zs_eradicator",
 	"npc_zs_firefighter",
-	"npc_zombine",
 	"npc_zs_medic_main",
 	"npc_zs_mlsm",
 	"npc_zs_sam",
@@ -284,6 +291,7 @@ static char g_40wave[][] = {
 	"npc_zs_zombie_breadmonster",
 	"npc_zs_zombie_fatscout",
 	"npc_zs_zombie_fatspy",
+	"npc_zombie_pyro_giant_main",
 };
 
 public void Nest_ClotThink(int iNPC)
@@ -350,28 +358,30 @@ public void Nest_ClotThink(int iNPC)
 
 				if(GetTeam(iNPC) == TFTeam_Red)
 				{
-					IncreaseSpawnRates *= 0.5; //way slower.
+					IncreaseSpawnRates *= 0.5;
 				}
 				
 				if(i_currentwave[iNPC] < 15) {
 					int idx = GetRandomInt(0, sizeof(g_10wave) - 1);
 					strcopy(EnemyToSpawn, sizeof(EnemyToSpawn), g_10wave[idx]);
-					//IncreaseSpawnRates *= 0.8;
+					IncreaseSpawnRates *= 0.5;
 				} 
 				else if(i_currentwave[iNPC] < 28) {
 					int idx = GetRandomInt(0, sizeof(g_20wave) - 1);
 					strcopy(EnemyToSpawn, sizeof(EnemyToSpawn), g_20wave[idx]);
-					//IncreaseSpawnRates *= 0.8;
+					IncreaseSpawnRates *= 0.5;
 				}
 				else if(i_currentwave[iNPC] < 41)
 				{
 					int idx = GetRandomInt(0, sizeof(g_30wave) - 1);
 					strcopy(EnemyToSpawn, sizeof(EnemyToSpawn), g_30wave[idx]);
+					IncreaseSpawnRates *= 0.5;
 				}
 				else 
 				{
 					int idx = GetRandomInt(0, sizeof(g_40wave) - 1);
 					strcopy(EnemyToSpawn, sizeof(EnemyToSpawn), g_40wave[idx]);
+					IncreaseSpawnRates *= 0.5;
 				}
 				
 				if(Rogue_Mode())

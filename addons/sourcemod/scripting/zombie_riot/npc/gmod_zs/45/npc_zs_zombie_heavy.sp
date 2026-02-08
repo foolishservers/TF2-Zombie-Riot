@@ -86,7 +86,7 @@ methodmap InfectedHeavy < CClotBody
 	
 	public InfectedHeavy(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedHeavy npc = view_as<InfectedHeavy>(CClotBody(vecPos, vecAng, "models/player/heavy.mdl", "1.0", "15000", ally));
+		InfectedHeavy npc = view_as<InfectedHeavy>(CClotBody(vecPos, vecAng, "models/player/heavy.mdl", "1.0", "30000", ally));
 		
 		i_NpcWeight[npc.index] = 2;
 		npc.SetActivity("ACT_MP_RUN_MELEE");

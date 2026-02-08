@@ -101,7 +101,7 @@ methodmap InfectedCleaner < CClotBody
 	
 	public InfectedCleaner(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedCleaner npc = view_as<InfectedCleaner>(CClotBody(vecPos, vecAng, "models/player/pyro.mdl", "1.0", "40000", ally));
+		InfectedCleaner npc = view_as<InfectedCleaner>(CClotBody(vecPos, vecAng, "models/player/pyro.mdl", "1.0", "50000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");

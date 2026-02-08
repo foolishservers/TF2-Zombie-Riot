@@ -86,7 +86,7 @@ methodmap InfectedFatSpy < CClotBody
 	
 	public InfectedFatSpy(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedFatSpy npc = view_as<InfectedFatSpy>(CClotBody(vecPos, vecAng, "models/player/heavy.mdl", "1.0", "30000", ally));
+		InfectedFatSpy npc = view_as<InfectedFatSpy>(CClotBody(vecPos, vecAng, "models/player/heavy.mdl", "1.0", "50000", ally));
 		
 		i_NpcWeight[npc.index] = 2;
 		int iActivity = npc.LookupActivity("ACT_MP_RUN_MELEE_ALLCLASS");

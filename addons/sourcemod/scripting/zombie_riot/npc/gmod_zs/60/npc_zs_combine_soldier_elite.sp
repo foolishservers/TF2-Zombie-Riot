@@ -68,12 +68,12 @@ void ZSCombineElite_OnMapStart_NPC()
 	PrecacheModel("models/combine_super_soldier.mdl");
 	PrecacheModel("models/effects/combineball.mdl");
 	NPCData data;
-	strcopy(data.Name, sizeof(data.Name), "Infected Elite");
+	strcopy(data.Name, sizeof(data.Name), "Bandit Elite");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_combine_soldier_elite");
 	strcopy(data.Icon, sizeof(data.Icon), "combine_elite");
 	data.IconCustom = true;
 	data.Flags = 0;
-	data.Category = Type_Common;
+	data.Category = Type_GmodZS;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
@@ -155,7 +155,8 @@ methodmap ZSCombineElite < CClotBody
 	
 	public ZSCombineElite(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSCombineElite npc = view_as<ZSCombineElite>(CClotBody(vecPos, vecAng, "models/combine_super_soldier.mdl", "1.15", "1500", ally));
+		ally = TFTeam_Stalkers;
+		ZSCombineElite npc = view_as<ZSCombineElite>(CClotBody(vecPos, vecAng, "models/combine_super_soldier.mdl", "1.15", "10000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -171,15 +172,26 @@ methodmap ZSCombineElite < CClotBody
 		func_NPCDeath[npc.index] = ZSCombineElite_NPCDeath;
 		func_NPCOnTakeDamage[npc.index] = ZSCombineElite_OnTakeDamage;
 		func_NPCThink[npc.index] = ZSCombineElite_ClotThink;
+		
+		for(int client_check=1; client_check<=MaxClients; client_check++)
+		{
+			if(IsClientInGame(client_check) && !IsFakeClient(client_check))
+			{
+				ShowGameText(client_check, "voice_player", 1, "%t", "Bandits Spawned");
+			}
+		}
 	
 		npc.m_fbGunout = false;
 		
+		AddNpcToAliveList(npc.index, 1);
+		TeleportDiversioToRandLocation(npc.index,_,1750.0, 1250.0);
 		npc.m_iState = 0;
-		npc.m_flSpeed = 260.0;
+		npc.m_flSpeed = 330.0;
 		npc.m_flNextRangedAttack = 0.0;
 		npc.m_flNextRangedSpecialAttack = 0.0;
 		npc.m_flAttackHappenswillhappen = false;
 		npc.m_bmovedelay = false;
+		AddNpcToAliveList(npc.index, 1);
 		
 		npc.m_iAttacksTillReload = 30;
 
@@ -246,7 +258,7 @@ public void ZSCombineElite_ClotThink(int iNPC)
         else if (bInMeleeRange)
         {
             // 근접 추격 모드
-            npc.m_flSpeed = 260.0;
+            npc.m_flSpeed = 330.0;
             npc.StartPathing();
             npc.SetGoalEntity(PrimaryThreatIndex);
             npc.m_fbGunout = false;
@@ -296,7 +308,7 @@ public void ZSCombineElite_ClotThink(int iNPC)
         else 
         {
             // 원거리 추격 모드
-            npc.m_flSpeed = 260.0;
+            npc.m_flSpeed = 330.0;
             npc.StartPathing();
             npc.SetGoalEntity(PrimaryThreatIndex);
             npc.m_fbGunout = false;
@@ -333,7 +345,7 @@ public void ZSCombineElite_ClotThink(int iNPC)
                         int target = TR_GetEntityIndex(swingTrace);    
                         if(target > 0) 
                         {
-                            SDKHooks_TakeDamage(target, npc.index, npc.index, 60.0, DMG_CLUB, -1, _, vecTarget);
+                            SDKHooks_TakeDamage(target, npc.index, npc.index, 200.0, DMG_CLUB, -1, _, vecTarget);
                             Custom_Knockback(npc.index, target, 250.0);
                             npc.PlayMeleeHitSound();
                         } 
@@ -356,8 +368,10 @@ public void ZSCombineElite_ClotThink(int iNPC)
                 if(npc.m_flNextRangedSpecialAttack < GetGameTime(npc.index))
                 {
                     float vPredictedPos[3]; PredictSubjectPosition(npc, PrimaryThreatIndex,_,_, vPredictedPos);
-                    npc.FireRocket(vPredictedPos, 15.0, 400.0, "models/effects/combineball.mdl");
-                    npc.m_flNextRangedSpecialAttack = GetGameTime(npc.index) + 9.0;
+					int projectile = npc.FireParticleRocket(vPredictedPos, 3000.0, 400.0, 150.0, "burningplayer_blueglow", true);
+					SDKUnhook(projectile, SDKHook_StartTouch, Rocket_Particle_StartTouch);
+					SDKHook(projectile, SDKHook_StartTouch, Combine_Rocket_Particle_StartTouch);
+					npc.m_flNextRangedSpecialAttack = GetGameTime(npc.index) + 10.0;
                     npc.PlayRangedAttackSecondarySound();
                 }
 
@@ -395,7 +409,7 @@ public void ZSCombineElite_ClotThink(int iNPC)
                         vecDir[2] = vecDirShooting[2] + x * 0.1 * vecRight[2] + y * 0.1 * vecUp[2]; 
                         NormalizeVector(vecDir, vecDir);
                         
-                        FireBullet(npc.index, npc.m_iWearable1, SelfVecPos, vecDir, 10.0, 9000.0, DMG_BULLET, "bullet_tracer01_red");
+                        FireBullet(npc.index, npc.m_iWearable1, SelfVecPos, vecDir, 30.0, 9000.0, DMG_BULLET, "bullet_tracer01_red");
                         npc.PlayRangedSound();
                     }
                 }
@@ -427,6 +441,44 @@ public Action ZSCombineElite_OnTakeDamage(int victim, int &attacker, int &inflic
 	}
 	
 	return Plugin_Changed;
+}
+
+public void Combine_Rocket_Particle_StartTouch(int entity, int target)
+{
+	if(target > 0 && target < MAXENTITIES)	//did we hit something???
+	{
+		int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
+		if(!IsValidEntity(owner))
+		{
+			owner = 0;
+		}
+		
+		int inflictor = h_ArrowInflictorRef[entity];
+		if(inflictor != -1)
+			inflictor = EntRefToEntIndex(h_ArrowInflictorRef[entity]);
+
+		if(inflictor == -1)
+			inflictor = owner;
+			
+		float ProjectileLoc[3];
+		GetEntPropVector(entity, Prop_Data, "m_vecAbsOrigin", ProjectileLoc);
+
+		if(b_should_explode[entity])	//should we "explode" or do "kinetic" damage
+		{
+			SDKHooks_TakeDamage(target, owner, inflictor, 500.0, DMG_TRUEDAMAGE, -1);	//acts like a kinetic rocket
+		}
+
+	}
+	else
+	{
+		int particle = EntRefToEntIndex(i_WandParticle[entity]);
+		//we uhh, missed?
+		if(IsValidEntity(particle))
+		{
+			RemoveEntity(particle);
+		}
+	}
+	RemoveEntity(entity);
 }
 
 public void ZSCombineElite_NPCDeath(int entity)

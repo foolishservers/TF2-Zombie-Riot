@@ -124,7 +124,7 @@ methodmap ZSFortifiedGiantPoisonZombie < CClotBody
 	
 	public ZSFortifiedGiantPoisonZombie(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSFortifiedGiantPoisonZombie npc = view_as<ZSFortifiedGiantPoisonZombie>(CClotBody(vecPos, vecAng, "models/zombie/poison.mdl", "1.75", "15000", ally, false, true));
+		ZSFortifiedGiantPoisonZombie npc = view_as<ZSFortifiedGiantPoisonZombie>(CClotBody(vecPos, vecAng, "models/zombie/poison.mdl", "2.2", "15000", ally, false, true));
 		
 		i_NpcWeight[npc.index] = 4;
 		
@@ -140,7 +140,6 @@ methodmap ZSFortifiedGiantPoisonZombie < CClotBody
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
 		
-		
 		//IDLE
 		npc.m_flAttackHappenswillhappen = false;
 		npc.m_flSpeed = 231.0;
@@ -148,8 +147,6 @@ methodmap ZSFortifiedGiantPoisonZombie < CClotBody
 		
 		return npc;
 	}
-	
-	
 }
 
 
@@ -325,7 +322,56 @@ public Action ZSFortifiedGiantPoisonZombie_OnTakeDamage(int victim, int &attacke
 		npc.m_blPlayHurtAnimation = true;
 	}
 	
+	if(!NpcStats_IsEnemySilenced(victim))
+	{
+		if(!npc.bXenoInfectedSpecialHurt)
+		{
+			npc.bXenoInfectedSpecialHurt = true;
+			npc.flXenoInfectedSpecialHurtTime = GetGameTime(npc.index) + 2.0;
+			SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
+			SetEntityRenderColor(npc.index, 150, 255, 150, 65);
+			CreateTimer(2.0, ZSFortifiedGiantPoisonZombie_Revert_Poison_Zombie_Resistance, EntIndexToEntRef(victim), TIMER_FLAG_NO_MAPCHANGE);
+			CreateTimer(10.0, ZSFortifiedGiantPoisonZombie_Revert_Poison_Zombie_Resistance_Enable, EntIndexToEntRef(victim), TIMER_FLAG_NO_MAPCHANGE);
+		}
+		float TrueArmor = 1.0;
+		if(!NpcStats_IsEnemySilenced(victim))
+		{
+			if(fl_TotalArmor[npc.index] == 1.0)
+			{
+				if(npc.flXenoInfectedSpecialHurtTime > GetGameTime(npc.index))
+				{
+					TrueArmor *= 0.25;
+					fl_TotalArmor[npc.index] = TrueArmor;
+					OnTakeDamageNpcBaseArmorLogic(victim, attacker, damage, damagetype, true);
+				}
+			}
+		}
+		fl_TotalArmor[npc.index] = TrueArmor;
+	}
+	
 	return Plugin_Changed;
+}
+
+public Action ZSFortifiedGiantPoisonZombie_Revert_Poison_Zombie_Resistance(Handle timer, int ref)
+{
+	int zombie = EntRefToEntIndex(ref);
+	if(IsValidEntity(zombie))
+	{
+		SetEntityRenderMode(zombie, RENDER_NORMAL);
+		SetEntityRenderColor(zombie, 255, 255, 255, 255);
+	}
+	return Plugin_Handled;
+}
+
+public Action ZSFortifiedGiantPoisonZombie_Revert_Poison_Zombie_Resistance_Enable(Handle timer, int ref)
+{
+	int zombie = EntRefToEntIndex(ref);
+	if(IsValidEntity(zombie))
+	{
+		ZSFortifiedGiantPoisonZombie npc = view_as<ZSFortifiedGiantPoisonZombie>(zombie);
+		npc.bXenoInfectedSpecialHurt = false;
+	}
+	return Plugin_Handled;
 }
 
 public void ZSFortifiedGiantPoisonZombie_NPCDeath(int entity)

@@ -1238,6 +1238,7 @@ void NPC_ConfigSetup()
 	Nest_OnMapStart_NPC();
 	ZSZmain_OnMapStart_NPC();
 	ZombieSummonRandom_OnMapStart_NPC();
+	PoyoSummonRandom_OnMapStart_NPC();
 	Amplification_Precache();
 	Pregnant_Precache();
 	ZSHeadcrabZombie_OnMapStart_NPC();
@@ -1282,6 +1283,16 @@ void NPC_ConfigSetup()
 	DasNaggenvatcher_OnMapStart();
 	StoneAgeMaker_OnMapStart_NPC();
 	MassShootingLover_OnMapStart_NPC();
+	ZSZombine_OnMapStart_NPC();
+	ZSMainHeadcrab_OnMapStart_NPC();
+	ZSMainHeadcrabZombie_OnMapStart_NPC();
+	ZSMainPoisonZombie_OnMapStart_NPC();
+	ZSSoldierGiant_OnMapStart_NPC();
+	ZSSoldierMinion_OnMapStart_NPC();
+	Angryheadcrab_MapStart();
+	Headcrabmilloperator_OnMapStart_NPC();
+	ManhattanParrot_OnMapStart_NPC();
+	InfectedTomislavMain_OnMapStart_NPC();
 	Allymedic_OnMapStart_NPC();
 	Allysoldier_OnMapStart_NPC();
 	Allyheavy_OnMapStart_NPC();
@@ -2738,6 +2749,9 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/45/npc_zs_zombie_engineer.sp"
 #include "npc/gmod_zs/45/npc_zs_medic_healer.sp"
 #include "npc/gmod_zs/45/npc_zs_huntsman.sp"
+#include "npc/gmod_zs/45/npc_angryheadcrab.sp"
+#include "npc/gmod_zs/45/npc_zs_hmo.sp"
+#include "npc/gmod_zs/45/npc_infected_tomislav_main.sp"
 #include "npc/gmod_zs/60/npc_zs_eradicator.sp"
 #include "npc/gmod_zs/60/npc_zs_zombie_fatspy.sp"
 #include "npc/gmod_zs/60/npc_zs_medic_main.sp"
@@ -2753,10 +2767,12 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/60/npc_zs_sniper.sp"
 #include "npc/gmod_zs/60/npc_zs_sam.sp"
 #include "npc/gmod_zs/60/npc_zs_mlsm.sp"
+#include "npc/gmod_zs/60/npc_zs_manhattan_parrot.sp"
 #include "npc/gmod_zs/npc_zs_zmain.sp"
 #include "npc/gmod_zs/special/npc_zs_flesh_creeper.sp"
 #include "npc/gmod_zs/special/npc_zs_nest.sp"
 #include "npc/gmod_zs/special/npc_random_zombie.sp"
+#include "npc/gmod_zs/special/npc_random_poyo.sp"
 #include "npc/gmod_zs/special/npc_zs_amplification.sp"
 #include "npc/gmod_zs/special/npc_zs_howler.sp"
 #include "npc/gmod_zs/special/npc_zs_poisonzombie_fortified_giant.sp"
@@ -2766,6 +2782,12 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/special/npc_zs_malfunctioning_heavy.sp"
 #include "npc/gmod_zs/special/npc_zs_red_marrow.sp"
 #include "npc/gmod_zs/special/npc_zs_bonemesh.sp"
+#include "npc/gmod_zs/special/npc_zs_zombine.sp"
+#include "npc/gmod_zs/special/npc_zs_zmain_headcrab.sp"
+#include "npc/gmod_zs/special/npc_zs_zmain_headcrabzombie.sp"
+#include "npc/gmod_zs/special/npc_zs_zmain_poisonzombie.sp"
+#include "npc/gmod_zs/special/npc_zs_soldier_giant_grave.sp"
+#include "npc/gmod_zs/special/npc_zs_soldier_minion_grave.sp"
 #include "npc/gmod_zs/bosses/npc_zs_nightmare.sp"
 #include "npc/gmod_zs/bosses/npc_zs_sphynx.sp"
 #include "npc/gmod_zs/bosses/npc_zs_pregnant.sp"
