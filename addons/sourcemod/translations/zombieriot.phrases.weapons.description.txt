@@ -4711,21 +4711,33 @@
 		"de"		"Nicht Genügend Overheat! Du brauchst {1} Overheat!"
 		"ko"		"과열 부족! {1}만큼의 과열이 필요합니다!"
 	}
-	"ExploAR_FocusMode"
+	"ExploAR_Capacitor"
 	{
 		"#format"	"{1:i}"
-		"en"	"[Focus Mode]\nCapacitor {1}％"
-		"ko"	"[집중 모드]\n축전기 {1}％"
+		"en"	"Capacitor {1}％"
+		"ko"	"축전기 {1}％"
 	}
-	"ExploAR_FocusMode_Max"
+	"ExploAR_Capacitor_Max"
 	{
-		"en"	"[Focus Mode]\nnCapacitor MAX"
-		"ko"	"[집중 모드]\n축전기 MAX"
+		"en"	"Capacitor MAX"
+		"ko"	"축전기 MAX"
 	}
-	"ExploAR_RapidMode"
+	"ExploAR_Capacitor_Disable"
 	{
-		"en"	"[Rapid Mode]"
-		"ko"	"[연사 모드]"
+		"#format"	"{1:i}"
+		"en"	"Capacitor {1}％ [Disable]"
+		"ko"	"축전기 {1}％ [비활성화]"
+	}
+	"ExploAR_Capacitor_Max_Disable"
+	{
+		"en"	"Capacitor MAX [Disable]"
+		"ko"	"축전기 MAX [비활성화]"
+	}
+	"ExploAR_Battery"
+	{
+		"#format"	"{1:i}"
+		"en"	"Battery {1}％"
+		"ko"	"배터리 {1}％"
 	}
 	"ExploAR_BarrageMode"
 	{
@@ -4733,6 +4745,7 @@
 		"en"	"[Barrage Mode]\nAmmo {1}/{2}"
 		"ko"	"[폭격 모드]\n탄약 {1}/{2}"
 	}
+
 	"Zealot Dash Denie Spam"
 	{
 		"en" 		"You cant dash, you must hit someone with your rapier at least once!"
