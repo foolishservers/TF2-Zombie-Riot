@@ -711,6 +711,18 @@ void NPC_ConfigSetup()
 	TrueCyberWarrior_OnMapStart();
 	VillageAlaxios_OnMapStart();
 
+//construction2 Victorians
+	Demolitionist_OnMapStart_NPC();
+	Chemical_Specialist_OnMapStart_NPC();
+	Victorian_Protector_OnMapStart_NPC();
+	ChemicalSpreader_OnMapStart_NPC();
+	Zapmarker_OnMapStart_NPC();
+	ArmoredMedic_OnMapStart_NPC();
+	Airraider_OnMapStart_NPC();
+	Victorian_Headhunter_OnMapStart_NPC();
+	Victorian_Resource_Collector_OnMapStart_NPC();
+	Gasleader_OnMapStart_NPC();	
+
 //special
 	Invisible_TRIGGER_OnMapStart_NPC();//It is currently used as a trigger for the Victoria Factory.
 	CaptinoBaguettus_OnMapStart_NPC();//Captino Meinus Follower
@@ -2448,6 +2460,18 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/baka/raidbosses/npc_cyber_messenger.sp"
 #include "npc/baka/raidbosses/npc_true_cyber_warrior.sp"
 #include "npc/baka/raidbosses/npc_village_god_alaxios.sp"
+
+//construction2 Victorian
+#include "npc/construction/construction2/victorians/npc_demolitionist.sp"
+#include "npc/construction/construction2/victorians/npc_chemical_specialist.sp"
+#include "npc/construction/construction2/victorians/npc_protector.sp"
+#include "npc/construction/construction2/victorians/npc_chemical_spreader.sp"
+#include "npc/construction/construction2/victorians/npc_zapmarker.sp"
+#include "npc/construction/construction2/victorians/npc_giant_armored_medic.sp"
+#include "npc/construction/construction2/victorians/npc_airraider.sp"
+#include "npc/construction/construction2/victorians/npc_headhunter.sp"
+#include "npc/construction/construction2/victorians/npc_boltbag.sp"
+#include "npc/construction/construction2/victorians/npc_gasleader.sp"
 
 //Matrix Enemies
 #include "npc/matrix/15/npc_agentalan.sp"
