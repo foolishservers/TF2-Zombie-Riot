@@ -945,7 +945,7 @@ void DasNaggenvatcherSpawnEnemy(int dasnaggenvatcher, char[] plugin_name, int he
 	}
 	else
 	{
-		int postWaves = CurrentRound - Waves_GetMaxRound();
+		int postWaves = CurrentRound[Rounds_Default] - Waves_GetMaxRound();
 		char npc_classname[60];
 		NPC_GetPluginById(i_NpcInternalId[enemy.Index], npc_classname, sizeof(npc_classname));
 
