@@ -195,6 +195,11 @@ methodmap Bastardzine < CClotBody
 		func_NPCThink[npc.index] = Bastardzine_BastardzineThink;	
 		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;	
 		
+		float wave = float(Waves_GetRoundScale()+1); //Wave scaling
+		
+		wave *= 0.133333;
+
+		npc.m_flWaveScale = wave;
 		
 		//IDLE
 		npc.m_flSpeed = 350.0;
@@ -330,9 +335,9 @@ public void Bastardzine_BastardzineThink(int iNPC)
 							{
 								{
 									if(!ShouldNpcDealBonusDamage(target))
-										SDKHooks_TakeDamage(target, npc.index, npc.index, 200.0, DMG_CLUB, -1, _, vecHit);
+										SDKHooks_TakeDamage(target, npc.index, npc.index, 75.0 * npc.m_flWaveScale, DMG_CLUB, -1, _, vecHit);
 									else
-										SDKHooks_TakeDamage(target, npc.index, npc.index, 120.0, DMG_CLUB, -1, _, vecHit);					
+										SDKHooks_TakeDamage(target, npc.index, npc.index, 100.0 * npc.m_flWaveScale, DMG_CLUB, -1, _, vecHit);					
 								}
 								
 								npc.PlayMeleeHitSound();

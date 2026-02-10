@@ -129,6 +129,11 @@ methodmap Allysoldier < CClotBody
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.StartPathing();
 		
+		npc.m_iTeamGlow = TF2_CreateGlow(npc.index);
+		npc.m_bTeamGlowDefault = false;
+		SetVariantColor(view_as<int>({255, 255, 255, 255}));
+		AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
+		
 		int skin = 0;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
 		
@@ -160,120 +165,128 @@ methodmap Allysoldier < CClotBody
 
 static void Allysoldier_ClotThink(int iNPC)
 {
-	Allysoldier npc = view_as<Allysoldier>(iNPC);
-	float gametime = GetGameTime(npc.index);
-	if(npc.m_flNextDelayTime > gametime)
-		return;
-	npc.m_flNextDelayTime = gametime + DEFAULT_UPDATE_DELAY_FLOAT;
-	
-	//float Range = ALLYSOLDIER_RANGE;
-	//spawnRing_Vectors(VecSelfNpcabs, Range * 2.0, 0.0, 0.0, 0.0, "materials/sprites/laserbeam.vmt", 255, 200, 80, 150, 1, 0.1, 3.0, 0.1, 3);	
-	//spawnRing_Vectors(VecSelfNpcabs, Range * 2.0, 0.0, 0.0, 25.0, "materials/sprites/laserbeam.vmt", 255, 50, 50, 200, 1, /*duration*/ 0.11, 3.0, 5.0, 1);
-	
-	npc.Update();
-	if(npc.m_blPlayHurtAnimation)
-	{
-		npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
-		npc.m_blPlayHurtAnimation = false;
-		npc.PlayHurtSound();
-	}
+    Allysoldier npc = view_as<Allysoldier>(iNPC);
+    float gametime = GetGameTime(npc.index);
+
+    if(npc.m_flNextDelayTime > gametime)
+        return;
+    npc.m_flNextDelayTime = gametime + DEFAULT_UPDATE_DELAY_FLOAT;
+    
+    npc.Update();
 	
 	if(npc.m_flNextThinkTime > gametime)
-		return;
-	npc.m_flNextThinkTime = gametime + 0.1;
-	
-	float VecSelfNpcabs[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", VecSelfNpcabs);
-	Allysoldier_ApplyBuffInLocation_Optimized(VecSelfNpcabs, GetTeam(npc.index), npc.index);
-	
-	int ally = npc.m_iTargetWalkTo;
-	
-	if(i_Target[npc.index] == -1 || npc.m_flGetClosestTargetTime < gametime)
-	{
-		npc.m_iTarget = GetClosestTarget(npc.index, _, _, _, _, _, _, _, 99999.9);
-		npc.m_flGetClosestTargetTime = gametime + 1.0;
+        return;
+    npc.m_flNextThinkTime = gametime + 0.1;
+    
+    float VecSelfNpcabs[3]; 
+    GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", VecSelfNpcabs);
+    Allysoldier_ApplyBuffInLocation_Optimized(VecSelfNpcabs, GetTeam(npc.index), npc.index);
+    
+    if(npc.m_blPlayHurtAnimation)
+    {
+        npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
+        npc.m_blPlayHurtAnimation = false;
+        npc.PlayHurtSound();
+    }
+    
+    int ally = npc.m_iTargetWalkTo;
+    
+    if(i_Target[npc.index] == -1 || npc.m_flGetClosestTargetTime < gametime)
+    {
+        npc.m_iTarget = GetClosestTarget(npc.index, _, _, _, _, _, _, _, 99999.9);
+        npc.m_flGetClosestTargetTime = gametime + 1.0;
 
-		ally = GetClosestAllyPlayer(npc.index);
-		npc.m_iTargetWalkTo = ally;
-	}
-	
-	if(IsValidEnemy(npc.index, npc.m_iTarget))
-	{
-		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget);
-		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
-		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-		switch(Allysoldier_Work(npc,gametime,npc.m_iTarget,flDistanceToTarget,vecTarget))
-		{
-			case 0:
-			{
-				if(npc.m_iChanged_WalkCycle != 0)
-				{
-					npc.m_bisWalking = true;
-					npc.m_bAllowBackWalking = false;
-					npc.m_iChanged_WalkCycle = 0;
-					npc.SetActivity("ACT_MP_RUN_PRIMARY");
-					npc.m_flSpeed = 240.0;
-					npc.StartPathing();
-				}
-				if(flDistanceToTarget < npc.GetLeadRadius()) 
-				{
-					float vPredictedPos[3];
-					PredictSubjectPosition(npc, npc.m_iTarget,_,_, vPredictedPos);
-					npc.SetGoalVector(vPredictedPos);
-				}
-				else 
-				{
-					npc.SetGoalEntity(npc.m_iTarget);
-				}
-			}
-			case 1:
-			{
-				if(npc.m_iChanged_WalkCycle != 1)
-				{
-					npc.m_bisWalking = false;
-					npc.m_bAllowBackWalking = false;
-					npc.m_iChanged_WalkCycle = 1;
-					npc.SetActivity("ACT_MP_STAND_PRIMARY");
-					npc.m_flSpeed = 0.0;
-					npc.StopPathing();
-				}
-			}
-			case 2:
-			{
-				if(npc.m_iChanged_WalkCycle != 2)
-				{
-					npc.m_bisWalking = true;
-					npc.m_bAllowBackWalking = true;
-					npc.m_iChanged_WalkCycle = 2;
-					npc.SetActivity("ACT_MP_RUN_PRIMARY");
-					npc.m_flSpeed = 240.0;
-					npc.StartPathing();
-				}
-				float vBackoffPos[3];
-				BackoffFromOwnPositionAndAwayFromEnemy(npc, npc.m_iTarget,_,vBackoffPos);
-				npc.SetGoalVector(vBackoffPos, true);
-			}
-		}
-	}
-	else
-	{
-		if(ally > 0)
-		{
-			float vecTarget[3]; WorldSpaceCenter(ally, vecTarget);
-			float vecSelf[3]; WorldSpaceCenter(npc.index, vecSelf);
-			float flDistanceToTarget = GetVectorDistance(vecTarget, vecSelf, true);
+        ally = GetClosestAllyPlayer(npc.index);
+        npc.m_iTargetWalkTo = ally;
+    }
+    
+    if(IsValidEnemy(npc.index, npc.m_iTarget))
+    {
+        float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget);
+        float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
+        float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
 
-			if(flDistanceToTarget > 25000.0)
-			{
-				npc.SetGoalEntity(ally);
-				npc.StartPathing();
-				return;
-			}
-		}
+        switch(Allysoldier_Work(npc, gametime, npc.m_iTarget, flDistanceToTarget, vecTarget))
+        {
+            case 0: // 추격 상태
+            {
+                if(npc.m_iChanged_WalkCycle != 0)
+                {
+                    npc.m_bisWalking = true;
+                    npc.m_bAllowBackWalking = false;
+                    npc.m_iChanged_WalkCycle = 0;
+                    npc.SetActivity("ACT_MP_RUN_PRIMARY");
+                    npc.m_flSpeed = 240.0;
+                    npc.StartPathing();
+                }
+                
+                if(flDistanceToTarget < npc.GetLeadRadius()) 
+                {
+                    float vPredictedPos[3];
+                    PredictSubjectPosition(npc, npc.m_iTarget, _, _, vPredictedPos);
+                    npc.SetGoalVector(vPredictedPos);
+                }
+                else 
+                {
+                    npc.SetGoalEntity(npc.m_iTarget);
+                    npc.StartPathing();
+                }
+            }
+            case 1: // 정지/사격 상태
+            {
+                if(npc.m_iChanged_WalkCycle != 1)
+                {
+                    npc.m_bisWalking = false;
+                    npc.m_iChanged_WalkCycle = 1;
+                    npc.SetActivity("ACT_MP_STAND_PRIMARY");
+                    npc.m_flSpeed = 0.0;
+                    npc.StopPathing();
+                }
+            }
+            case 2: // 후퇴 상태
+            {
+                if(npc.m_iChanged_WalkCycle != 2)
+                {
+                    npc.m_bisWalking = true;
+                    npc.m_bAllowBackWalking = true;
+                    npc.m_iChanged_WalkCycle = 2;
+                    npc.SetActivity("ACT_MP_RUN_PRIMARY");
+                    npc.m_flSpeed = 240.0;
+                    npc.StartPathing();
+                }
+                float vBackoffPos[3];
+                BackoffFromOwnPositionAndAwayFromEnemy(npc, npc.m_iTarget, _, vBackoffPos);
+                npc.SetGoalVector(vBackoffPos, true);
+            }
+        }
+    }
+    else // 적이 없을 때 (아군 추적)
+    {
+        if(ally > 0)
+        {
+            float vecTarget[3]; WorldSpaceCenter(ally, vecTarget);
+            float vecSelf[3]; WorldSpaceCenter(npc.index, vecSelf);
+            float flDistanceToTarget = GetVectorDistance(vecTarget, vecSelf, true);
 
-		npc.StopPathing();
-		npc.m_flGetClosestTargetTime = 0.0;
-	}
-	npc.PlayIdleAlertSound();
+            // 아군과 200 유닛 이상 떨어지면 추적 실행 (제곱값 40000.0)
+            if(flDistanceToTarget > 40000.0)
+            {
+                npc.m_iChanged_WalkCycle = 0;
+                npc.m_flSpeed = 240.0;
+                npc.SetActivity("ACT_MP_RUN_PRIMARY");
+				npc.FaceTowards(vecTarget, 20000.0);
+                npc.SetGoalEntity(ally);
+                npc.StartPathing();
+                return; // 중요: 이동 명령을 내렸으므로 아래의 StopPathing을 건너뜀
+            }
+        }
+
+        // 목적지에 도착했거나 대상이 없으면 정지
+        npc.StopPathing();
+        npc.m_iChanged_WalkCycle = -1; // 상태 초기화
+        npc.m_flGetClosestTargetTime = 0.0;
+    }
+    npc.PlayIdleAlertSound();
 }
 
 static int Allysoldier_Work(Allysoldier npc, float gameTime, int target, float distance, float vecTarget[3])

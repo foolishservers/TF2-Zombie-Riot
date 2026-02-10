@@ -149,6 +149,22 @@ methodmap ZsSoldier_Barrager < CClotBody
 			RaidAllowsBuildings = true;
 		}
 		
+		switch(GetRandomInt(0,2))
+		{
+			case 0:
+			{
+				CPrintToChatAll("{green}탄막 대령{default}: 형님 나가신다!");
+			}
+			case 1:
+			{
+				CPrintToChatAll("{green}탄막 대령{default}: 드디어 시작이군!");
+			}
+			case 2:
+			{
+				CPrintToChatAll("{green}탄막 대령{default}: 힘 좀 써 볼까!");
+			}
+		}
+		
 		//IDLE
 		npc.m_flSpeed = 270.0;
 		
@@ -292,7 +308,7 @@ static void Internal_ClotThink(int iNPC)
     if(npc.m_iAmmo <= 0 || b_we_are_reloading[npc.index])
     {
         npc.StartPathing();
-        npc.m_flSpeed = 400.0;
+        npc.m_flSpeed = 270.0;
         
         int Enemy_I_See = Can_I_See_Enemy(npc.index, PrimaryThreatIndex);
         if(IsValidEnemy(npc.index, Enemy_I_See))
@@ -323,7 +339,7 @@ static void Internal_ClotThink(int iNPC)
 
             if(npc.m_flNextMeleeAttack < GameTime)
             {
-                npc.AddGesture("ACT_MP_ATTACK_STAND_PRIMARY");
+				npc.AddGesture("ACT_MP_ATTACK_STAND_PRIMARY");
                 PredictSubjectPositionForProjectiles(npc, PrimaryThreatIndex, 750.0, _, vecTarget);
                 npc.FaceTowards(vecTarget, 20000.0);
                 npc.PlayMeleeSound();
@@ -365,8 +381,9 @@ static void Internal_NPCDeath(int entity)
 	ZsSoldier_Barrager npc = view_as<ZsSoldier_Barrager>(entity);
 	if(!npc.m_bGib)
 	{
-		npc.PlayDeathSound();	
+		npc.PlayDeathSound();
 	}
+	CPrintToChatAll("{green}탄막 대령{default}: 젠장. 잘 싸웠는데.");
 	
 	if(IsValidEntity(npc.m_iWearable2))
 		RemoveEntity(npc.m_iWearable2);

@@ -105,7 +105,7 @@ methodmap Eradicator < CClotBody
 	
 	public Eradicator(float vecPos[3], float vecAng[3], int ally)
 	{
-		Eradicator npc = view_as<Eradicator>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "30000", ally, false));
+		Eradicator npc = view_as<Eradicator>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "70000", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -222,7 +222,7 @@ public void Eradicator_ClotThink(int iNPC)
 						{
 							{
 								if(!ShouldNpcDealBonusDamage(target))
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 175.0, DMG_CLUB, -1, _, vecHit);
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 200.0, DMG_CLUB, -1, _, vecHit);
 								else
 									SDKHooks_TakeDamage(target, npc.index, npc.index, 500.0, DMG_CLUB, -1, _, vecHit);					
 							}

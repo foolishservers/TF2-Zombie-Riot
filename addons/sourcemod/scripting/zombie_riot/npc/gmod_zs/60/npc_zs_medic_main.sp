@@ -57,7 +57,7 @@ void InfectedBattleMedic_OnMapStart_NPC()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Precache = ClotPrecache;
-	data.Category = Type_Common;
+	data.Category = Type_GmodZS;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
@@ -131,7 +131,7 @@ methodmap InfectedBattleMedic < CClotBody
 	
 	public InfectedBattleMedic(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedBattleMedic npc = view_as<InfectedBattleMedic>(CClotBody(vecPos, vecAng, "models/player/medic.mdl", "1.0", "25000", ally));
+		InfectedBattleMedic npc = view_as<InfectedBattleMedic>(CClotBody(vecPos, vecAng, "models/player/medic.mdl", "1.0", "40000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -456,7 +456,7 @@ static int InfectedBattleMedic_Work(InfectedBattleMedic npc, float gameTime, flo
 						
 						if(IsValidEnemy(npc.index, target))
 						{
-							float damageDealt = 100.0;
+							float damageDealt = 175.0;
 							if(ShouldNpcDealBonusDamage(target))
 								damageDealt*=3.0;
 							SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_CLUB, -1, _, vecHit);

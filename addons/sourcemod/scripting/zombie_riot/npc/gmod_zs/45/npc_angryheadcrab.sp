@@ -27,7 +27,7 @@ static const char g_MeleeAttackSounds[][] = {
 	"npc/headcrab/attack3.wav"
 };
 
-void ZSHeadcrab_OnMapStart_NPC()
+void Angryheadcrab_MapStart()
 {
 	PrecacheSoundArray(g_DeathSounds);
 	PrecacheSoundArray(g_MeleeAttackSounds);
@@ -38,9 +38,9 @@ void ZSHeadcrab_OnMapStart_NPC()
 	PrecacheModel("models/headcrabclassic.mdl");
 
 	NPCData data;
-	strcopy(data.Name, sizeof(data.Name), "Headcrab");
-	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_headcrab");
-	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_headcrab");
+	strcopy(data.Name, sizeof(data.Name), "Angry Headcrab");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_angryheadcrab");
+	strcopy(data.Icon, sizeof(data.Icon), "ds_runner");
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
@@ -48,12 +48,12 @@ void ZSHeadcrab_OnMapStart_NPC()
 	NPC_Add(data);
 }
 
-static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
+static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
 {
-	return ZSHeadcrab(vecPos, vecAng, team);
+	return Angryheadcrab(vecPos, vecAng, team, data);
 }
 
-methodmap ZSHeadcrab < CSeaBody
+methodmap Angryheadcrab < CSeaBody
 {
 	public void PlayIdleSound()
 	{
@@ -80,37 +80,39 @@ methodmap ZSHeadcrab < CSeaBody
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME,_);	
 	}
 	
-	public ZSHeadcrab(float vecPos[3], float vecAng[3], int ally)
+	public Angryheadcrab(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
-		ZSHeadcrab npc = view_as<ZSHeadcrab>(CClotBody(vecPos, vecAng, "models/headcrabclassic.mdl", "1.25", "400", ally, false));
+		Angryheadcrab npc = view_as<Angryheadcrab>(CClotBody(vecPos, vecAng, "models/headcrabclassic.mdl", "1.35", data[0] ? "600" : "400", ally, false));
 		// 3000 x 0.15
 		// 4000 x 0.15
 
+		npc.SetElite(view_as<bool>(data[0]));
 		i_NpcWeight[npc.index] = 0;
 		npc.SetActivity("ACT_RUN");
 		KillFeed_SetKillIcon(npc.index, "bread_bite");
 		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
-		npc.m_iStepNoiseType = STEPSOUND_NORMAL;
+		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
 		
-		func_NPCDeath[npc.index] = ZSHeadcrab_NPCDeath;
-		func_NPCOnTakeDamage[npc.index] = ZSHeadcrab_OnTakeDamage;
-		func_NPCThink[npc.index] = ZSHeadcrab_ClotThink;
+		func_NPCDeath[npc.index] = Angryheadcrab_NPCDeath;
+		func_NPCOnTakeDamage[npc.index] = Angryheadcrab_OnTakeDamage;
+		func_NPCThink[npc.index] = Angryheadcrab_ClotThink;
 		
-		npc.m_flSpeed = 260.0;	// 1.9 x 250
+		npc.m_flSpeed = data[0] ? 475.0 : 330.0;	// 1.9 x 250
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_flNextMeleeAttack = 0.0;
 		npc.m_flAttackHappens = 0.0;
 		f_ExtraOffsetNpcHudAbove[npc.index] = -65.0;
-
+		
+		SetEntityRenderColor(npc.index, 255, 0, 0, 255);
 		return npc;
 	}
 }
 
-public void ZSHeadcrab_ClotThink(int iNPC)
+public void Angryheadcrab_ClotThink(int iNPC)
 {
-	ZSHeadcrab npc = view_as<ZSHeadcrab>(iNPC);
+	Angryheadcrab npc = view_as<Angryheadcrab>(iNPC);
 
 	float gameTime = GetGameTime(npc.index);
 	if(npc.m_flNextDelayTime > gameTime)
@@ -166,7 +168,6 @@ public void ZSHeadcrab_ClotThink(int iNPC)
 				
 				Handle swingTrace;
 				npc.FaceTowards(vecTarget, 15000.0);
-				npc.m_bAllowBackWalking = false;
 				if(npc.DoSwingTrace(swingTrace, npc.m_iTarget, _, _, _, _))
 				{
 					int target = TR_GetEntityIndex(swingTrace);	
@@ -177,7 +178,10 @@ public void ZSHeadcrab_ClotThink(int iNPC)
 					if(target > 0) 
 					{
 						npc.PlayMeleeHitSound();
-						SDKHooks_TakeDamage(target, npc.index, npc.index, 100.0, DMG_CLUB, -1, _, vecHit);
+						SDKHooks_TakeDamage(target, npc.index, npc.index, npc.m_bElite ? 150.0 : 100.0, DMG_CLUB);
+						StartBleedingTimer(target, npc.index, 5.0, 2, -1, DMG_TRUEDAMAGE, 0);
+						// 280 x 0.15
+						// 340 x 0.15
 					}
 				}
 
@@ -187,58 +191,20 @@ public void ZSHeadcrab_ClotThink(int iNPC)
 
 		if(distance < 10000.0 && npc.m_flNextMeleeAttack < gameTime)
 		{
-			npc.m_bAllowBackWalking = true;
-			int PrimaryThreatIndex = npc.m_iTarget;
-			float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-			if(flDistanceToTarget < 6000.0) //too close, back off!! Now!
+			int target = Can_I_See_Enemy(npc.index, npc.m_iTarget);
+			if(IsValidEnemy(npc.index, target))
 			{
-				npc.StartPathing();
+				npc.m_iTarget = target;
+
+				npc.AddGesture("ACT_RANGE_ATTACK1");
+
+				npc.PlayMeleeSound();
 				
-				int Enemy_I_See;
-			
-				Enemy_I_See = Can_I_See_Enemy(npc.index, PrimaryThreatIndex);
-				//Target close enough to hit
-				if(IsValidEnemy(npc.index, Enemy_I_See)) //Check if i can even see.
-				{
-					float vBackoffPos[3];
-					npc.m_flSpeed = 600.0;
-					BackoffFromOwnPositionAndAwayFromEnemy(npc, PrimaryThreatIndex, 300.0, vBackoffPos);
-					npc.SetGoalVector(vBackoffPos, true);
-				}
-			}
-			else
-			{
-				int target = Can_I_See_Enemy(npc.index, npc.m_iTarget);
-				if(IsValidEnemy(npc.index, target))
-				{
-					npc.m_iTarget = target;
-					npc.m_flSpeed = 231.0;
-					npc.AddGesture("ACT_RANGE_ATTACK1");
+				npc.m_flAttackHappens = gameTime + 0.45;
 
-					/*
-					switch(GetRandomInt(0,1))
-					{
-						case 0:
-						{
-							PluginBot_Jump(npc.index, vecTarget);
-						}
-						case 1:
-						{
-
-						}
-					}
-					*/
-
-					PluginBot_Jump(npc.index, vecTarget);
-
-					npc.PlayMeleeSound();
-
-					npc.m_flAttackHappens = gameTime + 0.08;
-
-					//npc.m_flDoingAnimation = gameTime + 1.2;
-					npc.m_flNextMeleeAttack = gameTime + 0.8;
-					npc.m_flHeadshotCooldown = gameTime + 0.8;
-				}
+				//npc.m_flDoingAnimation = gameTime + 1.2;
+				npc.m_flNextMeleeAttack = gameTime + 1.25;
+				npc.m_flHeadshotCooldown = gameTime + 1.25;
 			}
 		}
 	}
@@ -250,12 +216,12 @@ public void ZSHeadcrab_ClotThink(int iNPC)
 	npc.PlayIdleSound();
 }
 
-public Action ZSHeadcrab_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+public Action Angryheadcrab_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	if(attacker < 1)
 		return Plugin_Continue;
 		
-	ZSHeadcrab npc = view_as<ZSHeadcrab>(victim);
+	Angryheadcrab npc = view_as<Angryheadcrab>(victim);
 	if(npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 	{
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
@@ -264,12 +230,16 @@ public Action ZSHeadcrab_OnTakeDamage(int victim, int &attacker, int &inflictor,
 	return Plugin_Changed;
 }
 
-void ZSHeadcrab_NPCDeath(int entity)
+void Angryheadcrab_NPCDeath(int entity)
 {
-	ZSHeadcrab npc = view_as<ZSHeadcrab>(entity);
+	Angryheadcrab npc = view_as<Angryheadcrab>(entity);
 	if(!npc.m_bGib)
 		npc.PlayDeathSound();
 	
+	float vecMe[3]; WorldSpaceCenter(npc.index, vecMe);
+	Explode_Logic_Custom(40.0, npc.index, npc.index, -1, vecMe, 200.0, 1.0, _, true, 15, _, _, Angryheadcrab_ExplodePost);
 }
-
-
+static void Angryheadcrab_ExplodePost(int attacker, int victim, float damage, int weapon)
+{
+	StartBleedingTimer(victim, attacker, 5.0, 2, -1, DMG_TRUEDAMAGE, 0);
+}

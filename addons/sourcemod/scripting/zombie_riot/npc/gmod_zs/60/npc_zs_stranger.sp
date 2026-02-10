@@ -56,7 +56,7 @@ void StrangPyro_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "pyro");
 	data.IconCustom = false;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS;
-	data.Category = Type_Common;
+	data.Category = Type_GmodZS;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
@@ -125,7 +125,7 @@ methodmap StrangPyro < CClotBody
 	
 	public StrangPyro(float vecPos[3], float vecAng[3], int ally)
 	{
-		StrangPyro npc = view_as<StrangPyro>(CClotBody(vecPos, vecAng, "models/player/pyro.mdl", "1.35", "75000", ally, false, true));
+		StrangPyro npc = view_as<StrangPyro>(CClotBody(vecPos, vecAng, "models/player/pyro.mdl", "1.35", "200000", ally, false, true));
 		
 		i_NpcWeight[npc.index] = 3;
 		SetVariantInt(1);
@@ -384,7 +384,7 @@ void StrangerPyroSelfDefense(StrangPyro npc, float gameTime, int target, float d
 					if(ShouldNpcDealBonusDamage(target))
 						damageDealt *= 2.0;
 
-					SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_CLUB, -1, _, vecHit);
+					SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_TRUEDAMAGE, -1, _, vecHit);
 
 					// Hit sound
 				} 

@@ -121,10 +121,7 @@ methodmap Pregnant < CClotBody
 		{
 			if(IsClientInGame(client_check) && !IsFakeClient(client_check))
 			{
-				LookAtTarget(client_check, npc.index);
-				SetGlobalTransTarget(client_check);
 				ShowGameText(client_check, "voice_player", 1, "%t", "Pregnant Spawned");
-				UTIL_ScreenFade(client_check, 180, 1, FFADE_OUT, 0, 0, 0, 255);
 			}
 		}
 
@@ -196,7 +193,7 @@ public void Pregnant_ClotThink(int iNPC)
 					if(target > 0)
 					{
 						npc.PlayMeleeHitSound();
-						SDKHooks_TakeDamage(target, npc.index, npc.index, ShouldNpcDealBonusDamage(target) ? 1200.0 : 1000.0, DMG_CLUB);
+						SDKHooks_TakeDamage(target, npc.index, npc.index, ShouldNpcDealBonusDamage(target) ? 2500.0 : 1000.0, DMG_CLUB);
 						Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 200 : 100);
 						// 800 x 0.5
 
@@ -239,11 +236,11 @@ public void Pregnant_ClotThink(int iNPC)
 	npc.PlayIdleSound();
 }
 
-void Pregnant_OnTakeDamage(int victim, int attacker)
+void Pregnant_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
+	Pregnant npc = view_as<Pregnant>(victim);
 	if(attacker > 0)
 	{
-		Pregnant npc = view_as<Pregnant>(victim);
 		if(npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 		{
 			npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
@@ -257,8 +254,54 @@ void Pregnant_OnTakeDamage(int victim, int attacker)
 			}
 		}
 	}
+	if(!NpcStats_IsEnemySilenced(victim))
+	{
+		if(!npc.bXenoInfectedSpecialHurt)
+		{
+			npc.bXenoInfectedSpecialHurt = true;
+			npc.flXenoInfectedSpecialHurtTime = GetGameTime(npc.index) + 2.0;
+			SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
+			SetEntityRenderColor(npc.index, 150, 255, 150, 65);
+			CreateTimer(2.0, Pregnant_Revert_Poison_Zombie_Resistance, EntIndexToEntRef(victim), TIMER_FLAG_NO_MAPCHANGE);
+			CreateTimer(10.0, Pregnant_Revert_Poison_Zombie_Resistance_Enable, EntIndexToEntRef(victim), TIMER_FLAG_NO_MAPCHANGE);
+		}
+		float TrueArmor = 1.0;
+		if(!NpcStats_IsEnemySilenced(victim))
+		{
+			if(fl_TotalArmor[npc.index] == 1.0)
+			{
+				if(npc.flXenoInfectedSpecialHurtTime > GetGameTime(npc.index))
+				{
+					TrueArmor *= 0.25;
+					fl_TotalArmor[npc.index] = TrueArmor;
+					OnTakeDamageNpcBaseArmorLogic(victim, attacker, damage, damagetype, true);
+				}
+			}
+		}
+		fl_TotalArmor[npc.index] = TrueArmor;
+	}
+}
+public Action Pregnant_Revert_Poison_Zombie_Resistance(Handle timer, int ref)
+{
+	int zombie = EntRefToEntIndex(ref);
+	if(IsValidEntity(zombie))
+	{
+		SetEntityRenderMode(zombie, RENDER_NORMAL);
+		SetEntityRenderColor(zombie, 255, 255, 255, 255);
+	}
+	return Plugin_Handled;
 }
 
+public Action Pregnant_Revert_Poison_Zombie_Resistance_Enable(Handle timer, int ref)
+{
+	int zombie = EntRefToEntIndex(ref);
+	if(IsValidEntity(zombie))
+	{
+		Pregnant npc = view_as<Pregnant>(zombie);
+		npc.bXenoInfectedSpecialHurt = false;
+	}
+	return Plugin_Handled;
+}
 void Pregnant_NPCDeath(int entityy)
 {
 	Pregnant npc = view_as<Pregnant>(entityy);

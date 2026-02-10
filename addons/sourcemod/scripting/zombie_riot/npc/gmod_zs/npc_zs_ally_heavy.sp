@@ -142,6 +142,11 @@ methodmap Allyheavy < CClotBody
 		npc.m_iWearable3 = npc.EquipItem("head", "models/player/items/heavy/xms_heavy_sandvichsafe.mdl");
 		AcceptEntityInput(npc.m_iWearable3, "SetModelScale");
 		
+		npc.m_iTeamGlow = TF2_CreateGlow(npc.index);
+		npc.m_bTeamGlowDefault = false;
+		SetVariantColor(view_as<int>({255, 255, 255, 255}));
+		AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
+		
 		
 		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 0);
 		if(npc.m_bScalesWithWaves)

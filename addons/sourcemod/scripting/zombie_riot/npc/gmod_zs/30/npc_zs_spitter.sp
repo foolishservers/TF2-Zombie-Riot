@@ -100,9 +100,9 @@ methodmap ZsSpitter < CSeaBody
 		if(iActivity > 0) npc.StartActivity(iActivity);
 		KillFeed_SetKillIcon(npc.index, "huntsman");
 		
-		npc.m_iBleedType = BLEEDTYPE_SEABORN;
-		npc.m_iStepNoiseType = STEPSOUND_NORMAL;
-		npc.m_iNpcStepVariation = STEPTYPE_SEABORN;
+		npc.m_iBleedType = BLEEDTYPE_NORMAL;
+		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
+		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
 		
 		func_NPCDeath[npc.index] = ZsSpitter_NPCDeath;
 		func_NPCOnTakeDamage[npc.index] = ZsSpitter_OnTakeDamage;
@@ -170,7 +170,7 @@ public void ZsSpitter_ClotThink(int iNPC)
 				npc.FaceTowards(vecTarget, 15000.0);
 				
 				npc.PlayRangedSound();
-				int entity = npc.FireArrow(vecTarget, npc.m_bElite ? 40.0 : 40.0, 800.0, "models/weapons/w_bugbait.mdl");
+				int entity = npc.FireArrow(vecTarget, 40.0, 800.0, "models/weapons/w_bugbait.mdl");
 				// 280 * 0.15
 				// 320 * 0.15
 				
@@ -250,10 +250,9 @@ static Action zs_spitter_StartTouch(int entity, int target)
         if(inflictor == -1)
             inflictor = owner;
             
-        float DamageDeal = fl_rocket_particle_dmg[entity];
+        float DamageDeal = 40.0;
         if(ShouldNpcDealBonusDamage(target))
-            DamageDeal *= h_BonusDmgToSpecialArrow[entity];
-        KillFeed_SetKillIcon(owner, "ball");
+            DamageDeal *= 0.5;
         SDKHooks_TakeDamage(target, owner, inflictor, DamageDeal, DMG_BULLET|DMG_PREVENT_PHYSICS_FORCE, -1);    //acts like a kinetic rocket    
         if(target <= MaxClients && !IsInvuln(target))
             if(!HasSpecificBuff(target, "Fluid Movement"))

@@ -134,6 +134,8 @@ methodmap Zsvulture < CClotBody
 			RaidAllowsBuildings = true;
 		}
 		
+		CPrintToChatAll("{green}벌쳐 소령{default}: 좋아, 다 덤벼.");
+		
 		int skin = 5;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
 		npc.m_iWearable1 = npc.EquipItem("head", "models/workshop_partner/weapons/c_models/c_ai_flamethrower/c_ai_flamethrower.mdl");
@@ -344,6 +346,7 @@ public void Zsvulture_NPCDeath(int entity)
 	{
 		npc.PlayDeathSound();	
 	}
+	CPrintToChatAll("{green}벌쳐 소령{default}: 여기가 끝이군.");
 		
 	if(IsValidEntity(npc.m_iWearable7))
 		RemoveEntity(npc.m_iWearable7);

@@ -8110,10 +8110,10 @@
 		"en"	"Infected Bread Monster"
 		"ko"	"감염된 빵괴물"
 	}
-	"The neighborhood tough guy"
+	"Bandit Elite"
 	{
-		"en"	"The neighborhood tough guy"
-		"ko"	"동네힘쎈사람"
+		"en"	"Bandit Elite"
+		"ko"	"엘리트 밴딧"
 	}
 	"Vile Poison Zombie"
 	{
@@ -8154,6 +8154,26 @@
 	{
 		"en"	"Mass Shooting Lover Marine"
 		"ko"	"총 기난사가너무좋아 해병"
+	}
+	"Headcrab Mill Operator"
+	{
+		"en"	"Headcrab Mill Operator"
+		"ko"	"헤드크랩 장수"
+	}
+	"Angry Headcrab"
+	{
+		"en"	"Angry Headcrab"
+		"ko"	"개빡친 헤드크랩"
+	}
+	"Manhattan Parrot"
+	{
+		"en"	"Manhattan Parrot"
+		"ko"	"맨해튼 앵무새"
+	}
+	"Infected Tomislav Main"
+	{
+		"en"	"Infected Tomislav Main"
+		"ko"	"감염된 토미건 메인"
 	}
 	"Pheromone Elemental Damage"
 	{

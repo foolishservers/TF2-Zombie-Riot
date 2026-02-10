@@ -102,7 +102,7 @@ methodmap RedMarrow < CClotBody
 		
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
-		int iActivity = npc.LookupActivity("ACT_HL2MP_WALK_ZOMBIE_01");
+		int iActivity = npc.LookupActivity("ACT_HL2MP_RUN_ZOMBIE");
 		if(iActivity > 0) npc.StartActivity(iActivity);
 		if(npc.index > 0 && npc.index < 2048)
         {
@@ -120,11 +120,20 @@ methodmap RedMarrow < CClotBody
 		func_NPCThink[npc.index] = RedMarrow_ClotThink;
 		func_NPCOnTakeDamage[npc.index] = RedMarrow_OnTakeDamage;
 		
+		AddNpcToAliveList(npc.index, 1);
+		
+		float wave = float(Waves_GetRoundScale()+1); //Wave scaling
+		
+		wave *= 0.133333;
+
+		npc.m_flWaveScale = wave;
+		
 		SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
 		SetEntityRenderColor(npc.index, 255, 0, 0, 255);
 
         npc.m_flMeleeArmor = 0.77;
 		npc.m_flRangedArmor = 0.7;
+		npc.Anger = false;
 
 		npc.StartPathing();
 		
@@ -219,9 +228,9 @@ public void RedMarrow_ClotThink(int iNPC)
 						{
 							{
 								if(!ShouldNpcDealBonusDamage(target))
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 80.0, DMG_CLUB, -1, _, vecHit);
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 80.0 * npc.m_flWaveScale, DMG_CLUB, -1, _, vecHit);
 								else
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 120.0, DMG_CLUB, -1, _, vecHit);					
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 120.0 * npc.m_flWaveScale, DMG_CLUB, -1, _, vecHit);					
 							}
 							
 							npc.PlayMeleeHitSound();
@@ -270,7 +279,7 @@ public Action RedMarrow_OnTakeDamage(int victim, int &attacker, int &inflictor, 
     
     RedMarrow npc = view_as<RedMarrow>(victim);
 
-    while(g_flRedMarrowAccumulatedDamage[victim] >= threshold)
+    while(!npc.Anger && g_flRedMarrowAccumulatedDamage[victim] >= threshold)
     {
         g_flRedMarrowAccumulatedDamage[victim] -= threshold;
 
@@ -285,7 +294,10 @@ public Action RedMarrow_OnTakeDamage(int victim, int &attacker, int &inflictor, 
             CreateTimer(5.0, RedMarrow_Revert_Resistance_Enable, EntIndexToEntRef(victim), TIMER_FLAG_NO_MAPCHANGE);
         }
     }
-
+	if((ReturnEntityMaxHealth(npc.index) * 0.05) >= GetEntProp(npc.index, Prop_Data, "m_iHealth") && !npc.Anger)
+	{
+		npc.Anger = true;
+	}
     // 헤드샷 쿨다운 로직 (기존 유지)
     if (npc.m_flHeadshotCooldown < GetGameTime())
     {

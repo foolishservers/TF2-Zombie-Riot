@@ -44,7 +44,7 @@ void ZSHuntsman_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "sniper_bow");
 	data.IconCustom = false;
 	data.Flags = 0;
-	data.Category = Type_Aperture;
+	data.Category = Type_GmodZS;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
@@ -153,8 +153,6 @@ methodmap ZSHuntsman < CClotBody
 		
 		return npc;
 	}
-	
-	
 }
 
 
@@ -214,7 +212,7 @@ public void ZSHuntsman_ClotThink(int iNPC)
 				npc.SetGoalEntity(PrimaryThreatIndex);
 			}
 			
-			if(flDistanceToTarget < 160000)
+			if(flDistanceToTarget < 1440000)
 			{
 				int Enemy_I_See;
 				

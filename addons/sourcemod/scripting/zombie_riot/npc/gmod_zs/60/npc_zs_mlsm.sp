@@ -98,7 +98,7 @@ methodmap MassShootingLover < CClotBody
 
 	public MassShootingLover(float vecPos[3], float vecAng[3], int ally)
 	{
-		MassShootingLover npc = view_as<MassShootingLover>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "40000", ally));
+		MassShootingLover npc = view_as<MassShootingLover>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "50000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
@@ -122,7 +122,7 @@ methodmap MassShootingLover < CClotBody
 		npc.m_iOverlordComboAttack = 10;
 		
 		npc.StartPathing();
-		npc.m_flSpeed = 250.0;
+		npc.m_flSpeed = 300.0;
 		
 		int skin = 5;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
@@ -315,6 +315,7 @@ void MassShootingLoverSelfDefense(MassShootingLover npc, float gameTime)
 
 
 							SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_BULLET, -1, _, vecHit);
+							IncreaseEntityDamageTakenBy(target, 0.1, 3.5, true);
 						}
 					}
 					delete swingTrace;

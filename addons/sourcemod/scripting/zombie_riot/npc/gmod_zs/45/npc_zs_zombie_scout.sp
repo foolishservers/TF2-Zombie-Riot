@@ -132,7 +132,7 @@ methodmap ZSscout < CClotBody
 	
 	public ZSscout(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSscout npc = view_as<ZSscout>(CClotBody(vecPos, vecAng, "models/player/scout.mdl", "1.0", "12500", ally));
+		ZSscout npc = view_as<ZSscout>(CClotBody(vecPos, vecAng, "models/player/scout.mdl", "1.0", "15000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		
