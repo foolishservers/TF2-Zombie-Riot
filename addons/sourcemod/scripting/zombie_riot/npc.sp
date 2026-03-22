@@ -244,6 +244,7 @@ void NPC_ConfigSetup()
 	XenoFortifiedEarlyZombie_OnMapStart_NPC();
 	XenoPatientFew_OnMapStart_NPC();
 	XenoOuroborosEkas_OnMapStart_NPC();
+	XenoLabSecurity_OnMapStart_NPC();
 
 	
 	WanderingSpirit_OnMapStart_NPC();
@@ -822,6 +823,7 @@ void NPC_ConfigSetup()
 	RaidbossMrX_OnMapStart();
 	GodAlaxios_OnMapStart();
 	Sensal_OnMapStart_NPC();
+	SensalTargetLaser_OnMapStart_NPC();
 	Karlas_OnMapStart_NPC();
 	Stella_OnMapStart_NPC();
 	RaidbossBobTheFirst_OnMapStart();
@@ -975,6 +977,8 @@ void NPC_ConfigSetup()
 	BossSummonRandom_OnMapStart_NPC();
 	//Combine Mutation
 	OmegaRaid_OnMapStart_NPC();
+	Rollermine_OnMapStart_NPC();
+	NovaProspektOverseer_OnMapStart_NPC();
 	LostKnight_OnMapStart_NPC();
 	Merlton_Boss_OnMapStart_NPC();
 	BobFollower_Setup();
@@ -995,6 +999,7 @@ void NPC_ConfigSetup()
 	ImmutableHeavy_OnMapStart_NPC();
 	VanishingMatter_OnMapStart_NPC();
 	Erasus_OnMapStart_NPC();
+	ErasusDebug_OnMapStart_NPC();
 	AnnoyingSpirit_OnMapStart_NPC();
 	FogOrbHeavy_OnMapStart_NPC();
 
@@ -1782,6 +1787,7 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/xeno_lab/npc_xeno_early_infected.sp"
 #include "npc/xeno_lab/npc_xeno_patient_few.sp"
 #include "npc/xeno_lab/npc_xeno_ekas_robo.sp"
+#include "npc/xeno_lab/npc_xeno_lab_security.sp"
 
 #include "npc/special/npc_sawrunner.sp"
 #include "npc/special/npc_l4d2_tank.sp"
@@ -1816,6 +1822,7 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/ally/npc_allied_kahml_afterimage.sp"
 #include "npc/ally/npc_allied_kiyru_visualiser.sp"
 #include "npc/ally/npc_allied_ritualist_visualiser.sp"
+#include "npc/ally/npc_erasus_debug.sp"
 
 #include "npc/raidmode_bosses/npc_true_fusion_warrior.sp"
 #include "npc/raidmode_bosses/npc_blitzkrieg.sp"
@@ -2166,6 +2173,7 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/expidonsa/npc_speedus_adivus.sp"
 #include "npc/expidonsa/npc_anfuhrer_eisenhard.sp"
 #include "npc/raidmode_bosses/npc_sensal.sp"
+#include "npc/raidmode_bosses/npc_sensal_crystal_targeter.sp"
 
 #include "npc/ally/npc_vip_building.sp"
 #include "npc/rogue/npc_overlord_rogue.sp"
@@ -2530,10 +2538,12 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/matrix/freeplay/npc_freeplay_agentspencer.sp"
 
 //Combine Hell Mutation
+#include "npc/mutations/combinehell/other/npc_nova_prospekt_overseer.sp"
 #include "npc/mutations/combinehell/other/npc_hunter.sp"
 #include "npc/mutations/combinehell/other/npc_merlton.sp"
 #include "npc/mutations/combinehell/other/npc_combine_lost_knight.sp"
 #include "npc/mutations/combinehell/other/npc_omega_raid.sp"
+#include "npc/mutations/combinehell/other/npc_rollermine.sp"
 #include "npc/mutations/combinehell/other/npc_bob_follower.sp"
 #include "npc/mutations/combinehell/seaborn/npc_seaborn_combine_police_pistol.sp"
 #include "npc/mutations/combinehell/seaborn/npc_seaborn_combine_police_smg.sp"

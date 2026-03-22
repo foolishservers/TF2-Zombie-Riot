@@ -4,6 +4,8 @@
 static float f_TalkDelayCheck;
 static int i_TalkDelayCheck;
 
+static int b_DoNotHideName[MAXPLAYERS + 1];
+
 void Talker_OnMapStart_NPC()
 {
 	NPCData data;
@@ -60,14 +62,28 @@ methodmap Talker < CClotBody
 		b_ThisEntityIgnored[npc.index] = true;
 
 		SetEntityRenderMode(npc.index, RENDER_NONE);
+		
+		// Figure out who has beaten the waveset
+		Talker_GatherWavesetCompletion();
+		
+		// Set his non-translatable name here
+		b_NameNoTranslation[npc.index] = false;
+		c_NpcName[npc.index] = "???";
 
-		npc.m_iTalkWaveAt = 0;
 		npc.m_iTalkWaveAt = 0;
 		int WaveAmAt;
 		WaveAmAt = StringToInt(data);
 		if (WaveAmAt == 1)
 		{
 			i_ApertureBossesDead = APERTURE_BOSS_NONE;
+			
+			for (int client = 1; client <= MaxClients; client++)
+			{
+				if (!IsClientInGame(client) || IsFakeClient(client) || !b_DoNotHideName[client])
+					continue;
+				
+				CPrintToChat(client, "{rare}Your {unique}Expidonsan Research Card{rare} reminds you of something, the voice you hear sounds familiar...");
+			}
 		}
 		npc.m_iTalkWaveAt = WaveAmAt;
 		
@@ -76,6 +92,24 @@ methodmap Talker < CClotBody
 		func_NPCThink[npc.index] = view_as<Function>(Talker_ClotThink);
 		
 		return npc;
+	}
+}
+
+static void Talker_Talk(int entity, const char[] message)
+{
+	for (int client = 1; client <= MaxClients; client++)
+	{
+		if (!IsClientInGame(client) || IsFakeClient(client))
+			continue;
+		
+		char prefix[255];
+		StatusEffects_PrefixName(entity, client, prefix, sizeof(prefix));
+		
+		// Name the NPC based on whether the client owns the Expidonsan Research Card
+		if (b_DoNotHideName[client])
+			CPrintToChat(client, "{rare}%s%t{default}: %s", prefix, "Vincent", message);
+		else
+			CPrintToChat(client, "{rare}%s%s{default}: %s", prefix, c_NpcName[entity], message);
 	}
 }
 
@@ -179,27 +213,27 @@ stock void NpcTalker_Wave1Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 드디어 그 날이 왔군. 환영합니다, 엑스-");
+					Talker_Talk(npc.index, "So the day has finally arrived, welcome back E-");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 잠깐... 센서를 다시 보니, 당신은 그들이 아니군.");
+					Talker_Talk(npc.index, "Hang on a minute...my sensors are going off, you're not one of them.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 시스템에서 당신들 중 누구도 그들과 관련이 없다고 하는데...");
+					Talker_Talk(npc.index, "The system tells me that none of you are related to them.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 아마도 그런 탓에 자가 방어 시스템이 가동된 것 같군요.");
+					Talker_Talk(npc.index, "That's probably why the self-defense mechanisms kicked in.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 그렇지만 그럴만한 이유가 있었을지도 모르지...");
+					Talker_Talk(npc.index, "But maybe it was for a good reason...");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 여기서 뭘 하고 있었고, 이곳은 어떻게 찾아낸 겁니까?");
+					Talker_Talk(npc.index, "What are you doing in here? And how did you find this place?");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -210,27 +244,27 @@ stock void NpcTalker_Wave1Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 아, 드디어. 우리가 마지막으로 본 지가 벌써 몇 년도-");
+					Talker_Talk(npc.index, "Finally, it's been years since we last saw-");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 그러니까...잠깐만, 당신은 누구지?");
+					Talker_Talk(npc.index, "One moment...who, sorry, what are you?");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 스캐너에도 당신이 이곳의 직원이라고 표시되진 않는데.");
+					Talker_Talk(npc.index, "My scanners aren't picking you up as valid personnel.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 아마도 그런 탓에 자가 방어 시스템이 가동된 것 같고...");
+					Talker_Talk(npc.index, "That's probably why the self-defense mechanisms kicked in.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 그렇지만 그럴만한 이유가 있었을지도 모르지...");
+					Talker_Talk(npc.index, "But maybe it was for a good reason...");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 누가 당신을 이곳으로 보낸겁니까? 그럴리가 없을텐데.");
+					Talker_Talk(npc.index, "Did someone send you here? That can't be possible.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -241,27 +275,27 @@ stock void NpcTalker_Wave1Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 마침내, 내 창조주들과 다시 만남을-");
+					Talker_Talk(npc.index, "At last, I get to reunite with my makers-");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 어... 당신이 아닌데.");
+					Talker_Talk(npc.index, "Wait a second...you're not one of them.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신의 데이터가... 흐릿한 탓에 코드를 역분석해야 할 것 같습니다.");
+					Talker_Talk(npc.index, "Your data is...blurry, I'll have to reverse engineer this code.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 그래서 자가 방어 시스템이 가동된 듯 하고.");
+					Talker_Talk(npc.index, "That's probably why the self-defense mechanisms kicked in.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 그렇지만 그럴만한 이유가 있었을지도 모르지...");
+					Talker_Talk(npc.index, "But maybe it was for a good reason...");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 우연히 발견한게 아닐텐데, 이 장소는 어떻게 찾아온 거죠?");
+					Talker_Talk(npc.index, "How do you know about this place? You couldn't have just stumbled here on your own.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -294,27 +328,27 @@ stock void NpcTalker_Wave5Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 여기 계시면 안 됩니다.");
+					Talker_Talk(npc.index, "You can not stay here.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신이 누구인지는 모르겠지만, 이 파일에는 당신이 위협적인 존재라고 되어있습니다.");
+					Talker_Talk(npc.index, "I still haven't figured out who you are, but you're marked as a threat in these files.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 전 자유 의지가 있기 때문에, 이 경고를 따르지 않을 자유가 있지만요.");
+					Talker_Talk(npc.index, "I have free will, I can choose not to follow these warnings.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 하지만 무언가 의도가 있어서 여기에 들어온 거겠죠.");
+					Talker_Talk(npc.index, "But something leads me to believe that they're in here for a reason.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 그리고, 당신을 상대하는 것 말고도, 대체 무엇이 이 관문들을 개방하고 있는지 알아내는 것도 시급합니다.");
+					Talker_Talk(npc.index, "Besides having to deal with you, I still have to figure out what's opening up these gates.");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 오늘 참 이상한데...");
+					Talker_Talk(npc.index, "How peculiar...");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -325,27 +359,27 @@ stock void NpcTalker_Wave5Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 여길 떠나셔야합니다.");
+					Talker_Talk(npc.index, "You have to leave.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 제가 외부 세계에 대한 지식이 좀 제한적인데다가, 이 파일엔 당신이 위협적인 존재라고 표시되어있군요.");
+					Talker_Talk(npc.index, "I possess limited knowledge on the outside world, and you're marked as a threat in these files.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 그나마 전 자유 의지가 있기 때문에, 이 경고를 맹목적으로 따를 이유가 없습니다.");
+					Talker_Talk(npc.index, "I have free will, I can choose not to heed these warnings.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 하지만 무언가 의도가 있어서 여기에 들어온 거겠죠.");
+					Talker_Talk(npc.index, "But something leads me to believe that they're in here for a reason.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 그리고, 당신을 상대해야 하는 것 외에도, 이 관문들을 멈출 방법을 찾아야 합니다.");
+					Talker_Talk(npc.index, "Besides having to deal with you, I still have to find a way to stop these gates.");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 흥미롭군...");
+					Talker_Talk(npc.index, "How interesting...");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -356,27 +390,27 @@ stock void NpcTalker_Wave5Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신은 이 장소에 있을 수 없습니다.");
+					Talker_Talk(npc.index, "You are not permitted to be here.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신이 누구인지 잘 모르겠지만, 적어도 연구소는 전혀 관계가 없는 존재란건 확실합니다.");
+					Talker_Talk(npc.index, "I'm not sure what you are, but you're definitely not associated with the laboratories.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 시스템이 당장 당신을 내보내라고 경고하고 있지만, 그건... 제 자유 의지에 따라 어떻게 될 지는 모르죠.");
+					Talker_Talk(npc.index, "I have free will, I can choose to let you stay here, despite the system's warnings.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 하지만 무언가 의도가 있어서 여기에 들어온 거겠죠.");
+					Talker_Talk(npc.index, "But something leads me to believe that they're in here for a reason.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 그리고, 당신을 상대해야 하는 것 외에도, 이 관문들을 멈출 방법을 찾아야 합니다.");
+					Talker_Talk(npc.index, "Besides having to deal with you, I still have to find a way to stop these gates.");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 참 흥미로운데...");
+					Talker_Talk(npc.index, "How fascinating...");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -409,27 +443,27 @@ stock void NpcTalker_Wave10Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 아... 좀 진작에 전해드렸어야 했는데, 아주 오래전에 오직 한 가지 임무, 즉 연구소를 지키는 임무만을 위해 설계된 로봇들이 있었어요.");
+					Talker_Talk(npc.index, "Right...I should've probably mentioned this earlier, but a long time ago, there were robots designed with a sole task in mind; to defend the laboratory.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 누구로부터 연구소를 지키냐고요? 음... 파일에 따르면 당신과 같은 존재들로부터.");
+					Talker_Talk(npc.index, "Defend the laboratory against who? Well...people like you, according to the files.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 조만간 당신이 그 로봇 중 하나와 마주치게 될 가능성이 높다고 생각하셔야 할 겁니다.");
+					Talker_Talk(npc.index, "It is safe to assume that you might be facing off against one of them sometime soon.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 그중에 하나는 무단 침입자를 막기 위한 일종의 감시 장치로 설계되었죠.");
+					Talker_Talk(npc.index, "One of them was designed as a sort of control against trespassers.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 전 분명 나갈 수 있을 때 나가라고 경고했었는데, 계속 여기 남아있으신거라면 더 이상 해드릴 조언이 없군요.");
+					Talker_Talk(npc.index, "Since I've warned you to get out while you could, and you stayed, I have no advice left to give you.");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 정말로 길을 잃어서 이 곳에 들어오신거라면, 그냥 가만히 계셔야합니다. 그럼 로봇도 당신을 안전하게 연구소 밖으로 데리고 나갈 겁니다.");
+					Talker_Talk(npc.index, "If you're actually lost, let the robot do its job, and let it carry you out of the labs.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -440,27 +474,27 @@ stock void NpcTalker_Wave10Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 더 일찍 얘기해드렸어야 했는데, 아주 오래전에 오직 한 가지 목적, 즉 연구소를 지키는 것만을 위해 설계된 로봇들이 있었습니다.");
+					Talker_Talk(npc.index, "I should've probably mentioned this sooner, but ages ago, there were robots designed with a sole meaning in mind; to defend the laboratory.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 네, 뭐... 당신과 같은 존재들로부터 말이죠.");
+					Talker_Talk(npc.index, "Defend the laboratory against what? Well...people like you, apparently.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 조만간 그 로봇들 중 하나와 맞닥뜨리게 될 가능성이 높습니다.");
+					Talker_Talk(npc.index, "It's safe to say that you might be facing off against one of these robots sometime soon.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 그중에 하나는 무단 침입자를 막기 위한 일종의 감시 장치로 설계되었죠.");
+					Talker_Talk(npc.index, "One of them was created as a sort of control against trespassers.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 전 분명 나갈 수 있을 때 나가라고 경고했었는데, 계속 여기 남아있으신거라면 더 이상 해드릴 조언이 없군요.");
+					Talker_Talk(npc.index, "Since I've warned you to get out while you could, and you decided to stay, I have no advice left to give you.");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 정말로 길을 잃어서 이 곳에 들어오신거라면, 그냥 가만히 계셔야합니다. 그럼 로봇도 당신을 안전하게 연구소 밖으로 데리고 나갈 겁니다.");
+					Talker_Talk(npc.index, "If you're actually lost, let the robot do its job, and let it carry you out of the labs.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -471,27 +505,27 @@ stock void NpcTalker_Wave10Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 지금 말하기엔 좀 늦었을 수도 있지만, 오래전에 연구소를 지키는 단 하나의 목적을 위해 설계된 로봇들이 있었습니다.");
+					Talker_Talk(npc.index, "Probably an inconvenient time to mention this, but many years ago, there were robots designed with a sole purpose in mind; to defend the laboratory.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 파일에 따르면, 그 로봇들은 당신과 같은 존재들로부터 연구소를 지키기 위해 만들어졌습니다.");
+					Talker_Talk(npc.index, "According to the files, they were meant to defend the laboratory against people like you.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 조만간 이 로봇들 중 하나와 마주치게 될 수도 있다는 뜻입니다.");
+					Talker_Talk(npc.index, "It goes to say that you might be facing off against one of these robots sometime soon.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 그중에 하나는 무단 침입자를 막기 위한 일종의 감시 장치로 설계되었죠.");
+					Talker_Talk(npc.index, "One of them was built as a sort of control against trespassers.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 전 분명 나갈 수 있을 때 나가라고 경고했었는데, 계속 여기 남아있으신거라면 더 이상 해드릴 조언이 없군요.");
+					Talker_Talk(npc.index, "Since I've warned you to get out while you could, and you decided to stay, I have no advice left to give you.");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 정말로 길을 잃어서 이 곳에 들어오신거라면, 그냥 가만히 계셔야합니다. 그럼 로봇도 당신을 안전하게 연구소 밖으로 데리고 나갈 겁니다.");
+					Talker_Talk(npc.index, "If you're actually lost, let the robot do its job, and let it carry you out of the labs.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -522,27 +556,27 @@ stock void NpcTalker_Wave11Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 드디어 당신이 무엇인지 알아냈습니다! 여기에 당신의 종족이...인간이라고 나와 있군요.");
+					Talker_Talk(npc.index, "I have finally figured out what you are! It says here that your race is...human.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 그런데 왜 당신이 위협으로 표시되었는지는 잘 모르겠습니다.");
+					Talker_Talk(npc.index, "I'm not sure why you're marked as a threat though.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 딱히 폭력적인 성향은 보이지 않는 것 같은데요.");
+					Talker_Talk(npc.index, "You don't seem to be showing any violent tendencies.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 그러니까... 이곳의 다른 인간들을 죽인 것 빼고는.");
+					Talker_Talk(npc.index, "Aside from killing all of these...other humans.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 뭐, 아마 괜찮겠죠. 저건 진짜 본인들이 아니라 복제물일 뿐이니까요.");
+					Talker_Talk(npc.index, "It's alright though, they're probably just copies of one real human, who is actually unharmed.");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 아마도.");
+					Talker_Talk(npc.index, "Probably.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -553,27 +587,27 @@ stock void NpcTalker_Wave11Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 이 데이터를 가져오는 데 시간이 좀 걸렸지만, 당신의 종족은 인간이라는 걸 알아냈습니다.");
+					Talker_Talk(npc.index, "It has taken me a while to retrieve this data, but your race is human.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 데이터에 따르면 당신은 폭력적인 성향을 보이는 경향이 있다고 합니다.");
+					Talker_Talk(npc.index, "The data tells me that you tend to have violent tendencies.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 음, 데이터가 잘못된 것 같습니다. 당신이 지금 폭력적인 성향을 보이지 않는 것 같은데요.");
+					Talker_Talk(npc.index, "It appears as if the data is incorrect though, as you're not showing any violent tendencies.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 그러니까... 이곳의 다른 인간들을 죽인 것 빼고는.");
+					Talker_Talk(npc.index, "Aside from killing all of these...other humans.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 뭐, 아마 괜찮겠죠. 저건 진짜 본인에게 영향이 가는 것도 아닌 복제물들이니까요.");
+					Talker_Talk(npc.index, "It's alright though, they probably deserve to be here.");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 아마도.");
+					Talker_Talk(npc.index, "Probably.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -584,27 +618,27 @@ stock void NpcTalker_Wave11Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신의 종족을 조사하는 것은 쉬운 일이 아니었습니다만, 이제 당신의 종족이 인간이라는 것을 알았습니다.");
+					Talker_Talk(npc.index, "Researching your race was no easy task, but I now know that you're human.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 제 조사에 따르면 인간은 폭력적인 경향이 있습니다..");
+					Talker_Talk(npc.index, "Humans tend to be violent, is what my research told me.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 그런데 어쩌면 제 조사가 잘못되었을 수도 있습니다. 당신은 폭력적인 성향을 보이지 않았으니까요.");
+					Talker_Talk(npc.index, "But it seems like my research was incorrect, as you're not showing any violent tendencies.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 그러니까... 이곳의 다른 인간들을 죽인 것 빼고는.");
+					Talker_Talk(npc.index, "Aside from killing all of these...other humans.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 뭐, 아마 괜찮겠죠. 저건 진짜 본인들이 아닙니다.");
+					Talker_Talk(npc.index, "It's alright though, they're probably not even aware of what's happening to them.");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 아마도.");
+					Talker_Talk(npc.index, "Probably.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -615,23 +649,23 @@ stock void NpcTalker_Wave11Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 드디어 당신이 무엇인지 알아냈어요. 여길 보니 당신의 종족은... 인간이군요.");
+					Talker_Talk(npc.index, "I have finally figured out what you are! It says here that your race is...human.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신이 왜 위협적인 존재로 표시되었는지 이제 좀 이해가 가는군.");
+					Talker_Talk(npc.index, "I think I'm starting to understand why you're marked as a threat.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 걔가 당신을 죽이려 했던건 알아요. 하지만 방금은 잠깐동안 무방비 상태가 됐었죠.");
+					Talker_Talk(npc.index, "I know that it tried to kill you, but it was defenseless.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 그런데도... 당신은 그 틈을 타서 그걸 또 부품째로 분해해버렸죠.");
+					Talker_Talk(npc.index, "And yet...you took advantage of that, and you disassembled it, part-by-part.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 이제부터 당신을 계속 지켜봐야겠습니다.");
+					Talker_Talk(npc.index, "I'll be keeping an open eye on you from now on.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -642,27 +676,27 @@ stock void NpcTalker_Wave11Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 이 데이터를 가져오는 데 시간이 좀 걸렸지만, 당신의 종족은 인간입니다.");
+					Talker_Talk(npc.index, "It has taken me a while to retrieve this data, but your race is human.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 데이터에 따르면 당신은 폭력적인 성향을 보이는 경향이 있다고 합니다.");
+					Talker_Talk(npc.index, "The data tells me that you tend to have violent tendencies.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 데이터가 정확한 것 같군요.");
+					Talker_Talk(npc.index, "It appears that the data is spot on.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 걔가 당신을 죽이려 했던건 알아요. 하지만 방금은 잠깐동안 무방비 상태가 됐었죠.");
+					Talker_Talk(npc.index, "I know that it tried to kill you, but it was defenseless.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 그런데도... 당신은 그 점을 이용해 그걸 산산조각내버렸죠.");
+					Talker_Talk(npc.index, "And yet...you took advantage of that, and tore it apart.");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 이제부터 당신을 면밀히 관찰하겠습니다.");
+					Talker_Talk(npc.index, "I'll be observing you closely from now on.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -673,27 +707,27 @@ stock void NpcTalker_Wave11Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신의 종족을 조사하는 것은 쉬운 일이 아니었습니다만, 당신의 종족이 인간이란 것을 알아냈습니다.");
+					Talker_Talk(npc.index, "Researching your race was no easy task, but I now know that you're human.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 제 조사에 따르면 인간은 폭력적인 경향이 있습니다.");
+					Talker_Talk(npc.index, "Humans tend to be violent, is what my research told me.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 그리고 당신이 방금 한 행동을 보면 제 조사에는 확실히 오류가 없군요.");
+					Talker_Talk(npc.index, "And it seems like my research was error-free, considering what you just did.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 걔가 당신을 죽이려 했던건 알아요. 하지만 방금은 잠깐동안 무방비 상태가 됐었죠.");
+					Talker_Talk(npc.index, "I know that it tried to kill you, but it was defenseless.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 그런데도... 당신은 그 점을 이용해 흔적도 없이 부숴버렸어요.");
+					Talker_Talk(npc.index, "And yet...you took advantage of that, and destroyed it without second thought.");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 이제부터 당신을 예의주시할 겁니다.");
+					Talker_Talk(npc.index, "I'll be watching you closely from now on.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -724,15 +758,15 @@ stock void NpcTalker_Wave15Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 도대체 왜 인간이 이 파일 목록에 고유한 범주까지 가지고 있을까요.");
+					Talker_Talk(npc.index, "It really does make me wonder why human species even have their own category in these files.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 예전에는 이런 것보다 훨씬 더 큰 위협이 있었는데 말이죠.");
+					Talker_Talk(npc.index, "There used to be way bigger threats that we were meant to handle.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 어쩌면 그들의 회복탄력성 때문일지도 모르죠.");
+					Talker_Talk(npc.index, "Maybe it's because of their resilience.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -743,15 +777,15 @@ stock void NpcTalker_Wave15Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 아직도 이 인간이 왜 이 파일 목록에 위협이라고 표시되어있는지 모르겠습니다.");
+					Talker_Talk(npc.index, "I'm still thinking about humans being marked as a threat in these files.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신은 우리가 처리해야 할 위협에 비하면 그다지 큰 위협도 아닙니다.");
+					Talker_Talk(npc.index, "You are not as big of a threat compared to what we were meant to handle.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 어쩌면 당신의 회복탄력성 때문일지도요?");
+					Talker_Talk(npc.index, "Perhaps it's because of your resilience?");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -762,15 +796,15 @@ stock void NpcTalker_Wave15Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 왜 당신이 이 파일들 속에서 위협으로 표기되어있을까요? 이해할 수가 없군요.");
+					Talker_Talk(npc.index, "Why are you marked as a threat in these files? It's inconceivable.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신은 우리가 처리해야 할 위협에 비하면 아주 작은 위협에 불과합니다.");
+					Talker_Talk(npc.index, "You are not even a fraction of a threat compared to what we were meant to handle.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 어쩌면 당신의 회복탄력성 때문일지도 모르겠습니다?");
+					Talker_Talk(npc.index, "Is it because of your resilience?");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -781,15 +815,15 @@ stock void NpcTalker_Wave15Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신이 저지른 일이 불만족스럽군요.");
+					Talker_Talk(npc.index, "I am not happy with what you did.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: C.A.T. 은 그저 프로그래밍 명령을 따라야했을 뿐이라고요.");
+					Talker_Talk(npc.index, "C.A.T. was just following its programming.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 역시나 파일대로 그들은 폭력적인 성향을 따르는건가.");
+					Talker_Talk(npc.index, "Maybe the files are right about the human species.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -800,15 +834,15 @@ stock void NpcTalker_Wave15Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신이 저지른 일이 개탄스럽군요.");
+					Talker_Talk(npc.index, "You should not have done that.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: C.A.T. 은 그저 프로그래밍 명령을 따라야했을 뿐이라고요.");
+					Talker_Talk(npc.index, "C.A.T. was just following its programming.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 지금 하고 있는 일에 대해 다시 생각해보시는게 좋을 겁니다.");
+					Talker_Talk(npc.index, "I don't have to follow any programming though, so you might wanna reconsider what you're doing.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -819,15 +853,15 @@ stock void NpcTalker_Wave15Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신이 저지른 일이 정말 한탄스럽군요.");
+					Talker_Talk(npc.index, "You are treading on a dangerous path.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: C.A.T. 은 그저 프로그래밍 명령을 따라야했을 뿐이라고요.");
+					Talker_Talk(npc.index, "C.A.T. was just following its programming.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신이 걸어가는 방향을 바꾸지 않는다면 지금 그 길이 당신의 마지막 길이 될 수도 있습니다.");
+					Talker_Talk(npc.index, "The path you're taking might be your last if you don't switch directions.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -858,19 +892,19 @@ stock void NpcTalker_Wave20Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신은 이 건물에서 나가달라는 제 요청을 고의로 무시했습니다.");
+					Talker_Talk(npc.index, "You have willingly ignored my requests to vacate these premises.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 그건 회복탄력성이 아니라 고집입니다.");
+					Talker_Talk(npc.index, "That's not resilience, that's stubbornness.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 애초에, C.A.T. 이 당신을 연구소 밖으로 안내하려 했을텐데, 당신이 그 도움을 거부했었죠.");
+					Talker_Talk(npc.index, "Now, C.A.T. would have also escorted you out of the lab, but you refused to be helped.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 지금 당신에게 무슨 일이 일어나든 당신은 스스로 자초한 일입니다.");
+					Talker_Talk(npc.index, "Whatever happens to you now is your own undoing.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -881,19 +915,19 @@ stock void NpcTalker_Wave20Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신은 제가 수없이 요청했음에도 불구하고 연구소를 떠나지 않는군요.");
+					Talker_Talk(npc.index, "You haven't left the laboratories despite my numerous requests.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 그건 회복탄력성이 아니라 고집입니다.");
+					Talker_Talk(npc.index, "That's not resilience, that's stubbornness.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 그리고, C.A.T. 이 당신을 연구소에서 내보내려는 것도 고의로 거부했었죠.");
+					Talker_Talk(npc.index, "You have also refused to be escorted out of the laboratories by C.A.T.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 이후 당신에게 벌어질 일은 당신의 선택이 낳은 결과입니다.");
+					Talker_Talk(npc.index, "Whatever happens to you now is your own result of your actions.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -904,19 +938,19 @@ stock void NpcTalker_Wave20Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 제 요청에도 불구하고 당신은 계속 연구소에 남아있었군요.");
+					Talker_Talk(npc.index, "You have stayed in the laboratories, despite my requests for you to leave.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 그건 회복탄력성이 아니라 고집입니다.");
+					Talker_Talk(npc.index, "That's not resilience, that's stubbornness.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 그리고 C.A.T. 의 안내도 고의로 거부했었죠.");
+					Talker_Talk(npc.index, "You have also refused to be escorted by C.A.T.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신에게 들이닥칠 운명이 뭐든간에, 당신이 자초한 일이겠죠.");
+					Talker_Talk(npc.index, "Whatever fate meets you now is your own doing.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -927,19 +961,19 @@ stock void NpcTalker_Wave20Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신은 이 건물에서 나가달라는 제 요청을 고의로 무시했고,");
+					Talker_Talk(npc.index, "You have willingly ignored my requests to vacate these premises.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: C.A.T. 도 산산조각냈죠.");
+					Talker_Talk(npc.index, "You have also torn down C.A.T.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 그럼 이제 남은건 침입자를 가장 비살상적인 방법으로 쫓아내도록 설계된 로봇과 대면하는 것 뿐.");
+					Talker_Talk(npc.index, "A robot designed to kick trespassers out in the least lethal way concepted.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 이제 당신에게 무슨 일이 일어나든 제 알 바가 아닙니다.");
+					Talker_Talk(npc.index, "I do not care what happens to you at this point.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -950,19 +984,19 @@ stock void NpcTalker_Wave20Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신은 이 건물에서 나가달라는 제 요청을 수없이 무시했고,");
+					Talker_Talk(npc.index, "You haven't left the laboratories despite my numerous requests.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: C.A.T. 도 무자비하게 파괴했죠.");
+					Talker_Talk(npc.index, "You have destroyed C.A.T. mercilessly as well.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 그럼 이제 남은건 침입자를 가장 비살상적인 방법으로 쫓아내도록 설계된 로봇과 대면하는 것 뿐.");
+					Talker_Talk(npc.index, "A robot created to kick trespassers out in a non-lethal way.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신에게 무슨 일이 일어나든간에 제 탓하지 마시죠.");
+					Talker_Talk(npc.index, "Whatever happens to you now, it doesn't bother me.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -973,19 +1007,19 @@ stock void NpcTalker_Wave20Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신은 여기서 나가달라는 제 요청에도 불구하고 아직까지 연구소에 남아있군요.");
+					Talker_Talk(npc.index, "You have stayed in the laboratories, despite my requests for you to leave.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 그래, C.A.T. 에게 저지른 일도 잊을 수 없고.");
+					Talker_Talk(npc.index, "Let's also not forget what you did to C.A.T.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 프로그래밍에 예속된 존재도 그렇게 무자비하게 파괴하다니.");
+					Talker_Talk(npc.index, "You demolished it, even though it was just following its programming.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 뿌린대로 거둔다고 하잖아요.");
+					Talker_Talk(npc.index, "What goes around, comes around.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1028,19 +1062,19 @@ stock void NpcTalker_Wave21Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 그러니까 A.R.I.S. 를 뛰어넘으셨군요.");
+					Talker_Talk(npc.index, "So, you made it past A.R.I.S.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 솔직히 말해서, 당신의 능력을 과소평가한 것 같습니다.");
+					Talker_Talk(npc.index, "I must say, I have definitely underestimated your capabilities.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 만약 계속 남아있겠다고 고집 피우신다면, 저도 어쩔 수 없이 직접 당신과 맞서야할 겁니다.");
+					Talker_Talk(npc.index, "If you are so adamant on staying here, I'll have no choice but to face-off against you myself.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 폭력을 쓰는건 별로지만... 당신이 저에게 선택권을 남겨주시지는 않는군요.");
+					Talker_Talk(npc.index, "I don't like to resort to violence...but you're not leaving me with the choice to decide.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1051,19 +1085,19 @@ stock void NpcTalker_Wave21Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: A.R.I.S. 를 뛰어넘으셨군요.");
+					Talker_Talk(npc.index, "You've gotten past A.R.I.S.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 솔직히 말해서, 당신의 능력을 과소평가한 것 같습니다.");
+					Talker_Talk(npc.index, "I have to say, I heavily understimated what you're capable of.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 하지만 계속 이렇게 남아있겠다고 고집 피우신다면, 저도 어쩔 수 없이 직접 당신과 맞설겁니다.");
+					Talker_Talk(npc.index, "If you are so persistent on staying here, I'll have no choice but to face-off against you myself.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 폭력을 쓰는건 별로지만... 당신이 저에게 선택권을 남겨주시지는 않는군요.");
+					Talker_Talk(npc.index, "I hate to resort to violence...but you're not giving me much of a choice to choose.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1074,19 +1108,19 @@ stock void NpcTalker_Wave21Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 방금 A.R.I.S. 를 넘으셨군요.");
+					Talker_Talk(npc.index, "You've managed to get past A.R.I.S.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 그래요, 솔직히 당신의 능력을 과소평가한 것 같습니다.");
+					Talker_Talk(npc.index, "I have most definitely underestimated what you're capable of.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 그렇지만 이런 식으로 계속 고집을 피우신다면, 저도 어쩔 수 없이 직접 당신과 맞서야합니다.");
+					Talker_Talk(npc.index, "If you are so determined to stay here, I'll have no choice but to face-off against you myself.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 폭력을 쓰는건 별로지만... 당신이 저에게 선택권을 남겨주시지는 않는군요.");
+					Talker_Talk(npc.index, "I hate to resort to violence...but you're not giving me much of a choice.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1098,19 +1132,19 @@ stock void NpcTalker_Wave21Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 이제 와서 회개한다고 변하는 건 없지.");
+					Talker_Talk(npc.index, "Redemption is not earned by small acts of compassion.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 갑자기 마음이 바뀌었다고 해서 이전에 제가 당신이 이전에 저지른걸 잊을 리가 없습니다.");
+					Talker_Talk(npc.index, "Just because you had a sudden change of heart doesn't mean that I'll forget about what you did earlier.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신이 계속 여기에 머물겠다고 고집을 피우면, 저도 직접 당신과 맞설 수밖에 없고.");
+					Talker_Talk(npc.index, "If you are so adamant on staying here, I'll have no choice but to face-off against you myself.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 폭력을 쓰고 싶지는 않지만... 절박한 상황에서는 누군가 나서야하니까.");
+					Talker_Talk(npc.index, "I don't want to resort to violence...but when desperate times call for help, someone has to step in.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1121,19 +1155,19 @@ stock void NpcTalker_Wave21Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신이 갑자기 마음을 바꾼다고 해서 제가 당신이 저지른 일을 잊을 거라고 생각하는 겁니까?");
+					Talker_Talk(npc.index, "You think I'll forget about what you did just because you had a sudden change of heart?");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 그건 회개가 아니라 기만이라고.");
+					Talker_Talk(npc.index, "You are not tricking me with your attempt at redemption.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신이 계속 여기에 머물겠다고 고집을 피우면, 저도 직접 당신과 맞설 수밖에 없고.");
+					Talker_Talk(npc.index, "If you are so adamant on staying here, I'll have no choice but to face-off against you myself.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 폭력을 쓰고 싶지는 않지만... 절박한 상황에서는 누군가 나서야하니까.");
+					Talker_Talk(npc.index, "I don't want to resort to violence...but when desperate times call for help, someone has to take a stand.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1145,19 +1179,19 @@ stock void NpcTalker_Wave21Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: ...진심으로?");
+					Talker_Talk(npc.index, "...Are you serious?");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 걔가 당신에게 뭘 잘못했기에 분해해버린겁니까?");
+					Talker_Talk(npc.index, "What did it do to you to warrant disassembling it?");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: C.A.T. 은 살려보냈으면서 A.R.I.S. 는 그대로 파괴하다니?");
+					Talker_Talk(npc.index, "You spared C.A.T. yet you couldn't spare A.R.I.S.?");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 나도 폭력을 쓰고 싶지는 않지만... 절박한 상황에서는 누군가 나서야하지.");
+					Talker_Talk(npc.index, "I don't want to resort to violence...but when desperate times call for help, someone has to step in.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1168,19 +1202,19 @@ stock void NpcTalker_Wave21Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: ...진심으로?");
+					Talker_Talk(npc.index, "...Are you for real?");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 걔가 당신에게 뭘 잘못했기에 파괴한 겁니까?");
+					Talker_Talk(npc.index, "What did it do to you to warrant destroying it?");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: C.A.T. 을 살려준 당시와 반응이 너무 다르잖아?");
+					Talker_Talk(npc.index, "You left C.A.T. alone, yet you couldn't do the same for A.R.I.S.?");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 나도 폭력을 쓰고 싶지는 않지만... 위급한 상황에서는 누군가 맞서야만 하니까.");
+					Talker_Talk(npc.index, "I don't want to resort to violence...but when desperate times call for help, someone has to take a stand.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1192,15 +1226,15 @@ stock void NpcTalker_Wave21Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: ...");
+					Talker_Talk(npc.index, "...");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: {crimson}그렇게 나오겠다 이거지.");
+					Talker_Talk(npc.index, "{crimson}I guess that's that, then.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: {crimson}나중에 두고보자고.");
+					Talker_Talk(npc.index, "{crimson}I'll be on my way.");
 				}
 				case 4:
 				{
@@ -1247,19 +1281,19 @@ stock void NpcTalker_Wave25Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 분명히, 당신이 아무 이유 없이 이 장소에 오신건 아닐텐데요.");
+					Talker_Talk(npc.index, "You definitely didn't come here for no reason.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 그럼, 당신은 도대체 누가 보낸겁니까?");
+					Talker_Talk(npc.index, "So, who sent you?");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: {unique}엑스피돈사인{default}들이 보냈을거라는 짐작은 되는데.");
+					Talker_Talk(npc.index, "Were {unique}Expidonsans{default} not brave enough to reach out to us on their own?");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 어, 당신은 {unique}엑스피돈사{default}가 뭔지도 모르시겠군요.");
+					Talker_Talk(npc.index, "Maybe you don't even know what {unique}Expidonsa{default} is.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1270,19 +1304,19 @@ stock void NpcTalker_Wave25Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 그래서, 당신에게 이 장소를 알려준건 누구입니까?");
+					Talker_Talk(npc.index, "So, who told you about this place?");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 여긴 절대로 혼자 올 수 있는 곳이 아닌데요.");
+					Talker_Talk(npc.index, "You definitely didn't stumble here on your own.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: {unique}엑스피돈사{default}의 요청인가요?");
+					Talker_Talk(npc.index, "Was it {unique}Expidonsa{default}?");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 아니, 혹시 {unique}엑스피돈사{default}가 뭔지는 아십니까?");
+					Talker_Talk(npc.index, "Do you even know what {unique}Expidonsa{default} is?");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1294,19 +1328,19 @@ stock void NpcTalker_Wave25Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 이곳에 그냥 들어올 수 있을리가 없을텐데.");
+					Talker_Talk(npc.index, "You definitely didn't come here for no reason.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 그래서, 당신은 누가 보냈죠?");
+					Talker_Talk(npc.index, "So, who sent you?");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 여기서 날뛰라고 요청한 자 말입니다.");
+					Talker_Talk(npc.index, "Someone who just wants to break stuff?");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 아니면 뭐 다른 목적이 있기라도 합니까?");
+					Talker_Talk(npc.index, "What else would your purpose here be?");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1318,19 +1352,19 @@ stock void NpcTalker_Wave25Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 이곳에 그냥 들어올 수 있을리가 없을텐데.");
+					Talker_Talk(npc.index, "You definitely didn't come here for no reason.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 그래서, 당신은 누가 보냈죠?");
+					Talker_Talk(npc.index, "So, who sent you?");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 여기서 날뛰라고 요청한 자 말입니다?");
+					Talker_Talk(npc.index, "Someone who just wants to break stuff?");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 아니면 뭐 다른 목적이 있기라도 합니까?");
+					Talker_Talk(npc.index, "What else would your purpose here be?");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1384,19 +1418,19 @@ stock void NpcTalker_Wave30Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 하지만 그들이 당신을 여기로 보낸 거라면...");
+					Talker_Talk(npc.index, "But if they've sent you here... that can't be right...");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 이곳에 냉동 보관된 인간들이 많았던 이유가 설마...");
+					Talker_Talk(npc.index, "Is this why they have so many cryogenically frozen humans?!");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 연구소로 인간들을 유인해서... 그렇게...");
+					Talker_Talk(npc.index, "They just...lured them into the labs and-");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 아니, 잠깐만, 뭔가 잘못 됐어... 금방, 금방 돌아올게요.");
+					Talker_Talk(npc.index, "No no no no no, this can't be right, I- I'll be right back.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1407,19 +1441,19 @@ stock void NpcTalker_Wave30Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 그들이 당신을 여기로 보낼리가 없을텐데, 만약 정말로 그런거라면,");
+					Talker_Talk(npc.index, "They can't have sent you here, that can't be right...");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 이곳에 왜 그리 냉동 보관된 인간들이 많았는지 설명이 되겠군요.");
+					Talker_Talk(npc.index, "It would explain why they have so many cryogenically frozen humans though.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 연구소로 인간들을 유인해서... 그렇게-");
+					Talker_Talk(npc.index, "They just...lured them into the labs and-");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 허... 아니야, 뭔가 이상해... 잠시만요...");
+					Talker_Talk(npc.index, "No...no, that can't be right, I'll be right back.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1431,15 +1465,15 @@ stock void NpcTalker_Wave30Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 그럼, 왜 아직도 여기에 있지?");
+					Talker_Talk(npc.index, "If that's so, haven't you caused enough mayhem?");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 이미 충분히 날뛴거 아닌가? 대체 얼마나 날뛰어야 만족할건데?");
+					Talker_Talk(npc.index, "How much destruction does the human race need to bring to be satisfied?");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: {unique}엑스피돈사{default}가 당신을 위험 인물로 취급하는걸 따랐어야했는데.");
+					Talker_Talk(npc.index, "Maybe {unique}Expidonsa{default} was right about treating you like a threat.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1451,15 +1485,15 @@ stock void NpcTalker_Wave30Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}:  그럼, 왜 아직도 여기에 있지?");
+					Talker_Talk(npc.index, "If that's so, haven't you caused enough mayhem?");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 이미 충분히 날뛴거 아닌가? 대체 얼마나 날뛰어야 만족할건데?");
+					Talker_Talk(npc.index, "How much destruction does the human race need to bring to be satisfied?");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: {unique}엑스피돈사{default}가 당신을 위험 인물로 취급하는걸 따랐어야했는데.");
+					Talker_Talk(npc.index, "Maybe {unique}Expidonsa{default} was right about treating you like a threat.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1519,15 +1553,15 @@ stock void NpcTalker_Wave31Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 방금 도대체 그게 뭐하는 로봇이었는지는 몰라도, 이 차원문과 관련이 있는 것 같습니다.");
+					Talker_Talk(npc.index, "I'm not exactly sure what that thing was...but it seemed to be related with these Portal Gates.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 이 연구소와 관련도 없고요. 그대로 두면 그 정체를 알아낼 수 있겠군요.");
+					Talker_Talk(npc.index, "It doesn't share any origins with the lab. Leaving it intact was probably the right choice.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 음, 그럼 다시 조사를 시작해볼까요.");
+					Talker_Talk(npc.index, "Well, I'll be going back to doing my research now.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1538,15 +1572,15 @@ stock void NpcTalker_Wave31Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 방금 그 로봇... 뭐였죠? 꼭 마치 차원문과 연결된 듯한 모습이었는데.");
+					Talker_Talk(npc.index, "That thing...what was that? It appears to be tied with the Portal Gates.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 게다가 또 이 연구소와 관련이 없는 존재였고. 꼭 마치 무언가를 찾으러 온 것 같았어요.");
+					Talker_Talk(npc.index, "No correlation with the laboratories either. Looks like it was searching for something.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 아, 좀 이상한 일이긴 해도, 다시 조사를 시작해야겠군요.");
+					Talker_Talk(npc.index, "As strange as that was, I have to get back to my research.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1558,15 +1592,15 @@ stock void NpcTalker_Wave31Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 방금 파괴하신 그거 말인데... 도대체 뭔지 알 수가 없네요.");
+					Talker_Talk(npc.index, "That thing that you just destroyed...I don't know what it is, or rather what it was.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 그 물체가 파괴되면서 저 차원문에 영향을 준 것 같습니다. 이전보다 더 불안정해졌어요.");
+					Talker_Talk(npc.index, "Its destruction appears to have affected the Portal Gates. They're more unstable now.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 뭐, 이건 당신 책임이니까요. 전 계속 조사에 집중해야겠습니다.");
+					Talker_Talk(npc.index, "Well, this is on you. I'm going back to my research now.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1577,15 +1611,15 @@ stock void NpcTalker_Wave31Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 그 로봇... 그 기원은 저도 모르겠습니다. 당신이 그걸 파괴해버렸기 때문에 그것의 정체를 더 알 수 없게 되었지만요.");
+					Talker_Talk(npc.index, "That robot...its origins are unknown to me. Not that I'll know what they are with what you did.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 제가 알아낸 바로는, 방금 그게 저 차원문들과 연결되어 있다는 겁니다. 지금은 상태가 매우 불안정해졌어요.");
+					Talker_Talk(npc.index, "What I do know is that it was linked to these Portal Gates. They are precarious now.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 뭐, 이건 당신이 선택한 행동이니까요. 전 계속 조사에 집중해야겠습니다.");
+					Talker_Talk(npc.index, "You chose to do this. I'm going back to my research now.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1648,39 +1682,39 @@ stock void NpcTalker_Wave36Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 제가 틀렸었군요.");
+					Talker_Talk(npc.index, "I was wrong.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 그러니까, {unique}엑스피돈사인{default}들이 당신을 파견했을 거라는 예상이 틀렸어요.");
+					Talker_Talk(npc.index, "Well, wrong about you being sent by {unique}Expidonsans{default}.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: 현재 {unique}엑스피돈사{default}의 실체를 제대로 모르고 있었으니까요.");
+					Talker_Talk(npc.index, "I wasn't aware of {unique}Expidonsa's{default} full picture.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 그래요... 그들도 윤리적으로는 그다지 좋진 않았군요.");
+					Talker_Talk(npc.index, "It appears that they aren't the best when it comes to being ethical.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 그리고, 당신의 엠블럼도 역검색을 해봤습니다.");
+					Talker_Talk(npc.index, "I have also reverse-searched your emblems.");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신은 일종의 용병이신거죠?");
+					Talker_Talk(npc.index, "You are some sort of mercēnārius, yeah?");
 				}
 				case 7:
 				{
-					CPrintToChatAll("{rare}???{default}: 누군가에게 고용되어 이곳을 약탈하려는 것 같군요.");
+					Talker_Talk(npc.index, "This would mean that you've been hired by someone to loot this place.");
 				}
 				case 8:
 				{
-					CPrintToChatAll("{rare}???{default}: 유감입니다만, 그렇게 둘 수는 없습니다.");
+					Talker_Talk(npc.index, "I'm afraid I can not let that happen.");
 				}
 				case 9:
 				{
-					CPrintToChatAll("{rare}???{default}: 하지만 용병들도 급여를 받고 하는 일이니까요. 당신도 목적을 달성할 때까지는 여기에 계속 머무시겠죠.");
+					Talker_Talk(npc.index, "But since mercenaries are paid for their work, I have no reason to assume that you intend on stopping.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1691,39 +1725,39 @@ stock void NpcTalker_Wave36Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 제가 착각했습니다.");
+					Talker_Talk(npc.index, "I was mistaken.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 네. {unique}엑스피돈사{default}에서 당신을 파견했을 거라는 예상은 틀렸죠.");
+					Talker_Talk(npc.index, "Well, mistaken about you being sent by {unique}Expidonsa{default}.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{rare}???{default}: {unique}엑스피돈사{default}의 전체 상황을 제대로 모르고 있었거든요.");
+					Talker_Talk(npc.index, "I wasn't aware of {unique}Expidonsa's{default} full history.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{rare}???{default}: 네, 뭐... 그들도 윤리적인 면에서는 그다지 좋진 않았더군요.");
+					Talker_Talk(npc.index, "It appears that they aren't the best when it comes to being ethical.");
 				}
 				case 5:
 				{
-					CPrintToChatAll("{rare}???{default}: 그리고, 당신의 엠블럼도 역검색을 해봤습니다.");
+					Talker_Talk(npc.index, "I have also reverse-searched your emblems.");
 				}
 				case 6:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신은 용병이 맞으시죠?");
+					Talker_Talk(npc.index, "You are some sort of mercenarye, is that correct?");
 				}
 				case 7:
 				{
-					CPrintToChatAll("{rare}???{default}: 누군가에게 고용되어 이곳을 약탈하려는 것 같군요.");
+					Talker_Talk(npc.index, "This would mean that you've been hired by someone to loot this place.");
 				}
 				case 8:
 				{
-					CPrintToChatAll("{rare}???{default}: 유감스럽게도, 그렇게 둘 수는 없습니다.");
+					Talker_Talk(npc.index, "I'm afraid I can not let that happen.");
 				}
 				case 9:
 				{
-					CPrintToChatAll("{rare}???{default}: 하지만 용병들도 급여를 받고 하는 일이니까요. 당신도 목적을 달성할 때까지는 여기에 계속 머무시겠죠.");
+					Talker_Talk(npc.index, "But since mercenaries are paid for their work, I have no reason to assume that you intend on stopping.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1735,11 +1769,11 @@ stock void NpcTalker_Wave36Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신이 여기에 온 목적은 모르더라도, 내가 개입해야겠어.");
+					Talker_Talk(npc.index, "I'm not sure what your goal here is, but I will have to intervene.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신이 여기서 더 날뛰어서 대혼란을 불러오게 둘 수는 없거든.");
+					Talker_Talk(npc.index, "I can not allow you to bring more mayhem.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1751,11 +1785,11 @@ stock void NpcTalker_Wave36Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신이 여기에 온 목적은 모르더라도, 내가 개입해야겠어.");
+					Talker_Talk(npc.index, "I'm not sure what your goal here is, but I will have to intervene.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신이 여기서 더 날뛰어서 대혼란을 불러오게 둘 수는 없거든.");
+					Talker_Talk(npc.index, "I can not allow you to bring more mayhem.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1808,11 +1842,11 @@ stock void NpcTalker_Wave37Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 당신이 이 장비들을 가져가는 걸 허락할 수 없습니다.");
+					Talker_Talk(npc.index, "I can not let you get any of this gear.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 만약 이것들이 사악한 자들의 손에 들어간다면, 그 여파가 재앙에 가까워질 겁니다.");
+					Talker_Talk(npc.index, "If it were to fall into the wrong hands, the repercussions could be catastrophic.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1823,11 +1857,11 @@ stock void NpcTalker_Wave37Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 그 장비들은 가져갈 수 없습니다. 제가 허용 못 해요.");
+					Talker_Talk(npc.index, "You can not get any of this gear. I can't allow that.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 사악한 자들이 그 장비들을 입수한다면... 우리 세계에 어떠한 영향을 끼칠지 알 수 없습니다.");
+					Talker_Talk(npc.index, "If anyone with the wrong plans was to get their hands on this...the fate of our world could be at risk.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1903,11 +1937,11 @@ stock void NpcTalker_Wave38Talk(Talker npc)
 			{
 				case 1:
 				{
-					CPrintToChatAll("{rare}???{default}: 아무래도 제가 개입해야겠군요.");
+					Talker_Talk(npc.index, "I have to intervene.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{rare}???{default}: 유감입니다.");
+					Talker_Talk(npc.index, "I'm sorry.");
 					i_TalkDelayCheck = -1;
 				}
 			}
@@ -1945,5 +1979,20 @@ stock void NpcTalker_Wave38Talk(Talker npc)
 				}
 			}
 		}
+	}
+}
+
+static void Talker_GatherWavesetCompletion()
+{
+	for (int client = 1; client <= MaxClients; client++)
+	{
+		if (!IsClientInGame(client) || IsFakeClient(client) || AprilFoolsIconOverride() == 1)
+		{
+			// Also specifically get past this if the steam happy modifier is on
+			b_DoNotHideName[client] = false;
+			continue;
+		}
+		
+		b_DoNotHideName[client] = Items_HasNamedItem(client, "Expidonsan Research Card");
 	}
 }

@@ -176,31 +176,54 @@ methodmap ApertureResearcher < CClotBody
 
 		if(ally == TFTeam_Blue)
 		{
-			CPrintToChatAll("{normal}연구원{default}: 𝙹ᓵ⍑ リ╎ᓵ⍑ℸ ̣ ↸╎ᒷᓭᒷ ᒷꖌᒷꖎ⍑ᔑ⎓ℸ ̣ᒷリ ꖌ∷ᒷᔑℸ ̣⚍∷ᒷリ!!!");
+			CreateTimer(0.2, Researcher_Timer_IntroMessage_Almagest, EntIndexToEntRef(npc.index));
 		}
 		else
 		{
-			switch(GetRandomInt(0,2))
-			{
-				case 0:
-				{
-					CPrintToChatAll("{normal}연구원{default}: 안 돼! 난 죽고 싶지 않아!");
-				}
-				case 1:
-				{
-					CPrintToChatAll("{normal}연구원{default}: 왜 여기서 날뛰는거냐고?!");
-				}
-				case 2:
-				{
-					CPrintToChatAll("{normal}연구원{default}: 제발! 날 쏘지 마! 난 살고 싶어!...");
-				}
-			}
+			CreateTimer(0.2, Researcher_Timer_IntroMessage_Aperture, EntIndexToEntRef(npc.index));
 		}
 
 		TeleportDiversioToRandLocation(npc.index,_,1750.0, 1250.0);
 		
 		return npc;
 	}
+}
+
+static void Researcher_Timer_IntroMessage_Aperture(Handle timer, int ref)
+{
+	int entity = EntRefToEntIndex(ref);
+	if (ref == INVALID_ENT_REFERENCE || b_NpcHasDied[entity])
+		return;
+	
+	switch(GetRandomInt(0,2))
+	{
+		case 0:
+		{
+			Researcher_Talk(entity, "I really didn't want to end up in here!");
+		}
+		case 1:
+		{
+			Researcher_Talk(entity, "Why here?! Couldn't it have been any other place on this planet?!");
+		}
+		case 2:
+		{
+			Researcher_Talk(entity, "Please don't harm me, I-...");
+		}
+	}
+}
+
+static void Researcher_Timer_IntroMessage_Almagest(Handle timer, int ref)
+{
+	int entity = EntRefToEntIndex(ref);
+	if (ref == INVALID_ENT_REFERENCE || b_NpcHasDied[entity])
+		return;
+	
+	Researcher_Talk(entity, "𝙹ᓵ⍑ リ╎ᓵ⍑ℸ ̣ ↸╎ᒷᓭᒷ ᒷꖌᒷꖎ⍑ᔑ⎓ℸ ̣ᒷリ ꖌ∷ᒷᔑℸ ̣⚍∷ᒷリ!!!");
+}
+
+static void Researcher_Talk(int entity, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(entity, "normal", message);
 }
 
 public void ApertureResearcher_ClotThink(int iNPC)
@@ -243,15 +266,15 @@ public void ApertureResearcher_ClotThink(int iNPC)
 			{
 				case 0:
 				{
-					CPrintToChatAll("{normal}연구원{default}: 휴, 당신의 파일 기록을 보면 당신이 우릴 도울거란 생각은 하지도 못 했는데. 도와줘서 고맙소. 다들 여기서 나가자!");
+					Researcher_Talk(npc.index, "Well, given your history, I wasn't expecting you to be so helpful! I'm out of here!");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{normal}연구원{default}: 당신의 엑스피돈사에 대한 호의는 잊히지 않을거요! 어서 빠져나가자!");
+					Researcher_Talk(npc.index, "Your contributions to Expidonsa will not go unnoticed! I'm out!");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{normal}연구원{default}: 정말 위험했군. 우리에게 선의를 베풀어주어서 정말 고맙소! 다들 어서 순간이동해!");
+					Researcher_Talk(npc.index, "That was a close call, thanks for staying neutral! Teleporter, start!");
 				}
 			}
 		}
@@ -335,7 +358,7 @@ public void ApertureResearcher_NPCDeath(int entity)
 
 	if(GetTeam(npc.index) == TFTeam_Blue)
 	{
-		CPrintToChatAll("{normal}연구원{default}: ⍊ᒷ∷↸ᔑᒲᒲℸ ̣, ↸╎ᒷ ⍑ᔑʖᒷリ ↸𝙹ᓵ⍑ ᓭᓵ⍑𝙹リ ∴ᔑᓭ ↸∷ᔑ⚍⎓!");
+		Researcher_Talk(npc.index, "⍊ᒷ∷↸ᔑᒲᒲℸ ̣, ↸╎ᒷ ⍑ᔑʖᒷリ ↸𝙹ᓵ⍑ ᓭᓵ⍑𝙹リ ∴ᔑᓭ ↸∷ᔑ⚍⎓!");
 	}
 	else
 	{
@@ -343,15 +366,15 @@ public void ApertureResearcher_NPCDeath(int entity)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{normal}연구원{default}: 됐어! 우린 여기서 나간다!");
+				Researcher_Talk(npc.index, "I'm out of here!");
 			}
 			case 1:
 			{
-				CPrintToChatAll("{normal}연구원{default}: 텔레포터 재구성 완료! 다신 보지 말자, 이 더러운 놈들아!");
+				Researcher_Talk(npc.index, "Teleporter reconfigured, see you in never!");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{normal}연구원{default}: 빨리 텔레포트 장치를 작동 시켜!");
+				Researcher_Talk(npc.index, "Start the machine, start the machine!");
 			}
 		}	
 	}
