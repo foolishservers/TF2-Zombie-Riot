@@ -2132,8 +2132,8 @@ public void ReShowSettingsHud(int client)
 	menu2.AddItem("-85", buffer);
 	*/
 
-	Format(buffer, sizeof(buffer), "%T", "Taunt Speed increase", client);
-	if(b_TauntSpeedIncrease[client])
+	Format(buffer, sizeof(buffer), "%T", "Display Backwards Walk Notif", client);
+	if(b_BackwardsWalkNotif[client])
 	{
 		Format(buffer, sizeof(buffer), "%s %s", buffer, "[X]");
 	}
@@ -2639,13 +2639,13 @@ public int Settings_MenuPage(Menu menu, MenuAction action, int client, int choic
 				}
 				case -71: 
 				{
-					if(b_TauntSpeedIncrease[client])
+					if(b_BackwardsWalkNotif[client])
 					{
-						b_TauntSpeedIncrease[client] = false;
+						b_BackwardsWalkNotif[client] = false;
 					}
 					else
 					{
-						b_TauntSpeedIncrease[client] = true;
+						b_BackwardsWalkNotif[client] = true;
 					}
 					ReShowSettingsHud(client);
 				}
@@ -5680,6 +5680,7 @@ void Store_GiveAllInternal(int client, int health, bool removeWeapons = false)
 	else if(StoreItems)
 	{
 		Store_RemoveSpecificItem(client, "Teutonic Longsword", false);
+		Store_RemoveSpecificItem(client, "Teutonic Longsword Shadow", false);
 	}
 	//OverridePlayerModel(client);
 	//stickies can stay, we delete any non spike stickies.
@@ -5747,7 +5748,7 @@ void Store_GiveAllInternal(int client, int health, bool removeWeapons = false)
 	b_Reinforce[client] = false;
 	Custom_Inventory_Reset(client);
 	i_MaxSupportBuildingsLimit[client] = 0;
-	b_PlayerWasAirbornKnockbackReduction[client] = false;
+	b_PlayerWasAirbornKnockbackReduction[client] = 0;
 	BannerOnEntityCreated(client);
 	FullmoonEarlyReset(client);
 
@@ -5939,6 +5940,11 @@ int Store_GiveItem(int client, int index, bool &use=false, bool &found=false)
 						}
 						else
 							CrossbowGiveDhook(entity, true);
+					}
+					if(saveslot == TFWeaponSlot_Melee)
+					{	
+						//this melee weapon will deal 0 damage from tf2's view
+						Attributes_Set(entity, 476, 0.0);
 					}
 					HidePlayerWeaponModel(client, entity, true);
 

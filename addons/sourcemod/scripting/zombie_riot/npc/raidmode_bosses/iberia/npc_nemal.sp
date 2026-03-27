@@ -411,7 +411,7 @@ methodmap Nemal < CClotBody
 			{
 				case 0:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: 능력 훈련이었던거 기억 나지? 그래서 내가 왔어! 살살 해보자!");
+					CPrintToChatAll("{lightblue}Nemal{default}: We're supposed to train our abilities, remember? Well here I am! Let's start off easy!");
 				}
 				case 1:
 				{
@@ -419,11 +419,11 @@ methodmap Nemal < CClotBody
 				}
 				case 2:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: {gold}실베스터{default} 얘 안 온거 맞지? 또 {blue}센살{default}이랑 어디 해변가로 놀러가서 퍼질러 자고 있겠지... 또 나만 쏙 빼놓고!!!\n휴가는 이거 한 다음에 가자고 그렇게 말했는데!");
+					CPrintToChatAll("{lightblue}Nemal{default}: {gold}Silvester{default} is late isn't he? Probably off to some random beach with {blue}Sensal{default} as usual.. without me!!!\nWe said vacation is after this! Oh well, let's begin!");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: 이베리아인과 {gold}엑스피돈사인{default}들은 함께지!... 난 혼혈이지만...\n근데 이건 중요한게 아니고, 일단 해보자!");
+					CPrintToChatAll("{lightblue}Nemal{default}: Iberians are with us {gold}Expidonsans{default}!... But I'm kinda both...\nProbably not that important, anyways let's go!");
 				}
 			}
 		}
@@ -434,19 +434,19 @@ methodmap Nemal < CClotBody
 			{
 				case 0:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: 방금 연락이 왔는데, {gold}실베스터{default}가 곧 온대, 뭔 일 때문에 바쁘다고 하네, 그러니까 그가 올 때를 대비해!");
+					CPrintToChatAll("{lightblue}Nemal{default}: Got a call, {gold}Silvester{default} will be joining soon, he had some buisness apparently, get ready for... when he comes!");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: 자꾸 {darkblue}왈츠{default}가 {gold}실베스터{default}한테 끌려간다고? 아닌데? 왈츠가 실베스터를 강제로 끌고 오던데?");
+					CPrintToChatAll("{lightblue}Nemal{default}: What I would do for {darkblue}Waldch{default} to stop being so mangetic to {gold}Silvester{default} with his Wildingen antics, that isn't his home!!!");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: 솔직히, {blue}센살{default} 좀 무섭지 않아? 너도 그랑 싸워봤으니까 알 거 아냐!");
+					CPrintToChatAll("{lightblue}Nemal{default}: I'll be honest, {blue}Sensal's{default} kinda scary, I mean you fought him, you'd know!");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: 안타깝게도 많은 이베리아인들이 자신들의 고향을 떠난 상태야. 망할 {blue}시본{default}놈들 때문에... 남은 생존한 이베리아인들은 우리가 데려와서 돕고 있어!");
+					CPrintToChatAll("{lightblue}Nemal{default}: There sadly ain't many Iberians left after what happend to their home country, damn traitorous {blue}seaborn{default}... we took in the surviving iberians and helped them!");
 				}
 			}
 		}
@@ -457,15 +457,15 @@ methodmap Nemal < CClotBody
 			{
 				case 0:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: 좋아, 이제 수다는 그만할게.");
+					CPrintToChatAll("{lightblue}Nemal{default}: Enough chatter, I'll start to not restrain myself.");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: {blue}센살{default}이 너희가 약간의 트릭을 쓴다 했었는데, 거짓말이 아니었네.");
+					CPrintToChatAll("{lightblue}Nemal{default}: {blue}Sensal{default} wasn't lying when he said you guys got some tricks.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: 이베리아는 매우 긴 역사를 가지고 있는 국가야. 결국 {gold}엑스피돈사{default}의 협력으로 재건되겠지.");
+					CPrintToChatAll("{lightblue}Nemal{default}: Iberians have some really widening history, eventually it'll be rebuilt with {gold}Expidonsa's{default} help.");
 				}
 				case 3:
 				{
@@ -480,11 +480,11 @@ methodmap Nemal < CClotBody
 			{
 				case 0:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: 최선을 다 해야겠네.");
+					CPrintToChatAll("{lightblue}Nemal{default}: Looks like I have to give it all.");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: 이제 물러서지 않을게.");
+					CPrintToChatAll("{lightblue}Nemal{default}: I won't hold back anymore.");
 				}
 				case 2:
 				{
@@ -492,32 +492,7 @@ methodmap Nemal < CClotBody
 				}
 				case 3:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: 살짝 걱정했었는데, 그럴 필요는 없어보이네.");
-				}
-			}
-		}
-		TripleLol = false;
-		if(StrContains(data, "triple_enemies") != -1)
-		{
-			TripleLol = true;
-			i_RaidGrantExtra[npc.index] = 4;
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					CPrintToChatAll("{lightblue}네말{default}: {blue}센살{default}과 함께 하기로 했어.");
-				}
-				case 1:
-				{
-					CPrintToChatAll("{lightblue}네말{default}: 아, {blue}센살{default}. 여기야.");
-				}
-				case 2:
-				{
-					CPrintToChatAll("{lightblue}네말{default}: 이건 좀 너무 심한거 아닌가?");
-				}
-				case 3:
-				{
-					CPrintToChatAll("{lightblue}네말{default}: 미안한데 어... 그게 끝이네.");
+					CPrintToChatAll("{lightblue}Nemal{default}: I would worry about you, but I don't think thats necessary.");
 				}
 			}
 		}
@@ -531,11 +506,11 @@ methodmap Nemal < CClotBody
 			{
 				case 0:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: 최선을 다 해야겠네.");
+					CPrintToChatAll("{lightblue}Nemal{default}: Looks like I have to give it all.");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: 이제 물러서지 않을게.");
+					CPrintToChatAll("{lightblue}Nemal{default}: I won't hold back anymore.");
 				}
 				case 2:
 				{
@@ -543,7 +518,7 @@ methodmap Nemal < CClotBody
 				}
 				case 3:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: 살짝 걱정했었는데, 그럴 필요는 없어보이네.");
+					CPrintToChatAll("{lightblue}Nemal{default}: I would worry about you, but I don't think thats neccecary.");
 				}
 			}
 		}
@@ -610,6 +585,31 @@ methodmap Nemal < CClotBody
 			amount_of_people = 1.0;
 			
 		RaidModeScaling *= amount_of_people; //More then 9 and he raidboss gets some troubles, bufffffffff
+		TripleLol = false;
+		if(!StrContains(data, "triple_enemies"))
+		{
+			TripleLol = true;
+			i_RaidGrantExtra[npc.index] = 4;
+			switch(GetRandomInt(0,3))
+			{
+				case 0:
+				{
+					CPrintToChatAll("{lightblue}Nemal{default}: Sorry {blue}Sensal's{default} he's comming a bit late.");
+				}
+				case 1:
+				{
+					CPrintToChatAll("{lightblue}Nemal{default}: Hey {blue}Sensal's{default}, im here.");
+				}
+				case 2:
+				{
+					CPrintToChatAll("{lightblue}Nemal{default}: Isn't this overkill?");
+				}
+				case 3:
+				{
+					CPrintToChatAll("{lightblue}Nemal{default}: Sorry but thats all.");
+				}
+			}
+		}
 		if(!TripleLol)
 		{
 			func_NPCFuncWin[npc.index] = view_as<Function>(Raidmode_Expidonsa_Nemal_Win);
@@ -674,7 +674,7 @@ static void Internal_ClotThink(int iNPC)
 			{
 				case 0:
 				{
-					CPrintToChatAll("{lightblue}네말{default}: 날 못 이기는 거면, 넌 아직 {purple}공허{default}에 대한 준비가 덜 됐다는 뜻이야.");
+					CPrintToChatAll("{lightblue}Nemal{default}: You don't beat me, then you'll never be able to face the full force of the {purple}void{default}.");
 				}
 				case 1:
 				{
@@ -698,7 +698,7 @@ static void Internal_ClotThink(int iNPC)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{lightblue}네말{default}: 뭐... 다음 기회가 있잖아.");
+				CPrintToChatAll("{lightblue}Nemal{default}: Well... There's next time.");
 			}
 			case 1:
 			{
@@ -706,7 +706,7 @@ static void Internal_ClotThink(int iNPC)
 			}
 			case 2:
 			{
-				CPrintToChatAll("{lightblue}네말{default}: 미안하지만 이건 보육원이 아니라 훈련이야. 해야만 하는 일이라고.");
+				CPrintToChatAll("{lightblue}Nemal{default}: I'm sorry but this is needed, this is training, not a daycare.");
 			}
 		}
 		return;
@@ -740,7 +740,7 @@ static void Internal_ClotThink(int iNPC)
 			}
 			case 1:
 			{
-				CPrintToChatAll("{lightblue}네말{default}: ... {darkblue}카멜슈타인{default}을 이런 식으로 실망시키지는 마...");
+				CPrintToChatAll("{lightblue}Nemal{default}: ... Don't disappoint {darkblue}Kahmlstein{default} like this...");
 			}
 			case 2:
 			{
@@ -1010,7 +1010,7 @@ static void Internal_NPCDeath(int entity)
 		}
 		case 3:
 		{
-			CPrintToChatAll("{lightblue}네말{default}: 이거 좀 흥미로운데...");
+			CPrintToChatAll("{lightblue}Nemal{default}: I was going to insult you, but I asked for this...");
 		}
 	}
 
@@ -1785,12 +1785,12 @@ bool NemalTalkPostWin(Nemal npc)
 	else if(GetGameTime() + 5.0 > f_TimeSinceHasBeenHurt[npc.index] && i_SaidLineAlready[npc.index] < 4)
 	{
 		i_SaidLineAlready[npc.index] = 4;
-		CPrintToChatAll("{lightblue}네말{default}: 우리가 계속 {purple}공허 관문{default}을 통제하고 있을게. 너희 팀이 전부 {purple}공허{default} 원정에 나갈 준비가 되었다면 알려줘!");
+		CPrintToChatAll("{lightblue}Nemal{default}: We'll Keep {purple}void gates{default} under control, tell us when youre ready to kill off the {purple}void{default}  once and for all, as a team!");
 	}
 	else if(GetGameTime() + 10.0 > f_TimeSinceHasBeenHurt[npc.index] && i_SaidLineAlready[npc.index] < 3)
 	{
 		i_SaidLineAlready[npc.index] = 3;
-		CPrintToChatAll("{lightblue}네말{default}: 쉿! 그럼 재미 없잖아! 어쨌든, 잘 했어!");
+		CPrintToChatAll("{lightblue}Nemal{default}: Shhh! Don't ruin the fun! Eitherways, good job!");
 	}
 	else if(GetGameTime() + 13.0 > f_TimeSinceHasBeenHurt[npc.index] && i_SaidLineAlready[npc.index] < 2)
 	{
@@ -2069,7 +2069,7 @@ bool NemalSummonSilvester(Nemal npc)
 						}
 						case 3:
 						{
-							CPrintToChatAll("{lightblue}네말{default}: 쟤는 볼 때마다 가끔씩 희한하게 느껴진단 말이지...");
+							CPrintToChatAll("{lightblue}Nemal{default}: Just don't attack the same guy as me, thats unfair!");
 						}
 					}
 					npc.m_iChanged_WalkCycle = 3;
@@ -2114,11 +2114,11 @@ bool NemalSummonSilvester(Nemal npc)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{lightblue}네말{default}: 음? 드디어 {gold}실베스터{default}가 왔네!");
+				CPrintToChatAll("{lightblue}Nemal{default}: Oh? Looks like {gold}Silvester{default} Is finally coming!");
 			}
 			case 1:
 			{
-				CPrintToChatAll("{lightblue}네말{default}: 저 게을러터진 {gold}느림보{default}가 이제야 왔네!");
+				CPrintToChatAll("{lightblue}Nemal{default}: The lazy ass {gold}cat{default} is coming right up!");
 			}
 			case 2:
 			{

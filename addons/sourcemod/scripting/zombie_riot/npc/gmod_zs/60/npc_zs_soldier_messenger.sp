@@ -440,7 +440,7 @@ static void Spawn_Reinforcements(InfectedMessenger npc)
 		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
 		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
 	}
-	spawn_index = NPC_CreateByName("npc_zs_mlsm", npc.index, pos, ang, GetTeam(npc.index));
+	spawn_index = NPC_CreateByName("npc_zs_sniper", npc.index, pos, ang, GetTeam(npc.index));
 	NpcAddedToZombiesLeftCurrently(spawn_index, true);
 	if(spawn_index > MaxClients)
 	{

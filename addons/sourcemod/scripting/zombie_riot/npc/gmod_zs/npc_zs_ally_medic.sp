@@ -339,11 +339,9 @@ static int Medic_Work(Allymedic npc, float distance)
 			else
 			{
 				npc.StopHealing();
-				npc.m_bnew_target = false;
-				npc.SetGoalEntity(npc.m_iTargetWalkTo);
-                return 0;
+				npc.m_bnew_target = false;					
 			}
-			//return 0;
+			return 0;
 		}
 		npc.m_iTargetWalkTo=0;
 	}

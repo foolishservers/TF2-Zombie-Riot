@@ -1101,7 +1101,8 @@ stock void SetParent(int iParent, int iChild, const char[] szAttachment = "", co
 	{
 		if (szAttachment[0]) // do i even have anything?
 		{
-			SetVariantString(szAttachment); // "head"
+			if(!StrEqual(szAttachment, "root"))
+				SetVariantString(szAttachment); // "head"
 
 			if (maintain_anyways || !AreVectorsEqual(vOffsets, view_as<float>({0.0,0.0,0.0}))) // NULL_VECTOR
 			{
@@ -3202,7 +3203,7 @@ void Projectile_DealElementalDamage(int victim, int attacker, float Scale = 1.0)
 	}
 }
 
-bool OnlyWarnOnceEver = true;
+//bool OnlyWarnOnceEver = true;
 stock void Explode_Logic_Custom(float damage,
 int client, //To get attributes from and to see what is my enemy!
 int entity,	//Entity that gets forwarded or traced from/Distance checked.
@@ -3239,6 +3240,7 @@ int inflictor = 0)
 			explosion_range_dmg_falloff = Attributes_Get(weapon, Attrib_OverrideExplodeDmgRadiusFalloff, EXPLOSION_RANGE_FALLOFF);
 	}
 #endif	
+/*
 	if(explosionRadius >= 2100.0)
 	{
 		if(OnlyWarnOnceEver)
@@ -3251,6 +3253,7 @@ int inflictor = 0)
 		//at that point it  could just be global too.
 		explosionRadius = 2000.0;
 	}
+*/
 	//this should make explosives during raids more usefull.
 	if(!FromBlueNpc) //make sure that there even is any valid npc before we do these huge calcs.
 	{ 
@@ -3984,8 +3987,8 @@ stock int SpawnFormattedWorldText(const char[] format, float origin[3], int text
 			vector[1] += origin[1];
 			vector[2] += origin[2];
 
-			TeleportEntity(worldtext, vector, NULL_VECTOR, NULL_VECTOR);
-			SetParent(entity_parent, worldtext, "", origin);
+			SDKCall_SetLocalOrigin(worldtext, vector);
+			SetParent(entity_parent, worldtext, "root", origin);
 		}
 		else
 		{
@@ -5888,6 +5891,7 @@ enum
 	TankThrowLogic = 4,
 	Boomerang = 5,
 	ShadowingSlicer = 6,
+	ReilaSlash = 7,
 }
 
 enum struct HitDetectionEnum
@@ -6042,7 +6046,7 @@ void Stocks_ColourPlayernormal(int client)
 	while(TF2U_GetWearable(client, entity, i))
 	{
 #if defined ZR
-		if(entity == EntRefToEntIndex(Armor_Wearable[client]) || i_WeaponVMTExtraSetting[entity] != -1)
+		if(i_WeaponVMTExtraSetting[entity] != -1)
 			continue;
 #endif
 
@@ -6130,4 +6134,14 @@ stock int TrailAttach_Bone(int player, char[] attachBone, char[] trail, int alph
 	}
 		
 	return -1;
+}
+
+stock void StringToUpper(char[] buffer)
+{
+	int i; 
+	while (buffer[i] != '\0')
+	{
+		buffer[i] = CharToUpper(buffer[i]);
+		i++;
+	}
 }

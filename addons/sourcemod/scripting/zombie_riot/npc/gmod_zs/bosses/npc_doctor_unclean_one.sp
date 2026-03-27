@@ -839,7 +839,6 @@ public void DasNaggenvatcher_OnTakeDamagePost(int victim, int attacker, int infl
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_infected_tomislav_main",20000, RoundToCeil(4.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_sniper_jarate",20000, RoundToCeil(2.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_random_zombie", RoundToCeil(100000.0 * MultiGlobalHighHealthBoss), 1);
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_nightmare", RoundToCeil(100000.0 * MultiGlobalHighHealthBoss), 1);
 	}
 	else if(Ratio <= 0.55 && npc.g_TimesSummoned < 2)
 	{
@@ -855,7 +854,6 @@ public void DasNaggenvatcher_OnTakeDamagePost(int victim, int attacker, int infl
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_gore_blaster",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_runner",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_random_zombie", RoundToCeil(100000.0 * MultiGlobalHighHealthBoss), 1);
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_pregnant", RoundToCeil(100000.0 * MultiGlobalHighHealthBoss), 1);
 	}
 	else if(Ratio <= 0.35 && npc.g_TimesSummoned < 3)
 	{
@@ -872,8 +870,7 @@ public void DasNaggenvatcher_OnTakeDamagePost(int victim, int attacker, int infl
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_sniper",20000, RoundToCeil(2.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_cleaner",50000, RoundToCeil(2.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_ninja_zombie_spy",125, RoundToCeil(2.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_malfunctioning_heavy", RoundToCeil(150000.0 * MultiGlobalHighHealthBoss), 1);
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_sphynx", RoundToCeil(150000.0 * MultiGlobalHighHealthBoss), 1);
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_malfunctioning_heavy", RoundToCeil(300000.0 * MultiGlobalHighHealthBoss), 1);
 	}
 	else if(Ratio <= 0.20 && npc.g_TimesSummoned < 4)
 	{

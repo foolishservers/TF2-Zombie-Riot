@@ -270,6 +270,7 @@ enum struct RoomInfo
 		kv.GetString("spawn", this.Spawn, sizeof(this.Spawn));
 		kv.GetString("key", this.Key, sizeof(this.Key));
 		this.FuncStart = KvGetFunction(kv, "func_start");
+		this.CurrentCooldown = 0.0;
 		return true;
 	}
 
@@ -1985,7 +1986,23 @@ static void StartBattle(const RoomInfo room, float time = 0.1)
 		snap.GetKey(length, buffer, sizeof(buffer));
 
 		room.Fights.GetValue(buffer, scale);
-		EnemyScaling = ScaleBasedOnRound(round) / ScaleBasedOnRound(scale);
+		//we will scale down round linearly
+		if(round >= 25)
+		{
+			//we lessen scaling number
+			round += 1;
+		}
+		if(round >= 30)
+		{
+			//we lessen scaling number
+			round += 1;
+		}
+		if(round >= 40)
+		{
+			//we lessen scaling number
+			round += 1;
+		}
+		EnemyScaling = ScaleBasedOnRound((round - 6)) / ScaleBasedOnRound(scale);
 		PrintToConsoleAll("Dungeon Enemy Scaling: %.2f%%", EnemyScaling * 100.0);
 
 		BuildPath(Path_SM, buffer, sizeof(buffer), CONFIG_CFG, buffer);
@@ -2194,7 +2211,7 @@ bool Dungeon_AtLimitNotice()
 
 static float ScaleBasedOnRound(int round)
 {
-	return (500.0 + Pow(float(round), 2.7));
+	return (750.0 + Pow(float(round), 2.8));
 }
 
 void Dungeon_EnemySpawned(int entity)
@@ -2225,10 +2242,25 @@ void Dungeon_EnemySpawned(int entity)
 
 					if(EnemyScaling > 0.0)
 					{
-						fl_Extra_Damage[entity] *= 1.0 + ((EnemyScaling - 1.0) / 3.0);
+						fl_Extra_Damage[entity] *= 1.0 + ((EnemyScaling - 1.0) / 4.0);
 						
 						SetEntProp(entity, Prop_Data, "m_iHealth", RoundToCeil(float(GetEntProp(entity, Prop_Data, "m_iHealth")) * EnemyScaling));
 						SetEntProp(entity, Prop_Data, "m_iMaxHealth", RoundToCeil(float(ReturnEntityMaxHealth(entity)) * EnemyScaling));
+					}
+				}
+				
+				if(EnableSilentMode)
+				{
+					if(i_IsABuilding[entity] || i_NpcIsABuilding[entity])
+					{
+
+					}
+					else
+					{
+						//Too many players, we have to nerf the stats by 35%...
+						fl_Extra_Damage[entity] *= 0.65;
+						SetEntProp(entity, Prop_Data, "m_iHealth", RoundToCeil(float(ReturnEntityMaxHealth(entity)) * 0.65));
+						SetEntProp(entity, Prop_Data, "m_iMaxHealth", RoundToCeil(float(ReturnEntityMaxHealth(entity)) * 0.65));
 					}
 				}
 				Dungeon_GiveNpcMoney(entity);
@@ -2416,36 +2448,41 @@ stock int FindByEntityName(const char[] name)
 	return -1;
 }
 
-public void ZRModifs_ModifEnemyChaos(int iNpc)
+public void ZRModifs_ModifEnemyPrefixDuff(int iNpc)
 {
-	if(i_NpcInternalId[iNpc] == DungeonLoot_Id() ||i_NpcInternalId[iNpc] == Const2Spawner_Id())
-		return;
-		
-	fl_Extra_Damage[iNpc] *= 1.10;
-	int Health = GetEntProp(iNpc, Prop_Data, "m_iMaxHealth");
-	SetEntProp(iNpc, Prop_Data, "m_iHealth", RoundToCeil(float(Health) * 1.10));
-	SetEntProp(iNpc, Prop_Data, "m_iMaxHealth", RoundToCeil(float(Health) * 1.10));
-
+	bool DontBuffBaseStats = false;
 	if(b_thisNpcIsABoss[iNpc])
-		return;
+		DontBuffBaseStats = true;
+	if(b_thisNpcIsARaid[iNpc])
+	{
+		DontBuffBaseStats = true;
+		RaidModeTime = FAR_FUTURE;
+	}
 	if(i_IsABuilding[iNpc])
 		return;
 	if(i_NpcIsABuilding[iNpc])
 		return;
-//	if(Dungeon_GetEntityZone(iNpc) != Zone_Dungeon && Dungeon_GetEntityZone(iNpc) != Zone_RivalBase)
-//		return;
-	//Rare
-	if(GetRandomInt(0,RoundToCeil(75.0 * MultiGlobalEnemy)) != 0)
+
+	if(!DontBuffBaseStats && GetRandomInt(0,RoundToCeil(15.0 * MultiGlobalEnemy)) != 0)
 		return;
-	b_thisNpcHasAnOutline[iNpc] = true;
-	GiveNpcOutLineLastOrBoss(iNpc, true);
-	SetEntProp(iNpc, Prop_Data, "m_iHealth", RoundToCeil(float(ReturnEntityMaxHealth(iNpc)) * 3.0));
-	SetEntProp(iNpc, Prop_Data, "m_iMaxHealth", RoundToCeil(float(ReturnEntityMaxHealth(iNpc)) * 3.0));
-	fl_Extra_Damage[iNpc] *= 1.2;
+
+	if(!DontBuffBaseStats)
+	{
+		b_thisNpcHasAnOutline[iNpc] = true;
+		GiveNpcOutLineLastOrBoss(iNpc, true);
+		SetEntProp(iNpc, Prop_Data, "m_iHealth", RoundToCeil(float(ReturnEntityMaxHealth(iNpc)) * 3.0));
+		SetEntProp(iNpc, Prop_Data, "m_iMaxHealth", RoundToCeil(float(ReturnEntityMaxHealth(iNpc)) * 3.0));
+		fl_Extra_Damage[iNpc] *= 1.25;
+	}
+	ZRModifs_GiveRandomPrefix(iNpc);
+	//This is a unique enemy, give mega buffs
+}
+public void ZRModifs_GiveRandomPrefix(int iNpc)
+{
 	bool RetryBuffGiving = false;
 	bool GiveOneGuranteed = true;
 	int MaxHits = 0;
-	while(GiveOneGuranteed || RetryBuffGiving || GetRandomInt(1,4) == 1)
+	while(GiveOneGuranteed || RetryBuffGiving || GetRandomInt(1,3) == 1)
 	{
 		MaxHits++;
 		if(MaxHits >= 1000)
@@ -2454,7 +2491,7 @@ public void ZRModifs_ModifEnemyChaos(int iNpc)
 		}
 		GiveOneGuranteed = false;
 		RetryBuffGiving = false;
-		switch(GetRandomInt(1,18))
+		switch(GetRandomInt(1,35))
 		{
 			case 1:
 			{
@@ -2555,7 +2592,7 @@ public void ZRModifs_ModifEnemyChaos(int iNpc)
 			}
 			case 15:
 			{
-				if(Elemental_DamageRatio(iNpc, Element_Warped) > 0.0)
+				if(RaidBossActive == EntIndexToEntRef(iNpc) || b_thisNpcIsARaid[iNpc] || Elemental_DamageRatio(iNpc, Element_Warped) > 0.0)
 				{
 					RetryBuffGiving = true;
 				}
@@ -2585,15 +2622,175 @@ public void ZRModifs_ModifEnemyChaos(int iNpc)
 				else
 					ApplyStatusEffect(iNpc, iNpc, "Perfected Instinct", 999999.9);
 			}
+			
 			case 18:
 			{
-				if(HasSpecificBuff(iNpc, "Xeno Infection") || HasSpecificBuff(iNpc, "Xeno Infection Buff Only"))
+				if(HasSpecificBuff(iNpc, "Xeno Infection Buff") || HasSpecificBuff(iNpc, "Xeno Infection Buff Only"))
 					RetryBuffGiving = true;
 
 				Xeno_Resurgance_Enemy(iNpc);
 			}
+			case 19:
+			{
+				if(HasSpecificBuff(iNpc, "Armoring Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Armoring Prefix", 999999.9);
+			}
+			case 20:
+			{
+				if(HasSpecificBuff(iNpc, "Motivating Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Motivating Prefix", 999999.9);
+			}
+			case 21:
+			{
+				if(HasSpecificBuff(iNpc, "Invisible Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Invisible Prefix", 999999.9);
+			}
+			case 22:
+			{
+				if(HasSpecificBuff(iNpc, "Asexual Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Asexual Prefix", 999999.9);
+			}
+			case 23:
+			{
+				if(HasSpecificBuff(iNpc, "Glug Infested Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Glug Infested Prefix", 999999.9);
+			}
+			case 24:
+			{
+				if(HasSpecificBuff(iNpc, "Explosive Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Explosive Prefix", 999999.9);
+			}
+			case 25:
+			{
+				if(RaidBossActive == EntIndexToEntRef(iNpc) || b_thisNpcIsARaid[iNpc] || HasSpecificBuff(iNpc, "Stalker Prefix"))
+					RetryBuffGiving = true;
+				else
+				{
+					if(GetRandomInt(1,4) == 1)
+					{
+						ApplyStatusEffect(iNpc, iNpc, "Stalker Prefix", 999999.9);
+						ApplyStatusEffect(iNpc, iNpc, "Stalker Prefix Nerf", 999999.9);
+					}
+					else
+					{
+						//make it really really rare	
+						RetryBuffGiving = true;
+					}
+				}
+			}
+			case 26:
+			{
+				if(HasSpecificBuff(iNpc, "Disco Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Disco Prefix", 999999.9);
+			}
+			case 27:
+			{
+				if(HasSpecificBuff(iNpc, "Toxic Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Toxic Prefix", 999999.9);
+			}
+			case 28:
+			{
+				if(HasSpecificBuff(iNpc, "Boing Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Boing Prefix", 999999.9);
+			}
+			case 29:
+			{
+				if(HasSpecificBuff(iNpc, "Knockback Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Knockback Prefix", 999999.9);
+			}
+			case 30:
+			{
+				if(HasSpecificBuff(iNpc, "Loud Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Loud Prefix", 999999.9);
+			}
+			case 31:
+			{
+				if(HasSpecificBuff(iNpc, "Legendary Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Legendary Prefix", 999999.9);
+			}
+			case 32:
+			{
+				if(HasSpecificBuff(iNpc, "Ragebaiter Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Ragebaiter Prefix", 999999.9);
+			}
+			case 33:
+			{
+				if(HasSpecificBuff(iNpc, "Semi Healthy Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Semi Healthy Prefix", 999999.9);
+			}		
+			case 34:
+			{
+				if(HasSpecificBuff(iNpc, "Fat Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Fat Prefix", 999999.9);
+			}	
+			case 35:
+			{
+				if(HasSpecificBuff(iNpc, "Modifier+ Prefix"))
+					RetryBuffGiving = true;
+				else
+					ApplyStatusEffect(iNpc, iNpc, "Modifier+ Prefix", 999999.9);
+			}	
 		}
 	}
+}
+public void ZRModifs_ModifEnemyChaos(int iNpc)
+{
+	if(i_NpcInternalId[iNpc] == DungeonLoot_Id() ||i_NpcInternalId[iNpc] == Const2Spawner_Id())
+		return;
+		
+	fl_Extra_Damage[iNpc] *= 1.10;
+	int Health = GetEntProp(iNpc, Prop_Data, "m_iMaxHealth");
+	SetEntProp(iNpc, Prop_Data, "m_iHealth", RoundToCeil(float(Health) * 1.10));
+	SetEntProp(iNpc, Prop_Data, "m_iMaxHealth", RoundToCeil(float(Health) * 1.10));
+
+	if(b_thisNpcIsABoss[iNpc])
+		return;
+	if(i_IsABuilding[iNpc])
+		return;
+	if(i_NpcIsABuilding[iNpc])
+		return;
+//	if(Dungeon_GetEntityZone(iNpc) != Zone_Dungeon && Dungeon_GetEntityZone(iNpc) != Zone_RivalBase)
+//		return;
+	//Rare
+	if(GetRandomInt(0,RoundToCeil(35.0 * MultiGlobalEnemy)) != 0)
+		return;
+
+	b_thisNpcHasAnOutline[iNpc] = true;
+	GiveNpcOutLineLastOrBoss(iNpc, true);
+	SetEntProp(iNpc, Prop_Data, "m_iHealth", RoundToCeil(float(ReturnEntityMaxHealth(iNpc)) * 3.0));
+	SetEntProp(iNpc, Prop_Data, "m_iMaxHealth", RoundToCeil(float(ReturnEntityMaxHealth(iNpc)) * 3.0));
+	fl_Extra_Damage[iNpc] *= 1.2;
+	ZRModifs_GiveRandomPrefix(iNpc);
 	
 	//This is a unique enemy, give mega buffs
 }
