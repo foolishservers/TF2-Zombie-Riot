@@ -21,13 +21,16 @@ static const char g_IdleAlertedSounds[][] = {
 	"vo/taunts/heavy_taunts18.mp3",
 	"vo/taunts/heavy_taunts19.mp3",
 };
-
+static const char g_SelfRevive[][] = {
+	"mvm/mvm_bought_in.wav",
+};
 
 void Allyheavy_OnMapStart_NPC()
 {
 	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
 	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
 	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
+	for (int i = 0; i < (sizeof(g_SelfRevive)); i++) { PrecacheSound(g_SelfRevive[i]); }
 	PrecacheModel("models/player/heavy.mdl");
 	PrecacheSound("weapons/minigun_spin.wav");
 	PrecacheSound("weapons/minigun_shoot.wav");
@@ -102,10 +105,24 @@ methodmap Allyheavy < CClotBody
 			this.i_GunMode = 1;
 		}
 	}
+	public void PlaySelfRevive() 
+	{
+		EmitSoundToAll(g_SelfRevive[GetRandomInt(0, sizeof(g_SelfRevive) - 1)], this.index, SNDCHAN_STATIC, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 60);
+	}
+	property float m_flSelfRevival
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][6]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][6] = TempValueForProperty; }
+	}
+	property float m_flWasIdleState
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][7]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][7] = TempValueForProperty; }
+	}
 
 	public Allyheavy(float vecPos[3], float vecAng[3], int ally)
 	{
-		Allyheavy npc = view_as<Allyheavy>(CClotBody(vecPos, vecAng, "models/player/heavy.mdl", "1.0", "300", ally, true, false));
+		Allyheavy npc = view_as<Allyheavy>(CClotBody(vecPos, vecAng, "models/player/heavy.mdl", "1.0", "3000", ally, false, true));
 		
 		i_NpcWeight[npc.index] = 1;
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
@@ -124,10 +141,13 @@ methodmap Allyheavy < CClotBody
 		SetEntPropFloat(npc.index, Prop_Data, "m_flElementRes", 1.0, Element_Chaos);
 
 		npc.StartPathing();
-		npc.m_flSpeed = 230.0;
-		npc.m_bThisEntityIgnored = true;
-		b_NpcIsInvulnerable[npc.index] = true;
+		npc.m_flSpeed = 330.0;
 		npc.m_bScalesWithWaves = false;
+		
+		npc.m_iTeamGlow = TF2_CreateGlow(npc.index);
+		npc.m_bTeamGlowDefault = false;
+		SetVariantColor(view_as<int>({255, 0, 0, 0}));
+		AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
 		
 		int skin = 0;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
@@ -142,20 +162,9 @@ methodmap Allyheavy < CClotBody
 		npc.m_iWearable3 = npc.EquipItem("head", "models/player/items/heavy/xms_heavy_sandvichsafe.mdl");
 		AcceptEntityInput(npc.m_iWearable3, "SetModelScale");
 		
-		npc.m_iTeamGlow = TF2_CreateGlow(npc.index);
-		npc.m_bTeamGlowDefault = false;
-		SetVariantColor(view_as<int>({255, 255, 255, 255}));
-		AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
-		
-		
 		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 0);
-		if(npc.m_bScalesWithWaves)
-		{
-			SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
-			SetEntityRenderColor(npc.index, 255, 255, 255, 125);
-			SetEntityRenderMode(npc.m_iWearable1, RENDER_TRANSCOLOR);
-			SetEntityRenderColor(npc.m_iWearable1, 255, 255, 255, 125);
-		}
+		
+		b_ShowNpcHealthbar[npc.index] = true;
 
 		SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", skin);
 		return npc;
@@ -200,6 +209,17 @@ public void Allyheavy_ClotThink(int iNPC)
 		return;
 	}
 	npc.m_flNextThinkTime = gametime + 0.1;
+	if(!b_ShowNpcHealthbar[iNPC])
+	{
+		if(npc.m_flSelfRevival && npc.m_flSelfRevival < GetGameTime())
+		{
+			npc.PlaySelfRevive();
+			DesertYadeamDoHealEffect(iNPC, 200.0);
+			SetDownedState_Allyheavy(iNPC, false);
+		}
+		//stunned
+		return;
+	}
 	
 	int ally = npc.m_iTargetWalkTo;
 	
@@ -294,9 +314,83 @@ public Action Allyheavy_OnTakeDamage(int victim, int &attacker, int &inflictor, 
 		npc.m_blPlayHurtAnimation = true;
 	}
 	
+	if(RoundToNearest(damage) < GetEntProp(victim, Prop_Data, "m_iHealth"))
+		return Plugin_Changed;
+	
+	SetDownedState_Allyheavy(victim, true);
+	damage = 0.0;
+	//we died.
 	return Plugin_Changed;
 }
-
+void SetDownedState_Allyheavy(int iNpc, bool StateDo)
+{
+	Allyheavy npc = view_as<Allyheavy>(iNpc);
+	if(StateDo) //downed
+	{
+		npc.m_flSelfRevival = GetGameTime() + 30.0;
+		b_ShowNpcHealthbar[iNpc] = false;	
+		b_ThisEntityIgnored[iNpc] = true;
+		b_NpcIsInvulnerable[iNpc] = true;
+		SetEntProp(iNpc, Prop_Data, "m_iHealth", 1);
+		if(!npc.m_flWasIdleState)
+		{
+			npc.m_flWasIdleState = 1.0;
+			npc.StopPathing();
+			npc.m_bisWalking = false;
+			npc.AddGesture("ACT_MP_STUN_BEGIN");
+			npc.SetActivity("ACT_MP_STUN_MIDDLE");
+		}
+		SetEntityRenderMode(npc.index, RENDER_TRANSALPHA);
+		if(IsValidEntity(npc.m_iWearable1))
+		{
+			SetEntityRenderMode(npc.m_iWearable1, RENDER_TRANSALPHA);
+		}
+		if(IsValidEntity(npc.m_iWearable2))
+		{
+			SetEntityRenderMode(npc.m_iWearable2, RENDER_TRANSALPHA);
+		}
+		if(IsValidEntity(npc.m_iWearable3))
+		{
+			SetEntityRenderMode(npc.m_iWearable3, RENDER_TRANSALPHA);
+		}
+		if(IsValidEntity(npc.m_iWearable4))
+		{
+			SetEntityRenderMode(npc.m_iWearable4, RENDER_TRANSALPHA);
+		}
+	}
+	else
+	{
+		if(npc.m_flWasIdleState)
+		{
+			npc.m_flWasIdleState = 0.0;
+			npc.SetActivity("ACT_MP_DEPLOYED_PRIMARY");
+			npc.AddGesture("ACT_MP_ATTACK_STAND_PRIMARY", false);
+		}
+		npc.m_flSelfRevival = 0.0;
+		b_ShowNpcHealthbar[iNpc] = true;
+		b_ThisEntityIgnored[iNpc] = false;
+		b_NpcIsInvulnerable[iNpc] = false;
+		SetEntProp(iNpc, Prop_Data, "m_iHealth", ReturnEntityMaxHealth(iNpc));
+		SetEntityRenderMode(npc.index, RENDER_NORMAL);
+		if(IsValidEntity(npc.m_iWearable1))
+		{
+			SetEntityRenderMode(npc.m_iWearable1, RENDER_NORMAL);
+		}
+		if(IsValidEntity(npc.m_iWearable2))
+		{
+			SetEntityRenderMode(npc.m_iWearable2, RENDER_NORMAL);
+		}
+		if(IsValidEntity(npc.m_iWearable3))
+		{
+			SetEntityRenderMode(npc.m_iWearable3, RENDER_NORMAL);
+		}
+		if(IsValidEntity(npc.m_iWearable4))
+		{
+			SetEntityRenderMode(npc.m_iWearable4, RENDER_NORMAL);
+		}
+	}
+	
+}
 public void Allyheavy_NPCDeath(int entity)
 {
 	Allyheavy npc = view_as<Allyheavy>(entity);

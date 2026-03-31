@@ -281,7 +281,6 @@ public void Amplification_ExplodePost(int attacker, int victim, float damage, in
 	float vic_vec[3]; WorldSpaceCenter(victim, vic_vec);
 	ParticleEffectAt(vic_vec, "water_bulletsplash01", 1.5);
 	Elemental_AddPheromoneDamage(victim, attacker, view_as<Amplification>(attacker).m_bElite ? 15 : 12);
-	StartBleedingTimer(victim, attacker, 5.0, 2, -1, DMG_TRUEDAMAGE, 0);
 	// 400 x 0.2 x 0.15
 	// 500 x 0.2 x 0.15
 }

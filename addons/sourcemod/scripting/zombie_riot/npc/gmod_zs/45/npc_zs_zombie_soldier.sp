@@ -228,7 +228,16 @@ static void ZSoldierGrave_ClotThink(int iNPC)
 	else
 	{
 		npc.StopPathing();
-		npc.m_flGetClosestTargetTime = 0.0;
+		// 타겟이 사라졌으니 즉시 재탐색하도록 0.0으로 초기화
+		npc.m_flGetClosestTargetTime = 0.0; 
+
+		// 추가: 멍청하게 서 있지 않도록 애니메이션 상태도 강제로 리셋
+		if(npc.m_iChanged_WalkCycle != 1)
+		{
+			npc.m_iChanged_WalkCycle = 1;
+			npc.SetActivity("ACT_MP_STAND_PRIMARY");
+			npc.m_flSpeed = 0.0;
+		}
 	}
 	npc.PlayIdleAlertSound();
 }
@@ -286,7 +295,7 @@ static int ZSoldierGrave_Work(ZSoldierGrave npc, float gameTime, int target, flo
     }
 
     // 위 조건들에 해당하지 않는 "애매한 거리"이거나 재장전 중일 때의 기본 행동
-    return 1; // Stand / Attack Position
+    return 0; // Stand / Attack Position
 }
 
 static Action ZSoldierGrave_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)

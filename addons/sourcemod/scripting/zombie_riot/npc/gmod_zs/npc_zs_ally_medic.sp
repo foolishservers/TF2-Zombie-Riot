@@ -119,7 +119,7 @@ methodmap Allymedic < CClotBody
 		
 		npc.m_iTeamGlow = TF2_CreateGlow(npc.index);
 		npc.m_bTeamGlowDefault = false;
-		SetVariantColor(view_as<int>({255, 255, 255, 255}));
+		SetVariantColor(view_as<int>({255, 0, 0, 0}));
 		AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
 		
 		int skin = 0;
@@ -339,9 +339,11 @@ static int Medic_Work(Allymedic npc, float distance)
 			else
 			{
 				npc.StopHealing();
-				npc.m_bnew_target = false;					
+				npc.m_bnew_target = false;
+				npc.SetGoalEntity(npc.m_iTargetWalkTo);
+                return 0;
 			}
-			return 0;
+			//return 0;
 		}
 		npc.m_iTargetWalkTo=0;
 	}
