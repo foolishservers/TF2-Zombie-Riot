@@ -458,7 +458,7 @@ static void VillageAlaxios_ClotThink(int iNPC)
 				TF2_StunPlayer(client, 0.5, 0.5, TF_STUNFLAGS_LOSERSTATE);
 			}
 		}
-		if(AlaxiosForceTalk())
+		if(AlaxiosForceTalk(npc.index))
 		{
 			npc.m_bDissapearOnDeath = true;
 			RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
