@@ -32,10 +32,16 @@ static const char g_IdleAlertedSounds[][] = {
 	"vo/taunts/soldier_taunts18.mp3",
 };
 
+static const char g_SelfRevive[][] = {
+	"mvm/mvm_bought_in.wav",
+};
+
 static const char g_RangeAttackSounds[] = "weapons/rocket_shoot.wav";
 
 void Allysoldier_OnMapStart_NPC()
 {
+	for (int i = 0; i < (sizeof(g_SelfRevive)); i++) { PrecacheSound(g_SelfRevive[i]); }
+	
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Freedom Feathers");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_ally_soldier");
@@ -93,10 +99,24 @@ methodmap Allysoldier < CClotBody
 	public void PlayRangeSound() {
 		EmitSoundToAll(g_RangeAttackSounds, this.index, SNDCHAN_STATIC, 80, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(NORMAL_ZOMBIE_SOUNDLEVEL, 100));
 	}
+	public void PlaySelfRevive() 
+	{
+		EmitSoundToAll(g_SelfRevive[GetRandomInt(0, sizeof(g_SelfRevive) - 1)], this.index, SNDCHAN_STATIC, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 60);
+	}
+	property float m_flSelfRevival
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][6]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][6] = TempValueForProperty; }
+	}
+	property float m_flWasIdleState
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][7]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][7] = TempValueForProperty; }
+	}
 	
 	public Allysoldier(float vecPos[3], float vecAng[3], int ally)
 	{
-		Allysoldier npc = view_as<Allysoldier>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "200", ally, true, false));
+		Allysoldier npc = view_as<Allysoldier>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "2000", ally, false, true));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -119,9 +139,7 @@ methodmap Allysoldier < CClotBody
 		func_NPCThink[npc.index] = Allysoldier_ClotThink;		
 		
 		//IDLE
-		npc.m_bThisEntityIgnored = true;
-		b_NpcIsInvulnerable[npc.index] = true;
-		npc.m_flSpeed = 240.0;
+		npc.m_flSpeed = 330.0;
 		npc.m_iMaxAmmo = 1;
 		npc.m_iAmmo = 1;
 		npc.m_bScalesWithWaves = false;
@@ -131,7 +149,7 @@ methodmap Allysoldier < CClotBody
 		
 		npc.m_iTeamGlow = TF2_CreateGlow(npc.index);
 		npc.m_bTeamGlowDefault = false;
-		SetVariantColor(view_as<int>({255, 255, 255, 255}));
+		SetVariantColor(view_as<int>({255, 0, 0, 0}));
 		AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
 		
 		int skin = 0;
@@ -149,13 +167,7 @@ methodmap Allysoldier < CClotBody
 		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 0);
 		SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", 0);
 		
-		if(npc.m_bScalesWithWaves)
-		{
-			SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
-			SetEntityRenderColor(npc.index, 255, 255, 255, 125);
-			SetEntityRenderMode(npc.m_iWearable1, RENDER_TRANSCOLOR);
-			SetEntityRenderColor(npc.m_iWearable1, 255, 255, 255, 125);
-		}
+		b_ShowNpcHealthbar[npc.index] = true;
 		
 		return npc;
 	}
@@ -175,9 +187,21 @@ static void Allysoldier_ClotThink(int iNPC)
     npc.Update();
 	
 	if(npc.m_flNextThinkTime > gametime)
+	{
         return;
+	}
     npc.m_flNextThinkTime = gametime + 0.1;
-    
+    if(!b_ShowNpcHealthbar[iNPC])
+	{
+		if(npc.m_flSelfRevival && npc.m_flSelfRevival < GetGameTime())
+		{
+			npc.PlaySelfRevive();
+			DesertYadeamDoHealEffect(iNPC, 200.0);
+			SetDownedState_Allysoldier(iNPC, false);
+		}
+		//stunned
+		return;
+	}
     float VecSelfNpcabs[3]; 
     GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", VecSelfNpcabs);
     Allysoldier_ApplyBuffInLocation_Optimized(VecSelfNpcabs, GetTeam(npc.index), npc.index);
@@ -216,7 +240,7 @@ static void Allysoldier_ClotThink(int iNPC)
                     npc.m_bAllowBackWalking = false;
                     npc.m_iChanged_WalkCycle = 0;
                     npc.SetActivity("ACT_MP_RUN_PRIMARY");
-                    npc.m_flSpeed = 240.0;
+                    npc.m_flSpeed = 330.0;
                     npc.StartPathing();
                 }
                 
@@ -251,7 +275,7 @@ static void Allysoldier_ClotThink(int iNPC)
                     npc.m_bAllowBackWalking = true;
                     npc.m_iChanged_WalkCycle = 2;
                     npc.SetActivity("ACT_MP_RUN_PRIMARY");
-                    npc.m_flSpeed = 240.0;
+                    npc.m_flSpeed = 330.0;
                     npc.StartPathing();
                 }
                 float vBackoffPos[3];
@@ -272,7 +296,7 @@ static void Allysoldier_ClotThink(int iNPC)
             if(flDistanceToTarget > 40000.0)
             {
                 npc.m_iChanged_WalkCycle = 0;
-                npc.m_flSpeed = 240.0;
+                npc.m_flSpeed = 330.0;
                 npc.SetActivity("ACT_MP_RUN_PRIMARY");
 				npc.FaceTowards(vecTarget, 20000.0);
                 npc.SetGoalEntity(ally);
@@ -390,9 +414,82 @@ static Action Allysoldier_OnTakeDamage(int victim, int &attacker, int &inflictor
 		npc.m_blPlayHurtAnimation = true;
 	}
 	
+	if(RoundToNearest(damage) < GetEntProp(victim, Prop_Data, "m_iHealth"))
+		return Plugin_Changed;
+
+	SetDownedState_Allysoldier(victim, true);
+	damage = 0.0;
+	//we died.
 	return Plugin_Changed;
 }
-
+void SetDownedState_Allysoldier(int iNpc, bool StateDo)
+{
+	Allysoldier npc = view_as<Allysoldier>(iNpc);
+	if(StateDo) //downed
+	{
+		npc.m_flSelfRevival = GetGameTime() + 30.0;
+		b_ShowNpcHealthbar[iNpc] = false;	
+		b_ThisEntityIgnored[iNpc] = true;
+		b_NpcIsInvulnerable[iNpc] = true;
+		SetEntProp(iNpc, Prop_Data, "m_iHealth", 1);
+		if(!npc.m_flWasIdleState)
+		{
+			npc.m_flWasIdleState = 1.0;
+			npc.StopPathing();
+			npc.m_bisWalking = false;
+			npc.AddGesture("ACT_MP_STUN_BEGIN");
+			npc.SetActivity("ACT_MP_STUN_MIDDLE");
+		}
+		SetEntityRenderMode(npc.index, RENDER_TRANSALPHA);
+		if(IsValidEntity(npc.m_iWearable1))
+		{
+			SetEntityRenderMode(npc.m_iWearable1, RENDER_TRANSALPHA);
+		}
+		if(IsValidEntity(npc.m_iWearable2))
+		{
+			SetEntityRenderMode(npc.m_iWearable2, RENDER_TRANSALPHA);
+		}
+		if(IsValidEntity(npc.m_iWearable3))
+		{
+			SetEntityRenderMode(npc.m_iWearable3, RENDER_TRANSALPHA);
+		}
+		if(IsValidEntity(npc.m_iWearable4))
+		{
+			SetEntityRenderMode(npc.m_iWearable4, RENDER_TRANSALPHA);
+		}
+	}
+	else
+	{
+		if(npc.m_flWasIdleState)
+		{
+			npc.m_flWasIdleState = 0.0;
+			npc.SetActivity("ACT_MP_RUN_PRIMARY");
+		}
+		npc.m_flSelfRevival = 0.0;
+		b_ShowNpcHealthbar[iNpc] = true;
+		b_ThisEntityIgnored[iNpc] = false;
+		b_NpcIsInvulnerable[iNpc] = false;
+		SetEntProp(iNpc, Prop_Data, "m_iHealth", ReturnEntityMaxHealth(iNpc));
+		SetEntityRenderMode(npc.index, RENDER_NORMAL);
+		if(IsValidEntity(npc.m_iWearable1))
+		{
+			SetEntityRenderMode(npc.m_iWearable1, RENDER_NORMAL);
+		}
+		if(IsValidEntity(npc.m_iWearable2))
+		{
+			SetEntityRenderMode(npc.m_iWearable2, RENDER_NORMAL);
+		}
+		if(IsValidEntity(npc.m_iWearable3))
+		{
+			SetEntityRenderMode(npc.m_iWearable3, RENDER_NORMAL);
+		}
+		if(IsValidEntity(npc.m_iWearable4))
+		{
+			SetEntityRenderMode(npc.m_iWearable4, RENDER_NORMAL);
+		}
+	}
+	
+}
 static void Allysoldier_NPCDeath(int entity)
 {
 	Allysoldier npc = view_as<Allysoldier>(entity);

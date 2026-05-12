@@ -168,6 +168,22 @@ methodmap ZsMalfuncHeavy < CClotBody
 			RaidModeScaling = 0.0;
 			RaidAllowsBuildings = true;
 		}
+		
+		switch(GetRandomInt(0,2))
+		{
+			case 0:
+			{
+				CPrintToChatAll("{green}오버히터{default}: 놈들을 응징할 시간이다.");
+			}
+			case 1:
+			{
+				CPrintToChatAll("{green}오버히터{default}: 절망 속으로 가라앉아라.");
+			}
+			case 2:
+			{
+				CPrintToChatAll("{green}오버히터{default}: 네놈을 삼켜주마.");
+			}
+		}
 
 		int skin = 5;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
@@ -239,7 +255,21 @@ public void ZsMalfuncHeavy_ClotThink(int iNPC)
 	{
 		if(npc.i_Hit >= 5)
 		{
-			CPrintToChatAll("{green}오버히터{default}: {crimson}널 박살내주마.");
+			switch(GetRandomInt(0,2))
+			{
+				case 0:
+				{
+					CPrintToChatAll("{green}오버히터{default}: 내 고통을 느껴라!");
+				}
+				case 1:
+				{
+					CPrintToChatAll("{green}오버히터{default}: 어리석음의 대가를 치러라.");
+				}
+				case 2:
+				{
+					CPrintToChatAll("{green}오버히터{default}: 한순간의 착오로 모든 걸 잃게 되리라.");
+				}
+			}
 			npc.PlayIdleSound();
 			npc.Anger = true;
 			npc.i_Hit = 0;
@@ -267,7 +297,17 @@ public void ZsMalfuncHeavy_ClotThink(int iNPC)
 		}
 		else
 		{
-			CPrintToChatAll("{green}오버히터{default}: {default}이러고 있을 시간 없다.");
+			switch(GetRandomInt(0,1))
+			{
+				case 0:
+				{
+					CPrintToChatAll("{green}오버히터{default}: 넌 아무것도 아니다!");
+				}
+				case 1:
+				{
+					CPrintToChatAll("{green}오버히터{default}: 버러지들 같으니.");
+				}
+			}
 			npc.Anger = false;
 			npc.f_Overheat_Cooldown = 0.0;
 			npc.f_Overheat_Timer = 0.0;
@@ -405,6 +445,8 @@ static Action ZsMalfuncHeavy_OnTakeDamage(int victim, int &attacker, int &inflic
 static void ZsMalfuncHeavy_NPCDeath(int entity)
 {
 	ZsMalfuncHeavy npc = view_as<ZsMalfuncHeavy>(entity);
+	
+	CPrintToChatAll("{green}오버히터{default}: 겨우 그까짓 힘으로 감히!");
 
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);

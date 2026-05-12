@@ -650,7 +650,7 @@ public void ZsUnspeakable_ClotThink(int iNPC)
 	//	ForcePlayerLoss();
 	//	RaidBossActive = INVALID_ENT_REFERENCE;
 	//	func_NPCThink[npc.index] = INVALID_FUNCTION;
-		CPrintToChatAll("{crimson}불결한 존재{crimson}: 전부 죽는다.");
+		CPrintToChatAll("{crimson}불결한 존재{crimson}: 오랫동안 기다려온 순간이 마침내 도래하였다.");
 		SetEntPropFloat(npc.index, Prop_Send, "m_flModelScale", 1.85);
 		RaidModeScaling *= 5.0;
 		fl_Extra_Speed[npc.index] *= 1.2;
@@ -799,16 +799,14 @@ public Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflict
 		if(i_RaidGrantExtra[npc.index] >= 4)
 		{
 			SensalGiveShield(npc.index, CountPlayersOnRed(1) * 24);
+			if(!npc.m_bAlliesSummoned)
+			{
+				npc.m_bAlliesSummoned = true;
+				Spawn_Zombie(npc);
+			}
+			CPrintToChatAll("{crimson}불결한 존재{default}: 이 불경한 놈들이 감히!");
+			RaidModeScaling *= 1.1;
 		}
-		else
-			SensalGiveShield(npc.index, CountPlayersOnRed(1) * 12);
-		if(!npc.m_bAlliesSummoned)
-		{
-			npc.m_bAlliesSummoned = true;
-			Spawn_Zombie(npc);
-		}
-		CPrintToChatAll("{crimson}불결한 존재{default}: 이 불경한 놈들이 감히!");
-		RaidModeScaling *= 1.1;
 	}
 	if(npc.g_TimesSummoned < 3)
 	{
