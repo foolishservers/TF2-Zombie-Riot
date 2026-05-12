@@ -51,9 +51,9 @@ void JohnTheAllmighty_OnMapStart_NPC()
 #define JOHN_SLOWDOWN_RANGE 350.0
 
 
-static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
+static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
 {
-	return JohnTheAllmighty(vecPos, vecAng, team);
+	return JohnTheAllmighty(vecPos, vecAng, team, data);
 }
 
 methodmap JohnTheAllmighty < CClotBody
@@ -120,7 +120,7 @@ methodmap JohnTheAllmighty < CClotBody
 		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][1] = TempValueForProperty; }
 	}
 	
-	public JohnTheAllmighty(float vecPos[3], float vecAng[3], int ally)
+	public JohnTheAllmighty(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
 		JohnTheAllmighty npc = view_as<JohnTheAllmighty>(CClotBody(vecPos, vecAng, "models/player/medic.mdl", "1.5", "500000000", ally, false, true, true));
 		
@@ -162,29 +162,44 @@ methodmap JohnTheAllmighty < CClotBody
 			RaidModeTime = GetGameTime(npc.index) + 43.0;
 			RaidModeScaling = 0.0;
 			RaidAllowsBuildings = true;
+			RaidAllowLastman = false;
 		}
+		npc.m_iHealthBar = 99999999;
 		npc.m_flBackupDespawnEmergency = GetGameTime() + 43.0;
+		if(StrContains(data, "inftimer") != -1)
+		{
+			npc.m_iHealthBar = 1;
+			RaidModeTime = FAR_FUTURE;
+			npc.m_flBackupDespawnEmergency = FAR_FUTURE;
+			npc.m_iActualHealth = 99999999;
+			int color[4] = { 15, 15, 15, 240 };
+			SetCustomFog(FogType_NPC, color, color, 205.0, 400.0, 0.85);
+		}
+		else
+		{
+			
+			int color[4] = { 15, 15, 15, 240 };
+			SetCustomFog(FogType_NPC, color, color, 205.0, 400.0, 0.992);
+		}
 		
-		int color[4] = { 15, 15, 15, 240 };
-		SetCustomFog(FogType_NPC, color, color, 205.0, 400.0, 0.992);
 
 		switch(GetRandomInt(1, 4))
 		{
 			case 1:
 			{
-				CPrintToChatAll("{crimson}전능자 존{default}: 기부금이 필요한데, 좀 주면 안 되겠나?");
+				NPCTalkMessage(npc.index, "I need some money donations, care to give it?");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{crimson}전능자 존{crimson}: 네 장기를 전부 팔아치워주마.");
+				NPCTalkMessage(npc.index, "{crimson}I will sell your organs.");
 			}
 			case 3:
 			{
-				CPrintToChatAll("{crimson}전능자 존{default}: 너의 존재 자체가 나의 자금줄이다.");
+				NPCTalkMessage(npc.index, "You will fund my efforts.");
 			}
 			case 4:
 			{
-				CPrintToChatAll("{crimson}전능자 존{default}: 정말 훔쳐먹기 쉬워보이는 놈들이구나.");
+				NPCTalkMessage(npc.index, "You look easy to rob.");
 			}
 		}
 		npc.m_iBleedType = 0;
@@ -193,7 +208,6 @@ methodmap JohnTheAllmighty < CClotBody
 		npc.m_bDissapearOnDeath = true;
 
 		//makes him have infinity hp on his bar
-		npc.m_iHealthBar = 99999999;
 
 		func_NPCDeath[npc.index] = view_as<Function>(JohnTheAllmighty_NPCDeath);
 		func_NPCOnTakeDamage[npc.index] = view_as<Function>(JohnTheAllmighty_OnTakeDamage);
@@ -230,6 +244,11 @@ methodmap JohnTheAllmighty < CClotBody
 		
 		return npc;
 	}
+}
+
+static void NPCTalkMessage(int iNPC, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(iNPC, "crimson", message, .customName = "John The Almighty");
 }
 
 public void JohnTheAllmighty_ClotThink(int iNPC)
@@ -322,17 +341,7 @@ public void JohnTheAllmighty_NPCDeath(int entity)
 	JohnTheAllmighty npc = view_as<JohnTheAllmighty>(entity);
 
 	float WorldSpaceVec[3]; WorldSpaceCenter(npc.index, WorldSpaceVec);
-		
-	TE_Particle("pyro_blast", WorldSpaceVec, NULL_VECTOR, NULL_VECTOR, -1, _, _, _, _, _, _, _, _, _, 0.0);
-	TE_Particle("pyro_blast_lines", WorldSpaceVec, NULL_VECTOR, NULL_VECTOR, -1, _, _, _, _, _, _, _, _, _, 0.0);
-	TE_Particle("pyro_blast_warp", WorldSpaceVec, NULL_VECTOR, NULL_VECTOR, -1, _, _, _, _, _, _, _, _, _, 0.0);
-	TE_Particle("pyro_blast_flash", WorldSpaceVec, NULL_VECTOR, NULL_VECTOR, -1, _, _, _, _, _, _, _, _, _, 0.0);
-	
-	SDKUnhook(npc.index, SDKHook_OnTakeDamagePost, JohnTheAllmighty_OnTakeDamagePost);	
 
-	if(EntIndexToEntRef(entity) == RaidBossActive)
-		RaidBossActive = INVALID_ENT_REFERENCE;
-		
 	if(IsValidEntity(npc.m_iWearable8))
 		RemoveEntity(npc.m_iWearable8);
 	if(IsValidEntity(npc.m_iWearable7))
@@ -351,6 +360,20 @@ public void JohnTheAllmighty_NPCDeath(int entity)
 		RemoveEntity(npc.m_iWearable1);
 
 	ClearCustomFog(FogType_NPC);
+
+	if(!npc.m_bDissapearOnDeath)
+	{
+		return;
+	}
+	TE_Particle("pyro_blast", WorldSpaceVec, NULL_VECTOR, NULL_VECTOR, -1, _, _, _, _, _, _, _, _, _, 0.0);
+	TE_Particle("pyro_blast_lines", WorldSpaceVec, NULL_VECTOR, NULL_VECTOR, -1, _, _, _, _, _, _, _, _, _, 0.0);
+	TE_Particle("pyro_blast_warp", WorldSpaceVec, NULL_VECTOR, NULL_VECTOR, -1, _, _, _, _, _, _, _, _, _, 0.0);
+	TE_Particle("pyro_blast_flash", WorldSpaceVec, NULL_VECTOR, NULL_VECTOR, -1, _, _, _, _, _, _, _, _, _, 0.0);
+	
+	SDKUnhook(npc.index, SDKHook_OnTakeDamagePost, JohnTheAllmighty_OnTakeDamagePost);	
+
+	if(EntIndexToEntRef(entity) == RaidBossActive)
+		RaidBossActive = INVALID_ENT_REFERENCE;
 }
 
 void JohnTheAllmightySelfDefense(JohnTheAllmighty npc, float gameTime, float distance)
@@ -477,8 +500,8 @@ public void JohnTheAllmighty_OnTakeDamagePost(int victim, int attacker, int infl
 	if(npc.m_iActualHealth <= 0)
 	{
 		SDKUnhook(npc.index, SDKHook_OnTakeDamagePost, JohnTheAllmighty_OnTakeDamagePost);	
-		CPrintToChatAll("{crimson}전능자 존 {default}: 어, 잠깐만! 오븐 전원 끄는걸 깜빡했잖아! 잘 있어라!");
-		CPrintToChatAll("{green}그가 자신의 지갑을 떨어뜨리고 갔습니다. 덕분에 추가 자금을 챙겼습니다.");
+		NPCTalkMessage(npc.index, "OH NUTS! I left my oven on! Bye!");
+		CPrintToChatAll("{green}He also left behind his wallet and drops you an extra cash.");
 		npc.m_iActualHealth = 9999999;
 		for(int client = 1; client <= MaxClients; client++)
 		{

@@ -247,6 +247,7 @@ methodmap RaidbossMrX < CClotBody
 		func_NPCThink[npc.index] = RaidbossMrX_ClotThink;
 		RaidBossActive = EntIndexToEntRef(npc.index);
 		RaidAllowsBuildings = false;
+		RaidAllowLastman = true;
 		RaidModeTime = GetGameTime(npc.index) + 9999999.0;
 		npc.m_flRushAttackCD = GetGameTime(npc.index) + 45.0;
 		npc.m_flNextRangedAttack = GetGameTime(npc.index) + 15.0;
@@ -319,7 +320,7 @@ methodmap RaidbossMrX < CClotBody
 		npc.m_flNextRangedSpecialAttackHappens = 0.0;
 		i_SideHurtWhich[npc.index] = 0;
 
-		CPrintToChatAll("{green}비비쏜: ...");
+		NPCTalkMessage(npc.index, "...");
 
 		Citizen_MiniBossSpawn();
 		npc.StartPathing();
@@ -333,6 +334,11 @@ methodmap RaidbossMrX < CClotBody
 	}
 }
 
+static void NPCTalkMessage(int iNPC, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(iNPC, "green", message, .messageColor = "green");
+}
+
 public void RaidbossMrX_ClotThink(int iNPC)
 {
 	RaidbossMrX npc = view_as<RaidbossMrX>(iNPC);
@@ -343,7 +349,7 @@ public void RaidbossMrX_ClotThink(int iNPC)
 		if(!npc.m_fbGunout)
 		{
 			npc.m_fbGunout = true;
-			CPrintToChatAll("{green} 감염이 당신의 동료를 전부 집어삼키고 말았습니다... 가능하면 도주하세요.");
+			CPrintToChatAll("{green}The infection got all your friends... Run while you can.");
 		}
 	}
 	if(RaidModeTime < GetGameTime())
@@ -352,7 +358,7 @@ public void RaidbossMrX_ClotThink(int iNPC)
 		i_RaidGrantExtra[npc.index] = 0;
 		ForcePlayerLoss();
 		RaidBossActive = INVALID_ENT_REFERENCE;
-		CPrintToChatAll("{green} 당신은 감염에 저항조차 못 했습니다... 당신은 이제 한낱 감염체로 전락하고 말았습니다.");
+		CPrintToChatAll("{green}The infection proves too strong for you to resist as you join his side...");
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		return;
 	}
@@ -1072,29 +1078,18 @@ public void RaidbossMrX_NPCDeath(int entity)
 	RaidModeTime += 3.5; //cant afford to delete it, since duo.
 	if(i_RaidGrantExtra[npc.index] == 0 && GameRules_GetRoundState() == RoundState_ZombieRiot)
 	{
-		for (int client_repat = 1; client_repat <= MaxClients; client_repat++)
+		if(XenoExtraLogic())
 		{
-			if(IsValidClient(client_repat) && GetClientTeam(client_repat) == 2 && TeutonType[client_repat] != TEUTON_WAITING)
-			{
-				if(XenoExtraLogic())
-				{
-					CPrintToChat(client_repat, "{green}비비쏜: 칼마티커스 프로젝트를 가동시킬 때가 왔다...");
-				}
-			}
+			NPCTalkMessage(npc.index, "I have to activate Project Calmaticus...");
 		}
 	}
 	if(i_RaidGrantExtra[npc.index] == 1 && GameRules_GetRoundState() == RoundState_ZombieRiot)
 	{
-		for (int client_repat = 1; client_repat <= MaxClients; client_repat++)
+		if(XenoExtraLogic())
 		{
-			if(IsValidClient(client_repat) && GetClientTeam(client_repat) == 2 && TeutonType[client_repat] != TEUTON_WAITING)
-			{
-				if(XenoExtraLogic())
-				{
-					CPrintToChat(client_repat, "{green}비비쏜이 도주했습니다... 중상을 입은 채로 말이죠....");
-				}
-			}
+			CPrintToChatAll("{green}Vivithorn escapes... but heavily wounded...");
 		}
+		
 		for(int i; i < i_MaxcountNpcTotal; i++)
 		{
 			int other = EntRefToEntIndexFast(i_ObjectsNpcsTotal[i]);

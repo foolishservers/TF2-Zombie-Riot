@@ -38,7 +38,7 @@ void FinalHunter_Setup()
 	strcopy(data.Icon, sizeof(data.Icon), "sniper_headshot");
 	data.IconCustom = true;
 	data.Flags = 0;
-	data.Category = Type_BlueParadox;
+	data.Category = Type_Raid;
 	data.Func = ClotSummon;
 	NPCId = NPC_Add(data);
 }
@@ -185,6 +185,7 @@ static void ClotThink(int iNPC)
 			RaidModeTime = GetGameTime() + 9000.0;
 			RaidModeScaling = 0.0;
 			RaidAllowsBuildings = true;
+			RaidAllowLastman = true;
 			Waves_Progress();
 
 			CPrintToChatAll("{darkred}와일딩겐 히트맨{default}: {black}그것이 내 안에 있어.");
@@ -288,6 +289,7 @@ static void ClotThink(int iNPC)
 						RaidModeTime = GetGameTime() + 9000.0;
 						RaidModeScaling = 0.0;
 						RaidAllowsBuildings = true;
+						RaidAllowLastman = true;
 
 						EmitSoundToAll("mvm/mvm_warning.wav");
 						fl_Extra_Speed[npc.index] = 1.5;

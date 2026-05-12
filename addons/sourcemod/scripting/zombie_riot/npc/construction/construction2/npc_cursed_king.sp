@@ -79,7 +79,7 @@ void CursedKingOnMapStart()
 	strcopy(data.Icon, sizeof(data.Icon), "cursed_king");
 	data.IconCustom = true;
 	data.Flags = 0;
-	data.Category = 0;
+	data.Category = Type_Outlaws;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
@@ -171,6 +171,7 @@ methodmap CursedKing < CClotBody
 			RaidBossActive = EntIndexToEntRef(npc.index);
 			RaidModeTime = GetGameTime(npc.index) + 9000.0;
 			RaidAllowsBuildings = true;
+			RaidAllowLastman = false;
 		}
 		
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", 5);

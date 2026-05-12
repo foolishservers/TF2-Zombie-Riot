@@ -262,6 +262,7 @@ methodmap RaidbossSilvester < CClotBody
 		
 		RaidBossActive = EntIndexToEntRef(npc.index);
 		RaidAllowsBuildings = false;
+		RaidAllowLastman = true;
 		
 		int iActivity = npc.LookupActivity("ACT_MP_RUN_MELEE");
 		if(iActivity > 0) npc.StartActivity(iActivity);
@@ -370,8 +371,6 @@ methodmap RaidbossSilvester < CClotBody
 		f_ExplodeDamageVulnerabilityNpc[npc.index] = 0.7;
 		RaidModeScaling *= amount_of_people; //More then 9 and he raidboss gets some troubles, bufffffffff
 		
-	
-		
 		SDKHook(npc.index, SDKHook_OnTakeDamagePost, RaidbossSilvester_OnTakeDamagePost);
 		b_angered_twice[npc.index] = false;
 		
@@ -458,7 +457,6 @@ methodmap RaidbossSilvester < CClotBody
 		npc.m_flNextRangedAttack = GetGameTime(npc.index) + 5.0;		
 		Citizen_MiniBossSpawn();
 		npc.StartPathing();
-
 		
 		npc.m_flTimebeforekamehameha = GetGameTime(npc.index) + 20.0;
 		npc.m_iInKame = 0;
@@ -474,23 +472,30 @@ methodmap RaidbossSilvester < CClotBody
 			{
 				case 1:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 정말로 이렇게까지 해야 우리 경고를 들어먹겠어?");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Is... Is this really where we must change your mind?");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 제발 그냥 돌아가!");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Please just turn away!");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 이건 너무 위험한 일이라고!");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "This is too risky, we can't let you get any closer!");
 				}
 			}
 		}
+		
 		SilvesterApplyEffects(npc.index, false);
 		return npc;
 	}
 }
 
+void RaidbossSilvester_NPCTalkMessage(int iNPC, const char[] message, any ...)
+{
+	char buffer[255];
+	VFormat(buffer, sizeof(buffer), message, 3);
+	PrintNPCMessageWithPrefixes(iNPC, "gold", buffer);
+}
 
 static void Internal_ClotThink(int iNPC)
 {
@@ -509,15 +514,15 @@ static void Internal_ClotThink(int iNPC)
 				{
 					case 0:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: 포기하고 자수해.");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "Give up and turn yourself in.");
 					}
 					case 1:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: 이제 우리 말을 들어줄 준비는 됐어?");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "Ready to listen to us?");
 					}
 					case 2:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: 뭐야, 아니면 우릴 그냥 싫어하는거야?");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "Maybe you just hate us?");
 					}
 				}
 			}
@@ -527,15 +532,15 @@ static void Internal_ClotThink(int iNPC)
 				{
 					case 0:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: 널 죽여서라도 여기에서 끌고 나가겠어!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "Death is your only salvation!");
 					}
 					case 1:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: 말을 안 듣는걸 보니 이미 감염된 상태인게 분명해! 그럼 안타깝지만 죽어야지!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "Let me kill you, you're already infected anyway!");
 					}
 					case 2:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: 남의 말 좀 듣는게 그렇게나 힘든 일인거야?");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "******* like you NEVER listen, do you?");
 					}
 				}				
 			}
@@ -648,23 +653,23 @@ static void Internal_ClotThink(int iNPC)
 					case 1:
 					{
 						if(!XenoExtraLogic())
-							CPrintToChatAll("{gold}실베스터{default}: 이리 와!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "Come here!");
 						else
-							CPrintToChatAll("{gold}실베스터{default}: 이 곳에서 당장 나가!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "Just step away from here!!");
 					}
 					case 2:
 					{
 						if(!XenoExtraLogic())
-							CPrintToChatAll("{gold}실베스터{default}: 덤벼봐!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "That's it!");
 						else
-							CPrintToChatAll("{gold}Silvester{default}: 우린 또 감염당할 수는 없어!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "I don't want to get infected again..!!");
 					}
 					case 3:
 					{
 						if(!XenoExtraLogic())
-							CPrintToChatAll("{gold}실베스터{default}: 이제 진짜배기 싸움이다!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "Meet the real deal!");
 						else
-							CPrintToChatAll("{gold}실베스터{default}: 여긴 최고로 위험한 장소라고! 들어가서는 안 돼!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "Leave and turn back. This place is too dangerous for you!");
 					}
 				}
 			}
@@ -675,23 +680,23 @@ static void Internal_ClotThink(int iNPC)
 					case 1:
 					{
 						if(!XenoExtraLogic())
-							CPrintToChatAll("{gold}실베스터{default}: 이제 끝이다!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "It's over you little..!");
 						else
-							CPrintToChatAll("{gold}실베스터{default}: 이 곳의 그 놈들은 그 어떤 상식도 통하지 않아..");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "No no no.... I can't not again..");
 					}
 					case 2:
 					{
 						if(!XenoExtraLogic())
-							CPrintToChatAll("{gold}실베스터{default}: 내 말을 안 듣겠다면, 그것들처럼 변이되기 전에 내가 처리해주지!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "If you won't listen, I'll have to erase you before you become one of them!");
 						else
-							CPrintToChatAll("{gold}실베스터{default}: 너무 많은 자들이 그것들 때문에 죽어나갔어!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "So many keep falling for this!!");
 					}
 					case 3:
 					{
 						if(!XenoExtraLogic())
-							CPrintToChatAll("{gold}실베스터{default}: 전부 지옥에나 가라!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "GO TO HELL YOU MERCS!!!");
 						else
-							CPrintToChatAll("{gold}실베스터{default}: ...");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "...");
 					}
 				}
 			}
@@ -803,7 +808,8 @@ static void Internal_ClotThink(int iNPC)
 		GetEntPropVector(npc.index, Prop_Send, "m_vecOrigin", partnerPos);
 		GetEntPropVector(AllyEntity, Prop_Data, "m_vecAbsOrigin", victimPos); 
 		float Distance = GetVectorDistance(victimPos, partnerPos, true);
-		if(Distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 20.0) && Can_I_See_Enemy_Only(npc.index, AllyEntity))
+		int ForceStandStill = CountPlayersOnRed(2);
+		if(ForceStandStill > 1 && Distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 20.0) && Can_I_See_Enemy_Only(npc.index, AllyEntity))
 		{	
 			if(!IsValidEntity(i_LaserEntityIndex[npc.index]))
 			{
@@ -855,28 +861,35 @@ static void Internal_ClotThink(int iNPC)
 		if(!i_SadText)
 		{
 			i_SadText = true;
-			switch(GetRandomInt(1,3))
+			switch(GetRandomInt(1,4))
 			{
 				case 1:
 				{
 					if(!XenoExtraLogic())
-						CPrintToChatAll("{gold}실베스터{default}: 아, 안 돼!!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "N-No!");
 					else
-						CPrintToChatAll("{gold}실베스터{default}: {darkblue}왈츠{default}..?");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "{darkblue}Waldch{default}..?");
 				}
 				case 2:
 				{
 					if(!XenoExtraLogic())
-						CPrintToChatAll("{gold}실베스터{default}: 쟤 말고 나를 공격하라고!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "Why him?? Attack me you bunch of cowards!");
 					else
-						CPrintToChatAll("{gold}실베스터{default}: 괜찮아, 나 여깄어, 여깄다고!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "Don't faint, I'm here, I'm here for you!");
 				}
 				case 3:
 				{
 					if(!XenoExtraLogic())
-						CPrintToChatAll("{gold}실베스터{default}: 좀만 쉬어. 내가 처리할게.");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "We're gonna have to do this the hard way.");
 					else
-						CPrintToChatAll("{gold}실베스터{default}: 내가 이걸 그냥 넘어갈거라고 생각하지마..");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "... I won't let you get away with this.");
+				}
+				case 4:
+				{
+					if(!XenoExtraLogic())
+						RaidbossSilvester_NPCTalkMessage(npc.index, "Hang on, I've got you.");
+					else
+						RaidbossSilvester_NPCTalkMessage(npc.index, "Please rest, I'll take them out.");
 				}
 			}
 		}
@@ -1366,7 +1379,7 @@ static Action Internal_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 			RemoveNpcFromEnemyList(npc.index);
 			GiveProgressDelay(28.0);
 			damage = 0.0;
-			CPrintToChatAll("{gold}실베스터{default}: 우리 경고는 죽어도 안 듣는구만!?");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "WHY DO YOU REFUSE TO LISTEN TO OUR WARNINGS!?");
 			return Plugin_Handled;
 		}
 	}
@@ -1395,37 +1408,45 @@ public void RaidbossSilvester_OnTakeDamagePost(int victim, int attacker, int inf
 			int AllyEntity = EntRefToEntIndex(i_RaidDuoAllyIndex);
 			if(IsEntityAlive(AllyEntity) && !IsPartnerGivingUpGoggles(AllyEntity))
 			{
-				switch(GetRandomInt(1,3))
+				switch(GetRandomInt(1,4))
 				{
 					case 1:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: 이게 끝인줄 알아?");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "You think that was my all?");
 					}
 					case 2:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: 넌 지금 어떤 일이 벌어질지도 모르잖아...");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "You have no idea what I'm capable of...");
 					}
 					case 3:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: 이걸로 끝이 아니야..");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "You think this is it?");
+					}
+					case 4:
+					{
+						RaidbossSilvester_NPCTalkMessage(npc.index, "I'm not close to being done yet!");
 					}
 				}
 			}
 			else
 			{
-				switch(GetRandomInt(1,3))
+				switch(GetRandomInt(1,4))
 				{
 					case 1:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: 넌 지금 오만함에 눈이 멀었어!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "You're blinded by your own arrogance!");
 					}
 					case 2:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: 나 혼자 있다고 얕보고 있는거야?!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "You think I'm weak alone?!");
 					}
 					case 3:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: 넌 우리 경고를 무시했으니, 그 대가를 치뤄야지!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "You refuse to listen and thus, pay the price!");
+					}
+					case 4:
+					{
+						RaidbossSilvester_NPCTalkMessage(npc.index, "I'll avenge you {darkblue}Waldch{default}!");
 					}
 				}
 			}
@@ -1995,32 +2016,32 @@ bool SharedGiveupSilvester(int entity, int entity2)
 				{
 					ReviveAll(true);
 					if(!XenoExtraLogic())
-						CPrintToChatAll("{gold}실베스터{default}: 우린 널 도와주려고 했어. 이건 분명히 엄청 힘든 일일거야.");
+						RaidbossSilvester_NPCTalkMessage(entity, "We tried to help, this will be painful for you.");
 					else
-						CPrintToChatAll("{gold}실베스터{default}: 전혀 내 말을 듣지 않아. 이젠 널 도와주고 싶지 않네.");
+						RaidbossSilvester_NPCTalkMessage(entity, "You never listen. I will not assist you anymore.");
 					i_TalkDelayCheck += 1;
 				}
 				case 1:
 				{
 					if(!XenoExtraLogic())
-						CPrintToChatAll("{darkblue}왈츠{default}: 우리보다 훨씬 크고 강한 적이 있지만, 우린 그들을 이길 수 없어.");
+						RaidbossBlueGoggles_NPCTalkMessage(entity2, "There is a far greater enemy than us, not even we can beat him.");
 					else
-						CPrintToChatAll("{darkblue}왈츠{default}: 너흰 꼭 마치 무엇에 뛰어들 것인지 알고 있는 듯하네.");
+						RaidbossBlueGoggles_NPCTalkMessage(entity2, "It appears like you already know what you are get yourselves into.");
 
 					i_TalkDelayCheck += 1;
 				}
 				case 2:
 				{
 					
-					CPrintToChatAll("{darkblue}왈츠{default}: 솔직히 네가 그 놈을 이길 수 있을지 의심스럽지만, 만약 이긴다면, 큰 혼란을 물리치는 데 큰 도움이 될 거다.");
+					RaidbossBlueGoggles_NPCTalkMessage(entity2, "I doubt you can defeat him, but if you do somehow manage to, you will help us in defeating {darkblue}Chaos{default}.");
 					i_TalkDelayCheck += 1;
 				}
 				case 3:
 				{
 					if(!XenoExtraLogic())
-						CPrintToChatAll("{gold}실베스터{default}: 행운을 빌게.");
+						RaidbossSilvester_NPCTalkMessage(entity, "Good luck.");
 					else
-						CPrintToChatAll("{gold}실베스터{default}: 이제 우리 사이에 다시는 이런 일이 일어나지 않을거야. 맹세할게. 그리고 난 분명히 너희한테 경고한거고!");
+						RaidbossSilvester_NPCTalkMessage(entity, "I REFUSE to let this happen again to us two, don't say I didnt warn you!");
 
 					i_TalkDelayCheck = 5;
 					for (int client = 1; client <= MaxClients; client++)
@@ -2493,11 +2514,11 @@ public void Raidmode_Shared_Xeno_Duo(int entity)
 	{
 		if(XenoExtraLogic())
 		{
-			CPrintToChatAll("{gold}실베스터{default}: 넌 너무 고집불통이야.");
+			RaidbossSilvester_NPCTalkMessage(entity, "You're too stubborn for your own good.");
 		}
 		else
 		{
-			CPrintToChatAll("{gold}실베스터{default}: 어쩌면 우리는 너에게 더 좋은 경고 방식을 생각해냈어야 했을지도 모르겠어.");
+			RaidbossSilvester_NPCTalkMessage(entity, "Maybe we should've thought of a better way to warn them.");
 		}
 		return;
 	}
@@ -2505,11 +2526,11 @@ public void Raidmode_Shared_Xeno_Duo(int entity)
 	{
 		if(XenoExtraLogic())
 		{
-			CPrintToChatAll("{darkblue}왈츠{default}: 너무 멀리 오셨군.");
+			RaidbossBlueGoggles_NPCTalkMessage(entity, "Too far. Turn back.");
 		}
 		else
 		{
-			CPrintToChatAll("{darkblue}왈츠{default}: {green}그 놈{default}에게 죽는 것보단 나을거다.");
+			RaidbossBlueGoggles_NPCTalkMessage(entity, "Way better than dying to {green}Him{default}.");
 		}
 	}
 }
@@ -2535,7 +2556,7 @@ void SharedTimeLossSilvesterDuo(int entity)
 		}
 		SetEntProp(SensalSpawn, Prop_Data, "m_iHealth", 100000000);
 		SetEntProp(SensalSpawn, Prop_Data, "m_iMaxHealth", 100000000);
-		CPrintToChatAll("{blue}센살{default}: 당장 멈춰. 지금 이게 무슨 상황이지?");
+		CPrintToChatAll("{blue}Sensal{default}: Cease this fighting. What is going on here?");
 	}
 }
 
@@ -2566,13 +2587,13 @@ static void Internal_Weapon_Lines(RaidbossSilvester npc, int client)
 	{
 		
 		case WEAPON_SENSAL_SCYTHE,WEAPON_SENSAL_SCYTHE_PAP_1,WEAPON_SENSAL_SCYTHE_PAP_2,WEAPON_SENSAL_SCYTHE_PAP_3:
-		 switch(GetRandomInt(0,1)) 	{case 0: Format(Text_Lines, sizeof(Text_Lines), "그 무기, 분명 센살의 것이지만 걔보단 못 다루네.");
-		  							case 1: Format(Text_Lines, sizeof(Text_Lines), "{blue}센살{default}이 너한테 그 무기를 줬다고, {gold}%N{default}? 세상에.", client);}	//IT ACTUALLY WORKS, LMFAO
-		case WEAPON_FUSION,WEAPON_FUSION_PAP1,WEAPON_FUSION_PAP2, WEAPON_NEARL: switch(GetRandomInt(0,1)) 		{case 0: Format(Text_Lines, sizeof(Text_Lines), "그건 내 무기인데... 어떻게 얻은거야?");
-		 							case 1: Format(Text_Lines, sizeof(Text_Lines), "그건 내 무기잖아!");}
-		case WEAPON_KIT_BLITZKRIEG_CORE:  Format(Text_Lines, sizeof(Text_Lines), "어, 그 미친 기계를 잡았어? 대단한데!");
-		case WEAPON_BOBS_GUN:  Format(Text_Lines, sizeof(Text_Lines), "그 총은 나한텐 아무것도 아니야!!!");
-		case WEAPON_ANGELIC_SHOTGUN:  Format(Text_Lines, sizeof(Text_Lines), "{lightblue}네말{default}의 총...? 어...");
+		 switch(GetRandomInt(0,1)) 	{case 0: Format(Text_Lines, sizeof(Text_Lines), "You have his weapon yet none of his strength.");
+		  							case 1: Format(Text_Lines, sizeof(Text_Lines), "{blue}Sensal{default} gave you this {gold}%N{default}? can't be.", client);}	//IT ACTUALLY WORKS, LMFAO
+		case WEAPON_FUSION,WEAPON_FUSION_PAP1,WEAPON_FUSION_PAP2, WEAPON_NEARL: switch(GetRandomInt(0,1)) 		{case 0: Format(Text_Lines, sizeof(Text_Lines), "You're a bunch of little thieves aren't you?");
+		 							case 1: Format(Text_Lines, sizeof(Text_Lines), "Hey thats my weapon!");}
+		case WEAPON_KIT_BLITZKRIEG_CORE:  Format(Text_Lines, sizeof(Text_Lines), "Oh you beat him up? Thats good.");
+		case WEAPON_BOBS_GUN:  Format(Text_Lines, sizeof(Text_Lines), "That gun ain't got ANYTHING ON ME!!!");
+		case WEAPON_ANGELIC_SHOTGUN:  Format(Text_Lines, sizeof(Text_Lines), "{lightblue}Her{default} gun...? uh...");
 
 		default:
 		{
@@ -2582,7 +2603,7 @@ static void Internal_Weapon_Lines(RaidbossSilvester npc, int client)
 
 	if(valid)
 	{
-		CPrintToChatAll("{gold}Silvester{default}: %s", Text_Lines);
+		RaidbossSilvester_NPCTalkMessage(npc.index, "%s", Text_Lines);
 		fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(17.0, 26.0);
 		b_said_player_weaponline[client] = true;
 	}

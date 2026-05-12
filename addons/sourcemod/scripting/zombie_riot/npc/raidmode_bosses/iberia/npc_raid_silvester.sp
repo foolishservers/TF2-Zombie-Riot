@@ -86,7 +86,7 @@ static bool b_RageAnimated[MAXENTITIES];
 void Silvester_OnMapStart_NPC()
 {
 	NPCData data;
-	strcopy(data.Name, sizeof(data.Name), "Silvester");
+	strcopy(data.Name, sizeof(data.Name), "Silvester, The Sparring Partner");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_raid_silvester");
 	strcopy(data.Icon, sizeof(data.Icon), "silvester_raid");
 	data.IconCustom = true;
@@ -351,19 +351,19 @@ methodmap Silvester < CClotBody
 			{
 				case 0:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 늦어서 정말 미안해!");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Sorry that im late!");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: {blue}센살{default}의 부탁 때문에 좀 늦었어.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Had to do some errands with {blue}Sensal{default}.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 나 왔어!");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Here i am!");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 좀 살살하라고? 알았어!");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Starting easy? Got it!");
 				}
 			}
 		}
@@ -374,19 +374,19 @@ methodmap Silvester < CClotBody
 			{
 				case 0:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 예전 같네, 응?");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Just like old times, eh Mercs?");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 연습하는건 좋지. 그렇다고 대충 하면 안 되고.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Its good to practice, i shouldnt slack off.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: {lightblue}네말{default}, 미안한데 좀만 진지하게 할게.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Sorry {lightblue}Nemal{default} I should take this more seriously.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: {darkblue}왈츠{default}도 여기서 같이 훈련하면 좋았을텐데. 근데 자기 일 때문에 바쁘다고 하네.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Wish {darkblue}Waldch{default} would come with train with us, but ever since the {crimson}hitman{default} is gone, he can finally do work.");
 				}
 			}
 		}
@@ -397,19 +397,19 @@ methodmap Silvester < CClotBody
 			{
 				case 0:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 드디어.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Here it is.");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 마지막이군.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Final Challange.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 이제 마지막 싸움이야.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "No more holding back.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 최선을 다 해볼게.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Im giving it my all.");
 				}
 			}
 		}
@@ -423,19 +423,19 @@ methodmap Silvester < CClotBody
 			{
 				case 0:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 드디어.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Here it is.");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 마지막이군.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Final Challange.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 이제 마지막 싸움이야.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "No more holding back.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 최선을 다 해볼게.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Im giving it my all.");
 				}
 			}
 		}
@@ -594,7 +594,7 @@ static void Internal_ClotThink(int iNPC)
 		{
 			npc.m_flInTeleportLogic = 0.0;
 			npc.m_flChangeTargetsSilvester -= 3.0;
-			CPrintToChatAll("{gold}실베스터{default}: 어... 네말? 벌써 물러난거야?");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "Oh damn She is already gone...");
 			RemoveSpecificBuff(npc.index, "Very Defensive Backup");
 			return;
 		}
@@ -660,23 +660,23 @@ static void Internal_ClotThink(int iNPC)
 				{
 					case 0:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: {lightblue}네말{default}, 내가 갈게!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "Hold on {lightblue}Nemal{default} i'm coming!");
 					}
 					case 1:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: 나 대신 {lightblue}네말{default}을 먼저 마킹하시겠다고?");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "Thinking of taking {lightblue}Nemal{default} out first?");
 					}
 					case 2:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: {lightblue}네말{default}... 너 하는게 꼭 {darkblue}왈츠{default}랑 똑같다?!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "{lightblue}Nemal{default}... {darkblue}Waldch{default}... you both are the same i swear!");
 					}
 					case 3:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: 아... 내가 너한테 순간이동하기까지 좀 버텨봐.");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "Rahhh, ill teleport to you wait.");
 					}
 					case 4:
 					{
-						CPrintToChatAll("{gold}실베스터{default}: 내가 간다 !");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "Here i go !");
 					}
 				}
 			}
@@ -693,15 +693,15 @@ static void Internal_ClotThink(int iNPC)
 			{
 				case 0:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 날 이기지 못 하면, {purple}공허{default}의 힘에 맞선다는건 생각도 하지마.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "You dont beat me, then youll never be able to face the full force of the {purple}void{default}.");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 나조차도 못 이기면서 {purple}공허{default}엔 왜 가려는거야?");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Not beating me means no beating the {purple}void{default}.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{gold}실베스터{default}: 그 아드레날린을 나한테 좀 써봐! 좀!");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Use that adrenaline against me, come on!");
 				}
 			}
 		}
@@ -717,15 +717,15 @@ static void Internal_ClotThink(int iNPC)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{gold}실베스터{default}: 어, 잠깐, 지금 당장 다른쪽을 도와야겠어! 다음 번엔 네가 이길거야.");
+				RaidbossSilvester_NPCTalkMessage(npc.index, "Gotta go, youll win next time.");
 			}
 			case 1:
 			{
-				CPrintToChatAll("{gold}실베스터{default}: 그래도 이번엔 도망치지 않고 싸웠잖아! 그럼 잘 한거야!");
+				RaidbossSilvester_NPCTalkMessage(npc.index, "Atleast you fought, and didnt run!");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{gold}실베스터{default}: 다음엔 좀 강도를 약하게 할 수도 있겠지만, 그럼 훈련엔 별 도움이 안 되잖아.");
+				RaidbossSilvester_NPCTalkMessage(npc.index, "I can try to go easier next time, but that wont help with training.");
 			}
 		}
 		return;
@@ -749,7 +749,7 @@ static void Internal_ClotThink(int iNPC)
 			{
 				RemoveEntity(npc.m_iWearable8);
 			}
-			CPrintToChatAll("{gold}실베스터{default}: 좀 진지하게 해봐! 나도 이제부터 더 열심히 해볼게.");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "Youre taking to long to hurt me, ill try harder myself then.");
 			npc.m_flSilvesterTransformRegardless = FAR_FUTURE;
 			npc.i_GunMode = 0;
 		}
@@ -773,15 +773,15 @@ static void Internal_ClotThink(int iNPC)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{gold}실베스터{default}: 너무 느리잖아.");
+				RaidbossSilvester_NPCTalkMessage(npc.index, "Sorry, too slow.");
 			}
 			case 1:
 			{
-				CPrintToChatAll("{gold}실베스터{default}: 이건 좀 재미없는 결말인데.");
+				RaidbossSilvester_NPCTalkMessage(npc.index, "Well thats a boring end.");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{gold}실베스터{default}: 자꾸 도망가니까 이런 상황이 나왔잖아...");
+				RaidbossSilvester_NPCTalkMessage(npc.index, "If you would stop running, this wouldnt happen.");
 			}
 		}
 		BlockLoseSay = true;
@@ -898,7 +898,7 @@ static void Internal_ClotThink(int iNPC)
 					npc.SetActivity("ACT_MP_STAND_MELEE_ALLCLASS");
 					npc.m_flSpeed = 320.0;
 					npc.m_bAllowBackWalking = false;
-					CPrintToChatAll("{gold}실베스터{default}: 너 혼자 남은것 같네? 그럼 기다릴게.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Oh you seem to be alone, i'll wait.");
 					b_NpcIsInvulnerable[npc.index] = true; //Special huds for invul targets
 				}	
 			}
@@ -912,7 +912,7 @@ static void Internal_ClotThink(int iNPC)
 					npc.SetActivity("ACT_MP_STAND_MELEE");
 					npc.m_flSpeed = 320.0;
 					npc.m_bAllowBackWalking = false;
-					CPrintToChatAll("{gold}실베스터{default}: 너 혼자 남은것 같네? 그럼 기다릴게.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "Oh you seem to be alone, i'll wait.");
 					b_NpcIsInvulnerable[npc.index] = true; //Special huds for invul targets
 				}				
 			}
@@ -927,7 +927,7 @@ static void Internal_ClotThink(int iNPC)
 	{
 		if(!b_SilvLine[npc.index])
 		{
-			CPrintToChatAll("{gold}실베스터{default}: 나하고 홀로 싸우겠다고? 더 열심히 해야겠는데?");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "Fighting me alone now? Guess ill give it extra.");
 			b_SilvLine[npc.index] = true;
 			RaidModeScaling *= 1.15;
 		}
@@ -1061,7 +1061,7 @@ static Action Internal_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 				RemoveEntity(npc.m_iWearable8);
 			}
 			SetEntProp(npc.index, Prop_Data, "m_iHealth", ReturnEntityMaxHealth(npc.index)/2);
-			CPrintToChatAll("{gold}실베스터{default}: 음, 아무래도 훈련용 장비를 좀 떼야할 것 같은데.");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "Well, looks like i gotta take off the training wheels.");
 			npc.m_flSilvesterTransformRegardless = FAR_FUTURE;
 			npc.i_GunMode = 0;
 			damage = 0.0; //So he doesnt get oneshot somehow, atleast once.
@@ -1084,7 +1084,7 @@ static Action Internal_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 			MakeObjectIntangeable(npc.index);
 			SetEntProp(npc.index, Prop_Data, "m_iHealth", 1);
 			
-			CPrintToChatAll("{gold}실베스터{default}: 아니, 가까이 오진 말고! 아니... 아니다.");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "Not in the face! ah... fine.");
 
 			damage = 0.0; //So he doesnt get oneshot somehow, atleast once.
 			return Plugin_Handled;
@@ -1142,19 +1142,19 @@ static void Internal_NPCDeath(int entity)
 	{
 		case 0:
 		{
-			CPrintToChatAll("{gold}실베스터{default}: 뭐... 그럼 이제 {blue}센살{default}을 도우러 가야겠어. 나중에 또 봐!");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "Welp i gotta help {blue}Sensal{default} again, cya!");
 		}
 		case 1:
 		{
-			CPrintToChatAll("{gold}실베스터{default}: 지금 할 일이 많아서 살짝 지쳐있거든.. 그러니까 나중에 또 하자.");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "I have some stuff to do, exhausted anyways currently, till later.");
 		}
 		case 2:
 		{
-			CPrintToChatAll("{gold}실베스터{default}: 너흰 역시 정말 강해!!");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "You guys pack a punch!");
 		}
 		case 3:
 		{
-			CPrintToChatAll("{gold}실베스터{default}: 너희가 날 감염에서 치료해준거 기억 나? 난 아직도 기억해! 그리고 정말 고마워!");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "Remember when i was infected? I still thank you for helping me!");
 		}
 	}
 
@@ -1541,7 +1541,7 @@ bool SilvesterTransformation(Silvester npc, bool NemalAssistance)
 			ApplyStatusEffect(npc.index, npc.index, "Defensive Backup", 5.0);
 			npc.m_flDoingAnimation = 0.0;
 
-			CPrintToChatAll("{gold}실베스터{default}: 내 낫을 받아라!");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "Here's my scythe!");
 			if(NemalAssistance)
 			{
 				CPrintToChatAll("{lightblue}네말{default}: 나도 열심히 노력해야겠네. 아니면... 그냥 노력을 안 해야되나?");
@@ -1618,7 +1618,7 @@ static void Silvester_Weapon_Lines(Silvester npc, int client)
 
 	if(valid)
 	{
-		CPrintToChatAll("{gold}Silvester{default}: %s", Text_Lines);
+		RaidbossSilvester_NPCTalkMessage(npc.index, "%s", Text_Lines);
 		fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(17.0, 26.0);
 		b_said_player_weaponline[client] = true;
 	}

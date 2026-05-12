@@ -156,6 +156,7 @@ methodmap LastKnight < CClotBody
 			else
 				RaidModeScaling *= 1.5;
 			RaidAllowsBuildings = true;
+			RaidAllowLastman = false;
 		}
 		
 		return npc;
@@ -171,6 +172,11 @@ methodmap LastKnight < CClotBody
 			this.m_iMedkitAnnoyance = value;
 		}
 	}
+}
+
+static void NPCTalkMessage(int iNPC, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(iNPC, "gray", message);
 }
 
 public void LastKnight_ClotThink(int iNPC)
@@ -240,7 +246,7 @@ public void LastKnight_ClotThink(int iNPC)
 			if(!found)
 			{
 				PeaceKnight = 1;
-				CPrintToChatAll("{gray}마지막 기사{default}: 네가 바다를 상대로 싸우고 있다는 것을 나에게 증명해주었으니, 넌 더 이상 내 적이 아니다.");
+				NPCTalkMessage(npc.index, "You have proven yourself, you're against the ocean, and you're not my enemy.");
 
 				int owner;
 				for(int client = 1; client <= MaxClients; client++)

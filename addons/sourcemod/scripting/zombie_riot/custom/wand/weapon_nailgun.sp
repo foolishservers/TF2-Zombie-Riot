@@ -115,6 +115,11 @@ public void Weapon_Nailgun_Shotgun(DataPack pack)
 		if(Inv_Mini_Shell[client])
 			damage *= 0.7;
 		Attributes_Set(weapon, 2, damage);
+
+		float Accuracy = Attributes_GetOnPlayer(client, 344, true);			//Sentry range bonus
+		
+		Accuracy = 1.0 / Accuracy;
+		Attributes_Set(weapon, 106, Accuracy);
 			
 	}
 	delete pack;

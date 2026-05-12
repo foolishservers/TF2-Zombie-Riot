@@ -118,7 +118,7 @@ public void Shadowing_Darkness_Boss_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "shadowingdarkness");
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
-	data.Category = Type_Curtain;
+	data.Category = Type_Raid;
 	data.Func = ClotSummon;
 	data.Precache = ClotPrecache;
 	NPC_Add(data);
@@ -500,6 +500,7 @@ methodmap Shadowing_Darkness_Boss < CClotBody
 
 		RaidBossActive = EntIndexToEntRef(npc.index);
 		RaidAllowsBuildings = false;
+		RaidAllowLastman = true;
 		Citizen_MiniBossSpawn();
 		npc.m_flSwordParticleAttackCD = GetGameTime() + 5.0;
 		npc.m_flUpperSlashCD = GetGameTime() + 15.0;
@@ -616,7 +617,7 @@ public void Shadowing_Darkness_Boss_ClotThink(int iNPC)
 		return;
 	}
 
-	if(Shadowing_Darkness_UpperDash(npc, gameTime))
+	if(Shadowing_Darkness_UpperDash(npc, gameTime, 35.0))
 	{
 		return;
 	}
@@ -708,6 +709,7 @@ public Action Shadowing_Darkness_Boss_OnTakeDamage(int victim, int &attacker, in
 			SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", 1000000000);
 			f_AttackSpeedNpcIncrease[spawn_index]	*= 2.0;
 			fl_Extra_Damage[spawn_index]	*= 0.1;
+			b_thisNpcIsABoss[spawn_index] = true;
 
 		}
 		if(npc.m_iChanged_WalkCycle != 99) 	
@@ -795,6 +797,7 @@ public Action Shadowing_Darkness_Boss_OnTakeDamage(int victim, int &attacker, in
 				SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", (ReturnEntityMaxHealth(npc.index) / 4));
 				ApplyStatusEffect(spawn_index, spawn_index, "Extreme Anxiety", 5.0);
 				npc.m_iTargetAlly = spawn_index;
+				b_thisNpcIsABoss[spawn_index] = true;
 			}
 			if(npc.m_flSpeed != 0)
 				npc.m_flSpeed = SHADOW_DEFAULT_SPEED * 0.5;
@@ -1243,6 +1246,8 @@ bool Shadowing_Darkness_UmbralGateSummoner(Shadowing_Darkness_Boss npc, float ga
 					NpcAddedToZombiesLeftCurrently(spawn_index, true);
 					SetEntProp(spawn_index, Prop_Data, "m_iHealth", (ReturnEntityMaxHealth(npc.index) / 10));
 					SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", (ReturnEntityMaxHealth(npc.index) / 10));
+					b_thisNpcIsABoss[spawn_index] = true;
+					b_thisNpcHasAnOutline[spawn_index] = true;
 
 				}
 				
@@ -1288,11 +1293,11 @@ bool Shadowing_Darkness_UmbralGateSummoner(Shadowing_Darkness_Boss npc, float ga
 }
 
 
-bool Shadowing_Darkness_UpperDash(Shadowing_Darkness_Boss npc, float gameTime)
+bool Shadowing_Darkness_UpperDash(Shadowing_Darkness_Boss npc, float gameTime, float CDGive)
 {
 	if(npc.m_flUpperSlashCD < gameTime && npc.m_iState == 0)
 	{
-		npc.m_flUpperSlashCD = gameTime + 35.0;
+		npc.m_flUpperSlashCD = gameTime + CDGive;
 		npc.m_iState = 3;	
 		npc.m_flDoingAnimation = gameTime + 2.3;
 		if(npc.m_iChanged_WalkCycle != 1) 	

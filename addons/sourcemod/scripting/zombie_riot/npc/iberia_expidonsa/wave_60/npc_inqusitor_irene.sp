@@ -166,6 +166,7 @@ methodmap Iberiainqusitor_irene < CClotBody
 			RaidBossActive = EntIndexToEntRef(npc.index);
 			RaidModeTime = GetGameTime(npc.index) + 9000.0;
 			RaidAllowsBuildings = true;
+			RaidAllowLastman = false;
 		}
 		
 		
@@ -191,6 +192,11 @@ methodmap Iberiainqusitor_irene < CClotBody
 
 		return npc;
 	}
+}
+
+static void NPCTalkMessage(int iNPC, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(iNPC, "snow", message, .customName = "Irene");
 }
 
 public void Iberiainqusitor_irene_ClotThink(int iNPC)
@@ -296,7 +302,7 @@ public void Iberiainqusitor_irene_NPCDeath(int entity)
 	ParticleEffectAt(WorldSpaceVec, "teleported_blue", 0.5);
 	npc.PlayDeathSound();	
 	npc.m_bDissapearOnDeath = true;
-	CPrintToChatAll("{snow}아이린{default}: 저희가 정말 죽는것처럼 보이셨나요? 저희는 그저 그렇게 보이도록 연기하고 있을 뿐이랍니다. 걱정하지 마시길.");
+	NPCTalkMessage(npc.index, "You really think you're killing us? We are mearly simulating a death, no worries.");
 		
 	if(IsValidEntity(npc.m_iWearable7))
 		RemoveEntity(npc.m_iWearable7);
@@ -637,7 +643,7 @@ bool Irene_AbilityAir(Iberiainqusitor_irene npc)
 			if(!Irene_TargetsFound)
 			{
 				npc.m_flAirTimeAbilityHappening = 0.0;
-				CPrintToChatAll("{snow}아이린{default}: ...");
+				NPCTalkMessage(npc.index, "...");
 			}
 			else
 			{
@@ -645,19 +651,19 @@ bool Irene_AbilityAir(Iberiainqusitor_irene npc)
 				{
 					case 0:
 					{
-						CPrintToChatAll("{snow}아이린{default}: 내 검이 파도를 가르리라!");
+						NPCTalkMessage(npc.index, "My blade will cleave the tides!");
 					}
 					case 1:
 					{
-						CPrintToChatAll("{snow}아이린{default}: 내 빛이 악을 씻어내리니!");
+						NPCTalkMessage(npc.index, "My light will purge the vice!");
 					}
 					case 2:
 					{
-						CPrintToChatAll("{snow}아이린{default}: 내 눈이 정의를 찾아내리라!");
+						NPCTalkMessage(npc.index, "My eyes will find the truth!");
 					}
 					case 3:
 					{
-						CPrintToChatAll("{snow}아이린{default}: 나의 판단은 틀리지 않으리!");
+						NPCTalkMessage(npc.index, "My heart will be the judge!");
 					}
 				}
 				npc.m_flAirTimeAbilityHappening = GetGameTime(npc.index) + 2.0;
@@ -750,7 +756,7 @@ static void Irene_Weapon_Lines(Iberiainqusitor_irene npc, int client)
 
 	if(valid)
 	{
-		CPrintToChatAll("{snow}Irene{default}: %s", Text_Lines);
+		NPCTalkMessage(npc.index, Text_Lines);
 		fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(17.0, 26.0);
 		b_said_player_weaponline[client] = true;
 	}

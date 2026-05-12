@@ -69,6 +69,7 @@ enum
 	Attrib_MaxArmor_BaseAdditive = 5001,
 	Attrib_MaxArmor_FinalAdditive = 5002,
 	Attrib_ASPD_StatusCalc,	// Only used in status_effect to determine their current ASPD amount
+	Attrib_RegenElementalOutOfBattleScaling = 4061
 }
 
 StringMap WeaponAttributes[MAXENTITIES + 1];

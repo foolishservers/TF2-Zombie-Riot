@@ -48,7 +48,7 @@ void TheGreatRam_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "the_great_ram");
 	data.IconCustom = true;
 	data.Flags = 0;
-	data.Category = 0;
+	data.Category = Type_Outlaws;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
@@ -136,6 +136,7 @@ methodmap TheGreatRam < CClotBody
 			RaidBossActive = EntIndexToEntRef(npc.index);
 			RaidModeTime = GetGameTime(npc.index) + 9000.0;
 			RaidAllowsBuildings = true;
+			RaidAllowLastman = false;
 		}
 		npc.StartPathing();
 		npc.m_flSpeed = 25.0;

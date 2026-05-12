@@ -98,6 +98,7 @@ void Object_PluginStart()
 	.DefineFloatField("m_fLastTimeClaimed")
 	.DefineBoolField("m_bCannotBePickedUp")
 	.DefineBoolField("m_bNoOwnerRequired")
+	.DefineIntField("m_iExtraLogic")
 
 	//needed so npc stuff doesnt break
 	.DefineIntField("m_iHealthBar")
@@ -512,6 +513,17 @@ methodmap ObjectGeneric < CClotBody
 			return view_as<bool>(GetEntProp(this.index, Prop_Data, "m_bNoOwnerRequired"));
 		}
 	}
+	property int m_iExtraLogic
+	{
+		public set(int value)
+		{
+			SetEntProp(this.index, Prop_Data, "m_iExtraLogic", value);
+		}
+		public get()
+		{
+			return GetEntProp(this.index, Prop_Data, "m_iExtraLogic");
+		}
+	}
 	property bool m_bConstructBuilding
 	{
 		public set(bool value)
@@ -522,6 +534,7 @@ methodmap ObjectGeneric < CClotBody
 			{
 				SetEntPropEnt(this.index, Prop_Data, "m_hOwnerEntity", -1);
 				ApplyStatusEffect(this.index, this.index, "Const2 Scaling For Enemy Base Nerf", 999999.0);
+				/*
 				if(h_TransmitHookType[this.index] != 0)
 				{
 					if(!DHookRemoveHookID(h_TransmitHookType[this.index]))
@@ -530,6 +543,7 @@ methodmap ObjectGeneric < CClotBody
 					}
 				}
 				h_TransmitHookType[this.index] = 0;
+				*/
 			}
 			SetEntProp(this.index, Prop_Data, "m_bConstructBuilding", value);
 		}
