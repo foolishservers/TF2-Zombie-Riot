@@ -92,9 +92,9 @@ methodmap Pregnant < CClotBody
 		i_NpcWeight[npc.index] = 4;
 		npc.SetActivity("ACT_WALK");
 		
-		npc.m_iBleedType = BLEEDTYPE_SEABORN;
+		npc.m_iBleedType = BLEEDTYPE_DWELLER;
 		npc.m_iStepNoiseType = STEPSOUND_GIANT;
-		npc.m_iNpcStepVariation = STEPTYPE_SEABORN;
+		npc.m_iNpcStepVariation = STEPTYPE_DWELLER;
 
 		func_NPCDeath[npc.index] = Pregnant_NPCDeath;
 		func_NPCOnTakeDamage[npc.index] = Pregnant_OnTakeDamage;

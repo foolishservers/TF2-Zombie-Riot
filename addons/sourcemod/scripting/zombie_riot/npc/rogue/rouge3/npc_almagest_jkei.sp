@@ -68,6 +68,12 @@ int Almagest_JkeiID()
 {
 	return NPCId;
 }
+
+static void NPCTalkMessage(int entity, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(entity, "black", message);
+}
+
 static void ClotPrecache()
 {
 	PrecacheSoundCustom("#zombiesurvival/rogue3/rogue3_almagestboss.mp3");
@@ -352,7 +358,7 @@ methodmap AlmagestJkei < CClotBody
 		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", skin);
 		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", skin);
 		SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", 2);
-		CPrintToChatAll("{black}제이케이{default} : ∴ᒷリリ ↸⚍ ⨅⚍ {black}그림자 응달{default}... ⍑ ∴ᔑ∷ℸ ̣ᒷ ᒲᔑꖎ, ↸⚍ ∴╎∷ᓭℸ ̣ ᒷ⍑ ⊣ꖎᒷ╎ᓵ⍑ ⍊ᒷ∷∷ᒷᓵꖌᒷリ.");
+		NPCTalkMessage(npc.index, "∴ᒷリリ ↸⚍ ⨅⚍ {darkgray}Shadowing Darkness{default}... ⍑ ∴ᔑ∷ℸ ̣ᒷ ᒲᔑꖎ, ↸⚍ ∴╎∷ᓭℸ ̣ ᒷ⍑ ⊣ꖎᒷ╎ᓵ⍑ ⍊ᒷ∷∷ᒷᓵꖌᒷリ.");
 		
 
 		return npc;

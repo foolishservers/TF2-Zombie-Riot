@@ -304,7 +304,7 @@ methodmap OmegaRaid < CClotBody
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPTYPE_COMBINE;
-		npc.m_flOmegaRPGCD = GetGameTime() + 6.0;
+		npc.m_flOmegaRPGCD = GetGameTime(npc.index) + 6.0;
 		i_TalkDelayCheck = -1;
 
 		npc.m_iWearable2 = npc.EquipItem("head", "models/combine_super_soldier.mdl");
@@ -356,11 +356,11 @@ methodmap OmegaRaid < CClotBody
 			switch(GetRandomInt(0,2))
 			{
 				case 0:
-					CPrintToChatAll("{gold}오메가{default}: 늦어서 미안. {fullblue}파블로{default}라는 애한테 불렸었거든.");
+					NPCTalkMessage(npc.index, "Apologies for being late, got held up by this guy called {fullblue}Pablo{default}.");
 				case 1:
-					CPrintToChatAll("{gold}오메가{default}: 친선전을 시작해볼까!");
+					NPCTalkMessage(npc.index, "Time for a friendly skirmish!");
 				case 2:
-					CPrintToChatAll("{gold}오메가{default}: 그래, 불렀어?");
+					NPCTalkMessage(npc.index, "So, you called?");
 			}
 		}
 		else
@@ -368,11 +368,11 @@ methodmap OmegaRaid < CClotBody
 			switch(GetRandomInt(0,2))
 			{
 				case 0:
-					CPrintToChatAll("{gold}오메가{default}: 웃기고 있네, 너따윌 상대하는데 무기가 왜 필요하지?");
+					NPCTalkMessage(npc.index, "Fuck this, I don't need my weapons to dispose of you.");
 				case 1:
-					CPrintToChatAll("{gold}오메가{default}: 또 만났군.");
+					NPCTalkMessage(npc.index, "We meet once again.");
 				case 2:
-					CPrintToChatAll("{gold}오메가{default}: 이 곳에 너 같은 시체들이 많아.");
+					NPCTalkMessage(npc.index, "A lot of dead bodies on the way here.");
 			}
 		}
 
@@ -434,6 +434,11 @@ methodmap OmegaRaid < CClotBody
 		
 		return npc;
 	}
+}
+
+static void NPCTalkMessage(int entity, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(entity, "gold", message);
 }
 
 static void RocketBarrage_Ability(OmegaRaid npc, int target)
@@ -582,11 +587,11 @@ public void OmegaRaid_ClotThink(int iNPC)
 				{
 					case 0:
 					{
-						CPrintToChatAll("{gold}오메가{default}: 넌 이전에도 날 한 번 때려눕힌 적이 있잖아? 두 번은 못 하겠다는거야?");
+						NPCTalkMessage(npc.index, "You've 'beat' me once before, come on, you can do it a second time.");
 					}
 					case 1:
 					{
-						CPrintToChatAll("{gold}Omega{default}: If you can't beat me... I guess I'll get out of retirement to save the world myself.");
+						NPCTalkMessage(npc.index, "If you can't beat me... I guess I'll get out of retirement to save the world myself.");
 					}
 				}
 			}
@@ -596,11 +601,11 @@ public void OmegaRaid_ClotThink(int iNPC)
 				{
 					case 0:
 					{
-						CPrintToChatAll("{gold}오메가{default}: 원샷원킬..");
+						NPCTalkMessage(npc.index, "One shot, one kill.");
 					}
 					case 1:
 					{
-						CPrintToChatAll("{gold}오메가{default}: 그 녀석을 넘겨주면 넌 여기서 살아서 나갈수도 있어.");
+						NPCTalkMessage(npc.index, "Hand him over and I might just let you walk out of here alive.");
 					}
 				}
 			}
@@ -610,7 +615,7 @@ public void OmegaRaid_ClotThink(int iNPC)
 	if(npc.m_bWasSadAlready)
 	{
 		npc.StopPathing();
-		if(OmegasRabiling())
+		if(OmegasRabiling(npc.index))
 		{
 			npc.m_bDissapearOnDeath = true;
 			RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
@@ -629,7 +634,7 @@ public void OmegaRaid_ClotThink(int iNPC)
 	{
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		
-		CPrintToChatAll("{gold}오메가{default}: 음... 더 할 말이 있나?");
+		NPCTalkMessage(npc.index, "Well...now what?");
 		return;
 	}
 
@@ -640,14 +645,14 @@ public void OmegaRaid_ClotThink(int iNPC)
 		{
 			ForcePlayerLoss();
 			RaidBossActive = INVALID_ENT_REFERENCE;
-			CPrintToChatAll("{gold}오메가{default}: {default}시간은 흐른다.{default}");
+			NPCTalkMessage(npc.index, "Tempus Fugit.");
 			func_NPCThink[npc.index] = INVALID_FUNCTION;
 			return;
 		}
 	}
 
 	//Spawn Rollermines
-	if(npc.m_flRollermineSpawn < GetGameTime())
+	if(npc.m_flRollermineSpawn < GetGameTime(npc.index))
 	{	
 		//If he's using the RPG, this animation won't play
 		if(usage != 1)
@@ -665,7 +670,7 @@ public void OmegaRaid_ClotThink(int iNPC)
 	}
 
 	//Throw Grenade
-	if(npc.m_flThrowSupportGrenadeHappening < GetGameTime())
+	if(npc.m_flThrowSupportGrenadeHappening < GetGameTime(npc.index))
 	{
 		//If he's using the RPG, this animation won't play
 		if(usage != 1)
@@ -752,29 +757,29 @@ void OmegaThrowGrenadeHappening(OmegaRaid npc)
 {
 	if(npc.m_flThrowSupportGrenadeHappening)
 	{
-		if(npc.m_flThrowSupportGrenadeHappening < GetGameTime())
+		if(npc.m_flThrowSupportGrenadeHappening < GetGameTime(npc.index))
 		{
 			switch(GetRandomInt(0,4)) //Armornade voicelines
 			{
 				case 0:
 				{
-					CPrintToChatAll("{gold}Omega{default}: See this area? I feel like denying it.");
+					NPCTalkMessage(npc.index, "See this area? I feel like denying it.");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{gold}Omega{default}: You didn't think you were the only ones with grenades, did you?");
+					NPCTalkMessage(npc.index, "You didn't think you were the only ones with grenades, did you?");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{gold}Omega{default}: I knew these would come in handy.");
+					NPCTalkMessage(npc.index, "I knew these would come in handy.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{gold}Omega{default}: You've got too much space to maneuver around in, I think I'll restrict some of it.");
+					NPCTalkMessage(npc.index, "You've got too much space to maneuver around in, I think I'll restrict some of it.");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{gold}Omega{default}: I never come unprepared.");
+					NPCTalkMessage(npc.index, "I never come unprepared.");
 				}
 			}
 			npc.m_flThrowSupportGrenadeHappening = 0.0;
@@ -799,7 +804,7 @@ void OmegaThrowGrenadeHappening(OmegaRaid npc)
 			float HealDo = 1.0;
 			Omega_GrenadeSupportDo(npc.index, Grenade, damage, GrenadeRangeSupport, HealDo);
 			float SpeedReturn[3];
-			ArcToLocationViaSpeedProjectile(VecStart, vecTarget, SpeedReturn, 1.75, 1.0);
+			ArcToLocationViaSpeedProjectile(Grenade, vecTarget, SpeedReturn, 1.75, 1.0);
 			TeleportEntity(Grenade, NULL_VECTOR, NULL_VECTOR, SpeedReturn);
 			//Throw a grenade towards the target!
 		}
@@ -931,67 +936,46 @@ void OmegaCreateRollermines(int iNpc)
 	{
 		case 0:
 		{
-			CPrintToChatAll("{gold}Omega{default}: Aren't they just the cutest things ever?");
+			NPCTalkMessage(iNpc, "Aren't they just the cutest things ever?");
 		}
 		case 1:
 		{
-			CPrintToChatAll("{gold}Omega{default}: Get a load of these uh... rollermines, as I like to call them.");
+			NPCTalkMessage(iNpc, "Get a load of these uh... rollermines, as I like to call them.");
 		}
 		case 2:
 		{
-			CPrintToChatAll("{gold}Omega{default}: Don't underestimate my mechanical expertise.");
+			NPCTalkMessage(iNpc, "Don't underestimate my mechanical expertise.");
 		}
 		case 3:
 		{
-			CPrintToChatAll("{gold}Omega{default}: Rollermines, roll out. Heh, see what I did there?");
+			NPCTalkMessage(iNpc, "Rollermines, roll out. Heh, see what I did there?");
 		}
 		case 4:
 		{
-			CPrintToChatAll("{gold}Omega{default}: Protect me, zappies.");
+			NPCTalkMessage(iNpc, "Protect me, zappies.");
 		}
 	}
 
 	OmegaRaid npc = view_as<OmegaRaid>(iNpc);
 	
 	float pos[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos);
-	int summon = NPC_CreateByName("npc_rollermine", -1, pos, {0.0,0.0,0.0}, GetTeam(npc.index));
+	int summon = NPC_CreateByName("npc_living_metal_ball", -1, pos, {0.0,0.0,0.0}, GetTeam(npc.index));
 	if(IsValidEntity(summon))
 	{
-		/*
-		int count;
-		for(int i; i < i_MaxcountNpcTotal; i++)
-		{
-			summon = EntRefToEntIndexFast(i_ObjectsNpcsTotal[i]);
-			if(summon != INVALID_ENT_REFERENCE && IsEntityAlive(summon) && GetTeam(summon) == GetTeam(npc.index))
-			{
-				if(++count)
-				{
-					npc.m_flRangedArmor -= 0.03;
-					npc.m_flMeleeArmor -= 0.03;
-					break;
-				}
-				else if(--count)
-				{
-					npc.m_flRangedArmor += 0.05;
-					npc.m_flMeleeArmor += 0.05;
-					break;
-				}
-			}
-		}
-		*/
 		OmegaRaid npcsummon = view_as<OmegaRaid>(summon);
 		if(GetTeam(npc.index) != TFTeam_Red)
 			Zombies_Currently_Still_Ongoing++;
 
 		fl_Extra_Damage[npcsummon.index] = fl_Extra_Damage[npc.index];
 		fl_Extra_Damage[npcsummon.index] *= 1.5;
+		fl_Extra_Speed[npcsummon.index] *= 0.5;
 		npcsummon.m_iTargetAlly = iNpc;
 		SetEntProp(summon, Prop_Data, "m_iHealth", ReturnEntityMaxHealth(npc.index)/120);
 		SetEntProp(summon, Prop_Data, "m_iMaxHealth", ReturnEntityMaxHealth(npc.index)/120);
 		NpcStats_CopyStats(npc.index, summon);
 		//npcsummon.m_iWearable1 = ConnectWithBeam(npc.index, npcsummon.index, 0, 150, 195, 0.5, 0.5, 1.0, "sprites/laserbeam.vmt");
 	}
-	summon = NPC_CreateByName("npc_rollermine", -1, pos, {0.0,0.0,0.0}, GetTeam(npc.index));
+	summon = NPC_CreateByName("npc_living_metal_ball", -1, pos, {0.0,0.0,0.0}, GetTeam(npc.index));
 	if(IsValidEntity(summon))
 	{
 		OmegaRaid npcsummon = view_as<OmegaRaid>(summon);
@@ -1000,6 +984,7 @@ void OmegaCreateRollermines(int iNpc)
 
 		fl_Extra_Damage[npcsummon.index] = fl_Extra_Damage[npc.index];
 		fl_Extra_Damage[npcsummon.index] *= 1.5;
+		fl_Extra_Speed[npcsummon.index] *= 0.5;
 		npcsummon.m_iTargetAlly = iNpc;
 		SetEntProp(summon, Prop_Data, "m_iHealth", ReturnEntityMaxHealth(npc.index)/120);
 		SetEntProp(summon, Prop_Data, "m_iMaxHealth", ReturnEntityMaxHealth(npc.index)/120);
@@ -1199,11 +1184,11 @@ static Action OmegaRaid_OnTakeDamage(int victim, int &attacker, int &inflictor, 
 	{
 		if(Waves_InFreeplay())
 		{
-			CPrintToChatAll("{gold}오메가{default}: 좋아, 시간이 좀 빨리 흐르네.");
+			NPCTalkMessage(npc.index, "Alright, time to quit playing around.");
 		}
 		else
 		{
-			CPrintToChatAll("{gold}오메가{default}: 망할! 좀 죽으라고!");
+			NPCTalkMessage(npc.index, "God damn it! Just die already!");
 		}
 		npc.Anger = true;
 		ApplyStatusEffect(npc.index, npc.index, "Mazeat Command", 10.0);
@@ -1241,7 +1226,6 @@ public void OmegaRaid_NPCDeath(int entity)
 		ParticleEffectAt(WorldSpaceVec, "teleported_blue", 0.5);
 		npc.PlayTeleSound();
 	}
-	Music_SetRaidMusicSimple("vo/null.mp3", 60, false, 0.5);
 
 	if(IsValidEntity(npc.m_iWearable2))
 		RemoveEntity(npc.m_iWearable2);
@@ -1497,7 +1481,7 @@ static void OmegaRaid_Weapon_Lines(OmegaRaid npc, int client)
 					Format(Text_Lines, sizeof(Text_Lines), "솔직히 {green}그 놈{default}이 돌아왔으면 좋겠는데.",client);
 			}
 		}
-		case WEAPON_SEABORN_MISC:
+		case WEAPON_DWELLER_MISC:
 		{
 			if(Waves_InFreeplay())
 			{
@@ -1506,7 +1490,7 @@ static void OmegaRaid_Weapon_Lines(OmegaRaid npc, int client)
 					case 0:
 						Format(Text_Lines, sizeof(Text_Lines), "도대체 어떻게 시본의 힘을 부작용 없이 사용하고 있는거야?");
 					case 1:
-						Format(Text_Lines, sizeof(Text_Lines), "뭐, 솔직히 네가 겪은 모든 일을 생각하면, 시본 감염이 너에게 영향을 미치지 않는다는 것은 별로 놀라운 일도 아닐거 같네, {gold}%N{default}.",client);
+						Format(Text_Lines, sizeof(Text_Lines), "Well after everything you've went through, it shouldn't surprise me that the Dweller infection doesn't affect you, {gold}%N{default}.",client);
 				}
 			}
 			else
@@ -1704,7 +1688,7 @@ static void OmegaRaid_Weapon_Lines(OmegaRaid npc, int client)
 
 	if(valid)
 	{
-		CPrintToChatAll("{gold}오메가{default}: %s", Text_Lines);
+		NPCTalkMessage(npc.index, Text_Lines);
 		fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(15.0, 22.0);
 		b_said_player_weaponline[client] = true;
 	}
@@ -1744,12 +1728,7 @@ void OmegaRaid_DefeatAnimation(OmegaRaid npc)
 		
 }
 
-static void OmegaRaid_Reply(char text[255])
-{
-	CPrintToChatAll("{gold}Omega{default}: %s", text);
-}
-
-static bool OmegasRabiling()
+static bool OmegasRabiling(int iNPC)
 {
 	int maxyapping = 13;
 	if(i_TalkDelayCheck == maxyapping)
@@ -1766,7 +1745,7 @@ static bool OmegasRabiling()
 			case 0:
 			{
 				ReviveAll(true);
-				OmegaRaid_Reply("{default}좋아. 장난은 이제 그만하고, 이제 끝내지.");
+				NPCTalkMessage(iNPC, "Alright, that's enough of playing around, let's get this done.");
 			}
 			case 1:
 			{
@@ -1774,7 +1753,7 @@ static bool OmegasRabiling()
 			}
 			case 2:
 			{
-				OmegaRaid_Reply("{default}허?");
+				NPCTalkMessage(iNPC, "Huh?");
 			}
 			case 3:
 			{
@@ -1782,7 +1761,7 @@ static bool OmegasRabiling()
 			}
 			case 4:
 			{
-				OmegaRaid_Reply("{default}하지만 {crimson}배풍등{default}이 자기 병사를 보내서 널 처리하려고 했었잖아!");
+				NPCTalkMessage(iNPC, "But {crimson}Whiteflower{default} sent his army to finish you for good!");
 			}
 			case 5:
 			{
@@ -1790,7 +1769,7 @@ static bool OmegasRabiling()
 			}
 			case 6:
 			{
-				OmegaRaid_Reply("{default}그럼... 내가 널 구하려고 한게 전부 헛수고였단 소리야?");
+				NPCTalkMessage(iNPC, "So you're saying that all this fighting was for nothing?");
 			}
 			case 7:
 			{
@@ -1798,11 +1777,11 @@ static bool OmegasRabiling()
 			}
 			case 8:
 			{
-				OmegaRaid_Reply("{default}젠장... 좀 더 정확히 조사해봤어야했는데...");
+				NPCTalkMessage(iNPC, "Damn...well, at least I'm keeping myself in check, can't become too weak.");
 			}
 			case 9:
 			{
-				OmegaRaid_Reply("{default}아니, 그럼 왜 처음부터 안전하다고 연락을 안 한거야?");
+				NPCTalkMessage(iNPC, "Why didn't you just tell me that you weren't in any danger right off the bat?");
 			}
 			case 10:
 			{
@@ -1810,15 +1789,15 @@ static bool OmegasRabiling()
 			}
 			case 11:
 			{
-				OmegaRaid_Reply("{default}아 좀, 내가 널 혼자 내버려둘 것 같애? 절대 아니지.");
+				NPCTalkMessage(iNPC, "Oh please, you know I would never leave you hanging.");
 			}
 			case 12:
 			{
-				OmegaRaid_Reply("{default}그리고, 음... 오해해서 정말 미안합니다, 용병분들... 진짜 몰랐는데... 어...");
+				NPCTalkMessage(iNPC, "Well, I suppose an apology is owed for attacking you, mercenaries.");
 			}
 			case 13:
 			{
-				OmegaRaid_Reply("{default}사죄의 의미로 이걸 받아주시죠. 그리고 밥... 여기서 어서 나가자.");
+				NPCTalkMessage(iNPC, "Here, take this. Bob...let's get out of here.");
 				i_TalkDelayCheck = maxyapping;
 				OmegaRaid_GrantItem();
 			}
@@ -1841,15 +1820,15 @@ public void RaidMode_OmegaRaid_WinCondition(int entity)
 		{
 			case 0:
 			{
-				OmegaRaid_Reply("{default}왜 이래? 난 널 응원하고 있었다고.");
+				NPCTalkMessage(entity, "Aw come on, I was rootin' for you.");
 			}
 			case 1:
 			{
-				OmegaRaid_Reply("{default}You've gone soft, you need to get stronger to keep up.");
+				NPCTalkMessage(entity, "You've gone soft, you need to get stronger to keep up.");
 			}
 			case 2:
 			{
-				OmegaRaid_Reply("{default}You're not ready to take on bigger threats just yet. I'll take care of business.");
+				NPCTalkMessage(entity, "You're not ready to take on bigger threats just yet. I'll take care of business.");
 			}
 		}
 	}
@@ -1859,31 +1838,31 @@ public void RaidMode_OmegaRaid_WinCondition(int entity)
 		{
 			case 0:
 			{
-				OmegaRaid_Reply("{default}자, {white}밥{default}, 널 또 다시 구해냈어. 감사할 필요는 없고!");
+				NPCTalkMessage(entity, "Well {white}Bob{default}, I saved you once again, no need to thank me.");
 			}
 			case 1:
 			{
-				OmegaRaid_Reply("{default}이제 맥주 한 잔 하러 갈까, {white}밥{default}?");
+				NPCTalkMessage(entity, "Wanna grab some beer after this, {white}Bob{default}?");
 			}
 			case 2:
 			{
-				OmegaRaid_Reply("{default}적자생존이지.");
+				NPCTalkMessage(entity, "Survival of the fittest.");
 			}
 			case 3:
 			{
-				OmegaRaid_Reply("{default}살아남기 위해서는 뭐든지 했어야지.");
+				NPCTalkMessage(entity, "You gotta do what you gotta do to survive.");
 			}
 			case 4:
 			{
-				OmegaRaid_Reply("{default}네가 그 녀석을 포로로 잡아두는건 큰 실수였어.");
+				NPCTalkMessage(entity, "You shouldn't have kept him captive.");
 			}
 			case 5:
 			{
-				OmegaRaid_Reply("{crimson}배풍등 {default}이 드디어 돈이 쪼들리나보군. 이딴 허접쓰레기도 영입하다니.");
+				NPCTalkMessage(entity, "{crimson}Whiteflower {default}must've cut his budget huh?");
 			}
 			case 6:
 			{
-				OmegaRaid_Reply("{default}뭐, 이건 너무 쉽잖아?");
+				NPCTalkMessage(entity, "Well, that wasn't nearly as difficult as I was expecting it to be.");
 			}
 		}
 	}

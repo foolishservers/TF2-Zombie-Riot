@@ -282,7 +282,7 @@ public void BarrackThorns_ClotThink(int iNPC)
 					}
 					case 3:
 					{
-						NpcSpeechBubble(npc.index, "똑똑히 봐라, 이게 바로 이베리아의 데스트레자다!", 5, {255,255,255,255}, {0.0,0.0,60.0}, "");
+						NpcSpeechBubble(npc.index, "Watch carefully, this is the Destreza of Almina!", 5, {255,255,255,255}, {0.0,0.0,60.0}, "");
 					}
 				}
 			}

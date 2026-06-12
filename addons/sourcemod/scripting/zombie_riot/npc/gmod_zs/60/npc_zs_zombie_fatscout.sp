@@ -231,7 +231,7 @@ static int InfectedFatScoutSelfDefense(InfectedFatScout npc, float gameTime, int
 				Handle swingTrace;
 				if(npc.DoSwingTrace(swingTrace, target, { 9999.0, 9999.0, 9999.0 }))
 				{
-					if(!NpcStats_VictorianCallToArms(npc.index))
+					if(!NpcStats_VestanCallToArms(npc.index))
 						npc.m_iAmmo--;
 					target = TR_GetEntityIndex(swingTrace);	
 					

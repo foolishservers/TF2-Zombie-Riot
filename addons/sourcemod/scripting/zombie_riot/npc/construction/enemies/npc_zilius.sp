@@ -348,7 +348,7 @@ methodmap Construction_Raid_Zilius < CClotBody
 			}
 			case 8:
 			{
-				CPrintToChatAll("{black}질리우스{default}: 내가 존경하는 자들은 이베리아인 뿐이고, 마제트는 실패한 융합체일 뿐이다.");
+				CPrintToChatAll("{black}Zilius{default}: Alminans are the only ones I respect, Mazeat is an amalgam of failures.");
 			}
 			case 9:
 			{

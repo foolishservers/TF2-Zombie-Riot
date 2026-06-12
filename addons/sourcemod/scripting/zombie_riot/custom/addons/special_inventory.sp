@@ -225,7 +225,7 @@ public void Custom_Inventory_Attribute(int client, int weapon)
 	}
 	if(i_CustomWeaponEquipLogic[weapon]==WEAPON_IS_STICKYBOMB && Inv_StickyFullBurst[client])
 		Attributes_Set(weapon, 119, 0.0);
-	if(i_CustomWeaponEquipLogic[weapon]==WEAPON_VICTORIAN_LAUNCHER && Inv_CompressedExplosive[client])
+	if(i_CustomWeaponEquipLogic[weapon]==WEAPON_VESTAN_LAUNCHER && Inv_CompressedExplosive[client])
 		Attributes_SetMulti(weapon, 99, 1.33);
 }
 

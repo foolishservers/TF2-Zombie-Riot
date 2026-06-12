@@ -162,7 +162,8 @@ public void NecroCalcium_ClotThink(int iNPC)
 	if(IsValidClient(owner) && npc.m_flDuration > GetGameTime(npc.index))
 	{
 		int PrimaryThreatIndex = npc.m_iTarget;
-		if(IsValidEnemy(npc.index, PrimaryThreatIndex) && NpcStats_IberiaIsEnemyMarked(PrimaryThreatIndex))
+		
+		if(IsValidEnemy(npc.index, PrimaryThreatIndex) && NpcStats_AlminaIsEnemyMarked(PrimaryThreatIndex))
 		{
 			float vecTarget[3]; WorldSpaceCenter(PrimaryThreatIndex, vecTarget);
 			float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
@@ -255,7 +256,7 @@ public void NecroCalcium_ClotThink(int iNPC)
 
 bool Necromancy_AttackMarkOnly(int entity, int target)
 {
-	if(NpcStats_IberiaIsEnemyMarked(target))
+	if(NpcStats_AlminaIsEnemyMarked(target))
 	{
 		return true;
 	}

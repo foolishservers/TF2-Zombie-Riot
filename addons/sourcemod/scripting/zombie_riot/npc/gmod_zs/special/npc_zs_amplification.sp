@@ -116,9 +116,9 @@ methodmap Amplification < CSeaBody
 		i_NpcWeight[npc.index] = 2;
 		npc.SetActivity("ACT_WALK");
 		
-		npc.m_iBleedType = BLEEDTYPE_SEABORN;
+		npc.m_iBleedType = BLEEDTYPE_DWELLER;
 		npc.m_iStepNoiseType = STEPSOUND_GIANT;
-		npc.m_iNpcStepVariation = STEPTYPE_SEABORN;
+		npc.m_iNpcStepVariation = STEPTYPE_DWELLER;
 		
 		func_NPCDeath[npc.index] = Amplification_NPCDeath;
 		func_NPCOnTakeDamage[npc.index] = Amplification_OnTakeDamage;

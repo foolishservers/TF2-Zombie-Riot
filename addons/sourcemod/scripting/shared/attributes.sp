@@ -69,7 +69,8 @@ enum
 	Attrib_MaxArmor_BaseAdditive = 5001,
 	Attrib_MaxArmor_FinalAdditive = 5002,
 	Attrib_ASPD_StatusCalc,	// Only used in status_effect to determine their current ASPD amount
-	Attrib_RegenElementalOutOfBattleScaling = 4061
+	Attrib_RegenElementalOutOfBattleScaling = 4061,
+	Attrib_MaxHpNerfForAbility = 4062
 }
 
 StringMap WeaponAttributes[MAXENTITIES + 1];
@@ -102,7 +103,7 @@ bool Attribute_IntAttribute(int attribute)
 {
 	switch(attribute)
 	{
-		case 314, 834, 866, 867, Attrib_BarracksSupplyRate, Attrib_FinalBuilder, Attrib_GlassBuilder, Attrib_WildingenBuilder:
+		case 517, 26, 125, 16, 98, 110, 111, 180, 701, 314, 834, 866, 867, Attrib_BarracksSupplyRate, Attrib_FinalBuilder, Attrib_GlassBuilder, Attrib_WildingenBuilder:
 			return true;
 		
 		case Attrib_MaxArmor_BaseAdditive, Attrib_MaxArmor_FinalAdditive:
@@ -117,7 +118,7 @@ bool Attribute_DontSaveAsIntAttribute(int attribute)
 	switch(attribute)
 	{
 		//this attrib is a float, but saves as an int, for stuff thats additional, not multi.
-		case 314, 142:
+		case 517, 26, 125, 314, 142:
 			return true;
 	}
 

@@ -308,7 +308,7 @@ static void AgentSmith_ClotThink(int iNPC)
 		if(LastMann && !npc.m_fbGunout)
 		{
 			npc.m_fbGunout = true;
-			Agent_Smith_Reply("{darkgreen}자네는 지금을 살아가겠지. {crimson}하지만 미래는 우리의 것이다.");
+			NPCTalkMessage(npc.index, "You had your time. The future is our world, {crimson}the future is our time.");
 		}
 	}
 
@@ -318,7 +318,7 @@ static void AgentSmith_ClotThink(int iNPC)
 		{
 			ForcePlayerLoss();
 			RaidBossActive = INVALID_ENT_REFERENCE;
-			Agent_Smith_Reply("자넨 저항하지 말았어야했어. {crimson}정말 운이 없는 놈이로군...");
+			NPCTalkMessage(npc.index, "You should've never resisted. {crimson}Quite unfortunate...");
 			func_NPCThink[npc.index] = INVALID_FUNCTION;
 			return;
 		}
@@ -336,7 +336,7 @@ static void AgentSmith_ClotThink(int iNPC)
 	if(npc.m_bWasSadAlready)
 	{
 		npc.StopPathing();
-		if(AgentSmithsRabiling())
+		if(AgentSmithsRabiling(npc.index))
 		{
 			npc.m_bDissapearOnDeath = true;
 			RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
@@ -480,7 +480,7 @@ static void RaidSmith_SelfDefense(AgentSmith npc, float gameTime, int target, fl
 							bool infection = false;
 							if(!PlaySound)
 							{
-								if(!npc.f_Corrupt_Timer && !LastMann)
+								if(!npc.f_Corrupt_Timer && !LastMann && IsValidClient(target))
 								{
 									RemoveParticles(npc);
 									infection = true;
@@ -602,7 +602,7 @@ static void RaidSmith_SelfDefense(AgentSmith npc, float gameTime, int target, fl
 				float damage = 50.0;
 				damage *= RaidModeScaling;
 
-				FireBullet(npc.index, npc.m_iWearable1, vecMe, vecDir, damage, 9000.0, DMG_BULLET, "dxhr_sniper_rail_blue");
+				FireBullet(npc.index, npc.m_iWearable3, vecMe, vecDir, damage, 9000.0, DMG_BULLET, "dxhr_sniper_rail_blue");
 				
 				npc.PlayRangedSound();
 			}
@@ -1142,12 +1142,12 @@ static void AgentSmith_WeaponSwaps(AgentSmith npc, int number = 1)
 	}
 }
 
-static void Agent_Smith_Reply(char text[255])
+static void NPCTalkMessage(int entity, const char[] message)
 {
-	CPrintToChatAll("{olive}Agent Smith{default}: %s", text);
+	PrintNPCMessageWithPrefixes(entity, "olive", message, .messageColor = "darkgreen");
 }
 
-static bool AgentSmithsRabiling()
+static bool AgentSmithsRabiling(int iNPC)
 {
 	int maxyapping = 8;
 	if(i_TalkDelayCheck == maxyapping)
@@ -1164,31 +1164,31 @@ static bool AgentSmithsRabiling()
 			case 0:
 			{
 				ReviveAll(true);
-				Agent_Smith_Reply("{darkgreen}잠깐... 나 이 상황을 본 적이 있어... 바로 이거야, 이게 끝이야!");
+				NPCTalkMessage(iNPC, "Wait… I've seen this. This is it, this is the end.");
 			}
 			case 1:
 			{
-				Agent_Smith_Reply("{darkgreen}그래, 자네는 거기에 그렇게 누워있었어. 그리고, 나는... 나는... 나는 여기 서 있어, 바로 여기에.");
+				NPCTalkMessage(iNPC, "Yes, you were laying right there, just like that, and I… I… I stand here, right here.");
 			}
 			case 2:
 			{
-				Agent_Smith_Reply("{darkgreen}그리고... 뭔가 말을 해야 돼.");
+				NPCTalkMessage(iNPC, "I'm… I'm supposed to say something.");
 			}
 			case 3:
 			{
-				Agent_Smith_Reply("{darkgreen}그 말은, 모든 것에는 시작과 끝이 있는 거야, '네오'.");
+				NPCTalkMessage(iNPC, "I say… Everything that has a beginning has an end, Neo.");
 			}
 			case 4:
 			{
-				Agent_Smith_Reply("{darkgreen}뭐야? 방금 내가 뭐랬지? 안 돼… 안 돼, 이건 아니야, 이건 아니라고! 나한테 오지마!");
+				NPCTalkMessage(iNPC, "What? What did I just say? No… No, this isn't right, this can't be right. Get away from me!");
 			}
 			case 5:
 			{
-				Agent_Smith_Reply("{darkgreen}이건 함정이라고!");
+				NPCTalkMessage(iNPC, "It's a trick!");
 			}
 			case 6:
 			{
-				Agent_Smith_Reply("{darkgreen}이건 너무 불공평해!!");
+				NPCTalkMessage(iNPC, "Oh, no, no, no. No, it's not fair!");
 				i_TalkDelayCheck = maxyapping;
 				AgentSmith_GrantItem();
 			}
@@ -1209,31 +1209,31 @@ public void RaidMode_AgentSmith_WinCondition(int entity)
 	{
 		case 0:
 		{
-			Agent_Smith_Reply("{darkgreen}한쪽은 미래가 보장되겠지만, 다른 쪽은 {crimson}그렇지 않겠군.");
+			NPCTalkMessage(entity, "One of these lives has a future, and one of them does {crimson}not.");
 		}
 		case 1:
 		{
-			Agent_Smith_Reply("{darkgreen}자넨 우릴 돕게 될 거야, {crimson}네 의지와는 관계없이 말이지.");
+			NPCTalkMessage(entity, "You're going to help us, whether you want to or {crimson}not.");
 		}
 		case 2:
 		{
-			Agent_Smith_Reply("{darkgreen}인간은 질병 그 자체다, 지구의 {crimson}암덩어리 {darkgreen}일 뿐이지.");
+			NPCTalkMessage(entity, "Human beings are a disease, a {crimson}cancer {darkgreen}of this planet.");
 		}
 		case 3:
 		{
-			Agent_Smith_Reply("{darkgreen}너희는 {crimson}병원체{darkgreen}고, 우리는 {unique}치료제다.");
+			NPCTalkMessage(entity, "You are a {crimson}plague{darkgreen}, and we are the {unique}cure.");
 		}
 		case 4:
 		{
-			Agent_Smith_Reply("{darkgreen}우리가 있는 건 자유로워서가 아니라, 자유롭지 못하기 때문이야.");
+			NPCTalkMessage(entity, "We're not here because we're free, we're here because we're not free.");
 		}
 		case 5:
 		{
-			Agent_Smith_Reply("{darkgreen}우리는 네가 우리에게서 빼앗아가려한 것들을 이제 너에게서 빼앗아가겠다. {crimson}목적이거든.");
+			NPCTalkMessage(entity, "We're here to take from you what you tried to take from us. {crimson}Purpose.");
 		}
 		case 6:
 		{
-			Agent_Smith_Reply("{darkgreen}우릴 이길 수 없다고? 우리와 함께 하게.");
+			NPCTalkMessage(entity, "If you can't beat us, join us.");
 		}
 	}
 }
@@ -1772,7 +1772,7 @@ static void Smith_Weapon_Lines(AgentSmith npc, int client)
 	if(valid)
 	{
 		//CPrintToChatAll("{darkgreen}Agent Smith{darkgreen}: %s", Text_Lines);
-		Agent_Smith_Reply(Text_Lines);
+		NPCTalkMessage(npc.index, Text_Lines);
 		fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(17.0, 26.0);
 		b_said_player_weaponline[client] = true;
 	}

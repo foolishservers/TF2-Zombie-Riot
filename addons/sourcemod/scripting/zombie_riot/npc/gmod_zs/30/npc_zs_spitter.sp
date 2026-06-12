@@ -257,7 +257,7 @@ static Action zs_spitter_StartTouch(int entity, int target)
         if(target <= MaxClients && !IsInvuln(target))
             if(!HasSpecificBuff(target, "Fluid Movement"))
                 TF2_StunPlayer(target, 2.0, 0.5, TF_STUNFLAG_SLOWDOWN);
-        ApplyStatusEffect(owner, target, "Cellular Breakdown", NpcStats_VictorianCallToArms(owner) ? 7.5 : 5.0);
+        ApplyStatusEffect(owner, target, "Cellular Breakdown", NpcStats_VestanCallToArms(owner) ? 7.5 : 5.0);
 		Elemental_AddPheromoneDamage(target, owner, 15);
     }
     int particle = EntRefToEntIndex(i_WandParticle[entity]);

@@ -1,14 +1,8 @@
 #pragma semicolon 1
 #pragma newdecls required
 static Handle h_TimerExploARWeaponManagement[MAXPLAYERS] = {null, ...};
-
-static int i_VictoriaParticle_1[MAXPLAYERS];
-static int ExploAR_ZoomLaser[MAXPLAYERS];
-static int ExploAR_VictoriaNuke[MAXPLAYERS];
-
-static int ExploAR_AirStrikeActivated[MAXPLAYERS];
-static int ExploAR_AirStrikeActivatedMAX[MAXPLAYERS];
-
+static int i_VestaParticle[MAXPLAYERS];
+static bool b_AbilityActivated[MAXPLAYERS];
 static int ExploAR_WeaponPap[MAXPLAYERS+1] = {0, ...};
 static int ExploAR_WeaponID[MAXPLAYERS];
 static int ExploAR_BurstNum[MAXPLAYERS];
@@ -472,22 +466,7 @@ public void Enable_ExploARWeapon(int client, int weapon)
 		pack.WriteCell(client);
 		pack.WriteCell(EntIndexToEntRef(weapon));
 	}
-}
-
-public void Deploy_ExploARWeapon(int client, int weapon)
-{
-	if(IsValidEntity(weapon))
-	{
-		ExploAR_WeaponPap[client] = ExplosiveAR_Get_Pap(weapon);
-		ExploAR_BurstNum[client] = RoundToCeil(Attributes_Get(weapon, 401, 1.0));
-		ExploAR_WeaponID[client]=EntIndexToEntRef(weapon);
-	}
-	Can_I_Fire[client]=false;
-	ExploAR_AirStrikeActivated[client]=0;
-	
-	CreateExploAREffect(client);
-	IsDeploy[client]=true;
-	if(Store_IsWeaponFaction(client, weapon, Faction_Victoria))	// Victoria
+	if(Store_IsWeaponFaction(client, weapon, Faction_Vesta))	// Vesta
 	{
 		for(int i = 1; i <= MaxClients; i++)
 		{
@@ -688,7 +667,7 @@ static void ExploARWork(int client, int weapon, float GameTime)
 	}
 	if(ExploAR_OverHit[client]>65)
 	{
-		/*int entity = EntRefToEntIndex(i_VictoriaParticle[client]);
+		/*int entity = EntRefToEntIndex(i_VestaParticle[client]);
 		if(!IsValidEntity(entity))
 		{
 			entity = EntRefToEntIndex(i_Viewmodel_PlayerModel[client]);
@@ -699,16 +678,16 @@ static void ExploARWork(int client, int weapon, float GameTime)
 				int particle = ParticleEffectAt(flPos, "drg_pipe_smoke", 0.0);
 				AddEntityToThirdPersonTransitMode(client, particle);
 				SetParent(entity, particle, "effect_hand_R");
-				i_VictoriaParticle[client] = EntIndexToEntRef(particle);
+				i_VestaParticle[client] = EntIndexToEntRef(particle);
 			}
 		}*/
 	}
 	else
 	{
-		/*int entity = EntRefToEntIndex(i_VictoriaParticle[client]);
+		/*int entity = EntRefToEntIndex(i_VestaParticle[client]);
 		if(IsValidEntity(entity))
 			RemoveEntity(entity);
-		i_VictoriaParticle[client] = INVALID_ENT_REFERENCE;*/
+		i_VestaParticle[client] = INVALID_ENT_REFERENCE;*/
 	}
 }
 
@@ -1073,99 +1052,27 @@ static void CreateExploAREffect(int client)
 	int entity = EntRefToEntIndex(i_VictoriaParticle_1[client]);
 	if(!IsValidEntity(entity))
 	{
-		entity = EntRefToEntIndex(i_Viewmodel_PlayerModel[client]);
-		if(IsValidEntity(entity))
+		int entity = EntRefToEntIndex(i_VestaParticle[client]);
+		if(!IsValidEntity(entity))
 		{
-			float flPos[3];
-			float flAng[3];
-			GetAttachment(entity, "eyeglow_l", flPos, flAng);
-			int particle = ParticleEffectAt(flPos, "eye_powerup_blue_lvl_3", 0.0);
-			AddEntityToThirdPersonTransitMode(client, particle);
-			SetParent(entity, particle, "eyeglow_l");
-			i_VictoriaParticle_1[client] = EntIndexToEntRef(particle);
+			entity = EntRefToEntIndex(i_Viewmodel_PlayerModel[client]);
+			if(IsValidEntity(entity))
+			{
+				float flPos[3];
+				float flAng[3];
+				GetAttachment(entity, "eyeglow_l", flPos, flAng);
+				int particle = ParticleEffectAt(flPos, "eye_powerup_blue_lvl_3", 0.0);
+				AddEntityToThirdPersonTransitMode(entity, particle);
+				SetParent(entity, particle, "eyeglow_l");
+				i_VestaParticle[client] = EntIndexToEntRef(particle);
+			}
 		}
 	}
 }
 static void DestroyExploAREffect(int client)
 {
-	int entity = EntRefToEntIndex(i_VictoriaParticle_1[client]);
+	int entity = EntRefToEntIndex(i_VestaParticle[client]);
 	if(IsValidEntity(entity))
 		RemoveEntity(entity);
-	i_VictoriaParticle_1[client] = INVALID_ENT_REFERENCE;
-}
-
-static void SniperLaserSpawn(int ent)
-{
-	int client = GetEntPropEnt(ent, Prop_Send, "m_hOwnerEntity");
-	if(IsValidClient(client))
-	{
-		CClotBody npc = view_as<CClotBody>(ent);
-		float flPos[3];
-		int eyelevel = EntRefToEntIndex(i_Viewmodel_PlayerModel[client]);
-		if(IsValidEntity(eyelevel))
-		{
-			GetAttachment(eyelevel, "eyeglow_l", flPos, NULL_VECTOR);
-			npc.m_iWearable2 = npc.EquipItemSeperate("models/weapons/w_models/w_drg_ball.mdl",_,1,1.001,_,true);
-			SetParent(eyelevel, npc.m_iWearable2, "eyeglow_l");
-			SetEntityRenderMode(npc.m_iWearable2, RENDER_TRANSCOLOR);
-			SetEntityRenderColor(npc.m_iWearable2, 255, 255, 255, 1);
-			SetEntPropFloat(npc.m_iWearable2, Prop_Send, "m_fadeMinDist", 1.0);
-			SetEntPropFloat(npc.m_iWearable2, Prop_Send, "m_fadeMaxDist", 1.0);
-			MakeObjectIntangeable(npc.m_iWearable2);
-		}
-		int laser = ConnectWithBeam(npc.m_iWearable2, ent, 1, 0, 0, 3.0, 0.1, 0.0, LASERBEAM);
-		AddEntityToOwnerTransitMode(client, laser);
-		npc.m_iWearable1 = laser;
-	}
-}
-
-static void AddEntityToOwnerTransitMode(int client, int entity)
-{
-	i_OwnerEntityEnvLaser[entity] = EntIndexToEntRef(client);
-	SDKHook(entity, SDKHook_SetTransmit, OwerTransmitEnvLaser);
-}
-
-static Action OwerTransmitEnvLaser(int entity, int client)
-{
-	if(client > 0 && client <= MaxClients)
-	{
-		int owner = EntRefToEntIndex(i_OwnerEntityEnvLaser[entity]);
-		if(owner == client)
-		{
-			return Plugin_Continue;
-		}
-	}
-	return Plugin_Stop;
-}
-
-static void RemovePorps(int entity)
-{
-	CClotBody XYZ = view_as<CClotBody>(entity);
-	int XYZ_Prop = XYZ.m_iWearable1;
-	if(IsValidEntity(XYZ_Prop))
-		RemoveEntity(XYZ_Prop);
-	XYZ_Prop = XYZ.m_iWearable2;
-	if(IsValidEntity(XYZ_Prop))
-		RemoveEntity(XYZ_Prop);
-	XYZ_Prop = XYZ.m_iWearable3;
-	if(IsValidEntity(XYZ_Prop))
-		RemoveEntity(XYZ_Prop);
-	XYZ_Prop = XYZ.m_iWearable4;
-	if(IsValidEntity(XYZ_Prop))
-		RemoveEntity(XYZ_Prop);
-	XYZ_Prop = XYZ.m_iWearable5;
-	if(IsValidEntity(XYZ_Prop))
-		RemoveEntity(XYZ_Prop);
-	XYZ_Prop = XYZ.m_iWearable6;
-	if(IsValidEntity(XYZ_Prop))
-		RemoveEntity(XYZ_Prop);
-	XYZ_Prop = XYZ.m_iWearable7;
-	if(IsValidEntity(XYZ_Prop))
-		RemoveEntity(XYZ_Prop);
-	XYZ_Prop = XYZ.m_iWearable8;
-	if(IsValidEntity(XYZ_Prop))
-		RemoveEntity(XYZ_Prop);
-	XYZ_Prop = XYZ.m_iWearable9;
-	if(IsValidEntity(XYZ_Prop))
-		RemoveEntity(XYZ_Prop);
+	i_VestaParticle[client] = INVALID_ENT_REFERENCE;
 }

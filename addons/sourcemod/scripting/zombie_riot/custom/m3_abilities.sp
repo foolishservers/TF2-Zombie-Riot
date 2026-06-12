@@ -209,9 +209,9 @@ stock void GiveMorphineOnDamage(int client, int victim, float damage, int damage
 
 	MinCashMaxGain -= 250;
 
-	if(MinCashMaxGain >= 200000)
+	if(MinCashMaxGain >= 100000)
 	{
-		MinCashMaxGain = 200000;
+		MinCashMaxGain = 100000;
 	}
 	
 	float DamageForMaxCharge = (Pow(2.0 * MinCashMaxGain, 1.2) + MinCashMaxGain * 3.0);
@@ -231,15 +231,18 @@ stock void GiveMorphineOnDamage(int client, int victim, float damage, int damage
 }
 public void MorphineShot(int client)
 {
-	if(dieingstate[client] > 0 || MorphineMaxed(client))
+	if(!CvarInfiniteCash.BoolValue)
 	{
-		ClientCommand(client, "playgamesound items/medshotno1.wav");
-		return;
-	}
-	if(MorphineCharge[client] < 1.0)
-	{
-		ClientCommand(client, "playgamesound items/medshotno1.wav");
-		return;
+		if(dieingstate[client] > 0 || MorphineMaxed(client))
+		{
+			ClientCommand(client, "playgamesound items/medshotno1.wav");
+			return;
+		}
+		if(MorphineCharge[client] < 1.0)
+		{
+			ClientCommand(client, "playgamesound items/medshotno1.wav");
+			return;
+		}
 	}
 	i_MaxMorhpinesThisRound[client] += 1;
 	MorphineShotLogic(client);	
@@ -839,7 +842,7 @@ void HealPointToReinforce(int client, int healthvalue, float autoscale = 0.0)
 				
 				Base_HealingMaxPoints=RoundToCeil(3500.0 * Healing_Amount);
 			}
-			case WEAPON_SEABORN_MISC:
+			case WEAPON_DWELLER_MISC:
 			{
 				Healing_Amount=Attributes_Get(weapon, 8, 0.0)/2.0;
 				if(Healing_Amount<1.0)
@@ -978,6 +981,8 @@ public void Reinforce(int client, bool NoCD)
 			if(f_PlayerLastKeyDetected[client_check] < GetGameTime())
 				continue;
 			if(HasSpecificBuff(client_check, "Vuntulum Bomb EMP Death"))
+				continue;
+			if(!Rogue_BlueParadox_CanTeutonUpdate(client_check))
 				continue;
 
 			int CashSpendScale = CashSpentTotal[client_check];
@@ -2204,6 +2209,8 @@ stock int GetRandomDeathPlayer(int client)
 		if(f_PlayerLastKeyDetected[client_check] < GetGameTime())
 			continue;
 		if(HasSpecificBuff(client_check, "Vuntulum Bomb EMP Death"))
+			continue;
+		if(!Rogue_BlueParadox_CanTeutonUpdate(client_check))
 			continue;
 
 		int CashSpendScale = CashSpentTotal[client_check];

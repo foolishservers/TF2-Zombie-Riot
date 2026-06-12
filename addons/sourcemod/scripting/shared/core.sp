@@ -961,7 +961,7 @@ public Action Timer_Temp(Handle timer)
 			RaidModeTime += 0.2;
 			//if the raidboss is in spawn protection, prevent raidmode from going up.
 		}
-		if (RaidModeScaling != 0.0 && RaidModeTime > GetGameTime() && RaidModeTime < GetGameTime() + 60.0)
+		if (/*RaidModeScaling != 0.0 && */RaidModeTime > GetGameTime() && RaidModeTime < GetGameTime() + 60.0)
 		{
 			PlayTickSound(true, false);
 		}
@@ -1927,6 +1927,7 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3
 				Call_Finish(action);
 			}
 		}
+		
 	}
 	
 	//support in_use
@@ -2619,7 +2620,7 @@ public void OnEntityCreated(int entity, const char[] classname)
 		Building_Mounted[entity] = -1;
 		EntitySpawnToDefaultSiccerino(entity);
 		b_NpcIsTeamkiller[entity] = false;
-		IberiaEntityCreated(entity);
+		AlminaEntityCreated(entity);
 		f_HealDelayParticle[entity] = 0.0;
 		f_DelayAttackspeedPreivous[entity] = 1.0;
 		f_DelayAttackspeedPanicAttack[entity] = -1.0;
@@ -2683,6 +2684,7 @@ public void OnEntityCreated(int entity, const char[] classname)
 		EntityFuncAttack2[entity] = INVALID_FUNCTION;
 		EntityFuncAttack3[entity] = INVALID_FUNCTION;
 		EntityFuncReload4[entity] = INVALID_FUNCTION;
+		EntityFuncOnKill[entity] = INVALID_FUNCTION;
 		EntityFuncAttackInstant[entity] = INVALID_FUNCTION;
 		b_Is_Player_Projectile_Through_Npc[entity] = false;
 		b_IgnorePlayerCollisionNPC[entity] = false;
@@ -2718,7 +2720,6 @@ public void OnEntityCreated(int entity, const char[] classname)
 		b_IsAFlameThrower[entity] = false;
 		b_HasBombImplanted[entity] = false;
 		i_RaidGrantExtra[entity] = 0;
-		i_IsABuilding[entity] = false;
 		
 		i_NervousImpairmentArrowAmount[entity] = 0;
 		i_VoidArrowAmount[entity] = 0;
@@ -3021,8 +3022,8 @@ public void OnEntityCreated(int entity, const char[] classname)
 			OnManglerCreated(entity);
 		}
 #endif
-		else if(!StrContains(classname, "obj_dispenser") && 
-		!StrContains(classname, "obj_sentrygun") && 
+		else if(!StrContains(classname, "obj_dispenser") || 
+		!StrContains(classname, "obj_sentrygun") || 
 		!StrContains(classname, "obj_teleporter"))
 		{
 			//base tf2 buildings arent really supported for now
@@ -3279,10 +3280,10 @@ void CheckIfAloneOnServer(bool CountOnly = false)
 	for(int client=1; client<=MaxClients; client++)
 	{
 #if defined ZR 
-		if(IsClientInGame(client) && GetClientTeam(client)==2 && !IsFakeClient(client) && TeutonType[client] != TEUTON_WAITING)
+		if(IsClientInGame(client) && GetTeam(client)==2 && !IsFakeClient(client) && TeutonType[client] != TEUTON_WAITING)
 #endif
 #if defined RPG 
-		if(IsClientInGame(client) && GetClientTeam(client)==2 && !IsFakeClient(client))
+		if(IsClientInGame(client) && GetTeam(client)==2 && !IsFakeClient(client))
 #endif
 		{
 			if(!b_AntiLateSpawn_Allow[client])
@@ -3324,7 +3325,7 @@ void CheckIfAloneOnServer(bool CountOnly = false)
 	}
 	for(int client=1; client<=MaxClients; client++)
 	{
-		if(IsClientInGame(client) && GetClientTeam(client)==2 && !IsFakeClient(client) && TeutonType[client] == TEUTON_NONE)
+		if(IsClientInGame(client) && GetTeam(client)==2 && !IsFakeClient(client) && TeutonType[client] == TEUTON_NONE)
 		{
 			//update clients
 			Store_ApplyAttribs(client);

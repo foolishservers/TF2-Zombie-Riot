@@ -101,7 +101,7 @@ methodmap Zsrunner < CSeaBody
 		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;
-		npc.m_iNpcStepVariation = STEPTYPE_SEABORN;
+		npc.m_iNpcStepVariation = STEPTYPE_DWELLER;
 		
 		func_NPCDeath[npc.index] = Zsrunner_NPCDeath;
 		func_NPCOnTakeDamage[npc.index] = Zsrunner_OnTakeDamage;

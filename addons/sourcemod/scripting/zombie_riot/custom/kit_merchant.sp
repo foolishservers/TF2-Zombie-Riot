@@ -232,17 +232,17 @@ public void Weapon_MerchantSecondary_R(int client, int weapon, bool crit, int sl
 		}
 		case 1:
 		{
-			menu.AddItem("0", "생선 가게 (시본 대항)");
-			menu.AddItem("1", "무술가 (후퇴)");
-			menu.AddItem("-1", "수사관 (개선 필요)", ITEMDRAW_DISABLED);
-			menu.AddItem("-1", "와인 상인 (개선 필요)", ITEMDRAW_DISABLED);
+			menu.AddItem("0", "Fish Market (Anti-Dweller)");
+			menu.AddItem("1", "Martial Artist (Retreats)");
+			menu.AddItem("-1", "The Investigator (Upgrade Needed)", ITEMDRAW_DISABLED);
+			menu.AddItem("-1", "Wine Market (Upgrade Needed)", ITEMDRAW_DISABLED);
 		}
 		case 2:
 		{
-			menu.AddItem("0", "생선 가게 (시본 대항)");
-			menu.AddItem("1", "무술가 (후퇴, 기절)");
-			menu.AddItem("2", "수사관 (공속 훔치기)");
-			menu.AddItem("-1", "와인 상인 (개선 필요)", ITEMDRAW_DISABLED);
+			menu.AddItem("0", "Fish Market (Anti-Dweller)");
+			menu.AddItem("1", "Martial Artist (Retreats, Stuns)");
+			menu.AddItem("2", "The Investigator (Steal Attack Speed)");
+			menu.AddItem("-1", "Wine Market (Upgrade Needed)", ITEMDRAW_DISABLED);
 		}
 		case 69:
 		{
@@ -250,10 +250,10 @@ public void Weapon_MerchantSecondary_R(int client, int weapon, bool crit, int sl
 		}
 		default:
 		{
-			menu.AddItem("0", "생선 가게 (시본 대항)");
-			menu.AddItem("1", "무술가 (후퇴, 기절)");
-			menu.AddItem("2", "수사관 (공속 훔치기, 기절 면역)");
-			menu.AddItem("3", "와인 상인 (원거리 공격, 자가 부활)");
+			menu.AddItem("0", "Fish Market (Anti-Dweller)");
+			menu.AddItem("1", "Martial Artist (Retreats, Stuns)");
+			menu.AddItem("2", "The Investigator (Steal Attack Speed, Anti-Stun)");
+			menu.AddItem("3", "Wine Market (Ranged Guns, Self Revive)");
 		}
 	}
 
@@ -328,8 +328,8 @@ void Merchant_NPCTakeDamage(int victim, int attacker, float &damage, int weapon)
 	{
 		case Merchant_Jaye:
 		{
-			// Jaye: Bonus Damage vs Seaborn
-			if(i_BleedType[victim] == BLEEDTYPE_SEABORN)
+			// Jaye: Bonus Damage vs Dweller
+			if(i_BleedType[victim] == BLEEDTYPE_DWELLER)
 			{
 				switch(MerchantLevel[attacker])
 				{
@@ -597,7 +597,7 @@ void Merchant_NPCTakeDamagePost(int attacker, float damage, int weapon)
 					color[2] = 0;
 					color[3] = 255;
 					float amp = 0.3;
-					TE_SetupBeamPoints(VicLoc, VicLoc2, IreneReturnLaserSprite(), 0, 0, 0, 0.15, 1.0, 1.2, 1, amp, color, 0);
+					TE_SetupBeamPoints(VicLoc, VicLoc2, AmphiReturnLaserSprite(), 0, 0, 0, 0.15, 1.0, 1.2, 1, amp, color, 0);
 					TE_SendToAll();
 				}
 			}

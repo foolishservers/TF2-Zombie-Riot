@@ -187,6 +187,11 @@ methodmap ChaosKahmlstein < CClotBody
 		public get()							{ return b_FlamerToggled[this.index]; }
 		public set(bool TempValueForProperty) 	{ b_FlamerToggled[this.index] = TempValueForProperty; }
 	}
+	property float m_flTimerInternalSelf
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][1]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][1] = TempValueForProperty; }
+	}
 	public void PlayAngerSoundPassed() 
 	{
 		int sound = GetRandomInt(0, sizeof(g_AngerSoundsPassed) - 1);
@@ -328,7 +333,6 @@ methodmap ChaosKahmlstein < CClotBody
 		i_SpeedUpTime[npc.index] = 0;
 		npc.g_TimesSummoned = 0;
 		
-		b_thisNpcIsARaid[npc.index] = true;
 		
 
 		bool final = StrContains(data, "final_item") != -1;
@@ -356,10 +360,10 @@ methodmap ChaosKahmlstein < CClotBody
 			b_ThisNpcIsImmuneToNuke[npc.index] = true;
 			b_NoKnockbackFromSources[npc.index] = true;
 			b_ThisEntityIgnored[npc.index] = true;
-			b_thisNpcIsARaid[npc.index] = true;
 			npc.m_flNextChargeSpecialAttack = 0.0;
 			b_NoKillFeed[npc.index] = true;
 			b_ThisEntityIgnoredBeingCarried[npc.index] = true; //cant be targeted AND wont do npc collsiions
+			i_NpcIsABuilding[npc.index] = true;
 			npc.PlayTeleportSound();
 		}
 		else if(StrContains(data, "fake_3") != -1)
@@ -370,11 +374,11 @@ methodmap ChaosKahmlstein < CClotBody
 			b_ThisNpcIsImmuneToNuke[npc.index] = true;
 			b_NoKnockbackFromSources[npc.index] = true;
 			b_ThisEntityIgnored[npc.index] = true;
-			b_thisNpcIsARaid[npc.index] = true;
 			npc.m_flNextRangedBarrage_Spam = GetGameTime(npc.index) + 10.0;
 			npc.i_GunMode = 1;
 			b_NoKillFeed[npc.index] = true;
 			b_ThisEntityIgnoredBeingCarried[npc.index] = true; //cant be targeted AND wont do npc collsiions
+			i_NpcIsABuilding[npc.index] = true;
 			npc.PlayTeleportSound();
 		}
 		else if(StrContains(data, "fake_4") != -1)
@@ -385,14 +389,15 @@ methodmap ChaosKahmlstein < CClotBody
 			b_ThisNpcIsImmuneToNuke[npc.index] = true;
 			b_NoKnockbackFromSources[npc.index] = true;
 			b_ThisEntityIgnored[npc.index] = true;
-			b_thisNpcIsARaid[npc.index] = true;
 			npc.m_flRangedSpecialDelay = 0.0;
 			b_NoKillFeed[npc.index] = true;
 			b_ThisEntityIgnoredBeingCarried[npc.index] = true; //cant be targeted AND wont do npc collsiions
+			i_NpcIsABuilding[npc.index] = true;
 			npc.PlayTeleportSound();
 		}
 		else
 		{
+			b_thisNpcIsARaid[npc.index] = true;
 			RemoveAllDamageAddition();
 			func_NPCFuncWin[npc.index] = view_as<Function>(ChaosKahmlstein_Win);
 			SDKHook(npc.index, SDKHook_OnTakeDamagePost, ChaosKahmlstein_OnTakeDamagePost);
@@ -407,14 +412,17 @@ methodmap ChaosKahmlstein < CClotBody
 				}
 			}
 			RaidModeTime = GetGameTime(npc.index) + 250.0;
+			npc.m_flTimerInternalSelf = RaidModeTime;
 			if(final)
 			{
 				RaidModeTime += 45.0;
+				npc.m_flTimerInternalSelf = RaidModeTime;
 				Music_SetRaidMusicSimple("vo/null.mp3", 30, false, 0.5);
 			}
 			else if (npc.m_bBossRushDuo)
 			{
 				RaidModeTime = GetGameTime(npc.index) + 503.0;
+				npc.m_flTimerInternalSelf = RaidModeTime;
 				Music_SetRaidMusicSimple("vo/null.mp3", 30, false, 0.5);
 			}
 			else
@@ -851,6 +859,7 @@ public void ChaosKahmlstein_ClotThink(int iNPC)
 					RaidAllowsBuildings = false;
 					RaidAllowLastman = true;
 					RaidModeTime = GetGameTime() + 500.0;
+					npc.m_flTimerInternalSelf = RaidModeTime;
 					
 					MusicEnum music;
 					strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/internius/chaos_reigns_loop.mp3");
@@ -895,7 +904,7 @@ public void ChaosKahmlstein_ClotThink(int iNPC)
 		}
 	}
 	
-	float RaidModeTimeLeft = RaidModeTime - GetGameTime();
+	float RaidModeTimeLeft = npc.m_flTimerInternalSelf - GetGameTime();
 
 	if(RaidModeTimeLeft < 190.0 && i_SpeedUpTime[npc.index] == 0)
 	{

@@ -231,20 +231,19 @@ methodmap BossReila < CClotBody
 			SetEntityRenderFx(npc.m_iWearable6, RENDERFX_DISTORT);
 			SetEntityRenderColor(npc.m_iWearable6, GetRandomInt(25, 255), GetRandomInt(25, 255), GetRandomInt(25, 255), 255);
 		
+			NPCTalkMessage(npc.index, "Who are you?!", true);
 			strcopy(c_NpcName[npc.index], sizeof(c_NpcName[]), "Reila?");
-
-			CPrintToChatAll("{pink}?????{default}: 넌 누구야?!");
 		}
 		else if(badEnding)
 		{
-			CPrintToChatAll("{pink}레일라{default}: 이게 네가 원하던 결말인거야?!");
+			NPCTalkMessage(npc.index, "Is this what you wanted?!");
 			fl_Extra_Damage[npc.index] *= 3.0;
 			fl_Extra_Speed[npc.index] *= 1.4;
 			f_AttackSpeedNpcIncrease[npc.index] *= 0.7;
 		}
 		else
 		{
-			CPrintToChatAll("{pink}레일라{default}: リᒷ╎リ リᒷ╎リ! リ╎ᓵ⍑ℸ ̣ ⋮ᒷℸ ̣⨅ℸ ̣!.");
+			NPCTalkMessage(npc.index, "リᒷ╎リ リᒷ╎リ! リ╎ᓵ⍑ℸ ̣ ⋮ᒷℸ ̣⨅ℸ ̣!.");
 		}
 		if(data[0] && !altEnding && !badEnding && !Rogue_HasNamedArtifact("Ascension Stack"))
 			i_RaidGrantExtra[npc.index] = 1;
@@ -276,6 +275,15 @@ methodmap BossReila < CClotBody
 
 		return npc;
 	}
+}
+
+static void NPCTalkMessage(int entity, const char[] message, bool unknown = false)
+{
+	char customName[32];
+	if (unknown)
+		customName = "??????";
+	
+	PrintNPCMessageWithPrefixes(entity, "pink", message, .customName = customName);
 }
 
 public void BossReila_ClotThink(int iNPC)
@@ -424,7 +432,7 @@ public Action BossReila_OnTakeDamage(int victim, int &attacker, int &inflictor, 
 			i_RaidGrantExtra[npc.index] = 2;
 			npc.m_bisWalking = false;
 			ApplyStatusEffect(npc.index, npc.index, "Infinite Will", 50.0);
-			CPrintToChatAll("{pink}레일라가 {snow}손을 위로 들고 항복한다.");
+			CPrintToChatAll("{pink}Reila {snow}puts her hands up and gives up.");
 			damage = 0.0;
 			return Plugin_Changed;
 		}
@@ -988,20 +996,44 @@ bool Reila_LossAnimation(int iNpc)
 			{
 				case 2:
 				{
-					CPrintToChatAll("{pink}레일라 {snow}가 당신에게 무언가 말하고 있는데, 도저히 알아들을 수가 없습니다...");
-					CPrintToChatAll("{pink}레일라 :{default} ∴╎ᒷᓭ𝙹 ⍊ᒷ∷ᓭ⚍ᓵ⍑ᓭℸ ̣ ↸⚍ ᒲ╎ᓵ⍑ ᔑ⚍⎓⨅⚍⍑ꖎℸ ̣ᒷリ??...");
+					CPrintToChatAll("{pink}Reila {snow}tries to talk but you understand nothing...");
+					CPrintToChatAll("{pink}Reila:{default} ∴╎ᒷᓭ𝙹 ⍊ᒷ∷ᓭ⚍ᓵ⍑ᓭℸ ̣ ↸⚍ ᒲ╎ᓵ⍑ ᔑ⚍⎓⨅⚍⍑ꖎℸ ̣ᒷリ??...");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{pink}레일라 :{default} ∴ᔑ∷ℸ ̣ᒷ ᒲᔑꖎ, ʖ╎ᓭℸ ̣ ↸⚍ üʖᒷ∷⍑ᔑ!¡ℸ ̣ ⍊𝙹リ 알마게스트? ↸⚍ ꖌᔑリリᓭℸ ̣ ᒲ╎ᓵ⍑ リ╎ᓵ⍑ℸ ̣ ⍊ᒷ∷ᓭℸ ̣ᒷ⍑ᒷリ 𝙹↸ᒷ∷?");
+					CPrintToChatAll("{pink}Reila:{default} ∴ᔑ∷ℸ ̣ᒷ ᒲᔑꖎ, ʖ╎ᓭℸ ̣ ↸⚍ üʖᒷ∷⍑ᔑ!¡ℸ ̣ ⍊𝙹リ Almagest? ↸⚍ ꖌᔑリリᓭℸ ̣ ᒲ╎ᓵ⍑ リ╎ᓵ⍑ℸ ̣ ⍊ᒷ∷ᓭℸ ̣ᒷ⍑ᒷリ 𝙹↸ᒷ∷?");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{black}이잔 :{default} ... 환장하겠네. 언어장벽이잖아, 이거.");
+					CPrintToChatAll("{black}Izan{default}: ...Great, language barrier.");
+					if(Rogue_HasNamedArtifact("Omega's Assistance"))
+					{
+						switch(GetRandomInt(0,2))
+						{
+							case 0:
+								CPrintToChatAll("{gold}Omega{default}: Does anyone here speak Vestan?");
+							case 1:
+								CPrintToChatAll("{gold}Omega{default}: Everyone speaks nonsense nowadays.");
+							case 2:
+								CPrintToChatAll("{gold}Omega{default}: Vhxis, use the power of the void to decipher that!");
+						}
+					}
 				}
 				case 5:
 				{
-					CPrintToChatAll("{black}이잔 {snow}이 손가락으로 그의 귀를 가리키고는 머리를 좌우로 흔들며 못 알아듣겠다는 표시를 합니다.");
+					CPrintToChatAll("{black}Izan {snow}shakes his head and points at his ears, then shrugs.");
+					if(Rogue_HasNamedArtifact("Vhxis' Assistance"))
+					{
+						switch(GetRandomInt(0,2))
+						{
+							case 0:
+								CPrintToChatAll("{purple}Vhxis{default}: Why are we here? This isn't what we're here for.");
+							case 1:
+								CPrintToChatAll("{purple}Vhxis{default}: This was an enormous waste of time.");
+							case 2:
+								CPrintToChatAll("{purple}Vhxis{default}: We shouldn't be here. We must get to the {purple} Throne.");
+						}
+					}	
 				}
 				case 6:
 				{
@@ -1010,11 +1042,15 @@ bool Reila_LossAnimation(int iNpc)
 				}
 				case 7:
 				{
-					CPrintToChatAll("{black}이잔 {snow}이 그녀를 떠나보냈습니다.");
+					CPrintToChatAll("{black}Izan {snow}allows her to leave.");
+					if(Rogue_HasNamedArtifact("Omega's Assistance"))
+					{
+						CPrintToChatAll("{gold}Omega{default} and{purple} Vhxis{default} leave.");
+					}
 				}
 				case 8:
 				{
-					CPrintToChatAll("{black}이잔 :{default} 이제 우리가 걱정해야할 또 다른 문제가 생긴것 같네.");
+					CPrintToChatAll("{black}Izan{default}: Now we have a whole other group to worry about.");
 					RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
 				}
 			}

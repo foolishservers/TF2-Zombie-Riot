@@ -415,7 +415,7 @@ bool NPC_SpawnNext(bool panzer,
 						GiveNpcOutLineLastOrBoss(entity_Spawner, false);
 					}
 
-					if(!DisableSpawnProtection &&
+					if(!i_NpcIsABuilding[entity_Spawner] && !DisableSpawnProtection &&
 					 zr_spawnprotectiontime.FloatValue > 0.0 &&
 					  SpawnSettingsSee != 1 &&
 					  SpawnSettingsSee != 3 &&
@@ -456,7 +456,14 @@ bool NPC_SpawnNext(bool panzer,
 					}
 
 					if(Waves_InFreeplay())
+					{
+						TeleportDiversioToRandLocation(entity_Spawner,_,2000.0,1000.0);
 						Freeplay_SpawnEnemy(entity_Spawner);
+					}
+					if(Bool_IsNonZRMap() || Waves_InFreeplay())
+					{
+						TeleportDiversioToRandLocation(entity_Spawner,_,2000.0,1000.0);
+					}
 
 					NpcForward = entity_Spawner;
 
@@ -1603,7 +1610,7 @@ void OnTakeDamageBleedNpc(int victim, int &attacker, int &inflictor, float &dama
 					TE_BloodSprite(damagePosition, { 0.0, 0.0, 0.0 }, 125, 255, 125, 255, 32);
 					TE_SendToAllInRange(damagePosition, RangeType_Visibility);
 				}
-				else if (npcBase.m_iBleedType == BLEEDTYPE_SEABORN)
+				else if (npcBase.m_iBleedType == BLEEDTYPE_DWELLER)
 				{
 					//If you cant find any good blood effect, use this one and just recolour it.
 					TE_BloodSprite(damagePosition, { 0.0, 0.0, 0.0 }, 65, 65, 255, 255, 32);
@@ -2468,10 +2475,36 @@ void NPC_DeadEffects(int entity)
 #endif
 
 			Attributes_OnKill(entity, client, WeaponLastHit);
+			Npc_WeaponOnKillDo(entity, client, WeaponLastHit);
 		}
 	}
 }
+void Npc_WeaponOnKillDo(int entity, int client, int weapon)
+{
+	if(!IsValidEntity(weapon))
+		return;
 
+	if(EntityFuncOnKill[weapon] && EntityFuncOnKill[weapon]!=INVALID_FUNCTION)
+	{
+		Call_StartFunction(null, EntityFuncOnKill[weapon]);
+		Call_PushCell(entity);
+		Call_PushCell(client);
+		Call_PushCell(weapon);
+		Call_Finish();
+	}
+}
+/*
+	Usage:
+	CFG:
+	"func_onkill"	"KillEffectDoWeapon"
+
+	Plugin:
+	public void KillEffectDoWeapon(int victim, int killer, int weapon)
+	{
+
+	}
+
+*/
 #if defined ZR
 stock void CleanAllAppliedEffects_BombImplanter(int entity, bool do_boom = false)
 {
@@ -2819,7 +2852,7 @@ void PrintNPCMessageWithPrefixes(int entity, const char[] npcColor, const char[]
 	}
 	
 	bool checkedForPrefixes;
-	bool loud;
+	int loudnessScore;
 	char finalNpcColor[32], finalMessageColor[32];
 	char finalName[256], finalMessage[256];
 	
@@ -2841,60 +2874,54 @@ void PrintNPCMessageWithPrefixes(int entity, const char[] npcColor, const char[]
 			bool hasPrefix = prefix[0] != '\0';
 			if (hasPrefix)
 			{
-				if (HasSpecificBuff(entity, "Verde"))
-				{
-					// verd e
+				
+				if (HasSpecificBuff(entity, "Verde")) // verd e
 					finalNpcColor = "forestgreen";
-				}
-				else if (HasSpecificBuff(entity, "Ragebaiter Prefix"))
-				{
-					// To match the rest of ragebaiter text
+				else if (HasSpecificBuff(entity, "Ragebaiter Prefix")) // To match the rest of ragebaiter text
 					finalNpcColor = "crimson";
-				}
 				
 				if (HasSpecificBuff(entity, "Loud Prefix"))
-					loud = true;
+					loudnessScore++;
+				
+				if (HasSpecificBuff(entity, "Quiet Prefix"))
+					loudnessScore--;
 			}
 			
 			if (finalNpcColor[0] == '\0')
-			{
 				FormatEx(finalNpcColor, sizeof(finalNpcColor), "{%s}", npcColor);
-			}
 			else
-			{
 				Format(finalNpcColor, sizeof(finalNpcColor), "{%s}", finalNpcColor);
-			}
 			
 			// Sometimes colors are defined with {}, sometimes without... get rid of dupes to accommodate for everything
 			ReplaceString(finalNpcColor, sizeof(finalNpcColor), "{{", "{");
 			ReplaceString(finalNpcColor, sizeof(finalNpcColor), "}}", "}");
 			
 			if (finalMessageColor[0] == '\0')
-			{
 				FormatEx(finalMessageColor, sizeof(finalMessageColor), "{%s}", messageColor);
-			}
 			else
-			{
 				Format(finalMessageColor, sizeof(finalMessageColor), "{%s}", finalMessageColor);
-			}
 			
 			// Sometimes colors are defined with {}, sometimes without... get rid of dupes to accommodate for everything
 			ReplaceString(finalMessageColor, sizeof(finalMessageColor), "{{", "{");
 			ReplaceString(finalMessageColor, sizeof(finalMessageColor), "}}", "}");
 				
-			
-			if (!messageIsTranslated && loud)
-				StringToUpper(finalMessage);
+			if (!messageIsTranslated)
+			{
+				if (loudnessScore > 0)
+					StringToUpper(finalMessage);
+				else if (loudnessScore < 0)
+					finalMessage = "";
+			}
 			
 			checkedForPrefixes = true;
 		}
 		
-		if (messageIsTranslated)
+		if (messageIsTranslated && loudnessScore >= 0)
 		{
 			// Do some things per-client if the message is translated
 			FormatEx(finalMessage, sizeof(finalMessage), "%T", message, client);
 			
-			if (loud)
+			if (loudnessScore > 0)
 				StringToUpper(finalMessage);
 		}
 		

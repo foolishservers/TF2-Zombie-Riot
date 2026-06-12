@@ -421,7 +421,7 @@ static int InfectedBattleMedic_Work(InfectedBattleMedic npc, float gameTime, flo
 						if(GetVectorDistance(VecSelfNpc, vecTarget, true) < (200.0 * 200.0))
 						{
 							ApplyStatusEffect(npc.index, entitycount, "Oceanic Scream", 1.1);
-							if(NpcStats_VictorianCallToArms(npc.index))
+							if(NpcStats_VestanCallToArms(npc.index))
 								ApplyStatusEffect(npc.index, entitycount, "War Cry", 1.1);
 						}
 					}
@@ -502,7 +502,7 @@ static int InfectedBattleMedic_Work(InfectedBattleMedic npc, float gameTime, flo
 
 				HealEntityGlobal(npc.index, npc.m_iTarget, float(MaxHealth / 80), 1.0);
 				ApplyStatusEffect(npc.index, npc.m_iTarget, "Oceanic Scream", 1.1);
-				if(NpcStats_VictorianCallToArms(npc.index))
+				if(NpcStats_VestanCallToArms(npc.index))
 					ApplyStatusEffect(npc.index, npc.m_iTarget, "War Cry", 1.1);
 				
 				float WorldSpaceVec[3]; WorldSpaceCenter(npc.m_iTarget, WorldSpaceVec);
