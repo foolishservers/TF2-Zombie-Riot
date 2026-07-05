@@ -65,6 +65,17 @@ methodmap RaidbossBladedance < CClotBody
 		public set(bool TempValueForProperty) 	{ b_FlamerToggled[this.index] = TempValueForProperty; }
 	}
 	
+	property bool m_bForceNextWave
+	{
+		public get()							{ return b_DuringHook[this.index]; }
+		public set(bool TempValueForProperty) 	{ b_DuringHook[this.index] = TempValueForProperty; }
+	}
+	property float m_flHurtForAbility
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][0]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][0] = TempValueForProperty; }
+	}
+	
 	public void PlayIdleSound()
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
@@ -141,6 +152,8 @@ methodmap RaidbossBladedance < CClotBody
 		func_NPCDeath[npc.index] = RaidbossBladedance_NPCDeath;
 		func_NPCOnTakeDamage[npc.index] = RaidbossBladedance_OnTakeDamage;
 		func_NPCThink[npc.index] = RaidbossBladedance_ClotThink;
+		func_NPCSpawnForward[npc.index] = Bladedance_AllySpawn;
+		func_NPCFuncWin[npc.index] = view_as<Function>(Raidmode_Expidonsa_Sensal_Win);
 		
 		f_ExplodeDamageVulnerabilityNpc[npc.index] = 0.7;
 
@@ -292,12 +305,20 @@ public void RaidbossBladedance_ClotThink(int iNPC)
 		if(--npc.m_iOverlordComboAttack < 1)
 			npc.Anger = false;
 	}
+	else if(npc.m_iOverlordComboAttack > 45 && !npc.m_bForceNextWave && i_RaidGrantExtra[npc.index] == 1)
+	{
+		delete WaveTimer;
+		WaveTimer = CreateTimer(0.1, Waves_ProgressTimer);
+		npc.m_bForceNextWave = true;
+	}
 	else if(npc.m_iOverlordComboAttack > 50)
 	{
 		if(IsValidEnemy(npc.index, npc.m_iTarget))
 		{
 			npc.Anger = true;
 			
+			npc.m_bForceNextWave = false;
+
 			float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget );
 			npc.FaceTowards(vecTarget, 30000.0);
 			
@@ -462,6 +483,10 @@ public Action RaidbossBladedance_OnTakeDamage(int victim, int &attacker, int &in
 	{
 		npc.m_flHeadshotCooldown = gameTime + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
+	}
+	if(npc.m_flHurtForAbility < gameTime)
+	{
+		npc.m_flHurtForAbility = gameTime + DEFAULT_HURTDELAY;
 		if(!npc.Anger)
 			npc.m_iOverlordComboAttack++;
 	}
@@ -531,4 +556,19 @@ public void RaidbossBladedance_NPCDeath(int entity)
 
 	if (EntIndexToEntRef(npc.index) == RaidBossActive)
 		RaidBossActive = INVALID_ENT_REFERENCE;
+}
+
+public void Bladedance_AllySpawn(int self, int ally)
+{
+	if(GetTeam(ally) != GetTeam(self))
+	{
+		return;
+	}
+	float pos[3]; GetEntPropVector(self, Prop_Data, "m_vecAbsOrigin", pos);
+	pos[2] += 5.0;
+	float vAngles[3];								
+	GetEntPropVector(self, Prop_Data, "m_angRotation", vAngles); 
+	TeleportEntity(ally, pos, vAngles, NULL_VECTOR);
+	ApplyStatusEffect(ally, ally, "Godly Motivation", 5.0);
+	ApplyStatusEffect(ally, ally, "Infinite Will", 5.0);
 }

@@ -118,15 +118,15 @@ methodmap ZeinaPrisoner < CClotBody
 		{
 			case 1:
 			{
-				CPrintToChatAll("{snow}제이나{default}: 도와주세요! 저 자가 절 여기에 가뒀어요!");
+				NPCTalkMessage(npc.index, "He took me as a prisoner, help!");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{snow}제이나{default}: 이래서 엑스피돈사인들이란...");
+				NPCTalkMessage(npc.index, "I never liked your side of expidonsa...");
 			}
 			case 3:
 			{
-				CPrintToChatAll("{snow}제이나{default}: 이런건 해결책이 될 수 없어요..! {black}질리우스{default}!");
+				NPCTalkMessage(npc.index, "This is not the solution..! {black}Zilius{default}!");
 			}
 		}
 		
@@ -201,6 +201,10 @@ methodmap ZeinaPrisoner < CClotBody
 	}
 }
 
+static void NPCTalkMessage(int entity, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(entity, "snow", message);
+}
 
 public void ZeinaPrisoner_ClotThink(int iNPC)
 {
@@ -292,15 +296,15 @@ public void ZeinaPrisoner_NPCDeath(int entity)
 	{
 		case 1:
 		{
-			CPrintToChatAll("{snow}제이나{default}: 절 구해줘서 고마워요..!");
+			NPCTalkMessage(npc.index, "You freed me..!");
 		}
 		case 2:
 		{
-			CPrintToChatAll("{snow}제이나{default}: 정말 고마워요! 도와드릴게요!");
+			NPCTalkMessage(npc.index, "Thank you!! Ill help you!");
 		}
 		case 3:
 		{
-			CPrintToChatAll("{snow}제이나{default}: 이거나 먹어라, {black}질리우스{default}!");
+			NPCTalkMessage(npc.index, "Face this {black}Zilius{default}!");
 		}
 	}
 	CPrintToChatAll("{black}Zilius{default}...");

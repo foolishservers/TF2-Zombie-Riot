@@ -2119,7 +2119,7 @@ public Action OnBombDrop(const char [] output, int caller, int activator, float 
 				GiveCompleteInvul(RandomHELLDIVER, 3.5);
 				TF2_AddCondition(RandomHELLDIVER, TFCond_SpeedBuffAlly, 2.0);
 				EmitSoundToAll(g_ReinforceReadySounds, RandomHELLDIVER, SNDCHAN_STATIC, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
-				CPrintToChatAll("그리고 {black}밥 2세{green}가 응답하여.... 다음 플레이어를 징집시켰습니다! : {yellow}%N!",RandomHELLDIVER);
+				CPrintToChatAll("%s {green}responds... and was able to recruit {yellow}%N{green}!", s_MissionClient, RandomHELLDIVER);
 				DataPack pack_boom = new DataPack();
 				pack_boom.WriteFloat(position[0]);
 				pack_boom.WriteFloat(position[1]);
@@ -2132,7 +2132,7 @@ public Action OnBombDrop(const char [] output, int caller, int activator, float 
 			{
 				if(IsValidClient(PreviousOwner))
 				{
-					CPrintToChat(PreviousOwner, "하지만 {black}밥 2세{default} 휘하의 용병이 더 이상 없습니다... 그가 지원을 거부했습니다.");
+					CPrintToChat(PreviousOwner, "%s {default}wasn't able to get any merc... the backup call was refunded.");
 					HealPointToReinforce(PreviousOwner, 0, 1.0);
 					i_MaxRevivesAWave--;
 				}

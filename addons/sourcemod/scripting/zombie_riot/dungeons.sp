@@ -604,7 +604,7 @@ void Dungeon_SetupVote(KeyValues kv)
 	if(kv.JumpToKey("Raids"))
 	{
 		AttackTime = kv.GetFloat("delay", 300.0);
-		RespawnTime = kv.GetFloat("respawn", 20.0);
+		RespawnTime = kv.GetFloat("respawn", 25.0);
 		MaxWaveScale = kv.GetNum("maxwave", 39);
 
 		if(kv.GotoFirstSubKey())
@@ -687,6 +687,7 @@ void Dungeon_StartSetup()
 	Rogue_StartSetup();
 	Construction_RoundEnd();
 
+	s_MissionClient = "{white}Bob the First";
 	NextAttackAt = 0.0;
 	BattleWaveScale = 0.0;
 
@@ -833,11 +834,11 @@ public Action Dhook_TeleportToCenter(Handle timer, int userid)
 	{
 		if(!BasePosWasDone)
 		{
-			PrintToConsole(client, "Dhook_TeleportToCenter, Teleport Denied, %f, %f, %f", BasePosSave[0], BasePosSave[1], BasePosSave[2]);
+		//	PrintToConsole(client, "Dhook_TeleportToCenter, Teleport Denied, %f, %f, %f", BasePosSave[0], BasePosSave[1], BasePosSave[2]);
 			return Plugin_Stop;
 		}
 		
-		PrintToConsole(client, "Dhook_TeleportToCenter Teleport accepted, %f, %f, %f", BasePosSave[0], BasePosSave[1], BasePosSave[2]);
+	//	PrintToConsole(client, "Dhook_TeleportToCenter Teleport accepted, %f, %f, %f", BasePosSave[0], BasePosSave[1], BasePosSave[2]);
 		float ang[3];
 		ang[2] = 0.0;
 		SetEntProp(client, Prop_Send, "m_bDucked", true);
@@ -2333,7 +2334,7 @@ bool Dungeon_UpdateMvMStats()
 			if(round > limit)
 				round = limit;
 			
-			int current = CurrentCash - GlobalExtraCash;
+			int current = CurrentCash;
 			int goal = DefaultTotalCash(round);
 
 			if(current < goal)
@@ -3094,7 +3095,7 @@ void Dungeon_GiveNpcMoney(int entity)
 		LimitNotice = 0;
 	}
 	
-	int current = CurrentCash - GlobalExtraCash - StartCash;
+	int current = CurrentCash - StartCash;
 
 	int a, other;
 	while((other = FindEntityByNPC(a)) != -1)
