@@ -233,7 +233,7 @@ methodmap DasNaggenvatcher < CClotBody
 		g_dasnaggenvatcher_die=0.0;
 		WaveStart_SubWaveStart(GetGameTime() + 1000.0);
 		
-		RaidModeTime = GetGameTime(npc.index) + 400.0;
+		RaidModeTime = GetGameTime(npc.index) + 60.0;
 		RaidBossActive = EntIndexToEntRef(npc.index);
 		RaidAllowsBuildings = true;
 		npc.Anger = false;
@@ -808,7 +808,7 @@ public Action DasNaggenvatcher_OnTakeDamage(int victim, int &attacker, int &infl
 			if(EntRefToEntIndex(RaidBossActive)==npc.index)
 				RaidBossActive = INVALID_ENT_REFERENCE;
 			g_dasnaggenvatcher_die = GetGameTime(npc.index) + 40.0;
-			RaidModeTime += 60.0;
+			RaidModeTime += 120.0;
 			
 			SetEntProp(npc.index, Prop_Data, "m_iHealth", 1);
 			damage = 0.0;
@@ -827,7 +827,7 @@ public void DasNaggenvatcher_OnTakeDamagePost(int victim, int attacker, int infl
 		npc.g_TimesSummoned = 1;
 		npc.PlaySummonSound();
 		npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
-		RaidModeTime += 15.0;
+		RaidModeTime += 80.0;
 			
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_soldier_pickaxe",40000, RoundToCeil(6.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_soldier",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
@@ -846,7 +846,7 @@ public void DasNaggenvatcher_OnTakeDamagePost(int victim, int attacker, int infl
 		npc.g_TimesSummoned = 2;
 		npc.PlaySummonSound();
 		npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
-		RaidModeTime += 15.0;
+		RaidModeTime += 80.0;
 				
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_eradicator",70000, RoundToCeil(6.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_vile_poisonheadcrab_zombie",80000, RoundToCeil(6.0 * MultiGlobalEnemy));
@@ -862,7 +862,7 @@ public void DasNaggenvatcher_OnTakeDamagePost(int victim, int attacker, int infl
 		npc.g_TimesSummoned = 3;
 		npc.PlaySummonSound();
 		npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
-		RaidModeTime += 15.0;
+		RaidModeTime += 80.0;
 			
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_ihbc",45000, RoundToCeil(5.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_firefighter",50000, RoundToCeil(5.0 * MultiGlobalEnemy));
@@ -881,7 +881,7 @@ public void DasNaggenvatcher_OnTakeDamagePost(int victim, int attacker, int infl
 		DasNaggenvatcherSayWords(npc.index);
 		npc.g_TimesSummoned = 4;
 		npc.PlaySummonSound();
-		RaidModeTime += 15.0;
+		RaidModeTime += 120.0;
 		
 		npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_sniper",20000, RoundToCeil(2.0 * MultiGlobalEnemy));
@@ -973,7 +973,7 @@ void DasNaggenvatcherSayWords(int entity)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: 함께라면 어떤 적이든 처단할 수 있다!");
+				CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: 우리가 이룩한 모든 것을 적이 파괴하려 한다.");
 			}
 			case 1:
 			{

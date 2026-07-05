@@ -273,7 +273,7 @@ public void GoreBlaster_NPCDeath(int entity)
 
 	float vecMe[3]; WorldSpaceCenter(npc.index, vecMe);
 	//TE_Particle("asplode_hoodoo", vecMe, NULL_VECTOR, NULL_VECTOR, _, _, _, _, _, _, _, _, _, _, 0.0);
-	// int team = GetTeam(npc.index);
+	//int team = GetTeam(npc.index);
 
 	Explode_Logic_Custom(40.0, npc.index, npc.index, -1, vecMe, 200.0, 1.0, _, true, 15, _, _, GoreBlaster_ExplodePost);
 }

@@ -351,7 +351,7 @@ methodmap ZsUnspeakable < CClotBody
 			}
 			RaidModeTime = GetGameTime(npc.index) + 200.0;
 			RaidBossActive = EntIndexToEntRef(npc.index);
-			RaidAllowsBuildings = false;
+			RaidAllowsBuildings = true;
 			float value;
 			char buffers[3][64];
 			ExplodeString(data, ";", buffers, sizeof(buffers), sizeof(buffers[]));
@@ -804,7 +804,7 @@ public Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflict
 				npc.m_bAlliesSummoned = true;
 				Spawn_Zombie(npc);
 			}
-			CPrintToChatAll("{crimson}불결한 존재{default}: 이 불경한 놈들이 감히!");
+			CPrintToChatAll("{crimson}불결한 존재{default}: 들린다... 너희의 육신이 부패하고, 심장이 멎는 그 소리가!");
 			RaidModeScaling *= 1.1;
 		}
 	}
@@ -831,11 +831,11 @@ public Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflict
 			{
 				case 1:
 				{
-					CPrintToChatAll("{crimson}불결한 존재{default}: 나는 너희들과 이 지랄하면서 놀 시간이 없다.");
+					CPrintToChatAll("{crimson}불결한 존재{default}: 자, 발악하라");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{crimson}저것이 매우 크게 분노하고 있다.");
+					CPrintToChatAll("{crimson}불결한 존재{default}: 귀찮게하는군.");
 				}
 			}
 		}
@@ -1243,6 +1243,10 @@ void ZsUnspeakableSelfDefense(ZsUnspeakable npc, float gameTime, int target, flo
 						WorldSpaceCenter(target, vecHit);
 									
 						float damageDealt = 10.0 * RaidModeScaling;
+						if(i_IsABuilding[target])
+						{
+							damageDealt = 5000.0;
+						}
 
 						SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_CLUB, -1, _, vecHit);	
 						Elemental_AddPheromoneDamage(target, npc.index, RoundToNearest(damageDealt * 0.15), true, true);							
