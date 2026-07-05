@@ -320,43 +320,43 @@ methodmap Construction_Raid_Zilius < CClotBody
 		{
 			case 1:
 			{
-				CPrintToChatAll("{black}질리우스{default}: 혼돈? 나와 {black}''이잔''{default}만이 알고 있는 비밀이 있지.");
+				NPCTalkMessage(this.index, "Chaos? If only {black}''Izan''{default} was still around to tell you himself.");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{black}질리우스{default}: 끝없는 폭력이 뭘 초래하는지 모르고 있나보군. 네 자신을 좀 돌아봐라.");
+				NPCTalkMessage(this.index, "Ever think about what endless violence causes? Look at yourselves.");
 			}
 			case 3:
 			{
-				CPrintToChatAll("{black}질리우스{default}: 네 놈들은 {violet}공허와 장막{default}만도 못하는군.");
+				NPCTalkMessage(this.index, "You are just as bad as the {violet}curtain{default} and {violet}void{default} was.");
 			}
 			case 4:
 			{
-				CPrintToChatAll("{black}질리우스{default}: 엑스피돈사는 단순한 지하 도시가 아니다. 네가 살고 있는 행성 그 자체란 말이다, 이 기생충들아.");
+				NPCTalkMessage(this.index, "Expidonsa wasnt just an underground city, it was the very planet you live on, Parasites.");
 			}
 			case 5:
 			{
-				CPrintToChatAll("{black}질리우스{default}: 다른 상관들과 {black}''이잔''{default}이 다른 놈들을 돕지 않았다면 이렇게까진 되지 않았을텐데.");
+				NPCTalkMessage(this.index, "If only the other higherups and {black}''Izan''{default} agreed to not save those others.");
 			}
 			case 6:
 			{
-				CPrintToChatAll("{black}질리우스{default}: 네가 엑스피돈사에 없다고 생각하는 것들? 그런건 전부 다 있다.");
+				NPCTalkMessage(this.index, "Whatever you think expidonsa doesn't have, it does.");
 			}
 			case 7:
 			{
-				CPrintToChatAll("{black}질리우스{default}: {blue}센살{default}, {gold}실베스터{default}, 이 놈들을 포함한 그 지역의 엑스피돈사인들은 누가 혼돈을 만들었는지조차 모르고 있지.");
+				NPCTalkMessage(this.index, "{blue}Sensal{default}, {gold}Silvester{default}, all those other expidonsans in that region are so clueless to whomever made chaos.");
 			}
 			case 8:
 			{
-				CPrintToChatAll("{black}Zilius{default}: Alminans are the only ones I respect, Mazeat is an amalgam of failures.");
+				NPCTalkMessage(this.index, "Alminans are the only ones I respect, Mazeat is an amalgam of failures.");
 			}
 			case 9:
 			{
-				CPrintToChatAll("{black}질리우스{default}: 카멜스타인은 재능을 너무 낭비한 존재였다. 안타깝게도, 그 놈은 {gold}너무 많은걸 알려고 했지{default}.");
+				NPCTalkMessage(this.index, "Kahmlstein is such a wasted person, sadly he wasnt apart of the {gold}prime race{default}.");
 			}
 			case 10:
 			{
-				CPrintToChatAll("{black}질리우스{default}: 논리적으로 생각해보면, 너희 전부를 박멸하는 것이 {violet}그 놈들{default}을 끝낼 유일한 방법이다.");
+				NPCTalkMessage(this.index, "If you think very logically, extermination for all of you is the only to truly finish {violet}them{default}.");
 			}
 		}
 	}
@@ -409,15 +409,15 @@ methodmap Construction_Raid_Zilius < CClotBody
 		{
 			case 1:
 			{
-				CPrintToChatAll("{black}질리우스{default}: 다른 종족들은 우릴 거들떠도 보지 않았지. 그리고 이제 너희는 그 대가를 치를거다.");
+				NPCTalkMessage(npc.index, "No other races even help us, we will wipe you out ourselves.");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{black}질리우스{default}: 뛰어난 지능은 선견지명에서 나온다고 생각하지 않나?");
+				NPCTalkMessage(npc.index, "Extreme intelligence comes from foresight, dont you think?");
 			}
 			case 3:
 			{
-				CPrintToChatAll("{black}질리우스{default}: 우린 다른 엑스피돈사인들과는 달리 불친절하다. 그러니 불친절하게 대접해주지.");
+				NPCTalkMessage(npc.index, "Zilius and the other expidonsans are too nice, we do lack that weakness.");
 			}
 		}
 		RemoveAllDamageAddition();
@@ -578,6 +578,10 @@ methodmap Construction_Raid_Zilius < CClotBody
 	}
 }
 
+static void NPCTalkMessage(int entity, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(entity, "black", message);
+}
 
 static void Internal_ClotThink(int iNPC)
 {
@@ -591,19 +595,19 @@ static void Internal_ClotThink(int iNPC)
 			{
 				case 0:
 				{
-					CPrintToChatAll("{black}질리우스{default}: 그리고 {black}''밥 2세''{default}, 네 놈은 여전히 역겹군. 하지만 아무래도 상관 없지.");
+					NPCTalkMessage(npc.index, "{black}''Bob the second''{default} is still such an ass, but whatever.");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{black}질리우스{default}: 우리 둘 다 손해를 봤으니, 휴전으로 받아들이지.");
+					NPCTalkMessage(npc.index, "We both suffered losses, so take it as a truce now.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{black}질리우스{default}: 넌 다른 종족들이 전부 다 쓸모없는 쓰레기가 아니란 것을 증명했다. 하지만 대부분은 여전히 역겨운 쓰레기일 뿐이지.");
+					NPCTalkMessage(npc.index, "You proved to me that other races have the chance to not be useless... but most are regardless.");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{black}질리우스{default}: {purple}공허{default}가 몰려올 때마다, 센살이나 저 놈들이 감당할 수 있을진 모르겠군.");
+					NPCTalkMessage(npc.index, "Whenever the {purple}void or curtain{default} surfaces we'll land a hand, dont you think sensal or whoever are the only ones.");
 				} 
 				case 4:
 				{
@@ -612,7 +616,7 @@ static void Internal_ClotThink(int iNPC)
 				} 
 				case 5:
 				{
-					CPrintToChatAll("{black}질리우스{default}: 네가 만든 시뮬레이션은 한심하기 짝이 없으니까. 멍청하게 누가 현실에 대응하기 위한 가짜 시뮬레이션을 만드나.");
+					NPCTalkMessage(npc.index, "Because you created a simulation thats just pathetic, Dont mess with reality or even a fake of it.");
 					npc.m_flWinAnimationSay = GetGameTime() + 3.0;
 				} 
 				case 6:
@@ -622,11 +626,11 @@ static void Internal_ClotThink(int iNPC)
 				} 
 				case 7:
 				{
-					CPrintToChatAll("{black}질리우스{default}: 그래서 어쩌라는 거지? 비록 엑스피돈사가 존경 받고 있더라도, 신뢰까지 얻은건 아니지.");
+					NPCTalkMessage(npc.index, "Whatever, Theres many more expidonsans to convince, you earned our respect, but not our trust yet.");
 				} 
 				case 8:
 				{
-					CPrintToChatAll("{black}질리우스{default}: 하나 더, {black}''밥 2세''{default}, 그만 좀 나대고, 네 놈의 엑스피돈사 하수인들과 함께 혼돈을 맞서 싸울 준비나 해라...  {black}''이잔''{default}.");
+					NPCTalkMessage(npc.index, "for one, {black}''Bob the second''{default}, stop being so inactive and finally help against the chaos with your fellow expidonsans... {black}''Izan''{default}.");
 				} 
 				case 9:
 				{
@@ -634,7 +638,7 @@ static void Internal_ClotThink(int iNPC)
 				} 
 				case 10:
 				{
-					CPrintToChatAll("{black}질리우스{default}: 쫄지 마라. 그리고 네 용병 따까리들에게 전해. 비밀 누설하면 전부 감염체들 밥으로 던지겠다고.");
+					NPCTalkMessage(npc.index, "Sure, just tell your Mercs to not spill the beans.");
 				} 
 				case 11:
 				{
@@ -680,7 +684,7 @@ static void Internal_ClotThink(int iNPC)
 			{
 				case 0:
 				{
-					CPrintToChatAll("{black}질리우스{default}: 널 더 위대한 존재로 만들어줄 유전자 변형 기술이 남아있었다면 참 좋았을텐데.");
+					NPCTalkMessage(npc.index, "If only we kept your gene modification tech to make you into something greater.");
 				}
 			}
 		}
@@ -813,7 +817,7 @@ static Action Internal_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 	{
 		if(Construction_Mode() || Dungeon_Mode())
 		{
-			CPrintToChatAll("{black}질리우스{default}: 아무래도 생각했던 것보다 훨씬 쓸모 있는 놈들이군. 너희는 {purple}공허{default} 대항용으로 유용하게 쓰일 수 있겠어.");
+			NPCTalkMessage(npc.index, "Guess you lot are more then worthy. ill let you be, be usefull against the {purple}void{default}.");
 			npc.m_flWinAnimation = GetGameTime() + 50.0;
 			npc.m_flWinAnimationSay = GetGameTime() + 4.0;
 			i_RaidGrantExtra[npc.index] = 1111;
@@ -1176,7 +1180,7 @@ static void Internal_Weapon_Lines(Construction_Raid_Zilius npc, int client)
 
 	if(valid)
 	{
-		CPrintToChatAll("{black}Zilius{default}: %s", Text_Lines);
+		NPCTalkMessage(npc.index, Text_Lines);
 		fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(17.0, 26.0);
 		b_said_player_weaponline[client] = true;
 	}

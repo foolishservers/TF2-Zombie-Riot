@@ -416,6 +416,7 @@ int i_MVMPopulator;
 //bool RaidMode; 							//Is this raidmode?
 float RaidModeScaling = 0.5;			//what multiplier to use for the raidboss itself?
 float RaidModeTime = 0.0;
+bool RaidTimerAlert = true;				// Should players be warned about the raidboss timer?
 int TimeWhenStartedWaveset = 0;
 float f_TimerTickCooldownRaid = 0.0;
 float f_TimerTickCooldownShop = 0.0;
@@ -476,6 +477,8 @@ bool b_HoldingInspectWeapon[MAXPLAYERS];
 #define ZR_ARMOR_DAMAGE_REDUCTION 0.75
 #define ZR_LIVING_ARMOR_DAMAGE_REDUCTION 0.5
 #define ZR_ARMOR_DAMAGE_REDUCTION_INVRERTED 0.25
+
+#define DEFAULT_MISSION_CLIENT "{black}Bob the Second"
 
 float Armor_regen_delay[MAXPLAYERS];
 
@@ -576,6 +579,7 @@ bool applied_lastmann_buffs_once = false;
 int i_WaveHasFreeplay = 0;
 float fl_MatrixReflect[MAXENTITIES];
 
+char s_MissionClient[64]; // Who hired us for the current job
 
 #include "include/zombie_riot.inc"
 
@@ -610,6 +614,7 @@ float fl_MatrixReflect[MAXENTITIES];
 #include "betting.sp"
 #include "dungeons.sp"
 #include "sm_skyboxprops.sp"
+#include "shared/sound_manualdownload.sp"
 #include "custom/homing_projectile_logic.sp"
 #include "custom/weapon_slug_rifle.sp"
 #include "custom/weapon_boom_stick.sp"
@@ -764,6 +769,7 @@ float fl_MatrixReflect[MAXENTITIES];
 #include "custom/kit_heartbroken.sp"
 #include "custom/weapon_burningthumb.sp"
 #include "custom/kit_red_mist.sp"
+#include "custom/kit_barracks.sp"
 
 void ZR_PluginLoad()
 {
@@ -813,7 +819,7 @@ void ZR_PluginStart()
 
 
 	RegConsoleCmd("sm_afk", Command_AFK, "BRB GONNA CLEAN MY MOM'S DISHES");
-	RegConsoleCmd("sm_flop", Command_Flop, "Flop");
+//	RegConsoleCmd("sm_flop", Command_Flop, "Flop");
 	//RegConsoleCmd("sm_rtd", Command_RTdFail, "Go away.");						//Littearlly cannot support RTD. I will remove this onec i add support for it, but i doubt i ever will.
 	
 	RegAdminCmd("sm_give_cash", Command_GiveCash, ADMFLAG_ROOT, "Give Cash to the Person");
@@ -882,27 +888,37 @@ void ZR_PluginStart()
 	NpcConst2Building_CommandPluginStart();
 }
 
-bool IsNonZRMap = false;
-bool Bool_IsNonZRMap()
+bool IsZRMap;
+bool CanSpawnPickups;
+
+bool InZRMap()
 {
-	return IsNonZRMap;
+	return IsZRMap;
+}
+
+bool CanMapSpawnPickups()
+{
+	return CanSpawnPickups;
 }
 void ZR_MapStart()
 {
-	IsNonZRMap = false;
-	
 	char mapname[64];
 	GetMapName(mapname, sizeof(mapname));
-	if(StrContains(mapname, "zr_") != 0)
+	if(StrContains(mapname, "zr_") == 0 || StrContains(mapname, "vsh_zr_") == 0)
 	{
-		IsNonZRMap = true;
+		IsZRMap = true;
+		CanSpawnPickups = true;
 	}
-	
-	// Consider VSH maps as ZR maps
-	if(StrContains(mapname, "vsh_zr_") == 0)
-		IsNonZRMap = false;
-	if(StrContains(mapname, "vsh_") == 0)
-		IsNonZRMap = false;
+	else if(StrContains(mapname, "vsh_") == 0)
+	{
+		IsZRMap = false;
+		CanSpawnPickups = true;
+	}
+	else
+	{
+		IsZRMap = false;
+		CanSpawnPickups = false;
+	}
 
 	MusicString1.Clear();
 	MusicString2.Clear();
@@ -1125,6 +1141,9 @@ void ZR_MapStart()
 	// An info_populator entity is required for a lot of MvM-related stuff (preserved entity)
 //	CreateEntityByName("info_populator");
 	RaidBossActive = INVALID_ENT_REFERENCE;
+	RaidTimerAlert = true;
+	
+	s_MissionClient = DEFAULT_MISSION_CLIENT;
 	
 	CreateTimer(0.1, GlobalTimer, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 	
@@ -1250,9 +1269,9 @@ void ZR_ClientPutInServer(int client)
 	b_HasBeenHereSinceStartOfWave[client] = false;
 	Queue_PutInServer(client);
 	i_AmountDowned[client] = 0;
-	if(CurrentModifOn() == 3)
+	if(ZR_Get_Modifier() == 3 || ZR_Get_Modifier() == 8)
 		i_AmountDowned[client] = 1;
-	Waves_TrySpawnBarney();
+	Waves_TrySpawnBarney(); 
 		
 	dieingstate[client] = 0;
 	TeutonType[client] = 0;
@@ -1294,6 +1313,8 @@ void ZR_ClientPutInServer(int client)
 
 	if(BetWar_Mode() || Dungeon_Mode())
 		b_AntiLateSpawn_Allow[client] = true;
+
+	SoundManual_OnClientPutInServer(client);
 }
 
 void ZR_ClientDisconnect(int client)
@@ -1487,16 +1508,19 @@ public Action Command_AFK(int client, int args)
 	}
 	return Plugin_Handled;
 }
+/*
 public Action Command_Flop(int client, int args)
 {
 	if(client && IsEntityAlive(client))
 	{
-		FreezeNpcInTime(client, 1.0, true);
+		if(HasSpecificBuff(client, "Stunned"))
+			return Plugin_Handled;
+		FreezeNpcInTime(client, 1.5, true);
 		ApplyStatusEffect(client, client, "Ragdolled", 2.0);	
 	}
 	return Plugin_Handled;
 }
-
+*/
 
 public Action Command_TestTutorial(int client, int args)
 {
@@ -2471,7 +2495,34 @@ void TriggerLastmanLogic(int killed, int Hurtviasdkhook)
 					}
 					Yakuza_Lastman(16);
 				}
-				
+				if(IsBarracks(client))
+				{
+					CPrintToChatAll("{green}%N and their soldiers are making their last stand.",client);
+					switch (WhatCiv(client))
+					{
+						case Alternative:
+						{
+							CPrintToChatAll("{red}The remnants of Blitzkrieg army overcharge their systems to the maximum, it’s TOTAL BLITZKRIEG.",client);
+						}
+						case Combine:
+						{
+							CPrintToChatAll("{yellow}Not wanting to see you die like Guln, the soldiers of his army quickly load the anti-chaos weaponry, no more mercy.",client);
+						}
+						case Almina_Thorns:
+						{
+							CPrintToChatAll("{blue}Soldiers arm their best gears, remebering what cruel fate they had to go through under Whiteflower and Dwellers",client);
+						}
+						case Thorns:
+						{
+							CPrintToChatAll("{blue}Expidonsa declares code Epsilon, use of experimental technology has been authorized, no more holding back.",client);
+						}
+						default:
+						{
+							CPrintToChatAll("{red}A chanting of war can be heard from Alaxios army, they will not go down without a fight.",client);
+						}
+					}
+					Yakuza_Lastman(17);
+				}
 				
 				for(int i=1; i<=MaxClients; i++)
 				{
@@ -2658,6 +2709,9 @@ stock int MaxArmorCalculation(int ArmorLevel = -1, int client, float multiplyier
 	//half armor if they have this thing, but only if they arent under corrosion.
 	if((f_LivingArmorPenalty[client] > GetGameTime() || (Attributes_Get(client, Attrib_Armor_AliveMode, 0.0)) != 0.0) && Armor_Charge[client] >= 0)
 		Armor_Max /= 2;
+		
+	if(ZR_Get_Modifier() == NOSTALGICA)
+		Armor_Max = RoundToCeil(float(Armor_Max) * 0.75);
 	
 	Armor_Max += RoundToNearest(Attributes_GetOnPlayer(client, Attrib_MaxArmor_FinalAdditive, false, _, 0.0));
 	
@@ -2775,6 +2829,9 @@ stock void AddAmmoClient(int client, int AmmoType, int AmmoCount = 0, float Mult
 //	f_TimerTickCooldownShop = 0.0;
 stock void PlayTickSound(bool RaidTimer, bool NormalTimer)
 {
+	if (!RaidTimerAlert)
+		return;
+	
 	if(NormalTimer)
 	{
 		if(f_TimerTickCooldownShop < GetGameTime())
@@ -2962,7 +3019,7 @@ void ReviveAll(bool raidspawned = false,
 
 			if(i_AmountDowned[client] > 0)
 				i_AmountDowned[client] = 0;
-			if(CurrentModifOn() == 3)
+			if(ZR_Get_Modifier() == 3)
 				i_AmountDowned[client] = 1;
 
 			DoOverlay(client, "", 2);
@@ -3548,6 +3605,7 @@ void ZR_FastDownloadForce()
 	Core_PrecacheGlobalCustom();
 	PrecacheMusicZr();
 	PrecacheRedMistMusic();
+	PrecacheBarracksMusic();
 }
 
 
@@ -3685,11 +3743,28 @@ void SetCustomFog(int fogType, int color1[4], int color2[4], float start, float 
 
 void ClearCustomFog(int fogType)
 {
+	bool changed;
 	int entity = EntRefToEntIndex(CustomFogEntity[fogType]);
 	if (IsValidEntity(entity))
+	{
 		RemoveEntity(entity);
+		changed = true;
+	}
 	
 	CustomFogEntity[fogType] = INVALID_ENT_REFERENCE;
+	
+	if (changed)
+	{
+		int skyEntity = FindEntityByClassname(-1, "sky_camera");
+		for (int client = 1; client <= MaxClients; client++)
+		{
+			if (!IsClientInGame(client) || IsFakeClient(client))
+				continue;
+			
+			Copy3DSkyboxFogDataToClientSkybox(skyEntity, client);
+		}
+	}
+	
 	UpdateCustomFog();
 }
 
@@ -3740,10 +3815,7 @@ void UpdateCustomFog()
 	for (int client = 1; client <= MaxClients; client++)
 	{
 		if (IsClientInGame(client))
-		{
-			SetVariantString(buffer);
-			AcceptEntityInput(client, "SetFogController");
-		}
+			SetClientFogController(client, entity);
 	}
 }
 
@@ -3754,13 +3826,53 @@ void ShowCustomFogToClient(int client)
 	
 	// This is used on late joins for specific clients, use UpdateCustomFog to update globally
 	int entity = EntRefToEntIndex(ActiveFogEntity);
-	char buffer[64];
-	GetEntPropString(entity, Prop_Data, "m_iName", buffer, sizeof(buffer)); // By this point, this should always have a name
-	
-	SetVariantString(buffer);
-	AcceptEntityInput(client, "SetFogController");
+	SetClientFogController(client, entity);
 }
 
+void SetClientFogController(int client, int entity)
+{
+	char name[64];
+	GetEntPropString(entity, Prop_Data, "m_iName", name, sizeof(name));
+	
+	SetVariantString(name);
+	AcceptEntityInput(client, "SetFogController");
+	
+	CopyFogControllerDataToClientSkybox(entity, client);
+}
+
+void CopyFogControllerDataToClientSkybox(int entity, int client)
+{
+	if (entity == -1 || !IsValidEntity(entity))
+	{
+		SetEntProp(client, Prop_Send, "m_skybox3d.fog.enable", 0);
+		return;
+	}
+	
+	SetEntProp(client, Prop_Send, "m_skybox3d.fog.enable", GetEntProp(entity, Prop_Data, "m_fog.enable"));
+	SetEntPropFloat(client, Prop_Send, "m_skybox3d.fog.start", GetEntPropFloat(entity, Prop_Data, "m_fog.start"));
+	SetEntPropFloat(client, Prop_Send, "m_skybox3d.fog.end", GetEntPropFloat(entity, Prop_Data, "m_fog.end"));
+	SetEntProp(client, Prop_Send, "m_skybox3d.fog.colorPrimary", GetEntProp(entity, Prop_Data, "m_fog.colorPrimary"));
+	SetEntProp(client, Prop_Send, "m_skybox3d.fog.colorSecondary", GetEntProp(entity, Prop_Data, "m_fog.colorSecondary"));
+	SetEntProp(client, Prop_Send, "m_skybox3d.fog.blend", GetEntProp(entity, Prop_Data, "m_fog.blend"));
+	SetEntProp(client, Prop_Send, "m_skybox3d.fog.radial", GetEntProp(entity, Prop_Data, "m_fog.radial"));
+}
+
+void Copy3DSkyboxFogDataToClientSkybox(int entity, int client)
+{
+	if (entity == -1 || !IsValidEntity(entity))
+	{
+		SetEntProp(client, Prop_Send, "m_skybox3d.fog.enable", 0);
+		return;
+	}
+	
+	SetEntProp(client, Prop_Send, "m_skybox3d.fog.enable", GetEntProp(entity, Prop_Data, "m_skyboxData.fog.enable"));
+	SetEntPropFloat(client, Prop_Send, "m_skybox3d.fog.start", GetEntPropFloat(entity, Prop_Data, "m_skyboxData.fog.start"));
+	SetEntPropFloat(client, Prop_Send, "m_skybox3d.fog.end", GetEntPropFloat(entity, Prop_Data, "m_skyboxData.fog.end"));
+	SetEntProp(client, Prop_Send, "m_skybox3d.fog.colorPrimary", GetEntProp(entity, Prop_Data, "m_skyboxData.fog.colorPrimary"));
+	SetEntProp(client, Prop_Send, "m_skybox3d.fog.colorSecondary", GetEntProp(entity, Prop_Data, "m_skyboxData.fog.colorSecondary"));
+	SetEntProp(client, Prop_Send, "m_skybox3d.fog.blend", GetEntProp(entity, Prop_Data, "m_skyboxData.fog.blend"));
+	SetEntProp(client, Prop_Send, "m_skybox3d.fog.radial", GetEntProp(entity, Prop_Data, "m_skyboxData.fog.radial"));
+}
 
 bool ZR_AllowLastman()
 {

@@ -460,12 +460,28 @@ bool NPC_SpawnNext(bool panzer,
 						TeleportDiversioToRandLocation(entity_Spawner,_,2000.0,1000.0);
 						Freeplay_SpawnEnemy(entity_Spawner);
 					}
-					if(Bool_IsNonZRMap() || Waves_InFreeplay())
+					if(!InZRMap() || Waves_InFreeplay())
 					{
 						TeleportDiversioToRandLocation(entity_Spawner,_,2000.0,1000.0);
 					}
 
 					NpcForward = entity_Spawner;
+					
+					for(int targ; targ<i_MaxcountNpcTotal; targ++)
+					{
+						int DeathNoticer = EntRefToEntIndexFast(i_ObjectsNpcsTotal[targ]);
+						if(IsValidEntity(DeathNoticer) && !b_NpcHasDied[DeathNoticer])
+						{
+							Function func = func_NPCSpawnForward[DeathNoticer];
+							if(func && func != INVALID_FUNCTION)
+							{
+								Call_StartFunction(null, func);
+								Call_PushCell(DeathNoticer);
+								Call_PushCell(NpcForward);
+								Call_Finish();
+							}
+						}
+					}
 
 					return true;
 				}
@@ -2093,16 +2109,22 @@ stock bool Calculate_And_Display_HP_Hud(int attacker, bool ToAlternative = false
 		if(!(b_DamageNumbers[attacker] && b_DisplayDamageHudSettingInvert[attacker])) //hide if dmg numbers on, and setting on
 		{
 			static char c_DmgDelt[64];
-			IntToString(RoundToNearest(f_damageAddedTogether[attacker]),c_DmgDelt, sizeof(c_DmgDelt));
-			offset = RoundToNearest(f_damageAddedTogether[attacker]) < 0 ? 1 : 0;
-			ThousandString(c_DmgDelt[offset], sizeof(c_DmgDelt) - offset);
-
-#if defined ZR
-			if(!raidboss_active)
-#endif
+			bool showDamage;
+			
+			if (f_damageAddedTogether[attacker] > 0.0)
 			{
-				Format(ExtraHudHurt, sizeof(ExtraHudHurt), "%s \n-%s", ExtraHudHurt, c_DmgDelt);
+				IntToString(RoundToNearest(f_damageAddedTogether[attacker]),c_DmgDelt, sizeof(c_DmgDelt));
+				offset = RoundToNearest(f_damageAddedTogether[attacker]) < 0 ? 1 : 0;
+				ThousandString(c_DmgDelt[offset], sizeof(c_DmgDelt) - offset);
+				
+#if defined ZR
+				if(!raidboss_active)
+					showDamage = true;
+#endif
 			}
+
+			if (showDamage)
+				Format(ExtraHudHurt, sizeof(ExtraHudHurt), "%s \n-%s", ExtraHudHurt, c_DmgDelt);
 		}
 		ShowSyncHudText(attacker, SyncHud,"%s",ExtraHudHurt);
 	}
@@ -2209,12 +2231,15 @@ stock bool Calculate_And_Display_HP_Hud(int attacker, bool ToAlternative = false
 
 		if(!(b_DamageNumbers[attacker] && b_DisplayDamageHudSettingInvert[attacker])) //hide if dmg numbers on, and setting on
 		{
-			static char c_DmgDelt[64];
-			IntToString(RoundToNearest(f_damageAddedTogether[attacker]),c_DmgDelt, sizeof(c_DmgDelt));
-			offset = RoundToNearest(f_damageAddedTogether[attacker]) < 0 ? 1 : 0;
-			ThousandString(c_DmgDelt[offset], sizeof(c_DmgDelt) - offset);
+			if (f_damageAddedTogether[attacker] > 0.0)
+			{
+				static char c_DmgDelt[64];
+				IntToString(RoundToNearest(f_damageAddedTogether[attacker]),c_DmgDelt, sizeof(c_DmgDelt));
+				offset = RoundToNearest(f_damageAddedTogether[attacker]) < 0 ? 1 : 0;
+				ThousandString(c_DmgDelt[offset], sizeof(c_DmgDelt) - offset);
 
-			Format(ExtraHudHurt, sizeof(ExtraHudHurt), "%s \n-%s", ExtraHudHurt, c_DmgDelt);	
+				Format(ExtraHudHurt, sizeof(ExtraHudHurt), "%s \n-%s", ExtraHudHurt, c_DmgDelt);	
+			}
 		}
 		ShowSyncHudText(attacker, SyncHudRaid, ExtraHudHurt);	
 
@@ -2935,10 +2960,18 @@ void PrintNPCMessageWithPrefixes(int entity, const char[] npcColor, const char[]
 		}
 		else
 		{
-			if (!b_NameNoTranslation[entity])
-				FormatEx(finalName, sizeof(finalName), "%T", c_NpcName[entity], client);
+			char globalCustomName[128];
+			if (NPCStats_GetCustomChatName(entity, globalCustomName, sizeof(globalCustomName)))
+			{
+				strcopy(finalName, sizeof(finalName), globalCustomName);
+			}
 			else
-				strcopy(finalName, sizeof(finalName), c_NpcName[entity]);
+			{
+				if (!b_NameNoTranslation[entity])
+					FormatEx(finalName, sizeof(finalName), "%T", c_NpcName[entity], client);
+				else
+					strcopy(finalName, sizeof(finalName), c_NpcName[entity]);
+			}
 		}
 		
 		char fullText[512];
