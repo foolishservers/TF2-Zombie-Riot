@@ -210,7 +210,7 @@ public void ZSPoisonHeadcrab_ClotThink(int iNPC)
 							TF2_AddCondition(target, TFCond_LostFooting, 5.0);
 							TF2_AddCondition(target, TFCond_MarkedForDeathSilent, 10.0);
 							DoOverlay(target, "debug/yuv", 0);
-							CreateTimer(15.0, Parasihtta_RemoveOverlay, GetClientUserId(target), TIMER_FLAG_NO_MAPCHANGE);
+							CreateTimer(15.0, ZSPoisonHeadcrab_RemoveOverlay, GetClientUserId(target), TIMER_FLAG_NO_MAPCHANGE);
 						}
 					}
 				}
@@ -290,4 +290,11 @@ void ZSPoisonHeadcrab_NPCDeath(int entity)
 	
 }
 
-
+public Action ZSPoisonHeadcrab_RemoveOverlay(Handle helpmeimblind, int id)
+{
+	int client = GetClientOfUserId(id);
+	if (IsValidClient(client))
+		DoOverlay(client, "");
+		
+	return Plugin_Continue;
+}

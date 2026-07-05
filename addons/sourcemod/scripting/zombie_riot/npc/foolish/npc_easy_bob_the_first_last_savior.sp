@@ -411,7 +411,7 @@ methodmap EasyBobTheFirst < CClotBody
 		strcopy(c_NpcName[npc.index], sizeof(c_NpcName[]), "?????????????");
 		if(SmittenNpc)
 		{
-			if(CurrentModifOn() == 1)
+			if(ZR_Get_Modifier() == 1)
 			{
 				CPrintToChatAll("{white}%s{default}: 혼돈이 사방에 퍼져있어. 우린 너무 늦었어. 나와 함께 하자. 공격하지 말고.\n네 결백을 증명해봐.", NpcStats_ReturnNpcName(npc.index, true));
 			}
@@ -907,7 +907,7 @@ public void EasyBobTheFirst_ClotThink(int iNPC)
 			if(b_ThisEntityIgnoredByOtherNpcsAggro[npc.index])
 			{
 				b_ThisEntityIgnoredByOtherNpcsAggro[npc.index] = false;
-				if(CurrentModifOn() == 1 && i_RaidGrantExtra[npc.index] == 1)
+				if(ZR_Get_Modifier() == 1 && i_RaidGrantExtra[npc.index] == 1)
 					CPrintToChatAll("{white}%s{default}: 상관 없겠지, 너도 그 감염의 영향을 받았을테니.", NpcStats_ReturnNpcName(npc.index, true));
 			}
 		}
