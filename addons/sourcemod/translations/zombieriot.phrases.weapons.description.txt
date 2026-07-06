@@ -4669,13 +4669,33 @@
 	}
 	"Explosault Rifle AB 1 Desc"
 	{
-		"en"	"A small blue military laser beacon. How did a civilian get his hands on this?\nUse M2 to load special rounds. Fire it to locate the bombardment area\nbombardment will begin when you reload"
-		"ko"	"작은 청색 군용 비콘입니다. 대체 어떻게 일개 시민들이 이걸 손에 넣게 된걸까요?\n우클릭 시 특수 탄환을 장전하고 발사해 포격 위치를 지정\n무기를 재장전할시 포격 시작"
+		"en"	"Prototype chamber Tech, Heavy modification takes a toll on the Frame\nIncreased Damage, 4 Bust Shot"
+		"ko"	"시험형 약실 기술, 과한 개조로 총기에 무리를 줍니다.\n피해량 증가, 4점사가 됩니다."
+	}
+	"Explosault Rifle AB 1 Desc Extra"
+	{
+		"en"	"Max Overheat: Damm Explodes, launching Owner into the air and dealing damage to nearby Enemies, Self-damaged! If you have Armour, it can be smashed and self-damaged invalidated"
+		"ko"	"과열 게이지가 최대일 때 폭발하여 사용자를 위로 띄우고 주변적에 피해를 줍니다, 자가 피해를 받습니다! 아머가 있다면 아머가 박살 나고 자가 피해 무효화 가능"
 	}
 	"Explosault Rifle AB 2 Desc"
 	{
-		"en"	"A small blue military laser beacon. How did a civilian get his hands on this?\nUse M3 to load special rounds. Fire it to locate the bombardment area\nbombardment will begin when you reload"
-		"ko"	"작은 청색 군용 비콘입니다. 대체 어떻게 일개 시민들이 이걸 손에 넣게 된걸까요?\n피해량 증가\nM3를 눌러 특수 탄환들을 장전하고 발사해 포격 위치를 지정\n무기를 재장전할시 포격 시작"
+		"en"	"It's a small auxiliary drone often used by Vestans, But it's different\nWhen drones exist: charge 'Plasma Swarm' with each attack.\nIncreased Damage&Clip"
+		"ko"	"베스타인들이 자주 사용하는 소형 보조 드론입니다, 다만 뭔가 다르군요\n드론이 존재할 때: 공격할 때마다 '플라스마 스웜'을 충전합니다.\n피해량과 장탄수 증가"
+	}
+	"Explosault Rifle AB 2 Desc Extra"
+	{
+		"en"	"If the drone is destroyed, it will be rebuilding in 10s\nPlasma Swarm: Five slow projectile range attacks fired by drones"
+		"ko"	"드론은 파괴되면 10초후 재생성 됩니다.\n플라스마 스웜: 드론이 사격하는 5회의 느린 투사체 범위 공격"
+	}
+	"Explosault Rifle AB 3 Desc"
+	{
+		"en"	"Execute the Precision Strike Protocol. Wait, why do citizens have this?\nPress M2 when the Precision Strike is fully charged to Equipped 'Targeting Remote'\nIncreased Damage&Clip"
+		"ko"	"정밀 타격 프로토콜을 실행 합니다. 잠깐, 시민이 이걸 왜 가지고있죠?\n정밀 타격이 완전히 충전일 때 M2를 눌러 '원격 조준기' 장착\n피해량과 장탄수 증가"
+	}
+	"Explosault Rifle AB 3 Desc Extra"
+	{
+		"en"	"Position precision strike with 'remote aimer'\nWhen ammo runs out, Engageing Precision Strike"
+		"ko"	"'원격 조준기'로 정밀 타격 위치를 지정\n탄약 전부 소진 시 정밀 타격 개시"
 	}
 	"Explosault Rifle Desc Extra"
 	{
@@ -4695,33 +4715,54 @@
 		"de"		"Nicht Genügend Overheat! Du brauchst {1} Overheat!"
 		"ko"		"과열 부족! {1}만큼의 과열이 필요합니다!"
 	}
-	"ExploAR_FocusMode"
+	"ExploAR_Capacitor"
 	{
 		"#format"	"{1:i}"
-		"en"	"[Focus Mode]\nCapacitor {1}％"
-		"ko"	"[집중 모드]\n축전기 {1}％"
+		"en"	"Plasma Swarm {1}％"
+		"ko"	"플라즈마 스웜 {1}％"
 	}
-	"ExploAR_FocusMode_Max"
+	"ExploAR_Capacitor_Max"
 	{
-		"en"	"[Focus Mode]\nnCapacitor MAX"
-		"ko"	"[집중 모드]\n축전기 MAX"
-	}
-	"ExploAR_RapidMode"
-	{
-		"en"	"[Rapid Mode]"
-		"ko"	"[연사 모드]"
+		"en"	"Plasma Swarm MAX"
+		"ko"	"플라즈마 스웜 MAX"
 	}
 	"ExploAR_BarrageMode"
 	{
 		"#format"	"{1:i},{2:i}"
-		"en"	"[Barrage Mode]\nAmmo {1}/{2}"
-		"ko"	"[폭격 모드]\n탄약 {1}/{2}"
+		"en"	"[Precision Strike Mode]\nAmmo {1}/{2}"
+		"ko"	"[정밀 타격 모드]\n탄약 {1}/{2}"
+	}
+	"ExploAR_BarrageEnergy"
+	{
+		"#format"	"{1:i}"
+		"en"	"Precision Strike {1}％"
+		"ko"	"정밀 타격 {1}％"
+	}
+	"ExploAR_BarrageEnergy_Max"
+	{
+		"en"	"Precision Strike MAX"
+		"ko"	"정밀 타격 MAX"
+	}
+	"ExploAR_LostRobo"
+	{
+		"#format"	"{1:i}"
+		"en"	"[Drone Connection Lost]\nBuilding {1}s"
+		"ko"	"[드론 연결 끊김]\n생산중 {1}s"
+	}
+	"ExploAR_NeedRobo"
+	{
+		"en"	"Drone connection Required!"
+		"ko"	"드론 연결 필요!"
 	}
 	"Zealot Dash Denie Spam"
 	{
 		"en" 		"You cant dash, you must hit someone with your rapier at least once!"
 		"it"		"Non puoi scappare, devi colpire qualcuno con la tua rapiera almeno una volta!"
 		"ko" 		"현재 대쉬할 수 없습니다. 당신의 레이피어로 적을 최소 1회 이상 타격해야 합니다!"
+	}
+	"Father Dash Denie Spam"
+	{
+		"en" 		"You cant dash, you must hit someone with your weapon at least once!"
 	}
 	"Potion of Vigor"
 	{
@@ -4983,7 +5024,7 @@
 	}
 	"Kit Modernizer I Desc"
 	{
-		"en" "+20％ Kit DMG | +5％ Kit Atkspd | +5 Kit HP on kill | +5％ Kit Overall Resist\n+25％ Repair Rate"
+		"en" "+20％ Kit DMG | +5％ Kit Atkspd | +5 Kit HP on kill | +5％ Kit Overall Resist\n+25％ Repair Rate\nBarrack units have more hp/dmg (further upgrades give more stats)"
 		"it" "+20％ Danno kit | +5％ Velocità attacco kit | +5 HP kit per uccisione | +5％ Resistenza complessiva kit\n+25％ Velocità riparazione"
 		"ko" "키트 무기 피해량 +20％ | 공격 속도 +5％ | 처치시 체력 +5 회복 | 모든 피해 저항력 +5％\n수리 효율 +25％"
 	}
@@ -5016,36 +5057,6 @@
 		"en" "+100％ Kit DMG | +20％ Kit Atkspd | +20 Kit HP on kill | +20％ Kit Overall Resist\n+10％ Max mana | +200％ Repair Rate | +10％ Buidling HP | +50％ Clip Size"
 		"it" "+100％ Danni kit | +20％ Velocità attacco kit | +20 HP kit per uccisione | +20％ Resistenza complessiva kit\n+10％ Mana massimo | +200％ Velocità riparazione | +10％ HP edificio | +50％ Capacità caricatore"
 		"ko" "키트 무기 피해량 +100％ | 공격 속도 +20％ | 처치 시 체력 +20 회복 | 모든 피해 저항력 +20％\n최대 마나 +10％ | 수리 효율 +200％ | 구조물 체력 +10％ | 장탄수 +50％"
-	}
-	"Unit Reformator I Desc"
-	{
-		"en" "Fret not, my buddy, for your Barracks won't be useless this time.\nIncreases barrack unit HP by +75％, and barrack unit damage by +30％."
-		"it" "Non preoccuparti, amico mio, perché questa volta la tua caserma non sarà inutile.\nAumenta i punti salute delle unità della caserma del +75％ e il danno delle unità della caserma del +30％."
-		"ko" "걱정하지마, 친구, 이번엔 네 배럭 유닛들이 유용할테니.\n-배럭 유닛 최대 체력 +75％\n-배럭 유닛 피해량 +30％"
-	}
-	"Unit Reformator II Desc"
-	{
-		"en" "Increases barrack unit HP by +75％, and barrack unit damage by +30％."
-		"it" "Aumenta i punti salute delle unità della caserma del +75％ e il danno delle unità della caserma del +30％."
-		"ko" "-배럭 유닛 최대 체력 +75％\n-배럭 유닛 피해량 +30％"
-	}
-	"Unit Reformator III Desc"
-	{
-		"en" "Doubles barrack unit HP and damage by +45％."
-		"it" "Raddoppia i punti salute e il danno delle unità caserma del +45％."
-		"ko" "-배럭 유닛의 최대 체력이 2배로 증가\n-배럭 유닛 피해량 +45％"
-	}
-	"Unit Reformator IV Desc"
-	{
-		"en" "Doubles barrack unit HP and increases barrack unit damage by +75％."
-		"it" "Raddoppia i punti salute delle unità della caserma e aumenta i danni inflitti dalle unità della caserma del +75％."
-		"ko" "-배럭 유닛의 최대 체력이 2배로 증가\n-배럭 유닛 피해량 +75％"
-	}
-	"Unit Reformator V Desc"
-	{
-		"en" "TRIPLES barrack unit HP and doubles barrack unit damage."
-		"it" "TRIPLICA i punti salute delle unità della caserma e raddoppia i danni delle unità della caserma."
-		"ko" "-배럭 유닛의 최대 체력이 3배로 증가\n-배럭 유닛의 피해량이 2배로 증가"
 	}
 	"Reinforce Desc"
 	{
@@ -5690,5 +5701,41 @@
 	{
 		"en"	"-More damage, building hp, repair rate"
 		"ko"	"-피해량, 구조물 체력, 수리 효율 증가"
+	}
+	"The Index Nursefather Desc"
+	{
+		"en"    "The Will of Hermes.\n-Cycle between 9 weapons with varying damage.\n-Receive prescripts you MUST complete within a time limit to gain Grace.\n-Failing heavily debuffs you for a long time.\n-Press m2 to dash and dodge all attacks below a damage threshold"
+	}
+	"The Index Nursefather Desc 1"
+	{
+		"en"    "-+1 Grace cap and stat increases.\n-Hatchet gives extra poise.\n-Stiletto inflicts Sinking.\n-Rapier and Lance inflict Fragility.\n-Bastard Sword gives a damage buff. \n-Scythe deals far higher damage"
+	}
+	"The Index Nursefather Desc 2"
+	{
+		"en"    "-+1 Grace cap and stat increases.\n-All weapon hits now give poise.\n-Poise gives a higher chance to crit.(31％ chance at max poise)"
+	}
+	"The Index Nursefather Desc 3"
+	{
+		"en"    "-+1 Grace cap and stat increases.\n-Unlocks Furioso(R): a high damage combo ability.\n-Requires 6 Grace stacks and a hit from all weapons."
+	}
+	"The Index Nursefather Desc 4"
+	{
+		"en"    "-+1 Grace cap and stat increases.\n-Unlocks Shin.\n-Gain Shin permanently when obtaining your first Furioso.\n-Shin increases poise gain and duration."
+	}
+	"The Index Nursefather Desc 5"
+	{
+		"en"    "-+1 Grace cap and stat increases.\n-Unlocks Sizzling Wound.\n-Can Self Revive once every 6 minutes (R).\n-Self Reviving or using Furioso gives Sizzling Wound.\n-Sizzling Wound gives increased damage but randomly gives you burn and bleed."
+	}
+	"The Index Nursefather Desc 6"
+	{
+		"en"    "-+1 Grace cap and stat increases."
+	}
+	"The Index Nursefather Desc 7"
+	{
+		"en"    "-Stat increases"
+	}
+	"The Index Nursefather Desc 8"
+	{
+		"en"    "-Stat increases"
 	}
 }
