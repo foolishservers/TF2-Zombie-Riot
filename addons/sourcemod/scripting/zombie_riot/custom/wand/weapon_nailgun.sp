@@ -80,7 +80,7 @@ public void Weapon_Nailgun_SMG(DataPack pack)
 		Attributes_Set(weapon, 4, Extra_Clip);
 
 		float damage = Attributes_GetOnPlayer(client, 287, true);			//Sentry damage bonus
-		damage * 1.75;
+		damage *= 1.75;
 		//reduce
 		Attributes_Set(weapon, 2, damage);
 	}
