@@ -764,7 +764,7 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "custom/wand/weapon_wand_sigil_blade.sp"
 #include "custom/kit_omega.sp"
 #include "custom/kit_purging.sp"
-//#include "custom/weapon_bombplant_smg.sp"
+#include "custom/weapon_bombplant_smg.sp"
 #include "custom/weapon_guiding_missile.sp"
 #include "custom/kit_heartbroken.sp"
 #include "custom/weapon_burningthumb.sp"

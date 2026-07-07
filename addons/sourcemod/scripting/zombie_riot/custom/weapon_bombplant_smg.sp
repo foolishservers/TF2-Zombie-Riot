@@ -40,7 +40,6 @@ public void ResetMapStartExploARWeapon()
 	PrecacheModel("models/weapons/w_models/w_drg_ball.mdl");
 	g_LaserIndex = PrecacheModel(LASERBEAM);
 	Zero(Can_I_Fire);
-	Zero(Zoom_Active);
 	Zero(ExploAR_OverHit);
 	Zero(ExploAR_HUDDelay);
 	Zero(ExploAR_OverHeatDelay);
@@ -86,12 +85,7 @@ static void BombAR_M1_PreThink(int client)
 		float burstRate = Attributes_Get(weapon, 394, 1.0);
 		if(GetClientButtons(client) & IN_ATTACK && GetEntProp(weapon, Prop_Send, "m_iClip1") != 0)
 		{
-			if(GetEntProp(weapon, Prop_Send, "m_nKillComboCount") && Zoom_Active[client])
-			{
-				SetEntPropFloat(weapon, Prop_Data, "m_flNextPrimaryAttack", gameTime + ((burstRate * 2.5) * attackTime));
-				SetEntProp(weapon, Prop_Send, "m_nKillComboCount", 0);
-			}
-			else if(GetEntProp(weapon, Prop_Send, "m_nKillComboCount")>=ExploAR_BurstNum[client])
+			if(GetEntProp(weapon, Prop_Send, "m_nKillComboCount")>=ExploAR_BurstNum[client])
 			{
 				SetEntPropFloat(weapon, Prop_Data, "m_flNextPrimaryAttack", gameTime + (burstRate * attackTime));
 				SetEntProp(weapon, Prop_Send, "m_nKillComboCount", 0);
@@ -99,7 +93,7 @@ static void BombAR_M1_PreThink(int client)
 		}
 		else
 		{
-			SetEntPropFloat(weapon, Prop_Data, "m_flNextPrimaryAttack", gameTime + ((burstRate * (Zoom_Active[client] ? 0.5 : 1.0)) * attackTime));
+			SetEntPropFloat(weapon, Prop_Data, "m_flNextPrimaryAttack", gameTime + (burstRate * attackTime));
 			SetEntProp(weapon, Prop_Send, "m_nKillComboCount", 0);
 			Can_I_Fire[client]=false;
 			SDKUnhook(client, SDKHook_PreThink, BombAR_M1_PreThink);
@@ -431,34 +425,6 @@ public void Enable_ExploARWeapon(int client, int weapon)
 		}
 	}
 }
-public void Holster_ExploARWeapon(int client)
-{
-	if(ExploAR_WeaponPap[client]>2)
-	{
-		SDKUnhook(client, SDKHook_PreThink, BombAR_Laser_PreThink);
-		int Prop = EntRefToEntIndex(ExploAR_ZoomLaser[client]);
-		if(IsValidEntity(Prop))
-		{
-			RemovePorps(Prop);
-			RemoveEntity(Prop);
-		}
-		Zoom_Active[client] = false;
-		Weapon_Railcannon_Pap2_Holster(client, -1, false, -1);
-	}
-	if(ExploAR_AirStrikeActivated[client])
-	{
-		int Prop = EntRefToEntIndex(ExploAR_VictoriaNuke[client]);
-		if(IsValidEntity(Prop))
-		{
-			RemovePorps(Prop);
-			RemoveEntity(Prop);
-		}
-		ExploAR_AirStrikeActivated[client]=0;
-	}
-
-	IsDeploy[client]=false;
-	DestroyExploAREffect(client);
-}
 
 public void Deploy_ExploARWeapon(int client, int weapon)
 {
@@ -708,66 +674,22 @@ static void ExploARWork(int client, int weapon, float GameTime)
 	}
 	else if(SaveClip<clip)
 	{
-		if(ExploAR_AirStrikeActivated[client])
+		bool WhoExplode;
+		for(int entitycount; entitycount<i_MaxcountNpcTotal; entitycount++)
 		{
-			VictoriaNukeEngage(client, weapon);
-			Attributes_Set(weapon, 4, GetEntPropFloat(weapon, Prop_Send, "m_flEnergy"));
-			ExploAR_AirStrikeActivated[client]=0;
-		}
-		else
-		{
-			bool WhoExplode;
-			for(int entitycount; entitycount<i_MaxcountNpcTotal; entitycount++)
+			int npc = EntRefToEntIndexFast(i_ObjectsNpcsTotal[entitycount]);
+			if (IsValidEntity(npc) && !b_NpcHasDied[npc] && GetTeam(npc) != TFTeam_Red)
 			{
-				int npc = EntRefToEntIndexFast(i_ObjectsNpcsTotal[entitycount]);
-				if (IsValidEntity(npc) && !b_NpcHasDied[npc] && GetTeam(npc) != TFTeam_Red)
+				if(i_HowManyBombsOnThisEntity[npc][client] > 0)
 				{
-					if(i_HowManyBombsOnThisEntity[npc][client] > 0)
-					{
-						Cause_Terroriser_Explosion(client, npc, true);
-						WhoExplode=true;
-					}
+					Cause_Terroriser_Explosion(client, npc, true);
+					WhoExplode=true;
 				}
 			}
-			if(WhoExplode)
-				EmitSoundToAll("weapons/stickybomblauncher_det.wav", client);
 		}
+		if(WhoExplode)
+			EmitSoundToAll("weapons/stickybomblauncher_det.wav", client);
 		SetEntProp(weapon, Prop_Send, "m_nKillComboClass", clip);
-	}
-	
-	if(ExploAR_AirStrikeActivated[client])
-	{
-		int Prop = EntRefToEntIndex(ExploAR_VictoriaNuke[client]);
-		if(IsValidEntity(Prop))
-		{
-			int Props;
-			static float vOrigin[3];
-			CClotBody XYZ = view_as<CClotBody>(Prop);
-			for(int i = 1; i <= XYZ.m_iAttacksTillMegahit; i++)
-			{
-				switch(i)
-				{
-					case 1:Props = XYZ.m_iWearable1;
-					case 2:Props = XYZ.m_iWearable2;
-					case 3:Props = XYZ.m_iWearable3;
-					case 4:Props = XYZ.m_iWearable4;
-					case 5:Props = XYZ.m_iWearable5;
-					case 6:Props = XYZ.m_iWearable6;
-					case 7:Props = XYZ.m_iWearable7;
-					case 8:Props = XYZ.m_iWearable8;
-					case 9:Props = XYZ.m_iWearable9;
-					default:Props = XYZ.m_iWearable9;
-				}
-				if(IsValidEntity(Props))
-				{
-					GetAbsOrigin(Props, vOrigin);
-					static int color[4] = {200, 255, 50, 200};
-					float Radius = fl_Dead_Ringer[Props] * 2.0;
-					TE_SetupBeamRingPoint(vOrigin, Radius, Radius+0.1, g_LaserIndex, g_LaserIndex, 0, 1, 0.1, 6.0, 0.1, color, 1, 0);
-					TE_SendToClient(client);
-				}
-			}
-		}
 	}
 	
 	if(ExploAR_AirStrikeActivated[client])
@@ -974,162 +896,6 @@ static void WindowsVistaNukeEngage(int client, int weapon)
 		ExploAR_AirStrikeActivated[client]--;
 	}
 	else ExploAR_AirStrikeActivated[client]=0;
-}
-
-static void HE_StrikeThink(DataPack pack)
-{
-	pack.Reset();
-	int client = pack.ReadCell();
-	int weapon = EntRefToEntIndex(pack.ReadCell());
-	float targetpos[3]; pack.ReadFloatArray(targetpos, 3);
-	float damage = pack.ReadFloat();
-	float delay = pack.ReadFloat();
-	float maxdelay = pack.ReadFloat();
-	float radius = pack.ReadFloat();
-	float falloff = pack.ReadFloat();
-	if(!IsValidClient(client) || !IsValidEntity(weapon))
-		return;
-	if(GetGameTime() >= delay)
-	{
-		ParticleEffectAt(targetpos, "rd_robot_explosion", 1.0);
-		CreateEarthquake(targetpos, 0.5, radius*0.8, 16.0, 255.0);
-		Explode_Logic_Custom(damage, client, client, weapon, targetpos, radius, falloff);
-		EmitSoundToAll("beams/beamstart5.wav", 0, SNDCHAN_AUTO, 90, SND_NOFLAGS, 0.8, SNDPITCH_NORMAL, -1, targetpos);
-		return;
-	}
-	else
-	{
-		static int color[4] = {200, 255, 50, 200};
-		TE_SetupBeamRingPoint(targetpos, radius * 2.0, (radius * 2.0)+0.1, g_LaserIndex, g_LaserIndex, 0, 1, 0.1, 6.0, 0.1, color, 1, 0);
-		TE_SendToClient(client);
-		TE_SetupBeamRingPoint(targetpos, ((radius)*((delay-GetGameTime())/maxdelay))* 2.0, (((radius)*((delay-GetGameTime())/maxdelay))* 2.0)+0.1, g_LaserIndex, g_LaserIndex, 0, 1, 0.1, 6.0, 0.1, color, 1, 0);
-		TE_SendToClient(client);
-	}
-	delete pack;
-	DataPack pack2 = new DataPack();
-	pack2.WriteCell(client);
-	pack2.WriteCell(EntIndexToEntRef(weapon));
-	pack2.WriteFloatArray(targetpos, 3);
-	pack2.WriteFloat(damage);
-	pack2.WriteFloat(delay);
-	pack2.WriteFloat(maxdelay);
-	pack2.WriteFloat(radius);
-	pack2.WriteFloat(falloff);
-	float Throttle = 0.04;	//0.025
-	int frames_offset = RoundToCeil(66.0*Throttle);
-	if(frames_offset < 0)
-		frames_offset = 1;
-	RequestFrames(HE_StrikeThink, frames_offset, pack2);
-}
-
-static void VictoriaNukeSetUp(int client, int weapon)
-{
-	int Prop = EntRefToEntIndex(ExploAR_VictoriaNuke[client]);
-	if(IsValidEntity(Prop))
-	{
-		static float vAngles[3], vOrigin[3];
-		int Props;
-		GetClientEyePosition(client, vOrigin);
-		GetClientEyeAngles(client, vAngles);
-		LaserPoint(client, vAngles, vOrigin, vOrigin);
-		CClotBody XYZ = view_as<CClotBody>(Prop);
-		Props = XYZ.EquipItemSeperate("models/weapons/w_models/w_drg_ball.mdl",_,1,1.001,_,true);
-		SetEntityRenderMode(Props, RENDER_TRANSCOLOR);
-		SetEntityRenderColor(Props, 255, 255, 255, 1);
-		SetEntPropFloat(Props, Prop_Send, "m_fadeMinDist", 1.0);
-		SetEntPropFloat(Props, Prop_Send, "m_fadeMaxDist", 1.0);
-		MakeObjectIntangeable(Props);
-		fl_Charge_delay[Props] = 750.0*Attributes_Get(weapon, 2, 1.0)*1.15;
-		fl_Charge_Duration[Props] = 3.0/Attributes_Get(weapon, 103, 1.0);
-		fl_Dead_Ringer[Props] = EXPLOSION_RADIUS*Attributes_Get(weapon, 99, 1.0);
-		XYZ.m_iAttacksTillMegahit++;
-		switch(XYZ.m_iAttacksTillMegahit)
-		{
-			case 1:XYZ.m_iWearable1 = Props;
-			case 2:XYZ.m_iWearable2 = Props;
-			case 3:XYZ.m_iWearable3 = Props;
-			case 4:XYZ.m_iWearable4 = Props;
-			case 5:XYZ.m_iWearable5 = Props;
-			case 6:XYZ.m_iWearable6 = Props;
-			case 7:XYZ.m_iWearable7 = Props;
-			case 8:XYZ.m_iWearable8 = Props;
-			case 9:XYZ.m_iWearable9 = Props;
-			default:
-			{
-				RemovePorps(Prop);
-				RemoveEntity(Prop);
-				ExploAR_AirStrikeActivated[client]=0;
-			}
-		}
-		TeleportEntity(Props, vOrigin, NULL_VECTOR, NULL_VECTOR);
-		ExploAR_AirStrikeActivated[client]--;
-		SetEntPropFloat(weapon, Prop_Data, "m_flNextPrimaryAttack", GetGameTime() + 0.5);
-	}
-	else
-	{
-		RemovePorps(Prop);
-		RemoveEntity(Prop);
-		ExploAR_AirStrikeActivated[client]=0;
-	}
-}
-
-static void VictoriaNukeEngage(int client, int weapon)
-{
-	int Prop = EntRefToEntIndex(ExploAR_VictoriaNuke[client]);
-	if(IsValidEntity(Prop))
-	{
-		int Props;
-		static float vOrigin[3];
-		CClotBody XYZ = view_as<CClotBody>(Prop);
-		for(int i = 1; i <= XYZ.m_iAttacksTillMegahit; i++)
-		{
-			switch(i)
-			{
-				case 1:Props = XYZ.m_iWearable1;
-				case 2:Props = XYZ.m_iWearable2;
-				case 3:Props = XYZ.m_iWearable3;
-				case 4:Props = XYZ.m_iWearable4;
-				case 5:Props = XYZ.m_iWearable5;
-				case 6:Props = XYZ.m_iWearable6;
-				case 7:Props = XYZ.m_iWearable7;
-				case 8:Props = XYZ.m_iWearable8;
-				case 9:Props = XYZ.m_iWearable9;
-				default:Props = XYZ.m_iWearable9;
-			}
-			if(IsValidEntity(Props))
-			{
-				GetAbsOrigin(Props, vOrigin);
-				if(CountPlayersOnRed(0) <= 20)
-				{
-					vOrigin[2] += 3000.0;
-					int particle = ParticleEffectAt(vOrigin, "kartimpacttrail", fl_Charge_Duration[Props]);
-					SetEdictFlags(particle, (GetEdictFlags(particle) | FL_EDICT_ALWAYS));
-					CreateTimer(fl_Charge_Duration[Props]-0.3, MortarFire_Falling_Shot, EntIndexToEntRef(particle), TIMER_FLAG_NO_MAPCHANGE);	
-					vOrigin[2] -= 3000.0;
-				}
-				
-				DataPack HEStrike = new DataPack();
-				HEStrike.WriteCell(client);
-				HEStrike.WriteCell(EntIndexToEntRef(weapon));
-				HEStrike.WriteFloatArray(vOrigin, 3);
-				HEStrike.WriteFloat(fl_Charge_delay[Props]);
-				HEStrike.WriteFloat(GetGameTime()+fl_Charge_Duration[Props]);
-				HEStrike.WriteFloat(fl_Charge_Duration[Props]);
-				HEStrike.WriteFloat(fl_Dead_Ringer[Props]);
-				HEStrike.WriteFloat(Attributes_Get(weapon, 117, 1.0));
-				RequestFrame(HE_StrikeThink, HEStrike);
-				RemoveEntity(Props);
-			}
-		}
-		TeleportEntity(Props, vOrigin, NULL_VECTOR, NULL_VECTOR);
-		ExploAR_AirStrikeActivated[client]--;
-	}
-	else
-	{
-		RemovePorps(Prop);
-		RemoveEntity(Prop);
-		ExploAR_AirStrikeActivated[client]=0;
-	}
 }
 
 static void HE_StrikeThink(DataPack pack)
