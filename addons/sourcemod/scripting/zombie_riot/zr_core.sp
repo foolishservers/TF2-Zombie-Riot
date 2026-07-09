@@ -343,7 +343,8 @@ enum
 	WEAPON_BOMB_AR = 164,
 	WEAPON_BRICK = 165,
 	WEAPON_BURNINGTHUMB = 166,
-	WEAPON_RED_MIST = 167
+	WEAPON_RED_MIST = 167,
+	WEAPON_GUNSAW = 168
 }
 
 enum
@@ -771,6 +772,7 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "custom/kit_red_mist.sp"
 #include "custom/kit_barracks.sp"
 #include "custom/kit_indexfather.sp"
+#include "custom/kit_gunsaw.sp"
 
 void ZR_PluginLoad()
 {
@@ -1138,6 +1140,8 @@ void ZR_MapStart()
 	KitOmega_OnMapStart();
 	Wand_Sigil_Blade_MapStart();
 	PurgeKit_MapStart();
+	ResetMapStartExploARWeapon();
+	Gunsaw_MapStart();
 	
 	Zombies_Currently_Still_Ongoing = 0;
 	// An info_populator entity is required for a lot of MvM-related stuff (preserved entity)
@@ -1271,8 +1275,6 @@ void ZR_ClientPutInServer(int client)
 	b_HasBeenHereSinceStartOfWave[client] = false;
 	Queue_PutInServer(client);
 	i_AmountDowned[client] = 0;
-	if(ZR_Get_Modifier() == 3 || ZR_Get_Modifier() == 8)
-		i_AmountDowned[client] = 1;
 	Waves_TrySpawnBarney(); 
 		
 	dieingstate[client] = 0;
@@ -1988,6 +1990,7 @@ public Action Timer_Dieing(Handle timer, int client)
 				SetEntityHealth(client, 50);
 				RequestFrame(SetHealthAfterRevive, EntIndexToEntRef(client));
 				Rogue_TriggerFunction(Artifact::FuncRevive, client);
+				//Gunsaw_TryBodySteal(client, false, pos);
 				int entity, i;
 				while(TF2U_GetWearable(client, entity, i))
 				{
@@ -2141,8 +2144,12 @@ void CheckAlivePlayersforward(int killed=0)
 
 void CheckLastMannStanding(int killed)
 {
+	int testLast;
 	int PlayersLeftNotDowned = 0;
 	LastMann_BeforeLastman = false;
+	int Remaining;
+	int[] PeopleRemain = new int[MaxClients];
+
 	for(int client=1; client<=MaxClients; client++)
 	{
 		if(IsClientInGame(client) && GetClientTeam(client)==2 && !IsFakeClient(client) && TeutonType[client] != TEUTON_WAITING)
@@ -2154,7 +2161,9 @@ void CheckLastMannStanding(int killed)
 					continue;
 				if(dieingstate[client] == 0)
 				{
+					PeopleRemain[Remaining++] = client;
 					PlayersLeftNotDowned++;
+					testLast = client;
 				}
 			}
 		}
@@ -2162,6 +2171,31 @@ void CheckLastMannStanding(int killed)
 	if(PlayersLeftNotDowned == 1)
 	{
 		LastMann_BeforeLastman = true;
+			
+		if(Gunsaw_IsMerc(testLast) && Gunsaw_LastmanSecret())
+			CPrintToChatAll("? - Sense of impending doom\n{crimson}You can't help but feel sudden, overwhelming fear. Your skin has goosebumps all over. It's as if the nature around you abruptly fell silent...");
+
+	}
+	if(PlayersLeftNotDowned == 2)
+	{
+		bool NurseFather = false;
+		bool Expi = false;
+		for(int ClientsLeft = 1; ClientsLeft <= Remaining; ClientsLeft++)
+		{
+			if(Gunsaw_IsMerc(ClientsLeft))
+				Expi = true;
+			if(Is_Prescript_User(ClientsLeft))
+				NurseFather = true;
+
+		}
+		if(Expi && NurseFather)
+		{
+			if(IndexExpi_LastmanSecret())
+			{
+				CPrintToChatAll("{blue}The Nursefather lets out an agitated 'tsk'{crimson}The ''Mercenary'' seems to be in heavy distress, need of comfort from the only remaining {blue}ally{crimson}.");
+			}
+		}
+
 	}
 }
 void CheckAlivePlayers(int killed=0, int Hurtviasdkhook = 0, bool TestLastman = false, bool CheckDownedState = false)
@@ -2524,6 +2558,26 @@ void TriggerLastmanLogic(int killed, int Hurtviasdkhook)
 						}
 					}
 					Yakuza_Lastman(17);
+				}
+				if(Gunsaw_IsMerc(client))
+				{
+					if(IsValidEntity(EntRefToEntIndex(RaidBossActive)))
+					{
+						if(RaidModeTime > GetGameTime())
+						{
+							CPrintToChatAll("‼ - FOCUSED\n{crimson}Both of us die today. One, just a little later than the other.");
+						}
+						else
+						{
+							CPrintToChatAll("‼ - HORRIFIED\n{crimson}CAN'T FOCUS. CAN'T THINK. NOTHING ELSE MATTERS. RUN FOR YOUR LIFE OR FIGHT FOR IT!");
+						}
+					}
+					else
+					{
+						CPrintToChatAll("☠ - Miserable\n{crimson}How does it feel, knowing you're not coming back up %N..?", client);
+					}
+					
+					Yakuza_Lastman(18);
 				}
 				if(Is_Prescript_User(client))
 				{
@@ -3027,8 +3081,6 @@ void ReviveAll(bool raidspawned = false,
 
 			if(i_AmountDowned[client] > 0)
 				i_AmountDowned[client] = 0;
-			if(ZR_Get_Modifier() == 3)
-				i_AmountDowned[client] = 1;
 
 			DoOverlay(client, "", 2);
 			if(raidspawned)
@@ -3615,6 +3667,7 @@ void ZR_FastDownloadForce()
 	PrecacheMusicZr();
 	PrecacheRedMistMusic();
 	PrecacheBarracksMusic();
+	Gunsaw_Precache();
 }
 
 

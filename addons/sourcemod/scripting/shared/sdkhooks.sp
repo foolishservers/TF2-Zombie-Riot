@@ -1662,10 +1662,7 @@ public void OnPostThink(int client)
 			char HudBuffer[256];
 			if(!TeutonType[client])
 			{
-				int downsleft;
-				downsleft = 2;
-				if(ZR_Get_Modifier() == PREFIX_ONESTAND)
-					downsleft = 3;
+				int downsleft = TotalDowns();
 
 				downsleft -= i_AmountDowned[client];
 				SDKHooks_UpdateMarkForDeath(client);
@@ -2297,6 +2294,9 @@ public Action Player_OnTakeDamageAlive_DeathCheck(int victim, int &attacker, int
 					//We trigger lastman if we hit this
 				}
 			}
+
+			Gunsaw_TryBodySteal(victim, true);
+
 			damage = 0.0;
 			GiveCompleteInvul(victim, 3.0);
 			MorphineShotLogic(victim, true);
@@ -2325,10 +2325,8 @@ public Action Player_OnTakeDamageAlive_DeathCheck(int victim, int &attacker, int
 			Rogue_PlayerDowned(victim);	
 			
 			//there are players still left, down them.
-			int DownsLeft = 2;
-			if(ZR_Get_Modifier() == PREFIX_ONESTAND)
-				DownsLeft = 3;
-			if((SpecterCheckIfAutoRevive(victim) || i_AmountDowned[victim] < (DownsLeft + Dungeon_DownedBonus())) && !HasSpecificBuff(victim, "Nightmare Terror"))
+			int DownsLeft = TotalDowns();
+			if(((SpecterCheckIfAutoRevive(victim) || i_AmountDowned[victim] < DownsLeft)) && !HasSpecificBuff(victim, "Nightmare Terror"))
 			{
 				if(i_CurrentEquippedPerk[victim] & PERK_WHO)
 					Citizen_PlayerReplacement(victim, false);
@@ -2352,6 +2350,7 @@ public Action Player_OnTakeDamageAlive_DeathCheck(int victim, int &attacker, int
 				*/
 
 				Dungeon_PlayerDowned(victim);
+				Gunsaw_Monologue_OnDowned(victim);
 				
 				ApplyRapidSuturing(victim);
 				ExtinguishTargetDebuff(victim);
@@ -2475,19 +2474,19 @@ void Replicate_Damage_Medications(int victim, float &damage, int damagetype)
 {
 	if(!CheckInHud() && TF2_IsPlayerInCondition(victim, TFCond_MarkedForDeath))
 	{
-		i_WasInMarkedForDeath[victim] = TF2Util_GetPlayerConditionDuration(victim, TFCond_MarkedForDeath);
+		i_WasInMarkedForDeath[victim] = VS_GetPlayerCondDuration(victim, TFCond_MarkedForDeath);
 		TF2_RemoveCondition(victim, TFCond_MarkedForDeath);
 	}
 	if(!CheckInHud() && TF2_IsPlayerInCondition(victim, TFCond_MarkedForDeathSilent))
 	{
-		i_WasInMarkedForDeathSilent[victim] = TF2Util_GetPlayerConditionDuration(victim, TFCond_MarkedForDeathSilent);
+		i_WasInMarkedForDeathSilent[victim] = VS_GetPlayerCondDuration(victim, TFCond_MarkedForDeathSilent);
 		TF2_RemoveCondition(victim, TFCond_MarkedForDeathSilent);
 	}
 	if(TF2_IsPlayerInCondition(victim, TFCond_Jarated))
 	{
 		if(!CheckInHud())
 		{
-			i_WasInJarate[victim] = TF2Util_GetPlayerConditionDuration(victim, TFCond_Jarated);
+			i_WasInJarate[victim] = VS_GetPlayerCondDuration(victim, TFCond_Jarated);
 			TF2_RemoveCondition(victim, TFCond_Jarated);
 		}
 		damage *= 1.35;
@@ -2496,7 +2495,7 @@ void Replicate_Damage_Medications(int victim, float &damage, int damagetype)
 	{
 		if(!CheckInHud())
 		{
-			i_WasInDefenseBuff[victim] = TF2Util_GetPlayerConditionDuration(victim, TFCond_DefenseBuffed);
+			i_WasInDefenseBuff[victim] = VS_GetPlayerCondDuration(victim, TFCond_DefenseBuffed);
 			TF2_RemoveCondition(victim, TFCond_DefenseBuffed);
 		}
 		if(!(damagetype & DMG_TRUEDAMAGE))
@@ -2504,7 +2503,7 @@ void Replicate_Damage_Medications(int victim, float &damage, int damagetype)
 	}
 	if(!CheckInHud() && TF2_IsPlayerInCondition(victim, TFCond_RuneResist))
 	{
-		i_WasInResPowerup[victim] = TF2Util_GetPlayerConditionDuration(victim, TFCond_RuneResist);
+		i_WasInResPowerup[victim] = VS_GetPlayerCondDuration(victim, TFCond_RuneResist);
 		TF2_RemoveCondition(victim, TFCond_RuneResist);
 		//This is purely visual, it doesnt grant anything by itself.
 	}
@@ -2646,6 +2645,8 @@ public Action SDKHook_NormalSHook(int clients[MAXPLAYERS], int &numClients, char
 				}
 			}
 			LouderSoundStop = false;
+
+			Gunsaw_Monologue_LoudPrefix();
 		}
 	}
 /*
@@ -2992,6 +2993,11 @@ void ApplyLastmanOrDyingOverlay(int client)
 				if(!HasSpecificBuff(client, "Death is comming."))
 					return;
 			}
+			case 18:
+			{
+				if(Gunsaw_IsMerc(client) && f_OneShotProtectionTimer[client] < GetGameTime())
+					return;
+			}
 		}
 	}
 	
@@ -3051,12 +3057,8 @@ void SDKHooks_UpdateMarkForDeath(int client, bool force_Clear = false)
 	if (TeutonType[client] != TEUTON_NONE)
 		force_Clear = true;
 
-	int downsleft;
-	downsleft = 2;
-	if(ZR_Get_Modifier() == PREFIX_ONESTAND)
-		downsleft = 3;
+	int downsleft = TotalDowns();
 	downsleft -= i_AmountDowned[client];
-	downsleft += Dungeon_DownedBonus();
 	if(HasSpecificBuff(client, "Nightmare Terror"))
 		downsleft = 0;
 	if(!force_Clear && downsleft <= 0 && !SpecterCheckIfAutoRevive(client))

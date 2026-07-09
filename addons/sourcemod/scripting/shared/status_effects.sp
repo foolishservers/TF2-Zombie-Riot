@@ -89,8 +89,7 @@ static const char Categories[][] =
 	"Negative",
 	"Prefixes",
 };
-#define MAXBUFFSEXPLAIN 500
-//thres never gonna be more then 500 lol
+#define MAXBUFFSEXPLAIN 750
 bool DisplayBuffHintToClient[MAXPLAYERS][MAXBUFFSEXPLAIN];
 float DisplayChatBuffCD[MAXPLAYERS];
 
@@ -285,6 +284,7 @@ void InitStatusEffects()
 	StatusEffects_Red_Mist();
 	StatusEffects_Barracks();
 	StatusEffects_IndexNurseFather();
+	StatusEffects_Gunsaw();
 }
 
 static int CategoryPage[MAXPLAYERS];
@@ -1613,7 +1613,7 @@ void StatusEffects_HudHurt(int victim, int attacker, char[] Debuff_Adder_left, c
 			
 		if(Apply_MasterStatusEffect.HudDisplay_Func != INVALID_FUNCTION && Apply_MasterStatusEffect.HudDisplay_Func)
 		{
-			char HudDisplayCustom[14];
+			char HudDisplayCustom[16];
 			//We have a valid function ignore the original value.
 			Call_StartFunction(null, Apply_MasterStatusEffect.HudDisplay_Func);
 			Call_PushCell(attacker);
@@ -8043,7 +8043,6 @@ void StatusEffects_Construct2_EnemyModifs()
 	data.OnBuffEndOrDeleted			= Const2Modifs_Stalker_End;
 	data.TimerRepeatCall_Func 		= Const2Modifs_Stalker_Think;
 	data.OnTakeDamage_TakenFunc 	= INVALID_FUNCTION;
-	data.TimerRepeatCall_Func 		= StalkerCheckRemove;
 	StatusEffect_AddGlobal(data);
 	
 	strcopy(data.BuffName, sizeof(data.BuffName), "Stalker Prefix Nerf");
@@ -8448,7 +8447,7 @@ void StatusEffects_Construct2_EnemyModifs()
 	data.Positive 					= true;
 	data.ShouldScaleWithPlayerCount = false;
 	data.OnBuffStarted				= INVALID_FUNCTION;
-	data.OnBuffEndOrDeleted			= INVALID_FUNCTION;
+	data.OnBuffEndOrDeleted			= AlephPrefix_End;
 	data.TimerRepeatCall_Func 		= INVALID_FUNCTION;
 	data.OnTakeDamage_PostVictim	= Aleph_TakeDamageAttackerPost;
 	StatusEffect_AddGlobal(data);
@@ -9439,7 +9438,7 @@ void Const2Modifs_Stalker_Start(int victim, StatusEffect Apply_MasterStatusEffec
 void Const2Modifs_Stalker_End(int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect)
 {
 	//not an npc, ignore.
-	if(!b_ThisWasAnNpc[victim])
+	if(!b_ThisWasAnNpc[victim] || !IsEntityAlive(victim))
 		return;
 	
 	b_StaticNPC[victim] = Apply_StatusEffect.WearableUse != 0;
@@ -9449,6 +9448,9 @@ void Const2Modifs_Stalker_End(int victim, StatusEffect Apply_MasterStatusEffect,
 	int maxhealth = ReturnEntityMaxHealth(victim);
 	if (health > maxhealth)
 		SetEntProp(victim, Prop_Data, "m_iHealth", maxhealth);
+	
+	RemoveSpecificBuff(victim, "Stalker Prefix Nerf");
+	RemoveSpecificBuff(victim, "Anti-Waves");
 }
 
 void Const2Modifs_Stalker_Think(int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect)
@@ -9457,8 +9459,10 @@ void Const2Modifs_Stalker_Think(int victim, StatusEffect Apply_MasterStatusEffec
 	if(!b_ThisWasAnNpc[victim])
 		return;
 	
-	ApplyStatusEffect(victim, victim, "Stalker Prefix Nerf", 1.0);
-	ApplyStatusEffect(victim, victim, "Anti-Waves", 1.0);
+	ApplyStatusEffect(victim, victim, "Stalker Prefix Nerf", 10.0);
+	ApplyStatusEffect(victim, victim, "Anti-Waves", 10.0);
+	
+	RequestFrame(RemoveAllNonStalkerPrefix, EntIndexToEntRef(victim));
 }
 
 void RemoveAllNonStalkerPrefix(int ref)
@@ -11103,7 +11107,7 @@ void CallOfHeartBroken_Start(int victim, StatusEffect Apply_MasterStatusEffect, 
 	//
 	//no downs
 	i_AmountDowned[victim] = 55;
-	if(OwnerAttach == -1 || !IsEntityAlive(OwnerAttach))
+	if(OwnerAttach == -1 || !IsEntityAlive(OwnerAttach, _, true))
 	{
 		SDKHooks_TakeDamage(victim, victim, victim, 99999.0, DMG_TRUEDAMAGE, _, _, _, true);
 		ForcePlayerSuicide(victim);
@@ -11945,20 +11949,6 @@ float EgoLastman_DamageDealFunc(int attacker, int victim, StatusEffect Apply_Mas
 	return 0.3;
 }
 
-
-static void StalkerCheckRemove(int entity, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect)
-{
-	if(Apply_StatusEffect.DataForUse > GetGameTime())
-	{
-		return;
-	}
-	int ArrayPosition = E_AL_StatusEffects[entity].FindValue(Apply_StatusEffect.BuffIndex, E_StatusEffect::BuffIndex);
-	Apply_StatusEffect.DataForUse = GetGameTime() + 0.5;
-	E_AL_StatusEffects[entity].SetArray(ArrayPosition, Apply_StatusEffect);
-	RequestFrame(RemoveAllNonStalkerPrefix, EntIndexToEntRef(entity));
-
-}
-
 void Gore_Prefix_End(int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect)
 {
 	if (!b_ThisWasAnNpc[victim] || IsEntityAlive(victim))
@@ -11978,6 +11968,14 @@ void Gore_TakeDamageAttackerPost(int attacker, int victim, float damage, StatusE
 	Apply_StatusEffect.DataForUse = GetGameTime() + 0.35;
 	E_AL_StatusEffects[victim].SetArray(ArrayPosition, Apply_StatusEffect);
 	Npc_DoGibLogic(victim, 1.0, true);
+}
+
+void AlephPrefix_End(int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect)
+{
+	if (!b_ThisWasAnNpc[victim] || !IsEntityAlive(victim))
+		return;
+	
+	RemoveSpecificBuff(victim, "Infinite Will");
 }
 
 void Aleph_TakeDamageAttackerPost(int attacker, int victim, float damage, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int damagetype)
@@ -12160,7 +12158,7 @@ void StatusEffects_IndexNurseFather()
 	StatusEffect_AddGlobal(data);
 	
 	strcopy(data.BuffName, sizeof(data.BuffName), "Furioso Ability");
-	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "ℱ");
+	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "");
 	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), ""); //dont display above head, so empty
 	data.DamageDealMulti			= 0.0;
 	data.Positive 					= true;
@@ -12168,7 +12166,9 @@ void StatusEffects_IndexNurseFather()
 	data.ElementalLogic				= true;
 	data.Slot						= 0; //0 means ignored
 	data.SlotPriority				= 0;
-	data.HudDisplay_Func 			= Func_FuriosoHud;
+	data.OnBuffStarted				= FuriosoAbilityStart;
+	data.OnBuffStoreRefresh			= FuriosoAbilityStart;
+	data.OnBuffEndOrDeleted			= FuriosoAbilityEnd;
 	StatusEffect_AddGlobal(data);
 
 	strcopy(data.BuffName, sizeof(data.BuffName), "Karmic Consequence");
@@ -12177,6 +12177,18 @@ void StatusEffects_IndexNurseFather()
 	data.DamageDealMulti			= 0.9;
 	data.DamageTakenMulti			= 0.25;
 	data.Positive 					= false;
+	data.ShouldScaleWithPlayerCount = false;
+	data.ElementalLogic				= true;
+	data.Slot						= 0; //0 means ignored
+	data.SlotPriority				= 0;
+	StatusEffect_AddGlobal(data);
+
+	strcopy(data.BuffName, sizeof(data.BuffName), "Comfort in Hard Times");
+	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "^^");
+	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), ""); //dont display above head, so empty
+	data.DamageDealMulti			= 0.05;
+	data.DamageTakenMulti			= 0.95;
+	data.Positive 					= true;
 	data.ShouldScaleWithPlayerCount = false;
 	data.ElementalLogic				= true;
 	data.Slot						= 0; //0 means ignored
@@ -12326,7 +12338,7 @@ static void GraceStart(int victim, StatusEffect Apply_MasterStatusEffect, E_Stat
 
 	float flPos[3];
 	GetEntPropVector(victim, Prop_Data, "m_vecAbsOrigin", flPos);
-	int ParticleEffect = ParticleEffectAt_Parent(flPos, "utaunt_poweraura_blue_base", victim, "", {0.0,0.0,0.0});
+	int ParticleEffect = ParticleEffectAt_Parent(flPos, "utaunt_roses_blue_003", victim, "", {0.0,0.0,0.0});
 	if(victim <= MaxClients)
 		AddEntityToThirdPersonTransitMode(victim, ParticleEffect);
 	
@@ -12339,4 +12351,35 @@ static void GraceEnd(int victim, StatusEffect Apply_MasterStatusEffect, E_Status
 	if(!IsValidEntity(Apply_StatusEffect.WearableUse))
 		return;
 	RemoveEntity(Apply_StatusEffect.WearableUse);
+}
+
+
+void StatusEffects_Gunsaw()
+{
+	StatusEffect data;
+	data.Blank();
+
+	strcopy(data.BuffName, sizeof(data.BuffName), "Shrapnel");
+	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "*");
+	data.Positive 					= false;
+	data.ShouldScaleWithPlayerCount = false;
+	data.OnTakeDamage_TakenFunc		= ShrapnelDamageTaken;
+	StatusEffect_AddGlobal(data);
+}
+
+static float ShrapnelDamageTaken(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int damagetype, float damage)
+{
+	if(Apply_StatusEffect.TotalOwners[attacker])
+		StartBleedingTimer(victim, attacker, damage * 0.15, 6, -1, damagetype);
+
+	return 1.0;
+}
+static void FuriosoAbilityStart(int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect)
+{
+	IgniteTargetEffect(victim, FIRSTPERSON, victim, 2);
+}
+static void FuriosoAbilityEnd(int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect)
+{
+	ExtinguishTarget(victim);
+
 }

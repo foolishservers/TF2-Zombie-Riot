@@ -382,7 +382,7 @@ void WeaponZealot_OnTakeDamage(int attacker, int victim, float &damage)
 	//Anti delay
 	if(Zealot_BonusMeleeDamageDuration[attacker] > GetGameTime())
 	{
-		Zealot_BonusMeleeDamage[attacker] += 0.05;
+		Zealot_BonusMeleeDamage[attacker] += 0.1;
 		if(Zealot_BonusMeleeDamage[attacker] >= 1.5)
 		{	
 			Zealot_BonusMeleeDamage[attacker] = 1.5;
@@ -654,9 +654,9 @@ public void Client_ZealotThink(int client)
 
 	MaxDodgeCount[client]--;
 
-	//Punishment for dodging forwards.
-	if((buttons & IN_FORWARD))
-		MaxDodgeCount[client]--;
+//	//Punishment for dodging forwards.
+//	if((buttons & IN_FORWARD))
+//		MaxDodgeCount[client]--;
 	static float anglesB[3];
 	GetClientEyeAngles(client, anglesB);
 	anglesB[1] += AngleDeviate;

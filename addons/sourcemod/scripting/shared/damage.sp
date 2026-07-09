@@ -1099,6 +1099,8 @@ static float Player_OnTakeDamage_Equipped_Weapon_Logic(int victim, int &attacker
 		}
 		default: Weapon_AddonsCustom_PlayerTakeDamage(victim, attacker, damage, equipped_weapon, damagePosition, damagetype);
 	}
+
+	Gunsaw_Monologue_OnTakeDamage(victim, damage);
 	return damage;
 }
 
