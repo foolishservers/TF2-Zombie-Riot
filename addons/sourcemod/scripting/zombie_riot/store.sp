@@ -3471,10 +3471,9 @@ static void MenuPage(int client, int section)
 				Format(buffer, sizeof(buffer), "%T\n \n%s\n%T\n%s ", "TF2: Zombie Riot", client, buf, "Store Discount", client, info.Custom_Name);
 			}				
 			
+			// 원활한 한국어 지원을 위해 무기 설명은 따로 빼냄.
 			Config_CreateDescription(ItemArchetype[info.WeaponArchetype], info.Classname, info.Attrib, info.Value, info.Attribs, buffer, sizeof(buffer));
-			
-			TranslateItemName(client, info.Desc, info.Rogue_Desc, info.Rogue_Desc, sizeof(info.Rogue_Desc));
-			menu.SetTitle("%s\n%s\n ", buffer, info.Rogue_Desc);
+			menu.SetTitle("%s\n ", buffer);
 			
 			if(NPCOnly[client] == 2 || NPCOnly[client] == 3)
 			{
@@ -3679,6 +3678,24 @@ static void MenuPage(int client, int section)
 						}
 						Format(buffer, sizeof(buffer), "%T", tinker ? "View Modifiers" : (info.ExtraDesc[0] ? "Extra Description" : "Tags & Author"), client);
 
+						menu.AddItem(buffer2, buffer);
+					}
+					if(info.Desc[0])
+					{
+						for(int Repeatuntill; Repeatuntill < 10; Repeatuntill++)
+						{
+							if(Repeat_Filler < 6)
+							{
+								Repeat_Filler ++;
+								menu.AddItem(buffer2, "-", ITEMDRAW_DISABLED);
+							}
+							else
+							{
+								Repeat_Filler ++;
+								break;
+							}
+						}
+						Format(buffer, sizeof(buffer), "%T", "Item Description", client);
 						menu.AddItem(buffer2, buffer);
 					}
 				}
@@ -5204,6 +5221,11 @@ public int Store_MenuItemInt(Menu menu, MenuAction action, int client, int choic
 
 					Blacksmith_ExtraDesc(client, index);
 					GemCrafter_ExtraDesc(client, index);
+				}
+				case 6:	// Item Description
+				{
+					Store_ItemDescriptionMenu(client, index);
+					return 0;
 				}
 			}
 			MenuPage(client, index);
@@ -8066,4 +8088,48 @@ void Store_HandleAutoPapList()
 			}
 		}
 	}
+}
+
+static void Store_ItemDescriptionMenu(int client, int section)
+{
+	static Item item;
+	static ItemInfo info;
+	StoreItems.GetArray(section, item);
+	
+	int level = item.Owned[client] - 1;
+	if(item.ParentKit || level < 0 || NPCOnly[client] == 2 || NPCOnly[client] == 3)
+		level = 0;
+	
+	item.GetItemInfo(level, info);
+	
+	TranslateItemName(client, info.Desc, info.Rogue_Desc, info.Rogue_Desc, sizeof(info.Rogue_Desc));
+	
+	Menu menu = new Menu(Store_MenuItemDescription);
+	char name[16];
+	IntToString(section, name, sizeof(name));
+	menu.AddItem(name, name, ITEMDRAW_IGNORE); // choice 0 슬롯에 section 저장 (뒤로가기용)
+	menu.SetTitle("%s\n ", info.Rogue_Desc);
+	menu.ExitBackButton = true;
+	menu.Display(client, MENU_TIME_FOREVER);
+}
+
+public int Store_MenuItemDescription(Menu menu, MenuAction action, int client, int choice)
+{
+	switch(action)
+	{
+		case MenuAction_End:
+		{
+			delete menu;
+		}
+		case MenuAction_Cancel:
+		{
+			if(choice == MenuCancel_ExitBack)
+			{
+				char name[16];
+				menu.GetItem(0, name, sizeof(name));
+				MenuPage(client, StringToInt(name));
+			}
+		}
+	}
+	return 0;
 }
