@@ -3469,10 +3469,8 @@ static void MenuPage(int client, int section)
 			else
 			{
 				Format(buffer, sizeof(buffer), "%T\n \n%s\n%T\n%s ", "TF2: Zombie Riot", client, buf, "Store Discount", client, info.Custom_Name);
-			}				
+			}
 			
-			// 원활한 한국어 지원을 위해 무기 설명은 따로 빼냄.
-			Config_CreateDescription(ItemArchetype[info.WeaponArchetype], info.Classname, info.Attrib, info.Value, info.Attribs, buffer, sizeof(buffer));
 			menu.SetTitle("%s\n ", buffer);
 			
 			if(NPCOnly[client] == 2 || NPCOnly[client] == 3)
@@ -3686,7 +3684,7 @@ static void MenuPage(int client, int section)
 						{
 							if(Repeat_Filler < 6)
 							{
-								Repeat_Filler ++;
+								Repeat_Filler++;
 								menu.AddItem(buffer2, "-", ITEMDRAW_DISABLED);
 							}
 							else
@@ -8092,6 +8090,9 @@ void Store_HandleAutoPapList()
 
 static void Store_ItemDescriptionMenu(int client, int section)
 {
+	if(!IsValidClient(client))
+		return;
+	
 	static Item item;
 	static ItemInfo info;
 	StoreItems.GetArray(section, item);
@@ -8101,14 +8102,17 @@ static void Store_ItemDescriptionMenu(int client, int section)
 		level = 0;
 	
 	item.GetItemInfo(level, info);
-	
+	// 원활한 한국어 지원을 위해 무기 설명은 따로 빼냄.
+	char buffer[512];
+	Config_CreateDescription(ItemArchetype[info.WeaponArchetype], info.Classname, info.Attrib, info.Value, info.Attribs, buffer, sizeof(buffer));
 	TranslateItemName(client, info.Desc, info.Rogue_Desc, info.Rogue_Desc, sizeof(info.Rogue_Desc));
 	
 	Menu menu = new Menu(Store_MenuItemDescription);
-	char name[16];
-	IntToString(section, name, sizeof(name));
-	menu.AddItem(name, name, ITEMDRAW_IGNORE); // choice 0 슬롯에 section 저장 (뒤로가기용)
-	menu.SetTitle("%s\n ", info.Rogue_Desc);
+	CancelClientMenu(client);
+	SetStoreMenuLogic(client, false);
+	
+	menu.SetTitle("%s\n%s\n ", buffer, info.Rogue_Desc);
+	menu.AddItem("0", "-", ITEMDRAW_NOTEXT);
 	menu.ExitBackButton = true;
 	menu.Display(client, MENU_TIME_FOREVER);
 }
@@ -8125,9 +8129,7 @@ public int Store_MenuItemDescription(Menu menu, MenuAction action, int client, i
 		{
 			if(choice == MenuCancel_ExitBack)
 			{
-				char name[16];
-				menu.GetItem(0, name, sizeof(name));
-				MenuPage(client, StringToInt(name));
+				MenuPage(client, CurrentMenuItem[client]);
 			}
 		}
 	}

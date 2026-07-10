@@ -75,7 +75,7 @@
 		"en"		" \n---Starter Store---\n[Big Sale] in this store!\nStarter Cash: {1}"
 		"ru"		" \nНачальный магазин\n \nCash: {1}"
 		"it"		" \n---Negozio Iniziale---\n[Grandi saldi] in questo negozio! \nContanti Iniziali: {1}"
-		"ko"		" \n---초기 상점---\n이 상점은 [대할인] 중!\n초기 자금: {1}"
+		"ko"		" \n---초기 상점---\n초기 자금: {1}"
 	}
 	"Preview Mode Pap"
 	{
@@ -2340,7 +2340,7 @@
 		"fr" 		"Zombie Riot\nAppuyez TAB pour fermer le menu!\nAppuyez TAB + (H) pour afficher votre arme!"
 		"chi"		"TF2：僵尸暴动\n按Tab开关菜单\nTAB+(H)显示当前武器！"
 		"it"		"Zombie Riot\nPremi di nuovo TAB per chiudere il menu!\nTieni premuto TAB + (H) per mostrare l'arma corrente!"
-		"ko" 		"TF2: 좀비 라이엇\n탭을 다시 눌러 메뉴를 닫으세요!\n상점 메뉴에서 (H) 를 누르면 현재 무기가 표시됩니다!"
+		"ko" 		"Zombie Riot\n탭을 다시 눌러 메뉴를 닫으세요!"
 	}
 	"StatusEffectList"
 	{
@@ -2373,7 +2373,7 @@
 	{
 		"en" 		"The World Machine's Items"
 		"it"		"Gli articoli della Macchina del Mondo"
-		"ko" 		"세상 기계의 아이템"
+		"ko" 		"월드 머신의 아이템"
 	}
 	"Credits After Selling"
 	{
@@ -2416,7 +2416,7 @@
 		"chi"       "所有商品在这都会打8折 {$}\n一件物品打7折 {$$}"
 		"it"		"Tutti gli articoli sono scontati del 10％ qui! {$}\nUn articolo è scontato del 15%! {$$}"
 		"ko"		"$ 표시는 가격이 10％ 쌉니다!\n$$ 표시는 가격이 15％ 쌉니다!"
-	}	
+	}
 	"Your loadout has been equipped!"
 	{
 		"en"		"Your loadout has been equipped!"
