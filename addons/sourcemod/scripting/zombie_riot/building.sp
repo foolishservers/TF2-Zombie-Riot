@@ -345,7 +345,7 @@ static void BuildingMenu(int client)
 	
 	int metal = GetAmmo(client, Ammo_Metal);
 	int cash = Store_GetPlayerCash(client, false);
-	float multi = Object_GetMaxHealthMulti(client);
+	//float multi = Object_GetMaxHealthMulti(client);
 	float gameTime = GetGameTime();
 	bool ducking = view_as<bool>(GetClientButtons(client) & IN_DUCK);
 

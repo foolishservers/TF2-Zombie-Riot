@@ -784,6 +784,7 @@ void ZR_PluginStart()
 	LoadTranslations("zombieriot.phrases.zombienames");
 	LoadTranslations("zombieriot.phrases.npctalk");
 	LoadTranslations("zombieriot.phrases.foolishservers");
+	LoadNPCTalkTranslations();
 	
 	RegServerCmd("zr_reloadnpcs", OnReloadCommand, "Reload NPCs");
 	RegServerCmd("sm_reloadnpcs", OnReloadCommand, "Reload NPCs", FCVAR_HIDDEN);
@@ -3955,4 +3956,9 @@ bool ZR_AllowLastman()
 void WeaponUpdateDo()
 {
 	RedMist_ResetAbnorms();
+}
+
+void LoadNPCTalkTranslations()
+{
+	LoadTranslations("zombieriot.phrases.silvestertalk");
 }

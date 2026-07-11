@@ -1,13 +1,8 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-
 #define Silvester_BASE_RANGED_SCYTHE_DAMGAE 13.0
 #define Silvester_LASER_THICKNESS 25
-
-
-
-
 
 static bool b_SilvLine[MAXENTITIES];
 static bool b_SilvesterAttackSame[MAXENTITIES];
@@ -351,19 +346,19 @@ methodmap Silvester < CClotBody
 			{
 				case 0:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Sorry that im late!");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Wave30_1");
 				}
 				case 1:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Had to do some errands with {blue}Sensal{default}.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Wave30_2");
 				}
 				case 2:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Here i am!");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Wave30_3");
 				}
 				case 3:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Starting easy? Got it!");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Wave30_4");
 				}
 			}
 		}
@@ -374,19 +369,19 @@ methodmap Silvester < CClotBody
 			{
 				case 0:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Just like old times, eh Mercs?");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Wave45_1");
 				}
 				case 1:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Its good to practice, i shouldnt slack off.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Wave45_2");
 				}
 				case 2:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Sorry {lightblue}Nemal{default} I should take this more seriously.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Wave45_3");
 				}
 				case 3:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Wish {darkblue}Waldch{default} would come with train with us, but ever since the {crimson}hitman{default} is gone, he can finally do work.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Wave45_4");
 				}
 			}
 		}
@@ -397,19 +392,19 @@ methodmap Silvester < CClotBody
 			{
 				case 0:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Here it is.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Final_1");
 				}
 				case 1:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Final Challange.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Final_2");
 				}
 				case 2:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "No more holding back.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Final_3");
 				}
 				case 3:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Im giving it my all.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Final_4");
 				}
 			}
 		}
@@ -423,19 +418,19 @@ methodmap Silvester < CClotBody
 			{
 				case 0:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Here it is.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Final_1");
 				}
 				case 1:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Final Challange.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Final_2");
 				}
 				case 2:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "No more holding back.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Final_3");
 				}
 				case 3:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Im giving it my all.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Final_4");
 				}
 			}
 		}
@@ -594,7 +589,7 @@ static void Internal_ClotThink(int iNPC)
 		{
 			npc.m_flInTeleportLogic = 0.0;
 			npc.m_flChangeTargetsSilvester -= 3.0;
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Oh damn She is already gone...");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Teleport_Fail");
 			RemoveSpecificBuff(npc.index, "Very Defensive Backup");
 			return;
 		}
@@ -660,23 +655,23 @@ static void Internal_ClotThink(int iNPC)
 				{
 					case 0:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Hold on {lightblue}Nemal{default} i'm coming!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Teleport_Prepare_1");
 					}
 					case 1:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Thinking of taking {lightblue}Nemal{default} out first?");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Teleport_Prepare_2");
 					}
 					case 2:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "{lightblue}Nemal{default}... {darkblue}Waldch{default}... you both are the same i swear!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Teleport_Prepare_3");
 					}
 					case 3:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Rahhh, ill teleport to you wait.");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Teleport_Prepare_4");
 					}
 					case 4:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Here i go !");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Teleport_Prepare_5");
 					}
 				}
 			}
@@ -693,15 +688,15 @@ static void Internal_ClotThink(int iNPC)
 			{
 				case 0:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "You dont beat me, then youll never be able to face the full force of the {purple}void{default}.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_LastMann_1");
 				}
 				case 1:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Not beating me means no beating the {purple}void{default}.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_LastMann_2");
 				}
 				case 2:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Use that adrenaline against me, come on!");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_LastMann_3");
 				}
 			}
 		}
@@ -717,15 +712,15 @@ static void Internal_ClotThink(int iNPC)
 		{
 			case 0:
 			{
-				RaidbossSilvester_NPCTalkMessage(npc.index, "Gotta go, youll win next time.");
+				RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Lose_1");
 			}
 			case 1:
 			{
-				RaidbossSilvester_NPCTalkMessage(npc.index, "Atleast you fought, and didnt run!");
+				RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Lose_2");
 			}
 			case 2:
 			{
-				RaidbossSilvester_NPCTalkMessage(npc.index, "I can try to go easier next time, but that wont help with training.");
+				RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Lose_3");
 			}
 		}
 		return;
@@ -749,7 +744,7 @@ static void Internal_ClotThink(int iNPC)
 			{
 				RemoveEntity(npc.m_iWearable8);
 			}
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Youre taking to long to hurt me, ill try harder myself then.");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Force_Transform");
 			npc.m_flSilvesterTransformRegardless = FAR_FUTURE;
 			npc.i_GunMode = 0;
 		}
@@ -773,15 +768,15 @@ static void Internal_ClotThink(int iNPC)
 		{
 			case 0:
 			{
-				RaidbossSilvester_NPCTalkMessage(npc.index, "Sorry, too slow.");
+				RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_TimeOver_1");
 			}
 			case 1:
 			{
-				RaidbossSilvester_NPCTalkMessage(npc.index, "Well thats a boring end.");
+				RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_TimeOver_2");
 			}
 			case 2:
 			{
-				RaidbossSilvester_NPCTalkMessage(npc.index, "If you would stop running, this wouldnt happen.");
+				RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_TimeOver_3");
 			}
 		}
 		BlockLoseSay = true;
@@ -898,7 +893,7 @@ static void Internal_ClotThink(int iNPC)
 					npc.SetActivity("ACT_MP_STAND_MELEE_ALLCLASS");
 					npc.m_flSpeed = 320.0;
 					npc.m_bAllowBackWalking = false;
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Oh you seem to be alone, i'll wait.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_SoloWait");
 					b_NpcIsInvulnerable[npc.index] = true; //Special huds for invul targets
 				}	
 			}
@@ -912,7 +907,7 @@ static void Internal_ClotThink(int iNPC)
 					npc.SetActivity("ACT_MP_STAND_MELEE");
 					npc.m_flSpeed = 320.0;
 					npc.m_bAllowBackWalking = false;
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Oh you seem to be alone, i'll wait.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_SoloWait");
 					b_NpcIsInvulnerable[npc.index] = true; //Special huds for invul targets
 				}				
 			}
@@ -927,7 +922,7 @@ static void Internal_ClotThink(int iNPC)
 	{
 		if(!b_SilvLine[npc.index])
 		{
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Fighting me alone now? Guess ill give it extra.");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_SoloFight");
 			b_SilvLine[npc.index] = true;
 			RaidModeScaling *= 1.15;
 		}
@@ -1061,7 +1056,7 @@ static Action Internal_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 				RemoveEntity(npc.m_iWearable8);
 			}
 			SetEntProp(npc.index, Prop_Data, "m_iHealth", ReturnEntityMaxHealth(npc.index)/2);
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Well, looks like i gotta take off the training wheels.");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Anger_1");
 			npc.m_flSilvesterTransformRegardless = FAR_FUTURE;
 			npc.i_GunMode = 0;
 			damage = 0.0; //So he doesnt get oneshot somehow, atleast once.
@@ -1084,7 +1079,7 @@ static Action Internal_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 			MakeObjectIntangeable(npc.index);
 			SetEntProp(npc.index, Prop_Data, "m_iHealth", 1);
 			
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Not in the face! ah... fine.");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Anger_2");
 
 			damage = 0.0; //So he doesnt get oneshot somehow, atleast once.
 			return Plugin_Handled;
@@ -1142,19 +1137,19 @@ static void Internal_NPCDeath(int entity)
 	{
 		case 0:
 		{
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Welp i gotta help {blue}Sensal{default} again, cya!");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Win_1");
 		}
 		case 1:
 		{
-			RaidbossSilvester_NPCTalkMessage(npc.index, "I have some stuff to do, exhausted anyways currently, till later.");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Win_2");
 		}
 		case 2:
 		{
-			RaidbossSilvester_NPCTalkMessage(npc.index, "You guys pack a punch!");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Win_3");
 		}
 		case 3:
 		{
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Remember when i was infected? I still thank you for helping me!");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Win_4");
 		}
 	}
 
@@ -1541,7 +1536,7 @@ bool SilvesterTransformation(Silvester npc, bool NemalAssistance)
 			ApplyStatusEffect(npc.index, npc.index, "Defensive Backup", 5.0);
 			npc.m_flDoingAnimation = 0.0;
 
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Here's my scythe!");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_SpecialAttack");
 			if(NemalAssistance)
 			{
 				CPrintToChatAll("{lightblue}네말{default}: 나도 열심히 노력해야겠네. 아니면... 그냥 노력을 안 해야되나?");
@@ -1594,22 +1589,32 @@ static void Silvester_Weapon_Lines(Silvester npc, int client)
 
 	bool valid = true;
 	char Text_Lines[255];
-
 	Text_Lines = "";
-
-
+	
 	switch(i_CustomWeaponEquipLogic[weapon])
 	{
+		case WEAPON_SENSAL_SCYTHE, WEAPON_SENSAL_SCYTHE_PAP_1, WEAPON_SENSAL_SCYTHE_PAP_2, WEAPON_SENSAL_SCYTHE_PAP_3:
+		{
+			switch(GetRandomInt(0,1))
+			{
+				case 0: Format(Text_Lines, sizeof(Text_Lines), "Silvester_Sensal_Scythe_1");
+		  		case 1: Format(Text_Lines, sizeof(Text_Lines), "%T", "Silvester_Sensal_Scythe_2", client, client); //IT ACTUALLY WORKS, LMFAO
+			}	
+		}
 		
-		case WEAPON_SENSAL_SCYTHE,WEAPON_SENSAL_SCYTHE_PAP_1,WEAPON_SENSAL_SCYTHE_PAP_2,WEAPON_SENSAL_SCYTHE_PAP_3:
-		 switch(GetRandomInt(0,1)) 	{case 0: Format(Text_Lines, sizeof(Text_Lines), "그건 그 사람 무기인데. 그래도 원 주인이 너보단 더 잘 쓸 것 같은데.");
-		  							case 1: Format(Text_Lines, sizeof(Text_Lines), "음? {blue}센살{default}이 너한테 그걸 줬다고, {gold}%N{default}? 세상에.", client);}	//IT ACTUALLY WORKS, LMFAO
-		case WEAPON_FUSION,WEAPON_FUSION_PAP1,WEAPON_FUSION_PAP2, WEAPON_NEARL: switch(GetRandomInt(0,1)) 		{case 0: Format(Text_Lines, sizeof(Text_Lines), "그거 내 무기인거 알고 있는거지?");
-		 							case 1: Format(Text_Lines, sizeof(Text_Lines), "야! 그건 내 무기잖아!");}
-		case WEAPON_KIT_BLITZKRIEG_CORE:  Format(Text_Lines, sizeof(Text_Lines), "어? 설마 그 미친 기계를 부순거야? 대단한데!");
-		case WEAPON_BOBS_GUN:  Format(Text_Lines, sizeof(Text_Lines), "그 총은 나한테는 아무것도 아니지!");
-		case WEAPON_ANGELIC_SHOTGUN:  Format(Text_Lines, sizeof(Text_Lines), "그거... {lightblue}네말{default}의 총인데...? 음...");
-
+		case WEAPON_FUSION, WEAPON_FUSION_PAP1, WEAPON_FUSION_PAP2, WEAPON_NEARL:
+		{
+			switch(GetRandomInt(0,1))
+			{
+				case 0: Format(Text_Lines, sizeof(Text_Lines), "Silvester_Fusion_1");
+		 		case 1: Format(Text_Lines, sizeof(Text_Lines), "Silvester_Fusion_2");
+			}
+		}
+		
+		case WEAPON_KIT_BLITZKRIEG_CORE:  Format(Text_Lines, sizeof(Text_Lines), "Silvester_Blitzkrieg_Kit");
+		case WEAPON_BOBS_GUN:  Format(Text_Lines, sizeof(Text_Lines), "Silvester_Bobs_Sexy_Gun");
+		case WEAPON_ANGELIC_SHOTGUN:  Format(Text_Lines, sizeof(Text_Lines), "Silvester_Angelica_Shotgunus");
+		
 		default:
 		{
 			valid = false;
@@ -1623,7 +1628,6 @@ static void Silvester_Weapon_Lines(Silvester npc, int client)
 		b_said_player_weaponline[client] = true;
 	}
 }
-
 
 void Nemal_SilvesterApplyEffects(int entity, bool withoutweapon = false)
 {

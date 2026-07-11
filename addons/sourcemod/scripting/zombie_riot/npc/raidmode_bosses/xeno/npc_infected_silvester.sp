@@ -472,15 +472,15 @@ methodmap RaidbossSilvester < CClotBody
 			{
 				case 1:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Is... Is this really where we must change your mind?");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Encounter_Lab_1");
 				}
 				case 2:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Please just turn away!");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Encounter_Lab_2");
 				}
 				case 3:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "This is too risky, we can't let you get any closer!");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Encounter_Lab_3");
 				}
 			}
 		}
@@ -494,7 +494,8 @@ void RaidbossSilvester_NPCTalkMessage(int iNPC, const char[] message, any ...)
 {
 	char buffer[255];
 	VFormat(buffer, sizeof(buffer), message, 3);
-	PrintNPCMessageWithPrefixes(iNPC, "gold", buffer);
+	// PrintNPCMessageWithPrefixes(iNPC, "gold", buffer);
+	NPC_TalkMessageWithTranslationCheck(iNPC, "gold", buffer);
 }
 
 static void Internal_ClotThink(int iNPC)
@@ -514,15 +515,15 @@ static void Internal_ClotThink(int iNPC)
 				{
 					case 0:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Give up and turn yourself in.");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_LastMann_1");
 					}
 					case 1:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Ready to listen to us?");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_LastMann_2");
 					}
 					case 2:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Maybe you just hate us?");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_LastMann_3");
 					}
 				}
 			}
@@ -532,15 +533,15 @@ static void Internal_ClotThink(int iNPC)
 				{
 					case 0:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Death is your only salvation!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_LastMann_Lab_1");
 					}
 					case 1:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Let me kill you, you're already infected anyway!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_LastMann_Lab_2");
 					}
 					case 2:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "******* like you NEVER listen, do you?");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_LastMann_Lab_3");
 					}
 				}				
 			}
@@ -653,23 +654,23 @@ static void Internal_ClotThink(int iNPC)
 					case 1:
 					{
 						if(!XenoExtraLogic())
-							RaidbossSilvester_NPCTalkMessage(npc.index, "Come here!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_1");
 						else
-							RaidbossSilvester_NPCTalkMessage(npc.index, "Just step away from here!!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_Lab_1");
 					}
 					case 2:
 					{
 						if(!XenoExtraLogic())
-							RaidbossSilvester_NPCTalkMessage(npc.index, "That's it!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_2");
 						else
-							RaidbossSilvester_NPCTalkMessage(npc.index, "I don't want to get infected again..!!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_Lab_2");
 					}
 					case 3:
 					{
 						if(!XenoExtraLogic())
-							RaidbossSilvester_NPCTalkMessage(npc.index, "Meet the real deal!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_3");
 						else
-							RaidbossSilvester_NPCTalkMessage(npc.index, "Leave and turn back. This place is too dangerous for you!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_Lab_3");
 					}
 				}
 			}
@@ -680,33 +681,31 @@ static void Internal_ClotThink(int iNPC)
 					case 1:
 					{
 						if(!XenoExtraLogic())
-							RaidbossSilvester_NPCTalkMessage(npc.index, "It's over you little..!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_NoWaldch_1");
 						else
-							RaidbossSilvester_NPCTalkMessage(npc.index, "No no no.... I can't not again..");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_NoWaldch_Lab_1");
 					}
 					case 2:
 					{
 						if(!XenoExtraLogic())
-							RaidbossSilvester_NPCTalkMessage(npc.index, "If you won't listen, I'll have to erase you before you become one of them!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_NoWaldch_2");
 						else
-							RaidbossSilvester_NPCTalkMessage(npc.index, "So many keep falling for this!!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_NoWaldch_Lab_2");
 					}
 					case 3:
 					{
 						if(!XenoExtraLogic())
-							RaidbossSilvester_NPCTalkMessage(npc.index, "GO TO HELL YOU MERCS!!!");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_NoWaldch_3");
 						else
-							RaidbossSilvester_NPCTalkMessage(npc.index, "...");
+							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_NoWaldch_Lab_3");
 					}
 				}
 			}
-
-				
+			
 			SetVariantColor(view_as<int>({255, 255, 0, 200}));
 			AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
 			npc.PlayAngerSoundPassed();
-
-
+			
 			npc.m_flTimebeforekamehameha = 0.0;
 			npc.m_flNextRangedSpecialAttack = 0.0;			
 			npc.m_flNextRangedAttack = 0.0;		
@@ -866,30 +865,30 @@ static void Internal_ClotThink(int iNPC)
 				case 1:
 				{
 					if(!XenoExtraLogic())
-						RaidbossSilvester_NPCTalkMessage(npc.index, "N-No!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_1");
 					else
-						RaidbossSilvester_NPCTalkMessage(npc.index, "{darkblue}Waldch{default}..?");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_Lab_1");
 				}
 				case 2:
 				{
 					if(!XenoExtraLogic())
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Why him?? Attack me you bunch of cowards!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_2");
 					else
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Don't faint, I'm here, I'm here for you!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_Lab_2");
 				}
 				case 3:
 				{
 					if(!XenoExtraLogic())
-						RaidbossSilvester_NPCTalkMessage(npc.index, "We're gonna have to do this the hard way.");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_3");
 					else
-						RaidbossSilvester_NPCTalkMessage(npc.index, "... I won't let you get away with this.");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_Lab_3");
 				}
 				case 4:
 				{
 					if(!XenoExtraLogic())
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Hang on, I've got you.");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_4");
 					else
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Please rest, I'll take them out.");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_Lab_4");
 				}
 			}
 		}
@@ -1379,7 +1378,7 @@ static Action Internal_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 			RemoveNpcFromEnemyList(npc.index);
 			GiveProgressDelay(28.0);
 			damage = 0.0;
-			RaidbossSilvester_NPCTalkMessage(npc.index, "WHY DO YOU REFUSE TO LISTEN TO OUR WARNINGS!?");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Death");
 			return Plugin_Handled;
 		}
 	}
@@ -1412,19 +1411,19 @@ public void RaidbossSilvester_OnTakeDamagePost(int victim, int attacker, int inf
 				{
 					case 1:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "You think that was my all?");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Anger_1");
 					}
 					case 2:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "You have no idea what I'm capable of...");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Anger_2");
 					}
 					case 3:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "You think this is it?");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Anger_3");
 					}
 					case 4:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "I'm not close to being done yet!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Anger_4");
 					}
 				}
 			}
@@ -1434,19 +1433,19 @@ public void RaidbossSilvester_OnTakeDamagePost(int victim, int attacker, int inf
 				{
 					case 1:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "You're blinded by your own arrogance!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_NoWaldch_Anger_1");
 					}
 					case 2:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "You think I'm weak alone?!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_NoWaldch_Anger_2");
 					}
 					case 3:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "You refuse to listen and thus, pay the price!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_NoWaldch_Anger_3");
 					}
 					case 4:
 					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "I'll avenge you {darkblue}Waldch{default}!");
+						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_NoWaldch_Anger_4");
 					}
 				}
 			}
@@ -2016,9 +2015,9 @@ bool SharedGiveupSilvester(int entity, int entity2)
 				{
 					ReviveAll(true);
 					if(!XenoExtraLogic())
-						RaidbossSilvester_NPCTalkMessage(entity, "We tried to help, this will be painful for you.");
+						RaidbossSilvester_NPCTalkMessage(entity, "SilvesterXeno_Win_1");
 					else
-						RaidbossSilvester_NPCTalkMessage(entity, "You never listen. I will not assist you anymore.");
+						RaidbossSilvester_NPCTalkMessage(entity, "SilvesterXeno_Win_Lab_1");
 					i_TalkDelayCheck += 1;
 				}
 				case 1:
@@ -2039,17 +2038,17 @@ bool SharedGiveupSilvester(int entity, int entity2)
 				case 3:
 				{
 					if(!XenoExtraLogic())
-						RaidbossSilvester_NPCTalkMessage(entity, "Good luck.");
+						RaidbossSilvester_NPCTalkMessage(entity, "SilvesterXeno_Win_2");
 					else
-						RaidbossSilvester_NPCTalkMessage(entity, "I REFUSE to let this happen again to us two, don't say I didnt warn you!");
-
+						RaidbossSilvester_NPCTalkMessage(entity, "SilvesterXeno_Win_Lab_2");
+					
 					i_TalkDelayCheck = 5;
 					for (int client = 1; client <= MaxClients; client++)
 					{
 						if(IsValidClient(client) && GetClientTeam(client) == 2 && TeutonType[client] != TEUTON_WAITING && PlayerPoints[client] > 500)
 						{
 							Items_GiveNamedItem(client, "Head Equipped Blue Goggles");
-							CPrintToChat(client, "{default}그들에게서 약간의 도움을 받았습니다. 당신이 얻은것: {blue}''머리에 장착하는 파란 고글''{default}!");
+							CPrintToChat(client, "%T", "SilvesterXeno_Trophies", client);
 						}
 					}
 				}
@@ -2514,11 +2513,11 @@ public void Raidmode_Shared_Xeno_Duo(int entity)
 	{
 		if(XenoExtraLogic())
 		{
-			RaidbossSilvester_NPCTalkMessage(entity, "You're too stubborn for your own good.");
+			RaidbossSilvester_NPCTalkMessage(entity, "SilvesterXeno_Lose_Lab");
 		}
 		else
 		{
-			RaidbossSilvester_NPCTalkMessage(entity, "Maybe we should've thought of a better way to warn them.");
+			RaidbossSilvester_NPCTalkMessage(entity, "SilvesterXeno_Lose");
 		}
 		return;
 	}
@@ -2585,22 +2584,34 @@ static void Internal_Weapon_Lines(RaidbossSilvester npc, int client)
 
 	switch(i_CustomWeaponEquipLogic[weapon])
 	{
+		case WEAPON_SENSAL_SCYTHE, WEAPON_SENSAL_SCYTHE_PAP_1, WEAPON_SENSAL_SCYTHE_PAP_2, WEAPON_SENSAL_SCYTHE_PAP_3:
+		{
+			switch(GetRandomInt(0,1))
+			{
+				case 0: Format(Text_Lines, sizeof(Text_Lines), "Silvester_Sensal_Scythe_1");
+		  		case 1: Format(Text_Lines, sizeof(Text_Lines), "%T", "Silvester_Sensal_Scythe_2", client, client); //IT ACTUALLY WORKS, LMFAO
+			}	
+		}
 		
-		case WEAPON_SENSAL_SCYTHE,WEAPON_SENSAL_SCYTHE_PAP_1,WEAPON_SENSAL_SCYTHE_PAP_2,WEAPON_SENSAL_SCYTHE_PAP_3:
-		 switch(GetRandomInt(0,1)) 	{case 0: Format(Text_Lines, sizeof(Text_Lines), "You have his weapon yet none of his strength.");
-		  							case 1: Format(Text_Lines, sizeof(Text_Lines), "{blue}Sensal{default} gave you this {gold}%N{default}? can't be.", client);}	//IT ACTUALLY WORKS, LMFAO
-		case WEAPON_FUSION,WEAPON_FUSION_PAP1,WEAPON_FUSION_PAP2, WEAPON_NEARL: switch(GetRandomInt(0,1)) 		{case 0: Format(Text_Lines, sizeof(Text_Lines), "You're a bunch of little thieves aren't you?");
-		 							case 1: Format(Text_Lines, sizeof(Text_Lines), "Hey thats my weapon!");}
-		case WEAPON_KIT_BLITZKRIEG_CORE:  Format(Text_Lines, sizeof(Text_Lines), "Oh you beat him up? Thats good.");
-		case WEAPON_BOBS_GUN:  Format(Text_Lines, sizeof(Text_Lines), "That gun ain't got ANYTHING ON ME!!!");
-		case WEAPON_ANGELIC_SHOTGUN:  Format(Text_Lines, sizeof(Text_Lines), "{lightblue}Her{default} gun...? uh...");
-
+		case WEAPON_FUSION, WEAPON_FUSION_PAP1, WEAPON_FUSION_PAP2, WEAPON_NEARL:
+		{
+			switch(GetRandomInt(0,1))
+			{
+				case 0: Format(Text_Lines, sizeof(Text_Lines), "Silvester_Fusion_1");
+		 		case 1: Format(Text_Lines, sizeof(Text_Lines), "Silvester_Fusion_2");
+			}
+		}
+		
+		case WEAPON_KIT_BLITZKRIEG_CORE:  Format(Text_Lines, sizeof(Text_Lines), "Silvester_Blitzkrieg_Kit");
+		case WEAPON_BOBS_GUN:  Format(Text_Lines, sizeof(Text_Lines), "Silvester_Bobs_Sexy_Gun");
+		case WEAPON_ANGELIC_SHOTGUN:  Format(Text_Lines, sizeof(Text_Lines), "Silvester_Angelica_Shotgunus");
+		
 		default:
 		{
 			valid = false;
 		}
 	}
-
+	
 	if(valid)
 	{
 		RaidbossSilvester_NPCTalkMessage(npc.index, "%s", Text_Lines);
