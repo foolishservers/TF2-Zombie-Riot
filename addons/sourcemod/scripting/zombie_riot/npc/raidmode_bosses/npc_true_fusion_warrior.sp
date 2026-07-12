@@ -423,7 +423,7 @@ methodmap TrueFusionWarrior < CClotBody
 	}
 }
 
-static void InfectedSilvester_TalkMessage(int iNPC, const char[] message)
+static void InfectedSilvester_NPCTalkMessage(int iNPC, const char[] message, any ...)
 {
 	char name[128];
 	if (b_angered_twice[iNPC])
@@ -431,6 +431,8 @@ static void InfectedSilvester_TalkMessage(int iNPC, const char[] message)
 	else
 		name = "NPCTalk_Silvester?";
 	
+	char buffer[255];
+	VFormat(buffer, sizeof(buffer), message, 3);
 	NPC_TalkMessageWithTranslationCheck(iNPC, "gold", message, name);
 }
 
@@ -443,35 +445,21 @@ public void TrueFusionWarrior_ClotThink(int iNPC)
 		if(!npc.m_fbGunout)
 		{
 			npc.m_fbGunout = true;
-			switch(GetRandomInt(0,2))
-			{
-				case 0:
-				{
-					InfectedSilvester_TalkMessage(npc.index, "InfectedSilvester_LastMann_1");
-				}
-				case 1:
-				{
-					InfectedSilvester_TalkMessage(npc.index, "InfectedSilvester_LastMann_2");
-				}
-				case 2:
-				{
-					InfectedSilvester_TalkMessage(npc.index, "InfectedSilvester_LastMann_3");
-				}
-			}
+			InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_LastMann_%d", GetRandomInt(1, 3));
 		}
 	}
 	if(i_RaidGrantExtra[npc.index] == RAIDITEM_INDEX_WIN_COND)
 	{
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		
-		InfectedSilvester_TalkMessage(npc.index, "InfectedSilvester_Lose");
+		InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_Lose");
 		return;
 	}
 	if(RaidModeTime < GetGameTime())
 	{
 		ForcePlayerLoss();
 		RaidBossActive = INVALID_ENT_REFERENCE;
-		InfectedSilvester_TalkMessage(npc.index, "InfectedSilvester_TimeOver");
+		InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_TimeOver");
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		return;
 	}
@@ -515,7 +503,7 @@ public void TrueFusionWarrior_ClotThink(int iNPC)
 		}
 		if(GetGameTime() > npc.m_flTimeSinceHasBeenHurt)
 		{
-			InfectedSilvester_TalkMessage(npc.index, "InfectedSilvester_Win_6");
+			InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_Win_6");
 			npc.m_bDissapearOnDeath = true;
 			RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
 			for (int client = 1; client <= MaxClients; client++)
@@ -530,22 +518,22 @@ public void TrueFusionWarrior_ClotThink(int iNPC)
 		else if(GetGameTime() + 5.0 > npc.m_flTimeSinceHasBeenHurt && i_SaidLineAlready[npc.index] < 4)
 		{
 			i_SaidLineAlready[npc.index] = 4;
-			InfectedSilvester_TalkMessage(npc.index, "InfectedSilvester_Win_5");
+			InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_Win_5");
 		}
 		else if(GetGameTime() + 10.0 > npc.m_flTimeSinceHasBeenHurt && i_SaidLineAlready[npc.index] < 3)
 		{
 			i_SaidLineAlready[npc.index] = 3;
-			InfectedSilvester_TalkMessage(npc.index, "InfectedSilvester_Win_4");
+			InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_Win_4");
 		}
 		else if(GetGameTime() + 13.0 > npc.m_flTimeSinceHasBeenHurt && i_SaidLineAlready[npc.index] < 2)
 		{
 			i_SaidLineAlready[npc.index] = 2;
-			InfectedSilvester_TalkMessage(npc.index, "InfectedSilvester_Win_3");
+			InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_Win_3");
 		}
 		else if(GetGameTime() + 16.5 > npc.m_flTimeSinceHasBeenHurt && i_SaidLineAlready[npc.index] < 1)
 		{
 			i_SaidLineAlready[npc.index] = 1;
-			InfectedSilvester_TalkMessage(npc.index, "InfectedSilvester_Win_2");
+			InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_Win_2");
 		}
 		return; //He is trying to help.
 	}
@@ -994,7 +982,7 @@ public Action TrueFusionWarrior_OnTakeDamage(int victim, int &attacker, int &inf
 
 			SDKUnhook(npc.index, SDKHook_Think, TrueFusionWarrior_TBB_Tick);
 
-			InfectedSilvester_TalkMessage(npc.index, "InfectedSilvester_Win_1");
+			InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_Win_1");
 			int i = MaxClients + 1;
 			while((i = FindEntityByClassname(i, "obj_sentrygun")) != -1)
 			{

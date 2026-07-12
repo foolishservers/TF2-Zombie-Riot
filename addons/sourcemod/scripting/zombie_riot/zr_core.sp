@@ -3961,4 +3961,5 @@ void WeaponUpdateDo()
 void LoadNPCTalkTranslations()
 {
 	LoadTranslations("zombieriot.phrases.silvestertalk");
+	LoadTranslations("zombieriot.phrases.nemaltalk");
 }

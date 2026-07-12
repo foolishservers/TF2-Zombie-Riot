@@ -304,6 +304,53 @@
 		"ko"	"{default}그들에게서 약간의 도움을 받았습니다. 획득한 트로피: {blue}''머리에 장착하는 파란 고글''{default}!"
 	}
 	
+	"SilvesterXeno_Waldch_Need_Teleport_1"
+	{
+		"en"	"Stop seperating yourself from me {darkblue}Waldch{default}!!"
+		"ko"	"{darkblue}왈츠{default}!! 나랑 붙어있으라고 했잖아!"
+	}
+	"SilvesterXeno_Waldch_Need_Teleport_2"
+	{
+		"en"	"{darkblue}Waldch{default} get back to me NOW!"
+		"ko"	"{darkblue}왈츠{default}, 당장 이리 와!"
+	}
+	"SilvesterXeno_Waldch_Need_Teleport_3"
+	{
+		"en"	"{darkblue}Waldch{default} where are you GOING?!"
+		"ko"	"{darkblue}왈츠{default}! 너 어디 가는 거야?!"
+	}
+	"SilvesterXeno_Waldch_Need_Teleport_4"
+	{
+		"en"	"{darkblue}Waldch{default} that's the WRONG WAY!"
+		"ko"	"{darkblue}왈츠{default}! 거긴 함정이라고!"
+	}
+	
+	"SilvesterXeno_Waldch_Teleport_1"
+	{
+		"en"	"God dammit {darkblue}Waldch{default}!"
+		"ko"	"젠장, {darkblue}왈츠{default}!"
+	}
+	"SilvesterXeno_Waldch_Teleport_2"
+	{
+		"en"	"{darkblue}Waldch{default} don't do that again!"
+		"ko"	"{darkblue}왈츠{default}, 다시는 그러지 마!"
+	}
+	"SilvesterXeno_Waldch_Teleport_3"
+	{
+		"en"	"There {darkblue}Waldch{default}. Now STAY NEAR ME!"
+		"ko"	"{darkblue}왈츠{default}, 절대 내 곁에서 벗어나지 마!"
+	}
+	"SilvesterXeno_Waldch_Teleport_4"
+	{
+		"en"	"How many times must I tell you this {darkblue}Waldch{default}!"
+		"ko"	"{darkblue}왈츠{default}! 몇 번이나 말해야 알아듣는 거야?"
+	}
+	"SilvesterXeno_Waldch_Teleport_5"
+	{
+		"en"	"Our enemies are HERE not THERE {darkblue}Waldch{default}!"
+		"ko"	"{darkblue}왈츠{default}! 몇 번이나 말해야 알아듣는 거야?"
+	}
+	
 	// Silvester in Nemal
 	"SilvesterTrainer_Encounter_Wave30_1"
 	{
@@ -497,6 +544,11 @@
 		"en"	"Remember when I was infected? I still thank you for helping me!"
 		"ko"	"내가 감염되었을 때 기억 나? 그때 도와줘서 정말 고마워!"
 	}
+	"SilvesterTrainer_Win_5"
+	{
+		"en"	"Why do you keep pretending you dont know them? Some of them come from a {crimson}Previous{default} era."
+		"ko"	"근데 왜 계속 모르는 척을 하는거야? 저기서 몇몇 인원은 {crimson}과거{default} 시간대에서 온 사람들이잖아."
+	}
 	
 	"SilvesterTrainer_SpecialAttack"
 	{
@@ -505,38 +557,38 @@
 	}
 	
 	// Weapon Lines
-	"Silvester_Sensal_Scythe_1"
+	"Silvester_Response_Sensal_Scythe_1"
 	{
 		"en"	"You have his weapon yet none of his strength."
 		"ko"	"센살의 무기를 가졌지만 센살만큼의 힘은 없나보네."
 	}
-	"Silvester_Sensal_Scythe_2"
+	"Silvester_Response_Sensal_Scythe_2"
 	{
 		"#format"	"{1:N}"
 		"en"	"{blue}Sensal{default} gave you this {gold}{1}{default}? can't be."
 		"ko"	"{blue}센살{default}이 너한테 그 무기를 줬다고, {gold}{1}{default}? 세상에."
 	}
-	"Silvester_Fusion_1"
+	"Silvester_Response_Fusion_1"
 	{
 		"en"	"You're a bunch of little thieves aren't you?"
 		"ko"	"이런 도둑놈들을 봤나!"
 	}
-	"Silvester_Fusion_2"
+	"Silvester_Response_Fusion_2"
 	{
 		"en"	"Hey thats my weapon!"
 		"ko"	"야! 그건 내 무기잖아!"
 	}
-	"Silvester_Blitzkrieg_Kit"
+	"Silvester_Response_Blitzkrieg_Kit"
 	{
 		"en"	"Oh you beat him up? Thats good."
 		"ko"	"오, 그 미친 기계를 부순 거야? 대단한데!"
 	}
-	"Silvester_Bobs_Sexy_Gun"
+	"Silvester_Response_Bobs_Sexy_Gun"
 	{
 		"en"	"That gun ain't got ANYTHING ON ME!!!"
 		"ko"	"그 총은 나한텐 아무것도 아니야!!!"
 	}
-	"Silvester_Angelica_Shotgunus"
+	"Silvester_Response_Angelica_Shotgonnus"
 	{
 		"en"	"{lightblue}Her{default} gun...? uh..."
 		"ko"	"어? 그건 {lightblue}네말{default}의 총이잖아..?"

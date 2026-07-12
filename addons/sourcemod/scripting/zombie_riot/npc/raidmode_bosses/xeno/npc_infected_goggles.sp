@@ -377,56 +377,16 @@ public void RaidbossBlueGoggles_ClotThink(int iNPC)
 				{
 					i_GogglesHurtTalkMessage[npc.index] = 1;
 					//got hurt by 20% hp.
-					switch(GetRandomInt(1,4))
-					{
-						case 1:
-						{
-							RaidbossSilvester_NPCTalkMessage(AllyEntity, "Stop seperating yourself from me {darkblue}Waldch{default}!!");
-						}
-						case 2:
-						{
-							RaidbossSilvester_NPCTalkMessage(AllyEntity, "{darkblue}Waldch{default} get back to me NOW!");
-						}
-						case 3:
-						{
-							RaidbossSilvester_NPCTalkMessage(AllyEntity, "{darkblue}Waldch{default} where are you GOING?!");
-						}
-						case 4:
-						{
-							RaidbossSilvester_NPCTalkMessage(AllyEntity, "{darkblue}Waldch{default} that's the WRONG WAY!");
-						}
-					}
+					RaidbossSilvester_NPCTalkMessage(AllyEntity, "SilvesterXeno_Waldch_Need_Teleport_%d", GetRandomInt(1, 4));
 				}
 			}
 			case 1:
 			{
 				if(f_GogglesHurtTeleport[npc.index] > MaxHealthCalc * 0.25)
 				{
-					i_GogglesHurtTalkMessage[npc.index] = 2;
 					//got hurt by 20% hp.
-					switch(GetRandomInt(1,5))
-					{
-						case 1:
-						{
-							RaidbossSilvester_NPCTalkMessage(AllyEntity, "God dammit {darkblue}Waldch{default}!");
-						}
-						case 2:
-						{
-							RaidbossSilvester_NPCTalkMessage(AllyEntity, "{darkblue}Waldch{default} don't do that again!");
-						}
-						case 3:
-						{
-							RaidbossSilvester_NPCTalkMessage(AllyEntity, "There {darkblue}Waldch{default}. Now STAY NEAR ME!");
-						}
-						case 4:
-						{
-							RaidbossSilvester_NPCTalkMessage(AllyEntity, "How many times must I tell you this {darkblue}Waldch{default}!");
-						}
-						case 5:
-						{
-							RaidbossSilvester_NPCTalkMessage(AllyEntity, "Our enemies are HERE not THERE {darkblue}Waldch{default}!");
-						}
-					}
+					i_GogglesHurtTalkMessage[npc.index] = 2;
+					RaidbossSilvester_NPCTalkMessage(AllyEntity, "SilvesterXeno_Waldch_Teleport_%d", GetRandomInt(1, 5));
 					float WorldSpaceVec[3]; WorldSpaceCenter(npc.index, WorldSpaceVec);
 					float WorldSpaceVec2[3]; WorldSpaceCenter(AllyEntity, WorldSpaceVec2);
 

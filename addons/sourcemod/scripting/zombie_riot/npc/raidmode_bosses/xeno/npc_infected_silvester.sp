@@ -468,21 +468,7 @@ methodmap RaidbossSilvester < CClotBody
 		npc.m_flNextDelayTime = GetGameTime() + 0.2;
 		if(XenoExtraLogic())
 		{
-			switch(GetRandomInt(1,3))
-			{
-				case 1:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Encounter_Lab_1");
-				}
-				case 2:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Encounter_Lab_2");
-				}
-				case 3:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Encounter_Lab_3");
-				}
-			}
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Encounter_Lab_%d", GetRandomInt(1, 3));
 		}
 		
 		SilvesterApplyEffects(npc.index, false);
@@ -494,8 +480,12 @@ void RaidbossSilvester_NPCTalkMessage(int iNPC, const char[] message, any ...)
 {
 	char buffer[255];
 	VFormat(buffer, sizeof(buffer), message, 3);
-	// PrintNPCMessageWithPrefixes(iNPC, "gold", buffer);
 	NPC_TalkMessageWithTranslationCheck(iNPC, "gold", buffer);
+}
+
+void RaidbossSilvester_NPCTalkMessageAbout(int iNPC, const char[] message, int client)
+{
+	NPC_TalkMessageFormat(iNPC, "gold", "%t", _, _, message, client);
 }
 
 static void Internal_ClotThink(int iNPC)
@@ -509,42 +499,7 @@ static void Internal_ClotThink(int iNPC)
 		{
 			AlreadySaidLastmann = true;
 			npc.m_fbGunout = true;
-			if(!XenoExtraLogic())
-			{
-				switch(GetRandomInt(0,2))
-				{
-					case 0:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_LastMann_1");
-					}
-					case 1:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_LastMann_2");
-					}
-					case 2:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_LastMann_3");
-					}
-				}
-			}
-			else
-			{
-				switch(GetRandomInt(0,2))
-				{
-					case 0:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_LastMann_Lab_1");
-					}
-					case 1:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_LastMann_Lab_2");
-					}
-					case 2:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_LastMann_Lab_3");
-					}
-				}				
-			}
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_LastMann%s_%d", XenoExtraLogic() ? "_Lab" : "", GetRandomInt(1, 3));
 		}
 	}
 	if(RaidModeTime < GetGameTime())
@@ -649,57 +604,11 @@ static void Internal_ClotThink(int iNPC)
 			int AllyEntity = EntRefToEntIndex(i_RaidDuoAllyIndex);
 			if(IsEntityAlive(AllyEntity) && !IsPartnerGivingUpGoggles(AllyEntity))
 			{
-				switch(GetRandomInt(1,3))
-				{
-					case 1:
-					{
-						if(!XenoExtraLogic())
-							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_1");
-						else
-							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_Lab_1");
-					}
-					case 2:
-					{
-						if(!XenoExtraLogic())
-							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_2");
-						else
-							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_Lab_2");
-					}
-					case 3:
-					{
-						if(!XenoExtraLogic())
-							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_3");
-						else
-							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_Lab_3");
-					}
-				}
+				RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel%s_%d", XenoExtraLogic() ? "_Lab" : "", GetRandomInt(1, 3));
 			}
 			else
 			{
-				switch(GetRandomInt(1,3))
-				{
-					case 1:
-					{
-						if(!XenoExtraLogic())
-							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_NoWaldch_1");
-						else
-							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_NoWaldch_Lab_1");
-					}
-					case 2:
-					{
-						if(!XenoExtraLogic())
-							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_NoWaldch_2");
-						else
-							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_NoWaldch_Lab_2");
-					}
-					case 3:
-					{
-						if(!XenoExtraLogic())
-							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_NoWaldch_3");
-						else
-							RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_NoWaldch_Lab_3");
-					}
-				}
+				RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Angel_NoWaldch%s_%d", XenoExtraLogic() ? "_Lab" : "", GetRandomInt(1, 3));
 			}
 			
 			SetVariantColor(view_as<int>({255, 255, 0, 200}));
@@ -860,37 +769,7 @@ static void Internal_ClotThink(int iNPC)
 		if(!i_SadText)
 		{
 			i_SadText = true;
-			switch(GetRandomInt(1,4))
-			{
-				case 1:
-				{
-					if(!XenoExtraLogic())
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_1");
-					else
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_Lab_1");
-				}
-				case 2:
-				{
-					if(!XenoExtraLogic())
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_2");
-					else
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_Lab_2");
-				}
-				case 3:
-				{
-					if(!XenoExtraLogic())
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_3");
-					else
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_Lab_3");
-				}
-				case 4:
-				{
-					if(!XenoExtraLogic())
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_4");
-					else
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death_Lab_4");
-				}
-			}
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Waldch_Death%s_%d", XenoExtraLogic() ? "_Lab" : "", GetRandomInt(1, 4));
 		}
 		if(IsValidEntity(i_LaserEntityIndex[npc.index]))
 		{
@@ -1125,10 +1004,7 @@ static void Internal_ClotThink(int iNPC)
 		{
 			ActionToTake = 0;
 		}
-
-
-
-
+		
 		switch(ActionToTake)
 		{
 			case 2:
@@ -1407,47 +1283,11 @@ public void RaidbossSilvester_OnTakeDamagePost(int victim, int attacker, int inf
 			int AllyEntity = EntRefToEntIndex(i_RaidDuoAllyIndex);
 			if(IsEntityAlive(AllyEntity) && !IsPartnerGivingUpGoggles(AllyEntity))
 			{
-				switch(GetRandomInt(1,4))
-				{
-					case 1:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Anger_1");
-					}
-					case 2:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Anger_2");
-					}
-					case 3:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Anger_3");
-					}
-					case 4:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Anger_4");
-					}
-				}
+				RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Anger_%d", GetRandomInt(1, 4));
 			}
 			else
 			{
-				switch(GetRandomInt(1,4))
-				{
-					case 1:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_NoWaldch_Anger_1");
-					}
-					case 2:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_NoWaldch_Anger_2");
-					}
-					case 3:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_NoWaldch_Anger_3");
-					}
-					case 4:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_NoWaldch_Anger_4");
-					}
-				}
+				RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_NoWaldch_Anger_%d", GetRandomInt(1, 4));
 			}
 			
 			float pos[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos);
@@ -2014,10 +1854,7 @@ bool SharedGiveupSilvester(int entity, int entity2)
 				case 0:
 				{
 					ReviveAll(true);
-					if(!XenoExtraLogic())
-						RaidbossSilvester_NPCTalkMessage(entity, "SilvesterXeno_Win_1");
-					else
-						RaidbossSilvester_NPCTalkMessage(entity, "SilvesterXeno_Win_Lab_1");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Win%s_1", XenoExtraLogic() ? "_Lab" : "");
 					i_TalkDelayCheck += 1;
 				}
 				case 1:
@@ -2037,10 +1874,7 @@ bool SharedGiveupSilvester(int entity, int entity2)
 				}
 				case 3:
 				{
-					if(!XenoExtraLogic())
-						RaidbossSilvester_NPCTalkMessage(entity, "SilvesterXeno_Win_2");
-					else
-						RaidbossSilvester_NPCTalkMessage(entity, "SilvesterXeno_Win_Lab_2");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Win%s_2", XenoExtraLogic() ? "_Lab" : "");
 					
 					i_TalkDelayCheck = 5;
 					for (int client = 1; client <= MaxClients; client++)
@@ -2578,33 +2412,42 @@ static void Internal_Weapon_Lines(RaidbossSilvester npc, int client)
 		return;
 
 	bool valid = true;
-	char Text_Lines[255];
-
-	Text_Lines = "";
+	char Text_Lines[64];
+	bool mentionClient;
 
 	switch(i_CustomWeaponEquipLogic[weapon])
 	{
 		case WEAPON_SENSAL_SCYTHE, WEAPON_SENSAL_SCYTHE_PAP_1, WEAPON_SENSAL_SCYTHE_PAP_2, WEAPON_SENSAL_SCYTHE_PAP_3:
 		{
-			switch(GetRandomInt(0,1))
+			switch(GetRandomInt(0, 1))
 			{
-				case 0: Format(Text_Lines, sizeof(Text_Lines), "Silvester_Sensal_Scythe_1");
-		  		case 1: Format(Text_Lines, sizeof(Text_Lines), "%T", "Silvester_Sensal_Scythe_2", client, client); //IT ACTUALLY WORKS, LMFAO
-			}	
-		}
-		
-		case WEAPON_FUSION, WEAPON_FUSION_PAP1, WEAPON_FUSION_PAP2, WEAPON_NEARL:
-		{
-			switch(GetRandomInt(0,1))
-			{
-				case 0: Format(Text_Lines, sizeof(Text_Lines), "Silvester_Fusion_1");
-		 		case 1: Format(Text_Lines, sizeof(Text_Lines), "Silvester_Fusion_2");
+				case 0:
+				{
+					Text_Lines = "Silvester_Response_Sensal_Scythe_1";
+				}
+		  		case 1:
+				{
+					Text_Lines = "Silvester_Response_Sensal_Scythe_2";
+					mentionClient = true;
+				}
 			}
 		}
-		
-		case WEAPON_KIT_BLITZKRIEG_CORE:  Format(Text_Lines, sizeof(Text_Lines), "Silvester_Blitzkrieg_Kit");
-		case WEAPON_BOBS_GUN:  Format(Text_Lines, sizeof(Text_Lines), "Silvester_Bobs_Sexy_Gun");
-		case WEAPON_ANGELIC_SHOTGUN:  Format(Text_Lines, sizeof(Text_Lines), "Silvester_Angelica_Shotgunus");
+		case WEAPON_FUSION, WEAPON_FUSION_PAP1, WEAPON_FUSION_PAP2, WEAPON_NEARL:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Silvester_Response_Fusion_%d", GetRandomInt(1, 2));
+		}
+		case WEAPON_KIT_BLITZKRIEG_CORE:
+		{
+			Text_Lines = "Silvester_Response_Blitzkrieg_Kit";
+		}
+		case WEAPON_BOBS_GUN:
+		{
+			Text_Lines = "Silvester_Response_Bobs_Sexy_Gun";
+		}
+		case WEAPON_ANGELIC_SHOTGUN:
+		{
+			Text_Lines = "Silvester_Response_Angelica_Shotgonnus";
+		}
 		
 		default:
 		{
@@ -2614,7 +2457,12 @@ static void Internal_Weapon_Lines(RaidbossSilvester npc, int client)
 	
 	if(valid)
 	{
-		RaidbossSilvester_NPCTalkMessage(npc.index, "%s", Text_Lines);
+		if (mentionClient) {
+			RaidbossSilvester_NPCTalkMessageAbout(npc.index, Text_Lines, client);
+		}
+		else {
+			RaidbossSilvester_NPCTalkMessage(npc.index, Text_Lines);
+		}
 		fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(17.0, 26.0);
 		b_said_player_weaponline[client] = true;
 	}

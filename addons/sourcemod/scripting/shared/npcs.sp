@@ -2935,7 +2935,7 @@ void PrintNPCMessageWithPrefixes(int entity, const char[] npcColor, const char[]
 			// Sometimes colors are defined with {}, sometimes without... get rid of dupes to accommodate for everything
 			ReplaceString(finalMessageColor, sizeof(finalMessageColor), "{{", "{");
 			ReplaceString(finalMessageColor, sizeof(finalMessageColor), "}}", "}");
-				
+			
 			if (!messageIsTranslated)
 			{
 				if (loudnessScore > 0)
@@ -3023,5 +3023,65 @@ void PrintNPCMessageWithPrefixes_Delay(DataPack pack)
 	delete pack;
 	
 	PrintNPCMessageWithPrefixes(entity, npcColor, message, messageIsTranslated, customName, messageColor, customNameIsTranslated);
+}
+
+void NPC_TalkMessageWithTranslationCheck(int iNPC, const char[] npcColor, const char[] message, const char[] name = "", const char[] messageColor = "default") {
+	bool shouldNameTranslation = TranslationPhraseExists(name);
+	bool shouldMessageTranslation = TranslationPhraseExists(message);
+	PrintNPCMessageWithPrefixes(iNPC, npcColor, message, shouldMessageTranslation, name, messageColor, shouldNameTranslation);
+}
+
+/**
+ * Function name: NPC_TalkMessageFormat
+ * Purpose: PrintNPCMessageWithPrefixes cannot use formatted and translation message. So, this exists.
+ * Example Use: 
+ */
+void NPC_TalkMessageFormat(int entity, const char[] npcColor, const char[] message, const char[] customName = "", const char[] messageColor = "default", any ...) {
+	bool shouldNameTranslation = TranslationPhraseExists(customName);	
+	char finalName[256], finalMessage[256];
+	for (int client = 1; client <= MaxClients; client++)
+	{
+		if (!IsClientInGame(client) || IsFakeClient(client))
+			continue;
+		
+		bool isCustomName = customName[0] != '\0';
+		if (isCustomName)
+		{
+			if (shouldNameTranslation)
+				FormatEx(finalName, sizeof(finalName), "%T", customName, client);
+			else
+				strcopy(finalName, sizeof(finalName), customName);
+		}
+		else
+		{
+			char globalCustomName[128];
+			if (NPCStats_GetCustomChatName(entity, globalCustomName, sizeof(globalCustomName)))
+			{
+				strcopy(finalName, sizeof(finalName), globalCustomName);
+			}
+			else
+			{
+				if (!b_NameNoTranslation[entity])
+					FormatEx(finalName, sizeof(finalName), "%T", c_NpcName[entity], client);
+				else
+					strcopy(finalName, sizeof(finalName), c_NpcName[entity]);
+			}
+		}
+		
+		SetGlobalTransTarget(client);
+		VFormat(finalMessage, sizeof(finalMessage), message, 6);
+		
+		char fullText[512];
+		FormatEx(fullText, sizeof(fullText), "%s%s%s: %s", npcColor, finalName, messageColor, finalMessage);
+		if (strlen(fullText) > 250)
+		{
+			CPrintToChat(client, "%s%s%s:", npcColor, finalName, messageColor);
+			CPrintToChat(client, "%s%s", messageColor, finalMessage);
+		}
+		else
+		{
+			CPrintToChat(client, fullText);
+		}
+	}
 }
 #endif

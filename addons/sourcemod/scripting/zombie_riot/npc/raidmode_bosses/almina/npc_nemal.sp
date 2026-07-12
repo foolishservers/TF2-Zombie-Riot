@@ -1,17 +1,12 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-
 #define Nemal_BASE_RANGED_SCYTHE_DAMGAE 13.0
 #define Nemal_LASER_THICKNESS 25
-
-
-
 
 static float f_TimeSinceHasBeenHurt[MAXENTITIES];
 
 static int i_LaserEntityIndex[MAXENTITIES]={-1, ...};
-
 
 static bool TripleLol;
 static float NemalAntiLaserDo[MAXENTITIES];
@@ -21,8 +16,6 @@ static const char g_DeathSounds[][] = {
 	"weapons/rescue_ranger_teleport_receive_02.wav",
 };
 
-
-
 static const char g_MissAbilitySound[][] = {
 	"vo/soldier_negativevocalization01.mp3",
 	"vo/soldier_negativevocalization02.mp3",
@@ -31,7 +24,6 @@ static const char g_MissAbilitySound[][] = {
 	"vo/soldier_negativevocalization05.mp3",
 	"vo/soldier_negativevocalization06.mp3",
 };
-
 
 static const char g_IdleAlertedSounds[][] = {
 	")vo/medic_battlecry01.mp3",
@@ -43,9 +35,11 @@ static const char g_IdleAlertedSounds[][] = {
 static const char g_RangedAttackSounds[][] = {
 	"npc/combine_gunship/attack_start2.wav",
 };
+
 static const char g_MeleeAttackSounds[][] = {
 	"weapons/cbar_miss1.wav",
 };
+
 static const char g_MeleeHitSounds[][] = {
 	"weapons/neon_sign_hit_01.wav",
 	"weapons/neon_sign_hit_02.wav",
@@ -85,7 +79,6 @@ static const char g_LaserGlobalAttackSound[][] = {
 	"weapons/bumper_car_speed_boost_start.wav",
 };
 
-
 static const char g_AngellicaShooting[][] = {
 	"weapons/widow_maker_shot_01.wav",
 	"weapons/widow_maker_shot_02.wav",
@@ -95,6 +88,7 @@ static const char g_AngellicaShooting[][] = {
 static const char g_AngellicaShootingHit[][] = {
 	"npc/scanner/scanner_electric1.wav",
 };
+
 static const char g_MineLayed[][] = {
 	"weapons/mortar/mortar_explode2.wav",
 };
@@ -407,120 +401,30 @@ methodmap Nemal < CClotBody
 		{
 			f_ExplodeDamageVulnerabilityNpc[npc.index] = 1.0;
 			i_RaidGrantExtra[npc.index] = 1;
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "We're supposed to train our abilities, remember? Well here I am! Let's start off easy!");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "{gold}Silvester{default}? Where are you?... \nLate again... \nThis dude... \nHe'll come later, let's start off relaxed!");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "{gold}Silvester{default} is late isn't he? Probably off to some random beach with {blue}Sensal{default} as usual.. without me!!!\nWe said vacation is after this! Oh well, let's begin!");
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "Alminans are with us {gold}Expidonsans{default}!... But I'm kinda both...\nProbably not that important, anyways let's go!");
-				}
-			}
+			Nemal_NPCTalkMessage(npc.index, "Nemal_Encounter_Wave10_%d", GetRandomInt(1, 4));
 		}
 		if(StrContains(data, "wave_20") != -1)
 		{
 			i_RaidGrantExtra[npc.index] = 2;
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "Got a call, {gold}Silvester{default} will be joining soon, he had some buisness apparently, get ready for... when he comes!");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "What I would do for {darkblue}Waldch{default} to stop being so mangetic to {gold}Silvester{default} with his Wildingen antics, that isn't his home!!!");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "I'll be honest, {blue}Sensal's{default} kinda scary, I mean you fought him, you'd know!");
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "There sadly ain't many Alminans left after what happend to their home country, damn traitorous {blue}dweller{default}... we took in the surviving alminans and helped them!");
-				}
-			}
+			Nemal_NPCTalkMessage(npc.index, "Nemal_Encounter_Wave20_%d", GetRandomInt(1, 4));
 		}
 		if(StrContains(data, "wave_30") != -1)
 		{
 			i_RaidGrantExtra[npc.index] = 3;
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "Enough chatter, I'll start to not restrain myself.");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "{blue}Sensal{default} wasn't lying when he said you guys got some tricks.");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "Alminans have some really widening history, eventually it'll be rebuilt with {gold}Expidonsa's{default} help.");
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "{blue}Dwellers{default} and us had some treaty yknow... before they attacked everyone... Thats how we have the idea of what {green}Defenda's{default} are using.");
-				}
-			}
+			Nemal_NPCTalkMessage(npc.index, "Nemal_Encounter_Wave30_%d", GetRandomInt(1, 4));
 		}
 		if(StrContains(data, "wave_40") != -1)
 		{
 			i_RaidGrantExtra[npc.index] = 4;
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "Looks like I have to give it all.");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "I won't hold back anymore.");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "Ready yourself.");
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "I would worry about you, but I don't think thats necessary.");
-				}
-			}
+			Nemal_NPCTalkMessage(npc.index, "Nemal_Encounter_Final_%d", GetRandomInt(1, 4));
 		}
-		bool final = StrContains(data, "final_item") != -1;
 		
+		bool final = StrContains(data, "final_item") != -1;
 		if(final)
 		{
 			i_RaidGrantExtra[npc.index] = 5;
 			b_NpcUnableToDie[npc.index] = true;
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "Looks like I have to give it all.");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "I won't hold back anymore.");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "Ready yourself.");
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "I would worry about you, but I don't think thats neccecary.");
-				}
-			}
+			Nemal_NPCTalkMessage(npc.index, "Nemal_Encounter_Final_%d", GetRandomInt(1, 4));
 		}
 
 		for(int client_check=1; client_check<=MaxClients; client_check++)
@@ -591,26 +495,9 @@ methodmap Nemal < CClotBody
 		{
 			TripleLol = true;
 			i_RaidGrantExtra[npc.index] = 4;
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "Sorry {blue}Sensal's{default} he's comming a bit late.");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "Hey {blue}Sensal's{default}, im here.");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "Isn't this overkill?");
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "Sorry but thats all.");
-				}
-			}
+			Nemal_NPCTalkMessage(npc.index, "Nemal_Encounter_Trio_%d", GetRandomInt(1, 4));
 		}
+		
 		if(!TripleLol)
 		{
 			func_NPCFuncWin[npc.index] = view_as<Function>(Raidmode_Expidonsa_Nemal_Win);
@@ -623,7 +510,7 @@ methodmap Nemal < CClotBody
 			strcopy(music.Artist, sizeof(music.Artist), "Hopeku");
 			Music_SetRaidMusic(music);
 		}
-
+		
 		npc.m_iChanged_WalkCycle = -1;
 
 		int skin = 1;
@@ -631,7 +518,7 @@ methodmap Nemal < CClotBody
 		npc.m_fbGunout = false;
 
 		npc.m_iWearable1 = npc.EquipItem("head", "models/weapons/c_models/c_claymore/c_claymore.mdl");
-	//	Weapon slot
+		//	Weapon slot
 		npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/player/items/medic/medic_wintercoat_s02/medic_wintercoat_s02.mdl");
 		npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/player/items/medic/sf14_medic_kriegsmaschine_9000/sf14_medic_kriegsmaschine_9000.mdl");
 		npc.m_iWearable4 = npc.EquipItem("head", "models/workshop/player/items/medic/sf14_templar_hood/sf14_templar_hood.mdl");
@@ -653,9 +540,16 @@ methodmap Nemal < CClotBody
 	}
 }
 
-static void NPCTalkMessage(int iNPC, const char[] message)
+void Nemal_NPCTalkMessage(int iNPC, const char[] message, any ...)
 {
-	PrintNPCMessageWithPrefixes(iNPC, "lightblue", message);
+	char buffer[255];
+	VFormat(buffer, sizeof(buffer), message, 3);
+	NPC_TalkMessageWithTranslationCheck(iNPC, "lightblue", message);
+}
+
+static void Nemal_NPCTalkMessageAbout(int iNPC, const char[] message, int client)
+{
+	NPC_TalkMessageFormat(iNPC, "lightblue", "%t", _, _, message, client);
 }
 
 static void Internal_ClotThink(int iNPC)
@@ -676,21 +570,7 @@ static void Internal_ClotThink(int iNPC)
 		if(!npc.m_fbGunout)
 		{
 			npc.m_fbGunout = true;
-			switch(GetRandomInt(0,2))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "You don't beat me, then you'll never be able to face the full force of the {purple}void{default}.");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "Not beating me means no beating the {purple}void{default}.");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "Use that adrenaline against me, come on!");
-				}
-			}
+			Nemal_NPCTalkMessage(npc.index, "Nemal_LastMann_%d", GetRandomInt(1, 3));
 		}
 	}
 	if(i_RaidGrantExtra[npc.index] == RAIDITEM_INDEX_WIN_COND)
@@ -700,21 +580,8 @@ static void Internal_ClotThink(int iNPC)
 		npc.SetCycle(0.01);
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		
-		switch(GetRandomInt(0,2))
-		{
-			case 0:
-			{
-				NPCTalkMessage(npc.index, "Well... There's next time.");
-			}
-			case 1:
-			{
-				NPCTalkMessage(npc.index, "Too tired today? I get it.");
-			}
-			case 2:
-			{
-				NPCTalkMessage(npc.index, "I'm sorry but this is needed, this is training, not a daycare.");
-			}
-		}
+		Nemal_NPCTalkMessage(npc.index, "Nemal_Lose_%d", GetRandomInt(1, 3));
+		
 		return;
 	}
 	float TotalArmor = 1.0;
@@ -729,8 +596,8 @@ static void Internal_ClotThink(int iNPC)
 	fl_TotalArmor[iNPC] = TotalArmor;
 	if(RaidModeTime < GetGameTime())
 	{
-	//	DeleteAndRemoveAllNpcs = 10.0;
-	//	mp_bonusroundtime.IntValue = (6 * 2);
+		//DeleteAndRemoveAllNpcs = 10.0;
+		//mp_bonusroundtime.IntValue = (6 * 2);
 		ZR_NpcTauntWinClear();
 		ForcePlayerLoss();
 		npc.m_bisWalking = false;
@@ -738,28 +605,15 @@ static void Internal_ClotThink(int iNPC)
 		npc.SetCycle(0.01);
 		RaidBossActive = INVALID_ENT_REFERENCE;
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
-		switch(GetRandomInt(0,2))
-		{
-			case 0:
-			{
-				NPCTalkMessage(npc.index, "You won't defeat {purple}it{default} with that speed.");
-			}
-			case 1:
-			{
-				NPCTalkMessage(npc.index, "... Don't disappoint {darkblue}Kahmlstein{default} like this...");
-			}
-			case 2:
-			{
-				NPCTalkMessage(npc.index, "As much of an ass{darkblue}Kahmlstein{default} was... he did have something in him.");
-			}
-		}
+		
+		Nemal_NPCTalkMessage(npc.index, "Nemal_TimeOver_%d", GetRandomInt(1, 3));
+		
 		BlockLoseSay = true;
 	}
 
 	if(NemalTransformation(npc))
 		return;
-
-
+	
 	if(!npc.Anger)
 	{
 		if(NemalSwordSlicer(npc))
@@ -781,8 +635,6 @@ static void Internal_ClotThink(int iNPC)
 	}
 
 	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
-
-
 	
 	if(npc.m_blPlayHurtAnimation)
 	{
@@ -790,8 +642,7 @@ static void Internal_ClotThink(int iNPC)
 		npc.m_blPlayHurtAnimation = false;
 		npc.PlayHurtSound();
 	}
-
-
+	
 	if(!IsValidEntity(RaidBossActive))
 	{
 		RaidBossActive = EntIndexToEntRef(npc.index);
@@ -810,13 +661,13 @@ static void Internal_ClotThink(int iNPC)
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
 		int SetGoalVectorIndex = 0;
 		if(!npc.Anger)
-			SetGoalVectorIndex = NemalSelfDefense(npc,GetGameTime(npc.index), npc.m_iTarget, flDistanceToTarget); 
+			SetGoalVectorIndex = NemalSelfDefense(npc, GetGameTime(npc.index), npc.m_iTarget, flDistanceToTarget); 
 		else
-			SetGoalVectorIndex = NemalSelfDefenseRage(npc,GetGameTime(npc.index), npc.m_iTarget, flDistanceToTarget); 
+			SetGoalVectorIndex = NemalSelfDefenseRage(npc, GetGameTime(npc.index), npc.m_iTarget, flDistanceToTarget); 
 
 		int iPitch = npc.LookupPoseParameter("body_pitch");
 		if(iPitch >= 0)
-		{	
+		{
 			//Body pitch
 			float v[3], ang[3];
 			float SelfVec[3]; WorldSpaceCenter(npc.index, SelfVec);
@@ -826,10 +677,9 @@ static void Internal_ClotThink(int iNPC)
 									
 			float flPitch = npc.GetPoseParameter(iPitch);
 									
-			npc.SetPoseParameter(iPitch, ApproachAngle(ang[0], flPitch, 10.0));
-				
-		}	
-
+			npc.SetPoseParameter(iPitch, ApproachAngle(ang[0], flPitch, 10.0));	
+		}
+		
 		switch(SetGoalVectorIndex)
 		{
 			case 0:
@@ -915,7 +765,7 @@ static Action Internal_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 				RemoveEntity(npc.m_iWearable8);
 			}
 			SetEntProp(npc.index, Prop_Data, "m_iHealth", ReturnEntityMaxHealth(npc.index)/9);
-			NPCTalkMessage(npc.index, "Hey man, you're really hurting me here...");
+			Nemal_NPCTalkMessage(npc.index, "Nemal_Anger_1");
 			npc.i_GunMode = 0;
 			damage = 0.0; //So he doesnt get oneshot somehow, atleast once.
 			return Plugin_Handled;
@@ -940,7 +790,7 @@ static Action Internal_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 			MakeObjectIntangeable(npc.index);
 			SetEntProp(npc.index, Prop_Data, "m_iHealth", 1);
 			
-			NPCTalkMessage(npc.index, "Ouch ouch! Time out, time out!");
+			Nemal_NPCTalkMessage(npc.index, "Nemal_Anger_2");
 			npc.m_iTarget = 0;
 
 			damage = 0.0; //So he doesnt get oneshot somehow, atleast once.
@@ -997,34 +847,13 @@ static void Internal_NPCDeath(int entity)
 			RemoveEntity(i_LaserEntityIndex[EnemyLoop]);
 		}					
 	}
+	
 	if(BlockLoseSay)
 		return;
-
-	switch(GetRandomInt(0,3))
-	{
-		case 0:
-		{
-			NPCTalkMessage(npc.index, "Okay... ouch.. ow...");
-		}
-		case 1:
-		{
-			NPCTalkMessage(npc.index, "Okay Okay you won! For now.");
-		}
-		case 2:
-		{
-			NPCTalkMessage(npc.index, "See you next time.... this hurts..");
-		}
-		case 3:
-		{
-			NPCTalkMessage(npc.index, "I was going to insult you, but I asked for this...");
-		}
-	}
-
+	
+	Nemal_NPCTalkMessage(npc.index, "Nemal_Death_%d", GetRandomInt(1, 4));
 }
-/*
 
-
-*/
 void NemalAnimationChange(Nemal npc)
 {
 	if(npc.m_iChanged_WalkCycle == 0)
@@ -1771,7 +1600,7 @@ bool NemalTalkPostWin(Nemal npc)
 	}
 	if(GetGameTime() > f_TimeSinceHasBeenHurt[npc.index])
 	{
-		NPCTalkMessage(npc.index, "Till later Mercs!");
+		Nemal_NPCTalkMessage(npc.index, "Nemal_Win_4");
 		
 		RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
 		CClotBody allynpc = view_as<CClotBody>(npc.m_iTargetAlly);
@@ -1784,19 +1613,19 @@ bool NemalTalkPostWin(Nemal npc)
 			if(IsValidClient(client) && GetClientTeam(client) == 2 && TeutonType[client] != TEUTON_WAITING && PlayerPoints[client] > 500)
 			{
 				Items_GiveNamedItem(client, "Alminan and Expidonsan Training");
-				CPrintToChat(client,"{default}You feel more skilled and obtain: {gold}''Alminan and Expidonsan Training''{default}!");
+				CPrintToChat(client, "%T", "Nemal_Trophies", client);
 			}
 		}
 	}
 	else if(GetGameTime() + 5.0 > f_TimeSinceHasBeenHurt[npc.index] && i_SaidLineAlready[npc.index] < 4)
 	{
 		i_SaidLineAlready[npc.index] = 4;
-		NPCTalkMessage(npc.index, "We'll Keep {purple}void gates{default} under control, tell us when youre ready to kill off the {purple}void{default}  once and for all, as a team!");
+		Nemal_NPCTalkMessage(npc.index, "Nemal_Win_3");
 	}
 	else if(GetGameTime() + 10.0 > f_TimeSinceHasBeenHurt[npc.index] && i_SaidLineAlready[npc.index] < 3)
 	{
 		i_SaidLineAlready[npc.index] = 3;
-		NPCTalkMessage(npc.index, "Shhh! Don't ruin the fun! Eitherways, good job!");
+		Nemal_NPCTalkMessage(npc.index, "Nemal_Win_2");
 	}
 	else if(GetGameTime() + 13.0 > f_TimeSinceHasBeenHurt[npc.index] && i_SaidLineAlready[npc.index] < 2)
 	{
@@ -1804,14 +1633,14 @@ bool NemalTalkPostWin(Nemal npc)
 		CClotBody allynpc = view_as<CClotBody>(npc.m_iTargetAlly);
 		
 		if(IsValidEntity(allynpc.index))
-			RaidbossSilvester_NPCTalkMessage(allynpc.index, "Why do you keep pretending you dont know them? Some of them come from a {crimson}Previous{default} era.");
+			RaidbossSilvester_NPCTalkMessage(allynpc.index, "SilvesterTrainer_Win_5");
 		else
-			CPrintToChatAll("{gold}Silvester{default}: Why do you keep pretending you dont know them? Some of them come from a {crimson}Previous{default} era.");
+			CPrintToChatAll("{gold}%t{default}: %t", "Silvester", "SilvesterTrainer_Win_5");
 	}
 	else if(GetGameTime() + 16.5 > f_TimeSinceHasBeenHurt[npc.index] && i_SaidLineAlready[npc.index] < 1)
 	{
 		i_SaidLineAlready[npc.index] = 1;
-		NPCTalkMessage(npc.index, "Well thats it! You passed the test and ontop of that, helped eachother, teamwork!.. probably.");
+		Nemal_NPCTalkMessage(npc.index, "Nemal_Win_1");
 		ReviveAll(true);
 	}
 	return true; //He is trying to help.
@@ -1876,7 +1705,7 @@ bool NemalTransformation(Nemal npc)
 			npc.m_flDoingAnimation = 0.0;
 
 			SetEntProp(npc.index, Prop_Data, "m_iHealth", (ReturnEntityMaxHealth(npc.index) / 9));
-			NPCTalkMessage(npc.index, "Here's my finest creation at work!");
+			Nemal_NPCTalkMessage(npc.index, "Nemal_SpecialAttack");
 				
 			SetVariantColor(view_as<int>({255, 255, 255, 200}));
 			AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
@@ -2064,31 +1893,12 @@ bool NemalSummonSilvester(Nemal npc)
 				}
 				case 2:
 				{
-					switch(GetRandomInt(0,3))
-					{
-						case 0:
-						{
-							NPCTalkMessage(npc.index, "Ah no worries! I'll totally forgive you!");
-						}
-						case 1:
-						{
-							NPCTalkMessage(npc.index, "You're such a nut you know that right?");
-						}
-						case 2:
-						{
-							NPCTalkMessage(npc.index, "Sorry mercs this guy is signed with ''i dont wanna''");
-						}
-						case 3:
-						{
-							NPCTalkMessage(npc.index, "Just don't attack the same guy as me, thats unfair!");
-						}
-					}
+					Nemal_NPCTalkMessage(npc.index, "Nemal_Response_SilvesterHere_%d", GetRandomInt(1, 4));
 					npc.m_iChanged_WalkCycle = 3;
 					npc.m_flNemalSummonSilvesterHappening = GetGameTime(npc.index) + 1.0;
 				}
 				case 3:
 				{
-					
 					npc.m_flNemalSummonSilvesterHappening = 0.0;
 					b_NpcIsInvulnerable[npc.index] = false;
 					npc.m_iChanged_WalkCycle = 0;
@@ -2120,26 +1930,9 @@ bool NemalSummonSilvester(Nemal npc)
 		{
 			RemoveEntity(npc.m_iWearable1);
 		}
-
-		switch(GetRandomInt(0,3))
-		{
-			case 0:
-			{
-				NPCTalkMessage(npc.index, "Oh? Looks like {gold}Silvester{default} Is finally coming!");
-			}
-			case 1:
-			{
-				NPCTalkMessage(npc.index, "The lazy ass {gold}cat{default} is coming right up!");
-			}
-			case 2:
-			{
-				NPCTalkMessage(npc.index, "Hey look, traning partner!");
-			}
-			case 3:
-			{
-				NPCTalkMessage(npc.index, "New phone who this? Oh, you finally came!");
-			}
-		}
+		
+		Nemal_NPCTalkMessage(npc.index, "Nemal_Response_SilvesterSupport_%d", GetRandomInt(1, 4));
+		
 		if(i_RaidGrantExtra[npc.index] >= 3 && !TripleLol)
 		{
 			MusicEnum music;
@@ -2224,21 +2017,24 @@ static void Nemal_Weapon_Lines(Nemal npc, int client)
 		return;
 
 	bool valid = true;
-	char Text_Lines[255];
-
-	Text_Lines = "";
-
+	char Text_Lines[64];
+	bool mentionClient;
+	
 	switch(i_CustomWeaponEquipLogic[weapon])
 	{
-		
 		case WEAPON_SENSAL_SCYTHE,WEAPON_SENSAL_SCYTHE_PAP_1,WEAPON_SENSAL_SCYTHE_PAP_2,WEAPON_SENSAL_SCYTHE_PAP_3:
 		{
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "멋진 낫인데! 거기서 더 노랗게 물들면 센살의 것이 되겠어. 안 그래, {gold}%N{default}?",client);
+				{
+					Text_Lines = "Nemal_Response_Sensal_Scythe_1";
+					mentionClient = true;
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "하나 알려줄게 있는데, {blue}센살{default}의 그 무기는 사실... {gold}실베스터{default}의 물건이래! ... 아님 말고. 나도 어디서 들은거야.");
+				{
+					Text_Lines = "Nemal_Response_Sensal_Scythe_2";
+				}
 			}
 		}
 		case WEAPON_FUSION,WEAPON_FUSION_PAP1,WEAPON_FUSION_PAP2:
@@ -2246,9 +2042,13 @@ static void Nemal_Weapon_Lines(Nemal npc, int client)
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "{gold}실베스터{default} 저 웬수는 또 무기를 막 버리고 다니네?",client);
+				{
+					Text_Lines = "Nemal_Response_Fusion_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "{blue}센살{default}이 {gold}실베스터{default}가 무기를 막 버리고 다닌다는 말이 있던데 농담이 아닌가보네.");
+				{
+					Text_Lines = "Nemal_Response_Fusion_2";
+				}
 			}
 		}
 		case WEAPON_SICCERINO,WEAPON_WALDCH_SWORD_NOVISUAL:
@@ -2256,19 +2056,28 @@ static void Nemal_Weapon_Lines(Nemal npc, int client)
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "가위 한 쌍이 참 멋진데, {gold}%N{default}!",client);
+				{
+					Text_Lines = "Nemal_Response_Siccerino_1";
+					mentionClient = true;
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "저격 한 번 해보려고?",client);
+				{
+					Text_Lines = "Nemal_Response_Siccerino_2";
+				}
 			}
-		} 
+		}
 		case WEAPON_WALDCH_SWORD_REAL:
 		{
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "아하! {darkblue}왈츠{default}가 내 검을 버리진 않았구나!");
+				{
+					Text_Lines = "Nemal_Response_Waldch_Sword_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "{darkblue}왈츠{default}... 저 무기 싫어한다더니 엄청 아꼈었구나.");
+				{
+					Text_Lines = "Nemal_Response_Waldch_Sword_2";
+				}
 			}
 		}  
 		case WEAPON_NEARL:
@@ -2276,9 +2085,13 @@ static void Nemal_Weapon_Lines(Nemal npc, int client)
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "{gold}실베스터{default}가 거길 갔었어?");
+				{
+					Text_Lines = "Nemal_Response_Nearl_Spear_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "{gold}Silvester{default}... invite me next time to Grunwald...");
+				{
+					Text_Lines = "Nemal_Response_Nearl_Spear_2";
+				}
 			}
 		} 
 		case WEAPON_KAHMLFIST:
@@ -2286,9 +2099,14 @@ static void Nemal_Weapon_Lines(Nemal npc, int client)
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "{darkblue}카멜슈타인{default}은 무례한 사람이었지. 적어도 그는 자신의 잘못을 만회했지만.");
+				{
+					Text_Lines = "Nemal_Response_Kahlm_Fist_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "그를 기억하려는 거야, {gold}%N{default}? 그래 뭐... {darkblue}카멜슈타인{default}이 마지막에 한 일을 생각하면 그럴 만한 자격이 있긴 해.",client);
+				{
+					Text_Lines = "Nemal_Response_Kahlm_Fist_2";
+					mentionClient = true;
+				}
 			}
 		}  
 		case WEAPON_KIT_BLITZKRIEG_CORE:
@@ -2296,9 +2114,14 @@ static void Nemal_Weapon_Lines(Nemal npc, int client)
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "그 정신나간 컨셉을 가진 {crimson}블리츠크리그{default}는 항상 싫더라...");
+				{
+					Text_Lines = "Nemal_Response_Blitzkreig_Kit_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "그 정신나간 기계를 따라하려고? {gold}%N{default}? {crimson}블리츠크리그{default}는 좋은 놈이 아닌데...",client);
+				{
+					Text_Lines = "Nemal_Response_Blitzkreig_Kit_2";
+					mentionClient = true;
+				}
 			}
 		}
 		case WEAPON_RED_BLADE:
@@ -2306,9 +2129,13 @@ static void Nemal_Weapon_Lines(Nemal npc, int client)
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "그걸 보니까 {crimson}귄{default}이 그리워.");
+				{
+					Text_Lines = "Nemal_Response_Guln_Sword_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "그 검을 보니까 {crimson}귄{default}은 너무 허망하게 갔단 생각이 들어...");
+				{
+					Text_Lines = "Nemal_Response_Guln_Sword_2";
+				}
 			}
 		}
 		case WEAPON_SPIKELAYER:
@@ -2316,9 +2143,13 @@ static void Nemal_Weapon_Lines(Nemal npc, int client)
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "뭐야 이거, 레고야?");
+				{
+					Text_Lines = "Nemal_Response_Lego_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "그래도 이게 레고보다는 덜 아프잖아.");
+				{
+					Text_Lines = "Nemal_Response_Lego_2";
+				}
 			}
 		}
 		case WEAPON_BOARD:
@@ -2326,9 +2157,14 @@ static void Nemal_Weapon_Lines(Nemal npc, int client)
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "아픈건 싫어서 방어력에 올인했다... 맞지, {gold}%N{default}?",client);
+				{
+					Text_Lines = "Nemal_Response_Board_1";
+					mentionClient = true;
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "제대로 패링할 줄 안다면 {purple}그것{default} 상대로도 버틸 수 있을거야.");
+				{
+					Text_Lines = "Nemal_Response_Board_2";
+				}
 			}
 		}
 		case WEAPON_AMPHI:
@@ -2336,61 +2172,103 @@ static void Nemal_Weapon_Lines(Nemal npc, int client)
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "Hey hey thats my good {snow}friends{default} weapon {gold}%N{default}! She's a very nice Alminan.",client);
+				{
+					Text_Lines = "Nemal_Response_Amphi_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "Oh {snow}Amphi{default}, looks like you have a student, their name is {gold}%N{default}!",client);
+				{
+					Text_Lines = "Nemal_Response_Amphi_2";
+				}
 			}
+			
+			mentionClient = true;
 		}
-		case WEAPON_BOBS_GUN:  Format(Text_Lines, sizeof(Text_Lines), "우린 분명 훈련 하러 온건데......");
+		case WEAPON_BOBS_GUN:
+		{
+			Text_Lines = "Nemal_Response_Bobs_Sexy_Gun";
+		}
 		case WEAPON_ANGELIC_SHOTGUN:
 		{
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "응? 그건 내 무기잖아, {gold}%N{default}!",client);
+				{
+					Text_Lines = "Nemal_Response_Angelica_Shotgonnus_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "1:1 결투 좀 해볼까, {gold}%N{default}?",client);
+				{
+					Text_Lines = "Nemal_Response_Angelica_Shotgonnus_2";
+				}
 			}
+			
+			mentionClient = true;
 		}
-		case WEAPON_HHH_AXE:  Format(Text_Lines, sizeof(Text_Lines), "그거 날이 너무 날카로운거 아냐? {gold}%N{default}?",client);
+		case WEAPON_HHH_AXE:
+		{
+			Text_Lines = "Nemal_Response_HHH_Axe";
+			mentionClient = true;
+		}
 		case WEAPON_MLYNAR_PAP_2,WEAPON_MLYNAR_PAP,WEAPON_MLYNAR:
 		{
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "아니... 신문 보지마! 집중해! {gold}%N{default}, 좀!",client);
+				{
+					Text_Lines = "Nemal_Response_Mlynar_Newspaper_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "뭐야, 흥미라도 떨어진거야!? {gold}%N{default}! 빨리 그 신문 버려!",client);
+				{
+					Text_Lines = "Nemal_Response_Mlynar_Newspaper_2";
+				}
 			}
+			
+			mentionClient = true;
 		}
 		case WEAPON_TRASH_CANNON:
 		{
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "이상한 무기를 들고 있네, {gold}%N{default}.",client);
+				{
+					Text_Lines = "Nemal_Response_Trash_Cannon_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "왜 쓰레기통 안에 폭탄이 들어있는거래?",client);
+				{
+					Text_Lines = "Nemal_Response_Trash_Cannon_2";
+				}
 			}
+			
+			mentionClient = true;
 		}
 		case WEAPON_STAR_SHOOTER:
 		{
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "그건 내 유성 발사기잖아, {gold}%N{default}!",client);
+				{
+					Text_Lines = "Nemal_Response_Star_Shooter_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "그 유성 발사기를 보니까 나도 갑자기 쓰고 싶어지는데...?",client);
+				{
+					Text_Lines = "Nemal_Response_Star_Shooter_2";
+				}
 			}
+			
+			mentionClient = true;
 		}
 		case WEAPON_MESSENGER_LAUNCHER:
 		{
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "메신저의 정신은 이미 오래 전에 망가진지 오래였지... 그가 안타깝네.");
+				{
+					Text_Lines = "Nemal_Response_Messenger_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "메신저가 메세지를 보낸다... 이름 참 희한해.",client);
+				{
+					Text_Lines = "Nemal_Response_Messenger_2";
+					mentionClient = true;
+				}
 			}
 		}
 		case WEAPON_FLAMETAIL:
@@ -2398,9 +2276,14 @@ static void Nemal_Weapon_Lines(Nemal npc, int client)
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "피하지 말아봐!");
+				{
+					Text_Lines = "Nemal_Response_FlameTail_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "계속 피할 순 없을걸, {crimson}%N{default}.",client);
+				{
+					Text_Lines = "Nemal_Response_FlameTail_2";
+					mentionClient = true;
+				}
 			}
 		}
 		case WEAPON_LEPER_MELEE, WEAPON_LEPER_MELEE_PAP:
@@ -2408,29 +2291,46 @@ static void Nemal_Weapon_Lines(Nemal npc, int client)
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "그 검 정말 멋진데, {gold}%N{default}! 그러니까... 어... 묘사를 못 하겠다.",client);
+				{
+					Text_Lines = "Nemal_Response_Leper_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "그 포즈 잡는거 멋지다, {gold}%N{default}!",client);
+				{
+					Text_Lines = "Nemal_Response_Leper_2";
+				}
 			}
+			
+			mentionClient = true;
 		}
 		case WEAPON_NECRO_WANDS, WEAPON_SKULL_SERVANT:
 		{
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "충고하는데, 그 해골들로 계속 장난치지 마, {gold}%N{default}. 그 {green}해골바가지{default}가 우릴 지켜볼테니까...",client);
+				{
+					Text_Lines = "Nemal_Response_Leper_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "만약 저걸로 {green}그 해골{default}이 나타난다면, {gold}%N{default} 전부 네 탓이야.",client);
+				{
+					Text_Lines = "Nemal_Response_Leper_2";
+				}
 			}
+			
+			mentionClient = true;
 		}
 		case WEAPON_DWELLER_MISC:
 		{
 			switch(GetRandomInt(0,1))
 			{
 				case 0:
-					Format(Text_Lines, sizeof(Text_Lines), "바다 괴물!");
+				{
+					Text_Lines = "Nemal_Response_Dweller_1";
+				}
 				case 1:
-					Format(Text_Lines, sizeof(Text_Lines), "왜 바다 괴물이 되어있는거야? {gold}%N{default}?",client);
+				{
+					Text_Lines = "Nemal_Response_Dweller_2";
+					mentionClient = true;
+				}
 			}
 		}
 
@@ -2442,7 +2342,14 @@ static void Nemal_Weapon_Lines(Nemal npc, int client)
 
 	if(valid)
 	{
-		NPCTalkMessage(npc.index, Text_Lines);
+		if (mentionClient)
+		{
+			Nemal_NPCTalkMessageAbout(npc.index, Text_Lines, client);
+		}
+		else
+		{
+			Nemal_NPCTalkMessage(npc.index, Text_Lines);
+		}
 		fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(17.0, 26.0);
 		b_said_player_weaponline[client] = true;
 	}
