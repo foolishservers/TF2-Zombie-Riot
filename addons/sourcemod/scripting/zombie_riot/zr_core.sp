@@ -1143,6 +1143,7 @@ void ZR_MapStart()
 	PurgeKit_MapStart();
 	ResetMapStartExploARWeapon();
 	Gunsaw_MapStart();
+	IndexFather_MapStart();
 	
 	Zombies_Currently_Still_Ongoing = 0;
 	// An info_populator entity is required for a lot of MvM-related stuff (preserved entity)
@@ -2185,6 +2186,8 @@ void CheckLastMannStanding(int killed)
 		bool Expi = false;
 		for(int ClientsLeft = 1; ClientsLeft <= Remaining; ClientsLeft++)
 		{
+			if(dieingstate[ClientsLeft] != 0)
+				continue;
 			if(Gunsaw_IsMerc(ClientsLeft))
 				Expi = true;
 			if(Is_Prescript_User(ClientsLeft))

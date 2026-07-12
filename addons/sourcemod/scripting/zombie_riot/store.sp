@@ -7992,9 +7992,6 @@ void Store_RemoveFromClientAutoPapList(int client, int index)
 	int arrayIndex = AutoPapList[client].FindValue(index, AutoPapInfo::index);
 	if (arrayIndex != -1)
 		AutoPapList[client].Erase(arrayIndex);
-	
-	if (AutoPapList[client].Length == 0)
-		delete AutoPapList[client];
 }
 
 bool Store_IsItemInClientAutoPapList(int client, int index, int level)
@@ -8072,7 +8069,11 @@ void Store_HandleAutoPapList()
 					break;
 				}
 				
-				autoInfo.level += info.PackSkip;
+				int next = info.PackSkip;
+				if (next <= 0)
+					next = 1;
+				
+				autoInfo.level += next;
 				AutoPapList[client].SetArray(i, autoInfo);
 				break; // Only allow 1 enhancement per timer tick
 			}
@@ -8095,6 +8096,9 @@ void Store_HandleAutoPapList()
 					AutoPapList[client].Erase(i);
 			}
 		}
+		
+		if (AutoPapList[client].Length == 0)
+			delete AutoPapList[client];
 	}
 }
 

@@ -396,7 +396,7 @@ public void IndexFather_WeaponLoad(int client, int weapon)
 	SDKHook(client, SDKHook_PreThink, IndexFather_DodgeLogic);
 
 	DataPack pack;
-	Handle_Timer[client] = CreateDataTimer(0.1, Timer_Base, pack, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+	Handle_Timer[client] = CreateDataTimer(0.1, Timer_Base, pack, TIMER_REPEAT);
 	pack.WriteCell(client);
 	pack.WriteCell(EntIndexToEntRef(client));
 	pack.WriteCell(EntIndexToEntRef(weapon));
