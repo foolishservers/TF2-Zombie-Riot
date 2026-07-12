@@ -388,18 +388,19 @@ methodmap TheMessenger < CClotBody
 		
 		if (npc.m_bBossRushDuo)
 		{
-			NPCTalkMessage(npc.index, "You're gonna die.");
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_Encounter_BossrushDuo");
 		}
 		else if(!final)
 		{
 			if(i_RaidGrantExtra[npc.index] <= 2)
 			{
 				IgniteTargetEffect(npc.m_iWearable1);
-				NPCTalkMessage(npc.index, "Welcome, welcome sinners! I'm bearing a message to you all!");
+				
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_Encounter_FirstMatch");
 			}
 			else
 			{
-				NPCTalkMessage(npc.index, "Round two.");
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_Encounter_Rematch");
 			}
 		}
 
@@ -441,6 +442,13 @@ static void NPCTalkMessage(int iNPC, const char[] message)
 	PrintNPCMessageWithPrefixes(iNPC, "lightblue", message);
 }
 
+void TheMessenger_NPCTalkMessage(int iNPC, const char[] message, any ...)
+{
+	char buffer[255];
+	VFormat(buffer, sizeof(buffer), message, 3);
+	PrintNPCMessageWithPrefixes(iNPC, "lightblue", message);
+}
+
 public void TheMessenger_ClotThink(int iNPC)
 {
 	TheMessenger npc = view_as<TheMessenger>(iNPC);
@@ -457,7 +465,7 @@ public void TheMessenger_ClotThink(int iNPC)
 	if(i_RaidGrantExtra[npc.index] >= 6)
 	{
 		i_RaidGrantExtra[npc.index] = 6;
-		NPCTalkMessage(npc.index, "{crimson}AHAHAHAHHAHAHAHA!!! KNEEL BEFORE THE LORD'S MIGHT!");
+		TheMessenger_NPCTalkMessage(npc.index, "Messenger_Behold_Khalm");
 		return;
 	}
 	/*
@@ -471,25 +479,11 @@ public void TheMessenger_ClotThink(int iNPC)
 		BlockLoseSay = true;
 		if(i_RaidGrantExtra[npc.index] <= 2)
 		{
-			switch(GetRandomInt(0,2))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "Shame.");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "Are you for real??");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "No comment.");
-				}
-			}
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_TimeOver_FirstMatch_%d", GetRandomInt(1, 3));
 		}
 		else
 		{
-			NPCTalkMessage(npc.index, "...........");
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_TimeOver_Rematch");
 		}
 	}
 	if(LastMann)
@@ -499,43 +493,11 @@ public void TheMessenger_ClotThink(int iNPC)
 			npc.m_fbGunout = true;
 			if(i_RaidGrantExtra[npc.index] <= 2)
 			{
-				switch(GetRandomInt(0,3))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "Your friends are dead. {crimson}Accept your fate.");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "It's just you and me now.");
-					}
-					case 2:
-					{
-						NPCTalkMessage(npc.index, "Time for you to forward my message to your superiors.");
-					}
-					case 3:
-					{
-						NPCTalkMessage(npc.index, "Give up, you cannot win.");
-					}
-				}
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_LastMann_FirstMatch_%d", GetRandomInt(1, 4));
 			}
 			else
 			{
-				switch(GetRandomInt(0,2))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "YOU ARE DEAD");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "I'LL FUCK YOU UP");
-					}
-					case 3:
-					{
-						NPCTalkMessage(npc.index, "AHAHAHAHAHAHA");
-					}
-				}				
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_LastMann_Rematch_%d", GetRandomInt(1, 3));			
 			}
 		}
 	}
@@ -549,9 +511,7 @@ public void TheMessenger_ClotThink(int iNPC)
 		npc.m_blPlayHurtAnimation = false;
 		npc.PlayHurtSound();
 	}
-
-
-
+	
 	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
 	{
 		return;
@@ -674,29 +634,7 @@ bool Messanger_Elemental_Attack_Projectiles(TheMessenger npc)
 				npc.m_iOverlordComboAttack = 4;
 				fl_TotalArmor[npc.index] = fl_TotalArmor[npc.index] * 0.9;
 				RaidModeScaling *= 1.1;
-				switch(GetRandomInt(0,4))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "No more fucking around.");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "Stop wasting my time shitheads.");
-					}
-					case 2:
-					{
-						NPCTalkMessage(npc.index, "All sinners will {crimson}DIE.");
-					}
-					case 3:
-					{
-						NPCTalkMessage(npc.index, "You just brought infinite pain upon you.");
-					}
-					case 4:
-					{
-						NPCTalkMessage(npc.index, "You fucks are just a waste of my time.");
-					}
-				}
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_GroupAttack_%d", GetRandomInt(1, 5));
 				MessengerInitiateGroupAttack(npc);
 			}
 			return true;
@@ -888,7 +826,7 @@ public Action TheMessenger_OnTakeDamage(int victim, int &attacker, int &inflicto
 			if(i_CustomWeaponEquipLogic[weapon] == WEAPON_MESSENGER_LAUNCHER)
 			{
 				b_khamlWeaponRage[npc.index] = true;
-				NPCTalkMessage(npc.index, "USING MY OWN WEAPON AGAINST ME? {crimson}GO FUCK YOURSELF.");
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_Response_Messenger");
 			}
 		}
 	}
@@ -935,55 +873,11 @@ public void TheMessenger_NPCDeath(int entity)
 	{
 		if(i_RaidGrantExtra[npc.index] <= 2)
 		{
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "Ugh... little fucks.. This ain't over!");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "You're just delaying the inevitable..");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "I may or may not have heavily underestimated you..");
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "No...");
-				}
-			}
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_Death_FirstMatch_%d", GetRandomInt(1, 4));
 		}
 		else
 		{
-			switch(GetRandomInt(0,5))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "NOT TWICE.");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "WHY");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "YOU WILL REGRET THIS.");
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "I've failed you..... my Lord..");
-				}
-				case 4:
-				{
-					NPCTalkMessage(npc.index, "How will I.... tell Him about my failure.");
-				}
-				case 5:
-				{
-					NPCTalkMessage(npc.index, "FUCK FUCK FUCK GOD FUCKING DAMNIT {crimson}FUCK!!!{default}");
-				}
-			}
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_Death_Rematch_%d", GetRandomInt(1, 6));
 		}
 	}
 }
@@ -1401,34 +1295,8 @@ public void TheMessenger_OnTakeDamagePost(int victim, int attacker, int inflicto
 		npc.m_flNextChargeSpecialAttack = GetGameTime(npc.index) + 0.0;
 		f_MessengerSpeedUp[npc.index] = 1.65;
 		npc.m_flSpeed = 330.0;
-
-		switch(GetRandomInt(0,5))
-		{
-			case 0:
-			{
-				NPCTalkMessage(npc.index, "AHAHAHAHAHHA, all of you are so{crimson}FUCKED!!");
-			}
-			case 1:
-			{
-				NPCTalkMessage(npc.index, "{purple}VOID{default}, GRANT ME STRENGTH!");
-			}
-			case 2:
-			{
-				NPCTalkMessage(npc.index, "You think you won? I'M JUST GETTING STARTED.");
-			}
-			case 3:
-			{
-				NPCTalkMessage(npc.index, "Remember those cats? {crimson} You're about to get it worse.");
-			}
-			case 4:
-			{
-				NPCTalkMessage(npc.index, "{crimson} DEATH TO MY ENEMIES!!!.");
-			}
-			case 5:
-			{
-				NPCTalkMessage(npc.index, "{crimson} DIE ALREADY!!!");
-			}
-		}
+		
+		TheMessenger_NPCTalkMessage(npc.index, "Messenger_Anger_%d", GetRandomInt(1, 6));
 	}
 }
 
@@ -1437,38 +1305,10 @@ public void TheMessenger_Win(int entity)
 {
 	if(i_RaidGrantExtra[entity] <= 2)
 	{
-		switch(GetRandomInt(0,2))
-		{
-			case 0:
-			{
-				NPCTalkMessage(entity, "Judgement delivered.");
-			}
-			case 1:
-			{
-				NPCTalkMessage(entity, "Your penance is now over.");
-			}
-			case 2:
-			{
-				NPCTalkMessage(entity, "Thus your reign of terror is no more.");
-			}
-		}
+		TheMessenger_NPCTalkMessage(entity, "Messenger_Win_FirstMatch_%d", GetRandomInt(1, 3));
 	}
 	else
 	{
-		switch(GetRandomInt(0,2))
-		{
-			case 0:
-			{
-				NPCTalkMessage(entity, "{crimson}TAKE THAT YOU FUCKS");
-			}
-			case 1:
-			{
-				NPCTalkMessage(entity, "Message...... delivered....");
-			}
-			case 2:
-			{
-				NPCTalkMessage(entity, "Are you proud? My Lord....");
-			}
-		}
+		TheMessenger_NPCTalkMessage(entity, "Messenger_Win_Rematch_%d", GetRandomInt(1, 3));
 	}
 }

@@ -3965,4 +3965,5 @@ void LoadNPCTalkTranslations()
 {
 	LoadTranslations("zombieriot.phrases.silvestertalk");
 	LoadTranslations("zombieriot.phrases.nemaltalk");
+	LoadTranslations("zombieriot.phrases.interitustalk");
 }
