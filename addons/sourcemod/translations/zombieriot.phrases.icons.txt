@@ -746,6 +746,7 @@
 	{
 		"en"		"The bandits appeared."
 		"ko"		"밴딧들이 나타났습니다."
+	}
 	"A Portal Gate appears..."
 	{
 		"en" 		 "A Portal Gate appears..."

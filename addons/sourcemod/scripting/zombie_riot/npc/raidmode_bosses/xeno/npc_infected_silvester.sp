@@ -1854,7 +1854,7 @@ bool SharedGiveupSilvester(int entity, int entity2)
 				case 0:
 				{
 					ReviveAll(true);
-					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Win%s_1", XenoExtraLogic() ? "_Lab" : "");
+					RaidbossSilvester_NPCTalkMessage(entity, "SilvesterXeno_Win%s_1", XenoExtraLogic() ? "_Lab" : "");
 					i_TalkDelayCheck += 1;
 				}
 				case 1:
@@ -1874,7 +1874,7 @@ bool SharedGiveupSilvester(int entity, int entity2)
 				}
 				case 3:
 				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterXeno_Win%s_2", XenoExtraLogic() ? "_Lab" : "");
+					RaidbossSilvester_NPCTalkMessage(entity, "SilvesterXeno_Win%s_2", XenoExtraLogic() ? "_Lab" : "");
 					
 					i_TalkDelayCheck = 5;
 					for (int client = 1; client <= MaxClients; client++)
