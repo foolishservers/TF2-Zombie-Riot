@@ -293,12 +293,26 @@ methodmap RaidbossBlueGoggles < CClotBody
 	}
 }
 
+void RaidbossBlueGoggles_NPCTalkMessage(int iNPC, const char[] message, any ...)
+{
+	char buffer[255];
+	VFormat(buffer, sizeof(buffer), message, 3);
+	PrintNPCMessageWithPrefixes(iNPC, "darkblue", buffer);
+}
+
 public void RaidbossBlueGoggles_ClotThink(int iNPC)
 {
 	RaidbossBlueGoggles npc = view_as<RaidbossBlueGoggles>(iNPC);
 	
 	float gameTime = GetGameTime(npc.index);
+	float VelAm[3];
+	npc.GetVelocity(VelAm);
 
+	//too slow or attacking npc
+	if(getLinearVelocity(VelAm) <= 20.0 || (IsValidEnemy(npc.index, npc.m_iTarget) && !IsValidClient(npc.m_iTarget)))
+	{
+		ApplyStatusEffect(iNPC, iNPC, "Aimbot", 0.1);
+	}
 	//Raidmode timer runs out, they lost.
 	if(npc.m_flPiggyFor)
 	{
@@ -312,11 +326,11 @@ public void RaidbossBlueGoggles_ClotThink(int iNPC)
 			npc.m_fbGunout = true;
 			if(!XenoExtraLogic())
 			{
-				CPrintToChatAll("{darkblue}왈츠{default}: 여기든 아니든간에, 감염은 장난이 아니야.");
+				RaidbossBlueGoggles_NPCTalkMessage(npc.index, "{green}Xeno{default} is an infection that shouldn't be taken lightly.");
 			}
 			else
 			{
-				CPrintToChatAll("{darkblue}왈츠{default}: 포기해서 목숨이라도 보존해.");		
+				RaidbossBlueGoggles_NPCTalkMessage(npc.index, "Just give up and we'll spare your lives.");		
 			}
 		}
 	}
@@ -363,44 +377,16 @@ public void RaidbossBlueGoggles_ClotThink(int iNPC)
 				{
 					i_GogglesHurtTalkMessage[npc.index] = 1;
 					//got hurt by 20% hp.
-					switch(GetRandomInt(1,3))
-					{
-						case 1:
-						{
-							CPrintToChatAll("{gold}실베스터{default}: {darkblue}왈츠{default}!! 나랑 붙어있으라고 했잖아!");
-						}
-						case 2:
-						{
-							CPrintToChatAll("{gold}실베스터{default}: {darkblue}왈츠{default}, 당장 이리 와!");
-						}
-						case 3:
-						{
-							CPrintToChatAll("{gold}실베스터{default}: {darkblue}왈츠{default}, 당장 이리 안 오면 널 내 근처로 순간이동 시킬 수 밖에 없어!");
-						}
-					}
+					RaidbossSilvester_NPCTalkMessage(AllyEntity, "SilvesterXeno_Waldch_Need_Teleport_%d", GetRandomInt(1, 4));
 				}
 			}
 			case 1:
 			{
 				if(f_GogglesHurtTeleport[npc.index] > MaxHealthCalc * 0.25)
 				{
-					i_GogglesHurtTalkMessage[npc.index] = 2;
 					//got hurt by 20% hp.
-					switch(GetRandomInt(1,3))
-					{
-						case 1:
-						{
-							CPrintToChatAll("{gold}실베스터{default}: 젠장, {darkblue}왈츠{default}!");
-						}
-						case 2:
-						{
-							CPrintToChatAll("{gold}실베스터{default}: {darkblue}왈츠{default}... 어서!");
-						}
-						case 3:
-						{
-							CPrintToChatAll("{gold}실베스터{default}: {darkblue}왈츠{default}, 절대 내 곁에서 벗어나지마!");
-						}
-					}
+					i_GogglesHurtTalkMessage[npc.index] = 2;
+					RaidbossSilvester_NPCTalkMessage(AllyEntity, "SilvesterXeno_Waldch_Teleport_%d", GetRandomInt(1, 5));
 					float WorldSpaceVec[3]; WorldSpaceCenter(npc.index, WorldSpaceVec);
 					float WorldSpaceVec2[3]; WorldSpaceCenter(AllyEntity, WorldSpaceVec2);
 
@@ -517,41 +503,45 @@ public void RaidbossBlueGoggles_ClotThink(int iNPC)
 	{
 		if(XenoExtraLogic())
 		{
-			switch(GetURandomInt() % 3)
+			switch(GetRandomInt(0,3))
 			{
 				case 0:
 				{
-					CPrintToChatAll("{darkblue}왈츠{default}: 그가 없으니, 이젠 내 차례다!");
+					RaidbossBlueGoggles_NPCTalkMessage(npc.index, "I'll avenge you {gold}Silvester{default}!");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{darkblue}왈츠{default}: 너희는 꼭 마치 그를 죽여버리려 한 것처럼 싸우는군!");
+					CPrintToChatAll("{darkblue}Waldch{default}:{gold}Silvester{default} rest while I take care of them.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{darkblue}왈츠{default}: 너와 나 뿐이다!");
+					RaidbossBlueGoggles_NPCTalkMessage(npc.index, "Just you and me now!");
+				}
+				case 3:
+				{
+					RaidbossBlueGoggles_NPCTalkMessage(npc.index, "I'll stop you by myself!");
 				}
 			}
 		}
 		else
 		{
-			switch(RoundToFloor(GetURandomFloat() * 4.0))
+			switch(GetRandomInt(0,3))
 			{
 				case 0:
 				{
-					CPrintToChatAll("{darkblue}왈츠{default}: 정말로 그러지 말아야했어!");
+					RaidbossBlueGoggles_NPCTalkMessage(npc.index, "You really shouldn't have done that!");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{darkblue}왈츠{default}: 그를 괴롭힌 대가를 치르게 해주마!");
+					RaidbossBlueGoggles_NPCTalkMessage(npc.index, "You'll pay for that!");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{darkblue}왈츠{default}: 당장 여길 떠나라고!");
+					RaidbossBlueGoggles_NPCTalkMessage(npc.index, "Quit this right now!");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{darkblue}왈츠{default}: 이 멍청한 놈들!");
+					RaidbossBlueGoggles_NPCTalkMessage(npc.index, "You little ****!");
 				}
 			}
 		}
@@ -921,6 +911,8 @@ public void RaidbossBlueGoggles_ClotThink(int iNPC)
 						KillFeed_SetKillIcon(npc.index, "pro_smg");
 						
 						npc.FaceTowards(vecTarget, 400.0);
+						if(HasSpecificBuff(npc.index, "Aimbot"))
+							npc.FaceTowards(vecTarget, 9999.0);
 
 						npc.PlaySMGSound();
 						npc.AddGesture("ACT_MP_ATTACK_STAND_SECONDARY");
@@ -1084,7 +1076,7 @@ public Action RaidbossBlueGoggles_OnTakeDamage(int victim, int &attacker, int &i
 			RemoveNpcFromEnemyList(npc.index);
 			GiveProgressDelay(28.0);
 			damage = 0.0;
-			CPrintToChatAll("{darkblue}왈츠{default}: 네가 이겼어. 이제 더 이상 막지 않을게...");
+			RaidbossBlueGoggles_NPCTalkMessage(npc.index, "You win, I won't stop you no anymore...");
 			return Plugin_Handled;
 		}
 
@@ -1098,7 +1090,8 @@ public Action RaidbossBlueGoggles_OnTakeDamage(int victim, int &attacker, int &i
 
 	//redirect damage and reduce it if in range.
 	int AllyEntity = EntRefToEntIndex(i_RaidDuoAllyIndex);
-	if(IsEntityAlive(AllyEntity) && !b_NpcIsInvulnerable[AllyEntity] && !IsPartnerGivingUpGoggles(AllyEntity))
+	int ForceStandStill = CountPlayersOnRed(2);
+	if(ForceStandStill > 1 && IsEntityAlive(AllyEntity) && !b_NpcIsInvulnerable[AllyEntity] && !IsPartnerGivingUpGoggles(AllyEntity))
 	{
 		static float victimPos[3];
 		static float partnerPos[3];

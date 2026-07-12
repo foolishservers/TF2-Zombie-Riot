@@ -48,9 +48,21 @@ static char g_RocketSound[][] = {
 static const char g_HealSound[][] = {
 	"items/medshot4.wav",
 };
+static const char g_ChargeDashSound[][] =
+{
+	"weapons/vaccinator_charge_tier_01.wav",
+	"weapons/vaccinator_charge_tier_02.wav",
+	"weapons/vaccinator_charge_tier_03.wav",
+	"weapons/vaccinator_charge_tier_04.wav",
+};
 
 int WhiteflowerID;
 static bool b_TouchedEnemyTarget[MAXENTITIES];
+
+void Whiteflower_Resetb_TouchedEnemyTarget()
+{
+	Zero(b_TouchedEnemyTarget);
+}
 public void Whiteflower_Boss_OnMapStart_NPC()
 {
 	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
@@ -62,6 +74,7 @@ public void Whiteflower_Boss_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_RangedAttackSoundsSecondary));	i++) { PrecacheSound(g_RangedAttackSoundsSecondary[i]);	}
 	for (int i = 0; i < (sizeof(g_RocketSound));	i++) { PrecacheSound(g_RocketSound[i]);	}
 	for (int i = 0; i < (sizeof(g_HealSound)); i++) { PrecacheSound(g_HealSound[i]); }
+	for (int i = 0; i < (sizeof(g_ChargeDashSound)); i++) { PrecacheSound(g_ChargeDashSound[i]); }
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Whiteflower The Traitor");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_whiteflower_boss");
@@ -151,6 +164,10 @@ methodmap Whiteflower_Boss < CClotBody
 	public void PlayMeleeHitSound()
 	{
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME,_);	
+	}
+	public void PlayDashPrepareSound() 
+	{
+		EmitSoundToAll(g_ChargeDashSound[GetRandomInt(0, sizeof(g_ChargeDashSound) - 1)], this.index, SNDCHAN_AUTO, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
 	
 	property float m_flThrowSupportGrenadeHappening
@@ -297,7 +314,7 @@ methodmap Whiteflower_Boss < CClotBody
 		music.Time = 187;
 		music.Volume = 1.0;
 		music.Custom = true;
-		strcopy(music.Name, sizeof(music.Name), "Iberia's Last Stand");
+		strcopy(music.Name, sizeof(music.Name), "Almina's Last Stand");
 		strcopy(music.Artist, sizeof(music.Artist), "Grandpa Bard");
 		Music_SetRaidMusic(music);
 
@@ -342,6 +359,7 @@ methodmap Whiteflower_Boss < CClotBody
 
 		RaidBossActive = EntIndexToEntRef(npc.index);
 		RaidAllowsBuildings = false;
+		RaidAllowLastman = true;
 		Citizen_MiniBossSpawn();
 
 		func_NPCDeath[npc.index] = Whiteflower_Boss_NPCDeath;
@@ -381,6 +399,11 @@ methodmap Whiteflower_Boss < CClotBody
 	
 }
 
+static void NPCTalkMessage(int entity, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(entity, "crimson", message, .customName = "Whiteflower");
+}
+
 public void WhiteflowerWinLine(int entity)
 {
 	i_RaidGrantExtra[entity] = RAIDITEM_INDEX_WIN_COND;
@@ -389,7 +412,7 @@ public void WhiteflowerWinLine(int entity)
 		return;
 
 	AlreadySaidWin = true;
-	CPrintToChatAll("{crimson}배풍등{default}: 이제 한 놈 남았다.\n밥.");	
+	NPCTalkMessage(entity, "Now all that's left...\nIs Bob.");
 }
 
 public void Whiteflower_Boss_ClotThink(int iNPC)
@@ -426,7 +449,7 @@ public void Whiteflower_Boss_ClotThink(int iNPC)
 		npc.StopPathing();
 		npc.m_flNextThinkTime = FAR_FUTURE;
 		i_RaidGrantExtra[npc.index] = 0;
-		CPrintToChatAll("{crimson}배풍등{default}: 이제 넌 완전히 포위되었다.\n이제 넌 내 거야.\n이제 얌전히 나를 따라라.\n내가 밥을 죽이는걸 도와주면, 우리 둘 다 최고가 될 수 있어.");	
+		NPCTalkMessage(npc.index, "Out of time, you're completely surrounded.\nYou now belong to me.\nSubmit.\nHelp me kill Bob, and we will rule it all.");	
 	}
 
 	if(npc.m_flNextThinkTime > gameTime)
@@ -595,7 +618,6 @@ public void Whiteflower_Boss_ClotThink(int iNPC)
 				npc.m_flWasAirbornInJump = gameTime + 0.5;
 				Zero(b_TouchedEnemyTarget);
 				EmitCustomToAll("rpg_fortress/enemy/whiteflower_dash.mp3", npc.index, SNDCHAN_STATIC, BOSS_ZOMBIE_SOUNDLEVEL, _, 3.0, 100);
-				IgniteTargetEffect(npc.index);
 				if(npc.m_iChanged_WalkCycle != 7) 	
 				{
 					npc.m_bisWalking = false;
@@ -863,13 +885,14 @@ public void Whiteflower_Boss_ClotThink(int iNPC)
 						else
 							npc.m_flJumpHappening = 1.0;
 
-						float flPos[3];
-						GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", flPos);
-						flPos[2] += 70.0;
-						int particler = ParticleEffectAt(flPos, "scout_dodge_blue", 1.0);
-						SetParent(npc.index, particler);
 						if(npc.m_iChanged_WalkCycle != 6) 	
 						{
+							float flPos[3];
+							GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", flPos);
+							flPos[2] += 70.0;
+							int particler = ParticleEffectAt(flPos, "scout_dodge_blue", 1.0);
+							SetParent(npc.index, particler);
+							npc.PlayDashPrepareSound();
 							IgniteTargetEffect(npc.index);
 							npc.m_bisWalking = false;
 							npc.m_iChanged_WalkCycle = 6;
@@ -923,7 +946,7 @@ public Action Whiteflower_Boss_OnTakeDamage(int victim, int &attacker, int &infl
 	if(RoundToCeil(damage) > Health)
 	{	
 		if(i_RaidGrantExtra[npc.index] == 1)
-			CPrintToChatAll("{crimson}배풍등{default}: 이... 미친 쥐새끼들이... 지옥에서 너희들을...\n...\n배풍등이 소멸해간다.\n그의 무리가 사기를 잃고 흩어진다.");	
+			NPCTalkMessage(npc.index, "Y-You... fucking rats... rot in hell Bob...\n...\nWhiteflower perishes.\nHis army scatters.");	
 		
 		npc.StopPathing();
 		ApplyStatusEffect(victim, victim, "Infinite Will", 5.0);
@@ -951,7 +974,7 @@ public void Whiteflower_Boss_NPCDeath(int entity)
 		npc.PlayDeathSound();
 	}
 	if(i_RaidGrantExtra[npc.index] == 1)
-		CPrintToChatAll("{crimson}배풍등{default}: 이... 미친 쥐새끼들이... 지옥에서 너희들을...\n...\n배풍등이 소멸해간다.\n그의 무리가 사기를 잃고 흩어진다.");	
+		NPCTalkMessage(npc.index, "Y-You... fucking rats... rot in hell Bob...\n...\nWhiteflower perishes.\nHis army scatters.");	
 		
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
@@ -1011,7 +1034,7 @@ void WF_ThrowGrenadeHappening(Whiteflower_Boss npc)
 			HealDo *= RaidModeScaling;
 			WF_GrenadeSupportDo(npc.index, Grenade, damage, GrenadeRangeSupport, HealDo);
 			float SpeedReturn[3];
-			ArcToLocationViaSpeedProjectile(VecStart, vecTarget, SpeedReturn, 1.75, 1.0);
+			ArcToLocationViaSpeedProjectile(Grenade, vecTarget, SpeedReturn, 1.75, 1.0);
 			TeleportEntity(Grenade, NULL_VECTOR, NULL_VECTOR, SpeedReturn);
 			//Throw a grenade towards the target!
 		}
@@ -1176,64 +1199,64 @@ public void Whiteflower_Boss_NPCDeathAlly(int self, int ally)
 	{
 		case 1:
 		{
-			CPrintToChatAll("{crimson}배풍등{default}: 그래.. 네 녀석 차례다.");
+			NPCTalkMessage(npc.index, "Argk... You're next.");
 		}
 		case 2:
 		{
-			CPrintToChatAll("{crimson}배풍등{default}: 왜 도망가는거냐?");	
+			NPCTalkMessage(npc.index, "Why are you running?");	
 		}
 		case 3:
 		{
 			if(!Waves_InFreeplay())
 			{
-				CPrintToChatAll("{crimson}배풍등{default}: 날 상대하시겠다고? 하!");
+				NPCTalkMessage(npc.index, "First my army so I'm alone? Pah!");
 			}
 			else
 			{
-				CPrintToChatAll("{crimson}배풍등{default}: 미친 놈이 또 다른 미친 놈을 싸지른다더니.");
+				NPCTalkMessage(npc.index, "From one maniac to another huh?");
 			}
 			
 		}
 		case 4:
 		{
-			CPrintToChatAll("{crimson}배풍등{default}: 불결한 놈.");	
+			NPCTalkMessage(npc.index, "You are dirty.");	
 		}
 		case 5:
 		{
-			CPrintToChatAll("{crimson}배풍등{default}: 미친 놈이 또 다른 미친 놈을 싸지른다더니.");	
+			NPCTalkMessage(npc.index, "From one maniac to another huh?");	
 		}
 		case 6:
 		{
-			CPrintToChatAll("{crimson}배풍등{default}: 넌 저 놈들과 다를바 없다. 약해빠졌지.");	
+			NPCTalkMessage(npc.index, "You are just like them, weak.");	
 		}
 		case 7:
 		{
-			CPrintToChatAll("{crimson}배풍등{default}: 멍청한 놈.");	
+			NPCTalkMessage(npc.index, "You are a fool.");	
 		}
 		case 8:
 		{
-			CPrintToChatAll("{crimson}배풍등{default}: 어리석군.");	
+			NPCTalkMessage(npc.index, "Such ignorance.");	
 		}
 		case 9:
 		{
 			if(!Waves_InFreeplay())
 			{
-				CPrintToChatAll("{crimson}배풍등{default}: 저들은 적어도 자기 리더를 믿는다. 넌 도대체 무슨 가치가 있지?");	
+				NPCTalkMessage(npc.index, "They at least believe in their leader, do you?");	
 			}
 			else
 			{
-				CPrintToChatAll("{crimson}배풍등{default}: 그래... 네 녀석 차례다.");
+				NPCTalkMessage(npc.index, "Argk... You're next.");
 			}	
 		}
 		case 10:
 		{
 			if(!Waves_InFreeplay())
 			{
-				CPrintToChatAll("{crimson}배풍등{default}: 난 내 무리를 한 번도 소홀히 대한 적이 없다. 넌 안 그러겠지만.");	
+				NPCTalkMessage(npc.index, "I actually care for them, do you care for your own army?");	
 			}
 			else
 			{
-				CPrintToChatAll("{crimson}배풍등{default}: 불결한 놈.");
+				NPCTalkMessage(npc.index, "You are dirty.");
 			}
 		}
 	}

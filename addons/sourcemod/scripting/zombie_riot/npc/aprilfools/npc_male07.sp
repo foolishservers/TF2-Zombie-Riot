@@ -94,7 +94,7 @@ methodmap Male07 < CClotBody
 		music.Volume = 1.8;
 		music.Custom = true;
 		strcopy(music.Name, sizeof(music.Name), "it's Male07");
-		strcopy(music.Artist, sizeof(music.Artist), "Holy fuck");
+		strcopy(music.Artist, sizeof(music.Artist), "Holy fuck (song name is HIDE, author is Daniel Herrera)");
 		Music_SetRaidMusic(music);
 		
 		func_NPCDeath[npc.index] = Male07_NPCDeath;
@@ -189,8 +189,8 @@ public void Male07_ClotThink(int iNPC)
 
 	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
 	{
-		npc.m_iTarget = GetClosestTarget(npc.index,_,_,_,_,_,_,_,999999.9, true);
-		b_DoNotChangeTargetTouchNpc[npc.index] = 1;
+		npc.m_iTarget = GetClosestTarget(npc.index);
+		//b_DoNotChangeTargetTouchNpc[npc.index] = 1;
 		if(npc.m_iTarget < 1)
 		{
 			b_DoNotChangeTargetTouchNpc[npc.index] = 0;

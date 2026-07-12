@@ -83,7 +83,7 @@ static const char g_RocketReadyingSound[] = "misc/doomsday_cap_open_start.wav";
 
 static const char g_ShotgunFiringSound[] = ")weapons/tf2_backshot_shotty_crit.wav";
 
-static const char g_SpecialRangedAttackSound[] = "vo/mvm/norm/soldier_incoming01.mp3";
+static const char g_SpecialRangedAttackSound[] = "vo/mvm/norm/soldier_mvm_incoming01.mp3";
 
 static const char g_SelfLaunchingSound[] = ")weapons/rocket_pack_boosters_fire.wav";
 
@@ -434,6 +434,7 @@ methodmap ARIS < CClotBody
 		
 		RaidBossActive = EntIndexToEntRef(npc.index);
 		RaidAllowsBuildings = false;
+		RaidAllowLastman = true;
 
 		int iActivity = npc.LookupActivity("ACT_MP_RUN_MELEE_ALLCLASS");
 		if(iActivity > 0) npc.StartActivity(iActivity);
@@ -451,6 +452,7 @@ methodmap ARIS < CClotBody
 		RaidModeTime = GetGameTime() + 220.0;
 		b_thisNpcIsARaid[npc.index] = true;
 		b_ThisNpcIsImmuneToNuke[npc.index] = true;
+		Zero(b_said_player_weaponline);
 
 		for(int client_check=1; client_check<=MaxClients; client_check++)
 		{
@@ -549,15 +551,20 @@ methodmap ARIS < CClotBody
 		switch(GetRandomInt(0,2))
 		{
 			case 0:
-				CPrintToChatAll("{rare}A.R.I.S.{default}: 4R1S ㄷㅐㄱㅣ 중.");
+				NPCTalkMessage(npc.index, "4R1S R3P0R71N6 F0R DU7Y");
 			case 1:
-				CPrintToChatAll("{rare}A.R.I.S.{default}: 4R1S = 출동 ㅈㅜㄴㅂㅣ 완료");
+				NPCTalkMessage(npc.index, "4R1S = 10CK3D 4ND L04D3D");
 			case 2:
-				CPrintToChatAll("{rare}A.R.I.S.{default}: 활ㅅㅓㅇ화, 진압 ㅅㅣ작");
+				NPCTalkMessage(npc.index, "0NL1N3, 455UM1N6 MY FUNC710NS");
 		}
 
 		return npc;
 	}
+}
+
+static void NPCTalkMessage(int entity, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(entity, "rare", message);
 }
 
 public void ARIS_ClotThink(int iNPC)
@@ -651,11 +658,11 @@ public void ARIS_ClotThink(int iNPC)
 			switch(GetRandomInt(0,2))
 			{
 				case 0:
-					CPrintToChatAll("{rare}A.R.I.S.{default}: ㅅㅜ류탄 ㅌㅜ척!");
+					NPCTalkMessage(npc.index, "F1R3 1N 7H3 H0L3");
 				case 1:
-					CPrintToChatAll("{rare}A.R.I.S.{default}: 엄ㅍㅖ하ㄹㅏ!");
+					NPCTalkMessage(npc.index, "DUCK 4ND C0V3R");
 				case 2:
-					CPrintToChatAll("{rare}A.R.I.S.{default}: 로ㅋㅔㅅ!");
+					NPCTalkMessage(npc.index, "R0CK37S!");
 			}
 			npc.PlayRocketReadyingSound();
 		}
@@ -929,6 +936,9 @@ public Action ARIS_OnTakeDamage(int victim, int &attacker, int &inflictor, float
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
 	}
+
+	ARIS_Weapon_Lines(npc, attacker);
+	i_SaidLineAlready[npc.index] = 0;
 	
 	return Plugin_Changed;
 }
@@ -1207,11 +1217,11 @@ static void ARIS_DropMelee(ARIS npc)
 		switch(GetRandomInt(0,2))
 		{
 			case 0:
-				CPrintToChatAll("{rare}A.R.I.S.{default}: 방어를 ㄷㅓ 증강ㅎㅐ야한다");
+				NPCTalkMessage(npc.index, "D3P10Y1N6 R3S1574N7 M345UR3S");
 			case 1:
-				CPrintToChatAll("{rare}A.R.I.S.{default}: ㅈㅓ항력 보강 필요");
+				NPCTalkMessage(npc.index, "R3S1574NC3S 0NL1N3");
 			case 2:
-				CPrintToChatAll("{rare}A.R.I.S.{default}: ㅂㅏㅇ어장 작동!");
+				NPCTalkMessage(npc.index, "D3F3NS3 D3PL0Y3D");
 		}
 	}
 	if(npc.m_iCurrentMelee == ARIS_MELEE_DAMAGE)
@@ -1219,11 +1229,11 @@ static void ARIS_DropMelee(ARIS npc)
 		switch(GetRandomInt(0,2))
 		{
 			case 0:
-				CPrintToChatAll("{rare}A.R.I.S.{default}: 자가 ㄱㅏㅇ화 시작");
+				NPCTalkMessage(npc.index, "8UFF3R1N6 D4M463");
 			case 1:
-				CPrintToChatAll("{rare}A.R.I.S.{default}: 공격력 증강ㄱㅣ ㄱㅏ동중");
+				NPCTalkMessage(npc.index, "D4M463 800S73R D3PL0Y3D");
 			case 2:
-				CPrintToChatAll("{rare}A.R.I.S.{default}: 공격ㄹㅕㄱ : 강ㅎㅗㅏ");
+				NPCTalkMessage(npc.index, "D4M463 = 8UFF3D");
 		}
 	}
 	if(npc.m_iCurrentMelee == ARIS_MELEE_SPEED)
@@ -1231,11 +1241,11 @@ static void ARIS_DropMelee(ARIS npc)
 		switch(GetRandomInt(0,2))
 		{
 			case 0:
-				CPrintToChatAll("{rare}A.R.I.S.{default}: 가ㅅㅗㄱ기 ㄱㅏ동중");
+				NPCTalkMessage(npc.index, "V3L0C17Y R151N6");
 			case 1:
-				CPrintToChatAll("{rare}A.R.I.S.{default}: ㅎㅏ늘로 돌ㅇㅏ왔다");
+				NPCTalkMessage(npc.index, "4CC3L3R4710N 1NCR34S3D");
 			case 2:
-				CPrintToChatAll("{rare}A.R.I.S.{default}: 공ㄱㅣ역학 분산 ㄱㅏ동");
+				NPCTalkMessage(npc.index, "M0M3N7UM CH4N63");
 		}
 	}
 }
@@ -1620,7 +1630,7 @@ static bool ARIS_LoseConditions(int iNPC)
 				npc.SetPlaybackRate(1.0);
 				npc.m_flNextDeathState = GetGameTime() + 1.7;
 				
-				CPrintToChatAll("{rare}A.R.I.S.{default}: ㅅㅣㅁ각한 ㅍㅣㅎㅐ 감지");
+				NPCTalkMessage(npc.index, "3N0UGH D4M463 5U5741N3D");
 			}
 			
 			case 1:
@@ -1647,13 +1657,13 @@ static bool ARIS_LoseConditions(int iNPC)
 				switch (GetURandomInt() % 4)
 				{
 					case 0:
-						CPrintToChatAll("{rare}A.R.I.S.{default}: ㄷㅗ주!");
+						NPCTalkMessage(npc.index, "3J3C71N6!");
 					case 1:
-						CPrintToChatAll("{rare}A.R.I.S.{default}: 후퇴! ㅇㅓㅅㅓ!");
+						NPCTalkMessage(npc.index, "480R71N6 M15510N!");
 					case 2:
-						CPrintToChatAll("{rare}A.R.I.S.{default}: 재보ㄱㅏㅇ 필요!");
+						NPCTalkMessage(npc.index, "R37URN1N6 70 P057!");
 					case 3:
-						CPrintToChatAll("{rare}A.R.I.S.{default}: 4R15 = ㅌㅚ장!");
+						NPCTalkMessage(npc.index, "4R15 = 0U7!");
 				}
 			}
 			
@@ -1687,7 +1697,7 @@ static bool ARIS_LoseConditions(int iNPC)
 	{
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		
-		CPrintToChatAll("{rare}A.R.I.S.{default}: 임ㅁㅜ 완료. 원위ㅊㅣ.");
+		NPCTalkMessage(npc.index, "M15510N 5UCC355FUL, D3SP173 MY C4P481L1713S");
 		return true;
 	}
 	
@@ -1695,7 +1705,7 @@ static bool ARIS_LoseConditions(int iNPC)
 	{
 		ForcePlayerLoss();
 		RaidBossActive = INVALID_ENT_REFERENCE;
-		CPrintToChatAll("{rare}A.R.I.S.{default}: 적ㄱㅜㄴ의 도ㅈㅜ 감지. 임무 완료");
+		NPCTalkMessage(npc.index, "7H3 3N3M13S H4V3 F0RF317, M15510N 5UCC355FUL");
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		return true;
 	}
@@ -1746,4 +1756,46 @@ static void ARIS_SetNextForcedWeaponSwitchThreshold(ARIS npc)
 {
 	const float maxHealthPercentageThreshold = 0.25;
 	npc.m_iForcedWeaponSwitchHealthThreshold = GetEntProp(npc.index, Prop_Data, "m_iHealth") - RoundToCeil(ReturnEntityMaxHealth(npc.index) * maxHealthPercentageThreshold);
+}
+
+static void ARIS_Weapon_Lines(ARIS npc, int client)
+{
+	//if(client > MaxClients)
+	if(!IsValidClient(client))
+		return;
+
+	if(b_said_player_weaponline[client])	//only 1 line per player.
+		return;
+
+
+	float GameTime = GetGameTime();	//no need to throttle this.
+
+	if(fl_said_player_weaponline_time[npc.index] > GameTime)	//no spamming in chat please!
+		return;
+
+	bool valid = true;
+	char Text_Lines[255];
+
+	Text_Lines = "";
+
+	if(Store_HasNamedItem(client, "Expidonsan Research Card"))
+	{
+		switch(GetRandomInt(0,1))
+		{
+			case 0:
+			{
+				Format(Text_Lines, sizeof(Text_Lines), "TR41T0R5 W1LL N0T B3 T0L3R4T3D",client);
+			}
+			case 1:
+			{
+				Format(Text_Lines, sizeof(Text_Lines), "TR41T0R",client);
+			}
+		}
+		if(valid)
+		{
+			NPCTalkMessage(npc.index, Text_Lines);
+			fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(10.0, 15.0);
+			b_said_player_weaponline[client] = true;
+		}
+	}
 }

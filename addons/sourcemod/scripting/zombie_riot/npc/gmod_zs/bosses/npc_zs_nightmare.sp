@@ -134,10 +134,7 @@ methodmap ZSNightmare < CClotBody
 		{
 			if(IsClientInGame(client_check) && !IsFakeClient(client_check))
 			{
-				LookAtTarget(client_check, npc.index);
-				SetGlobalTransTarget(client_check);
 				ShowGameText(client_check, "voice_player", 1, "%t", "Nightmare Spawned");
-				UTIL_ScreenFade(client_check, 180, 1, FFADE_OUT, 0, 0, 0, 255);
 			}
 		}
 		

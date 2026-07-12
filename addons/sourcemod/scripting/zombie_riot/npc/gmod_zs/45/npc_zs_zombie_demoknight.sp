@@ -77,7 +77,7 @@ methodmap InfectedDemoMain < CClotBody
 	}
 	public InfectedDemoMain(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedDemoMain npc = view_as<InfectedDemoMain>(CClotBody(vecPos, vecAng, "models/player/demo.mdl", "1.0", "17500", ally));
+		InfectedDemoMain npc = view_as<InfectedDemoMain>(CClotBody(vecPos, vecAng, "models/player/demo.mdl", "1.0", "25000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -301,5 +301,3 @@ public void InfectedDemoMain_NPCDeath(int entity)
 	if(IsValidEntity(npc.m_iWearable3))
 		RemoveEntity(npc.m_iWearable3);
 }
-
-

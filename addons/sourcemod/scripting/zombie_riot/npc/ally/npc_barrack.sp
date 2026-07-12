@@ -135,6 +135,7 @@ static bool FreeToSelect[MAXENTITIES];
 static int SupplyCount[MAXENTITIES];
 static bool b_WalkToPosition[MAXENTITIES];
 static int i_RalleyTarget[MAXENTITIES];
+float f_ConfirmSuicide[MAXPLAYERS];
 
 methodmap BarrackBody < CClotBody
 {
@@ -807,6 +808,10 @@ public Action BarrackBody_OnTakeDamage(int victim, int &attacker, int &inflictor
 	if(i_NpcIsABuilding[victim])
 		return Plugin_Continue;
 		
+	if(HasSpecificBuff(attacker, "Marked"))
+	{
+		damage *= 0.9;
+	}
 	
 	if(!b_thisNpcIsARaid[attacker])
 	{
@@ -992,11 +997,24 @@ public int BarrackBody_MenuH(Menu menu, MenuAction action, int client, int choic
 							BarracksVillager_MenuSpecial(client, npc.index);
 							return 0;
 						}
+						else if(StrEqual(npc_classname, "npc_barrack_corruptedknight"))
+						{
+							CorruptedKnight_MenuSpecial(client, npc.index);
+							return 0;
+						}
 					}
 					case 8:
 					{
-						SmiteNpcToDeath(npc.index);
-						return 0;
+						if(f_ConfirmSuicide[client] > GetGameTime())
+						{
+							SmiteNpcToDeath(npc.index);
+							return 0;
+						}
+						else
+						{
+							CPrintToChat(client, "Press again to confirm killing the unit.");
+							f_ConfirmSuicide[client] = GetGameTime() + 2.0;
+						}
 					}
 				}
 
@@ -1100,7 +1118,6 @@ float Barracks_UnitExtraRangeCalc(int entity, int client, float range, bool buil
 
 	if(building && (i_NormalBarracks_HexBarracksUpgrades[client] & ZR_BARRACKS_UPGRADES_CRENELLATIONS))
 		RangeMulti *= 2.0;
-
 	
 	range *= RangeMulti;
 	return range;

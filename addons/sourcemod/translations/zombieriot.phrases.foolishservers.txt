@@ -769,4 +769,11 @@
 		"en"		"{crimson}[ZR]{snow} You have found!"
 		"ko"		"{crimson}[ZR]{snow} 아이템을 발견했습니다!"
 	}
+	
+	//Store
+	"Item Description"
+	{
+		"en"		"Item Description"
+		"ko"		"아이템 설명"
+	}
 }

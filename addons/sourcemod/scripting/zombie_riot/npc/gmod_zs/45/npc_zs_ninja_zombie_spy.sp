@@ -167,6 +167,9 @@ methodmap NinjaSpy < CClotBody
 
 		SetEntPropFloat(npc.m_iWearable2, Prop_Send, "m_fadeMinDist", 500.0);
 		SetEntPropFloat(npc.m_iWearable2, Prop_Send, "m_fadeMaxDist", 750.0);
+		
+		SetEntPropFloat(npc.m_iWearable3, Prop_Send, "m_fadeMinDist", 500.0);
+		SetEntPropFloat(npc.m_iWearable3, Prop_Send, "m_fadeMaxDist", 750.0);
 
 		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", 1);
 		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 1);

@@ -3,6 +3,7 @@
 
 static Handle SDKEquipWearable;
 static Handle SDKGetMaxHealth;
+Handle g_hSDKStartTouch;
 //static Handle g_hStudio_FindAttachment;
 
 static Handle g_hSetAbsOrigin;
@@ -27,6 +28,7 @@ static Handle g_SDKCallRemoveImmediate;
 static Handle SDKGetShootSound;
 static Handle SDKBecomeRagdollOnClient;
 static Handle SDKSetSpeed;
+static Handle SDKGetSmoothedVelocity;
 
 void SDKCall_Setup()
 {
@@ -47,7 +49,16 @@ void SDKCall_Setup()
 	SDKGetMaxHealth = EndPrepSDKCall();
 	if(!SDKGetMaxHealth)
 		LogError("[Gamedata] Could not find GetMaxHealth");
-		
+
+	StartPrepSDKCall(SDKCall_Entity);
+	PrepSDKCall_SetFromConf(gamedata, SDKConf_Virtual, "StartTouch");
+	PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
+	g_hSDKStartTouch = EndPrepSDKCall();
+	if(g_hSDKStartTouch == INVALID_HANDLE)
+	{
+		LogMessage("Failed to create call: StartTouch!");
+	}
+
 	delete gamedata;
 	
 	gamedata = LoadGameConfigFile("zombie_riot");
@@ -70,6 +81,7 @@ void SDKCall_Setup()
 	PrepSDKCall_SetFromConf(gamedata, SDKConf_Signature, "CBasePlayer::SnapEyeAngles");
 	PrepSDKCall_AddParameter(SDKType_QAngle, SDKPass_ByRef);
 	if ((g_hSnapEyeAngles = EndPrepSDKCall()) == null) SetFailState("Failed to create SDKCall for CBasePlayer::SnapEyeAngles!");
+	
 
 
 		
@@ -164,6 +176,12 @@ void SDKCall_Setup()
 	if(!SDKSetSpeed)
 		LogError("[Gamedata] Could not find CTFPlayer::TeamFortress_SetSpeed()");
 
+	StartPrepSDKCall(SDKCall_Entity);
+	PrepSDKCall_SetFromConf(gamedata, SDKConf_Virtual, "CBaseEntity::GetSmoothedVelocity");
+	PrepSDKCall_SetReturnInfo(SDKType_Vector, SDKPass_ByValue);
+	SDKGetSmoothedVelocity = EndPrepSDKCall();
+	if(!SDKGetSmoothedVelocity)
+		LogError("[Gamedata] Could not find CBaseEntity::GetSmoothedVelocity");
 	
 	//copied from 
 	//https://github.com/bhopppp/Shavit-Surf-Timer/blob/289b9df123e61f2a0982ded688d2c611023b25f5/addons/sourcemod/scripting/shavit-replay-playback.sp#L204
@@ -523,4 +541,17 @@ void SDKCall_RemoveImmediate(int entity)
 	{
 		SDKCall(g_SDKCallRemoveImmediate, entity);
 	}
+}
+void SDKCall_StartTouch(int entity, int target)
+{
+	if (g_hSDKStartTouch)
+	{
+		SDKCall(g_hSDKStartTouch, entity, target);
+	}
+}
+
+stock void SDKCall_GetSmoothedVelocity(int entity, float vec[3])
+{
+	if(SDKGetSmoothedVelocity)
+		SDKCall(SDKGetSmoothedVelocity, entity, vec);
 }

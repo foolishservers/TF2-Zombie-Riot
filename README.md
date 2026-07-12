@@ -43,6 +43,11 @@ Main Servers:
 145.239.70.42:27015 ( steam://connect/145.239.70.42:27015 )
 
 
+## info
+Zr uses a system that allows creators to add more sounds without straining servers and others.
+
+This uses a different repo were you download sounds manually with a simple drag and drop.
+- [Manual ZR Sound Repo](https://github.com/artvin01/ZrManualSounds)
  
 ## cvar's
 
@@ -79,8 +84,8 @@ global zr can be a shared database across multiple servers, local one should sta
 
 ### Dependencies
 
-Sourcemod 1.13 Is a Must.
-For both linux and Windows, not all linux gamedata might be here.
+### [Sourcemod 1.12] Is a Must.
+1.13 does not work anymore.
 The SourceMod plugins / extensions listed below are required for TF2 Zombie Riot to run:
 
 - [Flaming Sarge's TF2Attribute fork](https://github.com/FlaminSarge/tf2attributes)
@@ -89,11 +94,11 @@ The SourceMod plugins / extensions listed below are required for TF2 Zombie Riot
 - [TFEconData](https://github.com/nosoop/SM-TFEconData)
 - [CBaseNpc](https://github.com/TF2-DMB/CBaseNPC)
 - [Timescale Windows Fix](https://forums.alliedmods.net/showthread.php?t=324264) Not needed if you are on linux.
-- [TF2Utils](https://github.com/nosoop/SM-TFUtils)
 - [File Network](https://forums.alliedmods.net/showthread.php?t=341953)
 - [CollisionHookFIX](https://github.com/voided/CollisionHook)
 - [Source scramble](https://github.com/nosoop/SMExt-SourceScramble)
 - [Load Soundscript](https://github.com/haxtonsale/LoadSoundScript)
+- [vscript-ext](https://github.com/Mikusch/vscript-ext)
 - [Max speed unlocker/Edict Alloc](https://github.com/Mikusch/SourceScramble-Patches) (install both speed unlocker and Alloc)
 
 If you want to compile, this include is needed!

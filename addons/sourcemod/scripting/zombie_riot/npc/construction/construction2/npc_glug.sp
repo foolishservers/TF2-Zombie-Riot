@@ -54,7 +54,7 @@ void GlugOnMapStart()
 	strcopy(data.Icon, sizeof(data.Icon), "glug_slime");
 	data.IconCustom = true;
 	data.Flags = 0;
-	data.Category = 0;
+	data.Category = Type_Outlaws;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
@@ -75,6 +75,16 @@ methodmap Glug < CClotBody
 	{
 		public get()							{ return fl_AbilityOrAttack[this.index][1]; }
 		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][1] = TempValueForProperty; }
+	}
+	property bool m_bAggressive
+	{
+		public get()							{ return b_FlamerToggled[this.index]; }
+		public set(bool TempValueForProperty) 	{ b_FlamerToggled[this.index] = TempValueForProperty; }
+	}
+	property float m_flPeacefullAbdication
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][2]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][2] = TempValueForProperty; }
 	}
 	public void PlayIdleSound()
 	{
@@ -119,6 +129,12 @@ methodmap Glug < CClotBody
 		else
 			npc = view_as<Glug>(CClotBody(vecPos, vecAng, "models/props_coalmines/boulder3.mdl", "1.0", "1000", ally));
 		
+		if (StrContains(data, "randomspawn") != -1)
+			TeleportDiversioToRandLocation(npc.index, true, 1500.0, 500.0);
+		
+		if (StrContains(data, "aggressive") != -1)
+			npc.m_bAggressive = true;
+		
 		i_NpcWeight[npc.index] = 2;
 		
 		npc.m_iBleedType = BLEEDTYPE_RUBBER;
@@ -126,6 +142,7 @@ methodmap Glug < CClotBody
 		npc.m_iNpcStepVariation = 0;
 		npc.m_bDissapearOnDeath = true;
 		i_ExplosiveProjectileHexArray[npc.index] |= EP_DEALS_CLUB_DAMAGE;
+		npc.m_flPeacefullAbdication = GetGameTime() + 15.0;
 	
 
 		func_NPCDeath[npc.index] = ClotDeath;
@@ -185,6 +202,14 @@ static void ClotThink(int iNPC)
 		return;
 	
 	npc.m_flNextThinkTime = gameTime + 0.1;
+
+	if(npc.m_flPeacefullAbdication < gameTime)
+	{
+		npc.Anger = true;
+		npc.m_bDissapearOnDeath = true;	
+		RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
+		return;
+	}
 
 	int target = npc.m_iTarget;
 	if(i_Target[npc.index] != -1 && !IsValidEnemy(npc.index, target))
@@ -247,17 +272,38 @@ static void Clot_SelfDefense(Glug npc, float distance, float vecTarget[3], float
 		SDKCall_SetLocalAngles(npc.index, angles);
 		if(npc.m_flAttackHappens < gameTime)
 		{
-			PluginBot_Jump(npc.index, vecTarget, 600.0);
+			float vecJumpTo[3];
+			vecJumpTo = vecTarget;
+			
+			if (npc.m_bAggressive)
+			{
+				// Increase jump height based on distance, because being further away means it jumps straight ahead, which means less air time, which means shitty jumps
+				vecJumpTo[2] += 70.0 * (distance / (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 7.0));
+				
+				// As of time of writing, this should never happen, but if the npc is changed in the future, this prevents jumps from being weaker than they are supposed to be
+				if (vecJumpTo[2] < vecTarget[2])
+					vecJumpTo[2] = vecTarget[2];
+			}
+			
+			PluginBot_Jump(npc.index, vecJumpTo, 600.0);
 			npc.m_flAttackHappens = 0.0;
 			npc.PlayJumpSound();
 		}
 
 	}
-	if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 7.0))
+	
+	// Always target somebody if the glug is aggressive
+	if(npc.m_bAggressive || distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 7.0))
 	{
 		if(npc.m_flNextMeleeAttack < gameTime)
 		{
-			int target = Can_I_See_Enemy(npc.index, npc.m_iTarget);
+			int target;
+			
+			if (!npc.m_bAggressive)
+				target = Can_I_See_Enemy(npc.index, npc.m_iTarget);
+			else
+				target = npc.m_iTarget;
+			
 			if(IsValidEnemy(npc.index, target, false, true))
 			{
 				npc.m_iTarget = target;
@@ -305,7 +351,7 @@ static void ClotDeath(int entity)
 			if(spawn_index > MaxClients)
 			{
 				NpcStats_CopyStats(npc.index, spawn_index);
-				CClotBody npc1 = view_as<CClotBody>(spawn_index);
+				Glug npc1 = view_as<Glug>(spawn_index);
 				npc1.m_flNextThinkTime = GetGameTime() + 1.0;
 				NpcAddedToZombiesLeftCurrently(spawn_index, true);
 				int health = ReturnEntityMaxHealth(npc.index);
@@ -324,6 +370,8 @@ static void ClotDeath(int entity)
 				flPos[1] += GetRandomInt(0,1) ? GetRandomFloat(-200.0, -100.0) : GetRandomFloat(100.0, 200.0);
 				npc1.SetVelocity({0.0,0.0,0.0});
 				PluginBot_Jump(spawn_index, flPos);
+				
+				npc1.m_bAggressive = npc.m_bAggressive;
 			}
 		}
 	}
@@ -349,7 +397,8 @@ static void ClotTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 {
 	if(attacker > 0)
 	{
-		Huirgrajo npc = view_as<Huirgrajo>(victim);
+		Glug npc = view_as<Glug>(victim);
+		npc.m_flPeacefullAbdication = GetGameTime() + 15.0;
 
 		float gameTime = GetGameTime(npc.index);
 		if(npc.m_flHeadshotCooldown < gameTime)

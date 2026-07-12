@@ -24,8 +24,8 @@ void StalkerGoggles_OnMapStart()
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Machina Waldch");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_stalker_goggles");
-	strcopy(data.Icon, sizeof(data.Icon), "");
-	data.IconCustom = false;
+	strcopy(data.Icon, sizeof(data.Icon), "goggles");
+	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_Special;
 	data.Func = ClotSummon;
@@ -89,6 +89,7 @@ methodmap StalkerGoggles < StalkerShared
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;
 		npc.m_iNpcStepVariation = STEPTYPE_ROBOT;
 
+		b_thisNpcIsAMiniboss[npc.index] = true;
 		float wave = float(Waves_GetRoundScale()+1);
 		wave *= 0.133333;
 		npc.m_flWaveScale = wave;

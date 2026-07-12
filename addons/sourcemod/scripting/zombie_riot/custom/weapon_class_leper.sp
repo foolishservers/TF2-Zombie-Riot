@@ -219,6 +219,7 @@ public void Weapon_LeperSolemny(int client, int weapon, bool &result, int slot)
 	Grant 50% health and armor.
 	*/
 	Leper_InAnimation[client] = GetGameTime() + 1.85;
+	ApplyStatusEffect(client, client, "Infinite Will", 1.85);
 }
 //Freeze in place and cause effect.
 void RemoveSuperSwingLeper(int client)
@@ -246,6 +247,7 @@ void LeperOnSuperHitEffect(int client)
 	int ModelToDelete = 0;
 	SetCameraEffectLeperHew(client, ModelToDelete);
 	Leper_InAnimation[client] = GetGameTime() + 0.8;
+	ApplyStatusEffect(client, client, "Infinite Will", 0.8);
 
 	TF2_AddCondition(client, TFCond_FreezeInput, -1.0);
 
@@ -439,6 +441,7 @@ int SetCameraEffectLeperHew(int client, int &ModelToDelete)
 	int viewcontrol = CreateEntityByName("prop_dynamic");
 	if (IsValidEntity(viewcontrol))
 	{
+		b_ThisEntityIgnored[viewcontrol] = true;
 		GetVectorAnglesTwoPoints(vecSwingEnd, MiddleAngle, vAngleCamera);
 		vAngleCamera[2] -= GetRandomFloat(-20.0 , 20.0);
 		SetEntityModel(viewcontrol, "models/empty.mdl");
@@ -539,6 +542,7 @@ int SetCameraEffectLeperSolemny(int client, int &ModelToDelete)
 	int viewcontrol = CreateEntityByName("prop_dynamic");
 	if (IsValidEntity(viewcontrol))
 	{
+		b_ThisEntityIgnored[viewcontrol] = true;
 		float vAngleCamera[3];
 		GetVectorAnglesTwoPoints(vecSwingEnd, vOrigin, vAngleCamera);
 		vAngleCamera[0] -= 2.0;
@@ -842,6 +846,7 @@ public void Weapon_LeperWrath(int client, int weapon, bool &result, int slot)
 		SetCameraEffectLeperWrath(client, ModelToDelete);
 
 		Leper_InAnimation[client] = GetGameTime() + 1.85;
+		ApplyStatusEffect(client, client, "Infinite Will", 1.85);
 	}
 	else
 	{
@@ -900,6 +905,7 @@ int SetCameraEffectLeperWrath(int client, int &ModelToDelete)
 	int viewcontrol = CreateEntityByName("prop_dynamic");
 	if (IsValidEntity(viewcontrol))
 	{
+		b_ThisEntityIgnored[viewcontrol] = true;
 		float vAngleCamera[3];
 		GetVectorAnglesTwoPoints(vecSwingEnd, vOrigin, vAngleCamera);
 		SetEntityModel(viewcontrol, "models/empty.mdl");

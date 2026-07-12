@@ -117,7 +117,7 @@ void CAT_OnMapStart_NPC()
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "C.A.T.");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_cat");
-	strcopy(data.Icon, sizeof(data.Icon), "cat");
+	strcopy(data.Icon, sizeof(data.Icon), "cat_new");
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
 	data.Category = Type_Aperture;
@@ -311,6 +311,7 @@ methodmap CAT < CClotBody
 		
 		RaidBossActive = EntIndexToEntRef(npc.index);
 		RaidAllowsBuildings = false;
+		RaidAllowLastman = true;
 
 		int iActivity = npc.LookupActivity("ACT_MP_RUN_MELEE");
 		if(iActivity > 0) npc.StartActivity(iActivity);
@@ -328,6 +329,7 @@ methodmap CAT < CClotBody
 		RaidModeTime = GetGameTime() + 180.0;
 		b_thisNpcIsARaid[npc.index] = true;
 		b_ThisNpcIsImmuneToNuke[npc.index] = true;
+		Zero(b_said_player_weaponline);
 
 		for(int client_check=1; client_check<=MaxClients; client_check++)
 		{
@@ -424,15 +426,20 @@ methodmap CAT < CClotBody
 		switch(GetRandomInt(0,2))
 		{
 			case 0:
-				CPrintToChatAll("{rare}C.A.T.{default}: 침입자 대응책 준비 완료.");
+				NPCTalkMessage(npc.index, "CONTROL AGAINST TRESPASSERS, NOW ONLINE");
 			case 1:
-				CPrintToChatAll("{rare}C.A.T.{default}: C.A.T. 전투 준비.");
+				NPCTalkMessage(npc.index, "C.A.T. HAS BEEN ENGAGED");
 			case 2:
-				CPrintToChatAll("{rare}C.A.T.{default}: 시스템 파워 재가동.");
+				NPCTalkMessage(npc.index, "SYSTEM POWER-UP COMPLETE");
 		}
 
 		return npc;
 	}
+}
+
+static void NPCTalkMessage(int entity, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(entity, "rare", message);
 }
 
 public void CAT_ClotThink(int iNPC)
@@ -728,15 +735,15 @@ static void OrbSpam_Ability_ReadyUp(CAT npc)
 	{
 		case 0:
 		{
-			CPrintToChatAll("{rare}C.A.T.{default}: 입자 방사기 {unique}가동 준비 완료");
+			NPCTalkMessage(npc.index, "PARTICLE RADIATOR IS {unique}READY");
 		}
 		case 1:
 		{
-			CPrintToChatAll("{rare}C.A.T.{default}: 입자 분산 {crimson}준비 완료");
+			NPCTalkMessage(npc.index, "PREPARING FOR PARTICLE {crimson}DISPERSAL");
 		}
 		case 2:
 		{
-			CPrintToChatAll("{rare}C.A.T.{default}: 입자 방사기 준비 완료. {crimson}예열 중");
+			NPCTalkMessage(npc.index, "PARTICLES ARE DONE {crimson}WARMING UP");
 		}
 	}
 }
@@ -797,15 +804,15 @@ static void OrbSpam_Ability_End(CAT npc, bool yap = true)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{rare}C.A.T.{default}: 입자 방사기 {azure}냉각 중");
+				NPCTalkMessage(npc.index, "PARTICLE RADIATOR IS {azure}COOLING-OFF");
 			}
 			case 1:
 			{
-				CPrintToChatAll("{rare}C.A.T.{default}: 입자 분산 {azure}성공적");
+				NPCTalkMessage(npc.index, "PARTICLE DISPERSAL {azure}ACCOMPLISHED");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{rare}C.A.T.{default}: 입자력 {crimson}제거됨{default}... {azure}지금은.");
+				NPCTalkMessage(npc.index, "PARTICLES ARE {crimson}GONE{default}... {azure}FOR NOW");
 			}
 		}
 	}
@@ -870,7 +877,7 @@ bool CAT_timeBased(int iNPC)
 			AcceptEntityInput(npc.m_iWearable1, "Enable");
 			npc.m_flBeginTimeWarp = 0.0;
 			
-			CPrintToChatAll("{rare}C.A.T.{default}: ...성공적임");
+			NPCTalkMessage(npc.index, "...ACTION SUCCESSFUL");
 			
 			float vecPos[3];
 			GetAbsOrigin(npc.index, vecPos);
@@ -961,15 +968,15 @@ static void SelfDegradation_Ability_Start(CAT npc, bool yap = true)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{rare}C.A.T.{default}: 자가 붕괴 시작.");
+				NPCTalkMessage(npc.index, "INITIATING SELF-DEGRADATION");
 			}
 			case 1:
 			{
-				CPrintToChatAll("{rare}C.A.T.{default}: 자가 붕괴 진행 중...");
+				NPCTalkMessage(npc.index, "SELF-DEGRADATION IN PROCESS...");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{rare}C.A.T.{default}: 자가 붕괴 모드로 전환 중.");
+				NPCTalkMessage(npc.index, "SWITCHING TO SELF-DEGRADATION MODE");
 			}
 		}
 	}
@@ -1019,15 +1026,15 @@ static void SelfDegradation_Ability_Activate(CAT npc, bool yap = true)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{rare}C.A.T.{default}: 자가 붕괴 모드 {unique}가동 완료.");
+				NPCTalkMessage(npc.index, "SELF-DEGRADATION MODE IS {unique}ONLINE");
 			}
 			case 1:
 			{
-				CPrintToChatAll("{rare}C.A.T.{default}: 자가 붕괴: {unique}준비 완료");
+				NPCTalkMessage(npc.index, "SELF-DEGRADATION: {unique}ACTIVATED");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{rare}C.A.T.{default}: 자가 붕괴 모드 가동, {unique}성공적");
+				NPCTalkMessage(npc.index, "SELF-DEGRADATION POWER UP, {unique}COMPLETE");
 			}
 		}
 	}
@@ -1059,15 +1066,15 @@ static void SelfDegradation_Ability_Deactivate(CAT npc, bool yap = true)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{rare}C.A.T.{default}: 자가 붕괴 모드 {crimson}비활성화.");
+				NPCTalkMessage(npc.index, "SELF-DEGRADATION MODE IS {crimson}OFFLINE");
 			}
 			case 1:
 			{
-				CPrintToChatAll("{rare}C.A.T.{default}: 자가 붕괴 모드: {crimson}종료됨.");
+				NPCTalkMessage(npc.index, "SELF-DEGRADATION: {crimson}DEACTIVATED");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{rare}C.A.T.{default}: 자가 붕괴 모드 {crimson}강제 종료됨.");
+				NPCTalkMessage(npc.index, "SELF-DEGRADATION IS {crimson}SHUTTING DOWN");
 			}
 		}
 	}
@@ -1112,7 +1119,7 @@ public Action CAT_OnTakeDamage(int victim, int &attacker, int &inflictor, float 
 			npc.AddGesture("ACT_MP_STUN_BEGIN");
 			npc.SetActivity("ACT_MP_STUN_MIDDLE");
 			
-			CPrintToChatAll("{rare}C.A.T.{default}: {unique}정신 왜곡 {default}메커니즘 활성화 중...");
+			NPCTalkMessage(npc.index, "ENABLING {unique}MIND WARP {default}MECHANISMS...");
 			
 			npc.Anger = true;
 			npc.m_flBeginTimeWarp = GetGameTime(npc.index) + 2.0;
@@ -1222,9 +1229,35 @@ static void CAT_Weapon_Lines(CAT npc, int client)
 		}
 	}
 
+	if(IsHeartBroken(client))
+	{
+		valid = true;
+		Format(Text_Lines, sizeof(Text_Lines), "DESPITE YOUR VIOLENT BEHAVIOR, THE ONLY THING YOU'VE MANAGED TO BREAK SO FAR IS MY HEART",client);
+	}
+
+	if(Store_HasNamedItem(client, "Expidonsan Research Card"))
+	{
+		valid = true;
+		switch(GetRandomInt(0,2))
+		{
+			case 0:
+			{
+				Format(Text_Lines, sizeof(Text_Lines), "FAKER UNDER THE ALIAS '{rare}%N{default}' DETECTED",client);
+			}
+			case 1:
+			{
+				Format(Text_Lines, sizeof(Text_Lines), "YOU DO NOT BELONG IN HERE, '{rare}%N{default}'",client);
+			}
+			case 2:
+			{
+				Format(Text_Lines, sizeof(Text_Lines), "IT'S A PITY YOU CHOSE TO SIDE WITH {unique}THEM{default}, AND NOT {rare}US{default}, '{rare}%N{default}'",client);
+			}
+		}
+	}
+
 	if(valid)
 	{
-		CPrintToChatAll("{rare}C.A.T.{default}: %s", Text_Lines);
+		NPCTalkMessage(npc.index, Text_Lines);
 		fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(15.0, 22.0);
 		b_said_player_weaponline[client] = true;
 	}
@@ -1257,8 +1290,8 @@ static bool TraceEntityEnumerator_CAT_FindProjectiles(int entity, int self)
 	if (!b_IsAProjectile[entity])
 		return true;
 	
-	// Entity has just been initialized, skip this for now
-	if (GetTeam(entity) == 0)
+	// Scuffed way to check if the entity hasn't been fully initialized (and its team isn't set up yet), skip this for now
+	if (TeamNumber[entity] == -1 && GetTeam(entity) != -1)
 		return true;
 	
 	if (GetTeam(entity) == GetTeam(self))
@@ -1319,9 +1352,9 @@ static bool CAT_LoseConditions(int iNPC)
 				switch (GetURandomInt() % 2)
 				{
 					case 0:
-						CPrintToChatAll("{rare}C.A.T.{default}: 과부하 진ㅎ-");
+						NPCTalkMessage(npc.index, "OVERHEATING PROTOC-");
 					case 1:
-						CPrintToChatAll("{rare}C.A.T.{default}: 자폭 모드 진ㅎ-");
+						NPCTalkMessage(npc.index, "INITIATING SELF-DES-");
 				}
 				
 				npc.m_flDeathAnim = GetGameTime() + 1.0;
@@ -1347,7 +1380,7 @@ static bool CAT_LoseConditions(int iNPC)
 	{
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		
-		CPrintToChatAll("{rare}C.A.T.{default}: 이미 이긴 전투임.");
+		NPCTalkMessage(npc.index, "BY THE WORDS OF THE ONE AND ONLY GLORIOUS RACE; THERE CAN BE ONLY ONE");
 		return true;
 	}
 	
@@ -1355,7 +1388,7 @@ static bool CAT_LoseConditions(int iNPC)
 	{
 		ForcePlayerLoss();
 		RaidBossActive = INVALID_ENT_REFERENCE;
-		CPrintToChatAll("{rare}C.A.T.{default}: 네 무기를 버리고 항복한 뒤에 날 따라올 것.");
+		NPCTalkMessage(npc.index, "SURRENDER YOUR WEAPONS AND COME WITH ME");
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		return true;
 	}

@@ -98,6 +98,7 @@ void Object_PluginStart()
 	.DefineFloatField("m_fLastTimeClaimed")
 	.DefineBoolField("m_bCannotBePickedUp")
 	.DefineBoolField("m_bNoOwnerRequired")
+	.DefineIntField("m_iExtraLogic")
 
 	//needed so npc stuff doesnt break
 	.DefineIntField("m_iHealthBar")
@@ -139,11 +140,12 @@ methodmap ObjectGeneric < CClotBody
 		DispatchKeyValueVector(obj, "origin",	 vecPos);
 		DispatchKeyValueVector(obj, "angles",	 vecAng);
 		DispatchKeyValue(obj,		 "model",	 model);
-		DispatchKeyValue(obj,	   "modelscale", modelscale);
 		DispatchKeyValue(obj,	   "solid", "2");
 		DispatchKeyValue(obj,	   "physdamagescale", "0.0");
 		DispatchKeyValue(obj,	   "minhealthdmg", "0.0");
 		DispatchSpawn(obj);
+
+		SetEntPropFloat(obj, Prop_Send, "m_flModelScale", StringToFloat(modelscale));
 
 		ObjectGeneric objstats = view_as<ObjectGeneric>(obj);
 		objstats.BaseHealth = StringToInt(basehealth);
@@ -271,16 +273,16 @@ methodmap ObjectGeneric < CClotBody
 	{
 		int item = CreateEntityByName("prop_dynamic_override");
 		DispatchKeyValue(item, "model", model);
+
+		DispatchSpawn(item);
 		if(model_size == 1.0)
 		{
-			DispatchKeyValueFloat(item, "modelscale", GetEntPropFloat(this.index, Prop_Data, "m_flModelScale"));
+			SetEntPropFloat(item, Prop_Send, "m_flModelScale", GetEntPropFloat(this.index, Prop_Data, "m_flModelScale"));
 		}
 		else
 		{
-			DispatchKeyValueFloat(item, "modelscale", model_size);
+			SetEntPropFloat(item, Prop_Send, "m_flModelScale", model_size);
 		}
-
-		DispatchSpawn(item);
 		SetEntPropEnt(item, Prop_Send, "m_hOwnerEntity", this.index);
 		
 		SetEntityMoveType(item, MOVETYPE_NONE);
@@ -511,6 +513,17 @@ methodmap ObjectGeneric < CClotBody
 			return view_as<bool>(GetEntProp(this.index, Prop_Data, "m_bNoOwnerRequired"));
 		}
 	}
+	property int m_iExtraLogic
+	{
+		public set(int value)
+		{
+			SetEntProp(this.index, Prop_Data, "m_iExtraLogic", value);
+		}
+		public get()
+		{
+			return GetEntProp(this.index, Prop_Data, "m_iExtraLogic");
+		}
+	}
 	property bool m_bConstructBuilding
 	{
 		public set(bool value)
@@ -521,6 +534,7 @@ methodmap ObjectGeneric < CClotBody
 			{
 				SetEntPropEnt(this.index, Prop_Data, "m_hOwnerEntity", -1);
 				ApplyStatusEffect(this.index, this.index, "Const2 Scaling For Enemy Base Nerf", 999999.0);
+				/*
 				if(h_TransmitHookType[this.index] != 0)
 				{
 					if(!DHookRemoveHookID(h_TransmitHookType[this.index]))
@@ -529,6 +543,7 @@ methodmap ObjectGeneric < CClotBody
 					}
 				}
 				h_TransmitHookType[this.index] = 0;
+				*/
 			}
 			SetEntProp(this.index, Prop_Data, "m_bConstructBuilding", value);
 		}
@@ -654,13 +669,14 @@ public bool ObjectGeneric_CanBuildSentryBarracks(int client, int &count, int &ma
 	if(!client)
 		return false;
 		
-	return ObjectGeneric_CanBuildSentryInternal(client, count, maxcount);
+	count = Object_GetSentryBuilding(client) == -1 ? 0 : 1;
+	maxcount = IsBarracks(client) ? 1 : 0;
+
+	return (!count && maxcount);
 }
 public bool ObjectGeneric_CanBuildSentry(int client, int &count, int &maxcount)
 {
 	if(!client)
-		return false;
-	if(i_NormalBarracks_HexBarracksUpgrades_2[client] & ZR_BARRACKS_TROOP_CLASSES)
 		return false;
 	if(f_VintulumBombRecentlyUsed[client] > GetGameTime())
 		return false;
@@ -671,7 +687,7 @@ public bool ObjectGeneric_CanBuildSentry(int client, int &count, int &maxcount)
 bool ObjectGeneric_CanBuildSentryInternal(int client, int &count, int &maxcount)
 {
 	count = Object_GetSentryBuilding(client) == -1 ? 0 : 1;
-	maxcount = (Blacksmith_IsASmith(client) || Merchant_IsAMerchant(client)) ? 0 : 1;
+	maxcount = (Blacksmith_IsASmith(client) || Merchant_IsAMerchant(client) || IsBarracks(client)) ? 0 : 1;
 
 	return (!count && maxcount);
 }
@@ -917,6 +933,13 @@ bool Object_Interact(int client, int weapon, int obj)
 		MountedObjectInteracted = true;
 	}
 
+	if(EntityOnAllyInteract[client] && EntityOnAllyInteract[client] != INVALID_FUNCTION)
+	{
+		Call_StartFunction(null, EntityOnAllyInteract[client]);
+		Call_PushCell(client);
+		Call_PushCell(obj);
+		Call_Finish();
+	}
 	Function func = func_NPCInteract[entity];
 	if((!func || func == INVALID_FUNCTION) && GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity") != -1)
 		return false;
@@ -1077,6 +1100,7 @@ int Object_MaxSupportBuildings(int client, bool ingore_glass = false)
 	maxAllowed += Building_health_attribute; 
 	maxAllowed += Blacksmith_Additional_SupportBuildings(client); 
 	maxAllowed += Merchant_Additional_SupportBuildings(client); 
+	maxAllowed += Gunsaw_Additional_SupportBuildings(client);
 	if(CvarInfiniteCash.BoolValue)
 	{
 		maxAllowed += 999;
@@ -1093,15 +1117,11 @@ int Object_MaxSupportBuildings(int client, bool ingore_glass = false)
 			maxAllowed = 1;
 	}
 
-	if(i_NormalBarracks_HexBarracksUpgrades_2[client] & ZR_BARRACKS_TROOP_CLASSES)
+	if(IsBarracks(client))
 	{
 		if(!ingore_glass)
 		{
-			if(maxAllowed > 2)
-			{
-				maxAllowed = 2;
-
-			}
+			maxAllowed = 2;
 		}
 	}
 	return maxAllowed;
@@ -1133,8 +1153,6 @@ Action ObjectGeneric_ClotTakeDamage(int victim, int &attacker, int &inflictor, f
 	
 	if(GetTeam(victim) == TFTeam_Red)
 	{
-		if(CurrentModifOn() == 2 || CurrentModifOn() == 3)
-			damage *= 1.25;
 
 		if(Rogue_Mode()) //buildings are refunded alot, so they shouldnt last long.
 		{

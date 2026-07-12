@@ -20,6 +20,7 @@ float PreventRespawnsAll;
 #define ZR_DAMAGE_NPC_REFLECT					(1 << 10)	//this npc reflects damage to another npc that can also reflect damage, use this to filter out the damage.
 #define ZR_DAMAGE_CANNOTGIB_REGARDLESS			(1 << 11)
 #define ZR_DAMAGE_ALLOW_SELFHURT				(1 << 12)
+#define ZR_ELEMENTAL_QUANTUM					(1 << 13)
 
 
 #define PERK_NONE						0
@@ -31,6 +32,16 @@ float PreventRespawnsAll;
 #define PERK_TESLAR_MULE				(1 << 5)
 #define PERK_STOCKPILE_STOUT			(1 << 6)
 #define PERK_ENERGY_DRINK				(1 << 7)
+#define PERK_LOVER					(1 << 8)
+#define PERK_MARATHON				(1 << 9)
+#define PERK_SEALED					(1 << 10)
+#define PERK_BLOODY					(1 << 11)
+#define PERK_WHO					(1 << 12)
+	
+#define PERK_MORNING_COFFEE_X		(1 << 13)
+#define PERK_HASTY_HOPS_X			(1 << 14)
+#define PERK_MARKSMAN_BEER_X		(1 << 15)
+#define PERK_ENERGY_DRINK_X			(1 << 16)
 
 #define HEAL_NO_RULES				0	 	 
 //Nothing special.
@@ -42,10 +53,8 @@ float PreventRespawnsAll;
 //Silence Entirely nukes this heal
 #define HEAL_PASSIVE_NO_NOTIF		(1 << 4) 
 //Heals but doesnt notify anyone
-
-#define ZR_STORE_RESET (1 << 1) //This will reset the entire store to default
-#define ZR_STORE_DEFAULT_SALE (1 << 2) //This  will reset the current normally sold items, and put up a new set of items
-#define ZR_STORE_WAVEPASSED (1 << 3) //any storelogic that should be called when a wave passes
+#define HEAL_FLAG_AM				(1 << 5) 
+//Heals but doesnt notify anyone
 
 enum
 {
@@ -84,20 +93,20 @@ enum
 enum
 {
 	Faction_Expidonsa = 1,
-	Faction_Kazimierz,
-	Faction_Victoria,
+	Faction_Grunwald,
+	Faction_Vesta,
 	Faction_PsychicWarlord,
-	Faction_Seaborn
+	Faction_Dweller
 }
 public const char ItemFaction[][] =
 {
 	"",
 
 	"Expidonsa",
-	"Kazimierz",
-	"Victoria",
+	"Grunwald",
+	"Vesta",
 	"Psychic Warlord",
-	"Seaborn"
+	"Dweller"
 }
 
 enum
@@ -200,6 +209,7 @@ bool b_LagCompNPC_BlockInteral;
 bool b_LagCompAlliedPlayers; //Make sure this actually compensates allies.
 #endif
 
+Function func_WandOnTouch[MAXENTITIES];
 ConVar zr_spawnprotectiontime;
 #if !defined RTS
 float f_BackstabDmgMulti[MAXENTITIES];
@@ -215,6 +225,8 @@ int Animation_Index[MAXPLAYERS];
 int Animation_Retry[MAXPLAYERS];
 #endif
 
+float f_LatestDamageTaken[MAXPLAYERS];
+int i_LatestHealthLeft[MAXPLAYERS];
 int Building_Mounted[MAXENTITIES];
 bool i_HasBeenBackstabbed[MAXENTITIES];
 bool i_HasBeenHeadShotted[MAXENTITIES];
@@ -229,6 +241,7 @@ int g_particleImpactPortal;
 float f_damageAddedTogether[MAXPLAYERS];
 float f_damageAddedTogetherGametime[MAXPLAYERS];
 int i_HudVictimToDisplay[MAXPLAYERS];
+float f_RepeatShowHudFor[MAXPLAYERS];
 int i_HudVictimToDisplay2[MAXPLAYERS];
 #endif
 
@@ -247,6 +260,7 @@ int TeamNumber[MAXENTITIES];
 int i_NextAttackDoubleHit[MAXENTITIES];
 
 bool thirdperson[MAXPLAYERS];
+float f_ArmorDamageDeltHud[MAXPLAYERS];
 bool b_DoNotUnStuck[MAXENTITIES];
 float f_NoUnstuckVariousReasons[MAXENTITIES];
 //bool b_PlayerIsInAnotherPart[MAXENTITIES];
@@ -263,7 +277,7 @@ float f_TimerStatusEffectsDo[MAXENTITIES];
 
 int Healing_done_in_total[MAXENTITIES];
 int i_PlayerDamaged[MAXENTITIES];
-bool b_PlayerWasAirbornKnockbackReduction[MAXPLAYERS];
+int b_PlayerWasAirbornKnockbackReduction[MAXPLAYERS];
 ConVar CvarRPGInfiniteLevelAndAmmo;
 ConVar CvarXpMultiplier;
 TFClassType CurrentClass[MAXPLAYERS]={TFClass_Scout, ...};
@@ -271,6 +285,17 @@ TFClassType WeaponClass[MAXPLAYERS]={TFClass_Scout, ...};
 
 bool b_GivePlayerHint[MAXPLAYERS];
 #if defined ZR
+
+//custom wave music.
+MusicEnum MusicString1;
+MusicEnum MusicString2;
+MusicEnum MusicSetup1;
+MusicEnum MusicLastmann;
+MusicEnum MusicWin;
+MusicEnum MusicLoss;
+MusicEnum RaidMusicSpecial1;
+MusicEnum BGMusicSpecial1;
+
 int MostRecentVoteCancel;
 
 //only used for waves from spawners
@@ -314,6 +339,7 @@ float f_AmmoConsumeExtra[MAXPLAYERS];
 
 #if defined ZR || defined RTS
 ConVar CvarInfiniteCash;
+ConVar CvarUnlockStore;
 #endif
 
 #if defined ZR || defined RTS || defined RPG
@@ -340,7 +366,7 @@ bool b_HideCosmeticsPlayer[MAXPLAYERS];
 float f_HealDelayParticle[MAXENTITIES]={1.0, ...};
 
 bool b_IsAloneOnServer = false;
-bool b_TauntSpeedIncrease[MAXPLAYERS] = {true, ...};
+bool b_BackwardsWalkNotif[MAXPLAYERS] = {true, ...};
 Handle SyncHud_Notifaction;
 Handle SyncHud_WandMana;
 int i_CustomWeaponEquipLogic[MAXENTITIES]={0, ...};
@@ -443,6 +469,7 @@ float f_TimeFrozenStill[MAXENTITIES];
 float f_StunExtraGametimeDuration[MAXENTITIES];
 float f_BannerDurationActive[MAXENTITIES];
 float f_PreventMovementClient[MAXENTITIES];
+float BackwardsWarn[MAXPLAYERS];
 //0 means bad, 1 means good
 float f_BubbleProcStatus[MAXENTITIES][2];
 float f_DuelStatus[MAXENTITIES];
@@ -479,7 +506,7 @@ int ReplicateClient_RollAngle[MAXPLAYERS];
 bool b_StickyIsSticking[MAXENTITIES];
 
 float f_EntityRenderColour[MAXENTITIES][3];
-int i_EntityRenderColourSave[MAXENTITIES][3];
+int i_EntityRenderColourSave[MAXENTITIES][4];
 
 int i_Wearable[MAXENTITIES][10];
 int i_FreezeWearable[MAXENTITIES];
@@ -553,7 +580,7 @@ bool b_FaceStabber[MAXENTITIES];
 int Armor_Level[MAXPLAYERS]={0, ...}; 				//701
 int Grigori_Blessing[MAXPLAYERS]={0, ...}; 				//777
 bool b_HasGlassBuilder[MAXPLAYERS];
-bool b_HasMechanic[MAXPLAYERS];
+//bool b_HasMechanic[MAXPLAYERS];
 int i_MaxSupportBuildingsLimit[MAXPLAYERS];
 bool b_AggreviatedSilence[MAXPLAYERS];
 bool b_ArmorVisualiser[MAXENTITIES];
@@ -642,6 +669,11 @@ Function EntityFuncAttack2[MAXENTITIES];
 Function EntityFuncAttack3[MAXENTITIES];
 Function EntityFuncReload4[MAXENTITIES];
 Function EntityFuncPlayerRunCmd[MAXENTITIES];
+Function EntityFuncOnKill[MAXENTITIES];
+Function EntityOnAllyInteract[MAXENTITIES];
+Function EntityOnBuildObject[MAXENTITIES];
+Function EntityFuncTakeDamage[MAXENTITIES][3];
+Function EntityCustomTraceMelee[MAXENTITIES];
 //Function EntityFuncReloadSingular5[MAXENTITIES];
 
 float f_ClientMusicVolume[MAXPLAYERS];
@@ -667,7 +699,7 @@ bool b_IgnoreAllCollisionNPC[MAXENTITIES];		//for npc's that noclip
 int iref_PropAppliedToRocket[MAXENTITIES];
 
 int i_ExplosiveProjectileHexArray[MAXENTITIES];
-int h_TransmitHookType[MAXENTITIES];
+//int h_TransmitHookType[MAXENTITIES];
 int h_NpcCollissionHookType[MAXENTITIES];
 int h_NpcSolidHookType[MAXENTITIES];
 int h_NpcHandleEventHook[MAXENTITIES];
@@ -809,7 +841,7 @@ enum
 	STEPTYPE_COMBINE_METRO = 4,
 	STEPTYPE_TANK = 5,
 	STEPTYPE_ROBOT = 6,
-	STEPTYPE_SEABORN = 7
+	STEPTYPE_DWELLER = 7
 }
 
 enum
@@ -825,7 +857,7 @@ enum
 	BLEEDTYPE_RUBBER = 3,
 	BLEEDTYPE_XENO = 4,
 	BLEEDTYPE_SKELETON = 5,
-	BLEEDTYPE_SEABORN = 6,
+	BLEEDTYPE_DWELLER = 6,
 	BLEEDTYPE_VOID = 7,
 	BLEEDTYPE_UMBRAL = 8,
 	BLEEDTYPE_PORTAL = 9
@@ -897,6 +929,7 @@ int i_SaidLineAlready[MAXENTITIES];
 
 #if defined ZR
 
+Handle WaveTimer;
 float MultiGlobalEnemy = 0.25;
 float MultiGlobalEnemyBoss = 0.25;
 //This value is capped at max 4.0, any higher will result in MultiGlobalHealth being increased
@@ -930,4 +963,7 @@ int ActiveFogEntity;				// Entity ref of the fog controller that is currently ac
 bool g_PrecachedZombieNPCs;
 bool g_PrecachedMatrixNPCs;
 int ZoneMarkerRef[Zone_MAX] = {-1, ...};
+ArrayList CurrentCollection;
+ArrayList Artifacts;
+ArrayList E_AL_StatusEffects[MAXENTITIES];
 #endif

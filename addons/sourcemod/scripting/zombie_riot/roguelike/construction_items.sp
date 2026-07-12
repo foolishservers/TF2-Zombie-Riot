@@ -257,31 +257,26 @@ public void Construction_Alyx_Collect()
 
 public void GiveCash_Base1()
 {
-	CurrentCash += 500;
 	GlobalExtraCash += 500;
 	CPrintToChatAll("%t", "Gained Material", 500, "Cash");
 }
 public void GiveCash_Base2()
 {
-	CurrentCash += 1500;
 	GlobalExtraCash += 1500;
 	CPrintToChatAll("%t", "Gained Material", 1500, "Cash");
 }
 public void GiveCash_Base3()
 {
-	CurrentCash += 3000;
 	GlobalExtraCash += 3000;
 	CPrintToChatAll("%t", "Gained Material", 3000, "Cash");
 }
 public void GiveCash_Base4()
 {
-	CurrentCash += 5000;
 	GlobalExtraCash += 5000;
 	CPrintToChatAll("%t", "Gained Material", 5000, "Cash");
 }
 public void GiveCash_2000()
 {
-	CurrentCash += 2000;
 	GlobalExtraCash += 2000;
 	CPrintToChatAll("%t", "Gained Material", 2000, "Cash");
 }
@@ -333,7 +328,7 @@ public void Construction_RareWeapon_Collect()
 	char name[64];
 	float discount = 0.7;
 
-	switch(GetURandomInt() % 6)
+	switch(GetURandomInt() % 4)
 	{
 		case 0, 1:
 		{
@@ -349,10 +344,12 @@ public void Construction_RareWeapon_Collect()
 		{
 			strcopy(name, sizeof(name), "Whistle Stop");
 		}
+		/*
 		case 4, 5:
 		{
 			strcopy(name, sizeof(name), "Ancestor Launcher");
 		}
+		*/
 	}
 
 	Store_DiscountNamedItem(name, 999, discount);
@@ -368,7 +365,7 @@ public void Xeno_Resurgance_Enemy(int entity)
 		return;
 
 	if(view_as<CClotBody>(entity).m_iBleedType != BLEEDTYPE_XENO)
-		ApplyStatusEffect(entity, entity, "Xeno Infection", 9999.9);
+		ApplyStatusEffect(entity, entity, "Xeno Infection Buff", 9999.9);
 	else
 		ApplyStatusEffect(entity, entity, "Xeno Infection Buff Only", 9999.9);
 }

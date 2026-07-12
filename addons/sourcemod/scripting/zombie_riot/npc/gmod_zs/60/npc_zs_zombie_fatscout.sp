@@ -67,7 +67,7 @@ methodmap InfectedFatScout < CClotBody
 	
 	public InfectedFatScout(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
-		InfectedFatScout npc = view_as<InfectedFatScout>(CClotBody(vecPos, vecAng, "models/player/heavy.mdl", "1.0", "30000", ally));
+		InfectedFatScout npc = view_as<InfectedFatScout>(CClotBody(vecPos, vecAng, "models/player/heavy.mdl", "1.0", "60000", ally));
 		
 		i_NpcWeight[npc.index] = 2;
 		int iActivity = npc.LookupActivity("ACT_MP_RUN_SECONDARY");
@@ -231,7 +231,7 @@ static int InfectedFatScoutSelfDefense(InfectedFatScout npc, float gameTime, int
 				Handle swingTrace;
 				if(npc.DoSwingTrace(swingTrace, target, { 9999.0, 9999.0, 9999.0 }))
 				{
-					if(!NpcStats_VictorianCallToArms(npc.index))
+					if(!NpcStats_VestanCallToArms(npc.index))
 						npc.m_iAmmo--;
 					target = TR_GetEntityIndex(swingTrace);	
 					

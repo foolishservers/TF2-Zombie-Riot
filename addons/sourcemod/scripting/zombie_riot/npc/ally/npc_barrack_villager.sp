@@ -119,6 +119,7 @@ methodmap BarrackVillager < BarrackBody
 		VillagerRepairFocusLoc[npc.index][2] = 0.0;
 		b_DoNotChangeTargetTouchNpc[npc.index] = 1;
 		
+		npc.CmdOverride = Command_Retreat;
 		npc.m_iWearable1 = npc.EquipItem("weapon_bone", "models/workshop/weapons/c_models/c_sledgehammer/c_sledgehammer.mdl");
 		SetVariantString("0.5");
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
@@ -319,7 +320,7 @@ public void BarrackVillager_ClotThink(int iNPC)
 					float flDistanceToTarget = GetVectorDistance(VillagerRepairFocusLoc[npc.index], MePos, true);
 					if(flDistanceToTarget < (25.0*25.0))
 					{
-						SummonerRenerateResources(client, 0.4, 1.05);
+						SummonerRenerateResources(client, 0.26, 1.05);
 						if(npc.m_iChanged_WalkCycle != 7)
 						{
 							npc.m_iChanged_WalkCycle = 7;
@@ -521,7 +522,7 @@ bool BarracksVillager_RepairSelfTower(int entity, int tower)
 	{
 		if(GetEntProp(tower, Prop_Data, "m_iHealth") < GetEntProp(tower, Prop_Data, "m_iMaxHealth"))
 		{
-			SetEntProp(tower, Prop_Data, "m_iHealth", GetEntProp(tower, Prop_Data, "m_iHealth") + (GetEntProp(tower, Prop_Data, "m_iMaxHealth") / 500));
+			SetEntProp(tower, Prop_Data, "m_iHealth", GetEntProp(tower, Prop_Data, "m_iHealth") + (GetEntProp(tower, Prop_Data, "m_iMaxHealth") / 375));
 			if(GetEntProp(tower, Prop_Data, "m_iHealth") >= GetEntProp(tower, Prop_Data, "m_iMaxHealth"))
 			{
 				SetEntProp(tower, Prop_Data, "m_iHealth", GetEntProp(tower, Prop_Data, "m_iMaxHealth"));
@@ -571,7 +572,7 @@ void BarracksVillager_RepairBuilding(int entity, int building)
 		{
 			if(i_IsABuilding[building])
 			{
-				int HealthToRepair = GetEntProp(building, Prop_Data, "m_iMaxHealth") / 750;
+				int HealthToRepair = GetEntProp(building, Prop_Data, "m_iMaxHealth") / 500;
 				if(HealthToRepair < 1)
 				{
 					HealthToRepair = 1;

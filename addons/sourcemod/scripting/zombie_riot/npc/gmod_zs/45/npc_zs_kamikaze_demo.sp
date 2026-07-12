@@ -37,7 +37,7 @@ void InfectedKamikaze_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "demo");
 	data.IconCustom = false;
 	data.Flags = 0;
-	data.Category = Type_Common;
+	data.Category = Type_GmodZS;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
@@ -313,7 +313,7 @@ public void InfectedKamikaze_NPCDeath(int entity)
 		pack.WriteCell(100);
 		RequestFrame(DelayExplosiveMakeExplosion, pack);
 		*/
-		makeexplosion(entity, startPosition, 65, 125, _, true);
+		makeexplosion(entity, startPosition, 65, 200, _, true);
 	}
 	else
 	{

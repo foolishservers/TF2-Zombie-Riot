@@ -117,6 +117,10 @@ methodmap Allymedic < CClotBody
 		npc.m_bnew_target = false;
 		npc.StartPathing();
 		
+		npc.m_iTeamGlow = TF2_CreateGlow(npc.index);
+		npc.m_bTeamGlowDefault = false;
+		SetVariantColor(view_as<int>({255, 0, 0, 0}));
+		AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
 		
 		int skin = 0;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
@@ -313,7 +317,7 @@ static int Medic_Work(Allymedic npc, float distance)
 	if(npc.m_iTargetWalkTo)
 	{
 		if (GetTeam(npc.m_iTargetWalkTo)==GetTeam(npc.index) && 
-		b_BobsCuringHand_Revived[npc.m_iTargetWalkTo] >= 40 &&
+		b_BobsCuringHand_Revived[npc.m_iTargetWalkTo] >= 0 &&
 		 TeutonType[npc.m_iTargetWalkTo] == TEUTON_NONE &&
 		  dieingstate[npc.m_iTargetWalkTo] > 0 && 
 		  !b_LeftForDead[npc.m_iTargetWalkTo])
@@ -335,9 +339,11 @@ static int Medic_Work(Allymedic npc, float distance)
 			else
 			{
 				npc.StopHealing();
-				npc.m_bnew_target = false;					
+				npc.m_bnew_target = false;
+				npc.SetGoalEntity(npc.m_iTargetWalkTo);
+                return 0;
 			}
-			return 0;
+			//return 0;
 		}
 		npc.m_iTargetWalkTo=0;
 	}

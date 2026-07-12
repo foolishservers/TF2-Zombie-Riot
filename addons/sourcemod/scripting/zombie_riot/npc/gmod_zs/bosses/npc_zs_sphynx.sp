@@ -48,7 +48,7 @@ void ZSSphynx_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_sphynx");
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
-	data.Category = Type_Mutation;
+	data.Category = Type_GmodZS;
 	data.Func = ClotSummon;
 	data.Precache = ClotPrecache;
 	NPC_Add(data);
@@ -128,9 +128,16 @@ methodmap ZSSphynx < CClotBody
 		func_NPCThink[npc.index] = view_as<Function>(ZSSphynx_ClotThink);
 		
 		npc.StartPathing();
-		npc.m_flSpeed = 275.0;
+		npc.m_flSpeed = 330.0;
 		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);	
 		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);	
+		for(int client_check=1; client_check<=MaxClients; client_check++)
+		{
+			if(IsClientInGame(client_check) && !IsFakeClient(client_check))
+			{
+				ShowGameText(client_check, "voice_player", 1, "%t", "Sphynx Spawned");
+			}
+		}
 
 		npc.m_bDissapearOnDeath = false;
 		
@@ -141,6 +148,7 @@ methodmap ZSSphynx < CClotBody
 			RaidModeScaling = 0.0;
 			RaidAllowsBuildings = true;
 		}
+		
 		
 		return npc;
 	}

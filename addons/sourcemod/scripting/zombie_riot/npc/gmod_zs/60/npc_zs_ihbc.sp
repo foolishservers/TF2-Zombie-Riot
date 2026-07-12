@@ -26,7 +26,7 @@ void InfectedHazardous_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "medic_main");
 	data.IconCustom = true;
 	data.Flags = 0;
-	data.Category = Type_Common;
+	data.Category = Type_GmodZS;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
@@ -89,7 +89,7 @@ methodmap InfectedHazardous < CClotBody
 	
 	public InfectedHazardous(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedHazardous npc = view_as<InfectedHazardous>(CClotBody(vecPos, vecAng, "models/player/medic.mdl", "1.0", "25000", ally));
+		InfectedHazardous npc = view_as<InfectedHazardous>(CClotBody(vecPos, vecAng, "models/player/medic.mdl", "1.0", "45000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -251,16 +251,16 @@ public void InfectedHazardous_ClotThink(int iNPC)
 							{
 								
 								if(!ShouldNpcDealBonusDamage(target))
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 100.0, DMG_CLUB, -1, _, vecHit);
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 175.0, DMG_CLUB, -1, _, vecHit);
 								else
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 550.0, DMG_CLUB, -1, _, vecHit);
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 500.0, DMG_CLUB, -1, _, vecHit);
 									Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 30 : 10);
 									int flagsStun = 0;
 									if(!HasSpecificBuff(target, "Fluid Movement"))
 												flagsStun |= TF_STUNFLAG_SLOWDOWN;
 
 									if(target <= MaxClients)
-										TF2_StunPlayer(target, 2.0, 0.5, flagsStun);
+										TF2_StunPlayer(target, 2.0, 0.9, flagsStun);
 									ApplyStatusEffect(npc.index, target, "Cellular Breakdown", 8.0);
 								// Hit sound
 								npc.PlayMeleeHitSound();

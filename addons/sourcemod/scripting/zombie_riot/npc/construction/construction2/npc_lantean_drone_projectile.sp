@@ -10,7 +10,6 @@ static float fl_LanteanDrone_Deceleration;
 static float fl_LanteanDrone_HyperDecelerationNearDist = 500.0;
 static float fl_LanteanDrone_HyperDecelerationSpeed = 80.0;
 static float fl_LanteanDrone_HyperDecelerationMax = 0.5;
-static float fl_LanteanDrone_TurnSpeed;
 
 void Lantean_Drone_Projectile_OnMapStart()
 {
@@ -47,6 +46,41 @@ methodmap LanteanProjectile < CClotBody
 		public get()							{ return fl_AbilityOrAttack[this.index][1]; 				}
 		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][1] = TempValueForProperty; }
 	}
+	property float m_flTimeTillDeath_Base
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][2]; 				}
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][2] = TempValueForProperty; }
+	}
+	property float m_flMinRotation
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][3]; 				}
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][3] = TempValueForProperty; }
+	}
+	property float m_flMaxRotation
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][4]; 				}
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][4] = TempValueForProperty; }
+	}
+	property float m_flStartupTimer
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][5]; 				}
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][5] = TempValueForProperty; }
+	}
+	property float m_flStartupTimer_Base
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][6]; 				}
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][6] = TempValueForProperty; }
+	}
+	property float m_flMinSpeed
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][7]; 				}
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][7] = TempValueForProperty; }
+	}
+	property float m_flMaxSpeed
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][8]; 				}
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][8] = TempValueForProperty; }
+	}
 	property int m_iAttacker	//does entref get angry if you try to ent ref the world? no idea.
 	{
 		public get()							{ return EntRefToEntIndexFast(i_TimesSummoned[this.index]); }
@@ -64,7 +98,7 @@ methodmap LanteanProjectile < CClotBody
 	}
 	public LanteanProjectile(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
 	{
-		LanteanProjectile npc = view_as<LanteanProjectile>(CClotBody(vecPos, vecAng, LANTEAN_NPC_DRONE_MODEL, "0.75", "1000", team, .CustomThreeDimensions = {25.0, 25.0, 25.0}, .CustomThreeDimensionsextra = {-25.0, -25.0, -25.0}));
+		LanteanProjectile npc = view_as<LanteanProjectile>(CClotBody(vecPos, vecAng, LANTEAN_NPC_DRONE_MODEL, "2.0", "1000", team));
 		i_NpcWeight[npc.index] = 999;
 
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");	//uhh
@@ -87,10 +121,16 @@ methodmap LanteanProjectile < CClotBody
 		if(StrContains(data, "red") != -1)
 		{
 			npc.m_iWearable1 = ParticleEffectAt_Parent(Origin, "flaregun_energyfield_red", npc.index, "", {0.0,0.0,0.0});
+			npc.m_iWearable2 = ParticleEffectAt(Origin, "raygun_projectile_red_trail", 0.0); //Inf duartion
+			SDKCall_SetAbsAngle(npc.m_iWearable2, vecAng);
+			SetParent(npc.index, npc.m_iWearable2);	
 		}
 		else if(StrContains(data, "blue") != -1)
 		{
 			npc.m_iWearable1 = ParticleEffectAt_Parent(Origin, "flaregun_energyfield_blue", npc.index, "", {0.0,0.0,0.0});
+			npc.m_iWearable2 = ParticleEffectAt(Origin, "raygun_projectile_blue_trail", 0.0); //Inf duartion
+			SDKCall_SetAbsAngle(npc.m_iWearable2, vecAng);
+			SetParent(npc.index, npc.m_iWearable2);	
 		}
 		//is always static
 		AddNpcToAliveList(npc.index, 1);
@@ -100,6 +140,7 @@ methodmap LanteanProjectile < CClotBody
 		npc.m_iPenetrationAmmount = 0;
 
 		npc.m_flTimeTillDeath = GetGameTime() + 15.0;	//default value. should be ovewritten by the spawner
+		npc.m_flTimeTillDeath_Base = 15.0;
 
 		npc.m_iBleedType 					= BLEEDTYPE_METAL;
 
@@ -132,11 +173,17 @@ methodmap LanteanProjectile < CClotBody
 		npc.m_bDissapearOnDeath 				= true;
 		npc.b_BlockDropChances					= true;
 
-		npc.m_flSpeed = 500.0 + GetRandomFloat(0.0, 100.0);		//MAX SPEED
+		npc.m_flSpeed = 1600.0 + GetRandomFloat(0.0, 100.0);		//MAX SPEED
+		npc.m_flMaxSpeed = npc.m_flSpeed;
+		npc.m_flMinSpeed = npc.m_flSpeed * 0.1;
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.StopPathing();	//don't path.
 
-		npc.m_flTurnSpeed				= 13.2;
+		npc.m_flStartupTimer 			= GetGameTime() + 2.0;
+		npc.m_flStartupTimer_Base 		= 2.0;
+
+		npc.m_flMaxRotation 			= 11.5;
+		npc.m_flMinRotation 			= 5.75;
 		npc.m_flAcceleration			= 33.0;
 		npc.m_flDecceleration			= 16.5;
 		npc.m_flHyperDeccelNearDist		= 500.0;
@@ -153,6 +200,19 @@ methodmap LanteanProjectile < CClotBody
 		SDKHook(npc.index, SDKHook_StartTouch, Wand_Base_StartTouch);
 
 		return npc;
+	}
+	public float GetMaxSpeed()
+	{
+		float Ratio = (this.m_flTimeTillDeath - GetGameTime()) / (this.m_flTimeTillDeath_Base * 1.25);
+
+		if(this.m_flSpeed != this.m_flMaxSpeed)
+		{
+			this.m_flMinSpeed = this.m_flMinSpeed * (this.m_flMaxSpeed / this.m_flSpeed);
+		}
+
+		float FlySpeed = this.m_flMinSpeed + (this.m_flMaxSpeed - this.m_flMinSpeed) * Ratio;
+
+		return FlySpeed;
 	}
 	//Flight System:
 	public void HeadingControl()
@@ -173,8 +233,16 @@ methodmap LanteanProjectile < CClotBody
 	}
 	property float m_flTurnSpeed
 	{
-		public get()							{ return fl_LanteanDrone_TurnSpeed; 				}
-		public set(float TempValueForProperty) 	{ fl_LanteanDrone_TurnSpeed = TempValueForProperty; }
+		public get()							
+		{ 
+			if(this.m_flStartupTimer > GetGameTime())
+				return 0.0;
+
+			float Ratio = (this.m_flTimeTillDeath - GetGameTime()) / this.m_flTimeTillDeath_Base;
+
+			float RotationSpeed = this.m_flMinRotation + (this.m_flMaxRotation - this.m_flMinRotation) * Ratio;
+			return RotationSpeed; 				
+		}
 	}
 	property float m_flDecceleration
 	{
@@ -228,7 +296,7 @@ methodmap LanteanProjectile < CClotBody
 		TurnRates[0] = Data.PitchRotateLeft;
 		TurnRates[1] = Data.YawRotateLeft;
 
-		float MaxSpeed = this.m_flSpeed;
+		float MaxSpeed = this.GetMaxSpeed();
 		//we gotta turn ALOT, so slow down the this.index to make its turning circle smaller.
 
 		bool HyperDeccel = (Dist < HypeDecell_NearDist);
@@ -246,7 +314,7 @@ methodmap LanteanProjectile < CClotBody
 			if(fabs(TurnRates[i]) > 45.0)
 				HyperDeccel = false;
 
-			if(fabs(TurnRates[i]) > 100.0 && this.m_flCurrentSpeed > this.m_flSpeed*0.5)
+			if(fabs(TurnRates[i]) > 100.0 && this.m_flCurrentSpeed > this.GetMaxSpeed()*0.5)
 				SubDeccel = true;
 		}
 		
@@ -265,6 +333,11 @@ methodmap LanteanProjectile < CClotBody
 
 		float fBuf[3], fVel[3];
 		GetAngleVectors(Angles, fBuf, NULL_VECTOR, NULL_VECTOR);
+
+		if(this.m_flStartupTimer > GetGameTime())
+		{
+			MaxSpeed = MaxSpeed * ((this.m_flStartupTimer - GetGameTime()) / this.m_flStartupTimer_Base);
+		}
 
 		float FlySpeed = this.GetShipFlightSpeed(MaxSpeed, HyperDeccel, SubDeccel);
 
@@ -296,7 +369,7 @@ methodmap LanteanProjectile < CClotBody
 			if(FlySpeed+Acceleration < MaxSpeed)
 				FlySpeed+=Acceleration;
 			else {
-				if(MaxSpeed == this.m_flSpeed)
+				if(MaxSpeed == this.GetMaxSpeed())
 					FlySpeed = MaxSpeed;
 			}
 		}
@@ -304,8 +377,8 @@ methodmap LanteanProjectile < CClotBody
 		//we too fast
 		if(FlySpeed > MaxSpeed || DoNotAccel) {
 			//we faster the base speed. force set
-			if(FlySpeed > this.m_flSpeed) {
-				FlySpeed = this.m_flSpeed;
+			if(FlySpeed > this.GetMaxSpeed()) {
+				FlySpeed = this.GetMaxSpeed();
 			}
 			else {
 				//we faster then the max speed assigned due to rotational difference, apply gradual Deceleration and not instant.
@@ -388,7 +461,7 @@ static void LanteanNPC_SimulateTouch(int iNPC, int target)
 
 	Set_HitDetectionCooldown(npc.index, target, GetGameTime() + 1.0);
 	npc.m_iPenetrationAmmount++;
-	float damage = 10.0 * (npc.m_bUseRaidmodeScaling ? RaidModeScaling : 10.0);
+	float damage = 5.0 * (npc.m_bUseRaidmodeScaling ? RaidModeScaling : 10.0);
 	int attacker = npc.m_iAttacker;
 	if(!IsValidEntity(attacker))
 		attacker = npc.index;
@@ -450,6 +523,8 @@ static void LanteanNPC_Death(int iNPC)
 
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
+	if(IsValidEntity(npc.m_iWearable2))
+		RemoveEntity(npc.m_iWearable2);
 
 	SetEntityRenderMode(npc.index, RENDER_NORMAL);
 	SetEntityRenderColor(npc.index, 255, 255, 255, 255);

@@ -34,10 +34,11 @@ enum
 	OBS_MODE_FIXED,		// view from a fixed camera position
 	OBS_MODE_IN_EYE,	// follow a player in first person view
 	OBS_MODE_CHASE,		// follow a player in third person view
+	OBS_MODE_POI,		// PASSTIME point of interest - game objective, big fight, anything interesting; added in the middle of the enum due to tons of hard-coded "<ROAMING" enum compares
 	OBS_MODE_ROAMING,	// free roaming
-
-	NUM_OBSERVER_MODES
-};
+	
+	NUM_OBSERVER_MODES,
+}
 
 #define IN_MAX	26
 
@@ -1593,7 +1594,6 @@ static stock void RenderWaypoints(int client)
 						DispatchKeyValueVector(flag, "origin", pos);
 						DispatchKeyValueVector(flag, "angles", {0.0, -135.0, 0.0});
 						DispatchKeyValue(flag, "model", FLAG_MODEL);
-						DispatchKeyValue(flag, "modelscale", "1.0");
 						DispatchKeyValue(flag, "skin", "2");
 						DispatchKeyValue(flag, "solid", "0");
 

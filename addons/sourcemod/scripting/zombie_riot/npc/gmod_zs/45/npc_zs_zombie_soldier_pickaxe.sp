@@ -88,7 +88,7 @@ methodmap ZSsoldier < CClotBody
 	
 	public ZSsoldier(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSsoldier npc = view_as<ZSsoldier>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "22000", ally));
+		ZSsoldier npc = view_as<ZSsoldier>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "40000", ally));
 		
 		i_NpcWeight[npc.index] = 3;
 		npc.SetActivity("ACT_MP_RUN_MELEE");

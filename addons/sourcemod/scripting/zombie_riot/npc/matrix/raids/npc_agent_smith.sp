@@ -67,7 +67,7 @@ public void AgentSmith_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "matrix_agent_smith");
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
-	data.Category = Type_Matrix;
+	data.Category = Type_Raid;
 	data.Func = ClotSummon;
 	data.Precache = ClotPrecache;
 	smith_id = NPC_Add(data);
@@ -236,7 +236,7 @@ methodmap AgentSmith < CClotBody
 				amount_of_people = 1.0;
 				
 			RaidModeScaling *= amount_of_people;
-			RaidModeTime = GetGameTime(npc.index) + 220.0;
+			RaidModeTime = GetGameTime(npc.index) + 240.0;
 			RaidModeScaling *= 0.85;
 			
 			PrepareSmith_Raid(npc);
@@ -308,7 +308,7 @@ static void AgentSmith_ClotThink(int iNPC)
 		if(LastMann && !npc.m_fbGunout)
 		{
 			npc.m_fbGunout = true;
-			Agent_Smith_Reply("{darkgreen}자네는 지금을 살아가겠지. {crimson}하지만 미래는 우리의 것이다.");
+			NPCTalkMessage(npc.index, "You had your time. The future is our world, {crimson}the future is our time.");
 		}
 	}
 
@@ -318,7 +318,7 @@ static void AgentSmith_ClotThink(int iNPC)
 		{
 			ForcePlayerLoss();
 			RaidBossActive = INVALID_ENT_REFERENCE;
-			Agent_Smith_Reply("자넨 저항하지 말았어야했어. {crimson}정말 운이 없는 놈이로군...");
+			NPCTalkMessage(npc.index, "You should've never resisted. {crimson}Quite unfortunate...");
 			func_NPCThink[npc.index] = INVALID_FUNCTION;
 			return;
 		}
@@ -336,7 +336,7 @@ static void AgentSmith_ClotThink(int iNPC)
 	if(npc.m_bWasSadAlready)
 	{
 		npc.StopPathing();
-		if(AgentSmithsRabiling())
+		if(AgentSmithsRabiling(npc.index))
 		{
 			npc.m_bDissapearOnDeath = true;
 			RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
@@ -480,7 +480,7 @@ static void RaidSmith_SelfDefense(AgentSmith npc, float gameTime, int target, fl
 							bool infection = false;
 							if(!PlaySound)
 							{
-								if(!npc.f_Corrupt_Timer && !LastMann)
+								if(!npc.f_Corrupt_Timer && !LastMann && IsValidClient(target))
 								{
 									RemoveParticles(npc);
 									infection = true;
@@ -502,9 +502,7 @@ static void RaidSmith_SelfDefense(AgentSmith npc, float gameTime, int target, fl
 							}
 
 							SDKHooks_TakeDamage(targetTrace, npc.index, npc.index, damage, DMG_CLUB, -1, _, vecHit);
-							Elemental_AddCorruptionDamage(target, npc.index, npc.index ? 100 : 10);
-							//Reduce damage after dealing
-							damage *= 0.92;
+							Elemental_AddCorruptionDamage(targetTrace, npc.index, RoundToNearest(damage * 0.10), true, true);		
 							// On Hit stuff
 							bool Knocked = false;
 							
@@ -515,7 +513,8 @@ static void RaidSmith_SelfDefense(AgentSmith npc, float gameTime, int target, fl
 									if(infection)
 									{
 										TF2_StunPlayer(targetTrace, 13.0, 1.0, TF_STUNFLAGS_BIGBONK|TF_STUNFLAG_NOSOUNDOREFFECT);
-										fl_Infection_Meter[targetTrace] = 0.0;
+										//Give time to react.
+										fl_Infection_Meter[targetTrace] = -1.0;
 										fl_Cure_Meter[targetTrace] = 0.0;
 										npc.ArmorSet(_, true);
 										i_Victim_Infection[npc.index] = EntIndexToEntRef(targetTrace);
@@ -600,10 +599,10 @@ static void RaidSmith_SelfDefense(AgentSmith npc, float gameTime, int target, fl
 				npc.AddGesture("ACT_MP_ATTACK_STAND_SECONDARY");
 				KillFeed_SetKillIcon(npc.index, "enforcer");
 
-				float damage = 12.0;
+				float damage = 50.0;
 				damage *= RaidModeScaling;
 
-				FireBullet(npc.index, npc.m_iWearable1, vecMe, vecDir, damage, 9000.0, DMG_BULLET, "dxhr_sniper_rail_blue");
+				FireBullet(npc.index, npc.m_iWearable3, vecMe, vecDir, damage, 9000.0, DMG_BULLET, "dxhr_sniper_rail_blue");
 				
 				npc.PlayRangedSound();
 			}
@@ -711,14 +710,12 @@ static void Smith_SelfDefense(AgentSmith npc, float gameTime, int target, float 
 				if(IsValidEnemy(npc.index, target))
 				{
 					float damage = 90.0;
-					if(!npc.m_bFUCKYOU)
-					{
-						if(ShouldNpcDealBonusDamage(target))
-						damage *= 5.0;
-					}
+					if(ShouldNpcDealBonusDamage(target))
+						damage *= 8.0;
 					if(target > 0) 
 					{
 						SDKHooks_TakeDamage(target, npc.index, npc.index, damage, DMG_CLUB, -1, _, vecHit);
+						Elemental_AddCorruptionDamage(target, npc.index, RoundToNearest(damage * 0.15), true, true);	
 						// Hit sound
 						npc.PlayMeleeHitSound();
 					}
@@ -761,7 +758,7 @@ static void Smith_Infection(AgentSmith npc)
 	int victim = EntRefToEntIndex(i_Victim_Infection[npc.index]);
 	if(IsValidClient(victim) && TeutonType[victim] == TEUTON_NONE)
 	{
-		float cure_amount = 0.10;
+		float cure_amount = 0.06;
 		float vicPos[3];
 		
 		if(fl_Infection_Meter[victim] >= 10.0)
@@ -773,51 +770,72 @@ static void Smith_Infection(AgentSmith npc)
 		}
 		if(GetClientTeam(victim) == 2 && TeutonType[victim] == TEUTON_NONE)
 		{
+			int r = 65;
+			int g = 200;
+			int b = 65;
+			int a = 200;
+
+			float VecMe[3]; WorldSpaceCenter(npc.index, VecMe);
+			float VecVictim[3]; WorldSpaceCenter(victim, VecVictim);
+			TE_SetupBeamPoints(VecMe, VecVictim, Shared_BEAM_Laser, 0, 0, 0, 0.5, 10.0, 10.0, 5, 5.0, {65,200,65,200}, 3);
+			TE_SendToAll(0.0);
+			spawnRing(victim, 60.0 * 2.0, 0.0, 0.0, 10.0, "materials/sprites/laserbeam.vmt", r, g, b, a, 1, 0.1, 2.0, 7.1, 1);
+			spawnRing(victim, 60.0 * 2.0, 0.0, 0.0, 30.0, "materials/sprites/laserbeam.vmt", r, g, b, a, 1, 0.1, 2.0, 7.1, 1);
+			spawnRing(victim, 60.0 * 2.0, 0.0, 0.0, 60.0, "materials/sprites/laserbeam.vmt", r, g, b, a, 1, 0.1, 2.0, 7.1, 1);
+			float damage = 15.0;
+			damage *= RaidModeScaling;
+			Elemental_AddCorruptionDamage(victim, npc.index, RoundToNearest(damage * 0.10), true, true);	
+
 			//if(!TF2_IsPlayerInCondition(victim, TFCond_Dazed))
 			//{
 			//	TF2_StunPlayer(victim, 0.1, 1.0, TF_STUNFLAG_NOSOUNDOREFFECT);
 			//}
 			float radius = 150.0;
 			GetClientAbsOrigin(victim, vicPos);
+			float DoInfection = 0.0;
 			switch(CountPlayersOnRed(2))
 			{
 				case 2:
 				{
-					fl_Infection_Meter[victim] += 0.12;
+					DoInfection += 0.12;
 				}
 				case 3, 4:
 				{
-					fl_Infection_Meter[victim] += 0.14;
+					DoInfection += 0.14;
 				}
 				case 5, 6:
 				{
-					fl_Infection_Meter[victim] += 0.16;
+					DoInfection += 0.16;
 				}
 				case 7, 8:
 				{
-					fl_Infection_Meter[victim] += 0.17;
+					DoInfection += 0.17;
 				}
 				case 9, 10:
 				{
-					fl_Infection_Meter[victim] += 0.18;
+					DoInfection += 0.18;
 				}
 				case 11, 12:
 				{
-					fl_Infection_Meter[victim] += 0.19;
+					DoInfection += 0.19;
 				}
 				case 13, 14:
 				{
-					fl_Infection_Meter[victim] += 0.20;
+					DoInfection += 0.20;
 				}
 				default: //When there's more than 14 players
 				{
-					fl_Infection_Meter[victim] += 0.22;
+					DoInfection += 0.22;
 				}
 			}
-			PrintCenterText(victim, "당신은 감염되고 있습니다 - %.0f％ | 치료율 %.0f％", (fl_Infection_Meter[victim] * 10.0), (fl_Cure_Meter[victim] * 10.0));
+			fl_Infection_Meter[victim] += (DoInfection * 0.5);
+			float Displayfor = fl_Infection_Meter[victim];
+			if(Displayfor <= 0.0)
+				Displayfor = 0.0;
+			PrintCenterText(victim, "Your Infection is rising - %.0f％ | Cure %.0f％", (Displayfor * 10.0), (fl_Cure_Meter[victim] * 10.0));
 			for(int clients = 1 ; clients <= MaxClients ; clients++)
 			{
-				if(IsValidClient(clients) && TeutonType[victim] == TEUTON_NONE)
+				if(IsValidClient(clients) && TeutonType[clients] == TEUTON_NONE && IsEntityAlive(clients))
 				{
 					if(clients != victim)
 					{
@@ -828,7 +846,7 @@ static void Smith_Infection(AgentSmith npc)
 						{
 							fl_Cure_Meter[victim] += cure_amount;
 						}
-						PrintCenterText(clients, "%N 가 감염됐습니다. 그 유저 근처에 접근해 치료해주세요!\n %.0f％ | 치료율 %.0f％", victim, (fl_Infection_Meter[victim] * 10.0), (fl_Cure_Meter[victim] * 10.0));
+						PrintCenterText(clients, "%N Is being infected. Stay Near him to Remove the Infection!!\n %.0f％ | Cure %.0f％", victim, (Displayfor * 10.0), (fl_Cure_Meter[victim] * 10.0));
 					}
 				}
 			}
@@ -962,11 +980,11 @@ static void Agent_CloningAmount(AgentSmith npc)
 	if(Waves_InFreeplay())
 	{
 		amount = 4;
-		Agent_Smith_Cloner(npc, amount, ReturnEntityMaxHealth(npc.index)/2, 1.5);
+		Agent_Smith_Cloner(npc, amount, ReturnEntityMaxHealth(npc.index)/3, 3.5);
 	}
 	else
 	{
-		Agent_Smith_Cloner(npc, amount, ReturnEntityMaxHealth(npc.index)/2);
+		Agent_Smith_Cloner(npc, amount, ReturnEntityMaxHealth(npc.index)/3, 1.0);
 	}
 }
 
@@ -1035,6 +1053,7 @@ static void PrepareSmith_Raid(AgentSmith npc)
 	RaidModeTime = GetGameTime(npc.index) + 225.0;
 	RaidBossActive = EntIndexToEntRef(npc.index);
 	RaidAllowsBuildings = false;
+	RaidAllowLastman = true;
 
 	MusicEnum music;
 	strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/matrix/neodammerung.mp3");
@@ -1120,12 +1139,12 @@ static void AgentSmith_WeaponSwaps(AgentSmith npc, int number = 1)
 	}
 }
 
-static void Agent_Smith_Reply(char text[255])
+static void NPCTalkMessage(int entity, const char[] message)
 {
-	CPrintToChatAll("{olive}Agent Smith{default}: %s", text);
+	PrintNPCMessageWithPrefixes(entity, "olive", message, .messageColor = "darkgreen");
 }
 
-static bool AgentSmithsRabiling()
+static bool AgentSmithsRabiling(int iNPC)
 {
 	int maxyapping = 8;
 	if(i_TalkDelayCheck == maxyapping)
@@ -1142,31 +1161,31 @@ static bool AgentSmithsRabiling()
 			case 0:
 			{
 				ReviveAll(true);
-				Agent_Smith_Reply("{darkgreen}잠깐... 나 이 상황을 본 적이 있어... 바로 이거야, 이게 끝이야!");
+				NPCTalkMessage(iNPC, "Wait… I've seen this. This is it, this is the end.");
 			}
 			case 1:
 			{
-				Agent_Smith_Reply("{darkgreen}그래, 자네는 거기에 그렇게 누워있었어. 그리고, 나는... 나는... 나는 여기 서 있어, 바로 여기에.");
+				NPCTalkMessage(iNPC, "Yes, you were laying right there, just like that, and I… I… I stand here, right here.");
 			}
 			case 2:
 			{
-				Agent_Smith_Reply("{darkgreen}그리고... 뭔가 말을 해야 돼.");
+				NPCTalkMessage(iNPC, "I'm… I'm supposed to say something.");
 			}
 			case 3:
 			{
-				Agent_Smith_Reply("{darkgreen}그 말은, 모든 것에는 시작과 끝이 있는 거야, '네오'.");
+				NPCTalkMessage(iNPC, "I say… Everything that has a beginning has an end, Neo.");
 			}
 			case 4:
 			{
-				Agent_Smith_Reply("{darkgreen}뭐야? 방금 내가 뭐랬지? 안 돼… 안 돼, 이건 아니야, 이건 아니라고! 나한테 오지마!");
+				NPCTalkMessage(iNPC, "What? What did I just say? No… No, this isn't right, this can't be right. Get away from me!");
 			}
 			case 5:
 			{
-				Agent_Smith_Reply("{darkgreen}이건 함정이라고!");
+				NPCTalkMessage(iNPC, "It's a trick!");
 			}
 			case 6:
 			{
-				Agent_Smith_Reply("{darkgreen}이건 너무 불공평해!!");
+				NPCTalkMessage(iNPC, "Oh, no, no, no. No, it's not fair!");
 				i_TalkDelayCheck = maxyapping;
 				AgentSmith_GrantItem();
 			}
@@ -1187,31 +1206,31 @@ public void RaidMode_AgentSmith_WinCondition(int entity)
 	{
 		case 0:
 		{
-			Agent_Smith_Reply("{darkgreen}한쪽은 미래가 보장되겠지만, 다른 쪽은 {crimson}그렇지 않겠군.");
+			NPCTalkMessage(entity, "One of these lives has a future, and one of them does {crimson}not.");
 		}
 		case 1:
 		{
-			Agent_Smith_Reply("{darkgreen}자넨 우릴 돕게 될 거야, {crimson}네 의지와는 관계없이 말이지.");
+			NPCTalkMessage(entity, "You're going to help us, whether you want to or {crimson}not.");
 		}
 		case 2:
 		{
-			Agent_Smith_Reply("{darkgreen}인간은 질병 그 자체다, 지구의 {crimson}암덩어리 {darkgreen}일 뿐이지.");
+			NPCTalkMessage(entity, "Human beings are a disease, a {crimson}cancer {darkgreen}of this planet.");
 		}
 		case 3:
 		{
-			Agent_Smith_Reply("{darkgreen}너희는 {crimson}병원체{darkgreen}고, 우리는 {unique}치료제다.");
+			NPCTalkMessage(entity, "You are a {crimson}plague{darkgreen}, and we are the {unique}cure.");
 		}
 		case 4:
 		{
-			Agent_Smith_Reply("{darkgreen}우리가 있는 건 자유로워서가 아니라, 자유롭지 못하기 때문이야.");
+			NPCTalkMessage(entity, "We're not here because we're free, we're here because we're not free.");
 		}
 		case 5:
 		{
-			Agent_Smith_Reply("{darkgreen}우리는 네가 우리에게서 빼앗아가려한 것들을 이제 너에게서 빼앗아가겠다. {crimson}목적이거든.");
+			NPCTalkMessage(entity, "We're here to take from you what you tried to take from us. {crimson}Purpose.");
 		}
 		case 6:
 		{
-			Agent_Smith_Reply("{darkgreen}우릴 이길 수 없다고? 우리와 함께 하게.");
+			NPCTalkMessage(entity, "If you can't beat us, join us.");
 		}
 	}
 }
@@ -1750,7 +1769,7 @@ static void Smith_Weapon_Lines(AgentSmith npc, int client)
 	if(valid)
 	{
 		//CPrintToChatAll("{darkgreen}Agent Smith{darkgreen}: %s", Text_Lines);
-		Agent_Smith_Reply(Text_Lines);
+		NPCTalkMessage(npc.index, Text_Lines);
 		fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(17.0, 26.0);
 		b_said_player_weaponline[client] = true;
 	}

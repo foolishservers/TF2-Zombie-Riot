@@ -24,7 +24,7 @@ static char g_IdleSounds[][] = {
 };
 
 static char g_IntroSound[][] = {
-	"npc/strider/striderx_alert2.wav",
+	"vo/heavy_domination12.mp3",
 };
 
 static char g_MeleeHitSounds[][] = {
@@ -43,7 +43,7 @@ static char g_Overheat[][] = {
 	"npc/strider/fire.wav",
 };
 
-static float fl_DefaultSpeed_Witch = 200.0;
+static float fl_DefaultSpeed_Witch = 270.0;
 
 public void ZsMalfuncHeavy_OnMapStart_NPC()
 {
@@ -134,15 +134,6 @@ methodmap ZsMalfuncHeavy < CClotBody
 	public void PlayOverHeatSound() {
 		EmitSoundToAll(g_Overheat[GetRandomInt(0, sizeof(g_Overheat) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 90);
 	}
-	public void ArmorSet(float resistance = -1.0, bool uber = false)
-	{
-		if(resistance != -1.0 && resistance >= 0.0)
-		{
-			this.m_flMeleeArmor = resistance;
-			this.m_flRangedArmor = resistance;
-		}
-		b_NpcIsInvulnerable[this.index] = uber;
-	}
 	
 	public ZsMalfuncHeavy(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
@@ -169,6 +160,30 @@ methodmap ZsMalfuncHeavy < CClotBody
 
 		SetVariantInt(1);
 		AcceptEntityInput(npc.index, "SetBodyGroup");
+		
+		if(!IsValidEntity(RaidBossActive))
+		{
+			RaidBossActive = EntIndexToEntRef(npc.index);
+			RaidModeTime = GetGameTime(npc.index) + 9000.0;
+			RaidModeScaling = 0.0;
+			RaidAllowsBuildings = true;
+		}
+		
+		switch(GetRandomInt(0,2))
+		{
+			case 0:
+			{
+				CPrintToChatAll("{green}오버히터{default}: 놈들을 응징할 시간이다.");
+			}
+			case 1:
+			{
+				CPrintToChatAll("{green}오버히터{default}: 절망 속으로 가라앉아라.");
+			}
+			case 2:
+			{
+				CPrintToChatAll("{green}오버히터{default}: 네놈을 삼켜주마.");
+			}
+		}
 
 		int skin = 5;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
@@ -180,10 +195,16 @@ methodmap ZsMalfuncHeavy < CClotBody
 		npc.m_iWearable6 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_fists_of_steel/c_fists_of_steel.mdl", "", 1);
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable6, "SetModelScale");
+		npc.m_iWearable7 = npc.EquipItemSeperate("models/buildables/sentry_shield.mdl",_,_,_,-100.0,true);
+		SetVariantString("2.5");
+		AcceptEntityInput(npc.m_iWearable7, "SetModelScale");
+		SetEntProp(npc.m_iWearable7, Prop_Send, "m_nSkin", 1);
+		if(IsValidEntity(npc.m_iWearable7))
+			SetParent(npc.index, npc.m_iWearable7);
 		
 		func_NPCDeath[npc.index] = ZsMalfuncHeavy_NPCDeath;
 		func_NPCThink[npc.index] = ZsMalfuncHeavy_ClotThink;
-		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;
+		func_NPCOnTakeDamage[npc.index] = ZsMalfuncHeavy_OnTakeDamage;
 		npc.m_flSpeed = fl_DefaultSpeed_Witch;
 		npc.Anger = false;
 		npc.b_Enraged = false;
@@ -234,10 +255,23 @@ public void ZsMalfuncHeavy_ClotThink(int iNPC)
 	{
 		if(npc.i_Hit >= 5)
 		{
-			CPrintToChatAll("{green}오버히터{default}: {crimson}널 박살내주마.");
+			switch(GetRandomInt(0,2))
+			{
+				case 0:
+				{
+					CPrintToChatAll("{green}오버히터{default}: 내 고통을 느껴라!");
+				}
+				case 1:
+				{
+					CPrintToChatAll("{green}오버히터{default}: 어리석음의 대가를 치러라.");
+				}
+				case 2:
+				{
+					CPrintToChatAll("{green}오버히터{default}: 한순간의 착오로 모든 걸 잃게 되리라.");
+				}
+			}
 			npc.PlayIdleSound();
 			npc.Anger = true;
-			npc.ArmorSet(npc.m_fbGunout ? 1.08 : 1.25);
 			npc.i_Hit = 0;
 			npc.f_Overheat_Cooldown = gameTime + 10.0;
 			npc.m_flSpeed = npc.m_fbGunout ? fl_DefaultSpeed_Witch * 0.9: fl_DefaultSpeed_Witch * 0.8;
@@ -263,7 +297,17 @@ public void ZsMalfuncHeavy_ClotThink(int iNPC)
 		}
 		else
 		{
-			CPrintToChatAll("{green}오버히터{default}: {default}이러고 있을 시간 없다.");
+			switch(GetRandomInt(0,1))
+			{
+				case 0:
+				{
+					CPrintToChatAll("{green}오버히터{default}: 넌 아무것도 아니다!");
+				}
+				case 1:
+				{
+					CPrintToChatAll("{green}오버히터{default}: 버러지들 같으니.");
+				}
+			}
 			npc.Anger = false;
 			npc.f_Overheat_Cooldown = 0.0;
 			npc.f_Overheat_Timer = 0.0;
@@ -376,21 +420,33 @@ static void ZsMalfuncHeavy_SelfDefense(ZsMalfuncHeavy npc, float gameTime, int t
 		}
 	}
 }
-/*
+
 static Action ZsMalfuncHeavy_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	//Valid attackers only.
-	if(attacker < 1)
+	if(attacker <= 0)
 		return Plugin_Continue;
 
-	ZsMalfuncHeavy npc = view_as<ZsMalfuncHeavy>(victim);
+	//ZsMalfuncHeavy npc = view_as<ZsMalfuncHeavy>(victim);
+	
+	float vecTarget[3]; WorldSpaceCenter(attacker, vecTarget );
+	float VecSelfNpc[3]; WorldSpaceCenter(victim, VecSelfNpc);
+	float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
+
+	if(flDistanceToTarget < (300.0 * 300.0))
+	{
+		damage = 0.0;
+		return Plugin_Handled;
+	}
 
 	return Plugin_Continue;
-}*/
+}
 
 static void ZsMalfuncHeavy_NPCDeath(int entity)
 {
 	ZsMalfuncHeavy npc = view_as<ZsMalfuncHeavy>(entity);
+	
+	CPrintToChatAll("{green}오버히터{default}: 겨우 그까짓 힘으로 감히!");
 
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
@@ -409,6 +465,9 @@ static void ZsMalfuncHeavy_NPCDeath(int entity)
 
 	if(IsValidEntity(npc.m_iWearable6))
 		RemoveEntity(npc.m_iWearable6);
+	
+	if(IsValidEntity(npc.m_iWearable7))
+		RemoveEntity(npc.m_iWearable7);
 
 	npc.PlayDeathSound();
 }

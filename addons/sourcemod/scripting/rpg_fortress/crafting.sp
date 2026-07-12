@@ -96,10 +96,9 @@ enum struct CraftEnum
 			{
 				DispatchKeyValue(entity, "targetname", "rpg_fortress");
 				DispatchKeyValue(entity, "model", this.Model);
-				//DispatchKeyValueFloat(entity, "modelscale", this.Scale);
-				//DispatchKeyValue(entity, "solid", "2");
 				SetEntPropFloat(entity, Prop_Send, "m_fadeMinDist", MIN_FADE_DISTANCE);
-				SetEntPropFloat(entity, Prop_Send, "m_fadeMaxDist", MAX_FADE_DISTANCE);				
+				SetEntPropFloat(entity, Prop_Send, "m_fadeMaxDist", MAX_FADE_DISTANCE);		
+				SetEntPropFloat(entity, Prop_Send, "m_flModelScale", this.Scale);		
 				DispatchSpawn(entity);
 				float PosChange[3];
 				PosChange = this.Pos;
@@ -126,7 +125,6 @@ enum struct CraftEnum
 				if(this.Wear3[0])
 					GivePropAttachment(entity, this.Wear3);
 				
-				SetEntPropFloat(entity, Prop_Send, "m_flModelScale", this.Scale);
 				
 				SetVariantString(this.Idle);
 				AcceptEntityInput(entity, "SetDefaultAnimation", entity, entity);

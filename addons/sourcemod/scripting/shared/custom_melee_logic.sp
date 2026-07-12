@@ -184,81 +184,100 @@ stock void DoSwingTrace_Custom(Handle &trace, int client, float vecSwingForward[
 #if defined ZR
 	if(weapon > 0)
 	{
-		switch(i_CustomWeaponEquipLogic[weapon])
+		
+		if(EntityCustomTraceMelee[weapon] && EntityCustomTraceMelee[weapon] != INVALID_FUNCTION)
 		{
-			case WEAPON_LEPER_MELEE_PAP, WEAPON_LEPER_MELEE:
+			Call_StartFunction(null, EntityCustomTraceMelee[weapon]);
+			Call_PushCell(client);
+			Call_PushCell(weapon);
+			Call_PushFloatRef(CustomMeleeRange);
+			Call_PushFloatRef(CustomMeleeWide);
+			Call_PushCellRef(ignore_walls);
+			Call_PushCellRef(enemies_hit_aoe);
+			Call_Finish();
+		}
+		else
+		{
+			switch(i_CustomWeaponEquipLogic[weapon])
 			{
-				enemies_hit_aoe = LeperEnemyAoeHit(client);
-			}
-			case WEAPON_SPECTER: //yes, if we miss, then we do other stuff.
-			{
-				enemies_hit_aoe = SpecterHowManyEnemiesHit(client, weapon);
+				case WEAPON_LEPER_MELEE_PAP, WEAPON_LEPER_MELEE:
+				{
+					enemies_hit_aoe = LeperEnemyAoeHit(client);
+				}
+				case WEAPON_SPECTER: //yes, if we miss, then we do other stuff.
+				{
+					enemies_hit_aoe = SpecterHowManyEnemiesHit(client, weapon);
+				}	
+				case WEAPON_SUPERUBERSAW: //yes, if we miss, then we do other stuff.
+				{
+					enemies_hit_aoe = SuperubersawHowManyEnemiesHit(client);
+				}	
+				case WEAPON_SAGA: //yes, if we miss, then we do other stuff.
+				{
+					SagaAttackBeforeSwing(client);
+				}
+				case WEAPON_DWELLERMELEE:
+				{
+					SeaMelee_DoSwingTrace(client, CustomMeleeRange, CustomMeleeWide, ignore_walls, enemies_hit_aoe);
+				}
+				case WEAPON_RAPIER:
+				{
+					Rapier_DoSwingTrace(CustomMeleeRange, CustomMeleeWide);
+				}
+				case WEAPON_ANGELIC_SHOTGUN:
+				{
+					Angelic_Shotgun_DoSwingTrace(client, CustomMeleeRange, CustomMeleeWide, ignore_walls, enemies_hit_aoe);
+				}
+				case WEAPON_FLAGELLANT_MELEE:
+				{
+					Flagellant_DoSwingTrace(client);
+				}
+				case WEAPON_IMPACT_LANCE:
+				{
+					Wand_Impact_Lance_Multi_Hit(client, CustomMeleeRange, CustomMeleeWide);
+				}
+				case WEAPON_KIT_BLITZKRIEG_CORE:
+				{
+					Blitzkrieg_Kit_Custom_Melee_Logic(client, CustomMeleeRange, CustomMeleeWide, enemies_hit_aoe);
+				}
+				case WEAPON_ULPIANUS:
+				{
+					enemies_hit_aoe = Ulpianus_EnemyHitCount();
+				}
+				case WEAPON_YAKUZA:
+				{
+					Yakuza_EnemiesHit(client, weapon, enemies_hit_aoe);
+				}
+				case WEAPON_FULLMOON:
+				{
+					FullMoon_DoSwingTrace(client, CustomMeleeRange, CustomMeleeWide, ignore_walls, enemies_hit_aoe);
+				}
+				case WEAPON_OLDINFINITYBLADE:
+				{
+					enemies_hit_aoe = 10;
+				}
+				case WEAPON_CASTLEBREAKER:
+				{
+					CastleBreaker_DoSwingTrace(client, CustomMeleeRange, CustomMeleeWide, ignore_walls, enemies_hit_aoe);
+				}
+				case WEAPON_BOARD:
+				{
+					Board_DoSwingTrace(enemies_hit_aoe, CustomMeleeRange);
+				}
+				case WEAPON_HAMMER_NONPAP:
+				{
+					enemies_hit_aoe = 2;
+				}
+				case WEAPON_HAMMER_PAP_1:
+				{
+					enemies_hit_aoe = 3;
+				}
+				case WEAPON_RED_MIST:
+				{
+					Red_Mist_Horizontal_Slash_DoSwingTrace(client, CustomMeleeRange, CustomMeleeWide, ignore_walls, enemies_hit_aoe);
+				}
 			}	
-			case WEAPON_SUPERUBERSAW: //yes, if we miss, then we do other stuff.
-			{
-				enemies_hit_aoe = SuperubersawHowManyEnemiesHit(client);
-			}	
-			case WEAPON_SAGA: //yes, if we miss, then we do other stuff.
-			{
-				SagaAttackBeforeSwing(client);
-			}
-			case WEAPON_SEABORNMELEE:
-			{
-				SeaMelee_DoSwingTrace(client, CustomMeleeRange, CustomMeleeWide, ignore_walls, enemies_hit_aoe);
-			}
-			case WEAPON_RAPIER:
-			{
-				Rapier_DoSwingTrace(CustomMeleeRange, CustomMeleeWide);
-			}
-			case WEAPON_ANGELIC_SHOTGUN:
-			{
-				Angelic_Shotgun_DoSwingTrace(client, CustomMeleeRange, CustomMeleeWide, ignore_walls, enemies_hit_aoe);
-			}
-			case WEAPON_FLAGELLANT_MELEE:
-			{
-				Flagellant_DoSwingTrace(client);
-			}
-			case WEAPON_IMPACT_LANCE:
-			{
-				Wand_Impact_Lance_Multi_Hit(client, CustomMeleeRange, CustomMeleeWide);
-			}
-			case WEAPON_KIT_BLITZKRIEG_CORE:
-			{
-				Blitzkrieg_Kit_Custom_Melee_Logic(client, CustomMeleeRange, CustomMeleeWide, enemies_hit_aoe);
-			}
-			case WEAPON_ULPIANUS:
-			{
-				enemies_hit_aoe = Ulpianus_EnemyHitCount();
-			}
-			case WEAPON_YAKUZA:
-			{
-				Yakuza_EnemiesHit(client, weapon, enemies_hit_aoe);
-			}
-			case WEAPON_FULLMOON:
-			{
-				FullMoon_DoSwingTrace(client, CustomMeleeRange, CustomMeleeWide, ignore_walls, enemies_hit_aoe);
-			}
-			case WEAPON_OLDINFINITYBLADE:
-			{
-				enemies_hit_aoe = 10;
-			}
-			case WEAPON_CASTLEBREAKER:
-			{
-				CastleBreaker_DoSwingTrace(client, CustomMeleeRange, CustomMeleeWide, ignore_walls, enemies_hit_aoe);
-			}
-			case WEAPON_BOARD:
-			{
-				Board_DoSwingTrace(enemies_hit_aoe, CustomMeleeRange);
-			}
-			case WEAPON_HAMMER_NONPAP:
-			{
-				enemies_hit_aoe = 2;
-			}
-			case WEAPON_HAMMER_PAP_1:
-			{
-				enemies_hit_aoe = 3;
-			}
-		}	
+		}
 	}
 #endif
 
@@ -841,7 +860,7 @@ public void Timer_Do_Melee_Attack_Internal(DataPack pack)
 #if defined ZR
 					switch(i_CustomWeaponEquipLogic[weapon])
 					{
-						case WEAPON_SEABORNMELEE, WEAPON_HAMMER_NONPAP, WEAPON_HAMMER_PAP_1:
+						case WEAPON_DWELLERMELEE, WEAPON_HAMMER_NONPAP, WEAPON_HAMMER_PAP_1:
 						{
 							damage *= 0.5;
 						}
@@ -1041,7 +1060,7 @@ void AOEHammerExtraLogic(int entity, int victim, float damage, int weapon)
 
 bool CanBackstabEnemyPreCheck(int attacker, int weapon, int victim)
 {
-	if(f_BackstabDmgMulti[weapon] != 0.0 && !b_CannotBeBackstabbed[victim]) //Irene weapon cannot backstab.
+	if(f_BackstabDmgMulti[weapon] != 0.0 && !b_CannotBeBackstabbed[victim]) //Amphi weapon cannot backstab.
 	{
 #if defined ZR
 		return (IsBehindAndFacingTarget(attacker, victim, weapon) || b_FaceStabber[attacker] || i_NpcIsABuilding[victim]);

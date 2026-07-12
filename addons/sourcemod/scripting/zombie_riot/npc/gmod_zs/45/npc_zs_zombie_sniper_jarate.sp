@@ -83,7 +83,7 @@ methodmap InfectedSniperjarate < CClotBody
 	
 	public InfectedSniperjarate(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedSniperjarate npc = view_as<InfectedSniperjarate>(CClotBody(vecPos, vecAng, "models/player/sniper.mdl", "1.0", "12500", ally));
+		InfectedSniperjarate npc = view_as<InfectedSniperjarate>(CClotBody(vecPos, vecAng, "models/player/sniper.mdl", "1.0", "22500", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		npc.SetActivity("ACT_MP_RUN_MELEE");
@@ -183,7 +183,8 @@ public void InfectedSniperjarate_ClotThink(int iNPC)
 					if(target > 0)
 					{
 						npc.PlayMeleeHitSound();
-						SDKHooks_TakeDamage(target, npc.index, npc.index, 160.0, DMG_CLUB);
+						SDKHooks_TakeDamage(target, npc.index, npc.index, 200.0, DMG_CLUB);
+						Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 100 : 50);
 						
 						if(!NpcStats_IsEnemySilenced(npc.index))
 						{

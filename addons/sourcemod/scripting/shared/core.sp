@@ -14,10 +14,8 @@
 #if !defined RTS
 #include <tf2attributes>
 #endif
-//#include <lambda>
 #include <morecolors>
 #include <cbasenpc>
-#include <tf2utils>
 #include <profiler>
 #include <collisionhook>
 #include <sourcescramble>
@@ -90,6 +88,7 @@ enum
 //edit: No, makes you miss more often.
 
 bool EnableSilentMode = false;
+int CurrentEdictStrikes = 0;
 //Comment this out, and reload the plugin once ingame if you wish to have infinite cash.
 
 public const float OFF_THE_MAP[3] = { 16383.0, 16383.0, -16383.0 };
@@ -123,6 +122,7 @@ ConVar CvarKickPlayersAt;
 ConVar CvarMaxPlayerAlive;
 ConVar zr_interactforcereload;
 bool BlockOtherRaidMusic = false;
+bool RemoveRagdollDo = false;
 //ConVar CvarDebugOffset;
 
 int CurrentEntities;
@@ -182,12 +182,12 @@ bool b_MarkForReload = false; //When you wanna reload the plugin on map change..
 
 #include "global_arrays.sp"
 //This model is used to do custom models for npcs, mainly so we can make cool animations without bloating downloads
-#define COMBINE_CUSTOM_MODEL 		"models/zombie_riot/combine_attachment_police_230.mdl"
+#define COMBINE_CUSTOM_MODEL 		"models/zombie_riot/combine_attachment_police_231.mdl"
 
 //model uses self made IK rigs, to not break the top stuff.
-#define COMBINE_CUSTOM_2_MODEL 		"models/zombie_riot/combine_attachment_police_secondmodel_24.mdl"
+#define COMBINE_CUSTOM_2_MODEL 		"models/zombie_riot/combine_attachment_police_secondmodel_25.mdl"
 
-#define WEAPON_CUSTOM_WEAPONRY_1 	"models/zombie_riot/weapons/custom_weaponry_1_52.mdl"
+#define WEAPON_CUSTOM_WEAPONRY_1 	"models/zombie_riot/weapons/custom_weaponry_1_57.mdl"
 /*
 	1 - sensal scythe
 	2 - scythe_throw
@@ -494,6 +494,7 @@ int f_ArrowTrailParticle[MAXENTITIES]={INVALID_ENT_REFERENCE, ...};
 bool b_IsEntityAlwaysTranmitted[MAXENTITIES];
 bool b_IsEntityNeverTranmitted[MAXENTITIES];
 int b_NoHealthbar[MAXENTITIES];
+bool b_MuteArrowSound[MAXENTITIES];
 
 float f_AprilFoolsSetStuff[MAXENTITIES];
 //Arrays for npcs!
@@ -536,6 +537,7 @@ float fl_AttackHappensMinimum[MAXENTITIES];
 float fl_AttackHappensMaximum[MAXENTITIES];
 bool b_AttackHappenswillhappen[MAXENTITIES];
 bool b_thisNpcIsABoss[MAXENTITIES];
+bool b_thisNpcIsAMiniboss[MAXENTITIES];
 bool b_thisNpcIsARaid[MAXENTITIES]; //This is used for scaling.
 bool b_ShowNpcHealthbar[MAXENTITIES];
 bool b_TryToAvoidTraverse[MAXENTITIES];
@@ -619,6 +621,7 @@ bool b_DisableSetupMusic[MAXENTITIES];
 bool b_DisableStatusEffectHints[MAXENTITIES];
 bool b_LastManDisable[MAXENTITIES];
 float f_HeadshotDamageMultiNpc[MAXENTITIES];
+int i_TraceToInstead[MAXENTITIES];
 
 int b_OnDeathExtraLogicNpc[MAXENTITIES];
 #define	ZRNPC_DEATH_NOHEALTH		( 1<<0 )	// Do not give health on kill!
@@ -669,7 +672,6 @@ float fl_Extra_RangedArmor[MAXENTITIES] = {1.0, ...};
 float fl_Extra_Speed[MAXENTITIES] = {1.0, ...};
 float fl_Extra_Damage[MAXENTITIES] = {1.0, ...};
 float fl_GibVulnerablity[MAXENTITIES] = {1.0, ...};
-float f_RoleplayTalkLimit[MAXENTITIES] = {0.0, ...};
 
 bool b_ScalesWithWaves[MAXENTITIES]; //THIS WAS INSIDE THE NPCS!
 
@@ -687,7 +689,7 @@ char c_HeadPlaceAttachmentGibName[MAXENTITIES][64];
 float f_ExplodeDamageVulnerabilityNpc[MAXENTITIES];
 #if defined ZR
 float f_DelayNextWaveStartAdvancingDeathNpc;
-int Armor_Wearable[MAXPLAYERS];
+int Armor_Wearable_HudText[MAXPLAYERS];
 int Cosmetic_WearableExtra[MAXPLAYERS];
 #endif
 
@@ -764,6 +766,7 @@ int OriginalWeapon_AmmoType[MAXENTITIES];
 #include "sdkhooks.sp"
 #include "stocks.sp"
 #include "wand_projectile.sp"
+
 
 public Plugin myinfo =
 {
@@ -919,6 +922,7 @@ public void OnLibraryAdded(const char[] name)
 #if defined ZR
 	FileNetwork_LibraryAdded(name);
 	SteamWorks_LibraryAdded(name);
+	VScript_LibraryAdded(name);
 #endif
 }
 
@@ -927,6 +931,7 @@ public void OnLibraryRemoved(const char[] name)
 #if defined ZR
 	FileNetwork_LibraryRemoved(name);
 	SteamWorks_LibraryRemoved(name);
+	VScript_LibraryRemoved(name);
 #endif
 }
 
@@ -948,14 +953,15 @@ public Action Timer_Temp(Handle timer)
 	}
 	
 #if defined ZR
-	if(RaidbossIgnoreBuildingsLogic())
+	bool raid = RaidbossIgnoreBuildingsLogic();
+	if(raid)
 	{
 		if(i_npcspawnprotection[EntRefToEntIndex(RaidBossActive)] > NPC_SPAWNPROT_INIT)
 		{
 			RaidModeTime += 0.2;
 			//if the raidboss is in spawn protection, prevent raidmode from going up.
 		}
-		if (RaidModeScaling != 0.0 && RaidModeTime > GetGameTime() && RaidModeTime < GetGameTime() + 60.0)
+		if (/*RaidModeScaling != 0.0 && */RaidModeTime > GetGameTime() && RaidModeTime < GetGameTime() + 60.0)
 		{
 			PlayTickSound(true, false);
 		}
@@ -967,6 +973,25 @@ public Action Timer_Temp(Handle timer)
 			}
 		}
 	}
+	
+	for(int client=1; client<=MaxClients; client++)
+	{
+		if (!IsClientInGame(client) || IsFakeClient(client))
+			continue;
+		
+		// Always show the raid boss to everyone on the HUD
+		if (raid)
+			Calculate_And_Display_hp(client, EntRefToEntIndex(RaidBossActive), 0.0, true, .RaidHudForce = true);
+		
+		// Show the NPC a player is spectating on the HUD
+		if (IsClientObserver(client) && GetEntProp(client, Prop_Send, "m_iObserverMode") == OBS_MODE_CHASE)
+		{
+			int target = GetEntPropEnt(client, Prop_Send, "m_hObserverTarget");
+			if (target > MaxClients && b_ThisWasAnNpc[target] && !b_NpcHasDied[target])
+				Calculate_And_Display_hp(client, target, 0.0, true);
+		}
+	}
+	
 	if (GetWaveSetupCooldown() > GetGameTime() && GetWaveSetupCooldown() < GetGameTime() + 10.0)
 	{
 		PlayTickSound(false, true);
@@ -1049,6 +1074,7 @@ void Core_PrecacheGlobalCustom()
 public void OnMapStart()
 {
 	AntiSpamTipGive = 0.0;
+	CurrentEdictStrikes = 0;
 	PrecacheSound("weapons/knife_swing_crit.wav");
 	PrecacheSound("weapons/shotgun/shotgun_dbl_fire.wav");
 	PrecacheSound("npc/vort/attack_shoot.wav");
@@ -1204,6 +1230,7 @@ public void OnMapStart()
 	g_iLaserMaterial_Trace = PrecacheModel("materials/sprites/laserbeam.vmt");
 	CreateTimer(0.2, Timer_Temp, _, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
 	PrecacheSound("mvm/mvm_tank_horn.wav");
+	PrecacheSound("physics/glass/glass_sheet_break3.wav");
 	DeleteShadowsOffZombieRiot();
 
 	if(LibraryExists("LoadSoundscript"))
@@ -1270,6 +1297,7 @@ public void OnMapEnd()
 	Spawns_MapEnd();
 	Vehicle_MapEnd();
 	NPC_MapEnd();
+	VScript_MapEnd();
 #endif
 
 #if defined RPG
@@ -1522,6 +1550,13 @@ public void ConVarCallback_r_teeth(QueryCookie cookie, int client, ConVarQueryRe
 	}
 }
 
+public void OnClientConnected(int client)
+{
+#if defined ZR
+	Store_ResetClient(client);
+#endif
+}
+
 public void OnClientPostAdminCheck(int client)
 {
 #if defined ZR
@@ -1572,11 +1607,11 @@ public void OnClientPutInServer(int client)
 		return;
 	}
 #endif
+	BackwardsWarn[client] = 0.0;
 	b_GivePlayerHint[client] = false;
 	f_ClientConnectTime[client] = GetGameTime() + 30.0;
 	//do cooldown upon connection.
 	f_ClientInvul[client] = 0.0;
-	f_RoleplayTalkLimit[client] = 0.0;
 #if !defined NOG
 	DHook_HookClient(client);
 #endif
@@ -1698,6 +1733,7 @@ public void OnClientDisconnect(int client)
 
 	b_DisplayDamageHud[client][0] = false;
 	b_DisplayDamageHud[client][1] = false;
+	f_RepeatShowHudFor[client] = 0.0;
 
 #if defined ZR
 	WeaponClass[client] = TFClass_Scout;
@@ -1865,8 +1901,34 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3
 			}
 		}
 	}
-	
 	static int holding[MAXPLAYERS];
+	if(b_BackwardsWalkNotif[client])
+	{
+		if(holding[client] & IN_BACK)
+		{
+			if(BackwardsWarn[client])
+			{
+				if(BackwardsWarn[client] < GetGameTime())
+				{
+					SetHudTextParams(-1.0, 0.6, 2.25, 255, 125, 125, 255);
+					ShowSyncHudText(client,  SyncHud_Notifaction, "%T", "Backwards Setting", client);	
+					BackwardsWarn[client] = FAR_FUTURE;
+				}
+			}
+			if(!(buttons & IN_BACK))
+			{
+				if(BackwardsWarn[client] != FAR_FUTURE)
+					BackwardsWarn[client] = 0.0;
+				holding[client] &= ~IN_BACK;
+			}
+		}
+		else if(buttons & IN_BACK)
+		{
+			holding[client] |= IN_BACK;
+			if(BackwardsWarn[client] != FAR_FUTURE)
+				BackwardsWarn[client] = GetGameTime() + 3.0;
+		}
+	}
 	if(holding[client] & IN_ATTACK)
 	{
 		if(!(buttons & IN_ATTACK))
@@ -2062,14 +2124,13 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3
 				AllowImpulse = false;
 		}
 
+		f_CooldownForAbilities[client][1] = GetGameTime() + 0.5;
 		if(AllowImpulse)
 		{
 			f_ClientReviveDelayReviveTime[client] = GetGameTime() + 1.0;
 			if(DoInteractKeyLogic(angles, client))
 				return Plugin_Continue;
 		}
-
-		f_CooldownForAbilities[client][1] = GetGameTime() + 0.5;
 		// force wait 1 second so it isnt activated automatically
 		int weapon_holding = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
 		if(weapon_holding != -1)
@@ -2099,35 +2160,15 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3
 		holding[client] |= IN_SCORE;
 		
 #if defined ZR
-		if(GetClientTeam(client) == 2)
+		if(dieingstate[client] == 0)
 		{
-			if(dieingstate[client] == 0)
+			if(WaitingInQueue[client])
 			{
-				if(WaitingInQueue[client])
-				{
-					Queue_Menu(client);
-				}
-				else
-				{
-					Store_Menu(client);
-				}
-			}
-		}
-		else
-		{
-			
-			if(LastStoreMenu[client] || AnyMenuOpen[client])
-			{
-				HideMenuInstantly(client);
-				//show a blank page to instantly hide it
-				CancelClientMenu(client);
-				ClientCommand(client, "slot10");
-				ResetStoreMenuLogic(client);
+				Queue_Menu(client);
 			}
 			else
 			{
-				c_WeaponUseAbilitiesHud[client][0] = 0;
-				Items_EncyclopediaMenu(client);
+				Store_Menu(client);
 			}
 		}
 #endif
@@ -2536,19 +2577,29 @@ void SDKHook_TeamSpawn_SpawnPostInternal(int entity, int SpawnsMax = 2000000000,
 
 public void OnEntityCreated(int entity, const char[] classname)
 {
-	if(entity > CurrentEntities)
-		CurrentEntities = entity;
-
 #if defined ZR
+	if (entity > 0 && entity <= MAXENTITIES)
+	{
+		if(entity > CurrentEntities)
+		{
+			CurrentEntities = entity;
+			//so each strike is closer to the limit.
+			if(CurrentEntities >= ((MAXENTITIES - 28) + (CurrentEdictStrikes * 4)))
+			{
+				EntityClearPanicButton();
+			}
+		}
+	}
+
 	if (!StrContains(classname, "info_player_teamspawn")) 
 	{
 		RequestFrame(SDKHook_TeamSpawn_SpawnPost, entity);
 	}
 #endif
 //	PrintToChatAll("entity: %i| Clkassname %s",entity, classname);
-	if (entity > 0 && entity <= 2048 && IsValidEntity(entity))
+	if (entity > 0 && entity <= MAXENTITIES && IsValidEntity(entity))
 	{
-		h_TransmitHookType[entity] = 0;
+	//	h_TransmitHookType[entity] = 0;
 		f_TimeTillMeleeAttackShould[entity] = 0.0;
 		StatusEffectReset(entity, true);
 		f_InBattleDelay[entity] = 0.0;
@@ -2568,7 +2619,6 @@ public void OnEntityCreated(int entity, const char[] classname)
 		i_PullTowardsTarget[entity] = 0;
 		f_PullStrength[entity] = 0.0;
 #if defined ZR || defined RPG
-		Dungeon_SetEntityZone(entity, Zone_Unknown);
 		CoinEntityCreated(entity);
 #endif
 		//set it to 0!
@@ -2585,6 +2635,7 @@ public void OnEntityCreated(int entity, const char[] classname)
 		b_NoKnockbackFromSources[entity] = false;
 		f_ExplodeDamageVulnerabilityNpc[entity] = 1.0;
 #if defined ZR
+		Dungeon_SetEntityZone(entity, Zone_Unknown);
 		b_FaceStabber[entity] = false;
 		i_CustomWeaponEquipLogic[entity] = -1;
 		Resistance_for_building_High[entity] = 0.0;
@@ -2595,7 +2646,7 @@ public void OnEntityCreated(int entity, const char[] classname)
 		Building_Mounted[entity] = -1;
 		EntitySpawnToDefaultSiccerino(entity);
 		b_NpcIsTeamkiller[entity] = false;
-		IberiaEntityCreated(entity);
+		AlminaEntityCreated(entity);
 		f_HealDelayParticle[entity] = 0.0;
 		f_DelayAttackspeedPreivous[entity] = 1.0;
 		f_DelayAttackspeedPanicAttack[entity] = -1.0;
@@ -2659,6 +2710,7 @@ public void OnEntityCreated(int entity, const char[] classname)
 		EntityFuncAttack2[entity] = INVALID_FUNCTION;
 		EntityFuncAttack3[entity] = INVALID_FUNCTION;
 		EntityFuncReload4[entity] = INVALID_FUNCTION;
+		EntityFuncOnKill[entity] = INVALID_FUNCTION;
 		EntityFuncAttackInstant[entity] = INVALID_FUNCTION;
 		b_Is_Player_Projectile_Through_Npc[entity] = false;
 		b_IgnorePlayerCollisionNPC[entity] = false;
@@ -2676,6 +2728,7 @@ public void OnEntityCreated(int entity, const char[] classname)
 		f_DuelStatus[entity] = 0.0;
 		b_BuildingHasDied[entity] = true;
 		b_is_a_brush[entity] = false;
+		i_TraceToInstead[entity] = -1;
 		i_IsVehicle[entity] = 0;
 		b_IsARespawnroomVisualiser[entity] = false;
 		b_ThisEntityIgnoredEntirelyFromAllCollisions[entity] = false;
@@ -2694,7 +2747,7 @@ public void OnEntityCreated(int entity, const char[] classname)
 		b_IsAFlameThrower[entity] = false;
 		b_HasBombImplanted[entity] = false;
 		i_RaidGrantExtra[entity] = 0;
-		i_IsABuilding[entity] = false;
+		
 		i_NervousImpairmentArrowAmount[entity] = 0;
 		i_VoidArrowAmount[entity] = 0;
 		i_ChaosArrowAmount[entity] = 0;
@@ -2730,14 +2783,24 @@ public void OnEntityCreated(int entity, const char[] classname)
 		b_IsCustomProjectile[entity] = false;
 		if(!StrContains(classname, "entity_revive_marker")
 		  || !StrContains(classname, "tf_projectile_energy_ring")
-		  || !StrContains(classname, "entity_medigun_shield")
 		  || !StrContains(classname, "tf_projectile_energy_ball")
 		  || !StrContains(classname, "item_powerup_rune")
 		  || !StrContains(classname, "vgui_screen"))
 		{
 			SDKHook(entity, SDKHook_SpawnPost, Delete_instantly);
 		}
-		if(!StrContains(classname, "tf_objective_resource"))
+		else if(!StrContains(classname, "entity_medigun_shield"))
+		{
+			SDKHook(entity, SDKHook_SpawnPost, Delete_instantly_Shield);
+		}
+		else if(!StrContains(classname, "tf_ragdoll"))
+		{
+			if(RemoveRagdollDo)
+				RemoveEntity(entity);
+
+			RemoveRagdollDo = false;
+		}
+		else if(!StrContains(classname, "tf_objective_resource"))
 		{
 			b_ThisEntityIgnored[entity] = true;
 			b_ThisEntityIgnored_NoTeam[entity] = true;
@@ -2868,16 +2931,11 @@ public void OnEntityCreated(int entity, const char[] classname)
 			b_IsARespawnroomVisualiser[entity] = true;
 			b_ThisEntityIsAProjectileForUpdateContraints[entity] = true;
 		}
-		else if(!StrContains(classname, "prop_physics_multiplayer"))
+		else if(!StrContains(classname, "prop_soccer_ball") ||
+		!StrContains(classname, "prop_physics_multiplayer")||
+		!StrContains(classname, "prop_physics_override"))
 		{
 			b_ThisEntityIsAProjectileForUpdateContraints[entity] = true;
-			npc.bCantCollidie = true;
-			npc.bCantCollidieAlly = true;
-		}
-		else if(!StrContains(classname, "prop_physics_override"))
-		{
-			b_ThisEntityIsAProjectileForUpdateContraints[entity] = true;
-			
 			npc.bCantCollidie = true;
 			npc.bCantCollidieAlly = true;
 		}
@@ -2944,9 +3002,11 @@ public void OnEntityCreated(int entity, const char[] classname)
 			npc.bCantCollidie = true;
 			npc.bCantCollidieAlly = true;
 			SDKHook(entity, SDKHook_SpawnPost, Set_Projectile_Collision);
+			SDKHook(entity, SDKHook_SpawnPost, Set_Rocket_Team);
 			Hook_DHook_UpdateTransmitState(entity);
 			b_IsAProjectile[entity] = true;
 			TFProjectile_Rocket_Spawn(entity);
+			func_WandOnTouch[entity] = INVALID_FUNCTION;
 		}
 #endif
 		else if(!StrContains(classname, "zr_projectile_base"))
@@ -2985,6 +3045,15 @@ public void OnEntityCreated(int entity, const char[] classname)
 			OnManglerCreated(entity);
 		}
 #endif
+		else if(!StrContains(classname, "obj_dispenser") || 
+		!StrContains(classname, "obj_sentrygun") || 
+		!StrContains(classname, "obj_teleporter"))
+		{
+			//base tf2 buildings arent really supported for now
+			b_ThisEntityIgnored[entity] = true;
+			b_ThisEntityIgnored_NoTeam[entity] = true;
+			npc.bCantCollidieAlly = true;
+		}
 		else if(!StrContains(classname, "obj_") && !StrEqual(classname, "obj_vehicle"))
 		{
 			b_BuildingHasDied[entity] = false;
@@ -2997,6 +3066,7 @@ public void OnEntityCreated(int entity, const char[] classname)
 			Hook_DHook_UpdateTransmitState(entity);
 			b_ThisEntityIgnored[entity] = true;
 			b_ThisEntityIgnored_NoTeam[entity] = true;
+			SetEntProp(entity, Prop_Data, "m_bForcePurgeFixedupStrings", true);
 		}
 		else if(!StrContains(classname, "info_particle_system"))
 		{
@@ -3065,6 +3135,28 @@ public Action SDKHook_Regenerate_Touch(int entity, int target)
 	return Plugin_Continue;
 }
 
+void Set_Rocket_Team(int entity)
+{
+	RequestFrame(Set_Rocket_TeamFrame, EntRefToEntIndex(entity));
+}
+
+void Set_Rocket_TeamFrame(int ref)
+{
+	int entity = EntRefToEntIndex(ref);
+	if (!IsValidEntity(entity))
+		return;
+
+	if (GetTeam(entity) != 0)
+		return;
+
+	// Team likely not yet setup, assume it's meant to be the same as the owner
+	int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
+	if (owner == -1)
+		return;
+	
+	SetTeam(entity, GetTeam(owner));
+}
+
 void Set_Projectile_Collision(int entity)
 {
 	//needs to be delayed by frame, team setting in tf2 happens after its spawned.
@@ -3093,6 +3185,11 @@ void Set_Projectile_CollisionFrame(int ref)
 }
 public void Delete_instantly(int entity)
 {
+	RemoveEntity(entity);
+}
+public void Delete_instantly_Shield(int entity)
+{
+	//StopSound(entity, "/weapons/medi_shield_deploy.wav");
 	RemoveEntity(entity);
 }
 public void MakeFlamesUseless(int entity)
@@ -3229,10 +3326,10 @@ void CheckIfAloneOnServer(bool CountOnly = false)
 	for(int client=1; client<=MaxClients; client++)
 	{
 #if defined ZR 
-		if(IsClientInGame(client) && GetClientTeam(client)==2 && !IsFakeClient(client) && TeutonType[client] != TEUTON_WAITING)
+		if(IsClientInGame(client) && GetTeam(client)==2 && !IsFakeClient(client) && TeutonType[client] != TEUTON_WAITING)
 #endif
 #if defined RPG 
-		if(IsClientInGame(client) && GetClientTeam(client)==2 && !IsFakeClient(client))
+		if(IsClientInGame(client) && GetTeam(client)==2 && !IsFakeClient(client))
 #endif
 		{
 			if(!b_AntiLateSpawn_Allow[client])
@@ -3274,7 +3371,7 @@ void CheckIfAloneOnServer(bool CountOnly = false)
 	}
 	for(int client=1; client<=MaxClients; client++)
 	{
-		if(IsClientInGame(client) && GetClientTeam(client)==2 && !IsFakeClient(client) && TeutonType[client] == TEUTON_NONE)
+		if(IsClientInGame(client) && GetTeam(client)==2 && !IsFakeClient(client) && TeutonType[client] == TEUTON_NONE)
 		{
 			//update clients
 			Store_ApplyAttribs(client);
@@ -3366,34 +3463,37 @@ public void TF2_OnConditionRemoved(int client, TFCond condition)
 			case TFCond_Slowed:
 			{
 				SDKCall_SetSpeed(client);
+				Viewchange_UpdateDelay(client);
+			}
+			case TFCond_Dazed:
+			{
+				//a sec is 66, and after 33 it should be done
+				Viewchange_UpdateDelay(client, 25);
 			}
 			case TFCond_Taunting:
 			{
 				Viewchange_UpdateDelay(client);
 
-				if(!b_TauntSpeedIncrease[client])
+				int weapon_holding = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
+				if(weapon_holding != -1)
 				{
-					int weapon_holding = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
-					if(weapon_holding != -1)
+					static char classname[64];
+					GetEntityClassname(weapon_holding, classname, sizeof(classname));
+					if(TF2_GetClassnameSlot(classname, weapon_holding) == TFWeaponSlot_Melee)
 					{
-						static char classname[64];
-						GetEntityClassname(weapon_holding, classname, sizeof(classname));
-						if(TF2_GetClassnameSlot(classname, weapon_holding) == TFWeaponSlot_Melee)
-						{
-							float attack_speed;
+						float attack_speed;
+					
+						attack_speed = 1.0 / Attributes_Get(weapon_holding, 6, 1.0);
 						
-							attack_speed = 1.0 / Attributes_Get(weapon_holding, 6, 1.0);
-							
-							if(attack_speed > 5.0)
-							{
-								attack_speed *= 0.5; //Too fast! It makes animations barely play at all
-							}
-							Attributes_Set(client, 201, attack_speed);
+						if(attack_speed > 5.0)
+						{
+							attack_speed *= 0.5; //Too fast! It makes animations barely play at all
 						}
-						else
-						{	
-							Attributes_Set(client, 201, 1.0);
-						}
+						Attributes_Set(client, 201, attack_speed);
+					}
+					else
+					{	
+						Attributes_Set(client, 201, 1.0);
 					}
 				}
 			}
@@ -3401,7 +3501,7 @@ public void TF2_OnConditionRemoved(int client, TFCond condition)
 	}
 }
 
-stock bool InteractKey(int client, int weapon, bool Is_Reload_Button = false)
+stock bool InteractKey(int client, int weapon, bool Is_Reload_Button = false, int& EntityAlly = 0)
 {
 	if(weapon != -1) //Just allow. || GetEntPropFloat(weapon, Prop_Send, "m_flNextPrimaryAttack")<GetGameTime())
 	{
@@ -3419,6 +3519,7 @@ stock bool InteractKey(int client, int weapon, bool Is_Reload_Button = false)
 				}
 			}
 #endif
+			EntityAlly = entity;
 
 #if defined ZR
 			if(Vehicle_Interact(client, weapon, entity))
@@ -3518,6 +3619,11 @@ public Action TF2Items_OnGiveNamedItem(int client, char[] classname, int index, 
 #else
 	if(!StrContains(classname, "tf_wear"))
 	{
+		if(CurrentEdictStrikes >= 1)
+		{
+			//too many strikes
+			return Plugin_Stop;
+		}
 		switch(index)
 		{	
 			case 57, 131, 133, 231, 405, 406, 444, 608, 642, 1099, 1144:
@@ -3751,90 +3857,114 @@ void ReviveClientFromOrToEntity(int target, int client, int extralogic = 0, int 
 	
 	if(dieingstate[target] <= 0)
 	{
-		if(WasClientReviving)
-		{
-			AddHealthToUbersaw(client, 1, 0.065);
-			HealPointToReinforce(client, 1, 0.065);
-			i_Reviving_This_Client[client] = 0;
-			f_Reviving_This_Client[client] = 0.0;
-			Native_OnRevivingPlayer(client, target);
-		}
+		FullyReviveClient(target, client, extralogic);
+	}
+}
+
+void FullyReviveClient(int target, int client, int extralogic = 0, bool teleport = true)
+{
+	if(client <= MaxClients)
+	{
+		AddHealthToUbersaw(client, 1, 0.065);
+		HealPointToReinforce(client, 1, 0.065);
+		i_Reviving_This_Client[client] = 0;
+		f_Reviving_This_Client[client] = 0.0;
+		Native_OnRevivingPlayer(client, target);
+	}
+	if(extralogic)
+	{
+		i_AmountDowned[target]--;
+		b_BobsCuringHand_Revived[target] = -9999;
+	}
+	SetEntityMoveType(target, MOVETYPE_WALK);
+	RequestFrame(Movetype_walk, EntRefToEntIndex(target));
+	dieingstate[target] = 0;
+	ClientSaveUber(target);
+	ClientSaveRageMeterStatus(target);
+	
+	SetEntPropEnt(target, Prop_Send, "m_hObserverTarget", client);
+	f_WasRecentlyRevivedViaNonWave[target] = GetGameTime() + 1.0;
+	DHook_RespawnPlayer(target);
+	
+	float pos[3], ang[3];
+	GetEntPropVector(client, Prop_Data, "m_vecAbsOrigin", pos);
+	GetEntPropVector(client, Prop_Data, "m_angRotation", ang);
+	ang[2] = 0.0;
+	SetEntProp(target, Prop_Send, "m_bDucked", true);
+	SetEntityFlags(target, GetEntityFlags(target)|FL_DUCKING);
+	CClotBody npc = view_as<CClotBody>(target);
+	npc.m_bThisEntityIgnored = false;
+	
+	if(teleport)
+	{
+		Player_Teleport_Safe(target,pos, true, true);
+		TeleportEntity(target, NULL_VECTOR, ang, NULL_VECTOR);
+	}
+	SetEntityCollisionGroup(target, 5);
+
+	if(client <= MaxClients)
+		PrintCenterText(client, "");
+
+	PrintCenterText(target, "");
+	DoOverlay(target, "", 2);
+	SetEntityHealth(target, 50);
+	RequestFrame(SetHealthAfterRevive, EntIndexToEntRef(target));
+	Rogue_TriggerFunction(Artifact::FuncRevive, target);
+	//Gunsaw_TryBodySteal(target, false, pos);
+	int entity, i;
+	while(TF2U_GetWearable(target, entity, i))
+	{
+		if(i_WeaponVMTExtraSetting[entity] != -1)
+			continue;
+
+		SetEntityRenderMode(entity, RENDER_NORMAL);
+		SetEntityRenderColor(entity, 255, 255, 255, 255);
+	}
+	if(client <= MaxClients && (i_CurrentEquippedPerk[client] & PERK_REGENE))
+	{
+		HealEntityGlobal(client, client, float(SDKCall_GetMaxHealth(client)) * 0.2, 1.0, 1.0);
+		HealEntityGlobal(client, target, float(SDKCall_GetMaxHealth(target)) * 0.2, 1.0, 1.0, HEAL_ABSOLUTE);
+	}
+	else
+	{
+		if(client <= MaxClients)
+			HealEntityGlobal(client, client, float(SDKCall_GetMaxHealth(client)) * 0.1, 1.0, 1.0);
 		if(extralogic)
 		{
-			i_AmountDowned[target]--;
-			b_BobsCuringHand_Revived[target] = -9999;
-		}
-		SetEntityMoveType(target, MOVETYPE_WALK);
-		RequestFrame(Movetype_walk, EntRefToEntIndex(target));
-		dieingstate[target] = 0;
-		ClientSaveUber(target);
-		ClientSaveRageMeterStatus(target);
-		
-		SetEntPropEnt(target, Prop_Send, "m_hObserverTarget", client);
-		f_WasRecentlyRevivedViaNonWave[target] = GameTime + 1.0;
-		DHook_RespawnPlayer(target);
-		
-		float pos[3], ang[3];
-		GetEntPropVector(client, Prop_Data, "m_vecAbsOrigin", pos);
-		GetEntPropVector(client, Prop_Data, "m_angRotation", ang);
-		ang[2] = 0.0;
-		SetEntProp(target, Prop_Send, "m_bDucked", true);
-		SetEntityFlags(target, GetEntityFlags(target)|FL_DUCKING);
-		CClotBody npc = view_as<CClotBody>(target);
-		npc.m_bThisEntityIgnored = false;
-		TeleportEntity(target, pos, ang, NULL_VECTOR);
-		SetEntityCollisionGroup(target, 5);
-
-		if(WasClientReviving)
-			PrintCenterText(client, "");
-
-		PrintCenterText(target, "");
-		DoOverlay(target, "", 2);
-		SetEntityHealth(target, 50);
-		RequestFrame(SetHealthAfterRevive, EntIndexToEntRef(target));
-		Rogue_TriggerFunction(Artifact::FuncRevive, target);
-		int entity, i;
-		while(TF2U_GetWearable(target, entity, i))
-		{
-			if(entity == EntRefToEntIndex(Armor_Wearable[target]) || i_WeaponVMTExtraSetting[entity] != -1)
-				continue;
-
-			SetEntityRenderMode(entity, RENDER_NORMAL);
-			SetEntityRenderColor(entity, 255, 255, 255, 255);
-		}
-		if(WasClientReviving && (i_CurrentEquippedPerk[client] & PERK_REGENE))
-		{
-			HealEntityGlobal(client, client, float(SDKCall_GetMaxHealth(client)) * 0.2, 1.0, 1.0);
-			HealEntityGlobal(client, target, float(SDKCall_GetMaxHealth(target)) * 0.2, 1.0, 1.0, HEAL_ABSOLUTE);
+			HealEntityGlobal(client, target, float(SDKCall_GetMaxHealth(target)) * 1.0, 1.0, 1.0, HEAL_ABSOLUTE);
 		}
 		else
-		{
-			if(WasClientReviving)
-				HealEntityGlobal(client, client, float(SDKCall_GetMaxHealth(client)) * 0.1, 1.0, 1.0);
-			if(extralogic)
-			{
-				HealEntityGlobal(client, target, float(SDKCall_GetMaxHealth(target)) * 1.0, 1.0, 1.0, HEAL_ABSOLUTE);
-			}
-			else
-			{	
-				HealEntityGlobal(client, target, float(SDKCall_GetMaxHealth(target)), 0.1, 1.0, HEAL_ABSOLUTE);
-			}
+		{	
+			HealEntityGlobal(client, target, float(SDKCall_GetMaxHealth(target)), 0.1, 1.0, HEAL_ABSOLUTE);
 		}
-		
-		SetEntityRenderMode(target, RENDER_NORMAL);
-		SetEntityRenderColor(target, 255, 255, 255, 255);
-		EmitSoundToAll("mvm/mvm_revive.wav", target, SNDCHAN_AUTO, 90, _, 1.0);
-		MakePlayerGiveResponseVoice(target, 3); //Revived response!
-		f_ClientBeingReviveDelay[target] = 0.0;
-	//	if(b_KahmlLastWish[target])
-		{
-			HealEntityGlobal(client, target, float(SDKCall_GetMaxHealth(target)) * 0.1, 0.1, 1.0, HEAL_ABSOLUTE);
-			GiveArmorViaPercentage(target, 0.1, 1.0, false);
-			IncreaseEntityDamageTakenBy(target, 0.85, 5.0);
-		}
-		CreateTimer(0.25, ReviveDisplayMessageDelay, EntIndexToEntRef(target), TIMER_FLAG_NO_MAPCHANGE);
-		CheckLastMannStanding(0);
 	}
+	
+	SetEntityRenderMode(target, RENDER_NORMAL);
+	SetEntityRenderColor(target, 255, 255, 255, 255);
+	EmitSoundToAll("mvm/mvm_revive.wav", target, SNDCHAN_AUTO, 90, _, 1.0);
+	MakePlayerGiveResponseVoice(target, 3); //Revived response!
+	f_ClientBeingReviveDelay[target] = 0.0;
+//	if(b_KahmlLastWish[target])
+	{
+		HealEntityGlobal(client, target, float(SDKCall_GetMaxHealth(target)) * 0.1, 0.1, 1.0, HEAL_ABSOLUTE);
+		GiveArmorViaPercentage(target, 0.1, 1.0, false);
+		IncreaseEntityDamageTakenBy(target, 0.85, 5.0);
+	}
+	CreateTimer(0.25, ReviveDisplayMessageDelay, EntIndexToEntRef(target), TIMER_FLAG_NO_MAPCHANGE);
+	CheckLastMannStanding(0);
+}
+
+int TotalDowns()
+{
+	int downsleft = 2;
+	if(ZR_Get_Modifier() == PREFIX_ONESTAND)
+		downsleft++;
+	
+	if(ZR_Get_Modifier() == OLD_TIMES || ZR_Get_Modifier() == NOSTALGICA)
+		downsleft--;
+	
+	downsleft += Dungeon_DownedBonus();
+	return downsleft;
 }
 
 public Action ReviveDisplayMessageDelay(Handle timer, int ref)
@@ -3842,8 +3972,8 @@ public Action ReviveDisplayMessageDelay(Handle timer, int ref)
 	int target = EntRefToEntIndex(ref);
 	if(IsValidClient(target))
 	{
-		int downsleft;
-		downsleft = 2;
+		int downsleft = TotalDowns();
+
 		downsleft -= i_AmountDowned[target];
 		if(downsleft <= 0)
 		{
@@ -3956,7 +4086,7 @@ public void ArrowTouchNonCombatEntity(int entity, int other)
 }
 
 
-void PlayerHasInteract(int client, char[] Buffer, int Buffersize)
+stock void PlayerHasInteract(int client, char[] Buffer, int Buffersize)
 {
 	if(zr_interactforcereload.BoolValue) //Cvar is on
 	{
@@ -3988,6 +4118,9 @@ void PlayerHasInteract(int client, char[] Buffer, int Buffersize)
 int CalcMaxPlayers()
 {
 	int playercount = CvarMaxPlayerAlive.IntValue;
+	if(playercount == -1)
+		return -1;
+		
 	if(playercount < 1)
 		playercount = MAXPLAYERS - 1;
 	/*
@@ -4030,3 +4163,109 @@ void TakeDamage_DisableMVM()
 #endif
 */
 }
+
+
+
+stock void EntityClearPanicButton()
+{
+	switch(CurrentEdictStrikes)
+	{
+		case 0:
+		{
+			CPrintToChatAll("{crimson}Strike 1: We almost hit the edict limit, an emergency fix was initiated! All Player cosmetics have been tempomarily removed");
+			CPrintToChatAll("{crimson}Strike 1: We almost hit the edict limit, an emergency fix was initiated! All Player cosmetics have been tempomarily removed");
+			CPrintToChatAll("{crimson}Strike 1: We almost hit the edict limit, an emergency fix was initiated! All Player cosmetics have been tempomarily removed");
+		}
+		case 1:
+		{
+			CPrintToChatAll("{crimson}Strike 2: We almost hit the edict limit, an emergency fix was initiated! All Player cosmetics have been tempomarily removed, all projectiles and outlines are nuked");
+			CPrintToChatAll("{crimson}Strike 2: We almost hit the edict limit, an emergency fix was initiated! All Player cosmetics have been tempomarily removed, all projectiles and outlines are nuked");
+			CPrintToChatAll("{crimson}Strike 2: We almost hit the edict limit, an emergency fix was initiated! All Player cosmetics have been tempomarily removed, all projectiles and outlines are nuked");
+		}
+		case 2:
+		{
+			CPrintToChatAll("{crimson} Strike 3+: We almost hit the edict limit, an emergency fix was initiated! All Non Raid npcs and all Projectiles have been deleted! Raids will no longer grant items!");
+			CPrintToChatAll("{crimson} Strike 3+: We almost hit the edict limit, an emergency fix was initiated! All Non Raid npcs and all Projectiles have been deleted! Raids will no longer grant items!");
+			CPrintToChatAll("{crimson} Strike 3+: We almost hit the edict limit, an emergency fix was initiated! All Non Raid npcs and all Projectiles have been deleted! Raids will no longer grant items!");
+		}
+	}
+	int entity = -1;
+	if(CurrentEdictStrikes >= 1)
+	{
+		while((entity=FindEntityByClassname(entity, "zr_projectile_base")) != -1)
+		{
+			if(IsValidEntity(entity))
+			{
+				RemoveEntity(entity);
+			}
+		}
+		entity = -1;
+		while((entity=FindEntityByClassname(entity, "tf_glow")) != -1)
+		{
+			if(IsValidEntity(entity))
+			{
+				RemoveEntity(entity);
+			}
+		}
+	}
+	if(CurrentEdictStrikes >= 2)
+	{
+		entity = -1;
+		while((entity=FindEntityByClassname(entity, "zr_base_npc")) != -1)
+		{
+#if defined ZR
+			if(IsValidEntity(entity) && GetTeam(entity) != TFTeam_Red && !b_thisNpcIsARaid[entity])
+#else
+			if(IsValidEntity(entity))
+#endif
+			{
+				i_RaidGrantExtra[entity] = 0;
+				b_DissapearOnDeath[entity] = true;
+				b_DoGibThisNpc[entity] = true;
+				SmiteNpcToDeath(entity);
+				SmiteNpcToDeath(entity);
+				SmiteNpcToDeath(entity);
+				SmiteNpcToDeath(entity);
+			}
+		}
+	}
+	if(CurrentEdictStrikes >= 1)
+	{
+		for(int client=1; client<=MaxClients; client++)
+		{
+			if(IsClientInGame(client))
+			{
+				ApplyStatusEffect(client, client, "Terrified", 2.0);
+#if defined ZR
+				UTIL_ScreenFade(client, 800, 0, 0x0001, 0, 0, 0, 200);
+#endif
+			}
+		}
+	}
+	entity = -1;
+	while((entity=FindEntityByClassname(entity, "tf_wearable")) != -1)
+	{
+		if(!IsValidEntity(entity))
+			continue;
+		int client = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
+		if(!IsValidEntity(client))
+		{
+			RemoveEntity(entity);
+			continue;
+		}
+		
+		if(EntRefToEntIndex(i_Viewmodel_PlayerModel[client]) == entity)
+			continue;
+		if(EntRefToEntIndex(i_Worldmodel_WeaponModel[client]) == entity)
+			continue;
+		if(EntRefToEntIndex(WeaponRef_viewmodel[client]) == entity)
+			continue;
+			
+		TF2_RemoveWearable(client, entity);
+	}
+	
+	CurrentEdictStrikes++;
+	if(CurrentEdictStrikes >= 2)
+		CurrentEdictStrikes = 2;
+}
+

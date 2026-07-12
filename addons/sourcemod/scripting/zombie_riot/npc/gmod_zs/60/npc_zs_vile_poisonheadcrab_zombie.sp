@@ -125,7 +125,7 @@ methodmap ZSVILEPoisonheadcrabZombie < CClotBody
 	
 	public ZSVILEPoisonheadcrabZombie(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSVILEPoisonheadcrabZombie npc = view_as<ZSVILEPoisonheadcrabZombie>(CClotBody(vecPos, vecAng, "models/zombie/poison.mdl", "1.15", "60000", ally));
+		ZSVILEPoisonheadcrabZombie npc = view_as<ZSVILEPoisonheadcrabZombie>(CClotBody(vecPos, vecAng, "models/zombie/poison.mdl", "1.15", "80000", ally));
 		
 		i_NpcWeight[npc.index] = 2;
 		
@@ -147,7 +147,7 @@ methodmap ZSVILEPoisonheadcrabZombie < CClotBody
 		
 		//IDLE
 		npc.m_flAttackHappenswillhappen = false;
-		npc.m_flSpeed = 260.0;
+		npc.m_flSpeed = 300.0;
 		npc.StartPathing();
 		
 		SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
@@ -259,10 +259,10 @@ public void ZSVILEPoisonheadcrabZombie_ClotThink(int iNPC)
 								{
 									{
 										if(!ShouldNpcDealBonusDamage(target))
-										SDKHooks_TakeDamage(target, npc.index, npc.index, 380.0, DMG_CLUB, -1, _, vecHit);
+										SDKHooks_TakeDamage(target, npc.index, npc.index, 400.0, DMG_CLUB, -1, _, vecHit);
 									
 									else
-										SDKHooks_TakeDamage(target, npc.index, npc.index, 720.0, DMG_CLUB, -1, _, vecHit);
+										SDKHooks_TakeDamage(target, npc.index, npc.index, 1000.0, DMG_CLUB, -1, _, vecHit);
 										Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 50 : 10);
 									}
 									
@@ -360,8 +360,8 @@ public Action ZSVILEPoisonheadcrabZombie_Revert_Poison_Zombie_Resistance(Handle 
 	int zombie = EntRefToEntIndex(ref);
 	if(IsValidEntity(zombie))
 	{
-		SetEntityRenderMode(zombie, RENDER_NORMAL);
-		SetEntityRenderColor(zombie, 255, 255, 255, 255);
+		SetEntityRenderMode(zombie, RENDER_TRANSCOLOR);
+		SetEntityRenderColor(zombie, 150, 255, 150, 255);
 	}
 	return Plugin_Handled;
 }

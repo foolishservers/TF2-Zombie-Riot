@@ -2,27 +2,30 @@
 #pragma newdecls required
 static Handle h_TimerExploARWeaponManagement[MAXPLAYERS] = {null, ...};
 
-static int i_VictoriaParticle_1[MAXPLAYERS];
-//static int ExploAR_ZoomLaser[MAXPLAYERS];
-static int ExploAR_VictoriaNuke[MAXPLAYERS];
+static int i_WindowsVistaParticle_1[MAXPLAYERS]; 
+static int ExploAR_ZoomLaser[MAXPLAYERS];
+static int ExploAR_WindowsVistaNuke[MAXPLAYERS];
+static int ExploAR_Robot[MAXPLAYERS];
 
 static int ExploAR_AirStrikeActivated[MAXPLAYERS];
 static int ExploAR_AirStrikeActivatedMAX[MAXPLAYERS];
 
 static int ExploAR_WeaponPap[MAXPLAYERS+1] = {0, ...};
 static int ExploAR_WeaponID[MAXPLAYERS];
+static int ExploAR_TargetingRemoteID[MAXPLAYERS];
 static int ExploAR_BurstNum[MAXPLAYERS];
 static int ExploAR_OverHit[MAXPLAYERS];
 static int ExploAR_Charging[MAXPLAYERS];
 static int ExploAR_Battery[MAXPLAYERS];
 
-static float ExploAR_ClipAttributes[MAXPLAYERS];
 static float ExploAR_OverHeatDelay[MAXPLAYERS];
 static float ExploAR_HUDDelay[MAXPLAYERS];
-static bool Capacitor_Active[MAXPLAYERS] = {false, ...};
 static bool Can_I_Fire[MAXPLAYERS] = {false, ...};
 static bool IsDeploy[MAXPLAYERS] = {false, ...};
-static bool ExploAR_ClipFix[MAXPLAYERS] = {false, ...};
+static bool IsOverride[MAXPLAYERS] = {false, ...};
+static bool IsExtraDesc_1[MAXPLAYERS] = {false, ...};
+static bool IsExtraDesc_2[MAXPLAYERS] = {false, ...};
+static bool IsExtraDesc_3[MAXPLAYERS] = {false, ...};
 
 static int g_LaserIndex;
 
@@ -32,12 +35,11 @@ public void ResetMapStartExploARWeapon()
 	PrecacheSound("weapons/flare_detonator_launch.wav");
 	PrecacheSound("weapons/gunslinger_three_hit.wav");
 	PrecacheSound("beams/beamstart5.wav");
+	PrecacheSound("weapons/drg_pomson_drain_01.wav");
 	PrecacheModel("models/props_farm/vent001.mdl");
 	PrecacheModel("models/weapons/w_models/w_drg_ball.mdl");
 	g_LaserIndex = PrecacheModel(LASERBEAM);
 	Zero(Can_I_Fire);
-	Zero(ExploAR_ClipFix);
-	Zero(Capacitor_Active);
 	Zero(ExploAR_OverHit);
 	Zero(ExploAR_HUDDelay);
 	Zero(ExploAR_OverHeatDelay);
@@ -73,68 +75,11 @@ public void BombAR_M1_Attack(int client, int weapon, bool crit, int slot)
 	}
 }
 
-public void BombAR_M1_SingleAttack(int client, int weapon, bool crit, int slot)
-{
-	if(ExploAR_AirStrikeActivated[client]>64)
-	{
-		VictoriaNukeSetUp(client, weapon);
-		return;
-	}
-	float fm_Charging = float(ExploAR_Charging[client]);
-	float fm_Battery = float(ExploAR_Battery[client]);
-
-	bool UseBattery;
-	float overhitDelay = (fm_Charging/65.0)*3.0;
-	if(fm_Charging>=65.0)
-	{
-		if(fm_Battery>=100.0)
-		{
-			overhitDelay+=1.5;
-			UseBattery=true;
-		}
-		SetEntPropFloat(weapon, Prop_Data, "m_flNextPrimaryAttack", GetGameTime()+overhitDelay);
-	}
-	if(overhitDelay<1.62) overhitDelay = 1.62;
-	ExploAR_OverHeatDelay[client]=GetGameTime()+overhitDelay;
-	
-	Firebullet(client, weapon, ExploAR_OverHit[client], ExploAR_WeaponPap[client], fm_Charging, UseBattery);
-	
-	if(ExploAR_OverHit[client]<100)
-	{
-		int OverHit_Increase=ExploAR_OverHit[client]+2;
-		if(HasSpecificBuff(client, "Burn"))
-			OverHit_Increase++;
-		if(HasSpecificBuff(client, "Freeze")||HasSpecificBuff(client, "Cryo")
-		||HasSpecificBuff(client, "Near Zero")||HasSpecificBuff(client, "Frozen"))
-			OverHit_Increase--;
-		OverHit_Increase+=RoundToCeil((fm_Charging/65.0)*100.0);
-		if(UseBattery)
-			OverHit_Increase+=100;
-		ExploAR_OverHit[client]=OverHit_Increase;
-	}
-	if(UseBattery)
-		ExploAR_Battery[client] = 0;
-	else
-		ExploAR_Battery[client] += RoundToCeil((fm_Charging/65.0)*25.0);
-	ExploAR_Charging[client] = 0;
-	ExploAR_HUDDelay[client] = 0.0;
-}
-
 static void BombAR_M1_PreThink(int client)
 {
 	int weapon = EntRefToEntIndex(ExploAR_WeaponID[client]);
 	if(h_TimerExploARWeaponManagement[client] != null && IsValidEntity(weapon))
 	{
-		switch(ExploAR_WeaponPap[client])
-		{
-			case 0, 1, 2:{/*none*/}
-			default:
-			{
-				Can_I_Fire[client]=false;
-				SDKUnhook(client, SDKHook_PreThink, BombAR_M1_PreThink);
-				return;
-			}
-		}
 		float gameTime = GetGameTime();
 		float attackTime = GetEntPropFloat(weapon, Prop_Send, "m_flNextPrimaryAttack")- gameTime;
 		float burstRate = Attributes_Get(weapon, 394, 1.0);
@@ -161,13 +106,6 @@ static void BombAR_M1_PreThink(int client)
 		SDKUnhook(client, SDKHook_PreThink, BombAR_M1_PreThink);
 		return;
 	}
-}
-
-public void BombAR_ToggleCapacitor(int client, int weapon, bool crit, int slot)
-{
-	Capacitor_Active[client]=!Capacitor_Active[client];
-	ClientCommand(client, "playgamesound weapons/vaccinator_toggle.wav");
-	ExploAR_HUDDelay[client] = 0.0;
 }
 
 /*public void BombAR_Zoom_n_Laser(int client, int weapon, bool crit, int slot)
@@ -221,13 +159,12 @@ public void BombAR_ToggleCapacitor(int client, int weapon, bool crit, int slot)
 	}
 }*/
 
-/*static void BombAR_Laser_PreThink(int client)
+static void BombAR_Laser_PreThink(int client)
 {
 	int weapon = EntRefToEntIndex(ExploAR_WeaponID[client]);
 	int Prop = EntRefToEntIndex(ExploAR_ZoomLaser[client]);
-	if(Capacitor_Active[client] && h_TimerExploARWeaponManagement[client] != null && IsValidEntity(weapon) && IsValidEntity(Prop))
+	if(ExploAR_AirStrikeActivated[client]>64 && h_TimerExploARWeaponManagement[client] != null && IsValidEntity(weapon) && IsValidEntity(Prop))
 	{
-		Attributes_Set(weapon, 298, (ExploAR_AirStrikeActivated[client] ? 1.0 : 5.0));
 		static float vAngles[3], vOrigin[3];
 		GetClientEyePosition(client, vOrigin);
 		GetClientEyeAngles(client, vAngles);
@@ -242,7 +179,7 @@ public void BombAR_ToggleCapacitor(int client, int weapon, bool crit, int slot)
 		SDKUnhook(client, SDKHook_PreThink, BombAR_Laser_PreThink);
 		return;
 	}
-}*/
+}
 
 static bool LaserPoint(int entity, float flAng[3], float flPos[3], float pos[3])
 {
@@ -346,13 +283,25 @@ public void BombAR_AirStrike_Beacon(int client, int weapon, bool crit, int slot)
 			ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);
 			return;
 		}
-		
+		if(ExploAR_Battery[client]<90)
+		{
+			ClientCommand(client, "playgamesound items/medshotno1.wav");
+			SetDefaultHudPosition(client);
+			SetGlobalTransTarget(client);
+			ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Not enough charge");
+			return;
+		}
+		int Robot = EntRefToEntIndex(ExploAR_Robot[client]);
+		if(!IsValidEntity(Robot))
+		{
+			ClientCommand(client, "playgamesound items/medshotno1.wav");
+			SetDefaultHudPosition(client);
+			SetGlobalTransTarget(client);
+			ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "ExploAR_NeedRobo");
+			return;
+		}
 		if(IsValidEntity(weapon))
 		{
-			//wtf how
-			if(ExploAR_AirStrikeActivated[client])
-				Attributes_Set(weapon, 4, ExploAR_ClipAttributes[client]);
-		
 			float ClipAttributes = Attributes_Get(weapon, 4, 1.0);
 			int SMGAmmo=GetAmmo(client, 18);
 			int SMGAmmoMAX=RoundToCeil(2.5*ClipAttributes);
@@ -366,22 +315,19 @@ public void BombAR_AirStrike_Beacon(int client, int weapon, bool crit, int slot)
 				ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Not Enough Ammo", SMGAmmoMAX);
 				return;
 			}
+			ClientCommand(client, "playgamesound ui/cyoa_map_open.wav");
 			Rogue_OnAbilityUse(client, weapon);
 			Ability_Apply_Cooldown(client, slot, 50.0);
-			int iAmmoTable = FindSendPropInfo("CBaseCombatWeapon", "m_iClip1");
-			int GetClip=GetEntData(weapon, iAmmoTable, 4);
-			SetAmmo(client, 18, SMGAmmo+GetClip-SMGAmmoMAX);
-			SetEntData(weapon, iAmmoTable, SMGAmmoMAX);
+			
 			ExploAR_AirStrikeActivated[client]=SMGAmmoMAX+64;
 			ExploAR_AirStrikeActivatedMAX[client]=SMGAmmoMAX;
-			Attributes_Set(weapon, 298, 0.0);
+			
 			SetEntPropFloat(weapon, Prop_Data, "m_flNextPrimaryAttack", GetGameTime() + 1.0);
 			SetEntProp(weapon, Prop_Send, "m_nKillComboCount", 0);
 			SetEntProp(weapon, Prop_Send, "m_nKillComboClass", SMGAmmoMAX);
-			ExploAR_ClipAttributes[client]=ClipAttributes;
 			Can_I_Fire[client]=false;
 			SDKUnhook(client, SDKHook_PreThink, BombAR_M1_PreThink);
-			int Prop = EntRefToEntIndex(ExploAR_VictoriaNuke[client]);
+			int Prop = EntRefToEntIndex(ExploAR_WindowsVistaNuke[client]);
 			if(IsValidEntity(Prop))
 			{
 				RemovePorps(Prop);
@@ -397,7 +343,7 @@ public void BombAR_AirStrike_Beacon(int client, int weapon, bool crit, int slot)
 				TeleportEntity(Prop, vOrigin, NULL_VECTOR, NULL_VECTOR);
 				DispatchSpawn(Prop);
 				
-				ExploAR_VictoriaNuke[client]=EntIndexToEntRef(Prop);
+				ExploAR_WindowsVistaNuke[client]=EntIndexToEntRef(Prop);
 				SetVariantString("1.5");
 				AcceptEntityInput(Prop, "SetModelScale");
 				SetEntPropEnt(Prop, Prop_Data, "m_hOwnerEntity", client);
@@ -407,14 +353,52 @@ public void BombAR_AirStrike_Beacon(int client, int weapon, bool crit, int slot)
 				SetEntPropFloat(Prop, Prop_Send, "m_fadeMaxDist", 1.0);
 				SetParent(client, Prop);
 			}
-			Attributes_Set(weapon, 4, 0.04/ClipAttributes);//Only One
+			SDKUnhook(client, SDKHook_PreThink, BombAR_Laser_PreThink);
+			Prop = EntRefToEntIndex(ExploAR_ZoomLaser[client]);
+			if(IsValidEntity(Prop))
+			{
+				RemovePorps(Prop);
+				RemoveEntity(Prop);
+			}
+			Prop = CreateEntityByName("prop_dynamic");
+			if(IsValidEntity(Prop))
+			{
+				static float vAngles[3], vOrigin[3];
+				GetClientEyePosition(client, vOrigin);
+				GetClientEyeAngles(client, vAngles);
+				LaserPoint(client, vAngles, vOrigin, vOrigin);
+				DispatchKeyValue(Prop, "model", "models/weapons/w_models/w_drg_ball.mdl");
+				DispatchKeyValue(Prop, "solid", "0");
+				TeleportEntity(Prop, vOrigin, NULL_VECTOR, NULL_VECTOR);
+				DispatchSpawn(Prop);
+				
+				AddEntityToOwnerTransitMode(client, Prop);
+				ExploAR_ZoomLaser[client]=EntIndexToEntRef(Prop);
+				SetVariantString("1.5");
+				AcceptEntityInput(Prop, "SetModelScale");
+				SetEntPropEnt(Prop, Prop_Data, "m_hOwnerEntity", client);
+				SetEntityRenderMode(Prop, RENDER_TRANSCOLOR);
+				SetEntityRenderColor(Prop, 255, 0, 0, 254);
+				Robot = ConnectWithBeam(Robot, Prop, 50, 0, 0, 3.0, 0.1, 0.0, LASERBEAM);
+				SetEntityRenderColor(Robot, 50, 0, 0, 255);
+				AddEntityToOwnerTransitMode(client, Robot);
+				view_as<CClotBody>(Prop).m_iWearable1 = Robot;
+				SDKHook(client, SDKHook_PreThink, BombAR_Laser_PreThink);
+			}
+			IsOverride[client]=true;
+			Prop = Store_GiveSpecificItem(client, "ER Targeting Remote");
+			ResetClipOfWeaponStore(Prop, client, SMGAmmoMAX);
+			SetEntData(Prop, FindSendPropInfo("CBaseCombatWeapon", "m_iClip1"), SMGAmmoMAX);
+			ExploAR_TargetingRemoteID[client]=EntIndexToEntRef(Prop);
+			ExploAR_Battery[client]=0;
 		}
 	}
 }
 
 public void Enable_ExploARWeapon(int client, int weapon)
 {
-	ExploAR_WeaponID[client]=EntIndexToEntRef(weapon);
+	IsOverride[client]=false;
+	fl_Charge_delay[weapon] = 1.0;
 	if(h_TimerExploARWeaponManagement[client] != null)
 	{
 		delete h_TimerExploARWeaponManagement[client];
@@ -422,32 +406,14 @@ public void Enable_ExploARWeapon(int client, int weapon)
 		DataPack pack;
 		h_TimerExploARWeaponManagement[client] = CreateDataTimer(0.1, Timer_Management_ExploAR, pack, TIMER_REPEAT);
 		pack.WriteCell(client);
-		pack.WriteCell(EntIndexToEntRef(weapon));
 	}
 	else
 	{
 		DataPack pack;
 		h_TimerExploARWeaponManagement[client] = CreateDataTimer(0.1, Timer_Management_ExploAR, pack, TIMER_REPEAT);
 		pack.WriteCell(client);
-		pack.WriteCell(EntIndexToEntRef(weapon));
 	}
-}
-
-public void Deploy_ExploARWeapon(int client, int weapon)
-{
-	if(IsValidEntity(weapon))
-	{
-		ExploAR_WeaponPap[client] = ExplosiveAR_Get_Pap(weapon);
-		ExploAR_BurstNum[client] = RoundToCeil(Attributes_Get(weapon, 401, 1.0));
-		ExploAR_WeaponID[client]=EntIndexToEntRef(weapon);
-	}
-	Can_I_Fire[client]=false;
-	ExploAR_ClipFix[client]=false;
-	ExploAR_AirStrikeActivated[client]=0;
-	
-	CreateExploAREffect(client);
-	IsDeploy[client]=true;
-	if(Store_IsWeaponFaction(client, weapon, Faction_Victoria))	// Victoria
+	if(Store_IsWeaponFaction(client, weapon, Faction_Vesta))	// Vesta
 	{
 		for(int i = 1; i <= MaxClients; i++)
 		{
@@ -459,31 +425,90 @@ public void Deploy_ExploARWeapon(int client, int weapon)
 		}
 	}
 }
-public void Holster_ExploARWeapon(int client)
+
+public void Deploy_ExploARWeapon(int client, int weapon)
 {
-	if(ExploAR_WeaponPap[client]>2)
+	if(i_CustomWeaponEquipLogic[weapon]!=WEAPON_BOMB_AR)
+		return;
+	if(IsValidEntity(weapon))
 	{
-		//SDKUnhook(client, SDKHook_PreThink, BombAR_Laser_PreThink);
-		/*int Prop = EntRefToEntIndex(ExploAR_ZoomLaser[client]);
-		if(IsValidEntity(Prop))
-		{
-			RemovePorps(Prop);
-			RemoveEntity(Prop);
-		}*/
-		//Weapon_Railcannon_Pap2_Holster(client, -1, false, -1);
+		ExploAR_WeaponPap[client] = ExplosiveAR_Get_Pap(weapon);
+		ExploAR_BurstNum[client] = RoundToCeil(Attributes_Get(weapon, 401, 1.0));
+		ExploAR_WeaponID[client]=EntIndexToEntRef(weapon);
+		fl_Charge_delay[weapon] = 0.0;
+		fl_JumpCooldown[weapon] = 0.0;
 	}
+	Can_I_Fire[client]=false;
 	if(ExploAR_AirStrikeActivated[client])
 	{
-		int Prop = EntRefToEntIndex(ExploAR_VictoriaNuke[client]);
+		WindowsVistaNukeEngage(client, weapon);
+		SDKUnhook(client, SDKHook_PreThink, BombAR_Laser_PreThink);
+		int Prop = EntRefToEntIndex(ExploAR_WindowsVistaNuke[client]);
 		if(IsValidEntity(Prop))
 		{
 			RemovePorps(Prop);
 			RemoveEntity(Prop);
 		}
 		ExploAR_AirStrikeActivated[client]=0;
-		int weapon = EntRefToEntIndex(ExploAR_WeaponID[client]);
-		if(IsValidEntity(weapon))
-			Attributes_Set(weapon, 4, ExploAR_ClipAttributes[client]);
+		Store_RemoveSpecificItem(client, "ER Targeting Remote");
+		DestroyExploAREffect(client);
+	}
+	CreateExploAREffect(client);
+	IsDeploy[client]=true;
+	if(!IsExtraDesc_1[client] && ExploAR_WeaponPap[client]==3)
+	{
+		SetGlobalTransTarget(client);
+		CPrintToChat(client, "%s%t", STORE_COLOR, "Explosault Rifle AB 1 Desc Extra");
+		IsExtraDesc_1[client]=true;
+	}
+	if(!IsExtraDesc_2[client] && ExploAR_WeaponPap[client]==4)
+	{
+		SetGlobalTransTarget(client);
+		CPrintToChat(client, "%s%t", STORE_COLOR, "Explosault Rifle AB 2 Desc Extra");
+		IsExtraDesc_2[client]=true;
+	}
+	if(!IsExtraDesc_3[client] && ExploAR_WeaponPap[client]==5)
+	{
+		SetGlobalTransTarget(client);
+		CPrintToChat(client, "%s%t", STORE_COLOR, "Explosault Rifle AB 3 Desc Extra");
+		IsExtraDesc_3[client]=true;
+	}
+}
+public void Holster_ExploARWeapon(int client)
+{
+	int entity = EntRefToEntIndex(ExploAR_WeaponID[client]);
+	if(IsValidEntity(entity) && IsOverride[client])
+	{
+		IsOverride[client]=false;
+		return;
+	}
+	
+	entity = EntRefToEntIndex(ExploAR_Robot[client]);
+	if(IsValidEntity(entity))
+		RemoveEntity(entity);
+	if(ExploAR_AirStrikeActivated[client])
+	{
+		entity = EntRefToEntIndex(ExploAR_WindowsVistaNuke[client]);
+		if(IsValidEntity(entity))
+		{
+			RemovePorps(entity);
+			RemoveEntity(entity);
+		}
+		ExploAR_AirStrikeActivated[client]=0;
+	}
+	Store_RemoveSpecificItem(client, "ER Targeting Remote");
+	entity = EntRefToEntIndex(ExploAR_TargetingRemoteID[client]);
+	if(IsValidEntity(entity))
+	{
+		Store_RemoveSpecificItem(client, "", false, StoreWeapon[entity]);
+		TF2_RemoveItem(client, entity);
+		entity = EntRefToEntIndex(ExploAR_ZoomLaser[client]);
+		if(IsValidEntity(entity))
+		{
+			RemovePorps(entity);
+			RemoveEntity(entity);
+		}
+		TF2_AutoSetActiveWeapon(client);
 	}
 
 	IsDeploy[client]=false;
@@ -494,10 +519,15 @@ static Action Timer_Management_ExploAR(Handle timer, DataPack pack)
 {
 	pack.Reset();
 	int client = pack.ReadCell();
-	int weapon = EntRefToEntIndex(pack.ReadCell());
+	int weapon = EntRefToEntIndex(ExploAR_WeaponID[client]);
 	if(!IsValidClient(client) || !IsClientInGame(client) || !IsPlayerAlive(client) || !IsValidEntity(weapon))
 	{
 		h_TimerExploARWeaponManagement[client] = null;
+		IsOverride[client]=false;
+		IsExtraDesc_1[client]=false;
+		IsExtraDesc_2[client]=false;
+		IsExtraDesc_3[client]=false;
+		Holster_ExploARWeapon(client);
 		//SDKUnhook(client, SDKHook_PreThink, BombAR_Laser_PreThink);
 		SDKUnhook(client, SDKHook_PreThink, BombAR_M1_PreThink);
 		return Plugin_Stop;
@@ -516,7 +546,120 @@ static Action Timer_Management_ExploAR(Handle timer, DataPack pack)
 	}
 	
 	if(IsDeploy[client])
+	{
 		ExploARWork(client, weapon, GameTime);
+	
+		if(ExploAR_WeaponPap[client]>3)
+		{
+			int Robot = EntRefToEntIndex(ExploAR_Robot[client]);
+			if(!IsValidEntity(Robot))
+			{
+				if(!fl_Charge_delay[weapon])
+					fl_Charge_delay[weapon] = GameTime + 10.0;
+				else if(fl_Charge_delay[weapon] < GameTime)
+				{
+					Robot = Wand_Projectile_Spawn(client, 0.0, 0.0, 0.0, 0, weapon, "rockettrail_RocketJumper");
+					int particle = EntRefToEntIndex(i_WandParticle[Robot]);
+					if(IsValidEntity(particle))
+						RemoveEntity(particle);
+					WandProjectile_ApplyFunctionToEntity(Robot, NoClipRobotFunction);
+					SetEntityMoveType(Robot, MOVETYPE_NOCLIP);
+					ExploAR_Robot[client]=EntIndexToEntRef(Robot);
+					TeleportEntity(Robot, NULL_VECTOR, {0.0, 0.0, 0.0}, NULL_VECTOR);
+					i_State[Robot]=0;
+					Robot = ApplyCustomModelToWandProjectile(Robot, "models/player/items/all_class/pet_robro.mdl", 2.0, "");
+					TeleportEntity(Robot, NULL_VECTOR, {0.0, 0.0, 0.0}, NULL_VECTOR);
+					ClientCommand(client, "playgamesound ui/cyoa_key_minimize.wav");
+					fl_Charge_delay[weapon] = 0.0;
+				}
+			}
+			else
+			{
+				if(ExploAR_Charging[client]>(ExploAR_WeaponPap[client]>4 ? 31 : 39))
+				{
+					int target = EntRefToEntIndex(i_Target[Robot]);
+					if(IsValidEnemy(client, target))
+					{
+						switch(i_State[Robot])
+						{
+							case 5:
+							{
+								i_State[Robot]=0;
+								ExploAR_Charging[client]=0;
+								i_Target[Robot] = INVALID_ENT_REFERENCE;
+							}
+							default:
+							{
+								if(fl_NextRangedAttack[Robot] < GameTime)
+								{
+									float RobotPos[3], vecTarget[3], vecDest[3];
+									GetAbsOrigin(Robot, RobotPos);
+									WorldSpaceCenter(target, vecTarget);
+									vecDest = vecTarget;
+									vecDest[0] += GetRandomFloat(-25.0, 25.0);
+									vecDest[1] += GetRandomFloat(-25.0, 25.0);
+									vecDest[2] += GetRandomFloat(-25.0, 25.0);
+									int DronShot = view_as<CClotBody>(Robot).FireParticleRocket(vecDest, 0.0, 1200.0, 0.0, "raygun_projectile_red_crit", true,_, true, RobotPos);
+									i_WandOwner[DronShot]=EntIndexToEntRef(client);
+									i_WandWeapon[DronShot]=EntIndexToEntRef(weapon);
+									f_WandDamage[DronShot]=750.0*Attributes_Get(weapon, 2, 1.0);
+									WandProjectile_ApplyFunctionToEntity(DronShot, Dron_BombARTouch);	
+									fl_NextRangedAttack[Robot] = GameTime + 0.2;
+									i_State[Robot]++;
+								}
+							}
+						}
+					}
+				}
+				if(fl_JumpCooldown[weapon] < GameTime)
+				{
+					float Robotvec[3], Pathing[3], RobotAng[3];
+					bool TooFal;
+					GetAbsOrigin(Robot, Robotvec);
+					WorldSpaceCenter(client, RobotAng);
+					float Dist = GetVectorDistance(RobotAng, Robotvec, true);
+					if(Dist > (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 22.0))
+						TeleportEntity(Robot, RobotAng, NULL_VECTOR, NULL_VECTOR);
+					else
+					{
+						TooFal=(Dist > (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 2.0));
+						SubtractVectors(RobotAng, Robotvec, Pathing);
+						NormalizeVector(Pathing, Pathing);
+						GetVectorAngles(Pathing, RobotAng);
+						GetAngleVectors(RobotAng, Pathing, NULL_VECTOR, NULL_VECTOR);
+						RobotAng[2]=0.0;
+						RobotAng[0]=0.0;
+						SetEntPropVector(Robot, Prop_Data, "m_angRotation", RobotAng);
+						Robotvec[0]=Pathing[0]*(TooFal ? 300.0 : 50.0);
+						Robotvec[1]=Pathing[1]*(TooFal ? 300.0 : 50.0);
+						Robotvec[2]=Pathing[2]*(TooFal ? 300.0 : 50.0);
+						SetEntPropVector(Robot, Prop_Data, "m_vInitialVelocity", Robotvec);
+						Custom_SetAbsVelocity(Robot, Robotvec);	
+						fl_JumpCooldown[weapon] = GameTime + 1.0;
+					}
+				}
+			}
+		}
+		//This is Very expensive.
+		/*for(int i = 1; i <= MaxClients; i++)
+		{
+			if(IsValidClient(i))
+			{
+				int active = GetEntPropEnt(i, Prop_Send, "m_hActiveWeapon");
+				if(Store_IsWeaponFaction(i, active, Faction_Vesta) && !HasSpecificBuff(active, "Explosault Rifle Buff"))
+				{
+					ApplyStatusEffect(active, active, "Explosault Rifle Buff", 9999999.0);
+					Attributes_SetMulti(active, 4013, 1.1);
+				}
+			}
+		}*/
+	}
+	else
+	{
+		int Robot = EntRefToEntIndex(ExploAR_Robot[client]);
+		if(IsValidEntity(Robot))
+			RemoveEntity(Robot);
+	}
 
 	return Plugin_Continue;
 }
@@ -524,51 +667,34 @@ static Action Timer_Management_ExploAR(Handle timer, DataPack pack)
 static void ExploARWork(int client, int weapon, float GameTime)
 {
 	int SaveClip = GetEntProp(weapon, Prop_Send, "m_nKillComboClass");
-	int iAmmoTable = FindSendPropInfo("CBaseCombatWeapon", "m_iClip1");
-	int clip=GetEntData(weapon, iAmmoTable, 4);
-	if(ExploAR_ClipFix[client] && clip == 1)
-	{
-		SetEntData(weapon, iAmmoTable, RoundToNearest(25.0*ExploAR_ClipAttributes[client]));
-		ExploAR_ClipFix[client]=false;
-	}
-	
+	int clip=GetEntProp(weapon, Prop_Send, "m_iClip1");
 	if(SaveClip>clip)
 	{
 		SetEntProp(weapon, Prop_Send, "m_nKillComboClass", clip);
 	}
 	else if(SaveClip<clip)
 	{
-		if(ExploAR_AirStrikeActivated[client])
+		bool WhoExplode;
+		for(int entitycount; entitycount<i_MaxcountNpcTotal; entitycount++)
 		{
-			VictoriaNukeEngage(client, weapon);
-			ExploAR_AirStrikeActivated[client]=0;
-			Attributes_Set(weapon, 4, ExploAR_ClipAttributes[client]);
-			ExploAR_ClipFix[client]=true;
-		}
-		else
-		{
-			bool WhoExplode;
-			for(int entitycount; entitycount<i_MaxcountNpcTotal; entitycount++)
+			int npc = EntRefToEntIndexFast(i_ObjectsNpcsTotal[entitycount]);
+			if (IsValidEntity(npc) && !b_NpcHasDied[npc] && GetTeam(npc) != TFTeam_Red)
 			{
-				int npc = EntRefToEntIndexFast(i_ObjectsNpcsTotal[entitycount]);
-				if (IsValidEntity(npc) && !b_NpcHasDied[npc] && GetTeam(npc) != TFTeam_Red)
+				if(i_HowManyBombsOnThisEntity[npc][client] > 0)
 				{
-					if(i_HowManyBombsOnThisEntity[npc][client] > 0)
-					{
-						Cause_Terroriser_Explosion(client, npc, true);
-						WhoExplode=true;
-					}
+					Cause_Terroriser_Explosion(client, npc, true);
+					WhoExplode=true;
 				}
 			}
-			if(WhoExplode)
-				EmitSoundToAll("weapons/stickybomblauncher_det.wav", client);
 		}
+		if(WhoExplode)
+			EmitSoundToAll("weapons/stickybomblauncher_det.wav", client);
 		SetEntProp(weapon, Prop_Send, "m_nKillComboClass", clip);
 	}
 	
 	if(ExploAR_AirStrikeActivated[client])
 	{
-		int Prop = EntRefToEntIndex(ExploAR_VictoriaNuke[client]);
+		int Prop = EntRefToEntIndex(ExploAR_WindowsVistaNuke[client]);
 		if(IsValidEntity(Prop))
 		{
 			int Props;
@@ -601,59 +727,48 @@ static void ExploARWork(int client, int weapon, float GameTime)
 		}
 	}
 	
-	if(!ExploAR_AirStrikeActivated[client] && ExploAR_WeaponPap[client]>2 && (GetEntPropFloat(weapon, Prop_Send, "m_flNextPrimaryAttack") < GetGameTime() || GetEntPropFloat(weapon, Prop_Send, "m_flNextPrimaryAttack") >= FAR_FUTURE))
-	{
-		int NeedAmmo = RoundToCeil((float(ExploAR_Charging[client])/65.0)*12.0);
-		if(!Capacitor_Active[client] && ExploAR_OverHit[client]<100 && ExploAR_Charging[client]<64 && clip>=NeedAmmo)
-			ExploAR_Charging[client]++;
-		if(ExploAR_Charging[client]==64)
-		{
-			ClientCommand(client, "playgamesound \"player/recharged.wav\"");
-			ExploAR_Charging[client]=65;
-		}
-		Attributes_Set(weapon, 298, (clip>=NeedAmmo ? float(NeedAmmo) : float(clip)));
-	}
-	
 	if(ExploAR_HUDDelay[client] < GameTime)
 	{
 		char C_point_hints[512]="";
 		SetGlobalTransTarget(client);
-		if(ExploAR_WeaponPap[client]>2)
+		if(ExploAR_WeaponPap[client]>3)
 		{
-			if(ExploAR_AirStrikeActivated[client] && ExploAR_AirStrikeActivated[client]>64)
+			int Robot = EntRefToEntIndex(ExploAR_Robot[client]);
+			if(!IsValidEntity(Robot))
+			{
+				Robot=RoundToCeil(GameTime-fl_Charge_delay[weapon]);
+				Format(C_point_hints, sizeof(C_point_hints), "%t\n", "ExploAR_LostRobo", ((Robot ^ (Robot >> 31)) - (Robot >> 31)));
+			}
+			else if(ExploAR_AirStrikeActivated[client] && ExploAR_AirStrikeActivated[client]>64)
 			{
 				Format(C_point_hints, sizeof(C_point_hints),
 				"%t\n", "ExploAR_BarrageMode", ExploAR_AirStrikeActivated[client]-64, ExploAR_AirStrikeActivatedMAX[client]);
 			}
 			else
 			{
-				if(ExploAR_Charging[client]<64)
+				if(ExploAR_Charging[client]<(ExploAR_WeaponPap[client]>4 ? 32 : 40))
 				{
-					if(!Capacitor_Active[client])
-						Format(C_point_hints, sizeof(C_point_hints),
-						"%t\n", "ExploAR_Capacitor", RoundToCeil((float(ExploAR_Charging[client])/65.0)*100.0));
-					else
-						Format(C_point_hints, sizeof(C_point_hints),
-						"%t\n", "ExploAR_Capacitor_Disable", RoundToCeil((float(ExploAR_Charging[client])/65.0)*100.0));
+					Format(C_point_hints, sizeof(C_point_hints),
+					"%t\n", "ExploAR_Capacitor", RoundToCeil((float(ExploAR_Charging[client])/(ExploAR_WeaponPap[client]>4 ? 32.0 : 40.0))*100.0));
 				}
 				else
 				{
-					if(!Capacitor_Active[client])
-						Format(C_point_hints, sizeof(C_point_hints),
-						"%t\n", "ExploAR_Capacitor_Max");
-					else
-						Format(C_point_hints, sizeof(C_point_hints),
-						"%t\n", "ExploAR_Capacitor_Max_Disable");
+					Format(C_point_hints, sizeof(C_point_hints),
+					"%t\n", "ExploAR_Capacitor_Max");
 				}
-				Format(C_point_hints, sizeof(C_point_hints),
-				"%s%t\n", C_point_hints, "ExploAR_Battery", RoundToCeil((float(ExploAR_Battery[client])/100.0)*100.0));
-				/*int LaserPointent = EntRefToEntIndex(ExploAR_ZoomLaser[client]);
-				if(IsValidEntity(LaserPointent))
+				if(ExploAR_WeaponPap[client]>4)
 				{
-					int laser = view_as<CClotBody>(LaserPointent).m_iWearable1;
-					if(IsValidEntity(laser))
-						SetEntityRenderColor(laser, RoundToCeil((float(ExploAR_Charging[client])/20.0)*50.0), 0, 0, 255);
-				}*/
+					if(ExploAR_Battery[client]<90)
+					{
+						Format(C_point_hints, sizeof(C_point_hints),
+						"%s%t\n", C_point_hints, "ExploAR_BarrageEnergy", RoundToCeil((float(ExploAR_Battery[client])/90.0)*100.0));
+					}
+					else
+					{
+						Format(C_point_hints, sizeof(C_point_hints),
+						"%s%t\n", C_point_hints, "ExploAR_BarrageEnergy_Max");
+					}
+				}
 			}
 		}
 		
@@ -672,81 +787,52 @@ static void ExploARWork(int client, int weapon, float GameTime)
 		PrintHintText(client,"%s", C_point_hints);
 		ExploAR_HUDDelay[client] = GameTime + 0.5;
 	}
-	if(ExploAR_OverHit[client]>65)
+	if(ExploAR_WeaponPap[client]>2 && ExploAR_OverHit[client]>=100)
 	{
-		/*int entity = EntRefToEntIndex(i_VictoriaParticle[client]);
-		if(!IsValidEntity(entity))
+		int MaxArmor = MaxArmorCalculation(Armor_Level[client], client, 0.2);
+		int Armor=Armor_Charge[client];
+		if(Armor < 1)
 		{
-			entity = EntRefToEntIndex(i_Viewmodel_PlayerModel[client]);
-			if(IsValidEntity(entity))
+			if(dieingstate[client] > 0)
+				ForcePlayerSuicide(client);
+			else
 			{
-				float flPos[3];
-				GetAttachment(entity, "effect_hand_R", flPos, NULL_VECTOR);
-				int particle = ParticleEffectAt(flPos, "drg_pipe_smoke", 0.0);
-				AddEntityToThirdPersonTransitMode(client, particle);
-				SetParent(entity, particle, "effect_hand_R");
-				i_VictoriaParticle[client] = EntIndexToEntRef(particle);
-			}
-		}*/
-	}
-	else
-	{
-		/*int entity = EntRefToEntIndex(i_VictoriaParticle[client]);
-		if(IsValidEntity(entity))
-			RemoveEntity(entity);
-		i_VictoriaParticle[client] = INVALID_ENT_REFERENCE;*/
-	}
-}
-
-static void VictoriaNukeSetUp(int client, int weapon)
-{
-	int Prop = EntRefToEntIndex(ExploAR_VictoriaNuke[client]);
-	if(IsValidEntity(Prop))
-	{
-		static float vAngles[3], vOrigin[3];
-		int Props;
-		GetClientEyePosition(client, vOrigin);
-		GetClientEyeAngles(client, vAngles);
-		LaserPoint(client, vAngles, vOrigin, vOrigin);
-		CClotBody XYZ = view_as<CClotBody>(Prop);
-		Props = XYZ.EquipItemSeperate("models/weapons/w_models/w_drg_ball.mdl",_,1,1.001,_,true);
-		SetEntityRenderMode(Props, RENDER_TRANSCOLOR);
-		SetEntityRenderColor(Props, 255, 255, 255, 1);
-		SetEntPropFloat(Props, Prop_Send, "m_fadeMinDist", 1.0);
-		SetEntPropFloat(Props, Prop_Send, "m_fadeMaxDist", 1.0);
-		MakeObjectIntangeable(Props);
-		fl_Charge_delay[Props] = 925.0*Attributes_Get(weapon, 2, 1.0)*1.15;
-		fl_Charge_Duration[Props] = 3.0/Attributes_Get(weapon, 103, 1.0);
-		fl_Dead_Ringer[Props] = EXPLOSION_RADIUS*Attributes_Get(weapon, 99, 1.0);
-		XYZ.m_iAttacksTillMegahit++;
-		switch(XYZ.m_iAttacksTillMegahit)
-		{
-			case 1:XYZ.m_iWearable1 = Props;
-			case 2:XYZ.m_iWearable2 = Props;
-			case 3:XYZ.m_iWearable3 = Props;
-			case 4:XYZ.m_iWearable4 = Props;
-			case 5:XYZ.m_iWearable5 = Props;
-			case 6:XYZ.m_iWearable6 = Props;
-			case 7:XYZ.m_iWearable7 = Props;
-			case 8:XYZ.m_iWearable8 = Props;
-			case 9:XYZ.m_iWearable9 = Props;
-			default:
-			{
-				RemovePorps(Prop);
-				RemoveEntity(Prop);
-				ExploAR_AirStrikeActivated[client]=0;
+				float Health = float(GetClientHealth(client));
+				SDKHooks_TakeDamage(client, 0, 0, (Health>125.0 ? Health/2.0: Health*3.0), DMG_TRUEDAMAGE|DMG_PREVENT_PHYSICS_FORCE);
 			}
 		}
-		TeleportEntity(Props, vOrigin, NULL_VECTOR, NULL_VECTOR);
-		ExploAR_AirStrikeActivated[client]--;
-		SetEntPropFloat(weapon, Prop_Data, "m_flNextPrimaryAttack", GetGameTime() + 0.5);
+		else
+		{
+			Armor-=MaxArmor;
+			if(Armor<0)
+				Armor=0;
+			Armor_Charge[client]=Armor;
+			f_Armor_BreakSoundDelay[client] = GetGameTime() + 5.0;	
+			EmitSoundToClient(client, "npc/assassin/ball_zap1.wav", client, SNDCHAN_STATIC, 60, _, 1.0, GetRandomInt(95,105));
+		}
+		float position[3];
+		WorldSpaceCenter(client, position);
+		Explode_Logic_Custom(((float(SDKCall_GetMaxHealth(client))+125.0)*Attributes_Get(weapon, 2, 1.0)), client, client, weapon, position, _, Attributes_Get(weapon, 117, 1.0));
+		DataPack pack_boom = new DataPack();
+		pack_boom.WriteFloat(position[0]);
+		pack_boom.WriteFloat(position[1]);
+		pack_boom.WriteFloat(position[2]);
+		pack_boom.WriteCell(1);
+		RequestFrame(MakeExplosionFrameLater, pack_boom);
+		float fVelocity[3];
+		GetEntPropVector(client, Prop_Data, "m_vecVelocity", fVelocity);
+		fVelocity[2] = 500.0;
+		TeleportEntity(client, NULL_VECTOR, NULL_VECTOR, fVelocity);
+		ResetClipOfWeaponStore(weapon, client, 0);
+		SetEntData(weapon, FindSendPropInfo("CBaseCombatWeapon", "m_iClip1"), 0);
+		ExploAR_OverHit[client]=0;
 	}
-	else ExploAR_AirStrikeActivated[client]=0;
 }
 
-static void VictoriaNukeEngage(int client, int weapon)
+static void WindowsVistaNukeEngage(int client, int weapon)
 {
-	int Prop = EntRefToEntIndex(ExploAR_VictoriaNuke[client]);
+	Store_RemoveSpecificItem(client, "ER Targeting Remote");
+	int Prop = EntRefToEntIndex(ExploAR_WindowsVistaNuke[client]);
 	if(IsValidEntity(Prop))
 	{
 		int Props;
@@ -772,6 +858,19 @@ static void VictoriaNukeEngage(int client, int weapon)
 				GetAbsOrigin(Props, vOrigin);
 				if(CountPlayersOnRed(0) <= 20)
 				{
+					int Robot = EntRefToEntIndex(ExploAR_Robot[client]);
+					if(IsValidEntity(Robot))
+					{
+						float SpeedReturn[3];
+						int RocketGet = view_as<CClotBody>(Robot).FireRocket(vOrigin, 0.0, 650.0,_,1.5);
+						SetEntProp(RocketGet, Prop_Send, "m_bCritical", true);
+						ArcToLocationViaSpeedProjectile(Robot, vOrigin, SpeedReturn, 5.0, 2.0);
+						float ang[3]; GetVectorAngles(SpeedReturn, ang);
+						SetEntPropVector(RocketGet, Prop_Data, "m_angRotation", ang);
+						TeleportEntity(RocketGet, NULL_VECTOR, NULL_VECTOR, SpeedReturn);
+						SetEntityMoveType(RocketGet, MOVETYPE_NOCLIP);
+						CreateTimer(2.5, Timer_RemoveEntity, EntIndexToEntRef(RocketGet), TIMER_FLAG_NO_MAPCHANGE);
+					}
 					vOrigin[2] += 3000.0;
 					int particle = ParticleEffectAt(vOrigin, "kartimpacttrail", fl_Charge_Duration[Props]);
 					SetEdictFlags(particle, (GetEdictFlags(particle) | FL_EDICT_ALWAYS));
@@ -793,7 +892,7 @@ static void VictoriaNukeEngage(int client, int weapon)
 				RemoveEntity(Props);
 			}
 		}
-		TeleportEntity(Props, vOrigin, NULL_VECTOR, NULL_VECTOR);
+		//TeleportEntity(Props, vOrigin, NULL_VECTOR, NULL_VECTOR);
 		ExploAR_AirStrikeActivated[client]--;
 	}
 	else ExploAR_AirStrikeActivated[client]=0;
@@ -845,26 +944,14 @@ static void HE_StrikeThink(DataPack pack)
 	RequestFrames(HE_StrikeThink, frames_offset, pack2);
 }
 
-static void Firebullet(int client, int weapon, int Overheat, int GetPap, float fm_Charging=0.0, bool UseBattery=false)
+static void Firebullet(int client, int weapon, int Overheat, int GetPap)
 {
 	float damage = 500.0;
 	damage *= Attributes_Get(weapon, 2, 1.0);
 	float speed = 3000.0;
 	speed *= Attributes_Get(weapon, 103, 1.0);
-	if(UseBattery)
-		fm_Charging*=1.5;
-	if(GetPap>2)
-	{
-		damage*=4.0;
-		if((Overheat<100) && fm_Charging)
-		{
-			float TempBuff = (fm_Charging/65.0)*3.0;
-			if(TempBuff<1.0)TempBuff=1.0;
-			damage *= TempBuff;
-		}
-	}
 	if(Overheat>64)
-		damage -= (float(Overheat)/(GetPap==2 ? 130.0 : 100.0))*(damage/2.0);
+		damage -= (float(Overheat)/(GetPap==2 ? 130.0 : 100.0))*(damage/2.4);
 
 	float time = 5000.0/speed;
 	int Projectile = Wand_Projectile_Spawn(client, speed, time, damage, 0, weapon, "raygun_projectile_blue_trail");
@@ -872,26 +959,7 @@ static void Firebullet(int client, int weapon, int Overheat, int GetPap, float f
 	i_AttacksTillReload[Projectile]=0;	
 	static float EntLoc[3];
 	GetEntPropVector(Projectile, Prop_Data, "m_vecAbsOrigin", EntLoc);
-	if(GetPap>2)
-	{
-		i_AttacksTillReload[Projectile]=RoundToCeil((fm_Charging/65.0)*12.0);
-
-		int particle = EntRefToEntIndex(i_WandParticle[Projectile]);
-		if(IsValidEntity(particle))
-			RemoveEntity(particle);
-		if(Overheat>64)
-		{
-			particle = ParticleEffectAt(EntLoc, "raygun_projectile_red_crit", time);
-			i_AttacksTillReload[Projectile]=0;
-		}
-		else if(fm_Charging>=65.0)
-			particle = ParticleEffectAt(EntLoc, "raygun_projectile_blue_crit", time);
-		else
-			particle = ParticleEffectAt(EntLoc, "raygun_projectile_blue", time);
-		SetParent(Projectile, particle);
-		i_WandParticle[Projectile] = EntIndexToEntRef(particle);
-	}
-	else if(Overheat>64)
+	if(Overheat>64)
 	{
 		int particle = EntRefToEntIndex(i_WandParticle[Projectile]);
 		if(IsValidEntity(particle))
@@ -900,7 +968,9 @@ static void Firebullet(int client, int weapon, int Overheat, int GetPap, float f
 		SetParent(Projectile, particle);
 		i_WandParticle[Projectile] = EntIndexToEntRef(particle);
 	}
-	
+	int Robot = EntRefToEntIndex(ExploAR_Robot[client]);
+	if(ExploAR_WeaponPap[client]>3 && IsValidEntity(Robot))
+		ExploAR_Charging[client]++;
 	WandProjectile_ApplyFunctionToEntity(Projectile, Gun_BombARTouch);
 }
 
@@ -909,6 +979,22 @@ static int ExplosiveAR_Get_Pap(int weapon)
 	int pap=0;
 	pap = RoundFloat(Attributes_Get(weapon, 122, 0.0));
 	return pap;
+}
+
+static void NoClipRobotFunction(int entity, int target)
+{
+	int owner = EntRefToEntIndex(i_WandOwner[entity]);
+	int weapon = EntRefToEntIndex(i_WandWeapon[entity]);
+	if(!IsValidClient(owner)||!IsValidEntity(weapon))
+	{
+		int particle = EntRefToEntIndex(i_WandParticle[entity]);
+		if(IsValidEntity(particle))
+			RemoveEntity(particle);
+		RemoveEntity(entity);
+	}
+	
+	if(target > 0 && target < MAXENTITIES)
+		Set_HitDetectionCooldown(entity, target, FAR_FUTURE);
 }
 
 static void VentTouch(int entity, int target)
@@ -959,7 +1045,7 @@ static void VentTouch(int entity, int target)
 				if(!IsIn_HitDetectionCooldown(entity,AoE))
 				{
 					float Dmg_Force[3]; CalculateDamageForce(vecForward, 10000.0, Dmg_Force);
-					SDKHooks_TakeDamage(AoE, owner, owner, f_WandDamage[entity]*0.25, DMG_BULLET, weapon, Dmg_Force, targetpos, _ , ZR_DAMAGE_LASER_NO_BLAST);	
+					SDKHooks_TakeDamage(AoE, owner, owner, f_WandDamage[entity]*0.25, DMG_BULLET, weapon, Dmg_Force, targetpos, _ , ZR_DAMAGE_NONE);	
 				}
 				if(!b_NoKnockbackFromSources[AoE])
 				{
@@ -1036,10 +1122,18 @@ static void Gun_BombARTouch(int entity, int target)
 		int owner = EntRefToEntIndex(i_WandOwner[entity]);
 		int weapon = EntRefToEntIndex(i_WandWeapon[entity]);
 		float Dmg_Force[3]; CalculateDamageForce(vecForward, 10000.0, Dmg_Force);
-		SDKHooks_TakeDamage(target, owner, owner, f_WandDamage[entity], DMG_BULLET, weapon, Dmg_Force, Entity_Position, _ , ZR_DAMAGE_LASER_NO_BLAST);	// 2048 is DMG_NOGIB?
+		SDKHooks_TakeDamage(target, owner, owner, f_WandDamage[entity], DMG_BULLET, weapon, Dmg_Force, Entity_Position, _ , ZR_DAMAGE_NONE);	// 2048 is DMG_NOGIB?
 
 		if(!b_NpcIsInvulnerable[target])
 		{
+			int Robot = EntRefToEntIndex(ExploAR_Robot[owner]);
+			if(IsValidEntity(Robot))
+			{
+				if(ExploAR_WeaponPap[owner]>3 && ExploAR_Charging[owner]>(ExploAR_WeaponPap[owner]>4 ? 31 : 39) && IsValidEnemy(owner, target))
+					i_Target[Robot]=EntIndexToEntRef(target);
+				if(ExploAR_WeaponPap[owner]>4)
+					ExploAR_Battery[owner]++;
+			}
 			f_BombEntityWeaponDamageApplied[target][owner] += f_WandDamage[entity] / 12.0;
 			i_HowManyBombsOnThisEntity[target][owner]+=i_AttacksTillReload[entity]+1;
 			i_HowManyBombsHud[target]+=i_AttacksTillReload[entity]+1;
@@ -1059,12 +1153,37 @@ static void Gun_BombARTouch(int entity, int target)
 	}
 }
 
+static Action Dron_BombARTouch(int entity, int target)
+{
+	static float angles[3];
+	GetEntPropVector(entity, Prop_Send, "m_angRotation", angles);
+	float vecForward[3];
+	GetAngleVectors(angles, vecForward, NULL_VECTOR, NULL_VECTOR);
+	static float Entity_Position[3];
+	GetEntPropVector(entity, Prop_Data, "m_vecAbsOrigin", Entity_Position);
+
+	int owner = EntRefToEntIndex(i_WandOwner[entity]);
+	int weapon = EntRefToEntIndex(i_WandWeapon[entity]);
+	float Attrib = 1.0;
+	if(IsValidEntity(weapon))
+		Attrib = Attributes_Get(weapon, 117, 1.0);
+	Explode_Logic_Custom(f_WandDamage[entity], owner, owner, weapon, Entity_Position, _,Attrib);
+	if(CountPlayersOnRed(0) <= 12)
+		TE_Particle("mvm_soldier_shockwave", Entity_Position, NULL_VECTOR, NULL_VECTOR, -1, _, _, _, _, _, _, _, _, _, 0.0, .clientspec = owner);
+	int particle = EntRefToEntIndex(i_WandParticle[entity]);
+	if(IsValidEntity(particle))
+		RemoveEntity(particle);
+	EmitSoundToAll("weapons/drg_pomson_drain_01.wav", entity, SNDCHAN_STATIC, 65, _, 0.65);
+	RemoveEntity(entity);
+	return Plugin_Handled;
+}
+
 static void CreateExploAREffect(int client)
 {
 	DestroyExploAREffect(client);
 	if(!Items_HasNamedItem(client, "A copy of Truthful Evidence"))
 		return;
-	int entity = EntRefToEntIndex(i_VictoriaParticle_1[client]);
+	int entity = EntRefToEntIndex(i_WindowsVistaParticle_1[client]);
 	if(!IsValidEntity(entity))
 	{
 		entity = EntRefToEntIndex(i_Viewmodel_PlayerModel[client]);
@@ -1076,40 +1195,88 @@ static void CreateExploAREffect(int client)
 			int particle = ParticleEffectAt(flPos, "eye_powerup_blue_lvl_3", 0.0);
 			AddEntityToThirdPersonTransitMode(client, particle);
 			SetParent(entity, particle, "eyeglow_l");
-			i_VictoriaParticle_1[client] = EntIndexToEntRef(particle);
+			i_WindowsVistaParticle_1[client] = EntIndexToEntRef(particle);
 		}
 	}
 }
 static void DestroyExploAREffect(int client)
 {
-	int entity = EntRefToEntIndex(i_VictoriaParticle_1[client]);
+	int entity = EntRefToEntIndex(i_WindowsVistaParticle_1[client]);
 	if(IsValidEntity(entity))
 		RemoveEntity(entity);
-	i_VictoriaParticle_1[client] = INVALID_ENT_REFERENCE;
+	i_WindowsVistaParticle_1[client] = INVALID_ENT_REFERENCE;
 }
 
-static void SniperLaserSpawn(int ent)
+//ER_TargetingRemote
+public void ERTargetingRemote_M1_Attack(int client, int weapon, bool crit, int slot)
 {
-	int client = GetEntPropEnt(ent, Prop_Send, "m_hOwnerEntity");
-	if(IsValidClient(client))
+	slot = EntRefToEntIndex(ExploAR_WeaponID[client]);
+	int Robot = EntRefToEntIndex(ExploAR_Robot[client]);
+	int Prop = EntRefToEntIndex(ExploAR_WindowsVistaNuke[client]);
+	if(IsValidEntity(Prop) && IsValidEntity(Robot) && IsValidEntity(slot))
 	{
-		CClotBody npc = view_as<CClotBody>(ent);
-		float flPos[3];
-		int eyelevel = EntRefToEntIndex(i_Viewmodel_PlayerModel[client]);
-		if(IsValidEntity(eyelevel))
+		if(crit)
+			StopSound(client, SNDCHAN_WEAPON, "weapon/ambassador_shoot_crit.wav");
+		else
+			StopSound(client, SNDCHAN_WEAPON, "weapon/ambassador_shoot.wav");
+		static float vAngles[3], vOrigin[3];
+		int Props;
+		GetClientEyePosition(client, vOrigin);
+		GetClientEyeAngles(client, vAngles);
+		LaserPoint(client, vAngles, vOrigin, vOrigin);
+		CClotBody XYZ = view_as<CClotBody>(Prop);
+		Props = XYZ.EquipItemSeperate("models/weapons/w_models/w_drg_ball.mdl",_,1,1.001,_,true);
+		SetEntityRenderMode(Props, RENDER_TRANSCOLOR);
+		SetEntityRenderColor(Props, 255, 255, 255, 1);
+		SetEntPropFloat(Props, Prop_Send, "m_fadeMinDist", 1.0);
+		SetEntPropFloat(Props, Prop_Send, "m_fadeMaxDist", 1.0);
+		MakeObjectIntangeable(Props);
+		fl_Charge_delay[Props] = 925.0*Attributes_Get(slot, 2, 1.0)*1.15;
+		fl_Charge_Duration[Props] = 3.0/Attributes_Get(slot, 103, 1.0);
+		fl_Dead_Ringer[Props] = EXPLOSION_RADIUS*Attributes_Get(slot, 99, 1.0);
+		XYZ.m_iAttacksTillMegahit++;
+		ExploAR_AirStrikeActivated[client]--;
+		switch(XYZ.m_iAttacksTillMegahit)
 		{
-			GetAttachment(eyelevel, "eyeglow_l", flPos, NULL_VECTOR);
-			npc.m_iWearable2 = npc.EquipItemSeperate("models/weapons/w_models/w_drg_ball.mdl",_,1,1.001,_,true);
-			SetParent(eyelevel, npc.m_iWearable2, "eyeglow_l");
-			SetEntityRenderMode(npc.m_iWearable2, RENDER_TRANSCOLOR);
-			SetEntityRenderColor(npc.m_iWearable2, 255, 255, 255, 1);
-			SetEntPropFloat(npc.m_iWearable2, Prop_Send, "m_fadeMinDist", 1.0);
-			SetEntPropFloat(npc.m_iWearable2, Prop_Send, "m_fadeMaxDist", 1.0);
-			MakeObjectIntangeable(npc.m_iWearable2);
+			case 1:XYZ.m_iWearable1 = Props;
+			case 2:XYZ.m_iWearable2 = Props;
+			case 3:XYZ.m_iWearable3 = Props;
+			case 4:XYZ.m_iWearable4 = Props;
+			case 5:XYZ.m_iWearable5 = Props;
+			case 6:XYZ.m_iWearable6 = Props;
+			case 7:XYZ.m_iWearable7 = Props;
+			case 8:XYZ.m_iWearable8 = Props;
+			case 9:XYZ.m_iWearable9 = Props;
+			default:
+			{
+				RemovePorps(Prop);
+				RemoveEntity(Prop);
+				ExploAR_AirStrikeActivated[client]=0;
+			}
 		}
-		int laser = ConnectWithBeam(npc.m_iWearable2, ent, 1, 0, 0, 3.0, 0.1, 0.0, LASERBEAM);
-		AddEntityToOwnerTransitMode(client, laser);
-		npc.m_iWearable1 = laser;
+		TeleportEntity(Props, vOrigin, NULL_VECTOR, NULL_VECTOR);
+		if(ExploAR_AirStrikeActivated[client]-64<=0)
+		{
+			WindowsVistaNukeEngage(client, slot);
+			Store_RemoveSpecificItem(client, "", false, StoreWeapon[weapon]);
+			TF2_RemoveItem(client, weapon);
+			FakeClientCommand(client, "use tf_weapon_smg");
+			ExploAR_AirStrikeActivated[client]=0;
+			SDKUnhook(client, SDKHook_PreThink, BombAR_Laser_PreThink);
+			slot = EntRefToEntIndex(ExploAR_ZoomLaser[client]);
+			if(IsValidEntity(slot))
+			{
+				RemovePorps(slot);
+				RemoveEntity(slot);
+			}
+		}
+	}
+	else
+	{
+		Store_RemoveSpecificItem(client, "", false, StoreWeapon[weapon]);
+		TF2_RemoveItem(client, weapon);
+		FakeClientCommand(client, "use tf_weapon_smg");
+		ExploAR_AirStrikeActivated[client]=0;
 	}
 }
 
@@ -1162,4 +1329,24 @@ static void RemovePorps(int entity)
 	XYZ_Prop = XYZ.m_iWearable9;
 	if(IsValidEntity(XYZ_Prop))
 		RemoveEntity(XYZ_Prop);
+}
+
+stock void TF2_AutoSetActiveWeapon(int client, bool NoPrimary=false, bool NoSecondary=false)
+{
+	int primary = GetPlayerWeaponSlot(client, TFWeaponSlot_Primary);
+	int secondary = GetPlayerWeaponSlot(client, TFWeaponSlot_Secondary);
+	int melee = GetPlayerWeaponSlot(client, TFWeaponSlot_Melee);
+	
+	if(!NoPrimary && (primary>1 || IsValidEntity(primary)))
+	{
+		SetEntPropEnt(client, Prop_Send, "m_hActiveWeapon", primary);
+	}
+	else if(!NoSecondary && (secondary>1 || IsValidEntity(secondary)))
+	{
+		SetEntPropEnt(client, Prop_Send, "m_hActiveWeapon", secondary);
+	}
+	else if(melee>1 || IsValidEntity(melee))
+	{
+		SetEntPropEnt(client, Prop_Send, "m_hActiveWeapon", melee);
+	}
 }

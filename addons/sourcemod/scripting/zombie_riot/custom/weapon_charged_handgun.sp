@@ -124,7 +124,7 @@ public void Weapon_IEM_Launcher_PAP(int client, int weapon, bool crit, int slot)
 		float damage = 30.0;
 		damage *= Attributes_Get(weapon, 2, 1.0);
 		damage *= (1.0 / Attributes_Get(weapon, 6, 1.0));
-		damage *= (1.0 / Attributes_Get(weapon, 97, 1.0));
+	//	damage *= (1.0 / Attributes_Get(weapon, 97, 1.0));
 		
 		float fAng[3];
 		GetClientEyeAngles(client, fAng);
@@ -173,7 +173,7 @@ public void Weapon_IEM_Launcher_PAP_Star(int client, int weapon, bool crit, int 
 		float damage = 30.0;
 		damage *= Attributes_Get(weapon, 2, 1.0);
 		damage *= (1.0 / Attributes_Get(weapon, 6, 1.0));
-		damage *= (1.0 / Attributes_Get(weapon, 97, 1.0));
+	//	damage *= (1.0 / Attributes_Get(weapon, 97, 1.0));
 		
 		
 		float fAng[3];
@@ -207,9 +207,9 @@ public void Weapon_IEM_Cutter(int client, int weapon, bool crit, int slot)
 		EmitSoundToAll(SOUND_WAND_SHOT, client, _, 65, _, 0.45);
 		
 		float damage = 30.0;
-		damage *= Attributes_Get(weapon, 2, 1.0);
+		damage *= Attributes_Get(weapon, 2, 1.0); 
 		damage *= (1.0 / Attributes_Get(weapon, 6, 1.0));
-		damage *= (1.0 / Attributes_Get(weapon, 97, 1.0));
+	//	damage *= (1.0 / Attributes_Get(weapon, 97, 1.0));
 		
 		
 		Laser_Cutter_Static[client] = false;
@@ -258,7 +258,7 @@ public void Weapon_IEM_Cutter_PAP(int client, int weapon, bool crit, int slot)
 		float damage = 30.0;
 		damage *= Attributes_Get(weapon, 2, 1.0);
 		damage *= (1.0 / Attributes_Get(weapon, 6, 1.0));
-		damage *= (1.0 / Attributes_Get(weapon, 97, 1.0));
+	//	damage *= (1.0 / Attributes_Get(weapon, 97, 1.0));
 		
 		
 		Wand_Launch_Cutter_IEM(client, speed, 15.0, damage, true);
@@ -328,7 +328,7 @@ public void Weapon_Charged_Handgun(int client, int weapon, bool crit, int slot)
 		
 		damage *= Attributes_Get(weapon, 2, 1.0);
 		damage *= (1.0 / Attributes_Get(weapon, 6, 1.0));
-		damage *= (1.0 / Attributes_Get(weapon, 97, 1.0));
+	//	damage *= (1.0 / Attributes_Get(weapon, 97, 1.0));
 		
 		
 		Wand_Launch(client, iRot, speed, 2.0, damage);
@@ -352,8 +352,8 @@ static void Wand_Launch(int client, int iRot, float speed, float time, float dam
 
 	SetEntPropEnt(iCarrier, Prop_Send, "m_hOwnerEntity", client);
 	DispatchKeyValue(iCarrier, "model", ENERGY_BALL_MODEL);
-	DispatchKeyValue(iCarrier, "modelscale", "0");
 	DispatchSpawn(iCarrier);
+	SetEntPropFloat(iCarrier, Prop_Send, "m_flModelScale", 0.001);
 
 	TeleportEntity(iCarrier, fPos, NULL_VECTOR, fVel);
 	SetEntityMoveType(iCarrier, MOVETYPE_FLY);
@@ -456,8 +456,8 @@ static void Wand_Launch_IEM(int client, int iRot, float speed, float time, float
 
 	SetEntPropEnt(iCarrier, Prop_Send, "m_hOwnerEntity", client);
 	DispatchKeyValue(iCarrier, "model", ENERGY_BALL_MODEL);
-	DispatchKeyValue(iCarrier, "modelscale", "0");
 	DispatchSpawn(iCarrier);
+	SetEntPropFloat(iCarrier, Prop_Send, "m_flModelScale", 0.001);
 
 	TeleportEntity(iCarrier, fPos, NULL_VECTOR, fVel);
 	SetEntityMoveType(iCarrier, MOVETYPE_FLY);
@@ -1159,8 +1159,8 @@ stock int CreateWandCutterProjectile(int client, float flSpeed, float flPos[3], 
 
 	SetEntPropEnt(iCarrier, Prop_Send, "m_hOwnerEntity", client);
 	DispatchKeyValue(iCarrier, "model", ENERGY_BALL_MODEL);
-	DispatchKeyValue(iCarrier, "modelscale", "0");
 	DispatchSpawn(iCarrier);
+	SetEntPropFloat(iCarrier, Prop_Send, "m_flModelScale", 0.001);
 
 	TeleportEntity(iCarrier, flPos, NULL_VECTOR, fVel);
 	SetEntityMoveType(iCarrier, MOVETYPE_FLY);

@@ -48,7 +48,7 @@ void TheGreatRam_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "the_great_ram");
 	data.IconCustom = true;
 	data.Flags = 0;
-	data.Category = 0;
+	data.Category = Type_Outlaws;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
@@ -136,6 +136,7 @@ methodmap TheGreatRam < CClotBody
 			RaidBossActive = EntIndexToEntRef(npc.index);
 			RaidModeTime = GetGameTime(npc.index) + 9000.0;
 			RaidAllowsBuildings = true;
+			RaidAllowLastman = false;
 		}
 		npc.StartPathing();
 		npc.m_flSpeed = 25.0;
@@ -388,7 +389,7 @@ void TheGreatRamSelfDefense_Auto(TheGreatRam npc, float gameTime)
 				//Reducing gravity, reduces speed, lol.
 				SetEntityGravity(RocketGet, 1.0); 	
 				//I dont care if its not too accurate, ig they suck with the weapon idk lol, lore.
-				ArcToLocationViaSpeedProjectile(VecStart, vecTarget, SpeedReturn, 2.45, 1.0);
+				ArcToLocationViaSpeedProjectile(RocketGet, vecTarget, SpeedReturn, 2.45, 1.0);
 				SetEntityMoveType(RocketGet, MOVETYPE_FLYGRAVITY);
 				TeleportEntity(RocketGet, NULL_VECTOR, NULL_VECTOR, SpeedReturn);
 						

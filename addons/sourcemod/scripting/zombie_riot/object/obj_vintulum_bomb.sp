@@ -39,9 +39,9 @@ void ObjectVintulumBomb_MapStart()
 	BuildingInfo build;
 	build.Section = 1;
 	strcopy(build.Plugin, sizeof(build.Plugin), "obj_vintulum_bomb");
-	build.Cost = 2000;
+	build.Cost = 1000;
 	build.Health = 60;
-	build.Cooldown = 120.0;
+	build.Cooldown = 100.0;
 	build.Func = ObjectGeneric_CanBuildBomb;
 	Building_Add(build);
 }
@@ -69,7 +69,7 @@ methodmap ObjectVintulumBomb < ObjectGeneric
 	{
 		EmitSoundToAll(g_ExplosionRightBefore[GetRandomInt(0, sizeof(g_ExplosionRightBefore) - 1)], this.index, SNDCHAN_AUTO, 80, _, 0.8, 100);
 	}
-	public void PlayExplodeDo(bool alreadydead) 
+	public void PlayExplodeDo(bool alreadydead, bool VisualOnly = false) 
 	{
 		EmitSoundToAll(g_ExplosionSound[GetRandomInt(0, sizeof(g_ExplosionSound) - 1)], this.index, SNDCHAN_AUTO, 80, _, 1.0, 100);
 		EmitSoundToAll(g_ExplosionSound[GetRandomInt(0, sizeof(g_ExplosionSound) - 1)], this.index, SNDCHAN_AUTO, 80, _, 1.0, 100);
@@ -84,24 +84,27 @@ methodmap ObjectVintulumBomb < ObjectGeneric
 		TE_Particle("grenade_smoke_cycle", pos, NULL_VECTOR, NULL_VECTOR, _, _, _, _, _, _, _, _, _, _, 0.0);
 
 		
-		int Owner = GetEntPropEnt(this.index, Prop_Send, "m_hOwnerEntity");
-		if(!IsValidClient(Owner))
+		if(!VisualOnly)
 		{
-			return;
+			int Owner = GetEntPropEnt(this.index, Prop_Send, "m_hOwnerEntity");
+			if(!IsValidClient(Owner))
+			{
+				return;
+			}
+			float damage = 10.0;			
+			damage *= 30.0;
+			float attack_speed;
+			float sentry_range;
+			attack_speed = 1.0 / Attributes_GetOnPlayer(Owner, 343, true, true); //Sentry attack speed bonus
+			damage = attack_speed * damage * Attributes_GetOnPlayer(Owner, 287, true);			//Sentry damage bonus
+			sentry_range = Attributes_GetOnPlayer(Owner, 344, true, true);			//Sentry Range bonus
+			float AOE_range = 350.0 * sentry_range;
+				
+			damage *= 5.0;
+			//its like 5 mortars at once.
+			Explode_Logic_Custom(damage, Owner, Owner, -1, pos, AOE_range, 0.75, _, false);
+			ExpidonsaGroupHeal(Owner, AOE_range, 99, 1.0, 1.0, true, VintulumBombSelf, .LOS = true, .VecDoAt = pos);
 		}
-		float damage = 10.0;			
-		damage *= 30.0;
-		float attack_speed;
-		float sentry_range;
-		attack_speed = 1.0 / Attributes_GetOnPlayer(Owner, 343, true, true); //Sentry attack speed bonus
-		damage = attack_speed * damage * Attributes_GetOnPlayer(Owner, 287, true, true);			//Sentry damage bonus
-		sentry_range = Attributes_GetOnPlayer(Owner, 344, true, true);			//Sentry Range bonus
-		float AOE_range = 350.0 * sentry_range;
-
-		damage *= 5.0;
-		//its like 5 mortars at once.
-		Explode_Logic_Custom(damage, Owner, Owner, -1, pos, AOE_range, 0.75, _, false);
-		ExpidonsaGroupHeal(Owner, AOE_range, 99, 1.0, 1.0, true, VintulumBombSelf, .LOS = true, .VecDoAt = pos);
 		
 		int entity = CreateEntityByName("light_dynamic");
 		if(entity != -1)
@@ -119,8 +122,9 @@ methodmap ObjectVintulumBomb < ObjectGeneric
 			CreateTimer(2.0, Timer_RemoveEntity, EntIndexToEntRef(entity), TIMER_FLAG_NO_MAPCHANGE);
 			CreateTimer(0.1, Timer_ReduceLighting, EntIndexToEntRef(entity), TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
 		}
-		if(!alreadydead)
-			DestroyBuildingDo(this.index);
+		if(!VisualOnly)
+			if(!alreadydead)
+				DestroyBuildingDo(this.index);
 		
 	}
 	property float m_flBombExplodeTill
@@ -140,7 +144,7 @@ methodmap ObjectVintulumBomb < ObjectGeneric
 		npc.SentryBuilding = true;
 		npc.FuncCanBuild = ObjectGeneric_CanBuildBomb;
 
-		func_NPCThink[npc.index] = ClotThink;
+		func_NPCThink[npc.index] = ObjectVintulumBomb_ClotThink;
 		func_NPCInteract[npc.index] = ClotInteract;
 		func_NPCDeath[npc.index] = ClotDeath;
 
@@ -149,8 +153,7 @@ methodmap ObjectVintulumBomb < ObjectGeneric
 		return npc;
 	}
 }
-
-static void ClotThink(ObjectVintulumBomb npc)
+void ObjectVintulumBomb_ClotThink(ObjectVintulumBomb npc)
 {
 	int Owner = GetEntPropEnt(npc.index, Prop_Send, "m_hOwnerEntity");
 	if(!IsValidClient(Owner))
@@ -216,7 +219,7 @@ static bool ClotInteract(int client, int weapon, ObjectVintulumBomb npc)
 			return false;
 		}
 	}
-	float CooldownGive = 120.0;
+	float CooldownGive = 100.0;
 	if(Rogue_Mode())
 		CooldownGive *= 0.5;
 	SPrintToChat(Owner, "%T", "Global Cooldown Bomb", Owner, CooldownGive);

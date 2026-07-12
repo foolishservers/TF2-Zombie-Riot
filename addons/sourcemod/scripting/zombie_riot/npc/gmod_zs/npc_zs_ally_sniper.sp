@@ -119,6 +119,11 @@ methodmap AllySniper < CClotBody
 		b_NpcIsInvulnerable[npc.index] = true;
 		npc.m_bScalesWithWaves = false;
 		
+		npc.m_iTeamGlow = TF2_CreateGlow(npc.index);
+		npc.m_bTeamGlowDefault = false;
+		SetVariantColor(view_as<int>({255, 0, 0, 0}));
+		AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
+		
 		if(npc.m_bScalesWithWaves)
 		{
 			SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
@@ -403,8 +408,8 @@ int AllySniperSelfDefense(AllySniper npc, float gameTime)
 
 	if(gameTime > npc.m_flNextMeleeAttack)
 	{
-		npc.m_flAttackHappens = gameTime + 0.0;
-		npc.m_flDoingAnimation = gameTime + 0.95;
+		npc.m_flAttackHappens = gameTime + 0.2;
+		npc.m_flDoingAnimation = gameTime + 0.2;
 		npc.m_flNextMeleeAttack = gameTime + 1.75;
 	}
 	return 1;

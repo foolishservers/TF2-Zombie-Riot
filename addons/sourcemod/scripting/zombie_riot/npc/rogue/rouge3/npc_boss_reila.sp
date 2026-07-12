@@ -57,7 +57,7 @@ void BossReila_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "rbf_reila");
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
-	data.Category = Type_Curtain;
+	data.Category = Type_Raid;
 	data.Func = ClotSummon;
 	data.Precache = ClotPrecache;
 	NPCId = NPC_Add(data);
@@ -190,6 +190,7 @@ methodmap BossReila < CClotBody
 			RaidBossActive = EntIndexToEntRef(npc.index);
 			RaidModeTime = GetGameTime(npc.index) + 60.0;
 			RaidAllowsBuildings = true;
+			RaidAllowLastman = true;
 			RaidModeScaling = 1.0;
 		}
 		npc.StartPathing();
@@ -230,20 +231,19 @@ methodmap BossReila < CClotBody
 			SetEntityRenderFx(npc.m_iWearable6, RENDERFX_DISTORT);
 			SetEntityRenderColor(npc.m_iWearable6, GetRandomInt(25, 255), GetRandomInt(25, 255), GetRandomInt(25, 255), 255);
 		
+			NPCTalkMessage(npc.index, "Who are you?!", true);
 			strcopy(c_NpcName[npc.index], sizeof(c_NpcName[]), "Reila?");
-
-			CPrintToChatAll("{pink}?????{default}: 넌 누구야?!");
 		}
 		else if(badEnding)
 		{
-			CPrintToChatAll("{pink}레일라{default}: 이게 네가 원하던 결말인거야?!");
+			NPCTalkMessage(npc.index, "Is this what you wanted?!");
 			fl_Extra_Damage[npc.index] *= 3.0;
 			fl_Extra_Speed[npc.index] *= 1.4;
 			f_AttackSpeedNpcIncrease[npc.index] *= 0.7;
 		}
 		else
 		{
-			CPrintToChatAll("{pink}레일라{default}: リᒷ╎リ リᒷ╎リ! リ╎ᓵ⍑ℸ ̣ ⋮ᒷℸ ̣⨅ℸ ̣!.");
+			NPCTalkMessage(npc.index, "リᒷ╎リ リᒷ╎リ! リ╎ᓵ⍑ℸ ̣ ⋮ᒷℸ ̣⨅ℸ ̣!.");
 		}
 		if(data[0] && !altEnding && !badEnding && !Rogue_HasNamedArtifact("Ascension Stack"))
 			i_RaidGrantExtra[npc.index] = 1;
@@ -254,6 +254,7 @@ methodmap BossReila < CClotBody
 			RaidBossActive = EntIndexToEntRef(npc.index);
 			RaidModeTime = GetGameTime(npc.index) + 60.0;
 			RaidAllowsBuildings = true;
+			RaidAllowLastman = true;
 			RaidModeScaling = 1.0;
 			
 			i_RaidGrantExtra[npc.index] = 2;
@@ -269,10 +270,20 @@ methodmap BossReila < CClotBody
 		if(StrContains(data, "force_final_battle") != -1)
 		{
 			RaidAllowsBuildings = false;
+			RaidAllowLastman = true;
 		}
 
 		return npc;
 	}
+}
+
+static void NPCTalkMessage(int entity, const char[] message, bool unknown = false)
+{
+	char customName[32];
+	if (unknown)
+		customName = "??????";
+	
+	PrintNPCMessageWithPrefixes(entity, "pink", message, .customName = customName);
 }
 
 public void BossReila_ClotThink(int iNPC)
@@ -421,7 +432,7 @@ public Action BossReila_OnTakeDamage(int victim, int &attacker, int &inflictor, 
 			i_RaidGrantExtra[npc.index] = 2;
 			npc.m_bisWalking = false;
 			ApplyStatusEffect(npc.index, npc.index, "Infinite Will", 50.0);
-			CPrintToChatAll("{pink}레일라가 {snow}손을 위로 들고 항복한다.");
+			CPrintToChatAll("{pink}Reila {snow}puts her hands up and gives up.");
 			damage = 0.0;
 			return Plugin_Changed;
 		}
@@ -608,7 +619,7 @@ void ReilaSpawnBalls(int iNpc, float vecTarget[3])
 	{
 		npc.m_iBallsLeftToSpawn--;
 		npc.m_flSpawnBallsDoingCD = GetGameTime(npc.index) + 0.75;					
-		int projectile = npc.FireParticleRocket(vecTarget, 2000.0, 400.0, 150.0, "halloween_rockettrail", true);
+		int projectile = npc.FireParticleRocket(vecTarget, 500.0, 400.0, 150.0, "halloween_rockettrail", true);
 		float ang_Look[3];
 		GetEntPropVector(projectile, Prop_Send, "m_angRotation", ang_Look);
 		Initiate_HomingProjectile(projectile,
@@ -783,6 +794,10 @@ public void Reila_Rocket_Particle_StartTouch(int entity, int target)
 {
 	if(target > 0 && target < MAXENTITIES)	//did we hit something???
 	{
+		if(IsIn_HitDetectionCooldown(entity,target, ReilaSlash))
+			return;
+		Set_HitDetectionCooldown(entity,target, GetGameTime() + 0.4, ReilaSlash);
+
 		int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
 		if(!IsValidEntity(owner))
 		{
@@ -806,11 +821,6 @@ public void Reila_Rocket_Particle_StartTouch(int entity, int target)
 		SDKHooks_TakeDamage(target, owner, inflictor, DamageDeal, DMG_BULLET|DMG_PREVENT_PHYSICS_FORCE, -1);	//acts like a kinetic rocket
 				
 		Reila_Rocket_Particle_Think(entity);
-		int particle = EntRefToEntIndex(i_WandParticle[entity]);
-		if(IsValidEntity(particle))
-		{
-			RemoveEntity(particle);
-		}
 	}
 	else
 	{
@@ -821,8 +831,8 @@ public void Reila_Rocket_Particle_StartTouch(int entity, int target)
 		{
 			RemoveEntity(particle);
 		}
+		RemoveEntity(entity);
 	}
-	RemoveEntity(entity);
 }
 
 
@@ -834,6 +844,7 @@ public void Reila_Rocket_Particle_StartTouch(int entity, int target)
 void Reila_Rocket_Particle_Think(int entity)
 {
 	float gameTime = GetGameTime();
+	CBaseCombatCharacter(entity).SetNextThink(gameTime);
 	
 	int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
 	if (!IsValidEntity(owner))
@@ -844,15 +855,21 @@ void Reila_Rocket_Particle_Think(int entity)
 		RemoveEntity(entity);
 		return;
 	}
+	BossReila proj = view_as<BossReila>(entity);
+	if(proj.m_flNextDelayTime > GetGameTime(entity))
+	{
+		return;
+	}
+	proj.m_flNextDelayTime = GetGameTime(entity) + 1.0;
 	BossReila npc = view_as<BossReila>(owner);
-	
-	float vecPos[3], VecDown[3];
-	GetAbsOrigin(entity, vecPos);
 	
 	float velocity[3];
 	GetEntPropVector(entity, Prop_Data, "m_vecAbsVelocity", velocity);
 	velocity[2] += 300.0;
 	TeleportEntity(entity, NULL_VECTOR, NULL_VECTOR, velocity);		
+
+	float vecPos[3], VecDown[3];
+	GetAbsOrigin(entity, vecPos);
 
 	VecDown = vecPos;
 	VecDown[2] -= 1000.0;
@@ -876,10 +893,9 @@ void Reila_Rocket_Particle_Think(int entity)
 		spawnBeam(0.8, 120, 50, 200, 200, "materials/sprites/laserbeam.vmt", 3.0, 0.2, _, 10.0, vecPos, VecDown);	
 		EmitSoundToAll("weapons/vaccinator_charge_tier_03.wav", _, SNDCHAN_AUTO, 70, _, 0.65, GetRandomInt(80, 110), _, VecDown);
 		spawnRing_Vectors(VecDown, REILA_BOSS_LIGHTNING_RANGE * 2.0, 0.0, 0.0, 0.0, "materials/sprites/laserbeam.vmt", 100, 50, 150, 200, 1, REILA_BOSS_CHARGE_TIME, 6.0, 0.1, 1, 1.0);
-		
 	}
+
 	delete trace;
-	CBaseCombatCharacter(entity).SetNextThink(gameTime + 1.0);
 }
 
 
@@ -980,20 +996,44 @@ bool Reila_LossAnimation(int iNpc)
 			{
 				case 2:
 				{
-					CPrintToChatAll("{pink}레일라 {snow}가 당신에게 무언가 말하고 있는데, 도저히 알아들을 수가 없습니다...");
-					CPrintToChatAll("{pink}레일라 :{default} ∴╎ᒷᓭ𝙹 ⍊ᒷ∷ᓭ⚍ᓵ⍑ᓭℸ ̣ ↸⚍ ᒲ╎ᓵ⍑ ᔑ⚍⎓⨅⚍⍑ꖎℸ ̣ᒷリ??...");
+					CPrintToChatAll("{pink}Reila {snow}tries to talk but you understand nothing...");
+					CPrintToChatAll("{pink}Reila:{default} ∴╎ᒷᓭ𝙹 ⍊ᒷ∷ᓭ⚍ᓵ⍑ᓭℸ ̣ ↸⚍ ᒲ╎ᓵ⍑ ᔑ⚍⎓⨅⚍⍑ꖎℸ ̣ᒷリ??...");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{pink}레일라 :{default} ∴ᔑ∷ℸ ̣ᒷ ᒲᔑꖎ, ʖ╎ᓭℸ ̣ ↸⚍ üʖᒷ∷⍑ᔑ!¡ℸ ̣ ⍊𝙹リ 알마게스트? ↸⚍ ꖌᔑリリᓭℸ ̣ ᒲ╎ᓵ⍑ リ╎ᓵ⍑ℸ ̣ ⍊ᒷ∷ᓭℸ ̣ᒷ⍑ᒷリ 𝙹↸ᒷ∷?");
+					CPrintToChatAll("{pink}Reila:{default} ∴ᔑ∷ℸ ̣ᒷ ᒲᔑꖎ, ʖ╎ᓭℸ ̣ ↸⚍ üʖᒷ∷⍑ᔑ!¡ℸ ̣ ⍊𝙹リ Almagest? ↸⚍ ꖌᔑリリᓭℸ ̣ ᒲ╎ᓵ⍑ リ╎ᓵ⍑ℸ ̣ ⍊ᒷ∷ᓭℸ ̣ᒷ⍑ᒷリ 𝙹↸ᒷ∷?");
 				}
 				case 4:
 				{
-					CPrintToChatAll("{black}이잔 :{default} ... 환장하겠네. 언어장벽이잖아, 이거.");
+					CPrintToChatAll("{black}Izan{default}: ...Great, language barrier.");
+					if(Rogue_HasNamedArtifact("Omega's Assistance"))
+					{
+						switch(GetRandomInt(0,2))
+						{
+							case 0:
+								CPrintToChatAll("{gold}Omega{default}: Does anyone here speak Vestan?");
+							case 1:
+								CPrintToChatAll("{gold}Omega{default}: Everyone speaks nonsense nowadays.");
+							case 2:
+								CPrintToChatAll("{gold}Omega{default}: Vhxis, use the power of the void to decipher that!");
+						}
+					}
 				}
 				case 5:
 				{
-					CPrintToChatAll("{black}이잔 {snow}이 손가락으로 그의 귀를 가리키고는 머리를 좌우로 흔들며 못 알아듣겠다는 표시를 합니다.");
+					CPrintToChatAll("{black}Izan {snow}shakes his head and points at his ears, then shrugs.");
+					if(Rogue_HasNamedArtifact("Vhxis' Assistance"))
+					{
+						switch(GetRandomInt(0,2))
+						{
+							case 0:
+								CPrintToChatAll("{purple}Vhxis{default}: Why are we here? This isn't what we're here for.");
+							case 1:
+								CPrintToChatAll("{purple}Vhxis{default}: This was an enormous waste of time.");
+							case 2:
+								CPrintToChatAll("{purple}Vhxis{default}: We shouldn't be here. We must get to the {purple} Throne.");
+						}
+					}	
 				}
 				case 6:
 				{
@@ -1002,11 +1042,15 @@ bool Reila_LossAnimation(int iNpc)
 				}
 				case 7:
 				{
-					CPrintToChatAll("{black}이잔 {snow}이 그녀를 떠나보냈습니다.");
+					CPrintToChatAll("{black}Izan {snow}allows her to leave.");
+					if(Rogue_HasNamedArtifact("Omega's Assistance"))
+					{
+						CPrintToChatAll("{gold}Omega{default} and{purple} Vhxis{default} leave.");
+					}
 				}
 				case 8:
 				{
-					CPrintToChatAll("{black}이잔 :{default} 이제 우리가 걱정해야할 또 다른 문제가 생긴것 같네.");
+					CPrintToChatAll("{black}Izan{default}: Now we have a whole other group to worry about.");
 					RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
 				}
 			}

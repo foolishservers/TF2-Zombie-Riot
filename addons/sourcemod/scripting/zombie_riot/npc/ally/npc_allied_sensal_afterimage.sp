@@ -70,7 +70,7 @@ methodmap AlliedSensalAbility < CClotBody
 		while(TF2U_GetWearable(client, entity, i, "tf_wearable"))
 		{
 
-			if(entity == EntRefToEntIndex(Armor_Wearable[client]) || i_WeaponVMTExtraSetting[entity] != -1)
+			if(i_WeaponVMTExtraSetting[entity] != -1)
 				continue;
 				
 			if(EntRefToEntIndex(i_Viewmodel_PlayerModel[client]) != entity || (i_CustomModelOverrideIndex[client] < BARNEY || !b_HideCosmeticsPlayer[client]))
@@ -355,7 +355,7 @@ public bool AlliedSensal_TraceWallsOnly(int entity, int contentsMask)
 #define SENSAL_KNOCKBACK		750.0	// Knockback when push level and enemy weight is the same
 #define SENSAL_STUN_RATIO		0.00075	// Knockback when push level and enemy weight is the same
 
-void SensalCauseKnockback(int attacker, int victim, float RatioExtra = 1.0, bool dostun = true)
+void SensalCauseKnockback(int attacker, int victim, float RatioExtra = 1.0, bool dostun = true, float OverrideAng[3] = {0.0,0.0,0.0})
 {
 	int weight = i_NpcWeight[victim];
 	if(weight > 5)
@@ -409,5 +409,5 @@ void SensalCauseKnockback(int attacker, int victim, float RatioExtra = 1.0, bool
 	if(dostun)
 		FreezeNpcInTime(victim, knockback * SENSAL_STUN_RATIO);
 		
-	Custom_Knockback(attacker, victim, knockback, true, true, true);
+	Custom_Knockback(attacker, victim, knockback, true, true, true, .OverrideLookAng = OverrideAng);
 }

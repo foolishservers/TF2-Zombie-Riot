@@ -267,6 +267,7 @@ void Yakuza_Enable(int client, int weapon)
 		UpdateStyle(client);
 	}
 }
+
 void YakuzaMusicDownload()
 {
 	if(!Precached)
@@ -703,7 +704,6 @@ public void Yakuza_M2Special(int client, int weapon, int slot)
 						//tiger drop negates all damage.
 						f_AntiStuckPhaseThrough[client] = 0.0;
 						f_AntiStuckPhaseThroughFirstCheck[client] = 0.0;
-						IncreaseEntityDamageTakenBy(client, 0.1, 0.75);
 						DoSpecialActionYakuza(client, DamageBase, "brawler_heat_4", 0.75, target);
 						flMaxhealth *= 0.45;
 					}
@@ -757,7 +757,7 @@ public void Yakuza_M2Special(int client, int weapon, int slot)
 		damage *= Attributes_Get(weapon, 2, 1.0);
 		float EnemyVecPos[3]; WorldSpaceCenter(target, EnemyVecPos);
 		SDKHooks_TakeDamage(target, client, client, damage, DMG_CLUB, -1, damage_force, EnemyVecPos);
-		EmitSoundToAll(IRENE_KICKUP_1, client, _, 75, _, 0.60);
+		EmitSoundToAll(AMPHI_KICKUP_1, client, _, 75, _, 0.60);
 		float DistanceCheck[3];
 		GetEntPropVector(target, Prop_Data, "m_vecAbsOrigin", DistanceCheck);
 		spawnRing_Vectors(DistanceCheck, 50.0 * 2.0, 0.0, 0.0, 10.0, "materials/sprites/laserbeam.vmt", 255, 255, 255, 200, 1, 0.25, 12.0, 6.1, 1);	
@@ -1111,6 +1111,7 @@ static int DoSpecialActionYakuza(int client, float DamageBase, const char[] anim
 	int viewcontrol = CreateEntityByName("prop_dynamic");
 	if (IsValidEntity(viewcontrol))
 	{
+		b_ThisEntityIgnored[viewcontrol] = true;
 		GetVectorAnglesTwoPoints(vecSwingEnd, MiddleAngle, vAngleCamera);
 		SetEntityModel(viewcontrol, "models/empty.mdl");
 		DispatchKeyValueVector(viewcontrol, "origin", vecSwingEnd);

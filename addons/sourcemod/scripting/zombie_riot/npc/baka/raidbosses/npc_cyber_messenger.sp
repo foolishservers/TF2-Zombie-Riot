@@ -229,7 +229,7 @@ methodmap CyberMessenger < CClotBody
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
 		
 		IgniteTargetEffect(npc.m_iWearable1);
-		CPrintToChatAll("{lightblue}메신저{default}: 3차전은 준비 됐겠지, 죄인들!");
+		TheMessenger_NPCTalkMessage(npc.index, "Messenger_Encounter_CyberGrind");
 
 		npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/player/items/demo/cc_summer2015_outta_sight/cc_summer2015_outta_sight.mdl");
 		SetVariantString("1.0");

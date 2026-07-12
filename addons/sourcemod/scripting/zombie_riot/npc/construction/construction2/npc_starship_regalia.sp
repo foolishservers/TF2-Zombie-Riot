@@ -204,6 +204,10 @@ static const char g_LifeLossSounds[][] = {
 
 #define REGALIA_LANTEAN_DRONE_SHOOT_1 	")weapons/physcannon/energy_sing_flyby1.wav"
 #define REGALIA_LANTEAN_DRONE_SHOOT_2 	")weapons/physcannon/energy_sing_flyby2.wav"
+
+
+#define REGALIA_PRIMARY_LANCES_BEGIN_PHASE_1 	")mvm/mvm_tank_ping.wav"
+#define REGALIA_PRIMARY_LANCES_BEGIN_PHASE_2 	")mvm/mvm_tele_activate.wav"
 enum 
 {
 	StarShip_BG_Main 		= 1,
@@ -278,7 +282,7 @@ void StarShip_Regalia_OnMapStart()
 	strcopy(data.Icon, sizeof(data.Icon), "");
 	data.IconCustom = false;
 	data.Flags 		= 0;
-	data.Category 	= Type_Outlaws;
+	data.Category 	= Type_Raid;
 	data.Precache 	= ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
@@ -304,6 +308,8 @@ static void ClotPrecache()
 	PrecacheSound(REGALIA_LANTEAN_DRONE_SHOOT_2);
 	PrecacheSound(REGALIA_SPIRALGLAVE_SOUND);
 	PrecacheSound(REGALIA_DEATH_EXPLOSION_SOUND);
+	PrecacheSound(REGALIA_PRIMARY_LANCES_BEGIN_PHASE_1);
+	PrecacheSound(REGALIA_PRIMARY_LANCES_BEGIN_PHASE_2);
 
 }
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
@@ -328,7 +334,7 @@ methodmap RegaliaClass < CClotBody
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_STATIC, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 100);
 	}
 	public void EmitShieldBreakSound() {
-		EmitSoundToAll(g_ShieldBreakSound[GetRandomInt(0, sizeof(g_ShieldBreakSound) - 1)], this.index, _, SNDLEVEL_RAIDSIREN, _, 1.0, 60);
+		EmitSoundToAll(g_ShieldBreakSound[GetRandomInt(0, sizeof(g_ShieldBreakSound) - 1)], this.index, _, SNDLEVEL_ROCKET, _, 1.0, 60);
 	}
 	public void PlayCapperSound() {
 		EmitSoundToAll(g_DefaultCapperShootSound[GetRandomInt(0, sizeof(g_DefaultCapperShootSound) - 1)], this.index, SNDCHAN_STATIC, BOSS_ZOMBIE_SOUNDLEVEL, _, RAIDBOSSBOSS_ZOMBIE_VOLUME, 80);	
@@ -343,17 +349,17 @@ methodmap RegaliaClass < CClotBody
 		if(fl_RuinaLaserSoundTimer[this.index] > GetGameTime())
 			return;
 
-		EmitCustomToAll(g_RuinaLaserLoop[GetRandomInt(0, sizeof(g_RuinaLaserLoop) - 1)], this.index, SNDCHAN_STATIC, SNDLEVEL_RAIDSIREN, _, RAIDBOSSBOSS_ZOMBIE_VOLUME);
+		EmitCustomToAll(g_RuinaLaserLoop[GetRandomInt(0, sizeof(g_RuinaLaserLoop) - 1)], this.index, SNDCHAN_STATIC, SNDLEVEL_ROCKET, _, RAIDBOSSBOSS_ZOMBIE_VOLUME);
 		fl_RuinaLaserSoundTimer[this.index] = GetGameTime() + 2.25;
 	}
 	public void EndGenericLaserSound() {
 		StopCustomSound(this.index, SNDCHAN_STATIC, g_RuinaLaserLoop[GetRandomInt(0, sizeof(g_RuinaLaserLoop) - 1)]);
 	}
 	public void PlayLifeLossSound() {
-		EmitSoundToAll(g_LifeLossSounds[GetRandomInt(0, sizeof(g_LifeLossSounds) - 1)], _, SNDCHAN_STATIC, SNDLEVEL_RAIDSIREN, _, 1.0, 100);	
-		EmitSoundToAll(g_LifeLossSounds[GetRandomInt(0, sizeof(g_LifeLossSounds) - 1)], _, SNDCHAN_STATIC, SNDLEVEL_RAIDSIREN, _, 1.0, 100);	
-		EmitSoundToAll(g_LifeLossSounds[GetRandomInt(0, sizeof(g_LifeLossSounds) - 1)], _, SNDCHAN_STATIC, SNDLEVEL_RAIDSIREN, _, 1.0, 100);	
-		EmitSoundToAll(g_LifeLossSounds[GetRandomInt(0, sizeof(g_LifeLossSounds) - 1)], _, SNDCHAN_STATIC, SNDLEVEL_RAIDSIREN, _, 1.0, 100);	
+		EmitSoundToAll(g_LifeLossSounds[GetRandomInt(0, sizeof(g_LifeLossSounds) - 1)], _, SNDCHAN_STATIC, SNDLEVEL_ROCKET, _, 1.0, 100);	
+		EmitSoundToAll(g_LifeLossSounds[GetRandomInt(0, sizeof(g_LifeLossSounds) - 1)], _, SNDCHAN_STATIC, SNDLEVEL_ROCKET, _, 1.0, 100);	
+		EmitSoundToAll(g_LifeLossSounds[GetRandomInt(0, sizeof(g_LifeLossSounds) - 1)], _, SNDCHAN_STATIC, SNDLEVEL_ROCKET, _, 1.0, 100);	
+		EmitSoundToAll(g_LifeLossSounds[GetRandomInt(0, sizeof(g_LifeLossSounds) - 1)], _, SNDCHAN_STATIC, SNDLEVEL_ROCKET, _, 1.0, 100);	
 	}
 	property float m_flCurrentSpeed
 	{
@@ -510,6 +516,7 @@ methodmap RegaliaClass < CClotBody
 		public get()							{ return i_SurvivalKnifeCount[this.index]; }
 		public set(int TempValueForProperty) 	{ i_SurvivalKnifeCount[this.index] = TempValueForProperty; }
 	}
+	//fl_ArmorSetting
 	public RegaliaClass(float vecPos[3], float vecAng[3], int team, const char[] data)
 	{
 		RegaliaClass npc = view_as<RegaliaClass>(CClotBody(vecPos, vecAng, STARSHIP_MODEL, "1.0", "1000", team, .CustomThreeDimensions = {1000.0, 1000.0, 200.0}, .CustomThreeDimensionsextra = {-1000.0, -1000.0, -200.0}));
@@ -526,11 +533,13 @@ methodmap RegaliaClass < CClotBody
 		npc.m_iBeaconsExist = 0;
 
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
+		func_NPCFuncWin[npc.index] = view_as<Function>(Raidmode_Expidonsa_Sensal_Win);
 
 		if(StrContains(data, "raid_hud") != -1)
 		{
 			RaidBossActive = EntIndexToEntRef(npc.index);
 			RaidAllowsBuildings = true;
+			RaidAllowLastman = true;
 			RaidModeTime = FAR_FUTURE;
 		}
 		if(StrContains(data, "raid_damage_scaling") != -1)
@@ -545,6 +554,29 @@ methodmap RegaliaClass < CClotBody
 		if(StrContains(data, "final") != -1)
 		{
 			i_RaidGrantExtra[npc.index] = 1;
+		}
+		if(StrContains(data, "music_wiki_1") != -1)
+		{
+			MusicEnum music;
+			strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/dungeon/final_battle_1.mp3");
+			music.Time = 63;
+			music.Volume = 1.65;
+			music.Custom = true;
+			strcopy(music.Name, sizeof(music.Name), "The Voids");
+			strcopy(music.Artist, sizeof(music.Artist), "Galaxy On Fire 2");
+
+		}
+		if(StrContains(data, "music_wiki_2") != -1)
+		{
+
+			MusicEnum music;
+			strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/dungeon/final_boss_last_stretch.mp3");
+			music.Time = 9999;
+			music.Volume = 1.65;
+			music.Custom = true;
+			strcopy(music.Name, sizeof(music.Name), "Renegate Justice");
+			strcopy(music.Artist, sizeof(music.Artist), "Galaxy On Fire 2");
+
 		}
 		
 		//Setting it to 999 will make our lag comp not resize collision box on shoot
@@ -1328,7 +1360,7 @@ methodmap RegaliaClass < CClotBody
 
 		for(int i=0 ; i < 2 ; i ++)
 		{
-			int particle_1 = ParticleEffectAt({0.0,0.0,0.0}, skin == 1 ? "raygun_projectile_blue_crit" : "raygun_projectile_red_crit", 0.0);
+			int particle_1 = ParticleEffectAt({0.0,0.0,0.0}, skin == 1 ? "raygun_projectile_blue_trail" : "raygun_projectile_red_trail", 0.0);
 			SetParent(this.index, particle_1, Sections[i]);
 			this.AddAttachedEntity(particle_1);
 		}
@@ -1347,7 +1379,7 @@ methodmap RegaliaClass < CClotBody
 
 		for(int i=0 ; i < 2 ; i ++)
 		{
-			int particle_1 = ParticleEffectAt({0.0,0.0,0.0}, skin == 1 ? "raygun_projectile_blue_crit" : "raygun_projectile_red_crit", 0.0);
+			int particle_1 = ParticleEffectAt({0.0,0.0,0.0}, skin == 1 ? "raygun_projectile_blue_trail" : "raygun_projectile_red_trail", 0.0);
 			SetParent(this.index, particle_1, Sections[i]);
 			this.AddAttachedEntity(particle_1);
 		}
@@ -1461,7 +1493,7 @@ static void ClotThink(int iNPC)
 
 	HandleUnderSlungWeapons(npc);
 	HandleMainWeapons(npc);
-	HandleDroneSystem(npc);
+	//HandleDroneSystem(npc);
 	HandleSpiralGlaive(npc);
 	HandleBeacons(npc);
 	HandleConstructor(npc);
@@ -1564,7 +1596,7 @@ static void HandleConstructor(RegaliaClass npc)
 		npc.EndFlightSystemGoal();
 		npc.EndGenericLaserSound();
 
-		int health = RoundToFloor(ReturnEntityMaxHealth(npc.index) * 0.0125);	//0.125% of ship hp
+		int health = RoundToFloor(ReturnEntityMaxHealth(npc.index) * (0.0125 * 0.5));	//0.125% of ship hp
 
 		float Radius = 300.0;
 		float TE_Duration = 1.0;
@@ -1936,9 +1968,9 @@ static void HandleSpiralGlaive(RegaliaClass npc)
 	DataPack Pack = new DataPack();
 	Pack.WriteCellArray(Data, sizeof(Data));
 
-	EmitSoundToAll(REGALIA_SPIRALGLAVE_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_RAIDSIREN, _, 1.0, RoundToCeil(100 * (14.0/(Data.Duration_Base + Data.Windup_Base))));
-	EmitSoundToAll(REGALIA_SPIRALGLAVE_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_RAIDSIREN, _, 1.0, RoundToCeil(100 * (14.0/(Data.Duration_Base + Data.Windup_Base))));
-	EmitSoundToAll(REGALIA_SPIRALGLAVE_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_RAIDSIREN, _, 1.0, RoundToCeil(100 * (14.0/(Data.Duration_Base + Data.Windup_Base))));
+	EmitSoundToAll(REGALIA_SPIRALGLAVE_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_ROCKET, _, 1.0, RoundToCeil(100 * (14.0/(Data.Duration_Base + Data.Windup_Base))));
+	EmitSoundToAll(REGALIA_SPIRALGLAVE_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_ROCKET, _, 1.0, RoundToCeil(100 * (14.0/(Data.Duration_Base + Data.Windup_Base))));
+	EmitSoundToAll(REGALIA_SPIRALGLAVE_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_ROCKET, _, 1.0, RoundToCeil(100 * (14.0/(Data.Duration_Base + Data.Windup_Base))));
 
 	RequestFrames(SpiralGlave_Tick, 1, Pack);
 }
@@ -2353,10 +2385,10 @@ static void Regalia_AnnihilateTarget_Tick(DataPack IncomingData)
 		TE_SendToAll();
 
 		//a fucking THUNDER CLAP FROM GOD the sound
-		EmitSoundToAll(REGALIA_SPECIAL_IOC_EXPLOSION_SOUND, _, _, SNDLEVEL_RAIDSIREN, _, 1.0, 50);
-		EmitSoundToAll(REGALIA_SPECIAL_IOC_EXPLOSION_SOUND, _, _, SNDLEVEL_RAIDSIREN, _, 1.0, 50);
+		EmitSoundToAll(REGALIA_SPECIAL_IOC_EXPLOSION_SOUND, _, _, SNDLEVEL_ROCKET, _, 1.0, 50);
+		EmitSoundToAll(REGALIA_SPECIAL_IOC_EXPLOSION_SOUND, _, _, SNDLEVEL_ROCKET, _, 1.0, 50);
 
-		EmitSoundToAll(REGALIA_SPECIAL_IOC_EXPLOSION_SOUND_2, _, _, SNDLEVEL_RAIDSIREN, _, 1.0, 100);	
+		EmitSoundToAll(REGALIA_SPECIAL_IOC_EXPLOSION_SOUND_2, _, _, SNDLEVEL_ROCKET, _, 1.0, 100);	
 
 		for(int z=1 ; z <= 3 ; z++)
 		{
@@ -2642,7 +2674,7 @@ static void DoG_PatternTick(DataPack IncomingData)
 		
 		//Projectile.radius = 0.0;
 		Projectile.damage 	= ModifyDamage(100.0);
-		Projectile.bonus_dmg= 0.2;
+		Projectile.bonus_dmg= 0.05;
 		Projectile.speed 	= 3000.0;
 		Projectile.visible 	= false;
 
@@ -2727,6 +2759,14 @@ static void Func_On_Proj_DoG_Patterns(int entity, int other)
 	{
 		return;
 	}
+	
+	//ignore non construction buildings. so support buildings.
+	if(i_IsABuilding[other] && !i_IsVehicle[other])
+	{
+		ObjectGeneric objstats = view_as<ObjectGeneric>(other);
+		if(!objstats.m_bConstructBuilding)
+			return;
+	}
 
 	int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
 	if(!IsValidEntity(owner))
@@ -2737,7 +2777,7 @@ static void Func_On_Proj_DoG_Patterns(int entity, int other)
 
 	if(IsIn_HitDetectionCooldown(entity,other))
 		return;
-			
+
 	Set_HitDetectionCooldown(entity, other, GetGameTime() + 0.25);	//if they walk backwards, its likely to hit them 2 times, but who on earth would willingly walk backwards/alongside the trajectory of the projectile
 
 	float ProjectileLoc[3];
@@ -2796,8 +2836,8 @@ static void Invoke_RegaliaIOC(RegaliaClass npc, float EndLoc[3], float DetTime)
 	int color[4] = {255, 255, 255, 255};
 	color = iRegaliaColor(npc);
 
-	EmitSoundToAll(REGALIA_IOC_STARTUP, _, _, SNDLEVEL_RAIDSIREN, _, 1.0, 50);
-	EmitSoundToAll(REGALIA_IOC_CHARGE_LOOP, npc.index, SNDCHAN_STATIC, SNDLEVEL_RAIDSIREN, _, 1.0, 50, _, EndLoc);
+	EmitSoundToAll(REGALIA_IOC_STARTUP, _, _, SNDLEVEL_ROCKET, _, 1.0, 50);
+	EmitSoundToAll(REGALIA_IOC_CHARGE_LOOP, npc.index, SNDCHAN_STATIC, SNDLEVEL_ROCKET, _, 1.0, 50, _, EndLoc);
 
 	DataPack Pack = new DataPack();
 	Pack.WriteCell(EntIndexToEntRef(npc.index));
@@ -2928,6 +2968,7 @@ static void RegaliaIOC_Tick(DataPack Data)
 	RequestFrames(RegaliaIOC_Tick, 1, Pack);
 
 }
+/*
 static void HandleDroneSystem(RegaliaClass npc)
 {
 	if(!npc.bDoesSectionExist(StarShip_BG_CoreDeco))
@@ -2963,6 +3004,11 @@ static void HandleDroneSystem(RegaliaClass npc)
 
 	float ShipAngles[3]; ShipAngles = npc.GetAngles();
 
+	int iTargetList[MAXPLAYERS];
+	UnderTides npcGetInfo = view_as<UnderTides>(npc.index);
+	GetHighDefTargets(npcGetInfo, iTargetList, sizeof(iTargetList), false, false);
+	int target_loop = 0;
+
 	if(TopSection)
 	{
 		for(int i=0 ; i < 2 ; i++)
@@ -2974,7 +3020,8 @@ static void HandleDroneSystem(RegaliaClass npc)
 				Angles[2] = 0.0;
 				Angles[1] += (360.0 / SpawnAmt) * loop;
 				Angles[0] = -45.0;
-				FireDrones(npc, Loc, Angles);
+				FireDrones(npc, Loc, Angles, iTargetList[target_loop]);
+				target_loop++;
 			}
 		}
 	}
@@ -2989,12 +3036,13 @@ static void HandleDroneSystem(RegaliaClass npc)
 				Angles[2] = 0.0;
 				Angles[1] += (360.0 / SpawnAmt) * loop;
 				Angles[0] = 45.0;
-				FireDrones(npc, Loc, Angles);
+				FireDrones(npc, Loc, Angles, iTargetList[target_loop]);
+				target_loop++;
 			}
 		}
 	}
 }
-static void FireDrones(CClotBody npc, float Loc[3], float Angles[3])
+static void FireDrones(CClotBody npc, float Loc[3], float Angles[3], int target = -1)
 {
 	int Drone = NPC_CreateByName("npc_lantean_drone_projectile", npc.index, Loc, Angles, GetTeam(npc.index), "blue;raidmodescaling_damage");
 	int health = RoundToFloor(ReturnEntityMaxHealth(npc.index) * 0.0005);	//like 0.05% hp of ship
@@ -3007,9 +3055,26 @@ static void FireDrones(CClotBody npc, float Loc[3], float Angles[3])
 
 		LanteanProjectile drone_npc = view_as<LanteanProjectile>(Drone);
 		fl_AbilityVectorData[drone_npc.index] = Angles;
-
-		drone_npc.m_flTimeTillDeath = GetGameTime() + 10.0 + GetRandomFloat(0.5, 5.0);
+		
+		float death_timer = 10.0 + GetRandomFloat(0.5, 5.0);
+		drone_npc.m_flTimeTillDeath = GetGameTime() + death_timer;
 		drone_npc.m_flSpeed = DroneSpeed + 600.0 * GetRandomFloat(0.8, 1.2);
+		drone_npc.m_flTimeTillDeath = death_timer;
+
+		drone_npc.m_flMaxSpeed = DroneSpeed;
+		drone_npc.m_flMinSpeed = DroneSpeed * 0.1;
+		
+		//rotation speed goes from max to min depending on death timer.
+		drone_npc.m_flMaxRotation = 11.5;
+		drone_npc.m_flMinRotation = 5.75;
+
+		float StartupTime = 2.0;	//how long it takes the projectile to start moving fully after spawning.
+
+		drone_npc.m_flStartupTimer 		= GetGameTime() + StartupTime;	
+		drone_npc.m_flStartupTimer_Base = StartupTime;
+
+		if(target > 0)
+			drone_npc.m_iTarget = target;
 
 		switch(GetRandomInt(1, 2))
 		{
@@ -3025,6 +3090,7 @@ static void FireDrones(CClotBody npc, float Loc[3], float Angles[3])
 		Dungeon_SetEntityZone(Drone, Zone_HomeBase);
 	}
 }
+*/
 static float ModifyDamage(float dmg)
 {
 	if(bShipRaidModeScaling)
@@ -3034,7 +3100,7 @@ static float ModifyDamage(float dmg)
 }
 static float fl_PrimaryLanceDuration_Base 		= 20.0;
 static float fl_PrimaryLanceRecharge_Base 		= 120.0;
-static float fl_PrimaryLancesTravelSpeed		= 35.0;
+static float fl_PrimaryLancesTravelSpeed		= 25.0;
 static float fl_PrimaryLancesTurnSpeed			= 2.5;
 static float fl_primaryLanceDistanceRegulation	= 3000.0;
 static float fl_PrimaryLanceTravelDetectionSize = 25.0;
@@ -3062,8 +3128,8 @@ static void LanceeWeaponTurnControl(int iNPC)
 
 		float Origin[3]; GetAbsOrigin(npc.index, Origin);
 
-		float BeamSpeed = (fl_PrimaryLancesTravelSpeed * 0.1515 * (npc.Anger ? 2.0 : 1.0)) / TickrateModify;
-		float TurnSpeed = (fl_PrimaryLancesTurnSpeed * (npc.Anger ? 2.0 : 1.0)) / TickrateModify;
+		float BeamSpeed = (fl_PrimaryLancesTravelSpeed * 0.1515 * (npc.Anger ? 1.25 : 1.0)) / TickrateModify;
+		float TurnSpeed = (fl_PrimaryLancesTurnSpeed * (npc.Anger ? 1.5 : 1.0)) / TickrateModify;
 
 		float TargetLoc[3]; WorldSpaceCenter(npc.m_iTarget, TargetLoc);
 		
@@ -3268,6 +3334,8 @@ static void HandleMainWeapons(RegaliaClass npc)
 		}
 		else
 		{
+			EmitSoundToAll(REGALIA_PRIMARY_LANCES_BEGIN_PHASE_1, npc.index, SNDCHAN_STATIC, SNDLEVEL_ROCKET);
+
 			npc.m_bPrimaryLancesActive = true;
 			npc.m_flLanceRecharge = GameTime + fl_PrimaryLanceRecharge_Base;
 
@@ -3311,7 +3379,7 @@ static void HandleMainWeapons(RegaliaClass npc)
 
 			if(npc.bIsShipFacingLoc(Origin, WantedLoc, 5.0, 5.0))
 			{
-
+				EmitSoundToAll(REGALIA_PRIMARY_LANCES_BEGIN_PHASE_2, npc.index, SNDCHAN_STATIC, SNDLEVEL_ROCKET);
 				float BeamAngles[3];
 				MakeVectorFromPoints(WantedLoc, f3_LastValidPosition[npc.index], BeamAngles);
 				GetVectorAngles(BeamAngles, BeamAngles);
@@ -3321,8 +3389,6 @@ static void HandleMainWeapons(RegaliaClass npc)
 				npc.m_flLanceDuration = GameTime + fl_PrimaryLanceDuration_Base;
 				npc.m_flShipAbilityActive = GameTime + fl_PrimaryLanceDuration_Base + 1.0;
 				npc.m_flLanceRecharge = FAR_FUTURE;
-
-				
 			}
 		}
 		//else
@@ -3668,7 +3734,7 @@ static Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 		npc.PlayLifeLossSound();
 		ApplyStatusEffect(npc.index, npc.index, "Ancient Melodies", FAR_FUTURE);
 	//	CommLines("", "M I S T E R  B E A S T");
-		if(i_RaidGrantExtra[npc.index])
+		if(i_RaidGrantExtra[npc.index] == 1)
 		{
 			for(int i; i < i_MaxcountNpcTotal; i++)
 			{
@@ -3720,12 +3786,11 @@ static void NPC_Death(int iNPC)
 	StopSound(npc.index, SNDCHAN_STATIC, REGALIA_IOC_CHARGE_LOOP);
 	npc.EndGenericLaserSound();
 	
-
-	EmitSoundToAll(REGALIA_DEATH_EXPLOSION_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_RAIDSIREN, _, 1.0, 175);
-	EmitSoundToAll(REGALIA_DEATH_EXPLOSION_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_RAIDSIREN, _, 1.0, 150);
-	EmitSoundToAll(REGALIA_DEATH_EXPLOSION_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_RAIDSIREN, _, 1.0, 125);
-	EmitSoundToAll(REGALIA_DEATH_EXPLOSION_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_RAIDSIREN, _, 1.0, 100);
-	EmitSoundToAll(REGALIA_DEATH_EXPLOSION_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_RAIDSIREN, _, 1.0, 75);
+	EmitSoundToAll(REGALIA_DEATH_EXPLOSION_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_ROCKET, _, 1.0, 175);
+	EmitSoundToAll(REGALIA_DEATH_EXPLOSION_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_ROCKET, _, 1.0, 150);
+	EmitSoundToAll(REGALIA_DEATH_EXPLOSION_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_ROCKET, _, 1.0, 125);
+	EmitSoundToAll(REGALIA_DEATH_EXPLOSION_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_ROCKET, _, 1.0, 100);
+	EmitSoundToAll(REGALIA_DEATH_EXPLOSION_SOUND, npc.index, SNDCHAN_STATIC, SNDLEVEL_ROCKET, _, 1.0, 75);
 
 	float Loc[3]; GetAbsOrigin(npc.index, Loc);
 	int particle = ParticleEffectAt(Loc, "hammer_bell_ring_shockwave2", 1.0);
@@ -3738,10 +3803,20 @@ static void NPC_Death(int iNPC)
 	
 	npc.CleanEntities();
 
-	if(i_RaidGrantExtra[npc.index])
+	if(i_RaidGrantExtra[npc.index] == 1)
 	{
 		Waves_ClearWaves();
 		ForcePlayerWin();
+		for (int client = 1; client <= MaxClients; client++)
+		{
+			if(IsValidClient(client) && GetClientTeam(client) == 2 && TeutonType[client] != TEUTON_WAITING && PlayerPoints[client] > 500)
+			{
+				if(Items_GiveNamedItem(client, "Almagest Data Card"))
+				{
+					CPrintToChat(client, "{green}Obtained{yellow} ''Almagest Data Card''");
+				}
+			}
+		}
 		for(int i; i < i_MaxcountNpcTotal; i++)
 		{
 			int entitynpc = EntRefToEntIndexFast(i_ObjectsNpcsTotal[i]);

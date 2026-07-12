@@ -793,7 +793,7 @@ static void Invisible_TRIGGER_Man_ClotThink(int iNPC)
 							}
 							if(TempDelayOne[npc.index] < GetGameTime())
 							{
-								int Temp_Target = Victoria_GetTargetDistance(entity, true, false);
+								int Temp_Target = Vesta_GetTargetDistance(entity, true, false);
 								if(IsValidEnemy(entity, Temp_Target))
 								{
 									static float hullcheckmaxs[3];
@@ -841,7 +841,7 @@ static void Invisible_TRIGGER_Man_ClotThink(int iNPC)
 							}
 							if(TempDelayOne[npc.index] < GetGameTime())
 							{
-								int Temp_Target = Victoria_GetTargetDistance(entity, true, false);
+								int Temp_Target = Vesta_GetTargetDistance(entity, true, false);
 								if(IsValidEnemy(entity, Temp_Target))
 								{
 									static float hullcheckmaxs[3];

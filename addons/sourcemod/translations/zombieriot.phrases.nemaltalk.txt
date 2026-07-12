@@ -1,0 +1,503 @@
+"Phrases"
+{
+	"Nemal_Encounter_Wave10_1"
+	{
+		"en"	"We're supposed to train our abilities, remember? Well here I am! Let's start off easy!"
+		"ko"	"역량 훈련이었던거 기억 나지? 그래서 내가 왔어! 살살 해보자!"
+	}
+	"Nemal_Encounter_Wave10_2"
+	{
+		"en"	"{gold}Silvester{default}? Where are you?... \nLate again... \nThis dude... \nHe'll come later, let's start off relaxed!"
+		"ko"	"어... {gold}실베스터{default}? 얘 어딨어? \n설마 또 늦냐... \n환장하겠네... \n그래, 지각생은 냅두고 우리끼리 살살 해보자!"
+	}
+	"Nemal_Encounter_Wave10_3"
+	{
+		"en"	"{gold}Silvester{default} is late isn't he? Probably off to some random beach with {blue}Sensal{default} as usual.. without me!!!\nWe said vacation is after this! Oh well, let's begin!"
+		"ko"	"{gold}실베스터{default} 얘 안 온거 맞지? 또 {blue}센살{default}이랑 어디 해변가로 놀러가서 퍼질러 자고 있겠지... 또 나만 쏙 빼놓고!!!\n휴가는 이거 한 다음에 가자고 그렇게 말했는데!"
+	}
+	"Nemal_Encounter_Wave10_4"
+	{
+		"en"	"Alminans are with us {gold}Expidonsans{default}!... But I'm kinda both...\nProbably not that important, anyways let's go!"
+		"ko"	"알미나인과 {gold}익스피돈사인{default}들은 함께지!... 난 혼혈이지만...\n근데 이건 중요한게 아니고, 일단 해보자!"
+	}
+	
+	"Nemal_Encounter_Wave20_1"
+	{
+		"en"	"Got a call, {gold}Silvester{default} will be joining soon, he had some buisness apparently, get ready for... when he comes!"
+		"ko"	"방금 연락이 왔는데, {gold}실베스터{default}가 곧 온대, 뭔 일 때문에 바쁘다고 하네, 그러니까 그가 올 때를 대비해!"
+	}
+	"Nemal_Encounter_Wave20_2"
+	{
+		"en"	"What I would do for {darkblue}Waldch{default} to stop being so mangetic to {gold}Silvester{default} with his Wildingen antics, that isn't his home!!!"
+		"ko"	"자꾸 {darkblue}왈츠{default}가 와일딩겐 '장난'으로 {gold}실베스터{default}를 매혹하는 걸 막으려면 어떻게 해야할까? 거긴 그의 집도 아니라고!"
+	}
+	"Nemal_Encounter_Wave20_3"
+	{
+		"en"	"I'll be honest, {blue}Sensal's{default} kinda scary, I mean you fought him, you'd know!"
+		"ko"	"솔직히, {blue}센살{default} 좀 무섭지 않아? 너도 그랑 싸워봤으니까 알 거 아냐!"
+	}
+	"Nemal_Encounter_Wave20_4"
+	{
+		"en"	"There sadly ain't many Alminans left after what happend to their home country, damn traitorous {blue}dweller{default}... we took in the surviving alminans and helped them!"
+		"ko"	"안타깝게도 많은 알미나인들이 자신들의 고향을 떠난 상태야. 망할 {blue}드웰러{default}놈들 때문에... 남은 알미나인들은 우리가 데려와서 돕고 있어!"
+	}
+	
+	"Nemal_Encounter_Wave30_1"
+	{
+		"en"	"Enough chatter, I'll start to not restrain myself."
+		"ko"	"좋아, 이제 수다는 그만할게."
+	}
+	"Nemal_Encounter_Wave30_2"
+	{
+		"en"	"{blue}Sensal{default} wasn't lying when he said you guys got some tricks."
+		"ko"	"{blue}센살{default}이 너희가 약간의 트릭을 쓴다 했었는데, 거짓말이 아니었네."
+	}
+	"Nemal_Encounter_Wave30_3"
+	{
+		"en"	"Alminans have some really widening history, eventually it'll be rebuilt with {gold}Expidonsa's{default} help."
+		"ko"	"알미나는 매우 긴 역사를 가지고 있는 국가야. 언젠가는 {gold}엑스피돈사{default}의 협력으로 재건되겠지."
+	}
+	"Nemal_Encounter_Wave30_4"
+	{
+		"en"	"{blue}Dwellers{default} and us had some treaty yknow... before they attacked everyone... Thats how we have the idea of what {green}Defenda's{default} are using."
+		"ko"	"{blue}드웰러{default}는 우리와 조약을 맺은 적이 있어... 그 놈들이 우릴 공격하기 전까지는 말야... {green}디펜다{default}가 쓰는거 기억나? 그게 그 놈들 기술력이거든."
+	}
+	
+	"Nemal_Encounter_Final_1"
+	{
+		"en"	"Looks like I have to give it all."
+		"ko"	"최선을 다 해야겠네."
+	}
+	"Nemal_Encounter_Final_2"
+	{
+		"en"	"I won't hold back anymore."
+		"ko"	"이젠 물러서지 않을게."
+	}
+	"Nemal_Encounter_Final_3"
+	{
+		"en"	"Ready yourself."
+		"ko"	"준비해."
+	}
+	"Nemal_Encounter_Final_4"
+	{
+		"en"	"I would worry about you, but I don't think thats necessary."
+		"ko"	"살짝 걱정했었는데, 그럴 필요는 없어보이네."
+	}
+	
+	"Nemal_Encounter_Trio_1"
+	{
+		"en"	"Sorry, {blue}Sensal{default}! {gold}He's{default} comming a bit late."
+		"ko"	"미안, {blue}센살{default}! {gold}그{default}는 조금 늦게 올 거 같아."
+	}
+	"Nemal_Encounter_Trio_2"
+	{
+		"en"	"Hey {blue}Sensal{default}, I'm here."
+		"ko"	"아, 센살. 나 여기 있어."
+	}
+	"Nemal_Encounter_Trio_3"
+	{
+		"en"	"Isn't this overkill?"
+		"ko"	"이건 쟤네한테 좀 너무 심한거 아니야?"
+	}
+	"Nemal_Encounter_Trio_4"
+	{
+		"en"	"Sorry but thats all."
+		"ko"	"일단 너희에게 미안하고 어... 더 할 말이 없네."
+	}
+	
+	"Nemal_LastMann_1"
+	{
+		"en"	"You don't beat me, then you'll never be able to face the full force of the {purple}void{default}."
+		"ko"	"날 못 이기는 거면, 넌 아직 {purple}공허{default}에 대한 준비가 덜 됐다는 뜻이야."
+	}
+	"Nemal_LastMann_2"
+	{
+		"en"	"Not beating me means no beating the {purple}void{default}."
+		"ko"	"날 이기지 못 하면 {purple}공허{default}에는 들어갈 수 없어."
+	}
+	"Nemal_LastMann_3"
+	{
+		"en"	"Use that adrenaline against me, come on!"
+		"ko"	"왜 이래! 아마추어 같이! 힘 좀 써봐!"
+	}
+	
+	"Nemal_Lose_1"
+	{
+		"en"	"Well... There's next time."
+		"ko"	"뭐... 다음 기회가 있잖아."
+	}
+	"Nemal_Lose_2"
+	{
+		"en"	"Too tired today? I get it."
+		"ko"	"오늘 컨디션이 안 좋은거지? 알았어."
+	}
+	"Nemal_Lose_3"
+	{
+		"en"	"I'm sorry but this is needed, this is training, not a daycare."
+		"ko"	"미안하지만 이건 요양원이 아니라 훈련이야. 해야만 하는 일이라고."
+	}
+	
+	"Nemal_TimeOver_1"
+	{
+		"en"	"You won't defeat {purple}it{default} with that speed."
+		"ko"	"그런 속도로는 {purple}그것을{default} 상대로 따라잡을 수 없어."
+	}
+	"Nemal_TimeOver_2"
+	{
+		"en"	"... Don't disappoint {darkblue}Kahmlstein{default} like this..."
+		"ko"	"... {darkblue}카멜슈타인{default}을 이런 식으로 실망시키지는 마..."
+	}
+	"Nemal_TimeOver_3"
+	{
+		"en"	"As much of an ass{darkblue}Kahmlstein{default} was... he did have something in him."
+		"ko"	"{darkblue}카멜슈타인{default}은 대단한 인간이었지... 그런 그에게도 뭔가 특별한 게 있었고."
+	}
+	
+	"Nemal_Anger_1"
+	{
+		"en"	"Hey man, you're really hurting me here..."
+		"ko"	"오우야, 좀 세게 때리는데..."
+	}
+	"Nemal_Anger_2"
+	{
+		"en"	"Ouch ouch! Time out, time out!"
+		"ko"	"어우! 잠깐 타임!"
+	}
+	
+	"Nemal_Death_1"
+	{
+		"en"	"Okay... ouch.. ow..."
+		"ko"	"알겠으니 그만.. 아파라..."
+	}
+	"Nemal_Death_2"
+	{
+		"en"	"Okay Okay you won! For now."
+		"ko"	"알았어, 너희 승리야! ...지금까지는."
+	}
+	"Nemal_Death_3"
+	{
+		"en"	"See you next time.... this hurts.."
+		"ko"	"다음에 보자고.... 좀 아프네.."
+	}
+	"Nemal_Death_4"
+	{
+		"en"	"I was going to insult you, but I asked for this..."
+		"ko"	"너희 좀 골려주려고 했는데 내가 얻어맞았네..."
+	}
+	
+	"Nemal_Win_1"
+	{
+		"en"	"Well thats it! You passed the test and ontop of that, helped eachother, teamwork!.. probably."
+		"ko"	"이게 전부야! 시험도 통과했고, 게다가 서로 도왔고, 팀워크도 좋았어!... 아마도."
+	}
+	"Nemal_Win_2"
+	{
+		"en"	"Shhh! Don't ruin the fun! Eitherways, good job!"
+		"ko"	"쉿! 그럼 재미 없잖아! 어쨌든, 잘 했어!"
+	}
+	"Nemal_Win_3"
+	{
+		"en"	"We'll Keep {purple}void gates{default} under control, tell us when youre ready to kill off the {purple}void{default}  once and for all, as a team!"
+		"ko"	"우리가 계속 {purple}공허 관문{default}을 통제하고 있을게. 너희 팀이 전부 {purple}공허{default} 원정에 나갈 준비가 되었다면 알려줘!"
+	}
+	"Nemal_Win_4"
+	{
+		"en"	"Till later Mercs!"
+		"ko"	"그럼 다음에 보자, 용병 친구들!"
+	}
+	
+	"Nemal_Trophies"
+	{
+		"en"	"{default}You feel more skilled and obtain: {gold}''Alminan and Expidonsan Training''{default}!"
+		"ko"	"{default}이 훈련에서 더욱 많은 경험을 얻은 것 같습니다. 획득한 트로피: {gold}''알미나-익스피돈사 연합 훈련''{default}!"
+	}
+	
+	"Nemal_SpecialAttack"
+	{
+		"en"	"Here's my finest creation at work!"
+		"ko"	"내 걸작을 보라고!"
+	}
+	
+	"Nemal_Response_SilvesterSupport_1"
+	{
+		"en"	"Oh? Looks like {gold}Silvester{default} Is finally coming!"
+		"ko"	"어? 드디어 {gold}실베스터{default}가 왔네!"
+	}
+	"Nemal_Response_SilvesterSupport_2"
+	{
+		"en"	"The lazy ass {gold}cat{default} is coming right up!"
+		"ko"	"저 게을러터진 {gold}고양이{default}가 이제야 왔네!"
+	}
+	"Nemal_Response_SilvesterSupport_3"
+	{
+		"en"	"Hey look, traning partner!"
+		"ko"	"어, 저것 봐! 훈련 파트너가 왔어!"
+	}
+	"Nemal_Response_SilvesterSupport_4"
+	{
+		"en"	"New phone who this? Oh, you finally came!"
+		"ko"	"부재중 전화? 뭐야 이건? 아... 드디어 오는구나!"
+	}
+	
+	"Nemal_Response_SilvesterHere_1"
+	{
+		"en"	"Ah no worries! I'll totally forgive you!"
+		"ko"	"아, 걱정 마! 오늘 늦은 건 봐줄게."
+	}
+	"Nemal_Response_SilvesterHere_2"
+	{
+		"en"	"You're such a nut you know that right?"
+		"ko"	"너 가끔 가다 좀 과하게 바보 같을 때가 있는거 알고 있지?"
+	}
+	"Nemal_Response_SilvesterHere_3"
+	{
+		"en"	"Sorry mercs this guy is signed with ''i dont wanna''"
+		"ko"	"미안 용병 친구들. 얘 지금 ''나 이거 안 할래''라고 떼 쓰고 있거든."
+	}
+	"Nemal_Response_SilvesterHere_4"
+	{
+		"en"	"Just don't attack the same guy as me, thats unfair!"
+		"ko"	"나랑 싸우고 있는 사람은 공격하지 마. 그건 불공평해."
+	}
+	
+	"Nemal_Response_SilvesterSpecialAttack"
+	{
+		"en"	"Guess I'll try harder aswell, or try to."
+		"ko"	"나도 열심히 노력해야겠네. 아니면... 그냥 노력을 안 해야되나?"
+	}
+	
+	// Weapon Lines
+	"Nemal_Response_Sensal_Scythe_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Cool Scythe! Can it be yellow though {gold}{1}{default}?"
+		"ko"		"멋진 낫인데! 거기서 더 노란 색만 물들면 센살의 것이 되겠어. 안 그래, {gold}{1}{default}?"
+	}
+	"Nemal_Response_Sensal_Scythe_2"
+	{
+		"en"	"I'll let you in on a secret, {blue}Sensal's{default} weapon isnt even from him... its from {gold}Silvester{default}! .... i think, i may be wrong."
+		"ko"	"하나 알려줄 게 있는데, 사실... 그 무기는 {blue}센살{default} 꺼가 아니라 {gold}실베스터{default}의 물건이래! ... 아님 말고. 나도 어디서 들은거야."
+	}
+	"Nemal_Response_Fusion_1"
+	{
+		"en"	"{gold}Silvester{default} can't stop himself from showing his weapons can't he?"
+		"ko"	"{gold}실베스터{default} 저 웬수는 또 무기를 막 버리고 다니네?"
+	}
+	"Nemal_Response_Fusion_2"
+	{
+		"en"	"{blue}Sensal{default} Wasnt kidding when he said {gold}Silvester{default} loves showing off."
+		"ko"	"{blue}센살{default}이 {gold}실베스터{default}가 무기를 막 버리고 다닌다고 하던데 그 말이 농담이 아닌가 보네."
+	}
+	"Nemal_Response_Siccerino_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Nice pair of Siccors {gold}{1}{default}!"
+		"ko"		"가위 한 쌍이 참 멋진데, {gold}{1}{default}!"
+	}
+	"Nemal_Response_Siccerino_2"
+	{
+		"en"	"Ever tried Snipping slower?"
+		"ko"	"저격 한 번 해보려고?"
+	}
+	"Nemal_Response_Waldch_Sword_1"
+	{
+		"en"	"Aha! {darkblue}Waldch{default} DID accept my blade!"
+		"ko"	"아하! {darkblue}왈츠{default}가 내 검을 버리진 않았구나!"
+	}
+	"Nemal_Response_Waldch_Sword_2"
+	{
+		"en"	"{darkblue}Waldch{default} You said you HATED IT!!!!!!!!!!!!"
+		"ko"	"{darkblue}왈츠{default}... 너 저 무기 싫다면서!!!!!!!!!"
+	}
+	"Nemal_Response_Nearl_Spear_1"
+	{
+		"en"	"{gold}Silvester{default} went there too?!."
+		"ko"	"{gold}실베스터{default}가 거기도 갔었어?"
+	}
+	"Nemal_Response_Nearl_Spear_2"
+	{
+		"en"	"{gold}Silvester{default}... invite me next time to Grunwald..."
+		"ko"	"{gold}실베스터{default}... 다음 번엔 나도 그룬왈드에 초대해줘..."
+	}
+	"Nemal_Response_Kahlm_Fist_1"
+	{
+		"en"	"{darkblue}Kahmlstein{default} was a rude asshole, But atleast he reedemed himself."
+		"ko"	"{darkblue}카멜슈타인{default}은 무례한 사람이었지. 적어도 그는 자신의 잘못을 만회했지만."
+	}
+	"Nemal_Response_Kahlm_Fist_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Trying to keep his memory going {gold}{1}{default}? I guess {darkblue}Kahmlstein{default} deserves it after what he did at the end."
+		"ko"		"그를 추모하려는 거야, {gold}{1}{default}? 그래 뭐... {darkblue}카멜슈타인{default}이 마지막에 한 일을 생각하면..."
+	}
+	"Nemal_Response_Blitzkreig_Kit_1"
+	{
+		"en"	"Always hated the concept of the machine {crimson}Blitzkrieg{default}..."
+		"ko"	"{crimson}블리츠크리그{default}의 컨셉은 항상 마음에 들지 않더라고..."
+	}
+	"Nemal_Response_Blitzkreig_Kit_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Why are you trying to be like it {gold}{1}{default}? I guess {crimson}Blitzkrieg{default} was cool..."
+		"ko"		"왜 그 기계를 따라하려는 거야, {gold}{1}{default}? {crimson}블리츠크리그{default}가 멋져보여서는 아니라고 해줘..."
+	}
+	"Nemal_Response_Guln_Sword_1"
+	{
+		"en"	"I miss {crimson}Guln{default}."
+		"ko"	"그걸 보니까 {crimson}굴른{default}이 그리워."
+	}
+	"Nemal_Response_Guln_Sword_2"
+	{
+		"en"	"The world was too cruel to {crimson}Guln{default}..."
+		"ko"	"{crimson}굴른{default}은 너무 허망하게 가버렸지..."
+	}
+	"Nemal_Response_Lego_1"
+	{
+		"en"	"OW! WHY LEGOS??"
+		"ko"	"아야! 이거 레고야??"
+	}
+	"Nemal_Response_Lego_2"
+	{
+		"en"	"Just cause i can WALK doesnt mean i gotta step on LEGO"
+		"ko"	"내가 발을 딛는 모든 곳에 레고를 둘 필요가 있었어?? 정말??"
+	}
+	"Nemal_Response_Board_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Big shield {gold}{1}{default}, compensating?"
+		"ko"		"엄청 큰 방패네.. {gold}{1}{default}. 아픈 건 싫은가 보지?"
+	}
+	"Nemal_Response_Board_2"
+	{
+		"en"	"Parry me right... and you'll be set for {purple}it{default}."
+		"ko"	"이것도 패링해보라고. 그러면 {purple}그것{default} 상대로도 버틸 수 있을거야."
+	}
+	"Nemal_Response_Amphi_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Hey hey thats my good {snow}friends{default} weapon {gold}{1}{default}! She's a very nice Alminan."
+		"ko"		"이봐, 그건 내 소중한 {snow}친구{default}의 물건이잖아? 그녀가 좋은 사람이긴 해."
+	}
+	"Nemal_Response_Amphi_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Oh {snow}Amphi{default}, looks like you have a student, their name is {gold}{1}{default}!"
+		"ko"		"오, {snow}임피{default}, 아무래도 전학생 한 명 받아야할 것 같은데? 이름이 {gold}{1}{default}라고 하네!"
+	}
+	"Nemal_Response_Bobs_Sexy_Gun"
+	{
+		"en"	"We're here to train.... why......"
+		"ko"	"우린 분명 훈련 하러 온건데.... 왜..?"
+	}
+	"Nemal_Response_Angelica_Shotgonnus_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Hey thats my weapon {gold}%N{default}!"
+		"ko"		"야! 그건 내 무기잖아, {gold}{1}{default}!"
+	}
+	"Nemal_Response_Angelica_Shotgonnus_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"An one on one battle{gold}{1}{default}?"
+		"ko"		"1:1 결투 좀 해볼까, {gold}{1}{default}?"
+	}
+	"Nemal_Response_HHH_Axe"
+	{
+		"#format"	"{1:N}"
+		"en"		"You're just a little guy {gold}{1}{default}! wait ow OW that hurts!!!"
+		"ko"		"넌 한낱 애송이에 불과해, {gold}{1}{default}! 잠깐! 그거 너무 아프잖아!!!"
+	}
+	"Nemal_Response_Mlynar_Newspaper_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Care {gold}{1}{default}, dammit!"
+		"ko"		"아니... 신문 보지말라고! 훈련에 집중해! {gold}{1}{default}, 좀!"
+	}
+	"Nemal_Response_Mlynar_Newspaper_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"You aren't even fighting me are you {gold}{1}{default}?! Get off your paper!"
+		"ko"		"뭐야, 나랑 싸우는 데 흥미라도 떨어진 거야!? {gold}{1}{default}! 빨리 그 신문 내려놔!"
+	}
+	"Nemal_Response_Trash_Cannon_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Your Trash doesn't scare me {gold}{1}{default}."
+		"ko"		"그런 쓰레기로 날 위협하진 못해. {gold}{1}{default}."
+	}
+	"Nemal_Response_Trash_Cannon_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Why is there a bomb in your trash, {gold}{1}{default}?"
+		"ko"		"왜 쓰레기 안에 폭탄이 들어있는거야, {gold}{1}{default}?"
+	}
+	"Nemal_Response_Star_Shooter_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Hey you're using my Star Shooter {gold}{1}{default}!"
+		"ko"		"야! 그건 내 유성 발사기잖아, {gold}{1}{default}!"
+	}
+	"Nemal_Response_Star_Shooter_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Oh how i wanna use that weapon again... can i borrow your Star Shooter, {gold}{1}{default}?"
+		"ko"		"그거 보니까 나도 갑자기 쓰고 싶어지는데.. 니 유성 발사기 좀 빌려줄래, {gold}{1}{default}?"
+	}
+	"Nemal_Response_Messenger_1"
+	{
+		"en"		"Messenger's Mind was long gone, I pity him, really..."
+		"ko"		"메신저의 정신은 이미 오래 전에 망가진지 오래였지... 그가 안타까워."
+	}
+	"Nemal_Response_Messenger_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"If you see Messenger around, tell him I said hi {gold}{1}{default}, okay?"
+		"ko"		"너 나중에 메신저 보면, 걔한테 안녕이라고 전해줘. {gold}{1}{default}, 알았지?"
+	}
+	"Nemal_Response_FlameTail_1"
+	{
+		"en"		"Don't Dodge me!"
+		"ko"		"피하지마! 맞서 싸워!"
+	}
+	"Nemal_Response_FlameTail_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Can't dodge forever, {crimson}{1}{default}."
+		"ko"		"평생 피할 순 없을 걸, {crimson}{1}{default}."
+	}
+	"Nemal_Response_Leper_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"That sword is cool {gold}{1}{default}! lets fight like... uh... people."
+		"ko"		"그 검 정말 멋진데, {gold}{1}{default}! 그러니까... 어... 묘사를 못 하겠다."
+	}
+	"Nemal_Response_Leper_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"That amazing pose won't scare me off {gold}{1}{default}!"
+		"ko"		"그 포즈 멋진데, 하지만 날 놀래킬 정도는 아니라고, {gold}{1}{default}!"
+	}
+	"Nemal_Response_Necro_Wand_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Don't mess with the dead {gold}{1}{default}, dont wan't {green}him{default} bugging us...."
+		"ko"		"충고하는데, 죽은 자들로 계속 장난치지 마, {gold}{1}{default}. 그 {green}해골바가지{default}가 우릴 지켜볼 테니까..."
+	}
+	"Nemal_Response_Necro_Wand_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"if {green}he{default} comes back im blaming {gold}{1}{default}."
+		"ko"		"만약 저걸로 그 {green}해골{default}이 나타난다면, {gold}{1}{default} 전부 네 탓이야."
+	}
+	"Nemal_Response_Dweller_1"
+	{
+		"en"		"Sea creature! Shoo shoo!"
+		"ko"		"바다 괴물!"
+	}
+	"Nemal_Response_Dweller_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Why are you a Sea Creature {gold}{1}{default}? Shoo shoo!"
+		"ko"		"왜 바다 괴물이 되어있는거야, {gold}{1}{default}?"
+	}
+}

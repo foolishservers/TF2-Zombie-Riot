@@ -91,7 +91,7 @@ static void ClotPrecache()
 	PrecacheSoundArray(g_TeleportSound);
 	PrecacheSound(g_Jump_sound);
 	PrecacheSound(g_SuicideSound);
-	PrecacheSoundCustom("#zombiesurvival/void_wave/center_of_the_void_1.mp3");
+	PrecacheSoundCustom("#zombiesurvival/void_wave/unspeakable_raid.mp3");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
@@ -306,7 +306,7 @@ methodmap ZsUnspeakable < CClotBody
 
 		npc.m_flNextMeleeAttack = 0.0;
 		
-		npc.m_iBleedType = BLEEDTYPE_VOID;
+		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		npc.m_iStepNoiseType = STEPSOUND_GIANT;	
 		npc.m_iNpcStepVariation = STEPTYPE_TANK;
 		npc.m_flZsUnspeakableQuake = 0.0;
@@ -351,7 +351,7 @@ methodmap ZsUnspeakable < CClotBody
 			}
 			RaidModeTime = GetGameTime(npc.index) + 200.0;
 			RaidBossActive = EntIndexToEntRef(npc.index);
-			RaidAllowsBuildings = false;
+			RaidAllowsBuildings = true;
 			float value;
 			char buffers[3][64];
 			ExplodeString(data, ";", buffers, sizeof(buffers), sizeof(buffers[]));
@@ -627,6 +627,7 @@ public void ZsUnspeakable_ClotThink(int iNPC)
 	if(LastMann && !AlreadySaidLastmann)
 	{
 		AlreadySaidLastmann = true;
+		RaidModeTime += 10.0;
 		switch(GetRandomInt(0,2))
 		{
 			case 0:
@@ -649,7 +650,7 @@ public void ZsUnspeakable_ClotThink(int iNPC)
 	//	ForcePlayerLoss();
 	//	RaidBossActive = INVALID_ENT_REFERENCE;
 	//	func_NPCThink[npc.index] = INVALID_FUNCTION;
-		CPrintToChatAll("{crimson}불결한 존재{crimson}: 전부 죽는다.");
+		CPrintToChatAll("{crimson}불결한 존재{crimson}: 오랫동안 기다려온 순간이 마침내 도래하였다.");
 		SetEntPropFloat(npc.index, Prop_Send, "m_flModelScale", 1.85);
 		RaidModeScaling *= 5.0;
 		fl_Extra_Speed[npc.index] *= 1.2;
@@ -798,16 +799,14 @@ public Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflict
 		if(i_RaidGrantExtra[npc.index] >= 4)
 		{
 			SensalGiveShield(npc.index, CountPlayersOnRed(1) * 24);
+			if(!npc.m_bAlliesSummoned)
+			{
+				npc.m_bAlliesSummoned = true;
+				Spawn_Zombie(npc);
+			}
+			CPrintToChatAll("{crimson}불결한 존재{default}: 들린다... 너희의 육신이 부패하고, 심장이 멎는 그 소리가!");
+			RaidModeScaling *= 1.1;
 		}
-		else
-			SensalGiveShield(npc.index, CountPlayersOnRed(1) * 12);
-		if(!npc.m_bAlliesSummoned)
-		{
-			npc.m_bAlliesSummoned = true;
-			Spawn_Zombie(npc);
-		}
-		CPrintToChatAll("{crimson}불결한 존재{default}: 이 불경한 놈들이 감히!");
-		RaidModeScaling *= 1.1;
 	}
 	if(npc.g_TimesSummoned < 3)
 	{
@@ -820,7 +819,7 @@ public Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflict
 		{
 			if(i_RaidGrantExtra[npc.index] >= 4)
 			{
-				SensalGiveShield(npc.index, CountPlayersOnRed(1) * 3);
+				SensalGiveShield(npc.index, CountPlayersOnRed(1) * 24);
 			}
 			npc.g_TimesSummoned++;
 			ApplyStatusEffect(npc.index, npc.index, "Defensive Backup", 5.0);
@@ -832,11 +831,11 @@ public Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflict
 			{
 				case 1:
 				{
-					CPrintToChatAll("{crimson}불결한 존재{default}: 나는 너희들과 이 지랄하면서 놀 시간이 없다.");
+					CPrintToChatAll("{crimson}불결한 존재{default}: 자, 발악하라");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{crimson}저것이 매우 크게 분노하고 있다.");
+					CPrintToChatAll("{crimson}불결한 존재{default}: 귀찮게하는군.");
 				}
 			}
 		}
@@ -861,48 +860,38 @@ public Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflict
 
 static void Spawn_Zombie(ZsUnspeakable npc)
 {
-	float pos[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos);
-	float ang[3]; GetEntPropVector(npc.index, Prop_Data, "m_angRotation", ang);
-	int maxhealth = ReturnEntityMaxHealth(npc.index);
-	int heck;
-	int spawn_index;
-	heck= maxhealth;
-	maxhealth= (heck/10);
-	if(i_RaidGrantExtra[npc.index] >= 4)	//Only spawns if the wave is 60 or beyond.
-	{
-		CPrintToChatAll("{crimson} 저것이 끔찍한 감염체들을 소환했다.", NpcStats_ReturnNpcName(npc.index, true));
-		maxhealth= (heck/5);	//mid squishy
+    float pos[3], ang[3];
+    GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos);
+    GetEntPropVector(npc.index, Prop_Data, "m_angRotation", ang);
+    
+    int bossMaxHealth = ReturnEntityMaxHealth(npc.index);
+    
+    if(i_RaidGrantExtra[npc.index] >= 4)
+    {
+        CPrintToChatAll("{crimson} 저것이 끔찍한 감염체들을 소환했다.");
 
-		spawn_index = NPC_CreateByName("npc_random_zombie", npc.index, pos, ang, GetTeam(npc.index));
-		NpcAddedToZombiesLeftCurrently(spawn_index, true);
-		if(spawn_index > MaxClients)
-		{
-			NpcStats_CopyStats(npc.index, spawn_index);
-			b_thisNpcIsABoss[spawn_index] = true;
-			SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
-			SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
-		}
-		maxhealth= (heck/5);	//the tankiest
-		spawn_index = NPC_CreateByName("npc_random_zombie", npc.index, pos, ang, GetTeam(npc.index));
-		NpcAddedToZombiesLeftCurrently(spawn_index, true);
-		if(spawn_index > MaxClients)
-		{
-			NpcStats_CopyStats(npc.index, spawn_index);
-			b_thisNpcIsABoss[spawn_index] = true;
-			SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
-			SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
-		}
-		maxhealth= (heck/10);	//the tankiest
-		spawn_index = NPC_CreateByName("npc_random_zombie", npc.index, pos, ang, GetTeam(npc.index));
-		NpcAddedToZombiesLeftCurrently(spawn_index, true);
-		if(spawn_index > MaxClients)
-		{
-			NpcStats_CopyStats(npc.index, spawn_index);
-			b_thisNpcIsABoss[spawn_index] = true;
-			SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
-			SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
-		}
-	}
+        // 소환할 좀비들의 체력 비율 (20%, 20%, 10%)
+        float ratios[] = {0.2, 0.2, 0.1};
+
+        for(int i = 0; i < 3; i++)
+        {
+            int spawn_index = NPC_CreateByName("npc_random_poyo", npc.index, pos, ang, GetTeam(npc.index));
+            
+            if(spawn_index > MaxClients)
+            {
+                // 체력 계산 및 20만 제한(Clamp)
+                int finalHealth = RoundToFloor(bossMaxHealth * ratios[i]);
+                if(finalHealth > 200000) finalHealth = 200000; 
+
+                NpcAddedToZombiesLeftCurrently(spawn_index, true);
+                NpcStats_CopyStats(npc.index, spawn_index);
+                b_thisNpcIsABoss[spawn_index] = true;
+
+                SetEntProp(spawn_index, Prop_Data, "m_iHealth", finalHealth);
+                SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", finalHealth);
+            }
+        }
+    }
 }
 
 float ZsUnspeakable_Absorber(int entity, int victim, float damage, int weapon)
@@ -911,7 +900,7 @@ float ZsUnspeakable_Absorber(int entity, int victim, float damage, int weapon)
 	ApplyStatusEffect(entity, victim, "Heavy Presence", 1.0);
 
 	float damageDealt = 10.0 * RaidModeScaling;
-	Elemental_AddPheromoneDamage(victim, entity, RoundToNearest(damageDealt), true, true);
+	Elemental_AddPheromoneDamage(victim, entity, RoundToNearest(damageDealt * 0.5), true, true);
 	return 0.0;
 }
 bool ZsUnspeakable_TeleToAnyAffectedOnVoid(ZsUnspeakable npc)
@@ -1253,7 +1242,11 @@ void ZsUnspeakableSelfDefense(ZsUnspeakable npc, float gameTime, int target, flo
 						float vecHit[3];
 						WorldSpaceCenter(target, vecHit);
 									
-						float damageDealt = 8.0 * RaidModeScaling;
+						float damageDealt = 10.0 * RaidModeScaling;
+						if(i_IsABuilding[target])
+						{
+							damageDealt = 5000.0;
+						}
 
 						SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_CLUB, -1, _, vecHit);	
 						Elemental_AddPheromoneDamage(target, npc.index, RoundToNearest(damageDealt * 0.15), true, true);							
@@ -1439,6 +1432,10 @@ public void ZsUnspeakableWin(int entity)
 		case 4:
 		{
 			CPrintToChatAll("{crimson}불결한 존재{default}: 계획대로 착착 진행되면 참 기분 좋지");
+		}
+		case 5:
+		{
+			CPrintToChatAll("{crimson}불결한 존재{default}: 그 누구도 우리의 권위에 도전할 순 없다. 우리의 힘은 끝이 없다.");
 		}
 	}
 }

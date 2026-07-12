@@ -29,7 +29,7 @@ void ZSMedicHealer_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "medic");
 	data.IconCustom = false;
 	data.Flags = 0;
-	data.Category = Type_Common;
+	data.Category = Type_GmodZS;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
@@ -88,7 +88,7 @@ methodmap ZSMedicHealer < CClotBody
 	}
 	public ZSMedicHealer(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSMedicHealer npc = view_as<ZSMedicHealer>(CClotBody(vecPos, vecAng, "models/player/medic.mdl", "1.0", "10000", ally));
+		ZSMedicHealer npc = view_as<ZSMedicHealer>(CClotBody(vecPos, vecAng, "models/player/medic.mdl", "1.0", "15000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		

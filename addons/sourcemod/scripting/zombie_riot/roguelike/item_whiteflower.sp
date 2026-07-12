@@ -114,9 +114,9 @@ public void Rogue_SoulArknights_Weapon(int entity, int client)
 	
 	char buffer[64];
 	Store_GetItemName(StoreWeapon[entity], client, buffer, sizeof(buffer), false);
-	if(Store_IsWeaponFaction(client, entity, Faction_Seaborn) ||
-		Store_IsWeaponFaction(client, entity, Faction_Kazimierz) ||
-		Store_IsWeaponFaction(client, entity, Faction_Victoria) ||
+	if(Store_IsWeaponFaction(client, entity, Faction_Dweller) ||
+		Store_IsWeaponFaction(client, entity, Faction_Grunwald) ||
+		Store_IsWeaponFaction(client, entity, Faction_Vesta) ||
 		StrContains(buffer, "The Enforcer", false) != -1 ||
 		StrContains(buffer, "Riot Gun", false) != -1 ||
 		StrContains(buffer, "Angelica Shotgonnus", false) != -1 ||
@@ -130,11 +130,11 @@ public void Rogue_SoulArknights_Weapon(int entity, int client)
 		StrContains(buffer, "Quibai's Elegance", false) != -1 ||
 		StrContains(buffer, "Preaching Sword", false) != -1 ||
 		StrContains(buffer, "Guln's Blade", false) != -1 ||
-		StrContains(buffer, "Judgement Of Iberia", false) != -1 ||
+		StrContains(buffer, "Judgement Of Almina", false) != -1 ||
 		StrContains(buffer, "Passanger's Device", false) != -1 ||
 		StrContains(buffer, "The Standchen", false) != -1 ||
 		StrContains(buffer, "Merchant's Wrench", false) != -1 ||
-		StrContains(buffer, "Seaborn Claws", false) != -1 ||
+		StrContains(buffer, "Dweller Claws", false) != -1 ||
 		StrContains(buffer, "Explosive Dawn", false) != -1 ||
 		StrContains(buffer, "Ancestor Launcher", false) != -1 ||
 		StrContains(buffer, "Whistle Stop", false) != -1)
@@ -289,9 +289,9 @@ public void Rogue_AntiXeno_Enemy(int entity)
 	}
 }
 
-public void Rogue_AntiSeaborn_Enemy(int entity)
+public void Rogue_AntiDweller_Enemy(int entity)
 {
-	if(i_BleedType[entity] == BLEEDTYPE_SEABORN)
+	if(i_BleedType[entity] == BLEEDTYPE_DWELLER)
 	{
 		fl_Extra_MeleeArmor[entity] *= 1.75;
 		fl_Extra_RangedArmor[entity] *= 1.75;
@@ -318,7 +318,6 @@ public void Rogue_Exchanger_Collect()
 		
 	Rogue_AddIngots(-ingots, true);
 	
-	CurrentCash += 200 * ingots;
 	GlobalExtraCash += 200 * ingots;
 }
 
@@ -327,7 +326,6 @@ public void Rogue_Exchanger_IngotChanged(int &ingots)
 	if(ingots <= 0)
 		return;
 
-	CurrentCash += 200 * ingots;
 	GlobalExtraCash += 200 * ingots;
 	CPrintToChatAll("{green}%t","Cash Gained!", 200 * ingots);
 	ingots = 0;
@@ -365,8 +363,8 @@ public void Rogue_RottenBone_Enemy(int entity)
 {
 	if(RottenBone)
 	{
-		fl_Extra_MeleeArmor[entity] *= 1.0 + (RottenBone * 0.00015);
-		fl_Extra_RangedArmor[entity] *= 1.0 + (RottenBone * 0.00015);
+		fl_Extra_MeleeArmor[entity] *= 1.0 + (float(RottenBone) * 0.00015);
+		fl_Extra_RangedArmor[entity] *= 1.0 + (float(RottenBone) * 0.00015);
 
 		if(RottenBone < 3000)
 			RottenBone++;

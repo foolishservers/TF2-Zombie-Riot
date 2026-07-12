@@ -119,6 +119,12 @@ methodmap Butcher < CClotBody
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.StartPathing();
 		npc.m_flSpeed = 300.0;
+		
+		float wave = float(Waves_GetRoundScale()+1); //Wave scaling
+		
+		wave *= 0.133333;
+
+		npc.m_flWaveScale = wave;
 				
 		int skin = 1;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
@@ -286,11 +292,11 @@ void ButcherSelfDefense(Butcher npc, float gameTime, int target, float distance)
 				
 				if(IsValidEnemy(npc.index, target))
 				{
-					float damageDealt = 20.0;
+					float damageDealt = 50.0;
 					if(!ShouldNpcDealBonusDamage(target))
-						damageDealt *= 1.5;
+						damageDealt *= 0.5;
 
-					SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_CLUB, -1, _, vecHit);
+					SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt * npc.m_flWaveScale, DMG_CLUB, -1, _, vecHit);
 
 					// Hit sound
 					npc.PlayMeleeHitSound();

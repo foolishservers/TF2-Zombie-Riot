@@ -58,7 +58,7 @@ void AlmagestJkei_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "rbf_jkei");
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
-	data.Category = Type_Curtain;
+	data.Category = Type_Raid;
 	data.Func = ClotSummon;
 	data.Precache = ClotPrecache;
 	NPCId = NPC_Add(data);
@@ -68,6 +68,12 @@ int Almagest_JkeiID()
 {
 	return NPCId;
 }
+
+static void NPCTalkMessage(int entity, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(entity, "black", message);
+}
+
 static void ClotPrecache()
 {
 	PrecacheSoundCustom("#zombiesurvival/rogue3/rogue3_almagestboss.mp3");
@@ -191,12 +197,11 @@ methodmap AlmagestJkei < CClotBody
 		}
 		DispatchKeyValue(item, "model", model);
 
+		DispatchSpawn(item);
 		if(model_size != 1.0)
 		{
-		//	DispatchKeyValueFloat(item, "modelscale", GetEntPropFloat(this.index, Prop_Send, "m_flModelScale"));
-			DispatchKeyValueFloat(item, "modelscale", model_size);
+			SetEntPropFloat(item, Prop_Send, "m_flModelScale", model_size);
 		}
-		DispatchSpawn(item);
 		SetEntProp(item, Prop_Send, "m_fEffects", EF_BONEMERGE|EF_PARENT_ANIMATES|EF_NOSHADOW );
 		SetEntityMoveType(item, MOVETYPE_NONE);
 		SetEntProp(item, Prop_Data, "m_nNextThinkTick", -1.0);
@@ -296,6 +301,7 @@ methodmap AlmagestJkei < CClotBody
 			RaidBossActive = EntIndexToEntRef(npc.index);
 			RaidModeTime = GetGameTime(npc.index) + 9000.0;
 			RaidAllowsBuildings = true;
+			RaidAllowLastman = true;
 			RaidModeScaling = 0.0;
 			MusicEnum music;
 			strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/rogue3/rogue3_almagestboss.mp3");
@@ -328,11 +334,13 @@ methodmap AlmagestJkei < CClotBody
 			RaidBossActive = EntIndexToEntRef(npc.index);
 			RaidModeTime = GetGameTime(npc.index) + 9000.0;
 			RaidAllowsBuildings = true;
+			RaidAllowLastman = true;
 			RaidModeScaling = 0.0;
 		}
 		if(StrContains(data, "force_final_battle") != -1)
 		{
 			RaidAllowsBuildings = false;
+			RaidAllowLastman = true;
 		}
 		npc.StartPathing();
 		npc.SetJkeiSpeed(330.0);
@@ -350,7 +358,7 @@ methodmap AlmagestJkei < CClotBody
 		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", skin);
 		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", skin);
 		SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", 2);
-		CPrintToChatAll("{black}제이케이{default} : ∴ᒷリリ ↸⚍ ⨅⚍ {black}그림자 응달{default}... ⍑ ∴ᔑ∷ℸ ̣ᒷ ᒲᔑꖎ, ↸⚍ ∴╎∷ᓭℸ ̣ ᒷ⍑ ⊣ꖎᒷ╎ᓵ⍑ ⍊ᒷ∷∷ᒷᓵꖌᒷリ.");
+		NPCTalkMessage(npc.index, "∴ᒷリリ ↸⚍ ⨅⚍ {darkgray}Shadowing Darkness{default}... ⍑ ∴ᔑ∷ℸ ̣ᒷ ᒲᔑꖎ, ↸⚍ ∴╎∷ᓭℸ ̣ ᒷ⍑ ⊣ꖎᒷ╎ᓵ⍑ ⍊ᒷ∷∷ᒷᓵꖌᒷリ.");
 		
 
 		return npc;

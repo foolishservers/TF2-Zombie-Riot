@@ -80,7 +80,7 @@ void AlmagestProximaOnMapStart()
 	strcopy(data.Icon, sizeof(data.Icon), "");
 	data.IconCustom = true;
 	data.Flags = 0;
-	data.Category = 0;
+	data.Category = Type_Outlaws;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
@@ -161,7 +161,7 @@ methodmap AlmagestProxima < CClotBody
 		EnemyShieldCantBreak[npc.index] = true;
 		VausMagicaGiveShield(npc.index, 5);
 
-		npc.m_flSpeed = 400.0;
+		npc.m_flSpeed = 350.0;
 		
 		npc.m_iWearable1 = npc.EquipItem("head", "models/zombie_riot/weapons/ruina_models_2_5.mdl");
 		SetVariantInt(65536);
@@ -214,8 +214,6 @@ static bool Almagest_DidHealDo;
 static void ClotThink(int iNPC)
 {
 	AlmagestProxima npc = view_as<AlmagestProxima>(iNPC);
-
-	GrantEntityArmor(iNPC, true, 0.5, 0.25, 0);
 	float gameTime = GetGameTime(npc.index);
 	if(npc.m_flNextDelayTime > gameTime)
 		return;
@@ -250,7 +248,7 @@ static void ClotThink(int iNPC)
 		npc.m_flHealCooldownDo = GetGameTime(npc.index) + 0.5;
 		Almagest_DidHealDo = false;
 		int maxhealth = ReturnEntityMaxHealth(npc.index);
-		ExpidonsaGroupHeal(npc.index, 150.0, 99, float(maxhealth) / 20.0, 1.0, false,Expidonsa_OnlyHealSameIndex, AlmagestProximaBuff);
+		ExpidonsaGroupHeal(npc.index, 150.0, 99, float(maxhealth) / 40.0, 1.0, false,Expidonsa_OnlyHealSameIndex, AlmagestProximaBuff);
 		if(Almagest_DidHealDo)
 			DesertYadeamDoHealEffect(npc.index, 150.0);
 	}
@@ -275,9 +273,11 @@ static void ClotThink(int iNPC)
 					npc.SetGoalEntity(target,npc.m_bAllowBackWalking);
 				}
 				npc.m_bAllowBackWalking = false;
+				npc.m_flSpeed = 350.0;
 			}
 			case 2:
 			{
+				npc.m_flSpeed = 410.0;
 				//juke them
 				npc.m_bAllowBackWalking = true;
 				npc.FaceTowards(vecTarget, 1000.0);	
@@ -315,10 +315,10 @@ int AlmagestProxima_SelfDefense(AlmagestProxima npc, float distance, float vecTa
 				int target = TR_GetEntityIndex(swingTrace);
 				if(target > 0)
 				{
-					float damage = 450.0;
+					float damage = 400.0;
 					if(ShouldNpcDealBonusDamage(target))
 					{
-						damage *= 10.0;
+						damage *= 6.0;
 					}
 					if(StatusEffects_PikemanDebuffMaxStacks(target))
 					{
@@ -336,7 +336,7 @@ int AlmagestProxima_SelfDefense(AlmagestProxima npc, float distance, float vecTa
 					if(!ShouldNpcDealBonusDamage(target))
 					{
 						//not to buildings
-						ApplyStatusEffect(target, target, "Pikeman's Slashes", 7.5);
+						ApplyStatusEffect(target, target, "Pikeman's Stabs", 7.5);
 						StatusEffects_PikemanDebuffAdd(target, 2);
 					}
 

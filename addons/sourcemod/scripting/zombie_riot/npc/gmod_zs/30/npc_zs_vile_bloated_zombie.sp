@@ -265,6 +265,7 @@ public void VileBloatedZombie_NPCDeath(int entity)
 	}
 	float vecMe[3]; WorldSpaceCenter(npc.index, vecMe);
 	Explode_Logic_Custom(40.0, npc.index, npc.index, -1, vecMe, 200.0, 1.0, _, true, 15, _, _, VileBloatedZombie_ExplodePost);
+	//TE_Particle("asplode_hoodoo", vecMe, NULL_VECTOR, NULL_VECTOR, _, _, _, _, _, _, _, _, _, _, 0.0);
 }
 
 static void VileBloatedZombie_ExplodePost(int attacker, int victim, float damage, int weapon)

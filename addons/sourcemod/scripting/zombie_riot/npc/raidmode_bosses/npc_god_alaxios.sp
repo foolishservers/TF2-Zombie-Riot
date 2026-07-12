@@ -289,6 +289,7 @@ methodmap GodAlaxios < CClotBody
 		
 		RaidBossActive = EntIndexToEntRef(npc.index);
 		RaidAllowsBuildings = false;
+		RaidAllowLastman = true;
 		RaidModeTime = GetGameTime(npc.index) + 200.0;
 		RemoveAllDamageAddition();
 
@@ -380,6 +381,7 @@ methodmap GodAlaxios < CClotBody
 		{
 			RaidModeTime = GetGameTime(npc.index) + 9999.0;
 			RaidAllowsBuildings = true;
+			RaidAllowLastman = false;
 		}
 		if(Waves_InFreeplay())
 		{
@@ -387,7 +389,7 @@ methodmap GodAlaxios < CClotBody
 		}
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		if(StrContains(data, "seainfection") != -1)
-			npc.m_iBleedType = BLEEDTYPE_SEABORN;
+			npc.m_iBleedType = BLEEDTYPE_DWELLER;
 
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPSOUND_NORMAL;		
@@ -513,6 +515,10 @@ methodmap GodAlaxios < CClotBody
 	}
 }
 
+static void NPCTalkMessage(int iNPC, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(iNPC, "lightblue", message);
+}
 
 public void GodAlaxios_ClotThink(int iNPC)
 {
@@ -558,6 +564,7 @@ public void GodAlaxios_ClotThink(int iNPC)
 						RaidModeTime = GetGameTime(npc.index) + 150.0;
 						RaidBossActive = EntIndexToEntRef(npc.index);
 						RaidAllowsBuildings = false;
+						RaidAllowLastman = true;
 						npc.PlayRageSound();
 						SetEntProp(npc.index, Prop_Data, "m_iHealth", (ReturnEntityMaxHealth(npc.index) / 4));
 						static float flPos[3]; 
@@ -670,15 +677,15 @@ public void GodAlaxios_ClotThink(int iNPC)
 				{
 					case 0:
 					{
-						CPrintToChatAll("{lightblue}갓 알락시오스{crimson}: 우리는 위매니의 뜻을 받든다!!!");
+						NPCTalkMessage(npc.index, "{crimson}STOP BEING SO WEAK, HELP ME!!!!!");
 					}
 					case 1:
 					{
-						CPrintToChatAll("{lightblue}갓 알락시오스{crimson}: 제발 도와다오, 버틸 수가 없다..");
+						NPCTalkMessage(npc.index, "{crimson}I'M UNDER CONTROL, HELP ME.....");
 					}
 					case 3:
 					{
-						CPrintToChatAll("{lightblue}갓 알락시오스{crimson}: 머리가 깨질 것만 같다!!!! 제발 나를 도와줘!!!");
+						NPCTalkMessage(npc.index, "{crimson}THIS THING IS TOO MUCH, HELP!!!!!!!!!");
 					}
 				}
 			}
@@ -688,15 +695,15 @@ public void GodAlaxios_ClotThink(int iNPC)
 				{
 					case 0:
 					{
-						CPrintToChatAll("{lightblue}갓 알락시오스{default}: 너 혼자서는 아무것도 하지 못 한다!");
+						NPCTalkMessage(npc.index, "You have no chance alone!");
 					}
 					case 1:
 					{
-						CPrintToChatAll("{lightblue}갓 알락시오스{default}: 너의 무기술은 아틀란티스에 비하면 허약하다!!");
+						NPCTalkMessage(npc.index, "Your weaponry frails in comparison to Atlantis!!");
 					}
 					case 3:
 					{
-						CPrintToChatAll("{lightblue}갓 알락시오스{default}: 지금 항복할텐가?!");
+						NPCTalkMessage(npc.index, "Consider surrendering?!");
 					}
 				}
 			}
@@ -720,7 +727,7 @@ public void GodAlaxios_ClotThink(int iNPC)
 					SetEntityCollisionGroup(baseboss_index, 24);
 				}
 			}
-			CPrintToChatAll("{lightblue}갓 알락시오스{default}: 안 돼... 놈들이 온다, 전투 준비!!!");
+			NPCTalkMessage(npc.index, "No.. No No!! They are coming, prepare to fight together NOW!!!");
 			RaidBossActive = INVALID_ENT_REFERENCE;
 			for(int i; i<32; i++)
 			{
@@ -751,7 +758,7 @@ public void GodAlaxios_ClotThink(int iNPC)
 				GetEntPropVector(Spawner_entity, Prop_Data, "m_vecOrigin", pos);
 				GetEntPropVector(Spawner_entity, Prop_Data, "m_angRotation", ang);
 			}
-			int spawn_index = NPC_CreateByName("npc_isharmla", -1, pos, ang, TFTeam_Blue);
+			int spawn_index = NPC_CreateByName("npc_abyss_leviathan", -1, pos, ang, TFTeam_Blue);
 			if(spawn_index > MaxClients)
 			{
 				NpcStats_CopyStats(npc.index, spawn_index);
@@ -833,7 +840,7 @@ public void GodAlaxios_ClotThink(int iNPC)
 				TF2_StunPlayer(client, 0.5, 0.5, TF_STUNFLAGS_LOSERSTATE);
 			}
 		}
-		if(AlaxiosForceTalk())
+		if(AlaxiosForceTalk(npc.index))
 		{
 			npc.m_bDissapearOnDeath = true;
 			RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
@@ -910,6 +917,8 @@ public void GodAlaxios_ClotThink(int iNPC)
 			allyAlive = true;
 
 		if(GetTeam(npc.index) == TFTeam_Red)
+			allyAlive = false;
+		if(npc.Anger)
 			allyAlive = false;
 
 		if(allyAlive)
@@ -1166,7 +1175,7 @@ public Action GodAlaxios_OnTakeDamage(int victim, int &attacker, int &inflictor,
 			damage = 0.0;
 			RaidModeTime += 120.0;
 			f_TalkDelayCheck = GetGameTime() + 4.0;
-			CPrintToChatAll("{lightblue}갓 알락시오스{crimson}: 이제 그만!!!!!!!!");
+			NPCTalkMessage(npc.index, "{crimson}EEEEEEEEEEEEEEENOOOOOOOOUGH!!!");
 			return Plugin_Handled;
 		}
 	}
@@ -1331,9 +1340,9 @@ public void GodAlaxios_OnTakeDamagePost(int victim, int attacker, int inflictor,
 				npc.PlaySummonSound();
 				npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
 
-				GodAlaxiosSpawnEnemy(npc.index,"npc_seaborn_kazimersch_knight",100000, RoundToCeil(6.0 * MultiGlobalEnemy));
-				GodAlaxiosSpawnEnemy(npc.index,"npc_seaborn_kazimersch_archer",50000, RoundToCeil(12.0 * MultiGlobalEnemy));
-				GodAlaxiosSpawnEnemy(npc.index,"npc_seaborn_kazimersch_melee_assasin",75000, RoundToCeil(4.0 * MultiGlobalEnemy));
+				GodAlaxiosSpawnEnemy(npc.index,"npc_dweller_grunwald_knight",100000, RoundToCeil(6.0 * MultiGlobalEnemy));
+				GodAlaxiosSpawnEnemy(npc.index,"npc_dweller_grunwald_archer",50000, RoundToCeil(12.0 * MultiGlobalEnemy));
+				GodAlaxiosSpawnEnemy(npc.index,"npc_dweller_grunwald_melee_assasin",75000, RoundToCeil(4.0 * MultiGlobalEnemy));
 			}
 			else if(Ratio <= 0.55 && npc.g_TimesSummoned < 2)
 			{
@@ -1341,18 +1350,18 @@ public void GodAlaxios_OnTakeDamagePost(int victim, int attacker, int inflictor,
 				npc.PlaySummonSound();
 				npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
 				
-				GodAlaxiosSpawnEnemy(npc.index,"npc_seaborn_vanguard",25000, RoundToCeil(2.0 * MultiGlobalEnemy));
-				GodAlaxiosSpawnEnemy(npc.index,"npc_seaborn_defender",60000, RoundToCeil(12.0 * MultiGlobalEnemy));
+				GodAlaxiosSpawnEnemy(npc.index,"npc_dweller_vanguard",25000, RoundToCeil(2.0 * MultiGlobalEnemy));
+				GodAlaxiosSpawnEnemy(npc.index,"npc_dweller_defender",60000, RoundToCeil(12.0 * MultiGlobalEnemy));
 			}
 			else if(Ratio <= 0.35 && npc.g_TimesSummoned < 3)
 			{
 				npc.g_TimesSummoned = 3;
 				npc.PlaySummonSound();
 				npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
-				GodAlaxiosSpawnEnemy(npc.index,"npc_seaborn_medic",50000, RoundToCeil(10.0 * MultiGlobalEnemy));
-				GodAlaxiosSpawnEnemy(npc.index,"npc_seaborn_guard",100000, RoundToCeil(10.0 * MultiGlobalEnemy));
-				GodAlaxiosSpawnEnemy(npc.index,"npc_seaborn_kazimersch_beserker",200000, RoundToCeil(2.0 * MultiGlobalEnemy));
-				GodAlaxiosSpawnEnemy(npc.index,"npc_pathshaper", RoundToCeil(300000.0 * MultiGlobalHighHealthBoss), 1);
+				GodAlaxiosSpawnEnemy(npc.index,"npc_dweller_medic",50000, RoundToCeil(10.0 * MultiGlobalEnemy));
+				GodAlaxiosSpawnEnemy(npc.index,"npc_dweller_guard",100000, RoundToCeil(10.0 * MultiGlobalEnemy));
+				GodAlaxiosSpawnEnemy(npc.index,"npc_dweller_grunwald_beserker",200000, RoundToCeil(2.0 * MultiGlobalEnemy));
+				GodAlaxiosSpawnEnemy(npc.index,"npc_mirroring", RoundToCeil(300000.0 * MultiGlobalHighHealthBoss), 1, true);
 			}
 			else if(Ratio <= 0.20 && npc.g_TimesSummoned < 4)
 			{
@@ -1361,12 +1370,12 @@ public void GodAlaxios_OnTakeDamagePost(int victim, int attacker, int inflictor,
 				npc.g_TimesSummoned = 4;
 				npc.PlaySummonSound();
 				npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
-				GodAlaxiosSpawnEnemy(npc.index,"npc_seaborn_vanguard",50000, RoundToCeil(1.0 * MultiGlobalEnemy));
-				GodAlaxiosSpawnEnemy(npc.index,"npc_seaborn_kazimersch_longrange",50000, RoundToCeil(10.0 * MultiGlobalEnemy));
-				GodAlaxiosSpawnEnemy(npc.index,"npc_netherseapredator",70000, RoundToCeil(20.0 * MultiGlobalEnemy));	
-				GodAlaxiosSpawnEnemy(npc.index,"npc_netherseaspewer",50000, RoundToCeil(20.0 * MultiGlobalEnemy));	
-				GodAlaxiosSpawnEnemy(npc.index,"npc_isharmla", RoundToCeil(1000000.0 * MultiGlobalHighHealthBoss), 1, true);	
-				GodAlaxiosSpawnEnemy(npc.index,"npc_seaborn_specialist",7000, RoundToCeil(20.0 * MultiGlobalEnemy));	
+				GodAlaxiosSpawnEnemy(npc.index,"npc_dweller_vanguard",50000, RoundToCeil(1.0 * MultiGlobalEnemy));
+				GodAlaxiosSpawnEnemy(npc.index,"npc_dweller_grunwald_longrange",50000, RoundToCeil(10.0 * MultiGlobalEnemy));
+				GodAlaxiosSpawnEnemy(npc.index,"npc_abysspredator",70000, RoundToCeil(20.0 * MultiGlobalEnemy));	
+				GodAlaxiosSpawnEnemy(npc.index,"npc_abyssspewer",50000, RoundToCeil(20.0 * MultiGlobalEnemy));	
+				GodAlaxiosSpawnEnemy(npc.index,"npc_abyss_leviathan", RoundToCeil(1000000.0 * MultiGlobalHighHealthBoss), 1, true);	
+				GodAlaxiosSpawnEnemy(npc.index,"npc_dweller_specialist",7000, RoundToCeil(20.0 * MultiGlobalEnemy));	
 			}	
 		}
 		else
@@ -1440,26 +1449,26 @@ public void GodAlaxios_NPCDeath(int entity)
 			{
 				case 0:
 				{
-					CPrintToChatAll("{lightblue}갓 알락시오스{default}: 아틀란티스인들을 지키는데 실패하다니...");
+					NPCTalkMessage(npc.index, "I have failed Atlantis...");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{lightblue}갓 알락시오스{default}: 우리의 군대가 패퇴했단 말인가..?");
+					NPCTalkMessage(npc.index, "How was my army defeated..?");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{lightblue}갓 알락시오스{default}: 네 놈이 지금 뭘 하고 있는지 알고는 있나!");
+					NPCTalkMessage(npc.index, "You dont know what you are doing!");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{lightblue}갓 알락시오스{default}: 우린 서로 협력해야만 했다. 이렇게 싸우는게 아니라. {blue}바다가{default} 네 파멸을 가져오리라...");
+					NPCTalkMessage(npc.index, "We should be fighting together, not against each other, the {blue}sea{default} will be your doom...");
 				}
 			}
 		}
 		else
 		{
-			CPrintToChatAll("{lightblue}갓 알락시오스{default}: 오... 지금 내가..?");
-			CPrintToChatAll("{lightblue}갓 알락시오스가 미친듯이 전장을 뛰쳐나갑니다... 그를 추적조차 하지 못 했습니다.");
+			NPCTalkMessage(npc.index, "I'm.. I'm free..?");
+			CPrintToChatAll("{lightblue}God Alaxios instantly leaves the battlefield... you couldn't even trace him.");
 		}
 	}
 	else
@@ -1788,7 +1797,7 @@ void GodAlaxiosJumpSpecial(GodAlaxios npc, float gameTime)
 			Explode_Logic_Custom(damage, 0, npc.index, -1, ThrowPos,Range, 1.0, _, true, 20);
 			TE_Particle("asplode_hoodoo", ThrowPos, NULL_VECTOR, NULL_VECTOR, _, _, _, _, _, _, _, _, _, _, 0.0);
 			if(i_RaidGrantExtra[npc.index] == ALAXIOS_SEA_INFECTED)
-				SeaFounder_SpawnNethersea(ThrowPos);
+				SeaFounder_SpawnAbyss(ThrowPos);
 			
 			npc.SetVelocity({0.0,0.0,-1000.0});
 
@@ -2190,19 +2199,19 @@ void AlaxiosSayWords(int entity)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 넌 모르겠지, 나와 내 군대가 힘을 합치면 얼마나 위험한지를!");
+				NPCTalkMessage(entity, "You don't know the dangers you're getting yourself into fighting me and my army at the same time!");
 			}
 			case 1:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 나의 군대가 나를 도우리라!");
+				NPCTalkMessage(entity, "My army will always help me back up!");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 나와 내 군대는 하나가 되어 결코 패배하지 않을 것이다!");
+				NPCTalkMessage(entity, "Me and my army, as one, will never be defeated!");
 			}
 			case 3:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 아틀란티스를 위해 뭉치고! 하나가 되어 모두를 위한다!");
+				NPCTalkMessage(entity, "Together for Atlantis! As one and for all!");
 			}
 		}
 	}
@@ -2241,26 +2250,26 @@ void AlaxiosSayWordsAngry(int entity)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: {crimson}ISVOLI!!!! 우리의 왕국을 위하여!!!!");
+				NPCTalkMessage(entity, "{crimson}ISVOLI!!!! FOR THE PEOPLE!!!!!!!!!!");
 			}
 			case 1:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: {crimson}ISVOLI!!!! 잊혀진 자들을 위하여!!!!");
+				NPCTalkMessage(entity, "{crimson}ISVOLI!!!! FOR ALL THAT IS FORSAKEN!!!!!!!");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: {crimson}ISVOLI!!!! 미래를 위하여!!!!");
+				NPCTalkMessage(entity, "{crimson}ISVOLI!!!! FOR THE FUTURE!!!!!!!");
 			}
 			case 3:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: {crimson}ISVOLI!!!! 아틀란티스를 위하여!!!!");
+				NPCTalkMessage(entity, "{crimson}ISVOLI!!!! FOR ATLANTIS!!!!!!!!!");
 			}
 		}
 	}
 }
 
 
-bool AlaxiosForceTalk()
+bool AlaxiosForceTalk(int entity)
 {
 	if(i_TalkDelayCheck == 11)
 	{
@@ -2275,52 +2284,52 @@ bool AlaxiosForceTalk()
 			case 0:
 			{
 				ReviveAll(true);
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 이 부질 없는 싸움을 더는 용납할 수 없다!");
+				NPCTalkMessage(entity, "I will NOT tolerate this dispute any longer!");
 				i_TalkDelayCheck += 1;
 			}
 			case 1:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 반드시 이해해둬라. 적은 {blue}우리가 아니다.{default} 진짜 적은 {blue}바다의 그 놈들, 시본{default}이지.");
+				NPCTalkMessage(entity, "You have to understand, WE have a {blue}common enemy{default}, and that is {blue}Dweller{default}.");
 				i_TalkDelayCheck += 1;
 			}
 			case 2:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 우리가 이렇게 서로 싸우기만 할수록, 그 놈들이 점점 더 성장해나갈거다.");
+				NPCTalkMessage(entity, "More wars with each other means more opportunity for them to rise.");
 				i_TalkDelayCheck += 1;
 			}
 			case 3:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 비록 나와 내 군대는 불멸의 존재이더라도, 그들에게 감염 당하는 것을 버틸 수는 없다.");
+				NPCTalkMessage(entity, "And whilst I am immortal and my army unkillable, we are not incorruptible.");
 				i_TalkDelayCheck += 1;
 			}
 			case 4:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 하지만, 네 능력과 위력을 지금 여기서 느꼈다.");
+				NPCTalkMessage(entity, "However, I saw your prowess and your abilities.");
 				i_TalkDelayCheck += 1;
 			}
 			case 5:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 너라면 {blue}시본들의{default} 무기조차도 아무 이상 없이 다룰 수 있을 것이다. 감염조차 되지 않을테니...");
+				NPCTalkMessage(entity, "You can wield {blue}Dweller's{default} weapons without succumbing to their corruption, from what I can see at least...");
 				i_TalkDelayCheck += 1;
 			}
 			case 6:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 그래서 너희의 도움이 필요하다. 너희들이야말로 이 세계를 심해 속 공포로부터 정화할 수 있는 가장 큰 대항책이다.");
+				NPCTalkMessage(entity, "As such, we need your aid. YOU are our greatest opportunity to cleanse this world of watery horrors.");
 				i_TalkDelayCheck += 1;
 			}
 			case 7:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 물론, 우리는 최선을 다해 너를 지원할 것이다. 하나가 되어 다시 한 번 번영하게 되리라.");
+				NPCTalkMessage(entity, "Of course, we will support you as much as we can. As one, we will thrive once again.");
 				i_TalkDelayCheck += 1;
 			}
 			case 8:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 너희가 그 놈들 사이로 침투하면, 우리가 그 놈들의 주력 병력의 시선을 우리 쪽으로 끌어오겠다.");
+				NPCTalkMessage(entity, "When you invade them, we will make sure that their main forces are distracted by us.");
 				i_TalkDelayCheck += 1;
 			}
 			case 9:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 이 용병들에게 축복을!!! {crimson} 아틀란티스를 위해!!!!.");
+				NPCTalkMessage(entity, "ALL HAIL THE MERCENARIES!! {crimson}FOR ATLANTISSSSS!!!!!!!!!!!!!!.");
 				i_TalkDelayCheck = 11;
 				for (int client = 1; client <= MaxClients; client++)
 				{
@@ -2354,19 +2363,19 @@ public void Raidmode_Alaxios_Win(int entity)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 아틀란티스는 무너지지 않을 것이다!");
+				NPCTalkMessage(npc.index, "Atlantis will never fall!");
 			}
 			case 1:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 여전히 그 {blue}심해{default} 놈들을 신경 써야만 한다...");
+				NPCTalkMessage(npc.index, "I still have to take care of the {blue}deep sea{default}...");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 우리의 생계를 위협하면 이렇게 대가를 치르게 될 것이다!");
+				NPCTalkMessage(npc.index, "Threaten our livelyhood and you pay!");
 			}
 			case 3:
 			{
-				CPrintToChatAll("{lightblue}갓 알락시오스{default}: 이 사실을 {blue}센살{default} 에게 알려야겠군.");
+				NPCTalkMessage(npc.index, "I have to inform {blue}Sensal{default} about this.");
 			}
 		}
 	}

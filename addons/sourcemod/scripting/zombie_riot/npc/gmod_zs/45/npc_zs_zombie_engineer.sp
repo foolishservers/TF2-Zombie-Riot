@@ -63,7 +63,7 @@ void InfectedEngineer_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "Engineer");
 	data.IconCustom = false;
 	data.Flags = 0;
-	data.Category = Type_Common;
+	data.Category = Type_GmodZS;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 
@@ -132,7 +132,7 @@ methodmap InfectedEngineer < CClotBody
 	
 	public InfectedEngineer(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedEngineer npc = view_as<InfectedEngineer>(CClotBody(vecPos, vecAng, "models/player/engineer.mdl", "1.00", "12500", ally));
+		InfectedEngineer npc = view_as<InfectedEngineer>(CClotBody(vecPos, vecAng, "models/player/engineer.mdl", "1.00", "20000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -279,7 +279,7 @@ public void InfectedEngineer_ClotThink(int iNPC)
 							if(target > 0) 
 							{
 								if(!ShouldNpcDealBonusDamage(target))
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 10000.0, DMG_CLUB, -1, _, vecHit);
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 500.0, DMG_CLUB, -1, _, vecHit);
 								else
 									SDKHooks_TakeDamage(target, npc.index, npc.index, 10000.0, DMG_CLUB, -1, _, vecHit);
 								// Hit sound

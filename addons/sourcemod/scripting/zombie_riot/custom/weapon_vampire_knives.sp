@@ -138,6 +138,7 @@ public void Vamp_ActivateThrow(int client, int weapon, int pap, bool cleaver)
 		
 	if (Ability_Check_Cooldown(client, 2) < 0.0)
 	{
+		Rogue_OnAbilityUse(client, weapon);
 		Ability_Apply_Cooldown(client, 2, cleaver ? Vamp_ThrowCD_Cleaver[pap] : Vamp_ThrowCD_Normal[pap]);
 		
 		int BleedStacks = cleaver ? Vamp_BleedStacksOnThrow_Cleaver[pap] : Vamp_BleedStacksOnThrow_Normal[pap];
@@ -242,9 +243,9 @@ public void Vamp_ThrowKnives(int client, int weapon, int BleedStacks, float DMG_
 			DispatchKeyValue(prop, "targetname", "knifeModel"); 
 			DispatchKeyValue(prop, "spawnflags", "2"); 
 			DispatchKeyValue(prop, "model", modelName);
-			DispatchKeyValue(prop, "modelscale", "2.0"); //comically large cleaver :)
 			DispatchSpawn(prop);
 			MakeObjectIntangeable(prop);
+			SetEntPropFloat(prop, Prop_Send, "m_flModelScale", 2.0);//comically large cleaver :)
 			
 			TeleportEntity(prop, loc, Angles, NULL_VECTOR);
 			SetParent(projectile, prop);

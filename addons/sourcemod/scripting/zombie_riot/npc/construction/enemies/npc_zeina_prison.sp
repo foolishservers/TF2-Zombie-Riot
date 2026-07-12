@@ -40,7 +40,7 @@ void ZeinaPrisoner_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "");
 	data.IconCustom = false;
 	data.Flags = 0;
-	data.Category = Type_Expidonsa; 
+	data.Category = Type_Hidden;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
@@ -85,6 +85,12 @@ methodmap ZeinaPrisoner < CClotBody
 		
 		
 	}
+	property bool m_bClearFollower
+	{
+		public get()							{ return b_FUCKYOU[this.index]; }
+		public set(bool TempValueForProperty) 	{ b_FUCKYOU[this.index] = TempValueForProperty; }
+	}
+	
 	public ZeinaPrisoner(float vecPos[3], float vecAng[3], int ally)
 	{
 		ZeinaPrisoner npc = view_as<ZeinaPrisoner>(CClotBody(vecPos, vecAng, "models/player/medic.mdl", "1.0", "50000", ally));
@@ -118,15 +124,15 @@ methodmap ZeinaPrisoner < CClotBody
 		{
 			case 1:
 			{
-				CPrintToChatAll("{snow}제이나{default}: 도와주세요! 저 자가 절 여기에 가뒀어요!");
+				Zeina_NPCTalkMessage(npc.index, "He took me as a prisoner, help!");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{snow}제이나{default}: 이래서 엑스피돈사인들이란...");
+				Zeina_NPCTalkMessage(npc.index, "I never liked your side of expidonsa...");
 			}
 			case 3:
 			{
-				CPrintToChatAll("{snow}제이나{default}: 이런건 해결책이 될 수 없어요..! {black}질리우스{default}!");
+				Zeina_NPCTalkMessage(npc.index, "This is not the solution..! {black}Zilius{default}!");
 			}
 		}
 		
@@ -201,6 +207,10 @@ methodmap ZeinaPrisoner < CClotBody
 	}
 }
 
+void Zeina_NPCTalkMessage(int entity, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(entity, "snow", message);
+}
 
 public void ZeinaPrisoner_ClotThink(int iNPC)
 {
@@ -292,22 +302,29 @@ public void ZeinaPrisoner_NPCDeath(int entity)
 	{
 		case 1:
 		{
-			CPrintToChatAll("{snow}제이나{default}: 절 구해줘서 고마워요..!");
+			Zeina_NPCTalkMessage(npc.index, "You freed me..!");
 		}
 		case 2:
 		{
-			CPrintToChatAll("{snow}제이나{default}: 정말 고마워요! 도와드릴게요!");
+			Zeina_NPCTalkMessage(npc.index, "Thank you!! Ill help you!");
 		}
 		case 3:
 		{
-			CPrintToChatAll("{snow}제이나{default}: 이거나 먹어라, {black}질리우스{default}!");
+			Zeina_NPCTalkMessage(npc.index, "Face this {black}Zilius{default}!");
 		}
 	}
 	CPrintToChatAll("{black}Zilius{default}...");
 	float pos[3]; GetEntPropVector(entity, Prop_Data, "m_vecAbsOrigin", pos);
 	float ang[3]; GetEntPropVector(entity, Prop_Data, "m_angRotation", ang);
 
-	NPC_CreateByName("npc_zeinafree", -1, pos, ang, TFTeam_Red);
+	int spawn_index = NPC_CreateByName("npc_zeinafree", -1, pos, ang, TFTeam_Red);
+	if(spawn_index > MaxClients)
+	{
+		ZeinaFreeFollower npcSummon = view_as<ZeinaFreeFollower>(spawn_index);
+		npcSummon.m_iTargetAlly = entity;
+		NpcStats_CopyStats(entity, spawn_index);
+		npcSummon.m_bClearFollower = npc.m_bClearFollower;
+	}
 	
 	float WorldSpaceVec[3]; WorldSpaceCenter(npc.index, WorldSpaceVec);
 	ParticleEffectAt(WorldSpaceVec, "teleported_blue", 0.5);

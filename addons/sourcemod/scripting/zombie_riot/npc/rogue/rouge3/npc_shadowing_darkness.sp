@@ -118,7 +118,7 @@ public void Shadowing_Darkness_Boss_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "shadowingdarkness");
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
-	data.Category = Type_Curtain;
+	data.Category = Type_Raid;
 	data.Func = ClotSummon;
 	data.Precache = ClotPrecache;
 	NPC_Add(data);
@@ -429,7 +429,7 @@ methodmap Shadowing_Darkness_Boss < CClotBody
 			strcopy(music.Name, sizeof(music.Name), "Burnt Light");
 			strcopy(music.Artist, sizeof(music.Artist), "NeboScrub");
 			Music_SetRaidMusic(music);
-			CPrintToChatAll("{darkgray}그림자 응달{default}: 오, 너희구나. 드디어 이겨낸거네.");
+			NPCTalkMessage(npc.index, "Oh it's you lot, finally you actually prevailed.");
 		}
 		else
 		{
@@ -500,6 +500,7 @@ methodmap Shadowing_Darkness_Boss < CClotBody
 
 		RaidBossActive = EntIndexToEntRef(npc.index);
 		RaidAllowsBuildings = false;
+		RaidAllowLastman = true;
 		Citizen_MiniBossSpawn();
 		npc.m_flSwordParticleAttackCD = GetGameTime() + 5.0;
 		npc.m_flUpperSlashCD = GetGameTime() + 15.0;
@@ -524,6 +525,11 @@ methodmap Shadowing_Darkness_Boss < CClotBody
 	
 }
 
+static void NPCTalkMessage(int entity, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(entity, "darkgray", message, .customName = "Shadowing Darkness");
+}
+
 public void Shadowing_DarknessWinLine(int entity)
 {
 	i_RaidGrantExtra[entity] = RAIDITEM_INDEX_WIN_COND;
@@ -532,7 +538,7 @@ public void Shadowing_DarknessWinLine(int entity)
 		return;
 
 	AlreadySaidWin = true;
-	CPrintToChatAll("{darkgray}그림자 응달{default}: 걱정 마. 죽이진 않아.\n단지 널 이제 이곳이 얼마나 아름다운지... 이해시키도록 노력해볼게..");	
+	NPCTalkMessage(entity, "Oh don't worry, I won't kill you.\nI'll make sure that you understand what beauty this place is.");	
 }
 
 public void Shadowing_Darkness_Boss_ClotThink(int iNPC)
@@ -591,7 +597,32 @@ public void Shadowing_Darkness_Boss_ClotThink(int iNPC)
 		npc.StopPathing();
 		npc.m_flNextThinkTime = FAR_FUTURE;
 		i_RaidGrantExtra[npc.index] = 0;
-		CPrintToChatAll("{darkgray}그림자 응달{default}: 그러니까, 마침내 이곳의 고요함을 이해하게 된 거지? 아주 좋아! 싸움을 멈춰. 저항은 무의미하다고~");	
+
+		NPCTalkMessage(npc.index, "So you finally understand the calmness of this place, stop fighting, resisting is futile~");	
+		if(Rogue_HasNamedArtifact("Omega's Assistance"))
+		{
+			switch(GetRandomInt(0,2))
+			{
+				case 0:
+					CPrintToChatAll("{gold}Omega{default}: I'm getting too old to deal with this shit, Vhxis, we got this.");
+				case 1:
+					CPrintToChatAll("{gold}Omega{default}: Spare me the heroics. I just want to kick your ass.");
+				case 2:
+					CPrintToChatAll("{gold}Omega{default}: How about...I give you the finger, and you give us the throne?");
+			}
+		}
+		if(Rogue_HasNamedArtifact("Vhxis' Assistance"))
+		{
+			switch(GetRandomInt(0,2))
+			{
+				case 0:
+					CPrintToChatAll("{purple}Vhxis{default}: Bring it on.");
+				case 1:
+					CPrintToChatAll("{purple}Vhxis{default}: Stop fighting? Hah. You're in for a treat.");
+				case 2:
+					CPrintToChatAll("{purple}Vhxis{default}: You're NOTHING before the power of MAZEAT!");
+			}
+		}
 	}
 
 	if(npc.m_flNextThinkTime > gameTime)
@@ -616,7 +647,7 @@ public void Shadowing_Darkness_Boss_ClotThink(int iNPC)
 		return;
 	}
 
-	if(Shadowing_Darkness_UpperDash(npc, gameTime))
+	if(Shadowing_Darkness_UpperDash(npc, gameTime, 35.0))
 	{
 		return;
 	}
@@ -708,7 +739,8 @@ public Action Shadowing_Darkness_Boss_OnTakeDamage(int victim, int &attacker, in
 			SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", 1000000000);
 			f_AttackSpeedNpcIncrease[spawn_index]	*= 2.0;
 			fl_Extra_Damage[spawn_index]	*= 0.1;
-
+			b_thisNpcIsABoss[spawn_index] = true;
+			b_DoNotUnStuck[spawn_index] = true;	
 		}
 		if(npc.m_iChanged_WalkCycle != 99) 	
 		{
@@ -719,9 +751,9 @@ public Action Shadowing_Darkness_Boss_OnTakeDamage(int victim, int &attacker, in
 			npc.StopPathing();
 		}
 		i_RaidGrantExtra[npc.index] = 2;
-		CPrintToChatAll("{purple}안돼!!!!!!");
-		CPrintToChatAll("{darkgray}그림자 응달{default}: 당장 나한테서 저걸 치워줘-");
-		CPrintToChatAll("{black}이잔 :{default} 이게 뭔-");
+		CPrintToChatAll("{purple}NO!!!!!!");
+		NPCTalkMessage(npc.index, "Get this thing off me-.");
+		CPrintToChatAll("{black}Izan{default}: What the-");
 		if(Rogue_HasNamedArtifact("Vhxis' Assistance"))
 			CPrintToChatAll("{purple}비히시스{default}: 서둘러라! 저 미친 괴물이 날뛰게 두어선 안 돼!");
 		if(Rogue_HasNamedArtifact("Omega's Assistance"))
@@ -772,11 +804,11 @@ public Action Shadowing_Darkness_Boss_OnTakeDamage(int victim, int &attacker, in
 		switch(GetRandomInt(1,3))
 		{
 			case 1:
-				CPrintToChatAll("{darkgray}그림자 응달{default}: 움브랄이여, 날 지원하라!");
+				NPCTalkMessage(npc.index, "Umbrals, Assist me!");
 			case 2:
-				CPrintToChatAll("{darkgray}그림자 응달{default}: 좀 지원이 필요하겠는데...");
+				NPCTalkMessage(npc.index, "Need some resis against them...");
 			case 3:
-				CPrintToChatAll("{darkgray}그림자 응달{default}: 움브랄의 방벽이 필요해.");
+				NPCTalkMessage(npc.index, "Umbral armor should prevent this.");
 		}
 	}
 	if(!npc.Anger)
@@ -795,11 +827,12 @@ public Action Shadowing_Darkness_Boss_OnTakeDamage(int victim, int &attacker, in
 				SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", (ReturnEntityMaxHealth(npc.index) / 4));
 				ApplyStatusEffect(spawn_index, spawn_index, "Extreme Anxiety", 5.0);
 				npc.m_iTargetAlly = spawn_index;
+				b_thisNpcIsABoss[spawn_index] = true;
 			}
 			if(npc.m_flSpeed != 0)
 				npc.m_flSpeed = SHADOW_DEFAULT_SPEED * 0.5;
-			CPrintToChatAll("{purple}넌 오늘 끝을 보지 못 하리라...");
-			CPrintToChatAll("{darkgray}그림자 응달{default}: 그래. 역시나, 왕좌에 앉았을 때 어쩐지 혼자 있는것 같은 기분이 안 들더라, 미친 기생충 같으니...");
+			CPrintToChatAll("{purple}YOU WILL NOT SEE THE END OF THIS DAY...");
+			NPCTalkMessage(npc.index, "So I was right, I wasn't alone once I sat on that throne, parasite...");
 			if(Rogue_HasNamedArtifact("Vhxis' Assistance"))
 				CPrintToChatAll("{purple}비히시스{default}: 저 미친 해충... 그 날로 영원히 잠 든줄 알았는데!");
 			if(Rogue_HasNamedArtifact("Omega's Assistance"))
@@ -1057,15 +1090,6 @@ public void Shadowing_Darkness_ReflectProjectiles(int entity, int target)
 	{
 		owner = 0;
 	}
-	if(npc.m_iState >= MAX_BOUNCES_SHADOWING_DARKNESS)
-	{
-		int particle = EntRefToEntIndex(i_WandParticle[entity]);
-		if(IsValidEntity(particle))
-		{
-			RemoveEntity(particle);
-		}
-		return;
-	}
 	if(IsValidEnemy(entity, target, true, true))
 	{
 		ShadowingDarkness_Projectile_StartTouch(entity, target);	
@@ -1076,9 +1100,26 @@ public void Shadowing_Darkness_ReflectProjectiles(int entity, int target)
 		if(target != 0)
 			return;
 	}
+	if(npc.m_flNextDelayTime > GetGameTime(entity))
+	{
+		return;
+	}
+	//do not bounce instantly
+	npc.m_flNextDelayTime = GetGameTime(entity) + 0.1;
 	npc.m_iState++;
+	if(npc.m_iState >= MAX_BOUNCES_SHADOWING_DARKNESS)
+	{
+		int particle = EntRefToEntIndex(i_WandParticle[entity]);
+		if(IsValidEntity(particle))
+		{
+			RemoveEntity(particle);
+		}
+		RemoveEntity(entity);
+		return;
+	}
+
 	EntityKilled_HitDetectionCooldown(entity, ShadowingSlicer);
-	float pos[3];
+	float pos[3];	
 	GetEntPropVector(entity, Prop_Send, "m_vecOrigin", pos);
 	TE_Particle("mvm_soldier_shockwave", pos, NULL_VECTOR, NULL_VECTOR, _, _, _, _, _, _, _, _, _, _, 0.0);
 	EmitSoundToAll(g_BounceEnergOrb[GetRandomInt(0, sizeof(g_BounceEnergOrb) - 1)], _, SNDCHAN_AUTO, 80, _,1.0, 150,_,pos);
@@ -1090,7 +1131,13 @@ public void Shadowing_Darkness_ReflectProjectiles(int entity, int target)
 		float ProjectileVel[3];
 		GetEntPropVector(entity, Prop_Data, "m_vecAbsVelocity", ProjectileVel);
 		NegateVector(ProjectileVel);
-		TeleportEntity(entity, NULL_VECTOR, NULL_VECTOR, ProjectileVel);
+		Custom_SetAbsVelocity(entity, {0.0,0.0,0.0});	
+		DataPack pack = new DataPack();
+		pack.WriteCell(EntIndexToEntRef(entity));
+		pack.WriteFloat(ProjectileVel[0]);
+		pack.WriteFloat(ProjectileVel[1]);
+		pack.WriteFloat(ProjectileVel[2]);
+		RequestFrames(SetVelocityAtomizerProjectile, 1, pack);
 		return;
 	}
 
@@ -1101,7 +1148,14 @@ public void Shadowing_Darkness_ReflectProjectiles(int entity, int target)
 	WorldSpaceCenter(entity, vecSelf);
 	TE_SetupBeamPoints(vecSelf, EndPos, Shared_BEAM_Laser, 0, 0, 0, 1.5, 3.0, 3.0, 0, 0.0, {255,65,65,125}, 3);
 	TE_SendToAll(0.0);
-	TeleportEntity(entity, NULL_VECTOR, VecAngles, VecSpeed);
+
+	DataPack pack = new DataPack();
+	pack.WriteCell(EntIndexToEntRef(entity));
+	pack.WriteFloat(VecSpeed[0]);
+	pack.WriteFloat(VecSpeed[1]);
+	pack.WriteFloat(VecSpeed[2]);
+	RequestFrames(SetVelocityAtomizerProjectile, 1, pack);
+	TeleportEntity(entity, NULL_VECTOR, VecAngles, NULL_VECTOR);
 	//valid target found, bounce to said target
 }
 
@@ -1222,6 +1276,8 @@ bool Shadowing_Darkness_UmbralGateSummoner(Shadowing_Darkness_Boss npc, float ga
 					NpcAddedToZombiesLeftCurrently(spawn_index, true);
 					SetEntProp(spawn_index, Prop_Data, "m_iHealth", (ReturnEntityMaxHealth(npc.index) / 10));
 					SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", (ReturnEntityMaxHealth(npc.index) / 10));
+					b_thisNpcIsABoss[spawn_index] = true;
+					b_thisNpcHasAnOutline[spawn_index] = true;
 
 				}
 				
@@ -1267,11 +1323,11 @@ bool Shadowing_Darkness_UmbralGateSummoner(Shadowing_Darkness_Boss npc, float ga
 }
 
 
-bool Shadowing_Darkness_UpperDash(Shadowing_Darkness_Boss npc, float gameTime)
+bool Shadowing_Darkness_UpperDash(Shadowing_Darkness_Boss npc, float gameTime, float CDGive)
 {
 	if(npc.m_flUpperSlashCD < gameTime && npc.m_iState == 0)
 	{
-		npc.m_flUpperSlashCD = gameTime + 35.0;
+		npc.m_flUpperSlashCD = gameTime + CDGive;
 		npc.m_iState = 3;	
 		npc.m_flDoingAnimation = gameTime + 2.3;
 		if(npc.m_iChanged_WalkCycle != 1) 	
@@ -1785,7 +1841,7 @@ bool Shadowing_Darkness_TalkStart(Shadowing_Darkness_Boss npc)
 			if(TimeLeft < 50.0)
 			{
 				i_khamlCutscene = 14;
-				CPrintToChatAll("{darkgray}그림자 응달{default}: 오, 드디어 여기까지 도착한거구나...");
+				NPCTalkMessage(npc.index, "Oh look how they have come to me...");
 			}
 		}
 		case 14:
@@ -1801,7 +1857,7 @@ bool Shadowing_Darkness_TalkStart(Shadowing_Darkness_Boss npc)
 				strcopy(music.Artist, sizeof(music.Artist), "NeboScrub");
 				Music_SetRaidMusic(music, false);
 				i_khamlCutscene = 13;
-				CPrintToChatAll("{darkgray}그림자 응달{default}: 네가 열 받게 만든 움브랄이 셀 수도 없지?");
+				NPCTalkMessage(npc.index, "How many umbrals did you piss off?");
 			}
 		}
 		case 13:
@@ -1815,14 +1871,14 @@ bool Shadowing_Darkness_TalkStart(Shadowing_Darkness_Boss npc)
 						if(Rogue_HasNamedArtifact("Omega's Assistance"))
 							CPrintToChatAll("{gold}오메가{default}: 네가 알 바 아니잖아.");
 						else
-							CPrintToChatAll("{darkgray}그림자 응달{default}: 공허와 맞서고 싶다면, 움브랄과 하나가 되어야만 하니까...");
+							NPCTalkMessage(npc.index, "Better hope they are on your side, as for the Void...");
 					}
 					case 1:
 					{
 						if(Rogue_HasNamedArtifact("Vhxis' Assistance"))
 							CPrintToChatAll("{purple}비히시스{default}: %i.", GetRandomInt(0, 100));
 						else
-							CPrintToChatAll("{darkgray}그림자 응달{default}: 공허와 맞서고 싶다면, 움브랄과 하나가 되어야만 하니까...");
+							NPCTalkMessage(npc.index, "Better hope they are on your side, as for the Void...");
 					}
 				}
 				i_khamlCutscene = 12;
@@ -1833,9 +1889,9 @@ bool Shadowing_Darkness_TalkStart(Shadowing_Darkness_Boss npc)
 			if(TimeLeft < 40.0)
 			{
 				if(Rogue_HasNamedArtifact("Omega's Assistance"))
-					CPrintToChatAll("{darkgray}그림자 응달{default}: 그건 수사적인 질문이잖아... 어쨌건, 나를 죽인다고 해서 공허가 사라지는 건 아니라고.");
+					NPCTalkMessage(npc.index, "That was a rhetorical question...regardless, killing me won't stop the Void.");
 				else
-					CPrintToChatAll("{darkgray}그림자 응달{default}: 정말로 나를 죽여서 공허가 멈출 거라고 생각한다면, 다시 한 번 잘 생각해봐.");
+					NPCTalkMessage(npc.index, "If you really think killing me will stop the Void, be my guest.");
 				i_khamlCutscene = 11;
 			}
 		}
@@ -1845,13 +1901,13 @@ bool Shadowing_Darkness_TalkStart(Shadowing_Darkness_Boss npc)
 			{
 				if(Rogue_HasNamedArtifact("Omega's Assistance"))
 				{
-					CPrintToChatAll("{white}밥{allies} & {gold}오메가{default}: 배신자.");
-					CPrintToChatAll("{darkgray}그림자 응달{default}: 내가? 배신자라고? 난 아무것도 안 했는데.");
+					CPrintToChatAll("{white}Bob{allies} & {gold}Omega{default}: Traitors.");
+					NPCTalkMessage(npc.index, "Me, a traitor? I didn't do anything.");
 				}
 				else
 				{
-					CPrintToChatAll("{white}밥{default}: 너와 배풍등은 내가 지금까지 보아온 것들 중 가장 역겨운 배신자다.");
-					CPrintToChatAll("{darkgray}그림자 응달{default}: 내가? 배신자라고? 난 아무것도 안 했는데.");
+					CPrintToChatAll("{white}Bob{default}: You and whiteflower are the most nasty traitors I have seen.");
+					NPCTalkMessage(npc.index, "Me, a traitor? I didn't do anything.");
 				}
 				i_khamlCutscene = 10;
 			}
@@ -1873,9 +1929,9 @@ bool Shadowing_Darkness_TalkStart(Shadowing_Darkness_Boss npc)
 			{
 				i_khamlCutscene = 8;
 				if(Rogue_HasNamedArtifact("Bob's Wrath"))
-					CPrintToChatAll("{darkgray}그림자 응달{default}: 굴른이.. 죽었어..? ........");
+					NPCTalkMessage(npc.index, "Guln is dead..? ........");
 				else
-					CPrintToChatAll("{darkgray}그림자 응달{default}: 굴른에게 정확히 무슨 일이 일어났는지는 모르겠어. 나도 직접 찾아보려고 노력해 봤단 말야.");
+					NPCTalkMessage(npc.index, "I don't know exactly what happened to Guln, I have tried to find him myself.");
 			}
 		}
 		case 8:
@@ -1883,7 +1939,7 @@ bool Shadowing_Darkness_TalkStart(Shadowing_Darkness_Boss npc)
 			if(TimeLeft < 25.0)
 			{
 				i_khamlCutscene = 7;
-				CPrintToChatAll("{darkgray}그림자 응달{default}: 배풍등은 나쁜 사람이 아니라고. 그렇지만... 공허를 멈추고 싶다면, 움브랄의 힘을 빌려서 그들에게 맡겨야만 해.");
+				NPCTalkMessage(npc.index, "Whiteflower was not a bad person, however... If you want to stop the Void, you'll have to get ahold of the umbrals and make them do their job.");
 			}
 		}
 		case 7:
@@ -1893,7 +1949,7 @@ bool Shadowing_Darkness_TalkStart(Shadowing_Darkness_Boss npc)
 				if(Rogue_HasNamedArtifact("Omega's Assistance"))
 					CPrintToChatAll("{gold}오메가{default}: 배풍등이, 뭐? 나쁜 놈이 아냐? 뭘 같잖은 소릴 하고 자빠져? 넌 죽어야만 해.");
 				else
-					CPrintToChatAll("{darkgray}그림자 응달{default}: 비록 제한적이지만, 왕좌가 하는 일이 바로 그거야. 그리고 내가 그 역할을 맡고 있고. 그렇지만...");
+					NPCTalkMessage(npc.index, "This is what the throne does, to a limited degree, and I'm atop of it, but...");
 				i_khamlCutscene = 6;
 			}
 		}
@@ -1907,7 +1963,7 @@ bool Shadowing_Darkness_TalkStart(Shadowing_Darkness_Boss npc)
 					CPrintToChatAll("{purple}비히시스{default}: 저 왕좌에 저따위 놈보다 더 유능한 녀석이 앉으면 상황이 더 나아질거다.");
 				}
 				else
-					CPrintToChatAll("{darkgray}그림자 응달{default}: 내가 그 왕좌에 앉은 이후로 내가 좀 다른 일을 하고 싶어졌거든.");
+					NPCTalkMessage(npc.index, "Ever since I sat upon it, I wanted to do something else.");
 				i_khamlCutscene = 5;
 			}
 		}
@@ -1916,9 +1972,9 @@ bool Shadowing_Darkness_TalkStart(Shadowing_Darkness_Boss npc)
 			if(TimeLeft < 13.0)
 			{
 				if(Rogue_HasNamedArtifact("Vhxis' Assistance"))
-					CPrintToChatAll("{darkgray}그림자 응달{default}: 아, 좀! 이쯤 되면 알아채봐! 난 그 누구에게도 왕위를 넘겨줄 생각이 없어.");
+					NPCTalkMessage(npc.index, "Oh please, we all know I won't let anyone be the new heir to the throne.");
 				else
-					CPrintToChatAll("{darkgray}그림자 응달{default}: 이잔... 네가 항상 밥을 따라하고 싶어하던거, 기억 나긴 해? 진짜 웃기네.");
+					NPCTalkMessage(npc.index, "Izan... I remember when you wanted to be a fake Bob, that was hilarious.");
 				i_khamlCutscene = 4;
 			}
 		}
@@ -1927,7 +1983,7 @@ bool Shadowing_Darkness_TalkStart(Shadowing_Darkness_Boss npc)
 			if(TimeLeft < 8.0)
 			{
 				i_khamlCutscene = 3;
-				CPrintToChatAll("{darkgray}그림자 응달{default}: 그럼 내가 형용할 수 없는 자가 되어볼까? 그것보다 더 합리적인 존재로 말이야.");
+				NPCTalkMessage(npc.index, "Then I'll be what Unspeakable was, but reasonable, don't you think?");
 			}
 		}
 		case 3:
@@ -1935,7 +1991,7 @@ bool Shadowing_Darkness_TalkStart(Shadowing_Darkness_Boss npc)
 			if(TimeLeft < 4.0)
 			{
 				i_khamlCutscene = 2;
-				CPrintToChatAll("{darkgray}그림자 응달{default}: 어, 인상 쓰지마. 장난이라구. 형용할 수 없는 자 그 놈은 이미 죽었잖아. 다행인거지.");
+				NPCTalkMessage(npc.index, "Who am I kidding, Unspeakable is dead, luckily.");
 			}
 		}
 		case 2:
@@ -1954,7 +2010,7 @@ bool Shadowing_Darkness_TalkStart(Shadowing_Darkness_Boss npc)
 			if(TimeLeft < 0.0)
 			{
 				i_khamlCutscene = 0;
-				CPrintToChatAll("{darkgray}그림자 응달{default}: 그리고 이제 그 미래가 마침내 실현될 수 있도록... 하나 되어, 함께, 그리고 공동체가 되는거야~");
+				NPCTalkMessage(npc.index, "Let's make sure that the vision will finally come true, all under one, together, and as a collective~");
 				RaidModeTime = GetGameTime() + (350.0);
 				npc.m_flSwordParticleAttackCD = GetGameTime() + 5.0;
 				npc.m_flUpperSlashCD = GetGameTime() + 15.0;

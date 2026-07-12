@@ -134,7 +134,7 @@ methodmap InfectedMessenger < CClotBody
 	
 	public InfectedMessenger(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedMessenger npc = view_as<InfectedMessenger>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "70000", ally));
+		InfectedMessenger npc = view_as<InfectedMessenger>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "100000", ally));
 		
 		SetVariantInt(2);
 		AcceptEntityInput(npc.index, "SetBodyGroup");
@@ -166,7 +166,6 @@ methodmap InfectedMessenger < CClotBody
 		g_infected_messenger_died=false;
 		g_infected_messenger_die=0.0;
 		AddNpcToAliveList(npc.index, 1);
-		npc.m_bStaticNPC = true;
 		b_ThisNpcIsImmuneToNuke[npc.index] = true;
 		b_ThisEntityIgnoredByOtherNpcsAggro[npc.index] = true;
 		
@@ -394,7 +393,7 @@ public Action InfectedMessenger_OnTakeDamage(int victim, int &attacker, int &inf
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
 	}
-	if((ReturnEntityMaxHealth(npc.index)/4) >= GetEntProp(npc.index, Prop_Data, "m_iHealth") && !npc.Anger) 
+	if((ReturnEntityMaxHealth(npc.index)/2) >= GetEntProp(npc.index, Prop_Data, "m_iHealth") && !npc.Anger) 
 	{
 		npc.Anger = true;
 		if(!npc.m_bAlliesSummoned)
@@ -403,7 +402,7 @@ public Action InfectedMessenger_OnTakeDamage(int victim, int &attacker, int &inf
 			Spawn_Reinforcements(npc);
 			npc.PlaySummonSound();
 		}
-		CPrintToChatAll("{green}감염된 전령병{default}: 젠장 기습이다! 지금 당장 여기에 지원이 필요하다!");
+		CPrintToChatAll("{green}감염된 전령병{default}: 젠장! 이곳에 포격 지원이 필요하다 지금 당장!!");
 	}
 	if(RoundToCeil(damage) >= GetEntProp(npc.index, Prop_Data, "m_iHealth"))
 	{
@@ -433,7 +432,7 @@ static void Spawn_Reinforcements(InfectedMessenger npc)
 	heck= maxhealth;
 	maxhealth= heck;
 
-	spawn_index = NPC_CreateByName("npc_zs_cleaner", npc.index, pos, ang, GetTeam(npc.index));
+	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
 	NpcAddedToZombiesLeftCurrently(spawn_index, true);
 	if(spawn_index > MaxClients)
 	{
@@ -441,7 +440,7 @@ static void Spawn_Reinforcements(InfectedMessenger npc)
 		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
 		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
 	}
-	spawn_index = NPC_CreateByName("npc_zs_sniper", npc.index, pos, ang, GetTeam(npc.index));
+	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
 	NpcAddedToZombiesLeftCurrently(spawn_index, true);
 	if(spawn_index > MaxClients)
 	{
@@ -449,7 +448,47 @@ static void Spawn_Reinforcements(InfectedMessenger npc)
 		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
 		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
 	}
-	spawn_index = NPC_CreateByName("npc_zs_ihbc", npc.index, pos, ang, GetTeam(npc.index));
+	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
+	NpcAddedToZombiesLeftCurrently(spawn_index, true);
+	if(spawn_index > MaxClients)
+	{
+		NpcStats_CopyStats(npc.index, spawn_index);
+		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
+		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
+	}
+	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
+	NpcAddedToZombiesLeftCurrently(spawn_index, true);
+	if(spawn_index > MaxClients)
+	{
+		NpcStats_CopyStats(npc.index, spawn_index);
+		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
+		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
+	}
+	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
+	NpcAddedToZombiesLeftCurrently(spawn_index, true);
+	if(spawn_index > MaxClients)
+	{
+		NpcStats_CopyStats(npc.index, spawn_index);
+		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
+		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
+	}
+	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
+	NpcAddedToZombiesLeftCurrently(spawn_index, true);
+	if(spawn_index > MaxClients)
+	{
+		NpcStats_CopyStats(npc.index, spawn_index);
+		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
+		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
+	}
+	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
+	NpcAddedToZombiesLeftCurrently(spawn_index, true);
+	if(spawn_index > MaxClients)
+	{
+		NpcStats_CopyStats(npc.index, spawn_index);
+		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
+		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
+	}
+	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
 	NpcAddedToZombiesLeftCurrently(spawn_index, true);
 	if(spawn_index > MaxClients)
 	{

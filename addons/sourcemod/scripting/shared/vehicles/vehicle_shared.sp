@@ -41,6 +41,7 @@ methodmap VehicleGeneric < CClotBody
 
 #if defined ZR
 		Armor_Charge[obj] = 10000;
+		view_as<VehicleGeneric>(obj).m_iMaxArmor = 10000;
 #endif
 
 		SDKHook(obj, SDKHook_Think, VehicleThink);
@@ -84,6 +85,17 @@ methodmap VehicleGeneric < CClotBody
 			SetEntProp(this.index, Prop_Data, "m_iGunIndex", value);
 		}
 	}
+	property int m_iMaxArmor
+	{
+		public get()
+		{
+			return GetEntProp(this.index, Prop_Data, "m_iMaxArmor");
+		}
+		public set(int value)
+		{
+			SetEntProp(this.index, Prop_Data, "m_iMaxArmor", value);
+		}
+	}
 }
 
 static bool DoneSoundScript;
@@ -96,6 +108,7 @@ void Vehicle_PluginStart()
 	.DefineEntityField("m_hPlayer2")
 	.DefineVectorField("m_vecDriverOffset")
 	.DefineIntField("m_iGunIndex")
+	.DefineIntField("m_iMaxArmor")
 	.DefineEntityField("m_hSeatEntity", VEHICLE_MAX_SEATS)
 	.DefineVectorField("m_vecSeatPos", VEHICLE_MAX_SEATS)
 	.DefineIntField("m_iSeatGunIndex", VEHICLE_MAX_SEATS)
@@ -675,6 +688,15 @@ static void ExitVehicle(int vehicle, int target, bool killed, bool teleport)
 		ang[2] = 0.0;
 		TeleportEntity(target, pos, ang);
 	}
+	GetEntPropVector(target, Prop_Data, "m_vecAbsOrigin", pos);
+	pos[2] += 25.0;
+	
+	DataPack pack = new DataPack();
+	pack.WriteFloat(pos[0]);
+	pack.WriteFloat(pos[1]);
+	pack.WriteFloat(pos[2]);
+	pack.WriteCell(EntIndexToEntRef(target));
+	RequestFrame(TeleportDelayFrameDo, pack);
 
 	if(wasDriver)	// CPropVehicleDriveable::ExitVehicle
 	{
@@ -887,7 +909,7 @@ static void ZRRammingThink(VehicleGeneric obj)
 			if(scale < 1.0 || CvarInfiniteCash.BoolValue)
 				scale = 1.0;
 			
-			damage *= scale * 0.0035;
+			damage *= scale * 0.0015;
 		}
 		else
 		{
@@ -981,6 +1003,35 @@ static void AdjustClientWeapons(int client)
 	}
 
 	RestoreClientWeapons(client);
+	Modifier_FixColour(client);
+	ViewChange_PlayerModel(client);
+}
+
+public void Modifier_FixColour(int client)
+{
+	if(client > MaxClients)
+		return;
+	int entity, i;
+	while(TF2U_GetWearable(client, entity, i))
+	{
+		SetTeam(entity, 3);
+		SetEntProp(entity, Prop_Send, "m_nSkin", 0);
+	}	
+	RequestFrame(OvverideTeamcolourFix, GetClientUserId(client));
+}
+
+static void OvverideTeamcolourFix(int userid)
+{
+	int client = GetClientOfUserId(userid);
+	if(!client)
+		return;
+		
+	int entity, i;
+	while(TF2U_GetWearable(client, entity, i))
+	{
+		SetTeam(entity, 2);
+		SetEntProp(entity, Prop_Send, "m_nSkin", 0);
+	}	
 }
 
 static void RestoreClientWeapons(int client)
@@ -997,3 +1048,17 @@ static void RestoreClientWeapons(int client)
 	}
 }
 #endif
+void TeleportDelayFrameDo(DataPack pack)
+{
+	pack.Reset();
+	float vec_pos[3];
+	vec_pos[0] = pack.ReadFloat();
+	vec_pos[1] = pack.ReadFloat();
+	vec_pos[2] = pack.ReadFloat();
+	int client = EntRefToEntIndex(pack.ReadCell());
+	delete pack;
+	if(!IsEntityAlive(client))
+		return;
+		
+	Player_Teleport_Safe(client, vec_pos, true, true);
+}

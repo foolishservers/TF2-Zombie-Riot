@@ -86,7 +86,7 @@ methodmap BreadMonster < CClotBody
 	
 	public BreadMonster(float vecPos[3], float vecAng[3], int ally)
 	{
-		BreadMonster npc = view_as<BreadMonster>(CClotBody(vecPos, vecAng, "models/player/heavy.mdl", "1.0", "30000", ally));
+		BreadMonster npc = view_as<BreadMonster>(CClotBody(vecPos, vecAng, "models/player/heavy.mdl", "1.0", "50000", ally));
 		
 		i_NpcWeight[npc.index] = 2;
 		npc.SetActivity("ACT_MP_RUN_MELEE");
@@ -242,7 +242,7 @@ void BreadMonster_OnTakeDamage(int victim, int &attacker, int &inflictor, float 
 				npc.flXenoInfectedSpecialHurtTime = GetGameTime(npc.index) + 2.0;
 				SetEntityRenderMode(npc.index, RENDER_NORMAL);
 				SetEntityRenderColor(npc.index, 255, 165, 0, 255);
-				npc.m_flSpeed = 520.0;
+				npc.m_flSpeed = 550.0;
 				CreateTimer(2.0, BreadMonster_Revert_Zombie_Resistance, EntIndexToEntRef(victim), TIMER_FLAG_NO_MAPCHANGE);
 				CreateTimer(10.0, BreadMonster_Revert_Zombie_Resistance_Enable, EntIndexToEntRef(victim), TIMER_FLAG_NO_MAPCHANGE);
 			}
@@ -265,7 +265,7 @@ public Action BreadMonster_Revert_Zombie_Resistance(Handle timer, int ref)
 	if(IsValidEntity(zombie))
 	{
 		BreadMonster npc = view_as<BreadMonster>(zombie);
-		npc.m_flSpeed = 260.0;
+		npc.m_flSpeed = 299.0;
 		SetEntityRenderMode(zombie, RENDER_NORMAL);
 		SetEntityRenderColor(zombie, 255, 255, 255, 255);
 	}

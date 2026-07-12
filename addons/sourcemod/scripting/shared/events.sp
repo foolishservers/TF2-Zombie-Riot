@@ -13,6 +13,7 @@ void Events_PluginStart()
 	HookEvent("player_connect_client", OnPlayerConnect, EventHookMode_Pre);
 	HookEvent("player_disconnect", OnPlayerConnect, EventHookMode_Pre);
 	HookEvent("deploy_buff_banner", OnBannerDeploy, EventHookMode_Pre);
+	HookEvent("player_healed", PlayerHealEvent, EventHookMode_Pre);
 	HookEvent("teams_changed", EventHook_TeamsChanged, EventHookMode_PostNoCopy);
 #if defined ZR
 	HookEvent("teamplay_round_win", OnRoundEnd, EventHookMode_Pre);
@@ -78,9 +79,17 @@ float BonePosition[3], float BoneAngles[3], int ProjectileType, bool IsCrit)
 public void OnRoundStart(Event event, const char[] name, bool dontBroadcast)
 {
 #if defined ZR
+
+	if(!InZRMap())
+		DeleteAllBadEntities_NonZrMaps();
+	
+	if (!CanMapSpawnPickups())
+		DeleteAllPickups();
+	
 	DeleteShadowsOffZombieRiot();
 	EventRoundStartMusicFilter();
 	b_GameOnGoing = true;
+	WeaponUpdateDo();
 	
 	
 	LastMann = false;
@@ -119,20 +128,21 @@ public void OnRoundStart(Event event, const char[] name, bool dontBroadcast)
 	Zealot_RoundStart();
 	Drops_ResetChances();
 	NPCStats_HandlePaintedWearables();
+	Gunsaw_RoundStart();
+	IndexFather_ResetAllStats();
 
 	for(int client=1; client<=MaxClients; client++)
 	{
 		Armor_Charge[client] = 0; //reset armor to 0
 	}
 	ReviveAll();
+	for(int client=1; client<=MaxClients; client++)
+	{
+		if(IsValidClient(client))
+			Loadout_DatabaseLoadFavorite(client);
+	}
 	if(RoundStartTime > GetGameTime())
 	{
-		//This asumes it already picked a map, get loadouts while not redoing map logic!
-		for(int client=1; client<=MaxClients; client++)
-		{
-			if(IsValidClient(client))
-				Loadout_DatabaseLoadFavorite(client);
-		}
 		return;
 	}
 	
@@ -164,6 +174,8 @@ public void OnRoundStart(Event event, const char[] name, bool dontBroadcast)
 public void OnSetupFinished(Event event, const char[] name, bool dontBroadcast)
 {
 	Waves_ApplyCooldown(0.0);
+	if(!Waves_Started())
+		TimeWhenStartedWaveset = GetTime();
 	if(CvarAutoSelectDiff.BoolValue && !Waves_Started())
 	{
 		//Do this only once!
@@ -204,6 +216,18 @@ public Action OnPlayerTeam(Event event, const char[] name, bool dontBroadcast)
 	return Plugin_Continue;
 }
 
+public Action PlayerHealEvent(Event event, const char[] name, bool dontBroadcast)
+{
+	int patient = GetClientOfUserId(event.GetInt("patient"));
+	int healer = GetClientOfUserId(event.GetInt("healer"));
+	if(patient == healer)
+	{
+		//prevents medic self heal?
+		SetEntProp(patient, Prop_Send, "m_iHealth", GetEntProp(patient, Prop_Send, "m_iHealth") - event.GetInt("amount"));
+		return Plugin_Handled;
+	}
+	return Plugin_Continue;
+}
 public Action OnBannerDeploy(Event event, const char[] name, bool dontBroadcast)
 {
 	return Plugin_Handled;
@@ -256,7 +280,6 @@ public Action OnRoundEnd(Event event, const char[] name, bool dontBroadcast)
 	Waves_RoundEnd();
 	Escape_RoundEnd();
 	Rogue_RoundEnd();
-	Construction_RoundEnd();
 	BetWar_RoundEnd();
 	CurrentGame = 0;
 	RoundStartTime = 0.0;
@@ -352,7 +375,15 @@ public void OnPlayerResupply(Event event, const char[] name, bool dontBroadcast)
 #endif
 	   		b_ThisEntityIgnored[client] = true;
 			
-	   		int weapon_index = Store_GiveSpecificItem(client, "Teutonic Longsword");
+	   		int weapon_index;
+			if(view_as<bool>(Store_HasNamedItem(client, "Shadow's Letter")))
+			{
+				weapon_index = Store_GiveSpecificItem(client, "Teutonic Longsword Shadow");
+			}
+			else
+			{
+				weapon_index = Store_GiveSpecificItem(client, "Teutonic Longsword");
+			}
 			SetVariantInt(0);
 			AcceptEntityInput(client, "SetBodyGroup");
 			if(!WasHereSinceStartOfWave(client))
@@ -386,7 +417,6 @@ public void OnPlayerResupply(Event event, const char[] name, bool dontBroadcast)
 	   		TFClassType ClassForStats = WeaponClass[client];
 	   		
 	   		Attributes_Set(weapon_index, 107, RemoveExtraSpeed(ClassForStats, 330.0));
-	   		Attributes_Set(weapon_index, 476, 0.0);
 	   		SetEntityCollisionGroup(client, 1);
 	   		SetEntityCollisionGroup(weapon_index, 1);
 	   		
@@ -515,6 +545,8 @@ public void OnPlayerSpawn(Event event, const char[] name, bool dontBroadcast)
 #if defined ZR || defined RPG
 		Thirdperson_PlayerSpawn(client);
 #endif
+		LastHitRef[client] = -1;
+		f_LatestDamageTaken[client] = 0.0;
 	}
 }
 
@@ -537,18 +569,28 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 #endif
 
 #if defined ZR
+	if (dieingstate[client] == 0)
+		DownedOrKilledClient_Feedback(client, EntRefToEntIndex(LastHitRef[client]), f_LatestDamageTaken[client], event.GetInt("damagebits"));
 	Dungeon_PlayerDowned(client);
-	UnequipDispenser(client, true);
+
+	if(!(i_CurrentEquippedPerk[client] & PERK_SEALED))
+		UnequipDispenser(client, true);
+	
 	ArmorDisplayClient(client, true);
 	DataPack pack = new DataPack();
 	pack.WriteCell(GetClientUserId(client));
 	pack.WriteCell(-1);
 	Update_Ammo(pack);
 	Escape_DropItem(client);
-	Armor_Charge[client] = 0; //reset to 0 on death
+
+	if(i_CurrentEquippedPerk[client] & PERK_WHO)
+		Citizen_PlayerReplacement(client, false);
+
+	if(!(i_CurrentEquippedPerk[client] & PERK_SEALED))
+		Armor_Charge[client] = 0; //reset to 0 on death
 
 	//Incase they die, do suit!
-	if(!Rogue_Mode() && !Inv_LSandvich_SafeHouse[client])
+	if(!Rogue_Mode() && !(i_CurrentEquippedPerk[client] & PERK_SEALED) && !Inv_LSandvich_SafeHouse[client])
 	{
 		i_CurrentEquippedPerk[client] = 0;
 		UpdatePerkName(client);
@@ -569,6 +611,8 @@ public Action OnPlayerDeath(Event event, const char[] name, bool dontBroadcast)
 	SDKHooks_UpdateMarkForDeath(client, true);
 	PurnellDeathsound(client);
 	Vehicle_Exit(client, true);
+	SdkHooks_SetAndUpdateArmorClientText(client);
+	Gunsaw_PlayerDeath(client);
 #endif
 
 #if defined RPG
@@ -761,4 +805,41 @@ public Action ChatSetupTipTimer(Handle TimerHandle)
 			SPrintToChat(client, "{green}TIP:{snow} %t",TipText);
 	}
 	return Plugin_Stop;
+}
+
+void DeleteAllBadEntities_NonZrMaps()
+{
+	ServerCommand("sv_cheats 1; nav_load ; sv_cheats 0");
+	for( int i = 1; i <= MAXENTITIES; i++ ) 
+	{
+		if(!IsValidEntity(i))
+			continue;
+		static char classname[36];
+		GetEntityClassname(i, classname, sizeof(classname));
+		if(!StrContains(classname, "prop_door") ||
+		!StrContains(classname, "item_teamflag") ||
+		!StrContains(classname, "func_regenerate") ||
+		!StrContains(classname, "func_respawnroom") ||
+		!StrContains(classname, "func_respawnroomvisualizer") ||
+		!StrContains(classname, "func_door"))
+		{
+			RemoveEntity(i);
+		}
+	}
+}
+
+void DeleteAllPickups()
+{
+	for( int i = 1; i <= MAXENTITIES; i++ ) 
+	{
+		if(!IsValidEntity(i))
+			continue;
+		char classname[36];
+		GetEntityClassname(i, classname, sizeof(classname));
+		if(!StrContains(classname, "item_healthkit") ||
+		!StrContains(classname, "item_ammopack"))
+		{
+			RemoveEntity(i);
+		}
+	}
 }

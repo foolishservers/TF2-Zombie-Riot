@@ -57,8 +57,6 @@ void Aperture_Shared_LastStandSequence_Starting(CClotBody npc)
 	
 	SetEntProp(npc.index, Prop_Data, "m_iHealth", 1);
 	
-	RemoveAllBuffs(npc.index, true, false);
-	NPCStats_RemoveAllDebuffs(npc.index);
 	ApplyStatusEffect(npc.index, npc.index, "Last Stand", FAR_FUTURE);
 	ApplyStatusEffect(npc.index, npc.index, "Solid Stance", FAR_FUTURE);
 	
@@ -95,9 +93,10 @@ void Aperture_Shared_LastStandSequence_Starting(CClotBody npc)
 	
 	npc.m_flArmorCount = 0.0;
 	
+	RaidTimerAlert = false;
 	RaidModeScaling = 0.0;
 	RaidModeTime = gameTime + APERTURE_LAST_STAND_TIMER_TOTAL;
-	if(CurrentModifOn() == 1)
+	if(ZR_Get_Modifier() == 1)
 	{
 		RaidModeTime = FAR_FUTURE;
 	}
@@ -125,33 +124,45 @@ static void Aperture_Shared_LastStandSequence_AlmostHappening(CClotBody npc)
 	
 	EmitSoundToAll(g_ApertureSharedStunMainSound, npc.index, SNDCHAN_AUTO, RAIDBOSS_ZOMBIE_SOUNDLEVEL, 90, BOSS_ZOMBIE_VOLUME, 85);
 	
-	Event event = CreateEvent("show_annotation");
-	if (event)
+	float vecPos[3];
+	GetAbsOrigin(npc.index, vecPos);
+	vecPos[2] += 160.0; // hardcoded lollium!
+	
+	for (int client = 1; client <= MaxClients; client++)
 	{
-		float vecPos[3];
-		GetAbsOrigin(npc.index, vecPos);
-		vecPos[2] += 160.0; // hardcoded lollium!
+		if (!IsClientInGame(client) || IsFakeClient(client))
+			continue;
 		
-		// Can't translate npc names in annotations!
-		char message[128];
-		if(CurrentModifOn() != 1)
-		{
-			FormatEx(message, 128, "Choose to spare or kill %s!\nYou DO NOT have to kill it to proceed!", c_NpcName[npc.index]);
-		}
-		else
-		{
-			FormatEx(message, 128, "Kill %s.", c_NpcName[npc.index]);
-		}
+		bool chaos = ZR_Get_Modifier() == 1;
 		
-		event.SetFloat("worldPosX", vecPos[0]);
-		event.SetFloat("worldPosY", vecPos[1]);
-		event.SetFloat("worldPosZ", vecPos[2]);
-		event.SetFloat("lifetime", APERTURE_LAST_STAND_TIMER_TOTAL);
-		event.SetString("text", message);
-		event.SetString("play_sound", "vo/null.mp3");
-		event.SetInt("id", npc.index); //What to enter inside? Need a way to identify annotations by entindex!
-		event.Fire();
+		Event event = CreateEvent("show_annotation");
+		if (event)
+		{
+			char message[255], prefix[255], name[64];
+			StatusEffects_PrefixName(npc.index, client, prefix, sizeof(prefix));
+			
+			FormatEx(name, sizeof(name), "%T", c_NpcName[npc.index], client);
+			
+			if (!chaos)
+				FormatEx(message, sizeof(message), "Choose to spare or kill %s%s!\nYou DO NOT have to kill it to proceed!", prefix, name);
+			else
+				FormatEx(message, sizeof(message), "Kill %s%s.", prefix, name);
+			
+			event.SetInt("visibilityBitfield", (1 << client));
+			event.SetFloat("worldPosX", vecPos[0]);
+			event.SetFloat("worldPosY", vecPos[1]);
+			event.SetFloat("worldPosZ", vecPos[2]);
+			event.SetFloat("lifetime", APERTURE_LAST_STAND_TIMER_TOTAL);
+			event.SetString("text", message);
+			event.SetString("play_sound", "vo/null.mp3");
+			event.SetInt("id", npc.index); //What to enter inside? Need a way to identify annotations by entindex!
+			event.FireToClient(client);
+			event.Cancel();
+		}
 	}
+	
+	RemoveAllBuffs(npc.index, true, false);
+	NPCStats_RemoveAllDebuffs(npc.index);
 	
 	npc.m_iAnimationState = APERTURE_LAST_STAND_STATE_ALMOST_HAPPENING;
 }
@@ -204,7 +215,7 @@ public void Aperture_Shared_LastStandSequence_ClotThink(int entity)
 public Action Aperture_Shared_LastStandSequence_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	// Don't bother on Chaos Intrusion
-	if (CurrentModifOn() == 1)
+	if (ZR_Get_Modifier() == 1)
 		return Plugin_Continue;
 	
 	// We're massively reducing damage if players dealt too much damage to bosses in the spare/kill sequence
@@ -263,6 +274,7 @@ public void Aperture_Shared_LastStandSequence_NPCDeath(int entity)
 	
 	StopSound(npc.index, SNDCHAN_AUTO, g_ApertureSharedStunMainSound);
 	i_LastStandBossRef = INVALID_ENT_REFERENCE;
+	RaidTimerAlert = true;
 	
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);

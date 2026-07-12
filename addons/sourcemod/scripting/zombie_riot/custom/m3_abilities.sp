@@ -8,7 +8,6 @@ static float ability_cooldown_2[MAXPLAYERS+1]={0.0, ...};
 static int Attack3AbilitySlotArray[MAXPLAYERS+1]={0, ...};
 static float f_HealDelay[MAXENTITIES];
 static float f_Duration[MAXENTITIES];
-static bool b_ActivatedDuringLastMann[MAXPLAYERS+1];
 static int g_ProjectileModel;
 static int g_ProjectileModelArmor;
 int g_BeamIndex_heal = -1;
@@ -106,7 +105,6 @@ public void M3_Abilities_Precache()
 }
 public void M3_ClearAll()
 {
-	Zero(b_ActivatedDuringLastMann);
 	Zero(ability_cooldown);
 	Zero(ability_cooldown_2);
 	Zero(Attack3AbilitySlotArray);
@@ -211,9 +209,9 @@ stock void GiveMorphineOnDamage(int client, int victim, float damage, int damage
 
 	MinCashMaxGain -= 250;
 
-	if(MinCashMaxGain >= 200000)
+	if(MinCashMaxGain >= 100000)
 	{
-		MinCashMaxGain = 200000;
+		MinCashMaxGain = 100000;
 	}
 	
 	float DamageForMaxCharge = (Pow(2.0 * MinCashMaxGain, 1.2) + MinCashMaxGain * 3.0);
@@ -233,15 +231,18 @@ stock void GiveMorphineOnDamage(int client, int victim, float damage, int damage
 }
 public void MorphineShot(int client)
 {
-	if(dieingstate[client] > 0 || MorphineMaxed(client))
+	if(!CvarInfiniteCash.BoolValue)
 	{
-		ClientCommand(client, "playgamesound items/medshotno1.wav");
-		return;
-	}
-	if(MorphineCharge[client] < 1.0)
-	{
-		ClientCommand(client, "playgamesound items/medshotno1.wav");
-		return;
+		if(dieingstate[client] > 0 || MorphineMaxed(client))
+		{
+			ClientCommand(client, "playgamesound items/medshotno1.wav");
+			return;
+		}
+		if(MorphineCharge[client] < 1.0)
+		{
+			ClientCommand(client, "playgamesound items/medshotno1.wav");
+			return;
+		}
 	}
 	i_MaxMorhpinesThisRound[client] += 1;
 	MorphineShotLogic(client);	
@@ -307,23 +308,31 @@ public void WeakDash(int client)
 }
 
 
-public void MorphineShotLogic(int client)
+void MorphineShotLogic(int client, bool Oneshot_Protection = false)
 {
-	EmitSoundToAll(SOUND_HEAL_BEAM, client, _, 70, _, 1.0, 70);
-	TF2_AddCondition(client, TFCond_SpeedBuffAlly, 3.0);
 	float MaxHealth = float(SDKCall_GetMaxHealth(client));
-	f_AntiStuckPhaseThrough[client] = GetGameTime() + 3.0 + 0.5;
-	f_AntiStuckPhaseThroughFirstCheck[client] = GetGameTime() + 3.0 + 0.5;
-	ApplyStatusEffect(client, client, "Intangible", 3.0);
-	MorphineCharge[client] = 0.0;
-	if(Rogue_SuperStimsOn())
+	if(!Oneshot_Protection)
 	{
-		HealEntityGlobal(client, client, MaxHealth * 3.0, 1.0, 3.0, HEAL_SELFHEAL);
+		EmitSoundToAll(SOUND_HEAL_BEAM, client, _, 70, _, 1.0, 70);
+		if(Rogue_SuperStimsOn())
+		{
+			HealEntityGlobal(client, client, MaxHealth * 3.0, 1.0, 3.0, HEAL_SELFHEAL);
+		}
+		else
+		{
+			HealEntityGlobal(client, client, MaxHealth * 0.15, 0.5, 3.0, HEAL_SELFHEAL);
+		}
+		MorphineCharge[client] = 0.0;
 	}
 	else
 	{
 		HealEntityGlobal(client, client, MaxHealth * 0.15, 0.5, 3.0, HEAL_SELFHEAL);
 	}
+	TF2_AddCondition(client, TFCond_SpeedBuffAlly, 3.0);
+	f_AntiStuckPhaseThrough[client] = GetGameTime() + 3.0 + 0.5;
+	f_AntiStuckPhaseThroughFirstCheck[client] = GetGameTime() + 3.0 + 0.5;
+	ApplyStatusEffect(client, client, "Intangible", 3.0);
+
 }
 public void WeakDashLogic(int client)
 {
@@ -756,7 +765,8 @@ public void ReconstructiveTeleporter(int client)
 			{
 				char npc_classname[60];
 				NPC_GetPluginById(i_NpcInternalId[ally], npc_classname, sizeof(npc_classname));
-				if(BarrackOwner[ally] == GetClientUserId(client) && !(StrEqual(npc_classname, "npc_barrack_building")))
+				if(BarrackOwner[ally] == GetClientUserId(client) && !(StrEqual(npc_classname, "npc_barrack_building"))
+				&& !(StrEqual(npc_classname, "npc_barrack_villager")))
 				{
 					IsLiveBarrackUnits=true;
 					WorldSpaceCenter(ally, WorldSpaceVec);
@@ -833,7 +843,7 @@ void HealPointToReinforce(int client, int healthvalue, float autoscale = 0.0)
 				
 				Base_HealingMaxPoints=RoundToCeil(3500.0 * Healing_Amount);
 			}
-			case WEAPON_SEABORN_MISC:
+			case WEAPON_DWELLER_MISC:
 			{
 				Healing_Amount=Attributes_Get(weapon, 8, 0.0)/2.0;
 				if(Healing_Amount<1.0)
@@ -868,6 +878,12 @@ void HealPointToReinforce(int client, int healthvalue, float autoscale = 0.0)
 	else 
 		Base_HealingMaxPoints = RoundToCeil(1900.0 * Healing_Amount);
 	
+	if(IsBarracks(client))
+	{
+		float scale = 1.0 + (Barracks_GetInfo(client, 1) * 0.20);
+
+		Base_HealingMaxPoints = RoundToCeil(9000.0 * scale);	// Yes, it needs necessarily to scale with paps, otherwise it's still nowhere near enough
+	}
 	if(Base_HealingMaxPoints <= 3000)
 		Base_HealingMaxPoints = 3000;
 		
@@ -952,45 +968,22 @@ public void Reinforce(int client, bool NoCD)
 			f_ReinforceTillMax[client] = 1.0;
 		}
 
-		int MaxCashScale = CurrentCash;
-		if(MaxCashScale > 60000)
-			MaxCashScale = 60000;
-		
 		bool DeadPlayer;
 		for(int client_check=1; client_check<=MaxClients; client_check++)
 		{
-			if(!IsValidClient(client_check))
-				continue;
-			if(TeutonType[client_check] == TEUTON_NONE)
-				continue;
-			if(!b_AntiLateSpawn_Allow[client_check])
-				continue;
-			if(client==client_check || GetTeam(client_check) != TFTeam_Red)
-				continue;
-			if(!WasHereSinceStartOfWave(client_check))
-				continue;
-			if(f_PlayerLastKeyDetected[client_check] < GetGameTime())
-				continue;
-			if(HasSpecificBuff(client_check, "Vuntulum Bomb EMP Death"))
-				continue;
-
-			int CashSpendScale = CashSpentTotal[client_check];
-
-			if(CashSpendScale <= 500)
-				CashSpendScale = 500;
-
-			if((CashSpendScale * 3) < (MaxCashScale))
-				continue;
-
-			DeadPlayer=true;
+			if (CanPlayerBeSummoned(client_check, client))
+			{
+				// Just want to see if there's at least someone we can summon
+				DeadPlayer = true;
+				break;
+			}
 		}
 
 		if(!DeadPlayer)
 		{
 			ClientCommand(client, "playgamesound items/medshotno1.wav");
 			SetDefaultHudPosition(client);
-			SetGlobalTransTarget(client);
-			ShowSyncHudText(client,  SyncHud_Notifaction, "Player not detected");
+			ShowSyncHudText(client,  SyncHud_Notifaction, "%T", "Player not detected", client);
 			return;
 		}
 
@@ -1593,11 +1586,6 @@ public void GearTesting(int client)
 			SetEntityMoveType(client, MOVETYPE_NONE);
 
 			i_ClientHasCustomGearEquipped[client] = 2;
-			b_ActivatedDuringLastMann[client] = false;
-			if(LastMann)
-			{
-				b_ActivatedDuringLastMann[client] = true;
-			}
 
 			IncreaseEntityDamageTakenBy(client, 0.5, 3.0);
 			
@@ -1650,6 +1638,7 @@ public Action QuantumActivate(Handle cut_timer, int ref)
 			float startPosition[3];
 			GetClientAbsOrigin(client, startPosition);
 			i_HealthBeforeSuit[client] = GetClientHealth(client);
+			i_HealthBeforeSuitMaxHP[client] = ReturnEntityMaxHealth(client);
 
 			i_ClientHasCustomGearEquipped[client] = 2;
 			
@@ -1720,12 +1709,6 @@ public Action QuantumDeactivate(Handle cut_timer, int ref)
 		CurrentClass[client] = view_as<TFClassType>(GetEntProp(client, Prop_Send, "m_iDesiredPlayerClass"));
 		ViewChange_DeleteHands(client);
 		ViewChange_UpdateHands(client, CurrentClass[client]);
-		if(b_ActivatedDuringLastMann[client])
-		{
-			int MaxHealth = SDKCall_GetMaxHealth(client) * 2;
-			SetEntProp(client, Prop_Send, "m_iHealth", MaxHealth);
-		}
-		b_ActivatedDuringLastMann[client] = false;
 		//if in lastman, then give extra health.
 	}
 	return Plugin_Handled;
@@ -1894,6 +1877,7 @@ public Action Timer_Detect_Player_Near_Repair_Grenade(Handle timer, DataPack pac
 							if(CurrentMetal > 0)
 							{
 								int HealthAfter = HealEntityGlobal(client, entity_close, float(healing_Amount), .MaxHealPermitted = CurrentMetal);
+								ReduceMetalCost(client, HealthAfter);
 
 								CurrentMetal -= (HealthAfter) / 5;
 							}
@@ -2052,7 +2036,6 @@ stock int Drop_Prop(int client, float fPos[3], float PropSpeed=1200.0, const cha
 		DispatchKeyValueVector(PropMove, "movedir", Down);
 		DispatchKeyValue(PropMove, "targetname", PropNeam_patch);
 		DispatchKeyValue(PropMove, "movedir", "90 0 0");
-		DispatchKeyValue(PropMove, "modelscale", "3");
 		Format(buffer, sizeof(buffer), "%.2f", 5000.0);
 		DispatchKeyValue(PropMove, "movedistance", buffer);
 		Format(buffer, sizeof(buffer), "%.2f", PropSpeed);
@@ -2071,6 +2054,7 @@ stock int Drop_Prop(int client, float fPos[3], float PropSpeed=1200.0, const cha
 			TeleportEntity(Prop, fPos, NULL_VECTOR, NULL_VECTOR);
 			DispatchSpawn(Prop);
 			SetParent(PropMove, Prop);
+			SetEntPropFloat(Prop, Prop_Send, "m_flModelScale", 1.25);
 		}
 		AcceptEntityInput(PropMove, "Open");
 		SetEntPropEnt(PropMove, Prop_Data, "m_hOwnerEntity", client);
@@ -2096,7 +2080,7 @@ public Action OnBombDrop(const char [] output, int caller, int activator, float 
 		if(IsValidClient(PreviousOwner))
 		{
 			int RandomHELLDIVER = GetRandomDeathPlayer(HELLDIVER);
-			if(IsValidClient(RandomHELLDIVER) && GetTeam(RandomHELLDIVER) == TFTeam_Red && TeutonType[RandomHELLDIVER] == TEUTON_DEAD && WasHereSinceStartOfWave(RandomHELLDIVER))
+			if(RandomHELLDIVER != -1)
 			{
 				TeutonType[RandomHELLDIVER] = TEUTON_NONE;
 				dieingstate[RandomHELLDIVER] = 0;
@@ -2118,19 +2102,20 @@ public Action OnBombDrop(const char [] output, int caller, int activator, float 
 				GiveCompleteInvul(RandomHELLDIVER, 3.5);
 				TF2_AddCondition(RandomHELLDIVER, TFCond_SpeedBuffAlly, 2.0);
 				EmitSoundToAll(g_ReinforceReadySounds, RandomHELLDIVER, SNDCHAN_STATIC, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
-				CPrintToChatAll("그리고 {black}밥 2세{green}가 응답하여.... 다음 플레이어를 징집시켰습니다! : {yellow}%N!",RandomHELLDIVER);
+				CPrintToChatAll("%s {green}responds... and was able to recruit {yellow}%N{green}!", s_MissionClient, RandomHELLDIVER);
 				DataPack pack_boom = new DataPack();
 				pack_boom.WriteFloat(position[0]);
 				pack_boom.WriteFloat(position[1]);
 				pack_boom.WriteFloat(position[2]);
 				pack_boom.WriteCell(1);
 				RequestFrame(MakeExplosionFrameLater, pack_boom);
+				CheckAlivePlayers();
 			}
 			else
 			{
 				if(IsValidClient(PreviousOwner))
 				{
-					CPrintToChat(PreviousOwner, "하지만 {black}밥 2세{default} 휘하의 용병이 더 이상 없습니다... 그가 지원을 거부했습니다.");
+					CPrintToChat(PreviousOwner, "%s {default}wasn't able to get any merc... the backup call was refunded.", s_MissionClient);
 					HealPointToReinforce(PreviousOwner, 0, 1.0);
 					i_MaxRevivesAWave--;
 				}
@@ -2179,52 +2164,58 @@ public Action Timer_DelayTele(Handle timer, DataPack pack)
 
 stock int GetRandomDeathPlayer(int client)
 {
-	int Getclient = -1;
-
 	int victims;
 	int[] victim = new int[MaxClients];
+
+	for(int client_check = 1; client_check <= MaxClients; client_check++)
+	{
+		if (CanPlayerBeSummoned(client_check, client))
+			victim[victims++] = client_check;
+	}
+	
+
+	if(victims)
+		return victim[GetURandomInt() % victims];
+	
+	return -1;
+}
+
+bool CanPlayerBeSummoned(int client, int summoner)
+{
+	if(!IsValidClient(client))
+		return false;
+
+	if(IsEntityAlive(client, _, true))
+		return false;
+
+	if(!b_AntiLateSpawn_Allow[client])
+		return false;
+
+	if(summoner==client || GetTeam(client) != TFTeam_Red)
+		return false;
+
+	if(!WasHereSinceStartOfWave(client))
+		return false;
+
+	if(f_PlayerLastKeyDetected[client] < GetGameTime())
+		return false;
+	
+	if(HasSpecificBuff(client, "Vuntulum Bomb EMP Death"))
+		return false;
+
+	if(!Rogue_BlueParadox_CanTeutonUpdate(client))
+		return false;
 
 	int MaxCashScale = CurrentCash;
 	if(MaxCashScale > 60000)
 		MaxCashScale = 60000;
-
-	for(int client_check = 1; client_check <= MaxClients; client_check++)
-	{
-		if(!IsValidClient(client_check))
-			continue;
-
-		if(TeutonType[client_check] == TEUTON_NONE)
-			continue;
-
-		if(!b_AntiLateSpawn_Allow[client_check])
-			continue;
-		if(client==client_check || GetTeam(client_check) != TFTeam_Red)
-			continue;
-
-		if(!WasHereSinceStartOfWave(client_check))
-			continue;
-
-		if(f_PlayerLastKeyDetected[client_check] < GetGameTime())
-			continue;
-		if(HasSpecificBuff(client_check, "Vuntulum Bomb EMP Death"))
-			continue;
-
-		int CashSpendScale = CashSpentTotal[client_check];
-
-		if(CashSpendScale <= 500)
-			CashSpendScale = 500;
-
-		if((CashSpendScale * 3) < (MaxCashScale))
-			continue;
-
-		victim[victims++] = client_check;
-	}
 	
-	if(victims)
-	{
-		int winner = victim[GetURandomInt() % victims];
-		Getclient = winner;
-	}
+	int CashSpendScale = CashSpentTotal[client];
+	if(CashSpendScale <= 500)
+		CashSpendScale = 500;
 
-	return Getclient;
+	if((CashSpendScale * 3) < (MaxCashScale))
+		return false;
+	
+	return true;
 }

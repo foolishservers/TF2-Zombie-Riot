@@ -431,7 +431,7 @@
 	{
 		"en"	"{red}Enemy stats per chapter +4％, start with Fractured voidstone, rift events can occur more often, You have no hope."
 		"it"	"{red}Statistiche dei nemici per capitolo +4％, inizio con la pietra vuota fratturata, gli eventi della spaccatura possono verificarsi più spesso, Non hai speranza."
-		"ko"	"{red}매 챕터마다, 적의 능력치 +4％ 증가. '혼란' 공허석을 보유하고 시작. 균열 이벤트가 더 자주 발생함. 희망이 보이지 않습니다."
+		"ko"	"{red}매 챕터마다, 적의 능력치 +4％ 증가. '혼란' 공허석을 보유하고 시작. 균열 이벤트가 더 자주 발생. 희망이 보이지 않습니다."
 	}
 	"Rift Level 2"
 	{
@@ -503,7 +503,7 @@
 	{
 		"en"	"Be a hitman of your dreams.\n{green}''Tactician'' weapons gain infinite accuracy, extra cash & speedbonus on a headshot {yellow}(up to a limit for cash gain up to a limit for cash gain) If the weapon cant headshot, same effects apply but weaker."
 		"it"	"{green}Se l'arma non può colpire alla testa, si applicano gli stessi effetti, ma più deboli."
-		"ko"	"나 자신이 히트맨이 되는거다.\n{green}''전술가'' 계열 무기의 정확도가 무한대가 되며, 헤드샷시 추가 자금 및 속도 증진 획득. {yellow}(자금 획득 상한 존재) 헤드샷 불가 무기라면, 대신 약화된 효과가 적용."
+		"ko"	"나 자신이 히트맨이 되는거다.\n{green}''전술가'' 계열 무기의 정확도가 무한대가 되며, 헤드샷시 추가 자금, 속도 증진 획득. {yellow}(자금 획득 상한 O) 헤드샷 불가 무기라면 약화된 효과 적용."
 	}
 	"Hand of Spark"
 	{
@@ -921,9 +921,9 @@
 	}
 	"Devilbane Banner Desc"
 	{
-		"en"	"Made by Al-Hallem mercenaries loyal to Iberia.\n{green}Weapon cooldown reduced by 2s when hitting an Umbral enemy"
-		"it"	"Realizzato da mercenari Al-Hallem fedeli a Iberia.\n{green}Il cooldown dell'arma si riduce di 2s quando si colpisce un nemico Umbral"
-		"ko"	"이베리아에 충성하던 알-할렘 용병이 만들었다.\n{green}움브랄 계열 적을 적중할 때마다, 무기 능력 쿨타임이 2초씩 감소."
+		"en"	"Made by Al-Hallem mercenaries loyal to Almina.\n{green}Weapon cooldown reduced by 2s when hitting an Umbral enemy"
+		"it"	"Realizzato da mercenari Al-Hallem fedeli a Almina.\n{green}Il cooldown dell'arma si riduce di 2s quando si colpisce un nemico Umbral"
+		"ko"	"알미나에 충성하던 알-할렘 용병이 만들었다.\n{green}움브랄 계열 적을 적중할 때마다, 무기 능력 쿨타임이 2초씩 감소."
 	}
 	"Great Banshee Veil"
 	{
@@ -957,9 +957,9 @@
 	}
 	"Fearless Blade Desc"
 	{
-		"en"	"Ziberia artilleries, Ruina casters, and Victorian sharpshooters all took their shots at him.\n{green}The player who spent the most cash receives +50％ damage and max health"
+		"en"	"Ziberia artilleries, Ruina casters, and Vestan sharpshooters all took their shots at him.\n{green}The player who spent the most cash receives +50％ damage and max health"
 		"it"	"Le artiglierie di Ziberia, gli incantatori di Ruina e i tiratori scelti vittoriani hanno tutti sparato contro di lui.\n{green}Il giocatore che ha speso più denaro riceve +50％ danni e salute massima"
-		"ko"	"지베리아 화포 부대, 루이나 캐스터 부대, 빅토리아 명사수들이 그에게 파상 공세를 퍼부었다.\n{green}자금을 가장 많이 소모한 플레이어의 최대 체력, 피해량 +50％"
+		"ko"	"지베리아 화포 부대, 루이나 캐스터 부대, 베스타 명사수들이 그에게 파상 공세를 퍼부었다.\n{green}자금을 가장 많이 소모한 플레이어의 최대 체력, 피해량 +50％"
 	}
 	"Chaos Star"
 	{
@@ -1162,9 +1162,9 @@
 	}
 	"Nemesis Blood Desc"
 	{
-		"en"	"{green}Umbral Affinity increased by 3 when reaching a new chapter {red}but Umbral Affinity reduced by 15 while held\n{purple}Chance obtain a rare artifact when consumed"
-		"it"	"{green}l'Affinità Umbrale aumenta di 3 quando si raggiunge un nuovo capitolo {red}ma l'Affinità Umbrale si riduce di 15 mentre si tiene \n{purple}Possibilità di ottenere un artefatto raro quando si consuma"
-		"ko"	"{green}새 챕터 진입 시 움브랄 친화력이 3 증가. {red}대신 이것을 보유하는 동안, 엄브랄 친화력 15 감소\n{purple}관문에 흡수시키면, 확률적으로 희귀 등급 소장품 획득"
+		"en"	"{green}Umbral Affinity increased by 6 when reaching a new chapter {red}but Umbral Affinity reduced by 15 while held\n{purple}Chance obtain a rare artifact when consumed"
+		"it"	"{green}l'Affinità Umbrale aumenta di 6 quando si raggiunge un nuovo capitolo {red}ma l'Affinità Umbrale si riduce di 15 mentre si tiene \n{purple}Possibilità di ottenere un artefatto raro quando si consuma"
+		"ko"	"{green}새 챕터 진입 시 움브랄 친화력이 6 증가. {red}대신 이것을 보유하는 동안, 움브랄 친화력 15 감소\n{purple}관문에 흡수시키면, 확률적으로 희귀 등급 소장품 획득"
 	}
 	"Sprouting Stem"
 	{
@@ -1726,7 +1726,7 @@
 	{
 		"en"	"It's poisoned"
 		"it"	"È avvelenato"
-		"ko"	"독일지도 몰라"
+		"ko"	"독이 섞여 있을지도 몰라"
 	}
 	"Poison Water Desc 1"
 	{
@@ -1745,6 +1745,11 @@
 		"en"	"{green}Obtain an artifact, 2000 cash {red}but a chance to obtain a cursed artifact"
 		"it"	"{green}Ottieni un artefatto, 2000 contanti {red} ma la possibilità di ottenere un artefatto maledetto"
 		"ko"	"{green}소장품과 자금 2000 획득. {red}확률적으로 저주 소장품을 획득하게 됨"
+	}
+	"Poison Water Lore 1"
+	{
+		"en"	"Dont take chances with this lake."
+		"ko"	"위험을 감수할 수는 없다."
 	}
 	"Poison Water Lore 2a"
 	{
@@ -2048,7 +2053,7 @@
 	{
 		"en"	"You gotten this far, from infections, outbreaks, riots, and chaos. Take a moment to remember the past."
 		"it"	"Siete arrivati fin qui, tra infezioni, epidemie, rivolte e caos. Prendetevi un momento per ricordare il passato."
-		"ko"	"당신은 감염, 재앙, 폭동, 혼돈을 넘어 여기까지 도달했다. 과거를 잠시 돌아본다..."
+		"ko"	"당신은 감염, 재앙, 폭동 그리고 혼돈을 넘어 여기까지 도달했다. 과거를 잠시 돌아본다..."
 	}
 	"Finale Encounter Option 1"
 	{
@@ -2133,7 +2138,7 @@
 	{
 		"en" "☠ The Umbral Commander"
 		"it" "☠ il Comandante Umbro"
-		"ko" "☠ 움브랄의 사령관"
+		"ko" "☠ 움브랄의 지휘자"
 	}
 	"Sabotaging Electric's"
 	{
@@ -2377,17 +2382,17 @@
 		"it" "⚠ Taskforce sconosciuta"
 		"ko" "⚠ 정체불명의 특무대"
 	}
-	"Seaborn Enslaved"
+	"Dweller Enslaved"
 	{
-		"en" "⚔ Seaborn Enslaved"
-		"it" "⚔ Seaborn Enslaved"
-		"ko" "⚔ 억압당한 시본"
+		"en" "⚔ Dweller Enslaved"
+		"it" "⚔ Dweller Enslaved"
+		"ko" "⚔ 억압당한 드웰러"
 	}
-	"Seaborn Enslaved!"
+	"Dweller Enslaved!"
 	{
-		"en" "⚠ Seaborn Enslaved"
-		"it" "⚠ Seaborn Enslaved"
-		"ko" "⚠ 억압당한 시본"
+		"en" "⚠ Dweller Enslaved"
+		"it" "⚠ Dweller Enslaved"
+		"ko" "⚠ 억압당한 드웰러"
 	}
 	"Voided Superior's"
 	{

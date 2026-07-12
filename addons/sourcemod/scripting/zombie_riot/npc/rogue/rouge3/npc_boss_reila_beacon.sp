@@ -54,7 +54,7 @@ void ReilaBeacon_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "reilaconstruct");
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS;
-	data.Category = Type_Curtain;
+	data.Category = Type_Raid;
 	data.Func = ClotSummon;
 	data.Precache = ClotPrecache;
 	NPC_Add(data);
@@ -100,7 +100,7 @@ methodmap ReilaBeacon < CClotBody
 
 	public ReilaBeacon(float vecPos[3], float vecAng[3], int ally)
 	{
-		ReilaBeacon npc = view_as<ReilaBeacon>(CClotBody(vecPos, vecAng, IBERIA_BEACON, "0.3", "99999", ally, .NpcTypeLogic = 1));
+		ReilaBeacon npc = view_as<ReilaBeacon>(CClotBody(vecPos, vecAng, ALMINA_BEACON, "0.3", "99999", ally, .NpcTypeLogic = 1));
 		
 		i_NpcWeight[npc.index] = 999;
 		

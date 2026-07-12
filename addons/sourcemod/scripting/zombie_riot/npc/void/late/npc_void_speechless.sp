@@ -163,6 +163,7 @@ methodmap VoidSpeechless < CClotBody
 			RaidBossActive = EntIndexToEntRef(npc.index);
 			RaidModeTime = GetGameTime(npc.index) + 9000.0;
 			RaidAllowsBuildings = true;
+			RaidAllowLastman = false;
 			RaidModeScaling = MultiGlobalHealth;
 			if(RaidModeScaling == 1.0) //Dont show scaling if theres none.
 				RaidModeScaling = 0.0;
@@ -177,19 +178,19 @@ methodmap VoidSpeechless < CClotBody
 			{
 				case 0:
 				{
-					CPrintToChatAll("{violet}침묵하는 자{default}: 제발 죽여줘... 이 놈들은 면역자조차도 강제로 조종할 수 있어...");
+					NPCTalkMessage(npc.index, "It controlls us, it knows our immunity to chaos, kill us...");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{violet}침묵하는 자{default}: 제발 도와줘..");
+					NPCTalkMessage(npc.index, "Help me..");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{violet}침묵하는 자{default}: {blue}센살{default}에게 전해.. 보호막은 여기선 아무 짝에도 쓸모 없어...");
+					NPCTalkMessage(npc.index, "Tell {blue}Sensal{default}.. his shields are useless...");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{violet}침묵하는 자{default}: 내 몸이 멋대로 움직인다...");
+					NPCTalkMessage(npc.index, "I cannot controll my body...");
 				}
 			}
 		}
@@ -222,6 +223,11 @@ methodmap VoidSpeechless < CClotBody
 		
 		return npc;
 	}
+}
+
+static void NPCTalkMessage(int iNPC, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(iNPC, "violet", message);
 }
 
 public void VoidSpeechless_ClotThink(int iNPC)
@@ -622,8 +628,8 @@ void ExpidonsanExplorerLifeLoss(VoidSpeechless npc)
 		ApplyStatusEffect(npc.index, npc.index, "Zilius Prime Technology", 99999.0);
 		if(i_RaidGrantExtra[npc.index] == 1)
 		{
-			CPrintToChatAll("{violet}침묵하는 자{default}: 질리우스의 말이 맞았어... 정말로...\n{purple}저것이 엑스피돈사인의 몸을 완전히 지배하고 있습니다.");
-			CPrintToChatAll("{violet}잊혀진 엑스피돈사 슈트가 자체 프로토콜을 발동해 공허를 몰아내고 있습니다. 그의 자가 치유 능력이 사라지고 있습니다.");
+			NPCTalkMessage(npc.index, "Zilius was right... Im sorry...\n{purple}It takes full controll of The expidonsans body.");
+			CPrintToChatAll("{violet}The forgotten expidonsans suit activates its protocolls and repells the void as much as it can, as such, blocks all healing from itself.");
 		}
 		if(IsValidEntity(npc.m_iWearable3))
 			RemoveEntity(npc.m_iWearable3);

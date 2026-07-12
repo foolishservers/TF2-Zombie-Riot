@@ -154,6 +154,7 @@ methodmap ApertureResearcher < CClotBody
 			RaidModeTime = GetGameTime(npc.index) + 9000.0;
 			RaidModeScaling = 0.0;
 			RaidAllowsBuildings = true;
+			RaidAllowLastman = false;
 		}
 				
 		int skin = 1;
@@ -176,7 +177,7 @@ methodmap ApertureResearcher < CClotBody
 
 		if(ally == TFTeam_Blue)
 		{
-			CPrintToChatAll("{normal}연구원{default}: 𝙹ᓵ⍑ リ╎ᓵ⍑ℸ ̣ ↸╎ᒷᓭᒷ ᒷꖌᒷꖎ⍑ᔑ⎓ℸ ̣ᒷリ ꖌ∷ᒷᔑℸ ̣⚍∷ᒷリ!!!");
+			NPCTalkMessage(npc.index, "𝙹ᓵ⍑ リ╎ᓵ⍑ℸ ̣ ↸╎ᒷᓭᒷ ᒷꖌᒷꖎ⍑ᔑ⎓ℸ ̣ᒷリ ꖌ∷ᒷᔑℸ ̣⚍∷ᒷリ!!!");
 		}
 		else
 		{
@@ -184,15 +185,15 @@ methodmap ApertureResearcher < CClotBody
 			{
 				case 0:
 				{
-					CPrintToChatAll("{normal}연구원{default}: 안 돼! 난 죽고 싶지 않아!");
+					NPCTalkMessage(npc.index, "I really didn't want to end up in here!");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{normal}연구원{default}: 왜 여기서 날뛰는거냐고?!");
+					NPCTalkMessage(npc.index, "Why here?! Couldn't it have been any other place on this planet?!");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{normal}연구원{default}: 제발! 날 쏘지 마! 난 살고 싶어!...");
+					NPCTalkMessage(npc.index, "Please don't harm me, I-...");
 				}
 			}
 		}
@@ -201,6 +202,11 @@ methodmap ApertureResearcher < CClotBody
 		
 		return npc;
 	}
+}
+
+static void NPCTalkMessage(int entity, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(entity, "normal", message);
 }
 
 public void ApertureResearcher_ClotThink(int iNPC)
@@ -232,6 +238,18 @@ public void ApertureResearcher_ClotThink(int iNPC)
 		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
 	}
 
+	if(npc.Anger)
+	{
+		for(int entitycount; entitycount<MAXENTITIES; entitycount++) //Check for npcs
+		{
+			if(IsValidEnemy(npc.index, entitycount))
+				ApplyStatusEffect(npc.index, entitycount, "Kinetic Surge", 20.0);
+			else if(IsValidAlly(npc.index, entitycount))
+				ApplyStatusEffect(npc.index, entitycount, "Kinetic Surge", 20.0);
+		}
+		ApplyStatusEffect(npc.index, npc.index, "Kinetic Surge", 20.0);
+	}
+
 	//Too lazy to implemt atm
 	/*
 	//Check if allies dead for text
@@ -243,15 +261,15 @@ public void ApertureResearcher_ClotThink(int iNPC)
 			{
 				case 0:
 				{
-					CPrintToChatAll("{normal}연구원{default}: 휴, 당신의 파일 기록을 보면 당신이 우릴 도울거란 생각은 하지도 못 했는데. 도와줘서 고맙소. 다들 여기서 나가자!");
+					NPCTalkMessage(npc.index, "Well, given your history, I wasn't expecting you to be so helpful! I'm out of here!");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{normal}연구원{default}: 당신의 엑스피돈사에 대한 호의는 잊히지 않을거요! 어서 빠져나가자!");
+					NPCTalkMessage(npc.index, "Your contributions to Expidonsa will not go unnoticed! I'm out!");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{normal}연구원{default}: 정말 위험했군. 우리에게 선의를 베풀어주어서 정말 고맙소! 다들 어서 순간이동해!");
+					NPCTalkMessage(npc.index, "That was a close call, thanks for staying neutral! Teleporter, start!");
 				}
 			}
 		}
@@ -299,6 +317,7 @@ public Action ApertureResearcher_OnTakeDamage(int victim, int &attacker, int &in
 	}
 	if((ReturnEntityMaxHealth(npc.index)/2) >= GetEntProp(npc.index, Prop_Data, "m_iHealth")) 
 	{
+		npc.Anger = true;
 		for(int entitycount; entitycount<MAXENTITIES; entitycount++) //Check for npcs
 		{
 			if(IsValidEnemy(npc.index, entitycount))
@@ -335,7 +354,7 @@ public void ApertureResearcher_NPCDeath(int entity)
 
 	if(GetTeam(npc.index) == TFTeam_Blue)
 	{
-		CPrintToChatAll("{normal}연구원{default}: ⍊ᒷ∷↸ᔑᒲᒲℸ ̣, ↸╎ᒷ ⍑ᔑʖᒷリ ↸𝙹ᓵ⍑ ᓭᓵ⍑𝙹リ ∴ᔑᓭ ↸∷ᔑ⚍⎓!");
+		NPCTalkMessage(npc.index, "⍊ᒷ∷↸ᔑᒲᒲℸ ̣, ↸╎ᒷ ⍑ᔑʖᒷリ ↸𝙹ᓵ⍑ ᓭᓵ⍑𝙹リ ∴ᔑᓭ ↸∷ᔑ⚍⎓!");
 	}
 	else
 	{
@@ -343,15 +362,15 @@ public void ApertureResearcher_NPCDeath(int entity)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{normal}연구원{default}: 됐어! 우린 여기서 나간다!");
+				NPCTalkMessage(npc.index, "I'm out of here!");
 			}
 			case 1:
 			{
-				CPrintToChatAll("{normal}연구원{default}: 텔레포터 재구성 완료! 다신 보지 말자, 이 더러운 놈들아!");
+				NPCTalkMessage(npc.index, "Teleporter reconfigured, see you in never!");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{normal}연구원{default}: 빨리 텔레포트 장치를 작동 시켜!");
+				NPCTalkMessage(npc.index, "Start the machine, start the machine!");
 			}
 		}	
 	}

@@ -141,7 +141,7 @@ public Action RailgunFire(Handle timer, DataPack pack)
 	int obj = EntRefToEntIndex(pack.ReadCell());
 	int client = EntRefToEntIndex(pack.ReadCell());
 
-	if(IsClientInGame(client) && IsPlayerAlive(client) && IsValidEntity(obj))
+	if(IsValidClient(client) && IsPlayerAlive(client) && IsValidEntity(obj))
 	{
 		float pos[3];
 		GetEntPropVector(obj, Prop_Data, "m_vecAbsOrigin", pos);
@@ -170,7 +170,7 @@ public Action RailgunFire_ReloadStart(Handle timer, DataPack pack)
 	pack.Reset();
 	int obj = EntRefToEntIndex(pack.ReadCell());
 	int client = EntRefToEntIndex(pack.ReadCell());
-	if(IsClientInGame(client) && IsPlayerAlive(client) && IsValidEntity(obj))
+	if(IsValidClient(client) && IsPlayerAlive(client) && IsValidEntity(obj))
 	{
 		EmitSoundToAll(RAILGUN_START_CHARGE, obj, _, 90, _, 0.8);
 		EmitSoundToAll(RAILGUN_START_CHARGE, obj, _, 90, _, 0.8);
@@ -189,7 +189,7 @@ public Action RailgunFire_ReloadMiddle(Handle timer, DataPack pack)
 	pack.Reset();
 	int obj = EntRefToEntIndex(pack.ReadCell());
 	int client = EntRefToEntIndex(pack.ReadCell());
-	if(IsClientInGame(client) && IsPlayerAlive(client) && IsValidEntity(obj))
+	if(IsValidClient(client) && IsPlayerAlive(client) && IsValidEntity(obj))
 	{
 		EmitSoundToAll(RAILGUN_READY, obj, _, 90, _, 0.8);
 		EmitSoundToAll(RAILGUN_READY, obj, _, 90, _, 0.8);
@@ -207,7 +207,7 @@ public Action RailgunFire_ReloadEnd(Handle timer, DataPack pack)
 	pack.Reset();
 	int obj = EntRefToEntIndex(pack.ReadCell());
 	int client = EntRefToEntIndex(pack.ReadCell());
-	if(IsClientInGame(client) && IsPlayerAlive(client) && IsValidEntity(obj))
+	if(IsValidClient(client) && IsPlayerAlive(client) && IsValidEntity(obj))
 	{
 		EmitSoundToAll(RAILGUN_READY_ALARM, obj, _, 90, _, 0.8);
 		EmitSoundToAll(RAILGUN_READY_ALARM, obj, _, 90, _, 0.8);
@@ -236,7 +236,7 @@ static void Railgun_Boom(int client, int obj)
 		IsBuildingCarried = true;
 
 	int BEAM_BeamRadius = 40;
-	float Strength = 10.0;
+	float Strength = 13.0;
 	if(IsBuildingCarried)
 		Strength *= 0.9;
 
@@ -246,7 +246,7 @@ static void Railgun_Boom(int client, int obj)
 
 	attack_speed = 1.0 / Attributes_GetOnPlayer(client, 343, true, true); //Sentry attack speed bonus
 			
-	Strength = attack_speed * Strength * Attributes_GetOnPlayer(client, 287, true, true);			//Sentry damage bonus
+	Strength = attack_speed * Strength * Attributes_GetOnPlayer(client, 287, true);			//Sentry damage bonus
 	
 	float sentry_range;
 		

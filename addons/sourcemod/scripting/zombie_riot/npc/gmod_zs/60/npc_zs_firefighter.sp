@@ -293,7 +293,7 @@ public void InfectedFireFighter_ClotThink(int iNPC)
 								
 								if(!ShouldNpcDealBonusDamage(target))
 								{
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 150.0, DMG_CLUB, -1, _, vecHit);
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 175.0, DMG_CLUB, -1, _, vecHit);
 								//	TF2_IgnitePlayer(target, npc.index, 5.0);
 								}
 								else

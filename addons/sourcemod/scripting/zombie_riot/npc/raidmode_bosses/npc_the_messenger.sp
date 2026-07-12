@@ -316,6 +316,7 @@ methodmap TheMessenger < CClotBody
 		RaidModeTime = GetGameTime(npc.index) + 200.0;
 		RaidBossActive = EntIndexToEntRef(npc.index);
 		RaidAllowsBuildings = false;
+		RaidAllowLastman = true;
 	
 		float value;
 		char buffers[3][64];
@@ -387,18 +388,19 @@ methodmap TheMessenger < CClotBody
 		
 		if (npc.m_bBossRushDuo)
 		{
-			CPrintToChatAll("{lightblue}The Messenger{default}: You're gonna die.");
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_Encounter_BossrushDuo");
 		}
 		else if(!final)
 		{
 			if(i_RaidGrantExtra[npc.index] <= 2)
 			{
 				IgniteTargetEffect(npc.m_iWearable1);
-				CPrintToChatAll("{lightblue}메신저{default}: 잘 왔다, 죄인들아! 여기 너희에게 줄 전령이 하나 있다!");
+				
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_Encounter_FirstMatch");
 			}
 			else
 			{
-				CPrintToChatAll("{lightblue}메신저{default}: 2차전은 준비 됐겠지, 죄인들?");
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_Encounter_Rematch");
 			}
 		}
 
@@ -435,6 +437,18 @@ methodmap TheMessenger < CClotBody
 	}
 }
 
+static void NPCTalkMessage(int iNPC, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(iNPC, "lightblue", message);
+}
+
+void TheMessenger_NPCTalkMessage(int iNPC, const char[] message, any ...)
+{
+	char buffer[255];
+	VFormat(buffer, sizeof(buffer), message, 3);
+	PrintNPCMessageWithPrefixes(iNPC, "lightblue", message);
+}
+
 public void TheMessenger_ClotThink(int iNPC)
 {
 	TheMessenger npc = view_as<TheMessenger>(iNPC);
@@ -451,7 +465,7 @@ public void TheMessenger_ClotThink(int iNPC)
 	if(i_RaidGrantExtra[npc.index] >= 6)
 	{
 		i_RaidGrantExtra[npc.index] = 6;
-		CPrintToChatAll("{lightblue}메신저{default}: {crimson}으하하하하하!!! 전부 뒈져버려라!!");
+		TheMessenger_NPCTalkMessage(npc.index, "Messenger_Behold_Khalm");
 		return;
 	}
 	/*
@@ -465,25 +479,11 @@ public void TheMessenger_ClotThink(int iNPC)
 		BlockLoseSay = true;
 		if(i_RaidGrantExtra[npc.index] <= 2)
 		{
-			switch(GetRandomInt(0,2))
-			{
-				case 0:
-				{
-					CPrintToChatAll("{lightblue}메신저{default}: 쪽팔리는 줄 알아라.");
-				}
-				case 1:
-				{
-					CPrintToChatAll("{lightblue}메신저{default}: 진심인가?");
-				}
-				case 2:
-				{
-					CPrintToChatAll("{lightblue}메신저{default}: 뭐라 할 말이 없군.");
-				}
-			}
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_TimeOver_FirstMatch_%d", GetRandomInt(1, 3));
 		}
 		else
 		{
-			CPrintToChatAll("{lightblue}메신저{default}: ...........");
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_TimeOver_Rematch");
 		}
 	}
 	if(LastMann)
@@ -493,39 +493,11 @@ public void TheMessenger_ClotThink(int iNPC)
 			npc.m_fbGunout = true;
 			if(i_RaidGrantExtra[npc.index] <= 2)
 			{
-				switch(GetRandomInt(0,2))
-				{
-					case 0:
-					{
-						CPrintToChatAll("{lightblue}메신저{default}: 네 놈의 친구들은 전부 죽었다. {crimson}네 운명을 받아들여라.");
-					}
-					case 1:
-					{
-						CPrintToChatAll("{lightblue}메신저{default}: 너와 나만 남았다.");
-					}
-					case 3:
-					{
-						CPrintToChatAll("{lightblue}메신저{default}: 포기해라. 넌 이길 수 없다");
-					}
-				}
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_LastMann_FirstMatch_%d", GetRandomInt(1, 4));
 			}
 			else
 			{
-				switch(GetRandomInt(0,2))
-				{
-					case 0:
-					{
-						CPrintToChatAll("{lightblue}메신저{default}: 죽으라고!!!!");
-					}
-					case 1:
-					{
-						CPrintToChatAll("{lightblue}메신저{default}: 사지를 찢어발겨주마!!!!");
-					}
-					case 3:
-					{
-						CPrintToChatAll("{lightblue}메신저{default}: 으하하하하하!!!");
-					}
-				}				
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_LastMann_Rematch_%d", GetRandomInt(1, 3));			
 			}
 		}
 	}
@@ -539,9 +511,7 @@ public void TheMessenger_ClotThink(int iNPC)
 		npc.m_blPlayHurtAnimation = false;
 		npc.PlayHurtSound();
 	}
-
-
-
+	
 	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
 	{
 		return;
@@ -664,25 +634,7 @@ bool Messanger_Elemental_Attack_Projectiles(TheMessenger npc)
 				npc.m_iOverlordComboAttack = 4;
 				fl_TotalArmor[npc.index] = fl_TotalArmor[npc.index] * 0.9;
 				RaidModeScaling *= 1.1;
-				switch(GetRandomInt(0,3))
-				{
-					case 0:
-					{
-						CPrintToChatAll("{lightblue}메신저{default}: 나는 너희들과 이 지랄하면서 놀 시간이 없다.");
-					}
-					case 1:
-					{
-						CPrintToChatAll("{lightblue}메신저{default}: 그만 죽어라, 이 머저리들아.");
-					}
-					case 2:
-					{
-						CPrintToChatAll("{lightblue}메신저{default}: 모든 죄인은 {crimson}죽어야만한다.");
-					}
-					case 3:
-					{
-						CPrintToChatAll("{lightblue}메신저{default}: 그래봤자 무한한 고통을 느끼게 될 뿐이다.");
-					}
-				}
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_GroupAttack_%d", GetRandomInt(1, 5));
 				MessengerInitiateGroupAttack(npc);
 			}
 			return true;
@@ -874,7 +826,7 @@ public Action TheMessenger_OnTakeDamage(int victim, int &attacker, int &inflicto
 			if(i_CustomWeaponEquipLogic[weapon] == WEAPON_MESSENGER_LAUNCHER)
 			{
 				b_khamlWeaponRage[npc.index] = true;
-				CPrintToChatAll("{lightblue}메신저{default}: 그건 내 무기잖아. 이런 미친 놈이...");
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_Response_Messenger");
 			}
 		}
 	}
@@ -921,43 +873,11 @@ public void TheMessenger_NPCDeath(int entity)
 	{
 		if(i_RaidGrantExtra[npc.index] <= 2)
 		{
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					CPrintToChatAll("{lightblue}메신저{default}: 으윽... 이런 개밥도 못 한 쓰레기들이...");
-				}
-				case 1:
-				{
-					CPrintToChatAll("{lightblue}메신저{default}: 너흰 그저 피할 수 없는 일을 지연시킬 수 있을 뿐이다..");
-				}
-				case 2:
-				{
-					CPrintToChatAll("{lightblue}메신저{default}: 어쩌면 네놈들을 과소평가 했을수도 있겠군..");
-				}
-				case 3:
-				{
-					CPrintToChatAll("{lightblue}메신저{default}: 안 돼...");
-				}
-			}
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_Death_FirstMatch_%d", GetRandomInt(1, 4));
 		}
 		else
 		{
-			switch(GetRandomInt(0,2))
-			{
-				case 0:
-				{
-					CPrintToChatAll("{lightblue}메신저{default}: 두 번 씩이나 졌단 말인가!!");
-				}
-				case 1:
-				{
-					CPrintToChatAll("{lightblue}메신저{default}: 어째서냐!!");
-				}
-				case 2:
-				{
-					CPrintToChatAll("{lightblue}메신저{default}: 난 그저 그 분에게 한 번이라도 좋은 모습을 보여주고 싶었을 뿐인데... 으윽.....");
-				}
-			}
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_Death_Rematch_%d", GetRandomInt(1, 6));
 		}
 	}
 }
@@ -1368,33 +1288,15 @@ public void TheMessenger_OnTakeDamagePost(int victim, int attacker, int inflicto
 		}
 	}
 
-	if((ReturnEntityMaxHealth(npc.index)/4) >= GetEntProp(npc.index, Prop_Data, "m_iHealth") && !npc.Anger) //npc.Anger after half hp/400 hp
+	if((ReturnEntityMaxHealth(npc.index)/4) >= GetEntProp(npc.index, Prop_Data, "m_iHealth") && !npc.Anger) //npc.Anger after quarter hp/400 hp
 	{
 		npc.Anger = true;
 		npc.m_flAttackHappens_bullshit = GetGameTime(npc.index) + 0.0;
 		npc.m_flNextChargeSpecialAttack = GetGameTime(npc.index) + 0.0;
 		f_MessengerSpeedUp[npc.index] = 1.65;
 		npc.m_flSpeed = 330.0;
-
-		switch(GetRandomInt(0,3))
-		{
-			case 0:
-			{
-				CPrintToChatAll("{lightblue}메신저{default}: 하하하하하, 전부 {crimson}뒈질 준비나 해라!!");
-			}
-			case 1:
-			{
-				CPrintToChatAll("{lightblue}메신저{default}: 공허여, 내게 힘을 주소서!");
-			}
-			case 2:
-			{
-				CPrintToChatAll("{lightblue}메신저{default}: 지금 이겼다고 생각하나? 아직 시작일 뿐이라고.");
-			}
-			case 3:
-			{
-				CPrintToChatAll("{lightblue}메신저{default}: 그 고양이들을 기억하나? {crimson} 너희는 그것보다 더 심한 꼴을 당하게 될 거다.");
-			}
-		}
+		
+		TheMessenger_NPCTalkMessage(npc.index, "Messenger_Anger_%d", GetRandomInt(1, 6));
 	}
 }
 
@@ -1403,38 +1305,10 @@ public void TheMessenger_Win(int entity)
 {
 	if(i_RaidGrantExtra[entity] <= 2)
 	{
-		switch(GetRandomInt(0,2))
-		{
-			case 0:
-			{
-				CPrintToChatAll("{lightblue}메신저{default}: 정의가 집행되었다.");
-			}
-			case 1:
-			{
-				CPrintToChatAll("{lightblue}메신저{default}: 네 죗값은 이걸로 전부 치뤘다.");
-			}
-			case 2:
-			{
-				CPrintToChatAll("{lightblue}메신저{default}: 네 공포 정치는 이걸로 끝이다.");
-			}
-		}
+		TheMessenger_NPCTalkMessage(entity, "Messenger_Win_FirstMatch_%d", GetRandomInt(1, 3));
 	}
 	else
 	{
-		switch(GetRandomInt(0,2))
-		{
-			case 0:
-			{
-				CPrintToChatAll("{lightblue}메신저{default}: {crimson}멍청한 병신새끼들!");
-			}
-			case 1:
-			{
-				CPrintToChatAll("{lightblue}메신저{default}: 보고 계십니까? 제가 해냈습니다...");
-			}
-			case 2:
-			{
-				CPrintToChatAll("{lightblue}메신저{default}: 이제 만족하십니까, 주군이시여....");
-			}
-		}
+		TheMessenger_NPCTalkMessage(entity, "Messenger_Win_Rematch_%d", GetRandomInt(1, 3));
 	}
 }

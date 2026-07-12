@@ -298,7 +298,6 @@ static char VoteTitle[256];
 static char StartingItem[64];
 
 static ArrayList Curses;
-static ArrayList Artifacts;
 static ArrayList Floors;
 
 static int GameState;
@@ -314,7 +313,6 @@ static int LastFightCount;
 static int LastFightStage;
 static bool CurrentType;
 static ArrayList CurrentExclude;
-static ArrayList CurrentCollection;
 static ArrayList CurrentMissed;
 static int CurrentIngots;
 static int BonusLives;
@@ -856,6 +854,7 @@ void Rogue_StartSetup()	// Waves_RoundStart()
 		
 		strcopy(WhatDifficultySetting, sizeof(WhatDifficultySetting), StartingItem);
 		strcopy(WhatDifficultySetting_Internal, sizeof(WhatDifficultySetting_Internal), StartingItem);
+		strcopy(WhatModifierSetting, sizeof(WhatModifierSetting), StartingItem);
 		WavesUpdateDifficultyName();
 	}
 
@@ -870,6 +869,9 @@ void Rogue_StartSetup()	// Waves_RoundStart()
 		Store_RandomizeNPCStore(ZR_STORE_DEFAULT_SALE, 10);
 		Store_RandomizeNPCStore(ZR_STORE_DEFAULT_SALE, 5);
 	}
+	
+	if(RogueTheme == BlueParadox || RogueTheme == ReilaRift)
+		s_MissionClient = "{black}Izan";
 }
 
 void Rogue_CleanArtifacts()
@@ -1008,6 +1010,7 @@ public Action Rogue_EndVote(Handle timer, float time)
 
 				strcopy(WhatDifficultySetting, sizeof(WhatDifficultySetting), StartingItem);
 				strcopy(WhatDifficultySetting_Internal, sizeof(WhatDifficultySetting_Internal), StartingItem);
+				strcopy(WhatModifierSetting, sizeof(WhatModifierSetting), vote.Name);
 				WavesUpdateDifficultyName();
 
 			}
@@ -2789,11 +2792,20 @@ void Rogue_PlayerDowned(int client)
 
 bool Rogue_NoLastman()
 {
+	if(PapModeDo == PAP_MODE_BUILDING_ONLY)
+		return true;
+		
+	if(!ZR_AllowLastman())
+		return true;
+
 	return Rogue_Mode() && !Rogue_Paradox_Lastman();
 }
 
-bool Rogue_UnlockStore()
+int Rogue_UnlockStore()
 {
+	if(VScript_LockedWeapons())
+		return 2;
+	
 	return (Rogue_Mode() && RogueTheme == BlueParadox);
 }
 
@@ -3409,16 +3421,16 @@ bool Rogue_UpdateMvMStats()
 								switch(Rogue_GetUmbralLevel())
 								{
 									case 0:	// Most Friendly
-										Waves_SetWaveClass(objective, i, CurrentUmbral, "affinity_best", MVM_CLASS_FLAG_NORMAL|MVM_CLASS_FLAG_ALWAYSCRIT, true);
+										Waves_SetWaveClass(objective, i, CurrentUmbral, "affinitybestv2", MVM_CLASS_FLAG_NORMAL|MVM_CLASS_FLAG_ALWAYSCRIT, true);
 									
 									case 1, 2:
-										Waves_SetWaveClass(objective, i, CurrentUmbral, "affinity_neutral", MVM_CLASS_FLAG_NORMAL, true);
+										Waves_SetWaveClass(objective, i, CurrentUmbral, "affinityneutralv2", MVM_CLASS_FLAG_NORMAL, true);
 									
 									case 3:
-										Waves_SetWaveClass(objective, i, CurrentUmbral, "affinity_bad", MVM_CLASS_FLAG_MINIBOSS, true);
+										Waves_SetWaveClass(objective, i, CurrentUmbral, "affinitybadv3", MVM_CLASS_FLAG_MINIBOSS, true);
 									
 									default:	// Most Hated
-										Waves_SetWaveClass(objective, i, CurrentUmbral, "affinity_worst", MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT, true);
+										Waves_SetWaveClass(objective, i, CurrentUmbral, "affinityworstv2", MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT, true);
 								}
 
 								continue;
@@ -3508,6 +3520,7 @@ void ForceClientViewOntoEntity(int client, int entity)
 		int viewcontrol = CreateEntityByName("prop_dynamic");
 		if (IsValidEntity(viewcontrol))
 		{
+			b_ThisEntityIgnored[viewcontrol] = true;	
 			GetEntPropVector(entity, Prop_Send, "m_angRotation", rotation);
 			GetEntPropVector(entity, Prop_Data, "m_vecOrigin", origin);
 			SetEntityModel(viewcontrol, "models/empty.mdl");

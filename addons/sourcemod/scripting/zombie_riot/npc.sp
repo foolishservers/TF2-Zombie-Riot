@@ -73,6 +73,7 @@ void NPC_ConfigSetup()
 	// Buildings
 	ObjectBarricade_MapStart();
 	ObjectDecorative_MapStart();
+	ObjectExplosive_MapStart();
 	ObjectAmmobox_MapStart();
 	ObjectArmorTable_MapStart();
 	ObjectPerkMachine_MapStart();
@@ -152,6 +153,7 @@ void NPC_ConfigSetup()
 	VehicleLandrover_Setup();
 	VehiclePickup_Setup();
 	VehicleFullAPC_Setup();
+	VehicleMinecraft_Setup();
 	// Vehicles
 	
 	Combine_Police_Pistol_OnMapStart_NPC();
@@ -244,6 +246,7 @@ void NPC_ConfigSetup()
 	XenoFortifiedEarlyZombie_OnMapStart_NPC();
 	XenoPatientFew_OnMapStart_NPC();
 	XenoOuroborosEkas_OnMapStart_NPC();
+	XenoLabSecurity_OnMapStart_NPC();
 
 	
 	WanderingSpirit_OnMapStart_NPC();
@@ -290,6 +293,8 @@ void NPC_ConfigSetup()
 	AlliedLeperVisualiserAbility_OnMapStart_NPC();
 	AlliedKiryuVisualiserAbility_OnMapStart_NPC();
 	AlliedRitualistAbility_OnMapStart_NPC();
+	AlliedHeartbrokenVisualiserAbility_OnMapStart_NPC();
+	BurningThumbVisualiserAbility_OnMapStart_NPC();
 	
 	Mecha_Engineer_OnMapStart_NPC();
 	Mecha_Heavy_OnMapStart_NPC();
@@ -359,40 +364,40 @@ void NPC_ConfigSetup()
 	Remain_MapStart();
 	SeaFounder_Precache();
 	SeaPredator_Precache();
-	SeaBrandguider_Precache();
+	AbyssBrandguider_Precache();
 	SeaSpewer_Precache();
 	SeaSwarmcaller_Precache();
 	SeaReefbreaker_Precache();
-	EndSpeaker_MapStart();
-	SeabornScout_Precache();
-	SeabornSoldier_Precache();
+	Herald_MapStart();
+	DwellerScout_Precache();
+	DwellerSoldier_Precache();
 	CitizenRunner_Precache();
-	SeabornPyro_Precache();
-	SeabornDemo_Precache();
-	SeabornHeavy_Precache();
-	SeabornEngineer_Precache();
-	SeabornMedic_Precache();
-	SeabornSniper_Precache();
-	SeabornSpy_Precache();
-	KazimierzKnight_OnMapStart_NPC();
-	KazimierzKnightArcher_OnMapStart_NPC();
-	KazimierzBeserker_OnMapStart_NPC();
-	KazimierzLongArcher_OnMapStart_NPC();
-	KazimierzKnightAssasin_OnMapStart_NPC();
-	LastKnight_Precache();
-	SeabornGuard_Precache();
-	SeabornVanguard_Precache();
-	SeabornDefender_Precache();
-	SeabornCaster_Precache();
-	SeabornSpecialist_Precache();
-	SeabornSupporter_Precache();
-	SaintCarmen_Precache();
-	TidelinkedArchon_Precache();
-	TidelinkedBishop_Precache();
-	Pathshaper_Precache();
-	PathshaperFractal_Precache();
-	Isharmla_Precache();
-	IsharmlaTrans_MapStart();
+	DwellerPyro_Precache();
+	DwellerDemo_Precache();
+	DwellerHeavy_Precache();
+	DwellerEngineer_Precache();
+	DwellerMedic_Precache();
+	DwellerSniper_Precache();
+	DwellerSpy_Precache();
+	GrunwaldKnight_OnMapStart_NPC();
+	GrunwaldKnightArcher_OnMapStart_NPC();
+	GrunwaldBeserker_OnMapStart_NPC();
+	GrunwaldLongArcher_OnMapStart_NPC();
+	GrunwaldKnightAssasin_OnMapStart_NPC();
+	CorruptedKnight_Precache();
+	DwellerGuard_Precache();
+	DwellerVanguard_Precache();
+	DwellerDefender_Precache();
+	DwellerCaster_Precache();
+	DwellerSpecialist_Precache();
+	DwellerSupporter_Precache();
+	SaintAdrian_Precache();
+	DwellerArchon_Precache();
+	DwellerBishop_Precache();
+	Mirroring_Precache();
+	MirroringFractal_Precache();
+	AbyssLeviathan_Precache();
+	AbyssLeviathanTrans_MapStart();
 	
 #if defined RUINA_BASE
 	//Ruina waves	//warp
@@ -594,109 +599,109 @@ void NPC_ConfigSetup()
 	//void events
 	VoidedDiversionistico_OnMapStart_NPC();
 
-//Iberia Expidonsa
+//Almina Expidonsa
 	//Overall usage
-	Iberia_Beacon_OnMapStart_NPC();
-	IberiaBeaconConstructor_OnMapStart_NPC();
-	Iberia_Lighthouse_OnMapStart_NPC();
+	Almina_Beacon_OnMapStart_NPC();
+	AlminaBeaconConstructor_OnMapStart_NPC();
+	Almina_Lighthouse_OnMapStart_NPC();
 	Huirgrajo_Precache();
 	
 // wave 1-15
-	Iberia_Cambino_OnMapStart_NPC();
-	Iberia_Irani_OnMapStart_NPC();
-	Iberia_Kinat_OnMapStart_NPC();
-	Iberia_Ginus_OnMapStart_NPC();
-	Iberia_SpeedusInitus_OnMapStart_NPC();
-	Iberia_Anania_OnMapStart_NPC();
-	Iberia_Victorian_OnMapStart_NPC();
-	Iberia_inqusitor_iidutas_OnMapStart_NPC();
+	Almina_Cambino_OnMapStart_NPC();
+	Almina_Irani_OnMapStart_NPC();
+	Almina_Kinat_OnMapStart_NPC();
+	Almina_Ginus_OnMapStart_NPC();
+	Almina_SpeedusInitus_OnMapStart_NPC();
+	Almina_Anania_OnMapStart_NPC();
+	Almina_Vestan_OnMapStart_NPC();
+	Almina_inqusitor_iidutas_OnMapStart_NPC();
   
 
 //wave 16 -30
-	IberiaVivintu_OnMapStart_NPC();
-	IberiaCenula_OnMapStart_NPC();
-	IberiaKumbai_OnMapStart_NPC();
-	IberiaSpeedusInstantus_OnMapStart_NPC();
-	IberiaCombastia_OnMapStart_NPC();
-	IberiaMorato_OnMapStart_NPC();
-	IberiaSeaXploder_OnMapStart_NPC();
-	Iberia_AntiSeaRobot_OnMapStart_NPC();
+	AlminaVivintu_OnMapStart_NPC();
+	AlminaCenula_OnMapStart_NPC();
+	AlminaKumbai_OnMapStart_NPC();
+	AlminaSpeedusInstantus_OnMapStart_NPC();
+	AlminaCombastia_OnMapStart_NPC();
+	AlminaMorato_OnMapStart_NPC();
+	AlminaSeaXploder_OnMapStart_NPC();
+	Almina_AntiSeaRobot_OnMapStart_NPC();
 
 // 31-45
 
-	IberiaRanka_S_OnMapStart_NPC();
-	IberiaMurdarato_OnMapStart_NPC();
-	IberiaEliteKinat_OnMapStart_NPC();
-	Iberia_SeabornAnnihilator_OnMapStart_NPC();
-	IberianSentinel_OnMapStart_NPC();
-	IberianIronborus_OnMapStart_NPC();
-	IberianDestructius_OnMapStart_NPC();
-	IberiaSpeedusItus_OnMapStart_NPC();
+	AlminaRanka_S_OnMapStart_NPC();
+	AlminaMurdarato_OnMapStart_NPC();
+	AlminaEliteKinat_OnMapStart_NPC();
+	Almina_DwellerAnnihilator_OnMapStart_NPC();
+	AlminanSentinel_OnMapStart_NPC();
+	AlminanIronborus_OnMapStart_NPC();
+	AlminanDestructius_OnMapStart_NPC();
+	AlminaSpeedusItus_OnMapStart_NPC();
 
 //wave 45-60
 
-	IberiaSpeedusElitus_OnMapStart_NPC();
-	IberiaSeaDryer_OnMapStart_NPC();
-	IberiaRunaka_OnMapStart_NPC();
-	IberiaDeathMarker_OnMapStart_NPC();
-	Iberia_inqusitor_irene_OnMapStart_NPC();
+	AlminaSpeedusElitus_OnMapStart_NPC();
+	AlminaSeaDryer_OnMapStart_NPC();
+	AlminaRunaka_OnMapStart_NPC();
+	AlminaDeathMarker_OnMapStart_NPC();
+	Almina_inqusitor_amphi_OnMapStart_NPC();
 
-//Victorian Raid
+//Vestan Raid
 //wave 1~10
-	Victoria_Batter_OnMapStart_NPC();
-	Victorian_Charger_OnMapStart_NPC();
-	Victorian_Teslar_OnMapStart_NPC();
-	VictorianBallista_OnMapStart_NPC();
-	VictorianVanguard_OnMapStart_NPC();
-	VictorianSupplier_OnMapStart_NPC();
-	VictorianIgniter_OnMapStart_NPC();
-	VictorianGrenadier_OnMapStart_NPC();
-	VictorianSquadleader_OnMapStart_NPC();
-	VictorianSignaller_OnMapStart_NPC();
+	Vesta_Batter_OnMapStart_NPC();
+	Vestan_Charger_OnMapStart_NPC();
+	Vestan_Teslar_OnMapStart_NPC();
+	VestanBallista_OnMapStart_NPC();
+	VestanVanguard_OnMapStart_NPC();
+	VestanSupplier_OnMapStart_NPC();
+	VestanIgniter_OnMapStart_NPC();
+	VestanGrenadier_OnMapStart_NPC();
+	VestanSquadleader_OnMapStart_NPC();
+	VestanSignaller_OnMapStart_NPC();
 	
 //wave 11~20
-	VictorianHumbee_MapStart();
-	VictorianShotgunner_OnMapStart_NPC();
+	VestanHumbee_MapStart();
+	VestanShotgunner_OnMapStart_NPC();
 	Bulldozer_OnMapStart_NPC();
-	VictorianHardener_OnMapStart_NPC();
-	VictorianRaider_OnMapStart_NPC();
+	VestanHardener_OnMapStart_NPC();
+	VestanRaider_OnMapStart_NPC();
 	Zapper_OnMapStart_NPC();
-	VictorianPayback_OnMapStart_NPC();
+	VestanPayback_OnMapStart_NPC();
 	Blocker_OnMapStart_NPC();
-	VictoriaDestructor_Precache();
-	VictorianIronShield_OnMapStart_NPC();
+	VestaDestructor_Precache();
+	VestanIronShield_OnMapStart_NPC();
 	Aviator_OnMapStart_NPC();
 	
 //wave 21~30
-	Victoria_BaseBreaker_OnMapStart_NPC();
-	VictoriaAntiarmorInfantry_OnMapStart_NPC();
-	VictoriaAssaulter_OnMapStart_NPC();
-	VictorianMechafist_OnMapStart_NPC();
-	VictorianBooster_OnMapStart_NPC();
-	VictoriaScorcher_OnMapStart_NPC();
-	VictoriaMowdown_OnMapStart_NPC();
-	VictoriaMortar_OnMapStart_NPC();
-	VictoriaArtillerist_OnMapStart_NPC();
-	VictoriaBreachcart_MapStart();
-	VictoriaBombcart_Precache();
-	VictoriaBigpipe_OnMapStart_NPC();
-	VictoriaHarbringer_OnMapStart_NPC();
-	VictoriaBirdeye_OnMapStart_NPC();
+	Vesta_BaseBreaker_OnMapStart_NPC();
+	VestaAntiarmorInfantry_OnMapStart_NPC();
+	VestaAssaulter_OnMapStart_NPC();
+	VestanMechafist_OnMapStart_NPC();
+	VestanBooster_OnMapStart_NPC();
+	VestaScorcher_OnMapStart_NPC();
+	VestaMowdown_OnMapStart_NPC();
+	VestaMortar_OnMapStart_NPC();
+	VestaArtillerist_OnMapStart_NPC();
+	VestaBreachcart_MapStart();
+	VestaBombcart_Precache();
+	VestaBigpipe_OnMapStart_NPC();
+	VestaHarbringer_OnMapStart_NPC();
+	VestaBirdeye_OnMapStart_NPC();
 
 //wave 31~40
-	VictorianCaffeinator_OnMapStart_NPC();
-	VictorianMechanist_as_OnMapStart_NPC();
-	VictorianOfflineAvangard_MapStart();
-	VictorianWelder_OnMapStart_NPC();
-	VIctorianTanker_OnMapStart_NPC();
-	VictorianAssaultVehicle_OnMapStart();
-	VictorianPulverizer_OnMapStart_NPC();
-	VIctorianAmbusher_OnMapStart_NPC();
-	VictoriaTank_MapStart();
-	VictoriaTaser_OnMapStart_NPC();
-	VictoriaRadiomast_OnMapStart_NPC();
-	VictoriaRepair_OnMapStart_NPC();
-	Victorian_Radioguard_OnMapStart_NPC();
+	VestanCaffeinator_OnMapStart_NPC();
+	VestanMechanist_as_OnMapStart_NPC();
+	VestanOfflineAvangard_MapStart();
+	VestanWelder_OnMapStart_NPC();
+	VestanTanker_OnMapStart_NPC();
+	VestanAssaultVehicle_OnMapStart();
+	VestanPulverizer_OnMapStart_NPC();
+	VestanAmbusher_OnMapStart_NPC();
+	VestaTank_MapStart();
+	VestaTaser_OnMapStart_NPC();
+	VestaRadiomast_OnMapStart_NPC();
+	VestaRepair_OnMapStart_NPC();
+	Vestan_Radioguard_OnMapStart_NPC();
 
 //raid
 	Atomizer_OnMapStart_NPC();
@@ -711,14 +716,26 @@ void NPC_ConfigSetup()
 	TrueCyberWarrior_OnMapStart();
 	VillageAlaxios_OnMapStart();
 
+//construction2 Vestans
+	Demolitionist_OnMapStart_NPC();
+	Chemical_Specialist_OnMapStart_NPC();
+	Vestan_Protector_OnMapStart_NPC();
+	ChemicalSpreader_OnMapStart_NPC();
+	Zapmarker_OnMapStart_NPC();
+	ArmoredMedic_OnMapStart_NPC();
+	Airraider_OnMapStart_NPC();
+	Vestan_Headhunter_OnMapStart_NPC();
+	Vestan_Resource_Collector_OnMapStart_NPC();
+	Gasleader_OnMapStart_NPC();	
+
 //special
-	Invisible_TRIGGER_OnMapStart_NPC();//It is currently used as a trigger for the Victoria Factory.
+	Invisible_TRIGGER_OnMapStart_NPC();//It is currently used as a trigger for the Vesta Factory.
 	CaptinoBaguettus_OnMapStart_NPC();//Captino Meinus Follower
-	VictorianFactory_MapStart();
-	VictorianDroneFragments_MapStart();
-	VictorianDroneAnvil_MapStart();
-	Victorian_Tacticalunit_OnMapStart_NPC();
-	Victorian_TacticalProtector_OnMapStart_NPC();
+	VestanFactory_MapStart();
+	VestanDroneFragments_MapStart();
+	VestanDroneAnvil_MapStart();
+	Vestan_Tacticalunit_OnMapStart_NPC();
+	Vestan_TacticalProtector_OnMapStart_NPC();
 	TEST_Dummy_OnMapStart_NPC();
 
 	//Alt Barracks
@@ -747,7 +764,7 @@ void NPC_ConfigSetup()
 	BarrackManAtArmsOnMapStart();
 	BarrackLongbowOnMapStart();
 	BarrackHussarOnMapStart();
-	BarrackLastKnightOnMapStart();
+	BarrackCorruptedKnightOnMapStart();
 	BarrackCrossbowOnMapStart();
 	BarrackChampionOnMapStart();
 	BarrackHandCannoneerOnMapStart();
@@ -777,28 +794,28 @@ void NPC_ConfigSetup()
 	
 	Barracks_Combine_Commander_Precache();
 
-	//Iberia Barracks
-	Barracks_Iberia_Runner_Precache();
-	Barracks_Iberia_Gunner_Precache();
+	//Almina Barracks
+	Barracks_Almina_Runner_Precache();
+	Barracks_Almina_Gunner_Precache();
 
-	Barracks_Iberia_Tanker_Precache();
-	Barracks_Iberia_Rocketeer_Precache();
+	Barracks_Almina_Tanker_Precache();
+	Barracks_Almina_Rocketeer_Precache();
 
-	Barracks_Iberia_Healer_Precache();
-	Barracks_Iberia_Boomstick_Precache();
+	Barracks_Almina_Healer_Precache();
+	Barracks_Almina_Boomstick_Precache();
 	
-	Barracks_Iberia_Healtanker_Precache();
-	Barracks_Iberia_Elite_Gunner_Precache();
+	Barracks_Almina_Healtanker_Precache();
+	Barracks_Almina_Elite_Gunner_Precache();
 	
-	Barracks_Iberia_Guards_Precache();
-	Barracks_Iberia_Commando_Precache();
+	Barracks_Almina_Guards_Precache();
+	Barracks_Almina_Commando_Precache();
 
-	Barracks_Iberia_Headhunter_Precache();
-	Barrack_Iberia_Inquisitor_Lynsen_Precache();
+	Barracks_Almina_Headhunter_Precache();
+	Barrack_Almina_Inquisitor_Lynsen_Precache();
 
-	Barracks_Iberia_Lighthouse_Guardian_Precache();
+	Barracks_Almina_Lighthouse_Guardian_Precache();
 	
-	//Iberia Last Hope
+	//Almina Last Hope
 	Barracks_Thorns();
 
 	// Raid Low Prio
@@ -810,6 +827,7 @@ void NPC_ConfigSetup()
 	RaidbossMrX_OnMapStart();
 	GodAlaxios_OnMapStart();
 	Sensal_OnMapStart_NPC();
+	SensalTargetLaser_OnMapStart_NPC();
 	Karlas_OnMapStart_NPC();
 	Stella_OnMapStart_NPC();
 	RaidbossBobTheFirst_OnMapStart();
@@ -963,6 +981,8 @@ void NPC_ConfigSetup()
 	BossSummonRandom_OnMapStart_NPC();
 	//Combine Mutation
 	OmegaRaid_OnMapStart_NPC();
+	Rollermine_OnMapStart_NPC();
+	NovaProspektOverseer_OnMapStart_NPC();
 	LostKnight_OnMapStart_NPC();
 	Merlton_Boss_OnMapStart_NPC();
 	BobFollower_Setup();
@@ -972,17 +992,18 @@ void NPC_ConfigSetup()
 	VoidCombineElite_OnMapStart_NPC();
 	VoidCombineSoldierAr2_OnMapStart_NPC();
 	VoidCombineSoldierShotgun_OnMapStart_NPC();
-	Seaborn_Combine_Police_Pistol_OnMapStart_NPC();
-	SeabornCombinePoliceSmg_OnMapStart_NPC();
-	SeabornCombineElite_OnMapStart_NPC();
-	SeabornCombineSoldierAr2_OnMapStart_NPC();
-	SeabornCombineSoldierShotgun_OnMapStart_NPC();
+	Dweller_Combine_Police_Pistol_OnMapStart_NPC();
+	DwellerCombinePoliceSmg_OnMapStart_NPC();
+	DwellerCombineElite_OnMapStart_NPC();
+	DwellerCombineSoldierAr2_OnMapStart_NPC();
+	DwellerCombineSoldierShotgun_OnMapStart_NPC();
 
 	// Freeplay
 	DimensionalFragment_OnMapStart_NPC();
 	ImmutableHeavy_OnMapStart_NPC();
 	VanishingMatter_OnMapStart_NPC();
 	Erasus_OnMapStart_NPC();
+	ErasusDebug_OnMapStart_NPC();
 	AnnoyingSpirit_OnMapStart_NPC();
 	FogOrbHeavy_OnMapStart_NPC();
 
@@ -1238,6 +1259,7 @@ void NPC_ConfigSetup()
 	Nest_OnMapStart_NPC();
 	ZSZmain_OnMapStart_NPC();
 	ZombieSummonRandom_OnMapStart_NPC();
+	PoyoSummonRandom_OnMapStart_NPC();
 	Amplification_Precache();
 	Pregnant_Precache();
 	ZSHeadcrabZombie_OnMapStart_NPC();
@@ -1282,10 +1304,54 @@ void NPC_ConfigSetup()
 	DasNaggenvatcher_OnMapStart();
 	StoneAgeMaker_OnMapStart_NPC();
 	MassShootingLover_OnMapStart_NPC();
+	ZSZombine_OnMapStart_NPC();
+	ZSMainHeadcrab_OnMapStart_NPC();
+	ZSMainHeadcrabZombie_OnMapStart_NPC();
+	ZSMainPoisonZombie_OnMapStart_NPC();
+	ZSSoldierGiant_OnMapStart_NPC();
+	ZSSoldierMinion_OnMapStart_NPC();
+	Angryheadcrab_MapStart();
+	Headcrabmilloperator_OnMapStart_NPC();
+	ManhattanParrot_OnMapStart_NPC();
+	InfectedTomislavMain_OnMapStart_NPC();
 	Allymedic_OnMapStart_NPC();
 	Allysoldier_OnMapStart_NPC();
 	Allyheavy_OnMapStart_NPC();
 	AllySniper_OnMapStart_NPC();
+  
+	RocketGunner_OnMapStart_NPC();
+	HeavyWeaponsGuy_OnMapStart_NPC();
+	VeryHeavyHeavy_OnMapStart_NPC();
+	SteamHappyfier_OnMapStart_NPC();
+	BlackHeavySoul_OnMapStart_NPC();
+	Broly_OnMapStart_NPC();
+	FishScout_OnMapStart_NPC();
+	HumanMain_OnMapStart_NPC();
+	NoRandomKranz_OnMapStart_NPC();
+	Professional_Fingerer_OnMapStart_NPC();
+	SquadX_Omega_OnMapStart_NPC();
+	SquadX_Bob_OnMapStart_NPC();
+	SquadX_Whiteflower_OnMapStart_NPC();
+	SquadX_Shadowing_Darkness_OnMapStart_NPC();
+	SquadX_Master_OnMapStart_NPC();
+	KahmlsteinDeadGrandma_OnMapStart_NPC();
+	AustralianKing_OnMapStart_NPC();
+	DismountedTeuton_OnMapStart_NPC();
+	FuckerSwordsman_OnMapStart_NPC();
+	GigaObuch_OnMapStart_NPC();
+	LardFat_OnMapStart_NPC();
+	MountedTeuton_OnMapStart_NPC();
+	PurpleGuy_OnMapStart_NPC();
+	RTDMedic_OnMapStart_NPC();
+	AustralianSpider_OnMapStart_NPC();
+	SuctionMedic_OnMapStart_NPC();
+	LivingMetalBall_OnMapStart_NPC();
+	AxeThrowingBarbarian_OnMapStart_NPC();
+	AmbitiousTrader_OnMapStart_NPC();
+	AgentSmithFollower_Setup();
+	KevinmeryFollower_Setup();
+
+	VScript_CacheNPCs();
 }
 
 void NPC_MapEnd()
@@ -1447,26 +1513,30 @@ static int CreateNPC(NPCData npcdata, int id, int client, float vecPos[3], float
 			i_NpcInternalId[entity] = id;
 		
 		if(!ignoreSetup)
-		{
-			if(GetTeam(entity) == 2)
-			{
-				Rogue_AllySpawned(entity);
-				Waves_AllySpawned(entity);
-			}
-			else
-			{
-				Rogue_EnemySpawned(entity);
-				Waves_EnemySpawned(entity);
-				Construction_EnemySpawned(entity);
-				Dungeon_EnemySpawned(entity);
-			}
-			Waves_UpdateMvMStats();
-		}
+			NPC_PostSetup(entity);
+		
 		if(BetWar_Mode())
 			b_ShowNpcHealthbar[entity] = true;
 	}
 
 	return entity;
+}
+
+void NPC_PostSetup(int entity)
+{
+	if(GetTeam(entity) == 2)
+	{
+		Rogue_AllySpawned(entity);
+		Waves_AllySpawned(entity);
+	}
+	else
+	{
+		Rogue_EnemySpawned(entity);
+		Waves_EnemySpawned(entity);
+		Construction_EnemySpawned(entity);
+		Dungeon_EnemySpawned(entity);
+	}
+	Waves_UpdateMvMStats();
 }
 
 void ZR_NpcTauntWinClear()
@@ -1504,6 +1574,7 @@ void NPCDeath(int entity)
 {
 	Freeplay_OnNPCDeath(entity);
 	Cheese_OnNPCDeath(entity);
+	Gunsaw_NPCDeath(entity);
 	if(view_as<CClotBody>(entity).m_fCreditsOnKill)
 	{
 		int GiveMoney = 0;
@@ -1574,6 +1645,54 @@ void NPCDeath(int entity)
 
 Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
+	CClotBody npc = view_as<CClotBody>(victim);
+	bool PreventHurtsound = false;
+	//Various checks to prevent hurt sounds and allat
+	if(attacker <= MaxClients && TeutonType[attacker] != TEUTON_NONE)
+	{
+		PreventHurtsound = true;
+	}
+	/*
+	if(i_HexCustomDamageTypes[victim] & ZR_DAMAGE_DO_NOT_APPLY_BURN_OR_BLEED)
+		PreventHurtsound = true;
+	//dont when bleeding
+	*/
+
+	int CheckHpThreshhold = ReturnEntityMaxHealth(victim);
+	int flHealth = GetEntProp(victim, Prop_Data, "m_iHealth");
+	if(flHealth >= CheckHpThreshhold)
+	{
+		CheckHpThreshhold = flHealth;
+	}
+	if(npc.m_iHealthBar > 0)
+	{
+		CheckHpThreshhold *= npc.m_iHealthBar;
+	}
+	float WhichThreshholdDamageAt = 0.075;
+	//normal enemies need to take atleast 7.5% of their hp as damage in 1 hit so it does the hurt animation
+	if(b_thisNpcIsARaid[victim])
+	{
+		WhichThreshholdDamageAt *= 0.025;
+	}
+	else if(b_thisNpcIsABoss[victim])
+	{
+		WhichThreshholdDamageAt *= 0.15;
+	}
+	WhichThreshholdDamageAt *= float(flHealth);
+	if(WhichThreshholdDamageAt >= damage)
+	{
+		PreventHurtsound = true;
+	}
+	
+	if(PreventHurtsound)
+	{
+		float gameTime = GetGameTime(npc.index);
+
+		if(npc.m_flHeadshotCooldown < (gameTime + 0.0001))
+		{
+			npc.m_flHeadshotCooldown = gameTime + 0.0001;
+		}
+	}
 	Function func = func_NPCOnTakeDamage[victim];
 	if(func && func != INVALID_FUNCTION)
 	{
@@ -1595,8 +1714,9 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 }
 
 //BASES FOR ENEMIES
+#include "npc/dweller/npc_remains.sp"
 #include "npc/expidonsa/npc_expidonsa_base.sp" //ALSO IN RPG!
-#include "npc/seaborn/npc_nethersea_shared.sp"
+#include "npc/dweller/npc_abyss_shared.sp"
 #include "npc/ruina/ruina_npc_enchanced_ai_core.sp"	//this controls almost every ruina npc's behaviors.
 
 //BUILDINGS
@@ -1618,6 +1738,7 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "object/obj_brewing_stand.sp"
 #include "object/obj_revenant.sp"
 #include "object/obj_grill.sp"
+#include "object/obj_explosivebarrel.sp"
 #include "object/construction/obj_giant_lighthouse.sp"
 #include "object/construction/obj_const_stove.sp"
 #include "object/construction/obj_const_factory.sp"
@@ -1668,6 +1789,7 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "vehicles/vehicle_landrover.sp"
 #include "vehicles/vehicle_pickup.sp"
 #include "vehicles/vehicle_fullapc.sp"
+#include "vehicles/vehicle_minecraft.sp"
 
 //NORMAL
 #include "npc/normal/npc_headcrabzombie.sp"
@@ -1759,6 +1881,7 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/xeno_lab/npc_xeno_early_infected.sp"
 #include "npc/xeno_lab/npc_xeno_patient_few.sp"
 #include "npc/xeno_lab/npc_xeno_ekas_robo.sp"
+#include "npc/xeno_lab/npc_xeno_lab_security.sp"
 
 #include "npc/special/npc_sawrunner.sp"
 #include "npc/special/npc_l4d2_tank.sp"
@@ -1793,6 +1916,9 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/ally/npc_allied_kahml_afterimage.sp"
 #include "npc/ally/npc_allied_kiyru_visualiser.sp"
 #include "npc/ally/npc_allied_ritualist_visualiser.sp"
+#include "npc/ally/npc_allied_heartbroken_visualiser.sp"
+#include "npc/ally/npc_burningthumb_visualiser.sp"
+#include "npc/ally/npc_erasus_debug.sp"
 
 #include "npc/raidmode_bosses/npc_true_fusion_warrior.sp"
 #include "npc/raidmode_bosses/npc_blitzkrieg.sp"
@@ -2032,19 +2158,19 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/ally/combine_barracks/npc_barrack_combine_super.sp"
 #include "npc/ally/combine_barracks/npc_barrack_combine_commander.sp"
 
-#include "npc/ally/iberia_barracks/npc_barrack_runner.sp"
-#include "npc/ally/iberia_barracks/npc_barrack_gunner.sp"
-#include "npc/ally/iberia_barracks/npc_barrack_tanker.sp"
-#include "npc/ally/iberia_barracks/npc_barrack_rocketeer.sp"
-#include "npc/ally/iberia_barracks/npc_barrack_healer.sp"
-#include "npc/ally/iberia_barracks/npc_barrack_boomstick.sp"
-#include "npc/ally/iberia_barracks/npc_barrack_healtanker.sp"
-#include "npc/ally/iberia_barracks/npc_barrack_guards.sp"
-#include "npc/ally/iberia_barracks/npc_barrack_elite_gunner.sp"
-#include "npc/ally/iberia_barracks/npc_barrack_commando.sp"
-#include "npc/ally/iberia_barracks/npc_barrack_headhunter.sp"
-#include "npc/ally/iberia_barracks/npc_barrack_inquisitor.sp"
-#include "npc/ally/iberia_barracks/npc_barrack_lighthouse_guardian.sp"
+#include "npc/ally/almina_barracks/npc_barrack_runner.sp"
+#include "npc/ally/almina_barracks/npc_barrack_gunner.sp"
+#include "npc/ally/almina_barracks/npc_barrack_tanker.sp"
+#include "npc/ally/almina_barracks/npc_barrack_rocketeer.sp"
+#include "npc/ally/almina_barracks/npc_barrack_healer.sp"
+#include "npc/ally/almina_barracks/npc_barrack_boomstick.sp"
+#include "npc/ally/almina_barracks/npc_barrack_healtanker.sp"
+#include "npc/ally/almina_barracks/npc_barrack_guards.sp"
+#include "npc/ally/almina_barracks/npc_barrack_elite_gunner.sp"
+#include "npc/ally/almina_barracks/npc_barrack_commando.sp"
+#include "npc/ally/almina_barracks/npc_barrack_headhunter.sp"
+#include "npc/ally/almina_barracks/npc_barrack_inquisitor.sp"
+#include "npc/ally/almina_barracks/npc_barrack_lighthouse_guardian.sp"
 
 #include "npc/ally/npc_nearl_sword.sp"
 #include "npc/ally/npc_ritualist.sp"
@@ -2058,60 +2184,59 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/raidmode_bosses/xeno/npc_nemesis.sp"
 #include "npc/raidmode_bosses/xeno/npc_mrx.sp"
 
-#include "npc/seaborn/npc_firsttotalk.sp"
-#include "npc/seaborn/npc_seacrawler.sp"
-#include "npc/seaborn/npc_seapiercer.sp"
-#include "npc/seaborn/npc_seareaper.sp"
-#include "npc/seaborn/npc_searunner.sp"
-#include "npc/seaborn/npc_seaslider.sp"
-#include "npc/seaborn/npc_seaspitter.sp"
-#include "npc/seaborn/npc_undertides.sp"
-#include "npc/seaborn/npc_seaborn_kazimersch_knight.sp"
-#include "npc/seaborn/npc_seaborn_kazimersch_archer.sp"
-#include "npc/seaborn/npc_seaborn_kazimersch_beserker.sp"
-#include "npc/seaborn/npc_seaborn_kazimersch_longrange.sp"
-#include "npc/seaborn/npc_remains.sp"
-#include "npc/seaborn/npc_endspeaker_shared.sp"
-#include "npc/seaborn/npc_endspeaker_1.sp"
-#include "npc/seaborn/npc_endspeaker_2.sp"
-#include "npc/seaborn/npc_endspeaker_3.sp"
-#include "npc/seaborn/npc_endspeaker_4.sp"
-#include "npc/seaborn/npc_netherseafounder.sp"
-#include "npc/seaborn/npc_netherseapredator.sp"
-#include "npc/seaborn/npc_netherseabrandguider.sp"
-#include "npc/seaborn/npc_seaborn_kazimersch_melee_assasin.sp"
-#include "npc/seaborn/npc_netherseaspewer.sp"
-#include "npc/seaborn/npc_netherseaswarmcaller.sp"
-#include "npc/seaborn/npc_netherseareefbreaker.sp"
-#include "npc/seaborn/npc_seaborn_scout.sp"
-#include "npc/seaborn/npc_seaborn_soldier.sp"
-#include "npc/seaborn/npc_citizen_runner.sp"
-#include "npc/seaborn/npc_seaborn_pyro.sp"
-#include "npc/seaborn/npc_seaborn_demo.sp"
-#include "npc/seaborn/npc_seaborn_heavy.sp"
-#include "npc/seaborn/npc_seaborn_engineer.sp"
-#include "npc/seaborn/npc_seaborn_medic.sp"
-#include "npc/seaborn/npc_seaborn_sniper.sp"
-#include "npc/seaborn/npc_seaborn_spy.sp"
-#include "npc/seaborn/npc_lastknight.sp"
-#include "npc/ally/npc_barrack_lastknight.sp"
-#include "npc/seaborn/npc_saintcarmen.sp"
-#include "npc/seaborn/npc_pathshaper.sp"
-#include "npc/seaborn/npc_pathshaper_fractal.sp"
-#include "npc/seaborn/npc_tidelinkedbishop.sp"
-#include "npc/seaborn/npc_tidelinkedarchon.sp"
-#include "npc/seaborn/npc_seaborn_guard.sp"
-#include "npc/seaborn/npc_seaborn_defender.sp"
-#include "npc/seaborn/npc_seaborn_vanguard.sp"
-#include "npc/seaborn/npc_seaborn_caster.sp"
-#include "npc/seaborn/npc_seaborn_specialist.sp"
-#include "npc/seaborn/npc_seaborn_supporter.sp"
-#include "npc/seaborn/npc_isharmla.sp"
-#include "npc/seaborn/npc_isharmla_trans.sp"
+#include "npc/dweller/npc_herald_shared.sp"
+#include "npc/dweller/npc_dwellerhybrid.sp"
+#include "npc/dweller/npc_seacrawler.sp"
+#include "npc/dweller/npc_seapiercer.sp"
+#include "npc/dweller/npc_seareaper.sp"
+#include "npc/dweller/npc_searunner.sp"
+#include "npc/dweller/npc_seaslider.sp"
+#include "npc/dweller/npc_seaspitter.sp"
+#include "npc/dweller/npc_sea_dweller_nest.sp"
+#include "npc/dweller/npc_dweller_grunwald_knight.sp"
+#include "npc/dweller/npc_dweller_grunwald_archer.sp"
+#include "npc/dweller/npc_dweller_grunwald_beserker.sp"
+#include "npc/dweller/npc_dweller_grunwald_longrange.sp"
+#include "npc/dweller/npc_herald_1.sp"
+#include "npc/dweller/npc_herald_2.sp"
+#include "npc/dweller/npc_herald_3.sp"
+#include "npc/dweller/npc_herald_4.sp"
+#include "npc/dweller/npc_abyssfounder.sp"
+#include "npc/dweller/npc_abysspredator.sp"
+#include "npc/dweller/npc_abyssbrandguider.sp"
+#include "npc/dweller/npc_dweller_grunwald_melee_assasin.sp"
+#include "npc/dweller/npc_abyssspewer.sp"
+#include "npc/dweller/npc_abyssswarmcaller.sp"
+#include "npc/dweller/npc_abyssreefbreaker.sp"
+#include "npc/dweller/npc_dweller_scout.sp"
+#include "npc/dweller/npc_dweller_soldier.sp"
+#include "npc/dweller/npc_citizen_runner.sp"
+#include "npc/dweller/npc_dweller_pyro.sp"
+#include "npc/dweller/npc_dweller_demo.sp"
+#include "npc/dweller/npc_dweller_heavy.sp"
+#include "npc/dweller/npc_dweller_engineer.sp"
+#include "npc/dweller/npc_dweller_medic.sp"
+#include "npc/dweller/npc_dweller_sniper.sp"
+#include "npc/dweller/npc_dweller_spy.sp"
+#include "npc/dweller/npc_corruptedknight.sp"
+#include "npc/ally/npc_barrack_corruptedknight.sp"
+#include "npc/dweller/npc_saintadrian.sp"
+#include "npc/dweller/npc_mirroring.sp"
+#include "npc/dweller/npc_mirroring_fractal.sp"
+#include "npc/dweller/npc_dwellerbishop.sp"
+#include "npc/dweller/npc_dwellerarchon.sp"
+#include "npc/dweller/npc_dweller_guard.sp"
+#include "npc/dweller/npc_dweller_defender.sp"
+#include "npc/dweller/npc_dweller_vanguard.sp"
+#include "npc/dweller/npc_dweller_caster.sp"
+#include "npc/dweller/npc_dweller_specialist.sp"
+#include "npc/dweller/npc_dweller_supporter.sp"
+#include "npc/dweller/npc_abyss_leviathan.sp"
+#include "npc/dweller/npc_abyss_leviathan_trans.sp"
 
-#include "npc/raidmode_bosses/seaborn/npc_stella.sp"
-#include "npc/raidmode_bosses/seaborn/npc_karlas.sp"
-#include "npc/raidmode_bosses/seaborn/npc_bob_the_first_last_savior.sp"
+#include "npc/raidmode_bosses/dweller/npc_stella.sp"
+#include "npc/raidmode_bosses/dweller/npc_karlas.sp"
+#include "npc/raidmode_bosses/dweller/npc_bob_the_first_last_savior.sp"
 
 #include "npc/expidonsa/npc_benera.sp"
 #include "npc/expidonsa/npc_pental.sp"
@@ -2143,6 +2268,7 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/expidonsa/npc_speedus_adivus.sp"
 #include "npc/expidonsa/npc_anfuhrer_eisenhard.sp"
 #include "npc/raidmode_bosses/npc_sensal.sp"
+#include "npc/raidmode_bosses/npc_sensal_crystal_targeter.sp"
 
 #include "npc/ally/npc_vip_building.sp"
 #include "npc/rogue/npc_overlord_rogue.sp"
@@ -2312,124 +2438,124 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 
 
 
-#include "npc/iberia_expidonsa/npc_iberia_base.sp"
-#include "npc/iberia_expidonsa/npc_iberia_beacon.sp"
-#include "npc/iberia_expidonsa/npc_iberia_lighthouse.sp"
-#include "npc/iberia_expidonsa/npc_beacon_constructor.sp"
-#include "npc/iberia_expidonsa/npc_huirgrajo.sp"
+#include "npc/almina_expidonsa/npc_almina_base.sp"
+#include "npc/almina_expidonsa/npc_almina_beacon.sp"
+#include "npc/almina_expidonsa/npc_almina_lighthouse.sp"
+#include "npc/almina_expidonsa/npc_beacon_constructor.sp"
+#include "npc/almina_expidonsa/npc_huirgrajo.sp"
 
-#include "npc/iberia_expidonsa/wave_15/npc_irani.sp"
-#include "npc/iberia_expidonsa/wave_15/npc_cambino.sp"
-#include "npc/iberia_expidonsa/wave_15/npc_kinat.sp"
-#include "npc/iberia_expidonsa/wave_15/npc_ginus.sp"
-#include "npc/iberia_expidonsa/wave_15/npc_speedus_initus.sp"
-#include "npc/iberia_expidonsa/wave_15/npc_anania.sp"
-#include "npc/iberia_expidonsa/wave_15/npc_victorian.sp"
-#include "npc/iberia_expidonsa/wave_15/npc_inqusitor_iidutas.sp"
-
-
-#include "npc/iberia_expidonsa/wave_30/npc_vivintu.sp"
-#include "npc/iberia_expidonsa/wave_30/npc_cenula.sp"
-#include "npc/iberia_expidonsa/wave_30/npc_kumbai.sp"
-#include "npc/iberia_expidonsa/wave_30/npc_speedus_instantus.sp"
-#include "npc/iberia_expidonsa/wave_30/npc_combastia.sp"
-#include "npc/iberia_expidonsa/wave_30/npc_iberia_morato.sp"
-#include "npc/iberia_expidonsa/wave_30/npc_sea_xploder.sp"
-#include "npc/iberia_expidonsa/wave_30/npc_anti_sea_robot.sp"
+#include "npc/almina_expidonsa/wave_15/npc_irani.sp"
+#include "npc/almina_expidonsa/wave_15/npc_cambino.sp"
+#include "npc/almina_expidonsa/wave_15/npc_kinat.sp"
+#include "npc/almina_expidonsa/wave_15/npc_ginus.sp"
+#include "npc/almina_expidonsa/wave_15/npc_speedus_initus.sp"
+#include "npc/almina_expidonsa/wave_15/npc_anania.sp"
+#include "npc/almina_expidonsa/wave_15/npc_vestan.sp"
+#include "npc/almina_expidonsa/wave_15/npc_inqusitor_iidutas.sp"
 
 
-#include "npc/iberia_expidonsa/wave_45/npc_ranka_s.sp"
-#include "npc/iberia_expidonsa/wave_45/npc_murdarato.sp"
-#include "npc/iberia_expidonsa/wave_45/npc_elite_kinat.sp"
-#include "npc/iberia_expidonsa/wave_45/npc_seaborn_eradicator.sp"
-#include "npc/iberia_expidonsa/wave_45/npc_speedus_itus.sp"
-#include "npc/iberia_expidonsa/wave_45/npc_sentinel.sp"
-#include "npc/iberia_expidonsa/wave_45/npc_destructius.sp"
-#include "npc/iberia_expidonsa/wave_45/npc_ironborus.sp"
+#include "npc/almina_expidonsa/wave_30/npc_vivintu.sp"
+#include "npc/almina_expidonsa/wave_30/npc_cenula.sp"
+#include "npc/almina_expidonsa/wave_30/npc_kumbai.sp"
+#include "npc/almina_expidonsa/wave_30/npc_speedus_instantus.sp"
+#include "npc/almina_expidonsa/wave_30/npc_combastia.sp"
+#include "npc/almina_expidonsa/wave_30/npc_almina_morato.sp"
+#include "npc/almina_expidonsa/wave_30/npc_sea_xploder.sp"
+#include "npc/almina_expidonsa/wave_30/npc_anti_sea_robot.sp"
 
 
-#include "npc/iberia_expidonsa/wave_60/npc_death_marker.sp"
-#include "npc/iberia_expidonsa/wave_60/npc_runaka.sp"
-#include "npc/iberia_expidonsa/wave_60/npc_speedus_elitus.sp"
-#include "npc/iberia_expidonsa/wave_60/npc_sea_dryer.sp"
-#include "npc/iberia_expidonsa/wave_60/npc_inqusitor_irene.sp"
+#include "npc/almina_expidonsa/wave_45/npc_ranka_s.sp"
+#include "npc/almina_expidonsa/wave_45/npc_murdarato.sp"
+#include "npc/almina_expidonsa/wave_45/npc_elite_kinat.sp"
+#include "npc/almina_expidonsa/wave_45/npc_dweller_eradicator.sp"
+#include "npc/almina_expidonsa/wave_45/npc_speedus_itus.sp"
+#include "npc/almina_expidonsa/wave_45/npc_sentinel.sp"
+#include "npc/almina_expidonsa/wave_45/npc_destructius.sp"
+#include "npc/almina_expidonsa/wave_45/npc_ironborus.sp"
 
 
-#include "npc/raidmode_bosses/iberia/npc_nemal.sp"
-#include "npc/raidmode_bosses/iberia/npc_raid_silvester.sp"
+#include "npc/almina_expidonsa/wave_60/npc_death_marker.sp"
+#include "npc/almina_expidonsa/wave_60/npc_runaka.sp"
+#include "npc/almina_expidonsa/wave_60/npc_speedus_elitus.sp"
+#include "npc/almina_expidonsa/wave_60/npc_sea_dryer.sp"
+#include "npc/almina_expidonsa/wave_60/npc_inqusitor_amphi.sp"
 
-//Victoria
+
+#include "npc/raidmode_bosses/almina/npc_nemal.sp"
+#include "npc/raidmode_bosses/almina/npc_raid_silvester.sp"
+
+//Vesta
 //special
-#include "npc/victoria/npc_invisible_trigger.sp"
-#include "npc/victoria/npc_victorian_factory.sp"
-#include "npc/victoria/npc_victoria_tacticalprotector.sp"
-#include "npc/victoria/npc_victoria_tacticalunit.sp"
-#include "npc/victoria/npc_test_dummy.sp"
-#include "npc/victoria/npc_baguettus.sp"
+#include "npc/vesta/npc_invisible_trigger.sp"
+#include "npc/vesta/npc_vestan_factory.sp"
+#include "npc/vesta/npc_vesta_tacticalprotector.sp"
+#include "npc/vesta/npc_vesta_tacticalunit.sp"
+#include "npc/vesta/npc_test_dummy.sp"
+#include "npc/vesta/npc_baguettus.sp"
 
 //Wave 1~10
-#include "npc/victoria/npc_batter.sp"
-#include "npc/victoria/npc_charger.sp"
-#include "npc/victoria/npc_teslar.sp"
-#include "npc/victoria/npc_victorian_vanguard.sp"
-#include "npc/victoria/npc_supplier.sp"
-#include "npc/victoria/npc_ballista.sp"
-#include "npc/victoria/npc_igniter.sp"
-#include "npc/victoria/npc_grenadier.sp"
-#include "npc/victoria/npc_squadleader.sp"
-#include "npc/victoria/npc_signaller.sp"
+#include "npc/vesta/npc_batter.sp"
+#include "npc/vesta/npc_charger.sp"
+#include "npc/vesta/npc_teslar.sp"
+#include "npc/vesta/npc_vestan_vanguard.sp"
+#include "npc/vesta/npc_supplier.sp"
+#include "npc/vesta/npc_ballista.sp"
+#include "npc/vesta/npc_igniter.sp"
+#include "npc/vesta/npc_grenadier.sp"
+#include "npc/vesta/npc_squadleader.sp"
+#include "npc/vesta/npc_signaller.sp"
 
 //wave 11~20
-#include "npc/victoria/npc_humbee.sp"
-#include "npc/victoria/npc_shotgunner.sp"
-#include "npc/victoria/npc_bulldozer.sp"
-#include "npc/victoria/npc_hardener.sp"
-#include "npc/victoria/npc_raider.sp"
-#include "npc/victoria/npc_zapper.sp"
-#include "npc/victoria/npc_payback.sp"
-#include "npc/victoria/npc_blocker.sp"
-#include "npc/victoria/npc_destructor.sp"
-#include "npc/victoria/npc_ironshield.sp"
-#include "npc/victoria/npc_aviator.sp"
+#include "npc/vesta/npc_humbee.sp"
+#include "npc/vesta/npc_shotgunner.sp"
+#include "npc/vesta/npc_bulldozer.sp"
+#include "npc/vesta/npc_hardener.sp"
+#include "npc/vesta/npc_raider.sp"
+#include "npc/vesta/npc_zapper.sp"
+#include "npc/vesta/npc_payback.sp"
+#include "npc/vesta/npc_blocker.sp"
+#include "npc/vesta/npc_destructor.sp"
+#include "npc/vesta/npc_ironshield.sp"
+#include "npc/vesta/npc_aviator.sp"
 
 //wave 21~30
-#include "npc/victoria/npc_basebreaker.sp"
-#include "npc/victoria/npc_booster.sp"
-#include "npc/victoria/npc_scorcher.sp"
-#include "npc/victoria/npc_mowdown.sp"
-#include "npc/victoria/npc_mechafist.sp"
-#include "npc/victoria/npc_assaulter.sp"
-#include "npc/victoria/npc_antiarmor_infantry.sp"
-#include "npc/victoria/npc_mortar.sp"
-#include "npc/victoria/npc_victorian_artillerist.sp"
-#include "npc/victoria/npc_bombcart.sp"
-#include "npc/victoria/npc_breachcart.sp"
-#include "npc/victoria/npc_birdeye.sp"
-#include "npc/victoria/npc_harbringer.sp"
-#include "npc/victoria/npc_bigpipe.sp"
+#include "npc/vesta/npc_basebreaker.sp"
+#include "npc/vesta/npc_booster.sp"
+#include "npc/vesta/npc_scorcher.sp"
+#include "npc/vesta/npc_mowdown.sp"
+#include "npc/vesta/npc_mechafist.sp"
+#include "npc/vesta/npc_assaulter.sp"
+#include "npc/vesta/npc_antiarmor_infantry.sp"
+#include "npc/vesta/npc_mortar.sp"
+#include "npc/vesta/npc_vestan_artillerist.sp"
+#include "npc/vesta/npc_bombcart.sp"
+#include "npc/vesta/npc_breachcart.sp"
+#include "npc/vesta/npc_birdeye.sp"
+#include "npc/vesta/npc_harbringer.sp"
+#include "npc/vesta/npc_bigpipe.sp"
 
 //wave 31~40
-#include "npc/victoria/npc_caffeinator.sp"
-#include "npc/victoria/npc_welder.sp"
-#include "npc/victoria/npc_mechanist.sp"
-#include "npc/victoria/npc_avangard.sp"
-#include "npc/victoria/npc_tanker.sp"
-#include "npc/victoria/npc_pulverizer.sp"
-#include "npc/victoria/npc_ambusher.sp"
-#include "npc/victoria/npc_taser.sp"
-#include "npc/victoria/npc_victorian_tank.sp"
-#include "npc/victoria/npc_drive_in_my_car.sp"
-#include "npc/victoria/npc_victoria_radiomast.sp"
-#include "npc/victoria/npc_radioguard.sp"
-#include "npc/victoria/npc_radio_repair.sp"
-#include "npc/victoria/npc_victorian_moru.sp"
-#include "npc/victoria/npc_victorian_fragments.sp"
+#include "npc/vesta/npc_caffeinator.sp"
+#include "npc/vesta/npc_welder.sp"
+#include "npc/vesta/npc_mechanist.sp"
+#include "npc/vesta/npc_avangard.sp"
+#include "npc/vesta/npc_tanker.sp"
+#include "npc/vesta/npc_pulverizer.sp"
+#include "npc/vesta/npc_ambusher.sp"
+#include "npc/vesta/npc_taser.sp"
+#include "npc/vesta/npc_vestan_tank.sp"
+#include "npc/vesta/npc_drive_in_my_car.sp"
+#include "npc/vesta/npc_vesta_radiomast.sp"
+#include "npc/vesta/npc_radioguard.sp"
+#include "npc/vesta/npc_radio_repair.sp"
+#include "npc/vesta/npc_vestan_moru.sp"
+#include "npc/vesta/npc_vestan_fragments.sp"
 
 //raidbosses
-#include "npc/raidmode_bosses/victoria/npc_the_atomizer.sp"
-#include "npc/raidmode_bosses/victoria/npc_the_wall.sp"
-#include "npc/raidmode_bosses/victoria/npc_harrison.sp"
-#include "npc/raidmode_bosses/victoria/npc_castellan.sp"
+#include "npc/raidmode_bosses/vesta/npc_the_atomizer.sp"
+#include "npc/raidmode_bosses/vesta/npc_the_wall.sp"
+#include "npc/raidmode_bosses/vesta/npc_harrison.sp"
+#include "npc/raidmode_bosses/vesta/npc_castellan.sp"
 
 //Special
 #include "npc/baka/npc_cybergrind_gm.sp"
@@ -2437,6 +2563,18 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/baka/raidbosses/npc_cyber_messenger.sp"
 #include "npc/baka/raidbosses/npc_true_cyber_warrior.sp"
 #include "npc/baka/raidbosses/npc_village_god_alaxios.sp"
+
+//construction2 Vestan
+#include "npc/construction/construction2/vestans/npc_demolitionist.sp"
+#include "npc/construction/construction2/vestans/npc_chemical_specialist.sp"
+#include "npc/construction/construction2/vestans/npc_protector.sp"
+#include "npc/construction/construction2/vestans/npc_chemical_spreader.sp"
+#include "npc/construction/construction2/vestans/npc_zapmarker.sp"
+#include "npc/construction/construction2/vestans/npc_giant_armored_medic.sp"
+#include "npc/construction/construction2/vestans/npc_airraider.sp"
+#include "npc/construction/construction2/vestans/npc_headhunter.sp"
+#include "npc/construction/construction2/vestans/npc_boltbag.sp"
+#include "npc/construction/construction2/vestans/npc_gasleader.sp"
 
 //Matrix Enemies
 #include "npc/matrix/15/npc_agentalan.sp"
@@ -2495,16 +2633,18 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/matrix/freeplay/npc_freeplay_agentspencer.sp"
 
 //Combine Hell Mutation
+#include "npc/mutations/combinehell/other/npc_nova_prospekt_overseer.sp"
 #include "npc/mutations/combinehell/other/npc_hunter.sp"
 #include "npc/mutations/combinehell/other/npc_merlton.sp"
 #include "npc/mutations/combinehell/other/npc_combine_lost_knight.sp"
 #include "npc/mutations/combinehell/other/npc_omega_raid.sp"
+#include "npc/mutations/combinehell/other/npc_rollermine.sp"
 #include "npc/mutations/combinehell/other/npc_bob_follower.sp"
-#include "npc/mutations/combinehell/seaborn/npc_seaborn_combine_police_pistol.sp"
-#include "npc/mutations/combinehell/seaborn/npc_seaborn_combine_police_smg.sp"
-#include "npc/mutations/combinehell/seaborn/npc_seaborn_combine_soldier_elite.sp"
-#include "npc/mutations/combinehell/seaborn/npc_seaborn_combine_soldier_ar2.sp"
-#include "npc/mutations/combinehell/seaborn/npc_seaborn_combine_soldier_shotgun.sp"
+#include "npc/mutations/combinehell/dweller/npc_dweller_combine_police_pistol.sp"
+#include "npc/mutations/combinehell/dweller/npc_dweller_combine_police_smg.sp"
+#include "npc/mutations/combinehell/dweller/npc_dweller_combine_soldier_elite.sp"
+#include "npc/mutations/combinehell/dweller/npc_dweller_combine_soldier_ar2.sp"
+#include "npc/mutations/combinehell/dweller/npc_dweller_combine_soldier_shotgun.sp"
 #include "npc/mutations/combinehell/void/npc_voided_combine_police_pistol.sp"
 #include "npc/mutations/combinehell/void/npc_voided_combine_police_smg.sp"
 #include "npc/mutations/combinehell/void/npc_voided_combine_soldier_elite.sp"
@@ -2555,6 +2695,40 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/aprilfools/npc_troll_pistol.sp"
 #include "npc/aprilfools/npc_troll_rpg.sp"
 #include "npc/aprilfools/npc_troll_melee.sp"
+
+
+#include "npc/aprilfools/3rd_april/npc_smith_follower.sp"
+#include "npc/aprilfools/3rd_april/npc_kevin_follower.sp"
+#include "npc/aprilfools/3rd_april/npc_ambitious_trader.sp"
+#include "npc/aprilfools/3rd_april/npc_kahmlstein_grandma.sp"
+#include "npc/aprilfools/3rd_april/npc_rocket_gunner.sp"
+#include "npc/aprilfools/3rd_april/npc_heavy_weapons_guy.sp"
+#include "npc/aprilfools/3rd_april/npc_very_heavy_heavy.sp"
+#include "npc/aprilfools/3rd_april/npc_steam_happyfier.sp"
+#include "npc/aprilfools/3rd_april/npc_black_heavy_soul.sp"
+#include "npc/aprilfools/3rd_april/npc_broly.sp"
+#include "npc/aprilfools/3rd_april/npc_fish_scout.sp"
+#include "npc/aprilfools/3rd_april/npc_human_main.sp"
+#include "npc/aprilfools/3rd_april/npc_no_random_kranz.sp"
+#include "npc/aprilfools/3rd_april/npc_professional_fingerer.sp"
+#include "npc/aprilfools/3rd_april/npc_squad_bob.sp"
+#include "npc/aprilfools/3rd_april/npc_squad_omega.sp"
+#include "npc/aprilfools/3rd_april/npc_squad_shadowing_darkness.sp"
+#include "npc/aprilfools/3rd_april/npc_squad_whiteflower.sp"
+#include "npc/aprilfools/3rd_april/npc_squad_master.sp"
+#include "npc/aprilfools/3rd_april/npc_australianking.sp"
+#include "npc/aprilfools/3rd_april/npc_dismounted_teuton.sp"
+#include "npc/aprilfools/3rd_april/npc_fucker_swordsman.sp"
+#include "npc/aprilfools/3rd_april/npc_giga_obuch.sp"
+#include "npc/aprilfools/3rd_april/npc_lard_fat.sp"
+#include "npc/aprilfools/3rd_april/npc_mounted_teuton.sp"
+#include "npc/aprilfools/3rd_april/npc_purple_guy.sp"
+#include "npc/aprilfools/3rd_april/npc_rtd_medic.sp"
+#include "npc/aprilfools/3rd_april/npc_spider.sp"
+#include "npc/aprilfools/3rd_april/npc_suction_medic.sp"
+#include "npc/aprilfools/3rd_april/npc_living_metal_ball.sp"
+#include "npc/aprilfools/3rd_april/npc_axe_throwing_barbarian.sp"
+
 
 #include "npc/construction/enemies/npc_eirasus.sp"
 #include "npc/construction/enemies/npc_haltera.sp"
@@ -2738,11 +2912,13 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/45/npc_zs_zombie_engineer.sp"
 #include "npc/gmod_zs/45/npc_zs_medic_healer.sp"
 #include "npc/gmod_zs/45/npc_zs_huntsman.sp"
+#include "npc/gmod_zs/45/npc_angryheadcrab.sp"
+#include "npc/gmod_zs/45/npc_zs_hmo.sp"
+#include "npc/gmod_zs/45/npc_infected_tomislav_main.sp"
 #include "npc/gmod_zs/60/npc_zs_eradicator.sp"
 #include "npc/gmod_zs/60/npc_zs_zombie_fatspy.sp"
 #include "npc/gmod_zs/60/npc_zs_medic_main.sp"
 #include "npc/gmod_zs/60/npc_zs_zombie_fatscout.sp"
-#include "npc/gmod_zs/60/npc_zs_combine_soldier_elite.sp"
 #include "npc/gmod_zs/60/npc_zs_cleaner.sp"
 #include "npc/gmod_zs/60/npc_zs_vile_poisonheadcrab_zombie.sp"
 #include "npc/gmod_zs/60/npc_zs_stranger.sp"
@@ -2753,10 +2929,13 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/60/npc_zs_sniper.sp"
 #include "npc/gmod_zs/60/npc_zs_sam.sp"
 #include "npc/gmod_zs/60/npc_zs_mlsm.sp"
+#include "npc/gmod_zs/60/npc_zs_manhattan_parrot.sp"
+#include "npc/gmod_zs/bandit/npc_zs_combine_soldier_elite.sp"
 #include "npc/gmod_zs/npc_zs_zmain.sp"
 #include "npc/gmod_zs/special/npc_zs_flesh_creeper.sp"
 #include "npc/gmod_zs/special/npc_zs_nest.sp"
 #include "npc/gmod_zs/special/npc_random_zombie.sp"
+#include "npc/gmod_zs/special/npc_random_poyo.sp"
 #include "npc/gmod_zs/special/npc_zs_amplification.sp"
 #include "npc/gmod_zs/special/npc_zs_howler.sp"
 #include "npc/gmod_zs/special/npc_zs_poisonzombie_fortified_giant.sp"
@@ -2766,6 +2945,12 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/special/npc_zs_malfunctioning_heavy.sp"
 #include "npc/gmod_zs/special/npc_zs_red_marrow.sp"
 #include "npc/gmod_zs/special/npc_zs_bonemesh.sp"
+#include "npc/gmod_zs/special/npc_zs_zombine.sp"
+#include "npc/gmod_zs/special/npc_zs_zmain_headcrab.sp"
+#include "npc/gmod_zs/special/npc_zs_zmain_headcrabzombie.sp"
+#include "npc/gmod_zs/special/npc_zs_zmain_poisonzombie.sp"
+#include "npc/gmod_zs/special/npc_zs_soldier_giant_grave.sp"
+#include "npc/gmod_zs/special/npc_zs_soldier_minion_grave.sp"
 #include "npc/gmod_zs/bosses/npc_zs_nightmare.sp"
 #include "npc/gmod_zs/bosses/npc_zs_sphynx.sp"
 #include "npc/gmod_zs/bosses/npc_zs_pregnant.sp"

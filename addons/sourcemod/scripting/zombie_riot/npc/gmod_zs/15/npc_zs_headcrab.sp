@@ -43,7 +43,7 @@ void ZSHeadcrab_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_headcrab");
 	data.IconCustom = true;
 	data.Flags = 0;
-	data.Category = Type_Mutation;
+	data.Category = Type_GmodZS;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }

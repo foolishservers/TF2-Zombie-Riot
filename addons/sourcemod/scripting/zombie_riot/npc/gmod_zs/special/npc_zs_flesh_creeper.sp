@@ -173,7 +173,6 @@ methodmap FleshCreeper < CClotBody
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPSOUND_NORMAL;		
 		
-		
 		i_ClosestAllyCD[npc.index] = 0.0;
 
 		npc.m_iState = 0;

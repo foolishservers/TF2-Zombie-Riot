@@ -121,7 +121,7 @@ void VausMagicaShieldLogicNpcOnTakeDamage(int attacker, int victim, float &damag
 	}
 }
 #define DEFAULTMAXRAID_SHIELDCAP 250
-void VausMagicaGiveShield(int entity, int amount, bool ignorecooldown = false)
+void VausMagicaGiveShield(int entity, int amount, bool ignorecooldown = false, int customMaxCapacity = 0)
 {
 	float CapacityMaxMulti = float(CountPlayersOnRed(_, true)) / 7.0;
 	int MaxShieldCapacity = RoundToNearest(5.0 * CapacityMaxMulti);
@@ -143,7 +143,10 @@ void VausMagicaGiveShield(int entity, int amount, bool ignorecooldown = false)
 	}
 	if(MaxShieldCapacity < 1)
 		MaxShieldCapacity = 1;
-
+	
+	if (customMaxCapacity > 0)
+		MaxShieldCapacity = customMaxCapacity;
+	
 	if((f_Expidonsa_ShieldBroke[entity] > GetGameTime() && !ignorecooldown) && MaxShieldCapacity < DEFAULTMAXRAID_SHIELDCAP)
 	{
 		return; //do not give shield.
@@ -349,13 +352,13 @@ stock bool Expidonsa_OnlyHealSameIndex(int entity, int victim, float &healingamm
 	return false;
 }
 #if defined ZR
-#define IBERIA_BARRACKS_COOLDOWN_HEAL 2.0
-stock bool IberiaBarracks_HealSelfLimitCD(int entity, int victim, float &healingammount)
+#define ALMINA_BARRACKS_COOLDOWN_HEAL 2.0
+stock bool AlminaBarracks_HealSelfLimitCD(int entity, int victim, float &healingammount)
 {
 	if(f_HealCooldownSetDoGlobal[victim] > GetGameTime())
 		return true;
 
-	f_HealCooldownSetDoGlobal[victim] = GetGameTime() + IBERIA_BARRACKS_COOLDOWN_HEAL;
+	f_HealCooldownSetDoGlobal[victim] = GetGameTime() + ALMINA_BARRACKS_COOLDOWN_HEAL;
 
 	return false;
 }

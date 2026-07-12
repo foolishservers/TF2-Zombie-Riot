@@ -59,7 +59,7 @@ void KevinMery_OnMapStart_NPC()
 	data.Precache = ClotPrecache;
 	data.IconCustom = true;
 	data.Flags = 0;
-	data.Category = Type_Mutation;
+	data.Category = Type_Raid;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
@@ -135,6 +135,7 @@ methodmap KevinMery < CClotBody
 
 		RaidBossActive = EntIndexToEntRef(npc.index);
 		RaidAllowsBuildings = false;
+		RaidAllowLastman = true;
 		
 		int iActivity = npc.LookupActivity("ACT_MP_RUN_MELEE_ALLCLASS");
 		if(iActivity > 0) npc.StartActivity(iActivity);
@@ -243,6 +244,11 @@ methodmap KevinMery < CClotBody
 	}
 }
 
+static void NPCTalkMessage(int entity, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(entity, "collectors", message);
+}
+
 public void KevinMery_ClotThink(int iNPC)
 {
 	KevinMery npc = view_as<KevinMery>(iNPC);
@@ -271,7 +277,7 @@ public void KevinMery_ClotThink(int iNPC)
 			{
 				case 0:
 				{
-					CPrintToChatAll("{collectors}kevinmery2009{default}: 딱 한 명 남았다!!");
+					NPCTalkMessage(npc.index, "there's only one more left!!");
 					MusicEnum music;
 					strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/aprilfools/plead.mp3");
 					music.Time = 90; //no loop usually 43 loop tho
@@ -284,7 +290,7 @@ public void KevinMery_ClotThink(int iNPC)
 				}
 				case 1:
 				{
-					CPrintToChatAll("{collectors}kevinmery2009{default}: artvin님 쟤 너프좀;;");
+					NPCTalkMessage(npc.index, "artvin pls nerf");
 					MusicEnum music;
 					strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/aprilfools/plead.mp3");
 					music.Time = 90; //no loop usually 43 loop tho
@@ -303,7 +309,7 @@ public void KevinMery_ClotThink(int iNPC)
 	{
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		
-		CPrintToChatAll("{collectors}kevinmery2009{default}: !hop");
+		NPCTalkMessage(npc.index, "!hop");
 		return;
 	}
 
@@ -314,7 +320,7 @@ public void KevinMery_ClotThink(int iNPC)
 		{
 			ForcePlayerLoss();
 			RaidBossActive = INVALID_ENT_REFERENCE;
-			CPrintToChatAll("{collectors}kevinmery2009{default}: {default}gg{default}");
+			NPCTalkMessage(npc.index, "{default}gg{default}");
 			func_NPCThink[npc.index] = INVALID_FUNCTION;
 			return;
 		}
@@ -348,6 +354,24 @@ public void KevinMery_ClotThink(int iNPC)
 	
 	if(IsValidEnemy(npc.index, closest))
 	{
+		//Something something, don't try to cheese his knockback
+		int AntiCheeseReply = 0;
+		float vPredictedPosKevin[3];
+		PredictSubjectPosition(npc, npc.m_iTarget,_,_, vPredictedPosKevin);
+		vPredictedPosKevin = GetBehindTarget(npc.m_iTarget, 30.0 ,vPredictedPosKevin);
+		AntiCheeseReply = DiversionAntiCheese(npc.m_iTarget, npc.index, vPredictedPosKevin);
+		switch(AntiCheeseReply)
+		{
+			case 0:
+			{
+				//do nothing lol
+			}
+			case 1:
+			{
+				ApplyStatusEffect(npc.index, npc.index, "Trampling Prefix", 5.0);
+			}
+		}
+
 		float vecTarget[3]; WorldSpaceCenter(closest, vecTarget);
 			
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
@@ -377,15 +401,15 @@ public void KevinMery_ClotThink(int iNPC)
 				{
 					case 0:
 					{
-						CPrintToChatAll("{collectors}kevinmery2009{default}: {default}우리 아빠가 이거 줬어염{default}");
+						NPCTalkMessage(npc.index, "{default}my dad gave me this gun{default}");
 					}
 					case 1:
 					{
-						CPrintToChatAll("{collectors}kevinmery2009{default}: {default}아빠가 그리워 :({default}");
+						NPCTalkMessage(npc.index, "{default}i miss my dad :({default}");
 					}
 					case 2:
 					{
-						CPrintToChatAll("{collectors}kevinmery2009{default}: {default}이 모드 ㄹㅇ 재밌다 :){default}");
+						NPCTalkMessage(npc.index, "{default}this is so much fun :){default}");
 					}
 				}
 			}
@@ -417,15 +441,15 @@ public void KevinMery_ClotThink(int iNPC)
 				{
 					case 0:
 					{
-						CPrintToChatAll("{collectors}kevinmery2009{default}: {default}빵!!!{default}");
+						NPCTalkMessage(npc.index, "{default}fire!!!{default}");
 					}
 					case 1:
 					{
-						CPrintToChatAll("{collectors}kevinmery2009{default}: {default}펑!!!{default}");
+						NPCTalkMessage(npc.index, "{default}pow!!!{default}");
 					}
 					case 2:
 					{
-						CPrintToChatAll("{collectors}kevinmery2009{default}: {default}쾅!!!{default}");
+						NPCTalkMessage(npc.index, "{default}boom!!!{default}");
 					}
 				}
 				npc.m_flSwitchCooldown = gameTime + 10.0;
@@ -493,8 +517,6 @@ static void KevinMery_SelfDefense(KevinMery npc, float gameTime, int target, flo
 								damage = 1.0;
 							}
 							SDKHooks_TakeDamage(targetTrace, npc.index, npc.index, damage, DMG_CLUB, -1, _, vecHit);
-							//Reduce damage after dealing
-							damage *= 0.92;
 							// On Hit stuff
 							bool Knocked = false;
 							if(!PlaySound)
@@ -633,7 +655,6 @@ public void KevinMery_NPCDeath(int entity)
 		npc.PlayDeathSound();	
 	}
 		
-	Music_SetRaidMusicSimple("vo/null.mp3", 60, false, 0.5);
 	if(IsValidEntity(npc.m_iWearable4))
 		RemoveEntity(npc.m_iWearable4);
 	if(IsValidEntity(npc.m_iWearable3))

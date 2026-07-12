@@ -878,7 +878,7 @@ void KahmlDeath_DeathAnimationKahml(KahmlsteinFollower npc, float gameTime)
 			case 18,19,20,21,22:
 			{
 		//		npc.AddGesture("ACT_MP_GESTURE_VC_FISTPUMP_MELEE");
-				CPrintToChatAll("{darkblue}카멜슈타인{default}: ... 공허가 다시는 돌아오지 않도록...");
+				CPrintToChatAll("{darkblue}Kahmlstein{default}: ... Make sure the {purple}Void {default}doesnt come back...");
 				if(IsValidEntity(npc.index))
 				{
 					HideAllNpcCosmetics(npc.index);

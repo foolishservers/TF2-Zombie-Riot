@@ -42,7 +42,7 @@ void ZSoldierGrave_OnMapStart_NPC()
 	strcopy(data.Icon, sizeof(data.Icon), "soldier");
 	data.IconCustom = false;
 	data.Flags = 0;
-	data.Category = Type_Common;
+	data.Category = Type_GmodZS;
 	data.Func = ClotSummon;
 	data.Precache = ClotPrecache;
 	NPC_Add(data);
@@ -96,7 +96,7 @@ methodmap ZSoldierGrave < CClotBody
 	
 	public ZSoldierGrave(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSoldierGrave npc = view_as<ZSoldierGrave>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "20000", ally));
+		ZSoldierGrave npc = view_as<ZSoldierGrave>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "30000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -228,58 +228,74 @@ static void ZSoldierGrave_ClotThink(int iNPC)
 	else
 	{
 		npc.StopPathing();
-		npc.m_flGetClosestTargetTime = 0.0;
+		// 타겟이 사라졌으니 즉시 재탐색하도록 0.0으로 초기화
+		npc.m_flGetClosestTargetTime = 0.0; 
+
+		// 추가: 멍청하게 서 있지 않도록 애니메이션 상태도 강제로 리셋
+		if(npc.m_iChanged_WalkCycle != 1)
+		{
+			npc.m_iChanged_WalkCycle = 1;
+			npc.SetActivity("ACT_MP_STAND_PRIMARY");
+			npc.m_flSpeed = 0.0;
+		}
 	}
 	npc.PlayIdleAlertSound();
 }
 
 static int ZSoldierGrave_Work(ZSoldierGrave npc, float gameTime, int target, float distance, float vecTarget[3])
 {
-	if(npc.m_flAttackHappens || !npc.m_iAmmo)
-	{
-		if(!npc.m_flAttackHappens)
-		{
-			npc.m_flAttackHappens=gameTime+1.0;
-			npc.AddGesture("ACT_MP_RELOAD_STAND_PRIMARY", true,_,_,1.1);
-			npc.m_flAttackHappenswillhappen=false;
-			//npc.PlayReloadSound();
-		}
-		if(gameTime > npc.m_flAttackHappens)
-		{
-			npc.m_iAmmo = npc.m_iMaxAmmo;
-			npc.m_flAttackHappens=0.0;
-		}
-	}
-	if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 25.0) || npc.m_flAttackHappenswillhappen)
-	{
-		int Enemy_I_See = Can_I_See_Enemy(npc.index, target);
-		if((gameTime > npc.m_flNextRangedAttack && IsValidEnemy(npc.index, Enemy_I_See)) || npc.m_flAttackHappenswillhappen)
-		{
-			npc.AddGesture("ACT_MP_ATTACK_STAND_PRIMARY", true);
-			float ProjectileSpeed = 700.0;
-			WorldSpaceCenter(Enemy_I_See, vecTarget);
-			PredictSubjectPositionForProjectiles(npc, target, ProjectileSpeed, _,vecTarget);
-			npc.FaceTowards(vecTarget, 20000.0);
-			npc.FireRocket(vecTarget, 135.0, ProjectileSpeed);
-			npc.PlayRangeSound();
+    if(npc.m_flAttackHappens || !npc.m_iAmmo)
+    {
+        if(!npc.m_flAttackHappens)
+        {
+            npc.m_flAttackHappens = gameTime + 1.1; 
+            npc.AddGesture("ACT_MP_RELOAD_STAND_PRIMARY", true, _, _, 1.1);
+            npc.m_flAttackHappenswillhappen = false;
+        }
 
-			npc.m_flNextRangedAttack=gameTime+2.0;
-			npc.m_flAttackHappenswillhappen = true;
-			npc.m_iAmmo--;
-		}
-	}
-	if(distance > (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 9.0)||ShouldNpcDealBonusDamage(target))
-	{
-		return 0;
-	}
-	else if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 8.0))
-	{
-		if(Can_I_See_Enemy_Only(npc.index, target))
-		{
-			return 2;
-		}
-	}
-	return 1;
+        if(gameTime > npc.m_flAttackHappens)
+        {
+            npc.m_iAmmo = npc.m_iMaxAmmo;
+            npc.m_flAttackHappens = 0.0;
+        }
+    }
+
+    if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 25.0) || npc.m_flAttackHappenswillhappen)
+    {
+        int Enemy_I_See = Can_I_See_Enemy(npc.index, target);
+        
+        if(!npc.m_flAttackHappens && ((gameTime > npc.m_flNextRangedAttack && IsValidEnemy(npc.index, Enemy_I_See)) || npc.m_flAttackHappenswillhappen))
+        {
+            npc.AddGesture("ACT_MP_ATTACK_STAND_PRIMARY", true);
+            float ProjectileSpeed = 700.0;
+            
+            WorldSpaceCenter(target, vecTarget); 
+            PredictSubjectPositionForProjectiles(npc, target, ProjectileSpeed, _, vecTarget);
+            
+            npc.FaceTowards(vecTarget, 20000.0);
+            npc.FireRocket(vecTarget, 135.0, ProjectileSpeed);
+            npc.PlayRangeSound();
+
+            npc.m_flNextRangedAttack = gameTime + 2.0;
+            npc.m_flAttackHappenswillhappen = true; 
+            npc.m_iAmmo--;
+        }
+    }
+
+    if(distance > (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 9.0) || ShouldNpcDealBonusDamage(target))
+    {
+        return 0; // Chase
+    }
+    else if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 8.0))
+    {
+        if(Can_I_See_Enemy_Only(npc.index, target))
+        {
+            return 2; // Backoff
+        }
+    }
+
+    // 위 조건들에 해당하지 않는 "애매한 거리"이거나 재장전 중일 때의 기본 행동
+    return 0; // Stand / Attack Position
 }
 
 static Action ZSoldierGrave_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)

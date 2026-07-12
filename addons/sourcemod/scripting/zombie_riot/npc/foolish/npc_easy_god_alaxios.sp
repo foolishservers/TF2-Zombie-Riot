@@ -252,7 +252,7 @@ methodmap EasyAlaxios < CClotBody
 		}
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		if(StrContains(data, "seainfection") != -1)
-			npc.m_iBleedType = BLEEDTYPE_SEABORN;
+			npc.m_iBleedType = BLEEDTYPE_DWELLER;
 
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPSOUND_NORMAL;		
@@ -458,7 +458,7 @@ static void EasyAlaxios_ClotThink(int iNPC)
 				TF2_StunPlayer(client, 0.5, 0.5, TF_STUNFLAGS_LOSERSTATE);
 			}
 		}
-		if(AlaxiosForceTalk())
+		if(AlaxiosForceTalk(npc.index))
 		{
 			npc.m_bDissapearOnDeath = true;
 			RequestFrame(KillNpc, EntIndexToEntRef(npc.index));

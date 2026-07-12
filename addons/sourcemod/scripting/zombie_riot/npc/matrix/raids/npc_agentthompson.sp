@@ -137,6 +137,7 @@ methodmap AgentThompson < CClotBody
 		
 		RaidBossActive = EntIndexToEntRef(npc.index);
 		RaidAllowsBuildings = false;
+		RaidAllowLastman = true;
 
 		int iActivity = npc.LookupActivity("ACT_MP_RUN_MELEE");
 		if(iActivity > 0) npc.StartActivity(iActivity);
@@ -252,6 +253,11 @@ methodmap AgentThompson < CClotBody
 	}
 }
 
+static void NPCTalkMessage(int entity, const char[] message)
+{
+	PrintNPCMessageWithPrefixes(entity, "community", message, .messageColor = "darkgreen");
+}
+
 public void AgentThompson_ClotThink(int iNPC)
 {
 	AgentThompson npc = view_as<AgentThompson>(iNPC);
@@ -265,7 +271,7 @@ public void AgentThompson_ClotThink(int iNPC)
 	{
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		
-		CPrintToChatAll("{community}톰슨 요원{default}: 넌 이제 자유다.");
+		NPCTalkMessage(npc.index, "You're free, at last.");
 		return;
 	}
 
@@ -276,7 +282,7 @@ public void AgentThompson_ClotThink(int iNPC)
 		{
 			ForcePlayerLoss();
 			RaidBossActive = INVALID_ENT_REFERENCE;
-			CPrintToChatAll("{community}톰슨 요원{forestgreen}: {forestgreen}빨간 약은 시대에 뒤처진 물건이지.");
+			NPCTalkMessage(npc.index, "Redpills are behind the time.");
 			func_NPCThink[npc.index] = INVALID_FUNCTION;
 			return;
 		}
@@ -353,7 +359,7 @@ static void Thompsons_SelfDefense(AgentThompson npc, float gameTime, int target,
 				npc.DoSwingTrace(swingTrace, npc.m_iTarget, _, _, _, 1, _, HowManyEnemeisAoeMelee);
 				delete swingTrace;
 				bool PlaySound = false;
-				float damage = 35.0;
+				float damage = 28.0;
 				damage *= RaidModeScaling;
 				bool silenced = NpcStats_IsEnemySilenced(npc.index);
 				for(int counter = 1; counter <= HowManyEnemeisAoeMelee; counter++)
@@ -371,10 +377,8 @@ static void Thompsons_SelfDefense(AgentThompson npc, float gameTime, int target,
 							{
 								damage = 1.0;
 							}
-							Elemental_AddCorruptionDamage(targetTrace, npc.index, 15);
 							SDKHooks_TakeDamage(targetTrace, npc.index, npc.index, damage, DMG_CLUB, -1, _, vecHit);
-							//Reduce damage after dealing
-							damage *= 0.92;
+							Elemental_AddCorruptionDamage(targetTrace, npc.index, RoundToNearest(damage * 0.15), true, true);	
 							// On Hit stuff
 							bool Knocked = false;
 							if(!PlaySound)
@@ -494,7 +498,7 @@ static void Thompsons_SelfDefense(AgentThompson npc, float gameTime, int target,
 				npc.AddGesture("ACT_MP_ATTACK_STAND_SECONDARY");
 				KillFeed_SetKillIcon(npc.index, "shotgun_primary");
 
-				float damage = 15.0;
+				float damage = 30.0;
 				damage *= RaidModeScaling;
 
 				FireBullet(npc.index, npc.m_iWearable1, vecMe, vecDir, damage, 9000.0, DMG_BULLET, "dxhr_sniper_rail_blue");
@@ -599,7 +603,6 @@ public void AgentThompson_NPCDeath(int entity)
 		npc.PlayDeathSound();	
 	}
 		
-	Music_SetRaidMusicSimple("vo/null.mp3", 60, false, 0.5);
 	if(IsValidEntity(npc.m_iWearable4))
 		RemoveEntity(npc.m_iWearable4);
 	if(IsValidEntity(npc.m_iWearable3))
