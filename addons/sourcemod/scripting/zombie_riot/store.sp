@@ -8069,10 +8069,7 @@ void Store_HandleAutoPapList()
 					break;
 				}
 				
-				int next = info.PackSkip;
-				if (next <= 0)
-					next = 1;
-				
+				int next = info.PackSkip + 1;
 				autoInfo.level += next;
 				AutoPapList[client].SetArray(i, autoInfo);
 				break; // Only allow 1 enhancement per timer tick
