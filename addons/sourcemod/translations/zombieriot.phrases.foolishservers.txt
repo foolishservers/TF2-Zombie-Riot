@@ -776,4 +776,22 @@
 		"en"		"Item Description"
 		"ko"		"아이템 설명"
 	}
+	
+	//Common
+	"Wave_WaitingTime"
+	{
+		"#format"	"{1:.1f}"
+		"en"		"You were given extra {1} seconds to prepare."
+		"ko"		"준비 시간으로 {1}초 드립니다."
+	}
+	"Wave_WaitingTime_RaidBoss_LastMann"
+	{
+		"en"		"You were given extra 45 seconds to prepare for the raidboss... Get ready."
+		"ko"		"레이드 보스 준비 시간으로 45초 드립니다. 준비하세요!"
+	}
+	"Wave_WaitingTime_RaidBoss"
+	{
+		"en"		"You were given extra 30 seconds to prepare for the raidboss... Get ready."
+		"ko"		"레이드 보스 준비 시간으로 30초 드립니다. 준비하세요!"
+	}
 }

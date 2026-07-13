@@ -297,7 +297,8 @@ void RaidbossBlueGoggles_NPCTalkMessage(int iNPC, const char[] message, any ...)
 {
 	char buffer[255];
 	VFormat(buffer, sizeof(buffer), message, 3);
-	PrintNPCMessageWithPrefixes(iNPC, "darkblue", buffer);
+	// PrintNPCMessageWithPrefixes(iNPC, "darkblue", buffer);
+	NPC_TalkMessageWithTranslationCheck(iNPC, "darkblue", buffer);
 }
 
 public void RaidbossBlueGoggles_ClotThink(int iNPC)
@@ -326,11 +327,11 @@ public void RaidbossBlueGoggles_ClotThink(int iNPC)
 			npc.m_fbGunout = true;
 			if(!XenoExtraLogic())
 			{
-				RaidbossBlueGoggles_NPCTalkMessage(npc.index, "{green}Xeno{default} is an infection that shouldn't be taken lightly.");
+				RaidbossBlueGoggles_NPCTalkMessage(npc.index, "Waldch_LastMann");
 			}
 			else
 			{
-				RaidbossBlueGoggles_NPCTalkMessage(npc.index, "Just give up and we'll spare your lives.");		
+				RaidbossBlueGoggles_NPCTalkMessage(npc.index, "Waldch_LastMann_Lab");
 			}
 		}
 	}
@@ -503,47 +504,11 @@ public void RaidbossBlueGoggles_ClotThink(int iNPC)
 	{
 		if(XenoExtraLogic())
 		{
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					RaidbossBlueGoggles_NPCTalkMessage(npc.index, "I'll avenge you {gold}Silvester{default}!");
-				}
-				case 1:
-				{
-					CPrintToChatAll("{darkblue}Waldch{default}:{gold}Silvester{default} rest while I take care of them.");
-				}
-				case 2:
-				{
-					RaidbossBlueGoggles_NPCTalkMessage(npc.index, "Just you and me now!");
-				}
-				case 3:
-				{
-					RaidbossBlueGoggles_NPCTalkMessage(npc.index, "I'll stop you by myself!");
-				}
-			}
+			RaidbossBlueGoggles_NPCTalkMessage(npc.index, "Waldch_Revenge_Lab_%d", GetRandomInt(1, 4));
 		}
 		else
 		{
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					RaidbossBlueGoggles_NPCTalkMessage(npc.index, "You really shouldn't have done that!");
-				}
-				case 1:
-				{
-					RaidbossBlueGoggles_NPCTalkMessage(npc.index, "You'll pay for that!");
-				}
-				case 2:
-				{
-					RaidbossBlueGoggles_NPCTalkMessage(npc.index, "Quit this right now!");
-				}
-				case 3:
-				{
-					RaidbossBlueGoggles_NPCTalkMessage(npc.index, "You little ****!");
-				}
-			}
+			RaidbossBlueGoggles_NPCTalkMessage(npc.index, "Waldch_Revenge_%d", GetRandomInt(1, 4));
 		}
 
 		npc.Anger = true;

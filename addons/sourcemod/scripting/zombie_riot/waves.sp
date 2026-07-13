@@ -2214,7 +2214,7 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 				float WaitingTimeGive = wave.EnemyData.WaitingTimeGive;
 				if(!LastMann && WaitingTimeGive > 0.0)
 				{
-					SPrintToChatAll("준비 시간으로 %.1f초 드립니다.",WaitingTimeGive);
+					CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_WaitingTime", WaitingTimeGive);
 					GiveProgressDelay(WaitingTimeGive);
 					f_DelaySpawnsForVariousReasons = GetGameTime() + WaitingTimeGive;
 					SpawnTimer(WaitingTimeGive);
@@ -2226,14 +2226,14 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 					{
 						if(LastMann && !b_IsAloneOnServer)
 						{
-							SPrintToChatAll("You were given extra 45 seconds to prepare for the raidboss... Get ready.");
+							CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_WaitingTime_RaidBoss_LastMann");
 							GiveProgressDelay(45.0);
 							f_DelaySpawnsForVariousReasons = GetGameTime() + 45.0;
 							SpawnTimer(45.0);
 						}
 						else if(WaitingTimeGive <= 0.0)
 						{
-							SPrintToChatAll("You were given extra 30 seconds to prepare for the raidboss... Get ready.");
+							CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_WaitingTime_RaidBoss");
 							GiveProgressDelay(30.0);
 							f_DelaySpawnsForVariousReasons = GetGameTime() + 30.0;
 							SpawnTimer(30.0);

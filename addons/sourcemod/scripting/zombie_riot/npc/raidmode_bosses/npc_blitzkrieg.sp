@@ -517,51 +517,12 @@ methodmap Blitzkrieg < CClotBody
 		b_pureblitz = false;
 		if(!b_buffed_blitz)
 		{
-			
 			b_buffed_blitz = StrContains(data, "blitzmayhem") != -1;
 			if(b_buffed_blitz)
 			{
 				strcopy(c_NpcName[npc.index], sizeof(c_NpcName[]), "TRUE BLITZKRIEG");
 				b_pureblitz = true;
-				switch(GetRandomInt(0,7))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "NAHAHAHAHAHAHAHAHAHAHAHA!!!!!");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "ICH WERD EUCH ALLE UMBRINGEN!");
-					}
-					case 2:
-					{
-						NPCTalkMessage(npc.index, "DAS IS PURE KRAFT!");
-					}
-					case 3:
-					{
-						NPCTalkMessage(npc.index, "DENKSTE DAS WAR ALLES!!?!?!?!");
-					}
-					case 4:
-					{
-						NPCTalkMessage(npc.index, "DUUUUUUUUUUUUUUU KLEINE RATTE!");
-					}
-					case 5:
-					{
-						NPCTalkMessage(npc.index, "KOMMT HER IHR KLEINEN VIECHER!!");
-					}
-					case 6:
-					{
-						NPCTalkMessage(npc.index, "DIE WAHRE POWER VON RUIANIAN UND EXPIDONSANS!");
-					}
-					case 7:
-					{
-						NPCTalkMessage(npc.index, "VERPISS DICH!!!!!!!!!!!!!");
-					}
-					case 8:
-					{
-						NPCTalkMessage(npc.index, "BLITZKRIEG GEGEN BLITZKRIEG, KOMMT HER!!!!!");
-					}
-				}
+				RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Encounter_TrueForm_%d", GetRandomInt(1, 9));
 			}
 			else
 			{
@@ -597,73 +558,21 @@ methodmap Blitzkrieg < CClotBody
 			if(i_current_wave[npc.index] <=10)
 			{
 				RaidModeScaling *=1.5;
-				switch(GetRandomInt(0,1))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "Hehehe..");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "Shall we begin?");
-					}
-				}
+				RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Encounter_Hyper_Wave10_%d", GetRandomInt(1, 2));
 			}
 			else if(i_current_wave[npc.index] <=20)
 			{
 				RaidModeScaling *=1.5;
-				switch(GetRandomInt(0,1))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "A second chance at besting you.");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "You may have lived last time, but can you do it again?");
-					}
-					case 2:
-					{
-						NPCTalkMessage(npc.index, "I'm back for more.");
-					}
-				}
+				RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Encounter_Hyper_Wave20_%d", GetRandomInt(1, 3));
 			}
 			else if(i_current_wave[npc.index] <=30)
 			{
 				RaidModeScaling *=1.5;
-				switch(GetRandomInt(0,2))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "Let me introduce you to my best friend......{azure}the Moon.");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "You're all a bunch of annoying mercs, aren't you.");
-					}
-					case 2:
-					{
-						NPCTalkMessage(npc.index, "Let's just get this over with.");
-					}
-				}
+				RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Encounter_Hyper_Wave30_%d", GetRandomInt(1, 3));
 			}
 			else
 			{
-				switch(GetRandomInt(0,2))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "This is the end for you.{crimson}NO MORE RUNNING.");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "Your hubris will eventually {crimson} fail you.");
-					}
-					case 2:
-					{
-						NPCTalkMessage(npc.index, "POWER LIMITER: DISABLED{crimson} GOOD LUCK.{default}.");
-					}
-				}
+				RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Encounter_Hyper_Final_%d", GetRandomInt(1, 3));
 			}
 		}
 		
@@ -734,11 +643,18 @@ methodmap Blitzkrieg < CClotBody
 	}
 }
 
-static void NPCTalkMessage(int iNPC, const char[] message, any ...)
+static void RaidBossBlitzkrieg_NPCTalkMessage(int iNPC, const char[] message, any ...)
 {
 	char buffer[255];
 	VFormat(buffer, sizeof(buffer), message, 3);
-	PrintNPCMessageWithPrefixes(iNPC, "crimson", buffer);
+	NPC_TalkMessageWithTranslationCheck(iNPC, "crimson", buffer);
+}
+
+static void RaidBossBlitzkrieg_NPCTalkMessageAbout(int iNPC, const char[] message, int client, any ...)
+{
+	char buffer[255];
+	VFormat(buffer, sizeof(buffer), message, 4);
+	NPC_TalkMessageFormat(iNPC, "crimson", "%t", _, _, buffer, client);
 }
 
 static void ClotThink(int iNPC)
@@ -754,81 +670,15 @@ static void ClotThink(int iNPC)
 
 			if(b_pureblitz)
 			{
-				switch(GetRandomInt(0,4))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "BISTE AUßER PUSTE? VERRECK!");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "NA WIE GEHTS DIE ALEINE {crimson}HMMMMMMMMMM?");
-					}
-					case 2:
-					{
-						NPCTalkMessage(npc.index, "DU BIST EIN DRECKES FAKE, {crimson}GIB AUF!");
-					}
-					case 3:
-					{
-						NPCTalkMessage(npc.index, "DIE WAHRE KRAFT DER ALLIANCE!!!{crimson} IST HIIIIIIIIIIIERRRR!!");
-					}
-					case 4:
-					{
-						NPCTalkMessage(npc.index, "{crimson}KOMM HER!!! HAU NICHT AB DU WEICHEI!");
-					}
-				}
+				RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_LastMann_TrueForm_%d", GetRandomInt(1, 5));
 			}
 			else if(b_buffed_blitz)
 			{
-				switch(GetRandomInt(0,4))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "Unlike you filthy organics, I do not require oxygen to live.");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "How does it feel to be {crimson} all alone?");
-					}
-					case 2:
-					{
-						NPCTalkMessage(npc.index, "There is no hope for you.{crimson}Yield before I break you.");
-					}
-					case 3:
-					{
-						NPCTalkMessage(npc.index, "Death comes for{crimson} YOU.");
-					}
-					case 4:
-					{
-						NPCTalkMessage(npc.index, "All your friends have already{crimson} perished. You're next.");
-					}
-				}
+				RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_LastMann_Hyper_%d", GetRandomInt(1, 5));
 			}
 			else
 			{
-				switch(GetRandomInt(0,4))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "Only one human remains.");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "Steel triumphs flesh it seems.");
-					}
-					case 2:
-					{
-						NPCTalkMessage(npc.index, "You are hopeless.");
-					}
-					case 3:
-					{
-						NPCTalkMessage(npc.index, "Your death is{crimson} Inevitable.");
-					}
-					case 4:
-					{
-						NPCTalkMessage(npc.index, "All your friends have already perished.{crimson} You're next.");
-					}
-				}
+				RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_LastMann_%d", GetRandomInt(1, 5));
 			}
 		}
 	}
@@ -841,53 +691,15 @@ static void ClotThink(int iNPC)
 		
 		if(b_pureblitz)
 		{
-			switch(GetRandomInt(0,1))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "Willste NOCHMAL versuchen?  HMMMMM????");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "GIBSTE SCHON AUF? TRAURIG.");
-				}
-			}
+			RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Lose_TrueForm_%d", GetRandomInt(1, 2));
 		}
 		else if(b_buffed_blitz)
 		{
-			switch(GetRandomInt(0,1))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "Onto the rest of the {crimson}planet.");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "Breathing is optional, {crimson}but not for you.");
-				}
-			}
+			RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Lose_Hyper_%d", GetRandomInt(1, 2));
 		}
 		else
 		{
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "{crimson}Annihilated.{default}");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "Hopeless scrap.");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "Such {crimson}pathetic {default} weaponry.");
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "Your death is{crimson} Inevitable.");
-				}
-			}
+			RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Lose_%d", GetRandomInt(1, 4));
 		}
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		return;
@@ -927,21 +739,7 @@ static void ClotThink(int iNPC)
 		b_timer_lose = true;
 
 		b_lost=true;
-		switch(GetRandomInt(1, 3))
-		{
-			case 1:
-			{
-				NPCTalkMessage(npc.index, "It's already {crimson}too late,{default} my army has arrived...");
-			}
-			case 2:
-			{
-				NPCTalkMessage(npc.index, "My army has you surrounded from all sides, {crimson}surrender{default} or perish.");
-			}
-			case 3:
-			{
-				NPCTalkMessage(npc.index, "My army can always use {crimson}excellent specimens{default} like you.");
-			}
-		}
+		RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_TimeOver_%d", GetRandomInt(1, 3));
 	}
 	
 	if(!IsValidEntity(npc.m_iWearable6))
@@ -1228,27 +1026,9 @@ static void ClotThink(int iNPC)
 				if(npc.m_iCurrentLife>=2)
 				{
 					EmitSoundToAll("mvm/mvm_cpoint_klaxon.wav");
-					if(b_buffed_blitz)
+					if(b_buffed_blitz && IsValidClient(Enemy_I_See))
 					{
-						switch(GetRandomInt(1, 3))
-						{
-							case 1:
-							{
-								NPCTalkMessage(npc.index, "Have a gift from yours truly {yellow}%N{default}!", Enemy_I_See);
-							}
-							case 2:
-							{
-								NPCTalkMessage(npc.index, "Lookout above {yellow}%N{default}!", Enemy_I_See);
-							}
-							case 3:
-							{
-								NPCTalkMessage(npc.index, "A present for {yellow}%N{default}!", Enemy_I_See);
-							}
-							case 4:
-							{
-								NPCTalkMessage(npc.index, "Move along now, {yellow}%N{default}!", Enemy_I_See);
-							}
-						}
+						RaidBossBlitzkrieg_NPCTalkMessageAbout(npc.index, "Blitzkrieg_Draw_IonCannon_Hyper_%d", Enemy_I_See, GetRandomInt(1, 4));
 					}
 					Blitzkrieg_IOC_Invoke(npc.index, Enemy_I_See);
 				}
@@ -1414,47 +1194,11 @@ static Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 		
 		if(b_pureblitz)
 		{
-			switch(GetRandomInt(1, 4))
-			{
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "DAS WARS NOCH NET!");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "ICH KILL DICH!");
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "AAAAAAHHHHHAAAAAAAAAAAAAAAA!");
-				}
-				case 4:
-				{
-					NPCTalkMessage(npc.index, "ICH WERD DEIN DRECKS KOPF ZERSTÜCKELN!");
-				}
-			}
+			RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_LifeLoss_TrueForm_%d", GetRandomInt(1, 4));
 		}
 		else if(IsValidClient(closest))//Fancy text for blitz
 		{
-			switch(GetRandomInt(1, 4))
-			{
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "This is only just the beginning {yellow}%N{default}!", closest);
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "You think this is the end {yellow}%N{default}?", closest);
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "YOU FOOL {yellow}%N{default}!", closest);
-				}
-				case 4:
-				{
-					NPCTalkMessage(npc.index, "There's plenty more where that came from {yellow}%N{default}!", closest);
-				}
-			}
+			RaidBossBlitzkrieg_NPCTalkMessageAbout(npc.index, "Blitzkrieg_First_LifeLoss_%d", closest, GetRandomInt(1, 4));
 		}
 	}
 	else if(Ratio<0.5 && npc.m_iCurrentLife == 1 && i_current_wave[npc.index]>=20)
@@ -1468,47 +1212,11 @@ static Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 
 		if(b_pureblitz)
 		{
-			switch(GetRandomInt(1, 4))
-			{
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "DAS WARS NOCH NET!");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "ICH KILL DICH!");
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "AAAAAAHHHHHAAAAAAAAAAAAAAAA!", closest);
-				}
-				case 4:
-				{
-					NPCTalkMessage(npc.index, "ICH WERD DEIN DRECKS KOPF ZERSTÜCKELN!", closest);
-				}
-			}
+			RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_LifeLoss_TrueForm_%d", GetRandomInt(1, 4));
 		}
 		else if(IsValidClient(closest))
 		{
-			switch(GetRandomInt(1, 4))
-			{
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "Don't get too cocky {yellow}%N{default}!", closest);
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "Thy end is near {yellow}%N{default}!", closest);
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "{yellow}%N {default}are you sure you want to proceed further?", closest);
-				}
-				case 4:
-				{
-					NPCTalkMessage(npc.index, "This is getting interesting, {yellow}%N{default}!", closest);
-				}
-			}
+			RaidBossBlitzkrieg_NPCTalkMessageAbout(npc.index, "Blitzkrieg_Second_LifeLoss_%d", closest, GetRandomInt(1, 4));
 		}
 	}
 	else if(Ratio<0.25 && npc.m_iCurrentLife == 2 && i_current_wave[npc.index]>=30)
@@ -1522,47 +1230,11 @@ static Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 		
 		if(b_pureblitz)
 		{
-			switch(GetRandomInt(1, 4))
-			{
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "DAS WARS NOCH NET!");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "ICH KILL DICH!");
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "AAAAAAHHHHHAAAAAAAAAAAAAAAA!", closest);
-				}
-				case 4:
-				{
-					NPCTalkMessage(npc.index, "ICH WERD DEIN DRECKS KOPF ZERSTÜCKELN!", closest);
-				}
-			}
+			RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_LifeLoss_TrueForm_%d", GetRandomInt(1, 4));
 		}
 		else if(IsValidClient(closest))
 		{
-			switch(GetRandomInt(1, 4))
-			{
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "Your own hubris has lead to this {yellow}%N{default}, prepare for complete {crimson}BLITZKRIEG.", closest);
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "Thy end is {crimson} Now {yellow}%N{default}. Thou shall feel true {crimson}BLITZKRIEG.", closest);
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "You've really done it now...... {crimson} ITS TIME TO DIE. {yellow}%N {crimson}PREPARE FOR FULL BLITZKRIEG.", closest);
-				}
-				case 4:
-				{
-					NPCTalkMessage(npc.index, "You cannot hope to stop {crimson}BLITZKRIEG{default} with such lackluster weaponry {yellow}%N{default}!", closest);
-				}
-			}
+			RaidBossBlitzkrieg_NPCTalkMessageAbout(npc.index, "Blitzkrieg_Third_LifeLoss_%d", closest, GetRandomInt(1, 4));
 		}
 	} 
 	else if(Ratio < 0.175 && i_current_wave[npc.index] >=30 && fl_BEAM_RechargeTime[npc.index] != FAR_FUTURE && npc.m_iCurrentLife == 3)
@@ -1583,65 +1255,15 @@ static Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 		
 		if(b_pureblitz)
 		{
-			switch(GetRandomInt(1, 3))
-			{
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "{crimson}FRISS DAS!!!");	//Ego boost 9000%
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "{crimson}KOMMSTE NOCH KLAR DIGGA???");	//Ego boost 9000%
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "{crimson}DIE TECHNOLOGIE DER EXPIDONSANS IST DIE BESTE!!!!!");	//Ego boost 9000%
-				}
-			}
+			RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Final_LifeLoss_TrueForm_%d", GetRandomInt(1, 3));
 		}
 		else if(b_buffed_blitz)
 		{
-			switch(GetRandomInt(1, 3))
-			{
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "{crimson}Here's a fun fact, the atmosphere drastically lowers the potential of this attack... Guess what space lacks!");	//Ego boost 9000%
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "{crimson}MUHAHAHAHAHAH!");	//Ego boost 9000%
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "{crimson}THE {aqua}TRUE{default} POWER OF {azure}THE MOON, IN THE PALMS OF MY HANDS!");	//Ego boost 9000%
-				}
-				case 4:
-				{
-					NPCTalkMessage(npc.index, "{crimson}MY POWER TRANSCENDS ANYTHING YOU ORGANICS COULD EVEN COMPREHEND!");	//Ego boost 9000%
-				}
-			}
+			RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Final_LifeLoss_Hyper_%d", GetRandomInt(1, 4));
 		}
 		else
 		{
-			switch(GetRandomInt(1, 4))
-			{
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "{crimson}I AM A GOD.");	//Ego boost 9000%
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "{crimson}THY PUNISHMENT IS DEATH.");	//Ego boost 9000%
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "{crimson}THE POWER OF {azure}THE MOON{crimson}, IN THE PALMS OF MY HANDS.");	//Ego boost 9000%
-				}
-				case 4:
-				{
-					NPCTalkMessage(npc.index, "{crimson}RUNNING WILL ONLY DELAY THE INEVITABLE.");	//Ego boost 9000%
-				}
-			}
+			RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Final_LifeLoss_%d", GetRandomInt(1, 3));
 		}
 		
 		float charge=6.0;	//Charge time of blitzlight MUST be set here
@@ -1712,7 +1334,7 @@ static void Spawn_Allies(Blitzkrieg npc)
 	float ang[3]; GetEntPropVector(npc.index, Prop_Data, "m_angRotation", ang);
 	if(i_current_wave[npc.index]==30)
 	{
-		NPCTalkMessage(npc.index, "The minions have joined the battle.");
+		RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Spawn_Minion_Wave30");
 	}
 	int maxhealth = ReturnEntityMaxHealth(npc.index);
 	int heck;
@@ -1741,7 +1363,7 @@ static void Spawn_Allies(Blitzkrieg npc)
 	}
 	if(i_current_wave[npc.index]>=40)	//Only spawns if the wave is 60 or beyond.
 	{
-		NPCTalkMessage(npc.index, "And now its those two's turn");
+		RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Spawn_Minion_Final");
 		maxhealth= (heck/5);	//mid squishy
 
 		spawn_index = NPC_CreateByName("npc_alt_donnerkrieg", npc.index, pos, ang, GetTeam(npc.index), "raid_ally");
@@ -1810,74 +1432,38 @@ static void NPC_Death(int entity)
 	{	
 		if(b_pureblitz)
 		{
-			switch(GetRandomInt(1, 4))	//either he will say something, or nothing.
+			int num = GetRandomInt(1, 4);
+			switch(num)	//either he will say something, or nothing.
 			{
-				case 1:
+				case 1, 2:
 				{
-					NPCTalkMessage(npc.index, "MISST!");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "ICH KRIEG DICH NOCH!");
+					RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Death_TrueForm_%d", num);
 				}
 			}
 		}
 		else if(g_b_item_allowed)
 		{
-			switch(GetRandomInt(1, 4))	//either he will say something, or nothing.
+			int num = GetRandomInt(1, 4);
+			switch(num)	//either he will say something, or nothing.
 			{
-				case 1:
+				case 1, 2:
 				{
-					NPCTalkMessage(npc.index, "NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "error");
+					RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Death_Final_%d", num);
 				}
 			}
 		}
 		else if(b_buffed_blitz)
 		{
-			switch(GetRandomInt(1, 4))
+			if(IsValidClient(closest))
 			{
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "Next time you won't be this lucky, {yellow}%N{default}. {crimson}Next time.", closest);
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "Will you ever be this lucky again {yellow}%N{default}? Will{crimson} you?", closest);
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "I'll be back for you {yellow}%N{default}.", closest);
-				}
-				case 4:
-				{
-					NPCTalkMessage(npc.index, "I pity you {yellow}%N{crimson}. Because next time I'll come back stronger.", closest);
-				}
+				RaidBossBlitzkrieg_NPCTalkMessageAbout(npc.index, "Blitzkrieg_Death_Hyper_%d", closest, GetRandomInt(1, 3));
 			}
 		}
 		else
 		{
-			switch(GetRandomInt(1, 4))
+			if(IsValidClient(closest))
 			{
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "No..... this... cannot be. You win this time, {yellow}%N{crimson} this time.", closest);
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "It seems I've failed to best you {yellow}%N{default}.", closest);
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "I'll be back for you {yellow}%N{default}.", closest);
-				}
-				case 4:
-				{
-					NPCTalkMessage(npc.index, "HOW {yellow}%N{default}. How did you beat me before my army could arrive. {crimson}...Doesn't matter,{default} there's always a next time...", closest);
-				}
+				RaidBossBlitzkrieg_NPCTalkMessageAbout(npc.index, "Blitzkrieg_Death_%d", closest, GetRandomInt(1, 4));
 			}
 		}
 	}
