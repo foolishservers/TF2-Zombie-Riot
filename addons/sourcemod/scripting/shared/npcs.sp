@@ -3039,7 +3039,27 @@ void NPC_TalkMessageWithTranslationCheck(int iNPC, const char[] npcColor, const 
  */
 void NPC_TalkMessageFormat(int entity, const char[] npcColor, const char[] message, const char[] customName = "", const char[] messageColor = "default", any ...) {
 	bool shouldNameTranslation = TranslationPhraseExists(customName);	
+	char finalNpcColor[32], finalMessageColor[32];
 	char finalName[256], finalMessage[256];
+	
+	if (finalNpcColor[0] == '\0')
+		FormatEx(finalNpcColor, sizeof(finalNpcColor), "{%s}", npcColor);
+	else
+		Format(finalNpcColor, sizeof(finalNpcColor), "{%s}", finalNpcColor);
+	
+	// Sometimes colors are defined with {}, sometimes without... get rid of dupes to accommodate for everything
+	ReplaceString(finalNpcColor, sizeof(finalNpcColor), "{{", "{");
+	ReplaceString(finalNpcColor, sizeof(finalNpcColor), "}}", "}");
+	
+	if (finalMessageColor[0] == '\0')
+		FormatEx(finalMessageColor, sizeof(finalMessageColor), "{%s}", messageColor);
+	else
+		Format(finalMessageColor, sizeof(finalMessageColor), "{%s}", finalMessageColor);
+	
+	// Sometimes colors are defined with {}, sometimes without... get rid of dupes to accommodate for everything
+	ReplaceString(finalMessageColor, sizeof(finalMessageColor), "{{", "{");
+	ReplaceString(finalMessageColor, sizeof(finalMessageColor), "}}", "}");
+	
 	for (int client = 1; client <= MaxClients; client++)
 	{
 		if (!IsClientInGame(client) || IsFakeClient(client))
@@ -3073,11 +3093,11 @@ void NPC_TalkMessageFormat(int entity, const char[] npcColor, const char[] messa
 		VFormat(finalMessage, sizeof(finalMessage), message, 6);
 		
 		char fullText[512];
-		FormatEx(fullText, sizeof(fullText), "%s%s%s: %s", npcColor, finalName, messageColor, finalMessage);
+		FormatEx(fullText, sizeof(fullText), "%s%s%s: %s", finalNpcColor, finalName, finalMessageColor, finalMessage);
 		if (strlen(fullText) > 250)
 		{
-			CPrintToChat(client, "%s%s%s:", npcColor, finalName, messageColor);
-			CPrintToChat(client, "%s%s", messageColor, finalMessage);
+			CPrintToChat(client, "%s%s%s:", finalNpcColor, finalName, finalMessageColor);
+			CPrintToChat(client, "%s%s", finalMessageColor, finalMessage);
 		}
 		else
 		{
