@@ -5675,7 +5675,7 @@ void Store_ApplyAttribs(int client)
 
 	float value;
 	char buffer1[12];
-	if(i_ClientHasCustomGearEquipped[client] < 2)
+	if(i_ClientHasCustomGearEquipped[client] != CUSTOMGEAR_QUANTUM_SUIT)
 	{
 		static ItemInfo info;
 		char buffer2[32];
