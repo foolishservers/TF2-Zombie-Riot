@@ -4606,6 +4606,9 @@ public int Store_MenuPage(Menu menu, MenuAction action, int client, int choice)
 						Format(buffer, sizeof(buffer), "%T", "Niko Oneshot", client);
 						menu2.AddItem("-48", buffer);
 
+						Format(buffer, sizeof(buffer), "%T", "Claire Fpe", client);
+						menu2.AddItem("-152", buffer);
+
 						Format(buffer, sizeof(buffer), "%T", "Skeleboy", client);
 						menu2.AddItem("-49", buffer);
 
@@ -4653,6 +4656,12 @@ public int Store_MenuPage(Menu menu, MenuAction action, int client, int choice)
 					case -151:
 					{
 						OverridePlayerModel(client, HHH_SkeletonOverride, true);
+						JoinClassInternal(client, CurrentClass[client]);
+						MenuPage(client, -1);
+					}
+					case -152:
+					{
+						OverridePlayerModel(client, CLAIRE_FPE, true);
 						JoinClassInternal(client, CurrentClass[client]);
 						MenuPage(client, -1);
 					}
