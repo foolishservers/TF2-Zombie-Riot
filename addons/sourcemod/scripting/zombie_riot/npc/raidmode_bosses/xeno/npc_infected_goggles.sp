@@ -1041,10 +1041,9 @@ public Action RaidbossBlueGoggles_OnTakeDamage(int victim, int &attacker, int &i
 			RemoveNpcFromEnemyList(npc.index);
 			GiveProgressDelay(28.0);
 			damage = 0.0;
-			RaidbossBlueGoggles_NPCTalkMessage(npc.index, "You win, I won't stop you no anymore...");
+			RaidbossBlueGoggles_NPCTalkMessage(npc.index, "Waldch_Final_Death");
 			return Plugin_Handled;
 		}
-
 	}
 
 	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))

@@ -493,4 +493,160 @@
 		"en"		"I'll be back for you {yellow}{1}{default}."
 		"ko"		"다음에 두고 보자고, {yellow}{1}{default}."
 	}
+	
+	// Fake Kahml.
+	"FakeKahml_SpecialAttack"
+	{
+		"en"		"{crimson}I Will BREAK YOU"
+		"ko"		"{crimson}널 박살내주마."
+	}
+	"FakeKahml_NanoMachineStart"
+	{
+		"en"		"I don't have time for this."
+		"ko"		"이러고 있을 시간이 없다."
+	}
+	"FakeKahml_NanoMachineEnd"
+	{
+		"en"		"You Lived, Good work."
+		"ko"		"살아남았군. 훌륭하다."
+	}
+	"FakeKahml_Death"
+	{
+		"en"		"You're boring me. I'm leaving."
+		"ko"		"점점 지겹군. 잘 있어라."
+	}
+	
+	// Donnerkrieg.
+	"Donnerkrieg_Encounter"
+	{
+		"en"		"I have arrived to render judgement."
+		"ko"		"심판을 내리기 위해 이 곳에 왔다."
+	}
+	
+	"Donnerkrieg_Win_1"
+	{
+		"en"		"Wait no, please stop."
+		"ko"		"아니, 잠깐! 멈춰!"
+	}
+	"Donnerkrieg_Win_2"
+	{
+		"en"		"You stopped The rouge machine."
+		"ko"		"너희가 저 미친 기계를 드디어 저지해냈어."
+	}
+	"Donnerkrieg_Win_3"
+	{
+		"en"		"We don't have to fight anymore, for you see..."
+		"ko"		"보다시피 우린 이제 싸울 필요가 없어..."
+	}
+	"Donnerkrieg_Win_4"
+	{
+		"en"		"We had no choice."
+		"ko"		"우리에겐 선택의 여지가 없었어."
+	}
+	"Donnerkrieg_Win_5"
+	{
+		"en"		"If we hadn't complied he would have destroyed us."
+		"ko"		"만약 그를 따르지 않았다면, 분명 우리를 죽였을 거야."
+	}
+	"Donnerkrieg_Win_6"
+	{
+		"en"		"The corruption had fully gotten to him."
+		"ko"		"아무래도 저 기계에도 혼돈이 잠식되었던 거 같아."
+	}
+	"Donnerkrieg_Win_7"
+	{
+		"en"		"However, that doesn't matter anymore."
+		"ko"		"이젠 상관없는 일이 되었지만."
+	}
+	"Donnerkrieg_Win_8"
+	{
+		"en"		"With Blitzkrieg gone, the army has been set free, and so..."
+		"ko"		"블리츠크리그도 사라졌으니, 그의 수하들도 전부 자유의 몸이 됐어..."
+	}
+	"Donnerkrieg_Win_9"
+	{
+		"en"		"Blitzkrieg's army is happy to serve you as thanks for setting us free..."
+		"ko"		"우리를 자유의 몸으로 만들어줬으니, 그의 군대는 이제 너희를 따를 거야."
+	}
+	"Donnerkrieg_Win_10"
+	{
+		"en"		"Oh also our true names are, {aqua}Stella{snow}, that's me."
+		"ko"		"아, 그리고 우리 진짜 이름을 알려줄게. 나는 {aqua}스텔라{snow}야."
+	}
+	"Donnerkrieg_Win_11"
+	{
+		"en"		"And he's {crimson}Karlas{snow}!"
+		"ko"		"그리고 이 쪽은 {crimson}카를라스{snow}야!"
+	}
+	
+	"Donnerkrieg_Ready_NightmareCannon_1"
+	{
+		"en"		"{crimson}That's it, {default}I'm going to kill you."
+		"ko"		"{crimson}더 이상 못 참겠군.{default} 너희 모두 죽여주마."
+	}
+	"Donnerkrieg_Ready_NightmareCannon_2"
+	{
+		"en"		"{crimson}Hm, {default}wonder how this will end..."
+		"ko"		"{crimson}흠, {default}어떻게 끝이 날지 참 기대되는군..."
+	}
+	"Donnerkrieg_Ready_NightmareCannon_3"
+	{
+		"en"		"{crimson}PREPARE {default}Thyself, {yellow}Judgement {default}is near."
+		"ko"		"{crimson}각오해라, {yellow}심판이 {default}멀지 않았다."
+	}
+	"Donnerkrieg_Ready_NightmareCannon_4"
+	{
+		"en"		"Just thinking about recharging this gives me a headache."
+		"ko"		"이걸 재충전할 생각을 하니 머리가 아프군..."
+	}
+	"Donnerkrieg_Ready_NightmareCannon_5"
+	{
+		"en"		"Ya know, I'm getting quite bored of {crimson}this."
+		"ko"		"이 싸움이 점점 {crimson}지겨워지고 있는 걸."
+	}
+	
+	"Donnerkrieg_Ready_NightmareCannon_Special_1"
+	{
+		"en"		"Oh not again, now train's gone and {crimson}left{default}."
+		"ko"		"아 이런, 이제 집으로 돌아갈 기차는 이미 떠나버렸네."
+	}
+	"Donnerkrieg_Ready_NightmareCannon_Special_2"
+	{
+		"en"		"Aiming this thing is actually quite {crimson}complex {default}ya know."
+		"ko"		"이걸 조준하는 건 꽤나 {crimson}복잡한{default} 일이라고."
+	}
+	
+	"Donnerkrieg_NightmareCannon_1"
+	{
+		"en"		"{crimson}NIGHTMARE, CANNON!"
+		"ko"		"{crimson}악몽포 전개!"
+	}
+	"Donnerkrieg_NightmareCannon_2"
+	{
+		"en"		"{crimson}JUDGEMENT BE UPON THEE!"
+		"ko"		"{crimson}저들에게 죽음을!"
+	}
+	"Donnerkrieg_NightmareCannon_3"
+	{
+		"en"		"{crimson}Annihilation"
+		"ko"		"{crimson}섬멸 개시!"
+	}
+	
+	"Donnerkrieg_NightmareCannon_Special_1"
+	{
+		"en"		"{crimson}And the city's too far to walk to the end while I..."
+		"ko"		"걸어서 돌아가기엔 너무 {purple}먼 곳{default}인데... 특히 내가.."
+	}
+	"Donnerkrieg_NightmareCannon_Special_2"
+	{
+		"en"		"However it's still{crimson} worth the effort."
+		"ko"		"하지만 {crimson}충분히 그럴 가치가 있지."
+	}
+	
+	// Shared.
+	"Blitzkrieg_Trophies"
+	{
+		"en"		"{default}You now have access to: {crimson}''Blitzkrieg's Army''{default}!"
+		"ko"		"{default}이제 당신은 새로운 세력을 배럭으로 호출할 수 있게 되었습니다...: {crimson}''블리츠크리그의 군대''{default}!"
+	}
 }
