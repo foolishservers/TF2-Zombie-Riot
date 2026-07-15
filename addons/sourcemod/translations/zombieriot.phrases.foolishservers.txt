@@ -474,8 +474,8 @@
 	}
 	"Identifying Targets Desc"
 	{
-		"en"	"Increases Damage Taken by 25％"
-		"ko"	"대상이 받는 피해가 25％ 증가합니다."
+		"en"	"Increases Damage Taken by 20％"
+		"ko"	"대상이 받는 피해가 20％ 증가합니다."
 	}
 	
 	//무기 이름
