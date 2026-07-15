@@ -773,6 +773,7 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "custom/kit_barracks.sp"
 #include "custom/kit_indexfather.sp"
 #include "custom/kit_gunsaw.sp"
+#include "custom/weapon_flare.sp"
 
 void ZR_PluginLoad()
 {

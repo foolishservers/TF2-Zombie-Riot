@@ -467,6 +467,16 @@
 		"en"	"Barricade is mounted, damage taken is reduced\n{yellow}but when the mounted Barricade also takes damage.\n{crimson}If hit by a raid boss, it will be destroyed faster."
 		"ko"	"바리케이드를 장착한 경우, 받는 피해가 감소하지만\n{yellow}장착한 바리케이드도 피해를 입습니다.\n{crimson}레이드 보스에게 피격되면 더 빨리 파괴됩니다."
 	}
+	"Identifying Targets"
+	{
+		"en"	"Identifying Targets"
+		"ko"	"타겟 식별"
+	}
+	"Identifying Targets Desc"
+	{
+		"en"	"Increases Damage Taken by 25％"
+		"ko"	"대상이 받는 피해가 25％ 증가합니다."
+	}
 	
 	//무기 이름
 	"Chaos Infected Launcher"
@@ -538,6 +548,11 @@
 	{
 		"en"		"Improvised Armor"
 		"ko"		"급조된 증가 장갑"
+	}
+	"Killing Order"
+	{
+		"en"		"Killing Order"
+		"ko"		"살상 명령"
 	}
 	
 	//무기 설명
@@ -694,6 +709,27 @@
 	{
 		"en"	"Final Max Armor +300\n-Max Armor -10％"
 		"ko"	"-최종 최대 아머 +300\n-최대 아머 10％ 감소"
+	}
+	
+	"Killing Order Pap 1"
+	{
+		"en"	"Change projectile to hitscan\n-Increased damage\n-Increased attackspeed"
+		"ko"	"-피해량, 공격 속도 증가\n공격 방식이 히트스캔으로 변경"
+	}
+	"Killing Order Pap 2"
+	{
+		"en"	"-Additional damage to hit target for 4 seconds\n-Increased damage\n-Increased attackspeed"
+		"ko"	"-피해량, 공격 속도 증가\n적중한 대상에게 4초 동안 추가 피해"
+	}
+	"Killing Order Pap 3"
+	{
+		"en"	"-Increased damage\n-Increased attackspeed"
+		"ko"	"-피해량, 공격 속도 증가"
+	}
+	"Killing Order Pap 4"
+	{
+		"en"	"-Increased damage\n-Increased attackspeed"
+		"ko"	"-피해량, 공격 속도 증가"
 	}
 	
 	//Etc

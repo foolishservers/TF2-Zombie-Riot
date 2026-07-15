@@ -215,6 +215,7 @@ void InitStatusEffects()
 	StatusEffects_TeslarStick();
 #if defined ZR
 	StatusEffects_Baka();
+	StatusEffects_BlackOak();
 #endif
 	StatusEffects_Ludo();
 	StatusEffects_Cryo();
@@ -835,6 +836,24 @@ float Cybergrind_EX_Hard_SpeedFunc(int victim, StatusEffect Apply_MasterStatusEf
 	else if(Waves_GetRound()>28)f_Speed = 1.06;
 	else if(Waves_GetRound()>14)f_Speed = 1.06;
 	return f_Speed;
+}
+
+void StatusEffects_BlackOak()
+{
+	StatusEffect data;
+	strcopy(data.BuffName, sizeof(data.BuffName), "Identifying Targets");
+	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "IT");
+	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
+	//-1.0 means unused
+	data.DamageTakenMulti 			= 0.2;
+	data.DamageDealMulti			= -1.0;
+	data.AttackspeedBuff			= -1.0;
+	data.MovementspeedModif			= -1.0;
+	data.Positive 					= false;
+	data.ShouldScaleWithPlayerCount	= false;
+	data.Slot						= 0;
+	data.SlotPriority				= 0;
+	StatusEffect_AddGlobal(data);
 }
 #endif
 
@@ -3828,8 +3847,6 @@ stock void StatusEffects_PikemanDebuffAdd(int victim, int valuetoadd)
 			E_AL_StatusEffects[victim].SetArray(ArrayPosition, Apply_StatusEffect);
 		}
 	}
-	
-
 }
 
 void Func_PikemanMaxStacks(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int SizeOfChar, char[] HudToDisplay)
