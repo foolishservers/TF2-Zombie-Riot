@@ -7748,7 +7748,7 @@ static bool CheckEntitySlotIndex(int index, int slot, int entity, int costOfUpgr
 void ResetStoreMenuLogic(int client)
 {
 	LastStoreMenu[client] = 0.0;
-	AnyMenuOpen[client] = 0.0;
+	AnyMenuOpen[client] = 0;
 }
 
 void SetStoreMenuLogic(int client, bool store = true)
