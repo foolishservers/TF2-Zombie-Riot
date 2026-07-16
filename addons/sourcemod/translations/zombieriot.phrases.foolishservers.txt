@@ -830,4 +830,31 @@
 		"en"		"You were given extra 30 seconds to prepare for the raidboss... Get ready."
 		"ko"		"레이드 보스 준비 시간으로 30초 드립니다. 준비하세요!"
 	}
+	
+	//Auto Loadout.
+	"Loadout - H&K G36 Carbine Route"
+	{
+		"en" 		"SMG: H&K G36 Carbine Route [Easy]"
+		"ko"		"기관단총: H&K G36 카빈 루트 [추천]"
+	}
+	"Loadout - Grigori Shotgun Route"
+	{
+		"en" 		"Shotgun: Grigori Shotgun Route [Hard]"
+		"ko"		"산탄총: 그리고리 산탄총 루트 [어려움]"
+	}
+	"Loadout - Medic"
+	{
+		"en" 		"Basic Medic [Hard]"
+		"ko"		"메딕 스타터팩 [어려움]"
+	}
+	"Loadout - Gravaton Spell"
+	{
+		"en" 		"Gravaton Spell [Normal]"
+		"ko"		"중력 마법 [보통]"
+	}
+	"Loadout - Steel Dagger"
+	{
+		"en" 		"Steel Dagger [Hard]"
+		"ko"		"강철 단검 [어려움]"
+	}
 }
