@@ -832,27 +832,27 @@
 	}
 	
 	//Auto Loadout.
-	"Loadout - H&K G36 Carbine Route"
+	"Ranged - H&K G36 Carbine Route"
 	{
 		"en" 		"SMG: H&K G36 Carbine Route [Easy]"
 		"ko"		"기관단총: H&K G36 카빈 루트 [추천]"
 	}
-	"Loadout - Grigori Shotgun Route"
+	"Ranged - Grigori Shotgun Route"
 	{
 		"en" 		"Shotgun: Grigori Shotgun Route [Hard]"
 		"ko"		"산탄총: 그리고리 산탄총 루트 [어려움]"
 	}
-	"Loadout - Medic"
+	"Medic - Basic"
 	{
 		"en" 		"Basic Medic [Hard]"
 		"ko"		"메딕 스타터팩 [어려움]"
 	}
-	"Loadout - Gravaton Spell"
+	"Mage - Gravaton Spell"
 	{
 		"en" 		"Gravaton Spell [Normal]"
 		"ko"		"중력 마법 [보통]"
 	}
-	"Loadout - Steel Dagger"
+	"Melee - Steel Dagger"
 	{
 		"en" 		"Steel Dagger [Hard]"
 		"ko"		"강철 단검 [어려움]"
