@@ -3675,7 +3675,7 @@ static void MenuPage(int client, int section)
 
 						menu.AddItem(buffer2, buffer);
 					}
-					if(info.Desc[0])
+					// if(info.Desc[0])
 					{
 						for(int Repeatuntill; Repeatuntill < 10; Repeatuntill++)
 						{
@@ -6849,6 +6849,7 @@ int Store_GiveItem(int client, int index, bool &use=false, bool &found=false, bo
 		VehicleFullAPC_WeaponEnable(client, entity);
 		Enable_ExploARWeapon(client, entity);
 		Gunsaw_Enable(client, entity);
+		KitSurvivalist_Enable(client, entity);
 
 		//give all revelant things back
 		WeaponSpawn_Reapply(client, entity, StoreWeapon[entity]);
@@ -8180,15 +8181,17 @@ static void Store_ItemDescriptionMenu(int client, int section)
 	
 	item.GetItemInfo(level, info);
 	// 원활한 한국어 지원을 위해 무기 설명은 따로 빼냄.
-	char buffer[512];
+	char buffer[256], buffer2[512];
 	Config_CreateDescription(ItemArchetype[info.WeaponArchetype], info.Classname, info.Attrib, info.Value, info.Attribs, buffer, sizeof(buffer));
-	TranslateItemName(client, info.Desc, info.Rogue_Desc, info.Rogue_Desc, sizeof(info.Rogue_Desc));
+	
+	if (info.Desc[0])
+		TranslateItemName(client, info.Desc, info.Rogue_Desc, buffer2, sizeof(buffer2));
 	
 	Menu menu = new Menu(Store_MenuItemDescription);
 	CancelClientMenu(client);
 	SetStoreMenuLogic(client, false);
 	
-	menu.SetTitle("%s\n%s\n ", buffer, info.Rogue_Desc);
+	menu.SetTitle("%s\n%s\n ", buffer, buffer2);
 	menu.AddItem("0", "-", ITEMDRAW_NOTEXT);
 	menu.ExitBackButton = true;
 	menu.Display(client, MENU_TIME_FOREVER);

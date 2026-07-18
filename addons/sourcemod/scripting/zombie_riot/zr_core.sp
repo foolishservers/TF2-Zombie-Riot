@@ -333,6 +333,15 @@ enum
     WEAPON_KIT_PURGE_RAMPAGER = 161,
     WEAPON_KIT_PURGE_ANNAHILATOR = 162,
     WEAPON_KIT_PURGE_MISC = 163,
+	WEAPON_BOMB_AR = 164,
+	WEAPON_BRICK = 165,
+	WEAPON_BURNINGTHUMB = 166,
+	WEAPON_RED_MIST = 167,
+	WEAPON_GUNSAW = 168,
+}
+
+enum
+{
 	WEAPON_MAJORSTEAM_LAUNCHER = 1000,
 	WEAPON_LOCKDOWN = 1001,
 	WEAPON_MINECRAFT_SWORD = 1002,
@@ -340,12 +349,8 @@ enum
 	WEAPON_IS_HPR = 1004,
 	WEAPON_IS_STICKYBOMB = 1005,
 	WEAPON_IS_AUTOSHOTGUN = 1006,
-	WEAPON_BOMB_AR = 164,
-	WEAPON_BRICK = 165,
-	WEAPON_BURNINGTHUMB = 166,
-	WEAPON_RED_MIST = 167,
-	WEAPON_GUNSAW = 168
-}
+	WEAPON_KIT_SURVIVALIST = 1007,
+};
 
 enum
 {
@@ -776,6 +781,7 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "custom/kit_indexfather.sp"
 #include "custom/kit_gunsaw.sp"
 #include "custom/weapon_flare.sp"
+#include "custom/kit_survivalist.sp"
 
 void ZR_PluginLoad()
 {
@@ -1148,6 +1154,7 @@ void ZR_MapStart()
 	ResetMapStartExploARWeapon();
 	Gunsaw_MapStart();
 	IndexFather_MapStart();
+	KitSurvivalist_MapStart();
 	
 	Zombies_Currently_Still_Ongoing = 0;
 	// An info_populator entity is required for a lot of MvM-related stuff (preserved entity)

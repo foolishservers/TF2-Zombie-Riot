@@ -555,6 +555,23 @@
 		"ko"		"살상 명령"
 	}
 	
+	"Survivalist Kit"
+	{
+		"en"		"Survivalist Kit"
+		"ko"		"생존주의자 키트"
+	}
+	
+	"Survivalist's Carbine"
+	{
+		"en"		"Survivalist's Carbine"
+		"ko"		"생존주의자의 소총"
+	}
+	"Survivalist's Knife"
+	{
+		"en"		"Survivalist's Knife"
+		"ko"		"생존주의자의 칼"
+	}
+	
 	//무기 설명
 	"Chaos Infected Launcher desc"
 	{
@@ -707,8 +724,8 @@
 	
 	"Improvised Armor Desc"
 	{
-		"en"	"Final Max Armor +300\n-Max Armor -10％"
-		"ko"	"-최종 최대 아머 +300\n-최대 아머 10％ 감소"
+		"en"	"Final Max Armor +300\n-Max Armor -20％"
+		"ko"	"-최종 최대 아머 +300\n-최대 아머 20％ 감소"
 	}
 	
 	"Killing Order Pap 1"
@@ -730,6 +747,58 @@
 	{
 		"en"	"-Increased damage\n-Increased attackspeed"
 		"ko"	"-피해량, 공격 속도 증가"
+	}
+	
+	"Survivalist's Carbine Desc"
+	{
+		"en"		"-Fast-reload but low clip size"
+		"ko"		"-재장전이 빠르지만, 탄창이 작음"
+	}
+	"Survivalist's Knife Desc"
+	{
+		"en"		"-High-damage but slow attack rate"
+		"ko"		"-피해량이 높지만, 공격 속도가 느림"
+	}
+	
+	"Survivalist Kit Desc"
+	{
+		"en"		"-Provides an fast-reload carbine, high-damage knife"
+		"ko"		"-재장전이 빠른 카빈과 높은 피해를 주는 칼을 보유"
+	}
+	"Survivalist Kit Pap 1 Desc"
+	{
+		"en"		"New melee alt-fire ability - Reserved Health:\nAttacking with melee will reserve health and consume via M2\nImproved stats."
+		"ko"		"근접 무기 우클릭 능력 해금 - 체력 회복:\n적을 근접 무기로 타격 시, 체력을 모으고 우클릭으로 소모하여 회복할 수 있음.\n전반적인 능력치 증가"
+	}
+	"Survivalist Kit Pap 2 Desc"
+	{
+		"en"		"New primary alt-fire ability - Fire Grenade:\nFire aoe attack immediately\nImproved stats."
+		"ko"		"주무기 우클릭 능력 해금 - 유탄 발사:\n우클릭 시 즉각 유탄이 발사됨.\n전반적인 능력치 증가"
+	}
+	"Survivalist Kit Pap 3 Desc"
+	{
+		"en"		"New ability - Revive:\nIf damage is higher than your health, consume all reserved health and gives uber.\nOnly one chance on wave/raid.\nImproved stats."
+		"ko"		"능력 해금 - 소생:\n만약 죽을 피해를 받으면, 모은 체력을 전부 소모하고 우버를 잠깐 받음.\n레이드/웨이브 당 한 번만 사용 가능\n전반적인 능력치 증가"
+	}
+	"Survivalist Kit Pap 4 Desc"
+	{
+		"en"		"Improved stats."
+		"ko"		"전반적인 능력치 증가"
+	}
+	"Survivalist Kit Pap 5 Desc"
+	{
+		"en"		"Improved stats."
+		"ko"		"전반적인 능력치 증가"
+	}
+	"Survivalist Kit Pap 6 Desc"
+	{
+		"en"		"Improved stats."
+		"ko"		"전반적인 능력치 증가"
+	}
+	"Survivalist Kit Pap 7 Desc"
+	{
+		"en"		"Improved stats."
+		"ko"		"전반적인 능력치 증가"
 	}
 	
 	//Etc
