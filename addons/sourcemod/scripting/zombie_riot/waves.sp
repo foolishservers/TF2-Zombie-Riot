@@ -1901,7 +1901,7 @@ public Action Waves_RoundStartTimer(Handle timer)
 public Action Waves_AllowVoting(Handle timer)
 {
 	Waves_SetReadyStatus(1);
-	SPrintToChatAll("이제 준비(F4)를 할 수 있습니다.");
+	CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_Setup_Allow_Ready");
 	return Plugin_Continue;
 }
 
@@ -1974,8 +1974,8 @@ public Action Waves_EndVote(Handle timer, int WhatWasMyCancel)
 					VoteEndTime = GetGameTime() + 30.0;
 					MostRecentVoteCancel++;
 					CreateTimer(30.0, Waves_EndVote, MostRecentVoteCancel, TIMER_FLAG_NO_MAPCHANGE);
-					PrintHintTextToAll("Vote for the top %d options!", list.Length);
-					SPrintToChatAll("Vote for the top %d options!", list.Length);
+					PrintHintTextToAll("%t", "Wave_Vote_TieBreaker", list.Length);
+					CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_Vote_TieBreaker", list.Length);
 					Waves_SetReadyStatus(2);
 					return Plugin_Continue;
 				}
@@ -2057,8 +2057,8 @@ public Action Waves_EndVote(Handle timer, int WhatWasMyCancel)
 					MostRecentVoteCancel++;
 					CreateTimer(duration, Waves_EndVote, MostRecentVoteCancel, TIMER_FLAG_NO_MAPCHANGE);
 
-					PrintHintTextToAll("Vote for the wave modifier!");
-					SPrintToChatAll("Vote for the wave modifier!");
+					PrintHintTextToAll("%t", "Wave_Vote_Modifier");
+					CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_Vote_Modifier");
 				}
 				else
 				{
@@ -2982,7 +2982,7 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 						{
 							Waves_SetReadyStatus(2);
 							//wait a minimum of 30 seconds when theres too many players.
-							SPrintToChatAll("30초 간은 준비할 수 없습니다.");
+							CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_Setup_Disallow_Ready");
 							CreateTimer(30.0, Waves_AllowVoting, _, TIMER_FLAG_NO_MAPCHANGE);
 						}
 						else
@@ -3005,13 +3005,12 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 					zr_tagblacklist.GetString(buffer, sizeof(buffer));
 					if(StrContains(buffer, "fools26", false) != -1)
 					{
-
 						Cooldown = GetGameTime() + 5.0;
 
 						SpawnTimer(5.0);
 						CreateTimer(5.0, Waves_RoundStartTimer, _, TIMER_FLAG_NO_MAPCHANGE);
 
-						SPrintToChatAll("You were given extra 5 seconds to prepare...");
+						CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_WaitingTime_LastMann_AprilFools26");
 					}
 					else
 					{
@@ -3020,9 +3019,8 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 						SpawnTimer(45.0);
 						CreateTimer(45.0, Waves_RoundStartTimer, _, TIMER_FLAG_NO_MAPCHANGE);
 
-						SPrintToChatAll("You were given extra 45 seconds to prepare...");
+						CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_WaitingTime_LastMann");
 					}
-					
 				}
 				else if(GiveBreakForPlayers && !Rogue_Mode() && round.Waves.Length)
 				{					
@@ -3036,7 +3034,7 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 						SpawnTimer(5.0);
 						CreateTimer(5.0, Waves_RoundStartTimer, _, TIMER_FLAG_NO_MAPCHANGE);
 
-						SPrintToChatAll("You were given extra 5 seconds to prepare, as most of your team died......");
+						CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_BreakTime_AprilFools26");
 					}
 					else
 					{
@@ -3045,8 +3043,7 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 						SpawnTimer(30.0);
 						CreateTimer(30.0, Waves_RoundStartTimer, _, TIMER_FLAG_NO_MAPCHANGE);
 						
-						SPrintToChatAll("You were given extra 30 seconds to prepare, as most of your team died......");
-						
+						CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_BreakTime");
 					}
 				}
 				else
