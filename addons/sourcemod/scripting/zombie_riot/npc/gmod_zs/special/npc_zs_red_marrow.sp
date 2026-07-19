@@ -35,6 +35,10 @@ static const char g_MeleeMissSounds[][] = {
 	"npc/fast_zombie/claw_miss2.wav",
 };
 float g_flRedMarrowAccumulatedDamage[2048]; 
+
+// [추가] 50% 체력 기믹이 단 한 번만 발동하도록 체크하는 전역 배열 플래그
+bool g_bRedMarrowTriggered50[2048]; 
+
 public void RedMarrow_OnMapStart_NPC()
 {
 	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
@@ -107,6 +111,7 @@ methodmap RedMarrow < CClotBody
 		if(npc.index > 0 && npc.index < 2048)
         {
             g_flRedMarrowAccumulatedDamage[npc.index] = 0.0;
+            g_bRedMarrowTriggered50[npc.index] = false; // [변경] 생성 시 플래그 초기화
         }
 
 		npc.m_flNextMeleeAttack = 0.0;
@@ -119,8 +124,6 @@ methodmap RedMarrow < CClotBody
 		func_NPCDeath[npc.index] = RedMarrow_NPCDeath;
 		func_NPCThink[npc.index] = RedMarrow_ClotThink;
 		func_NPCOnTakeDamage[npc.index] = RedMarrow_OnTakeDamage;
-		
-		AddNpcToAliveList(npc.index, 1);
 		
 		float wave = float(Waves_GetRoundScale()+1); //Wave scaling
 		
@@ -268,37 +271,35 @@ public Action RedMarrow_OnTakeDamage(int victim, int &attacker, int &inflictor, 
     if(attacker <= 0 || victim <= 0 || !IsValidEntity(victim))
         return Plugin_Continue;
 
-    // 2. 최대 체력 가져오기 (npc.iMaxHealth 에러 시 대체제)
-    int maxHealth = GetEntProp(victim, Prop_Data, "m_iMaxHealth");
-    float threshold = float(maxHealth) * 0.25;
-
-    if (threshold <= 0.0) return Plugin_Continue;
-
-    // 3. 데미지 누적 및 트리거 체크
-    g_flRedMarrowAccumulatedDamage[victim] += damage;
-    
     RedMarrow npc = view_as<RedMarrow>(victim);
+    
+    int maxHealth = GetEntProp(victim, Prop_Data, "m_iMaxHealth");
+    int currentHealth = GetEntProp(victim, Prop_Data, "m_iHealth");
+    
+    float expectedHealth = float(currentHealth) - damage;
+    float health50Percent = float(maxHealth) * 0.5;
 
-    while(!npc.Anger && g_flRedMarrowAccumulatedDamage[victim] >= threshold)
+    // [변경] npc.bTriggered50 대신 새로 만든 전역 배열 플래그 사용
+    if (!g_bRedMarrowTriggered50[victim] && expectedHealth <= health50Percent)
     {
-        g_flRedMarrowAccumulatedDamage[victim] -= threshold;
+        g_bRedMarrowTriggered50[victim] = true; // 단 한번만 실행되도록 플래그 변경
 
         if(!NpcStats_IsEnemySilenced(victim))
         {
-            // 속성값이 확실히 존재하는지 확인 후 적용
             npc.bXenoInfectedSpecialHurt = true;
             npc.flXenoInfectedSpecialHurtTime = GetGameTime() + 5.0;
             
-            ApplyStatusEffect(victim, victim, "Unstoppable Force", 5.0);
+            ApplyStatusEffect(victim, victim, "Unstoppable Force", 8.0);
             
             CreateTimer(5.0, RedMarrow_Revert_Resistance_Enable, EntIndexToEntRef(victim), TIMER_FLAG_NO_MAPCHANGE);
         }
     }
-	if((ReturnEntityMaxHealth(npc.index) * 0.05) >= GetEntProp(npc.index, Prop_Data, "m_iHealth") && !npc.Anger)
-	{
-		npc.Anger = true;
-	}
-    // 헤드샷 쿨다운 로직 (기존 유지)
+
+    if((float(maxHealth) * 0.05) >= expectedHealth && !npc.Anger)
+    {
+        npc.Anger = true;
+    }
+
     if (npc.m_flHeadshotCooldown < GetGameTime())
     {
         npc.m_flHeadshotCooldown = GetGameTime() + DEFAULT_HURTDELAY;
@@ -325,5 +326,9 @@ public void RedMarrow_NPCDeath(int entity)
 	{
 		npc.PlayDeathSound();	
 	}
-	if(entity > 0 && entity < 2048) g_flRedMarrowAccumulatedDamage[entity] = 0.0;
+	if(entity > 0 && entity < 2048) 
+	{
+		g_flRedMarrowAccumulatedDamage[entity] = 0.0;
+		g_bRedMarrowTriggered50[entity] = false; // [변경] 사망 시 플래그 초기화
+	}
 }

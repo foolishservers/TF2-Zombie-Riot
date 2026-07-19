@@ -221,7 +221,6 @@ public void BloatedZombie_ClotThink(int iNPC)
 									SDKHooks_TakeDamage(target, npc.index, npc.index, 80.0, DMG_CLUB, -1, _, vecHit);
 								else
 									SDKHooks_TakeDamage(target, npc.index, npc.index, 120.0, DMG_CLUB, -1, _, vecHit);
-									Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 10 : 10);
 							}
 							
 							npc.PlayMeleeHitSound();

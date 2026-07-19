@@ -251,10 +251,8 @@ public void InfectedHazardous_ClotThink(int iNPC)
 							{
 								
 								if(!ShouldNpcDealBonusDamage(target))
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 175.0, DMG_CLUB, -1, _, vecHit);
-								else
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 500.0, DMG_CLUB, -1, _, vecHit);
-									Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 30 : 10);
+								{
+									Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 100 : 50);
 									int flagsStun = 0;
 									if(!HasSpecificBuff(target, "Fluid Movement"))
 												flagsStun |= TF_STUNFLAG_SLOWDOWN;
@@ -262,6 +260,12 @@ public void InfectedHazardous_ClotThink(int iNPC)
 									if(target <= MaxClients)
 										TF2_StunPlayer(target, 2.0, 0.9, flagsStun);
 									ApplyStatusEffect(npc.index, target, "Cellular Breakdown", 8.0);
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 175.0, DMG_CLUB, -1, _, vecHit);
+								}
+								else
+								{
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 500.0, DMG_CLUB, -1, _, vecHit);
+								}
 								// Hit sound
 								npc.PlayMeleeHitSound();
 								

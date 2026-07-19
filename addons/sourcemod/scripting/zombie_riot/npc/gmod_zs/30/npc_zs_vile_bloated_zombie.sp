@@ -218,14 +218,15 @@ public void VileBloatedZombie_ClotThink(int iNPC)
 						TR_GetEndPosition(vecHit, swingTrace);
 						if(target > 0) 
 						{
+							if(!ShouldNpcDealBonusDamage(target))
 							{
-								if(!ShouldNpcDealBonusDamage(target))
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 350.0, DMG_CLUB, -1, _, vecHit);
-								else
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 1000.0, DMG_CLUB, -1, _, vecHit);
-									Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 10 : 10);
+								SDKHooks_TakeDamage(target, npc.index, npc.index, 350.0, DMG_CLUB, -1, _, vecHit);
+								Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 10 : 10);
 							}
-							
+							else
+							{
+								SDKHooks_TakeDamage(target, npc.index, npc.index, 1000.0, DMG_CLUB, -1, _, vecHit);
+							}
 							npc.PlayMeleeHitSound();
 						}
 						else
