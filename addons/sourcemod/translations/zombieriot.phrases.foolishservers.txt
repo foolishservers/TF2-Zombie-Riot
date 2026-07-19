@@ -944,6 +944,164 @@
 		"ko"		"임무 난이도 투표!"
 	}
 	
+	//LastMann.
+	"Special_LastMann_Yakuza"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}Something awakens inside {1}......."
+		"ko"		"{crimson}알 수 없는 잠재력이 {1}의 몸에서 깨어나고 있다..."
+	}
+	"Special_LastMann_Zealot"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}{1} descended into a fanatical worship of Sigmar, and set out to cleanse the unrighteous themselves."
+		"ko"		"{crimson}정의를 더럽히는 자들을 시그마에 대한 광적인 신앙으로 정화하기 위해 {1}이 나섰다."
+	}
+	"Special_LastMann_Fractal"
+	{
+		"#format"	"{1:N}"
+		"en"		"{purple}Twirl{crimson}'s Essence enters {1}..."
+		"ko"		"{purple}트윌{crimson}의 정수가 {1}에게 흘러들어가고 있다..."
+	}
+	"Special_LastMann_Soldine"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}Expidonsa Activates {1}'s emergency protocols..."
+		"ko"		"{crimson}{1}의 엑스피돈사 긴급 프로토콜이 실행되었다..."
+	}
+	"Special_LastMann_Purnell"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}{1} gets filled with the unyielding desire to avenge his patients."
+		"ko"		"{crimson}{1}의 환자들의 복수를 향한 꺾이지 않는 욕망이 가득 차고 있다."
+	}
+	"Special_LastMann_Blacksmith"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}{1} Seems to be completly and utterly screwed."
+		"ko"		"{crimson}나사를 조이던 {1}의 인생도 조여지기 시작했다."
+	}
+	"Special_LastMann_Blitzkrieg"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}The Machine Within {1} screams: FOR VICTORY"
+		"ko"		"{crimson}{1}의 기계 몸이 울부짖는다. 승리를 향해!"
+	}
+	"Special_LastMann_Flagellant"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}The undying soul {1} refuses to ever die."
+		"ko"		"{crimson}{1}의 고행에는 수많은 피가 흐를 것이다."
+	}
+	"Special_LastMann_Leper"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}The King {1} cannot stand this any longer..!"
+		"ko"		"{crimson}수많은 자들이 혼돈을 마주하고 무릎 꿇는다. 허나 {1}은(는) 아니다. 적어도 오늘은."
+	}
+	"Special_LastMann_Dweller"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}The sea entirely corrupts {1}."
+		"ko"		"{crimson}바다의 힘이 {1}를 완벽히 잠식시켰다."
+	}
+	"Special_LastMann_Merchant"
+	{
+		"en"		"{crimson}The merchant knows not who to trade with... Thus massively enrages."
+		"ko"		"{crimson}거래할 상대를 잃은 상인이 격분한다..."
+	}
+	"Special_LastMann_Cheese"
+	{
+		"#format"	"{1:N}"
+		"en"		"{darkviolet}{1} decides to inject themselves with plasma as a last resort..."
+		"ko"		"{darkviolet}{1}이(가) 생각해낸 최후의 저항은, 자기 자신이 플라즈마가 되는 것이었다..."
+	}
+	"Special_LastMann_Arsenal"
+	{
+		"#format"	"{1:N}"
+		"en"		"{gold}{1} is now alone, however giving up isn't in their vocabulary."
+		"ko"		"{gold}{1}은 이제 혼자가 되었지만, 포기라는 단어는 그들의 사전에 없다."
+	}
+	"Special_LastMann_Purge"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}{1}'s purging protocol activates."
+		"ko"		"{crimson}{1}, 분쇄 프로토콜 실행."
+	}
+	"Special_LastMann_HeartBroken"
+	{
+		"#format"	"{1:N}"
+		"en"		"{purple}What kindled this flame of wrath that burns within {1}..?"
+		"ko"		"{purple}{1}의 마음을 처참하게 찢어놓은 자는 누구인가.."
+	}
+	"Special_LastMann_RedMist_MOSB"
+	{
+		"#format"	"{1:N}"
+		"en"		"{maroon}The mountain of dead bodies resonates with {darkgrey}{1}..."
+		"ko"		"{maroon}웃는 시체들의 산이 {darkgrey}{1}{maroon}와(과) 공명한다..."
+	}
+	"Special_LastMann_RedMist"
+	{
+		"#format"	"{1:N}"
+		"en"		"{darkgrey}Even with all this strength {fullred}{1} {darkgrey}still failed to protect everyone."
+		"ko"		"{darkgrey}도시 최강의 무력으로도 {fullred}{1}{darkgrey}는 모두를 지킬 수 없었다.."
+	}
+	"Special_LastMann_Barracks_Shared"
+	{
+		"#format"	"{1:N}"
+		"en"		"{green}{1} and their soldiers are making their last stand."
+		"ko"		"{green}{1}와 그의 병사들은 최후의 저항을 준비하고 있다."
+	}
+	"Special_LastMann_Barracks_Alt"
+	{
+		"en"		"{red}The remnants of Blitzkrieg army overcharge their systems to the maximum, it’s TOTAL BLITZKRIEG."
+		"ko"		"{red}블리츠크리그 잔당들은 시스템을 최대 한도로 과충전한다. 총력 전격전의 시작이다."
+	}
+	"Special_LastMann_Barracks_Combine"
+	{
+		"en"		"{yellow}Not wanting to see you die like Guln, the soldiers of his army quickly load the anti-chaos weaponry, no more mercy."
+		"ko"		"{yellow}당신이 굴른과 같은 운명을 맞이하는 걸 피하기 위해, 그의 군대는 혼돈 섬멸 장비를 준비한다. 더 이상 자비란 없다."
+	}
+	"Special_LastMann_Barracks_Almina"
+	{
+		"en"		"{blue}Soldiers arm their best gears, remebering what cruel fate they had to go through under Whiteflower and Dwellers"
+		"ko"		"{blue}병사들은 최고의 무기를 준비한다. 배풍등과 드웰러 밑에서 고통받던 잔혹한 기억을 떠올리며."
+	}
+	"Special_LastMann_Barracks_Expidonsa"
+	{
+		"#format"	"{1:N}"
+		"en"		"{blue}Expidonsa declares code Epsilon, use of experimental technology has been authorized, no more holding back."
+		"ko"		"{blue}엑스피돈사는 코드 엡실론을 발령하고, 실험적 기술의 사용을 승인했다. 더 이상 머뭇거릴 틈이 없다."
+	}
+	"Special_LastMann_Barracks_Alaxios"
+	{
+		"#format"	"{1:N}"
+		"en"		"{red}A chanting of war can be heard from Alaxios army, they will not go down without a fight."
+		"ko"		"{red}알락시오스의 군대에서 전투의 함성이 들려온다. 그들은 절대 함락되지 않을 것이다."
+	}
+	"Special_LastMann_Merc_RaidBoss"
+	{
+		"en"		"‼ - FOCUSED\n{crimson}Both of us die today. One, just a little later than the other."
+		"ko"		"‼ - (집중)\n{crimson}오늘 살아돌아가는 자는 없겠지. 하지만 먼저 죽는 건 너야."
+	}
+	"Special_LastMann_Merc_RaidBoss_TimeOver"
+	{
+		"en"		"‼ - HORRIFIED\n{crimson}CAN'T FOCUS. CAN'T THINK. NOTHING ELSE MATTERS. RUN FOR YOUR LIFE OR FIGHT FOR IT!"
+		"ko"		"‼ - (공포)\n{crimson}집중할 수가 없어. 아무 생각도 못하겠어. 괜찮아. 도망치거나 맞서 싸워!"
+	}
+	"Special_LastMann_Merc"
+	{
+		"#format"	"{1:N}"
+		"en"		"☠ - Miserable\n{crimson}How does it feel, knowing you're not coming back up {1}..?"
+		"ko"		"☠ - (비참함)\n{crimson}저런, 다시는 올라올 수 없게 되었네. 기분이 어때, {1}..?"
+	}
+	"Special_LastMann_Prescript"
+	{
+		"#format"	"{1:N}"
+		"en"		"{blue}The Prescript demands you kill everyone in your sight who apposes you {crimson}{1}."
+		"ko"		"{blue}지령은... {crimson}{1}의 시야 안에 있는 모두를 죽이라는 군."
+	}
+	
 	//Auto Loadout.
 	"Ranged - H&K G36 Carbine Route"
 	{
