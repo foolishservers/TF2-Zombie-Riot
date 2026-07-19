@@ -188,7 +188,7 @@ public void KitSurvivalist_Primary_M2(int client, int weapon, bool crit, int slo
 	Ability_Apply_Cooldown(client, slot, 25.0);
 	
 	//okay, interesting
-	float damage = 300.0;
+	float damage = 250.0;
 	damage *= Attributes_Get(weapon, 335, 1.0);		
 	damage *= Attributes_Get(weapon, 1, 1.0);		
 	damage *= Attributes_Get(weapon, 2, 1.0);
