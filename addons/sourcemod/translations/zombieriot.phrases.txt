@@ -114,6 +114,11 @@
 		"it"		"Contanti: {1} (+{2})"
 		"ko"		"자금: {1} (+{2})"
 	}
+	"Current Modifier"
+	{
+		"en"	"Current Modifier"
+		"ko"	"현재 모디파이어"
+	}
 	"Current Skill Points"
 	{
 		"#format"	"{1:d}"
