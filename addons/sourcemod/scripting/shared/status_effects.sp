@@ -681,6 +681,26 @@ void StatusEffects_Baka()
 	data.Status_SpeedFunc 			= INVALID_FUNCTION;
 	data.HudDisplay_Func 				= INVALID_FUNCTION;
 	StatusEffect_AddGlobal(data);
+
+	strcopy(data.BuffName, sizeof(data.BuffName), "Taunt");
+	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "⫘");
+	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
+	//-1.0 means unused
+	data.DamageTakenMulti 			= -1.0;
+	data.DamageDealMulti				= -1.0;
+	data.AttackspeedBuff				= -1.0;
+	data.MovementspeedModif			= -1.0;
+	data.Positive 					= true;
+	data.ShouldScaleWithPlayerCount 	= false;
+	data.Slot						= 0;
+	data.SlotPriority					= 0;
+	data.OnTakeDamage_TakenFunc 		= INVALID_FUNCTION;
+	data.OnTakeDamage_DealFunc 		= INVALID_FUNCTION;
+	data.OnTakeDamage_PostVictim		= INVALID_FUNCTION;
+	data.OnTakeDamage_PostAttacker		= INVALID_FUNCTION;
+	data.Status_SpeedFunc 			= INVALID_FUNCTION;
+	data.HudDisplay_Func 				= Taunt_Hud_Func;
+	StatusEffect_AddGlobal(data);
 }
 
 float AOESlowdown_Func(int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect)
@@ -715,7 +735,7 @@ float MajorSteam_Launcher_ResistanceFunc(int attacker, int victim, StatusEffect 
 	return f_MajorSteam_Launcher_Resistance(victim);
 }
 
-float Barricade_Stabilizer_ResistanceFunc(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int damagetype, int basedamage)
+float Barricade_Stabilizer_ResistanceFunc(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int damagetype, float &basedamage, float DamageBuffExtraScaling)
 {
 	float f_Resistance = 1.0;
 	int building = EntRefToEntIndex(i2_MountedInfoAndBuilding[1][victim]);
@@ -725,7 +745,7 @@ float Barricade_Stabilizer_ResistanceFunc(int attacker, int victim, StatusEffect
 		{
 			if(!CheckInHud())
 			{
-				int health = GetEntProp(building, Prop_Data, "m_iHealth") - RoundToCeil(basedamage*(RaidbossIgnoreBuildingsLogic(1) ? 1.5 : 1.0));
+				int health = GetEntProp(building, Prop_Data, "m_iHealth") - RoundToCeil(basedamage *(RaidbossIgnoreBuildingsLogic(1) ? 1.5 : 1.0));
 				if(health > 0)
 				{
 					ObjectGeneric objstats = view_as<ObjectGeneric>(building);
@@ -777,16 +797,39 @@ void Barricade_Stabilizer_Hud_Func(int attacker, int victim, StatusEffect Apply_
 	#endif
 }
 
-float Chaos_Coil_Func(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int damagetype, int basedamage)
+void Taunt_Hud_Func(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int SizeOfChar, char[] HudToDisplay)
+{
+	static float Delay = 0.0;
+	float GameTime = GetGameTime();
+	if(Delay < GameTime)
+	{
+		for(int EnemyLoop; EnemyLoop < MAXENTITIES; EnemyLoop ++)
+		{
+			if(IsValidClient(EnemyLoop))
+				continue;
+			if(!b_ThisWasAnNpc[EnemyLoop])
+				continue;
+			if(GetTeam(EnemyLoop) != TFTeam_Red)
+			{
+				fl_GetClosestTargetTimeTouch[EnemyLoop] = 2.0 + GameTime;
+				fl_GetClosestTargetTime[EnemyLoop] = 0.0;
+			}
+		}
+		Delay = float(GetRandomInt(2, 6)) + GameTime;
+	}
+	Format(HudToDisplay, SizeOfChar, "[⫘ %is]", RoundToCeil(Delay - GameTime));
+}
+
+float Chaos_Coil_Func(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int damagetype, float &basedamage, float DamageBuffExtraScaling)
 {
 	if(!Inv_Chaos_Coil[victim])
 		RemoveSpecificBuff(victim, "Chaos Coil Speed");
 	if(!CheckInHud())
-		Elemental_AddChaosDamage(victim, attacker, basedamage);
+		Elemental_AddChaosDamage(victim, attacker, RoundToCeil(basedamage*0.5));
 	return 1.15;
 }
 
-float Cybergrind_EX_Hard_ResistanceFunc(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int damagetype)
+float Cybergrind_EX_Hard_ResistanceFunc(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, float &basedamage, float DamageBuffExtraScaling)
 {
 	float f_Resistance = 0.8;
 	int GetWaves = Waves_GetRound()+1;

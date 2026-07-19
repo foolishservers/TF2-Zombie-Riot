@@ -1,7 +1,8 @@
 #pragma semicolon 1
 #pragma newdecls required
-
+//배럭을 위한 변수
 bool Inv_Golden_Crown[MAXENTITIES];
+
 bool Inv_Mining_Foreman_Hat[MAXPLAYERS];
 bool Inv_LSandvich_SafeHouse[MAXPLAYERS];
 bool Inv_Slug_Shell_Pouch[MAXPLAYERS];

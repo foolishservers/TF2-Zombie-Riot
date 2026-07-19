@@ -21,7 +21,7 @@ public void Weapon_AddonsCustom_Enable(int client, int weapon)
 	MSword_Enable(client, weapon);
 }
 
-void Weapon_AddonsCustomLastMan(int client)
+stock void Weapon_AddonsCustomLastMan(int client)
 {
 	if(client)
 	{
@@ -40,7 +40,7 @@ void Weapon_AddonsCustomLastMan(int client)
 	}*/
 }
 
-bool Weapon_AddonsStartCustomSoundForLastMan(int client, int WhatSoundPlay)
+stock bool Weapon_AddonsStartCustomSoundForLastMan(int client, int WhatSoundPlay)
 {
 	if(client)
 	{
@@ -61,7 +61,7 @@ bool Weapon_AddonsStartCustomSoundForLastMan(int client, int WhatSoundPlay)
 	return CompleteFailure;
 }
 
-void Weapon_AddonsStopCustomSoundForLastMan(int client, int WhatSoundPlay)
+stock void Weapon_AddonsStopCustomSoundForLastMan(int client, int WhatSoundPlay)
 {
 	if(client)
 	{

@@ -5797,7 +5797,8 @@ int GetClosestTarget_Internal(int entity, float fldistancelimit, float fldistanc
 						
 					if(dist == 0.0)
 						dist = GetVectorDistance(targetPos[a], EntityLocation, false);
-
+					if(HasSpecificBuff(a, "Taunt") && 12250000 > dist)
+						dist *= 0.00001;
 
 				//	PrintToChatAll("%f > %f", dist, fldistancelimit);
 					if(GetClosestTarget_Enemy_Type[a] > 2)	// Distance limit
@@ -5869,6 +5870,12 @@ int GetClosestTarget_Internal(int entity, float fldistancelimit, float fldistanc
 				{
 					TauntRange = Attributes_Get(target, Attrib_TauntRangeValue, 0.0);
 				}
+				if(HasSpecificBuff(target, "Taunt"))
+				{
+					if(TauntRange != 0.0)
+						TauntRange*=2.0;
+					TauntRange=3500.0;
+				}
 				if(TauntRange != 0.0)
 				{
 					//taunting enemy in rnage, give much higher proprity
@@ -5926,7 +5933,7 @@ int GetClosestTarget_Internal(int entity, float fldistancelimit, float fldistanc
 			GetEntPropVector( target, Prop_Data, "m_vecAbsOrigin", TargetLocation ); //do not use abs, some entities do not have abs.
 			float distanceVector = GetVectorDistance( EntityLocation, TargetLocation, true ); 
 			if(i_CurrentEquippedPerk[target] & PERK_BLOODY)
-				distanceVector *= 2.0;
+				distanceVector  *= 2.0;
 
 			float TauntRange;
 			if(target <= MaxClients)
@@ -5938,6 +5945,12 @@ int GetClosestTarget_Internal(int entity, float fldistancelimit, float fldistanc
 			else
 			{
 				TauntRange = Attributes_Get(target, Attrib_TauntRangeValue, 0.0);
+			}
+			if(HasSpecificBuff(target, "Taunt"))
+			{
+				if(TauntRange != 0.0)
+					TauntRange*=2.0;
+				TauntRange=3500.0;
 			}
 			if(TauntRange != 0.0)
 			{
