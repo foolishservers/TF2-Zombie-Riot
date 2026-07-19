@@ -222,13 +222,15 @@ public void ShadowWalker_ClotThink(int iNPC)
 						TR_GetEndPosition(vecHit, swingTrace);
 						if(target > 0) 
 						{
-							{
 								if(!ShouldNpcDealBonusDamage(target))
+								{
+									ApplyStatusEffect(npc.index, target, "Cellular Breakdown", 8.0);
 									SDKHooks_TakeDamage(target, npc.index, npc.index, 80.0, DMG_CLUB, -1, _, vecHit);
+								}
 								else
+								{
 									SDKHooks_TakeDamage(target, npc.index, npc.index, 120.0, DMG_CLUB, -1, _, vecHit);
-								ApplyStatusEffect(npc.index, target, "Cellular Breakdown", 8.0);
-							}
+								}
 							
 							npc.PlayMeleeHitSound();
 						}

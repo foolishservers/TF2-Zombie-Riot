@@ -184,20 +184,16 @@ public void InfectedSniperjarate_ClotThink(int iNPC)
 					{
 						npc.PlayMeleeHitSound();
 						SDKHooks_TakeDamage(target, npc.index, npc.index, 200.0, DMG_CLUB);
-						Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 100 : 50);
-						
-						if(!NpcStats_IsEnemySilenced(npc.index))
+						if (!i_IsABuilding[target])
 						{
-							ApplyStatusEffect(npc.index, npc.index, "Silenced", 20.0);
+							Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 100 : 50);
+							int flagsStun = 0;
+							if(!HasSpecificBuff(target, "Fluid Movement"))
+								flagsStun |= TF_STUNFLAG_SLOWDOWN;
 
-							if(target > MaxClients)
-							{
-								ApplyStatusEffect(npc.index, target, "Teslar Mule", 5.0);
-							}
-							else
-							{
-								TF2_AddCondition(target, TFCond_Jarated, 5.0);
-							}
+							if(target <= MaxClients)
+								TF2_StunPlayer(target, 2.0, 0.9, flagsStun);
+							ApplyStatusEffect(npc.index, target, "Cellular Breakdown", 8.0);
 						}
 					}
 				}

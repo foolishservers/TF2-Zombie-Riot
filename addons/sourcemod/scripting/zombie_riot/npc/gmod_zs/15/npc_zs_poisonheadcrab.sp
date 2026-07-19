@@ -108,6 +108,7 @@ methodmap ZSPoisonHeadcrab < CSeaBody
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_flNextMeleeAttack = 0.0;
 		npc.m_flAttackHappens = 0.0;
+		npc.m_flMeleeArmor = 3.0;
 		f_ExtraOffsetNpcHudAbove[npc.index] = -65.0;
 
 		return npc;
@@ -184,6 +185,11 @@ public void ZSPoisonHeadcrab_ClotThink(int iNPC)
 					{
 						npc.PlayMeleeHitSound();
 						SDKHooks_TakeDamage(target, npc.index, npc.index, 0.0, DMG_CLUB, -1, _, vecHit);
+						if (i_IsABuilding[target])
+						{
+							// 구조물일 때는 여기서 더 이상 아래로 내려가지 않고 종료
+							return; 
+						}
 						if(!HasSpecificBuff(target, "Envenomed"))
 						{
 							ApplyStatusEffect(npc.index, target, "Envenomed", 10.0);
@@ -192,12 +198,11 @@ public void ZSPoisonHeadcrab_ClotThink(int iNPC)
 								Force_ExplainBuffToClient(target, "Envenomed");
 								SetEntProp(target, Prop_Data, "m_iHealth", 1);
 								HealEntityGlobal(target, target, 250.0, 1.0, 20.0, HEAL_SELFHEAL);
+								Custom_Knockback(npc.index, target, 500.0, true);
+								TF2_AddCondition(target, TFCond_LostFooting, 0.5);
+								TF2_AddCondition(target, TFCond_AirCurrent, 0.5);
+								ApplyStatusEffect(npc.index, target, "Unstoppable Force", 0.5);
 							}
-						}
-						if (i_IsABuilding[target])
-						{
-							//use void a subtitute, it just reduces repair HP alot.
-							Elemental_AddVoidDamage(target, npc.index, 2000, false, false);
 						}
 						if(b_ThisWasAnNpc[target])
 						{

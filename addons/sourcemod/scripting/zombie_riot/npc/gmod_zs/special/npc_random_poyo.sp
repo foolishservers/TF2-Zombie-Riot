@@ -28,9 +28,10 @@ static void ClotPrecache()
 	NPC_GetByPlugin("npc_zs_howler");
 	NPC_GetByPlugin("npc_zs_zombine");
 	NPC_GetByPlugin("npc_zs_bonemesh");
+	NPC_GetByPlugin("npc_zs_soldier_giant_grave");
 }
 
-bool SamePoyoDisallow[9];
+bool SamePoyoDisallow[11];
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
 {
 	return PoyoSummonRandom(vecPos, vecAng, team, data);
@@ -148,6 +149,16 @@ void PoyoSummonRaidboss(int ZombieSummonbase)
 		case 8:
 		{
 			PluginName = "npc_zs_bonemesh";
+			enemy.Is_Boss = 1;
+		}
+		case 9:
+		{
+			PluginName = "npc_zs_soldier_giant_grave";
+			enemy.Is_Boss = 1;
+		}
+		case 10:
+		{
+			PluginName = "npc_zs_red_marrow";
 			enemy.Is_Boss = 1;
 		}
 	}

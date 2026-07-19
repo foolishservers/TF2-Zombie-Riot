@@ -361,7 +361,7 @@ public void ManhattanParrot_NPCDeath(int entity)
 	TE_Particle("asplode_hoodoo", vecMe, NULL_VECTOR, NULL_VECTOR, _, _, _, _, _, _, _, _, _, _, 0.0);
 
 	b_NpcIsTeamkiller[npc.index] = true;
-	Explode_Logic_Custom(1000.0, npc.index, npc.index, -1, vecMe, 200.0, 1.0, _, true, 40, _, _, _);
+	Explode_Logic_Custom(5000.0, npc.index, npc.index, -1, vecMe, 200.0, 1.0, _, true, 40, _, _, _);
 	b_NpcIsTeamkiller[npc.index] = false;
 
 	

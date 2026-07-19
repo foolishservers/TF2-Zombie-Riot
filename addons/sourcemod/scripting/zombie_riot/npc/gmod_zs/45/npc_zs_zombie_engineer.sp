@@ -279,9 +279,14 @@ public void InfectedEngineer_ClotThink(int iNPC)
 							if(target > 0) 
 							{
 								if(!ShouldNpcDealBonusDamage(target))
+								{
 									SDKHooks_TakeDamage(target, npc.index, npc.index, 500.0, DMG_CLUB, -1, _, vecHit);
+									ApplyStatusEffect(npc.index, target, "Cudgelled", 8.0);
+								}
 								else
+								{
 									SDKHooks_TakeDamage(target, npc.index, npc.index, 10000.0, DMG_CLUB, -1, _, vecHit);
+								}
 								// Hit sound
 								npc.PlayMeleeHitSound();
 								

@@ -98,11 +98,6 @@ methodmap InfectedMessenger < CClotBody
 	{
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _);	
 	}
-	property bool m_bAlliesSummoned
-	{
-		public get()							{ return b_InKame[this.index]; }
-		public set(bool TempValueForProperty) 	{ b_InKame[this.index] = TempValueForProperty; }
-	}
 	public void PlaySummonSound() 
 	{
 		EmitSoundToAll(g_SummonSounds[GetRandomInt(0, sizeof(g_SummonSounds) - 1)], this.index, SNDCHAN_AUTO, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
@@ -150,6 +145,7 @@ methodmap InfectedMessenger < CClotBody
 
 		func_NPCDeath[npc.index] = ClotDeath;
 		func_NPCOnTakeDamage[npc.index] = InfectedMessenger_OnTakeDamage;
+		SDKHook(npc.index, SDKHook_OnTakeDamagePost, InfectedMessenger_OnTakeDamagePost);
 		func_NPCThink[npc.index] = ClotThink;
 		npc.i_GunMode = Waves_GetRoundScale();
 		
@@ -160,9 +156,9 @@ methodmap InfectedMessenger < CClotBody
 		npc.m_flRangedArmor = 0.2;
 		int WaveSetting = 1;
 		i_RaidGrantExtra[npc.index] = WaveSetting;
-		npc.m_bAlliesSummoned = false;
 		npc.WhatWaves = 0;
 		npc.InWaves = 0;
+		npc.g_TimesSummoned = 0;
 		g_infected_messenger_died=false;
 		g_infected_messenger_die=0.0;
 		AddNpcToAliveList(npc.index, 1);
@@ -396,13 +392,6 @@ public Action InfectedMessenger_OnTakeDamage(int victim, int &attacker, int &inf
 	if((ReturnEntityMaxHealth(npc.index)/2) >= GetEntProp(npc.index, Prop_Data, "m_iHealth") && !npc.Anger) 
 	{
 		npc.Anger = true;
-		if(!npc.m_bAlliesSummoned)
-		{
-			npc.m_bAlliesSummoned = true;
-			Spawn_Reinforcements(npc);
-			npc.PlaySummonSound();
-		}
-		CPrintToChatAll("{green}감염된 전령병{default}: 젠장! 이곳에 포격 지원이 필요하다 지금 당장!!");
 	}
 	if(RoundToCeil(damage) >= GetEntProp(npc.index, Prop_Data, "m_iHealth"))
 	{
@@ -421,81 +410,6 @@ public Action InfectedMessenger_OnTakeDamage(int victim, int &attacker, int &inf
 		}
 	}
 	return Plugin_Changed;
-}
-static void Spawn_Reinforcements(InfectedMessenger npc)
-{
-	float pos[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos);
-	float ang[3]; GetEntPropVector(npc.index, Prop_Data, "m_angRotation", ang);
-	int maxhealth = ReturnEntityMaxHealth(npc.index);
-	int heck;
-	int spawn_index;
-	heck= maxhealth;
-	maxhealth= heck;
-
-	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
-	NpcAddedToZombiesLeftCurrently(spawn_index, true);
-	if(spawn_index > MaxClients)
-	{
-		NpcStats_CopyStats(npc.index, spawn_index);
-		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
-		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
-	}
-	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
-	NpcAddedToZombiesLeftCurrently(spawn_index, true);
-	if(spawn_index > MaxClients)
-	{
-		NpcStats_CopyStats(npc.index, spawn_index);
-		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
-		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
-	}
-	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
-	NpcAddedToZombiesLeftCurrently(spawn_index, true);
-	if(spawn_index > MaxClients)
-	{
-		NpcStats_CopyStats(npc.index, spawn_index);
-		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
-		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
-	}
-	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
-	NpcAddedToZombiesLeftCurrently(spawn_index, true);
-	if(spawn_index > MaxClients)
-	{
-		NpcStats_CopyStats(npc.index, spawn_index);
-		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
-		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
-	}
-	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
-	NpcAddedToZombiesLeftCurrently(spawn_index, true);
-	if(spawn_index > MaxClients)
-	{
-		NpcStats_CopyStats(npc.index, spawn_index);
-		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
-		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
-	}
-	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
-	NpcAddedToZombiesLeftCurrently(spawn_index, true);
-	if(spawn_index > MaxClients)
-	{
-		NpcStats_CopyStats(npc.index, spawn_index);
-		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
-		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
-	}
-	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
-	NpcAddedToZombiesLeftCurrently(spawn_index, true);
-	if(spawn_index > MaxClients)
-	{
-		NpcStats_CopyStats(npc.index, spawn_index);
-		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
-		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
-	}
-	spawn_index = NPC_CreateByName("npc_zs_manhattan_parrot", npc.index, pos, ang, GetTeam(npc.index));
-	NpcAddedToZombiesLeftCurrently(spawn_index, true);
-	if(spawn_index > MaxClients)
-	{
-		NpcStats_CopyStats(npc.index, spawn_index);
-		SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
-		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
-	}
 }
 static void Spawn_Chaos(InfectedMessenger npc)
 {
@@ -535,7 +449,104 @@ static void Spawn_Chaos(InfectedMessenger npc)
 		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
 	}
 }
+public void InfectedMessenger_OnTakeDamagePost(int victim, int attacker, int inflictor, float damage, int damagetype) 
+{
+	InfectedMessenger npc = view_as<InfectedMessenger>(victim);
+	float maxhealth = float(ReturnEntityMaxHealth(npc.index));
+	float health = float(GetEntProp(npc.index, Prop_Data, "m_iHealth"));
+	float Ratio = health / maxhealth;
+	if(Ratio <= 0.85 && npc.g_TimesSummoned < 1)
+	{
+		npc.g_TimesSummoned = 1;
+		npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
+		npc.PlaySummonSound();
+		CPrintToChatAll("{crimson}감염된 전령병{default}: 젠장 기습이다!!!! 이곳에 지원군을 보내라 지금 당장!!!!");
+		InfectedMessengerSpawnEnemy(npc.index,"npc_zs_cleaner",50000, RoundToCeil(6.0 * MultiGlobalEnemy));
+		InfectedMessengerSpawnEnemy(npc.index,"npc_zs_zombie_soldier",30000, RoundToCeil(2.0 * MultiGlobalEnemy));
+		InfectedMessengerSpawnEnemy(npc.index,"npc_zs_mlsm",50000, RoundToCeil(6.0 * MultiGlobalEnemy));
+		InfectedMessengerSpawnEnemy(npc.index,"npc_infected_tomislav_main",20000, RoundToCeil(4.0 * MultiGlobalEnemy));
+		InfectedMessengerSpawnEnemy(npc.index,"npc_zs_zombie_sniper_jarate",40000, RoundToCeil(2.0 * MultiGlobalEnemy));
+	}
+	else if(Ratio <= 0.20 && npc.g_TimesSummoned < 2)
+	{
+		npc.g_TimesSummoned = 2;
+		npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
+		npc.PlaySummonSound();
+		CPrintToChatAll("{crimson}감염된 전령병{default}: 아직도 놈들이 살아있다!!! 이곳에 당장 공습을 때려!!!!");
+		InfectedMessengerSpawnEnemy(npc.index,"npc_zs_manhattan_parrot",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
+		InfectedMessengerSpawnEnemy(npc.index,"npc_zs_kamikaze_demo",6000, RoundToCeil(8.0 * MultiGlobalEnemy));
+	}
+}
+void InfectedMessengerSpawnEnemy(int infectedmessenger, char[] plugin_name, int health = 0, int count, bool is_a_boss = false)
+{
+	if(GetTeam(infectedmessenger) == TFTeam_Red)
+	{
+		count /= 2;
+		if(count < 1)
+		{
+			count = 1;
+		}
+		for(int Spawns; Spawns <= count; Spawns++)
+		{
+			float pos[3]; GetEntPropVector(infectedmessenger, Prop_Data, "m_vecAbsOrigin", pos);
+			float ang[3]; GetEntPropVector(infectedmessenger, Prop_Data, "m_angRotation", ang);
+			
+			int summon = NPC_CreateByName(plugin_name, -1, pos, ang, GetTeam(infectedmessenger));
+			if(summon > MaxClients)
+			{
+				fl_Extra_Damage[summon] = 10.0;
+				if(!health)
+				{
+					health = GetEntProp(summon, Prop_Data, "m_iMaxHealth");
+				}
+				SetEntProp(summon, Prop_Data, "m_iHealth", health / 10);
+				SetEntProp(summon, Prop_Data, "m_iMaxHealth", health / 10);
+			}
+		}
+		return;
+	}
+		
+	Enemy enemy;
+	enemy.Index = NPC_GetByPlugin(plugin_name);
+	if(health != 0)
+	{
+		enemy.Health = health;
+	}
+	enemy.Is_Boss = view_as<int>(is_a_boss);
+	enemy.Is_Immune_To_Nuke = true;
+	//do not bother outlining.
+	enemy.ExtraMeleeRes = 1.0;
+	enemy.ExtraRangedRes = 1.0;
+	enemy.ExtraSpeed = 1.0;
+	enemy.ExtraDamage = 1.0;
+	enemy.ExtraSize = 1.0;		
+	enemy.Team = GetTeam(infectedmessenger);
+	
+	if(!Waves_InFreeplay())
+	{
+		for(int i; i<count; i++)
+		{
+			Waves_AddNextEnemy(enemy);
+		}
+	}
+	else
+	{
+		int postWaves = CurrentRound[Rounds_Default] - Waves_GetMaxRound();
+		char npc_classname[60];
+		NPC_GetPluginById(i_NpcInternalId[enemy.Index], npc_classname, sizeof(npc_classname));
 
+		Freeplay_AddEnemy(postWaves, enemy, count, true);
+		if(count > 0)
+		{
+			for(int a; a < count; a++)
+			{
+				Waves_AddNextEnemy(enemy);
+			}
+		}
+	}
+
+	Zombies_Currently_Still_Ongoing += count;
+}
 static void ClotDeath(int entity)
 {
 	InfectedMessenger npc = view_as<InfectedMessenger>(entity);

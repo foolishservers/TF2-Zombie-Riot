@@ -317,6 +317,7 @@ methodmap ZsUnspeakable < CClotBody
 		npc.m_flVoidPillarAttack =  GetGameTime() + 5.0;
 		AlreadySaidWin = false;
 		AlreadySaidLastmann = false;
+		WaveStart_SubWaveStart(GetGameTime() + 1000.0);
 
 		func_NPCDeath[npc.index] = view_as<Function>(ZsUnspeakable_NPCDeath);
 		func_NPCOnTakeDamage[npc.index] = view_as<Function>(ZsUnspeakable_OnTakeDamage);
@@ -804,7 +805,10 @@ public Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflict
 				npc.m_bAlliesSummoned = true;
 				Spawn_Zombie(npc);
 			}
-			CPrintToChatAll("{crimson}불결한 존재{default}: 들린다... 너희의 육신이 부패하고, 심장이 멎는 그 소리가!");
+			
+			RaidModeTime += 30.0;
+			ApplyStatusEffect(victim, victim, "Unstoppable Force", 8.0);
+			CPrintToChatAll("{crimson}불결한 존재{default}: 너희는 그 무엇 하나 바꿀 수 없으리라.");
 			RaidModeScaling *= 1.1;
 		}
 	}

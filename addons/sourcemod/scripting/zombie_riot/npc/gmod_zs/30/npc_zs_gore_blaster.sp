@@ -224,14 +224,15 @@ public void GoreBlaster_ClotThink(int iNPC)
 						TR_GetEndPosition(vecHit, swingTrace);
 						if(target > 0) 
 						{
+							if(!ShouldNpcDealBonusDamage(target))
 							{
-								if(!ShouldNpcDealBonusDamage(target))
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 80.0, DMG_CLUB, -1, _, vecHit);
-								else
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 100.0, DMG_CLUB, -1, _, vecHit);					
+								SDKHooks_TakeDamage(target, npc.index, npc.index, 80.0, DMG_CLUB, -1, _, vecHit);
+								StartBleedingTimer(target, npc.index, 10.0, 4, -1, DMG_TRUEDAMAGE, 0);
 							}
-
-							StartBleedingTimer(target, npc.index, 10.0, 4, -1, DMG_TRUEDAMAGE, 0);
+							else
+							{
+								SDKHooks_TakeDamage(target, npc.index, npc.index, 100.0, DMG_CLUB, -1, _, vecHit);
+							}
 							
 							npc.PlayMeleeHitSound();
 						}

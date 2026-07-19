@@ -452,6 +452,7 @@ void AllyheavySelfDefense(Allyheavy npc)
 					SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_BULLET, -1, _, vecHit);
 					if (!IsInvuln(target) && !i_IsABuilding[target])
 					{
+						ApplyStatusEffect(npc.index, target, "Hypodermic Toxin Injection", 2.0);
 						if(!HasSpecificBuff(target, "Fluid Movement"))
 							ApplyStatusEffect(npc.index, target, "Slowdown", 1.0);
 					}
