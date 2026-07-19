@@ -581,7 +581,7 @@ static void BuildingMenu(int client)
 	if(menu.Display(client, 2))
 		MenuTimer[client] = CreateTimer(0.5, Timer_RefreshMenu, client);
 
-	AnyMenuOpen[client] = 1.0;
+	AnyMenuOpen[client] = 1;
 }
 
 static int BuildingMenuH(Menu menu, MenuAction action, int client, int choice)
@@ -592,17 +592,17 @@ static int BuildingMenuH(Menu menu, MenuAction action, int client, int choice)
 		{
 			delete menu;
 			if(IsValidClient(client))
-				AnyMenuOpen[client] = 0.0;
+				AnyMenuOpen[client] = 0;
 		}
 		case MenuAction_Cancel:
 		{
 			delete MenuTimer[client];
-			AnyMenuOpen[client] = 0.0;
+			AnyMenuOpen[client] = 0;
 		}
 		case MenuAction_Select:
 		{
 			delete MenuTimer[client];
-			AnyMenuOpen[client] = 0.0;
+			AnyMenuOpen[client] = 0;
 
 			if(HasWrench(client))
 			{
@@ -2777,7 +2777,8 @@ void DeleteAndRefundBuilding(int client, int entity)
 			return;
 	}
 
-	if(IsValidClient(client))
+	int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
+	if(IsValidClient(client) && client == owner)
 	{
 		int Repair = 	GetEntProp(entity, Prop_Data, "m_iRepair");
 		int MaxRepair = GetEntProp(entity, Prop_Data, "m_iRepairMax");

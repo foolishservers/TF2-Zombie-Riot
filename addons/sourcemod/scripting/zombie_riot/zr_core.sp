@@ -333,6 +333,15 @@ enum
     WEAPON_KIT_PURGE_RAMPAGER = 161,
     WEAPON_KIT_PURGE_ANNAHILATOR = 162,
     WEAPON_KIT_PURGE_MISC = 163,
+	WEAPON_BOMB_AR = 164,
+	WEAPON_BRICK = 165,
+	WEAPON_BURNINGTHUMB = 166,
+	WEAPON_RED_MIST = 167,
+	WEAPON_GUNSAW = 168,
+}
+
+enum
+{
 	WEAPON_MAJORSTEAM_LAUNCHER = 1000,
 	WEAPON_LOCKDOWN = 1001,
 	WEAPON_MINECRAFT_SWORD = 1002,
@@ -340,12 +349,8 @@ enum
 	WEAPON_IS_HPR = 1004,
 	WEAPON_IS_STICKYBOMB = 1005,
 	WEAPON_IS_AUTOSHOTGUN = 1006,
-	WEAPON_BOMB_AR = 164,
-	WEAPON_BRICK = 165,
-	WEAPON_BURNINGTHUMB = 166,
-	WEAPON_RED_MIST = 167,
-	WEAPON_GUNSAW = 168
-}
+	WEAPON_KIT_SURVIVALIST = 1007,
+};
 
 enum
 {
@@ -525,7 +530,7 @@ int Armor_Charge[MAXENTITIES];
 int Armor_DebuffType[MAXENTITIES];
 float f_Armor_BreakSoundDelay[MAXENTITIES];
 
-float AnyMenuOpen[MAXPLAYERS];
+int AnyMenuOpen[MAXPLAYERS];
 float LastStoreMenu[MAXPLAYERS];
 bool LastStoreMenu_Store[MAXPLAYERS];
 
@@ -614,7 +619,9 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "construction.sp"
 #include "betting.sp"
 #include "dungeons.sp"
+#include "autoloadouts.sp"
 #include "sm_skyboxprops.sp"
+#include "random_pickups.sp"
 #include "shared/sound_manualdownload.sp"
 #include "custom/homing_projectile_logic.sp"
 #include "custom/weapon_slug_rifle.sp"
@@ -773,6 +780,8 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "custom/kit_barracks.sp"
 #include "custom/kit_indexfather.sp"
 #include "custom/kit_gunsaw.sp"
+#include "custom/weapon_flare.sp"
+#include "custom/kit_survivalist.sp"
 
 void ZR_PluginLoad()
 {
@@ -1045,6 +1054,7 @@ void ZR_MapStart()
 	Wand_FireBall_Map_Precache();
 	Wand_Lightning_Map_Precache();
 	WeaponBoomerang_MapStart();
+	RandomPickup_OnMapStart();
 	Wand_LightningAbility_Map_Precache();
 	Wand_Necro_Map_Precache();
 	Wand_NerosSpell_Map_Precache();
@@ -1144,6 +1154,7 @@ void ZR_MapStart()
 	ResetMapStartExploARWeapon();
 	Gunsaw_MapStart();
 	IndexFather_MapStart();
+	KitSurvivalist_MapStart();
 	
 	Zombies_Currently_Still_Ongoing = 0;
 	// An info_populator entity is required for a lot of MvM-related stuff (preserved entity)
@@ -1246,6 +1257,7 @@ public Action GlobalTimer(Handle timer)
 	Zombie_Delay_Warning();
 	Spawners_Timer();
 	Store_HandleAutoPapList();
+	AutoLoadouts_Handle();
 	
 	if(frame % 100)
 		return Plugin_Continue;
@@ -1298,7 +1310,7 @@ void ZR_ClientPutInServer(int client)
 	i_CurrentEquippedPerk[client] = 0;
 	UpdatePerkName(client);
 	i_HealthBeforeSuit[client] = 0;
-	i_ClientHasCustomGearEquipped[client] = 0;
+	i_ClientHasCustomGearEquipped[client] = CUSTOMGEAR_NONE;
 	
 	Construction_PutInServer(client);
 	if(CountPlayersOnServer() == 1)
@@ -3966,4 +3978,6 @@ void LoadNPCTalkTranslations()
 	LoadTranslations("zombieriot.phrases.silvestertalk");
 	LoadTranslations("zombieriot.phrases.nemaltalk");
 	LoadTranslations("zombieriot.phrases.interitustalk");
+	LoadTranslations("zombieriot.phrases.waldchtalk");
+	LoadTranslations("zombieriot.phrases.blitzkriegtalk");
 }

@@ -59,8 +59,8 @@
 
 #endif
 
-#define ZR_MAX_GIBCOUNT		12 //Anymore then this, and it will only summon 1 gib per zombie instead.
-#define ZR_MAX_GIBCOUNT_ABSOLUTE 35 //Anymore then this, and the duration is halved for gibs staying.
+#define ZR_MAX_GIBCOUNT		56 //Anymore then this, and it will only summon 1 gib per zombie instead.
+#define ZR_MAX_GIBCOUNT_ABSOLUTE 20 //Anymore then this, and the duration is halved for gibs staying.
 #define RAIDBOSS_GLOBAL_ATTACKLIMIT 16
 
 //#pragma dynamic	131072
@@ -99,6 +99,7 @@ ConVar zr_downloadconfig;
 ConVar CvarSkillPoints;
 ConVar CvarRogueSpecialLogic;
 ConVar CvarLeveling;
+ConVar CvarDisableAutoLoadouts;
 ConVar CvarAutoSelectWave;
 ConVar CvarAutoSelectDiff;
 ConVar CvarVoteLimit;
@@ -346,7 +347,6 @@ char g_ArrowHitSoundMiss[][] = {
 };
 
 char g_GibSound[][] = {
-	"physics/flesh/flesh_squishy_impact_hard1.wav",
 	"physics/flesh/flesh_squishy_impact_hard2.wav",
 	"physics/flesh/flesh_squishy_impact_hard3.wav",
 	"physics/flesh/flesh_squishy_impact_hard4.wav",
@@ -707,6 +707,7 @@ int OriginalWeapon_AmmoType[MAXENTITIES];
 #include "master_takedamage.sp"
 #include "npc_default_sounds.sp"	// NPC Stats is required here due to important methodmap
 #include "npc_stats.sp"	// NPC Stats is required here due to important methodmap
+#include "npc_gibs.sp"	// NPC Stats is required here due to important methodmap
 #include "npc_collision_logic.sp"	// NPC collisions are sepearted for ease
 #include "npc_trace_filters.sp"	// NPC trace filters are sepearted for ease
 
@@ -1705,7 +1706,7 @@ public void OnClientDisconnect(int client)
 	RTSCamera_ClientDisconnect(client);
 #endif
 
-	i_ClientHasCustomGearEquipped[client] = 0;
+	i_ClientHasCustomGearEquipped[client] = CUSTOMGEAR_NONE;
 	i_EntityToAlwaysMeleeHit[client] = 0;
 	ReplicateClient_Svairaccelerate[client] = -1.0;
 	ReplicateClient_BackwardsWalk[client] = -1.0;
@@ -3882,6 +3883,9 @@ void FullyReviveClient(int target, int client, int extralogic = 0, bool teleport
 	ClientSaveUber(target);
 	ClientSaveRageMeterStatus(target);
 	
+	int previousActiveWeaponStoreIndex = Store_GetActiveWeaponStoreIndex(target);
+	int previousLastWeaponStoreIndex = Store_GetLastWeaponStoreIndex(target);
+	
 	SetEntPropEnt(target, Prop_Send, "m_hObserverTarget", client);
 	f_WasRecentlyRevivedViaNonWave[target] = GetGameTime() + 1.0;
 	DHook_RespawnPlayer(target);
@@ -3938,6 +3942,14 @@ void FullyReviveClient(int target, int client, int extralogic = 0, bool teleport
 			HealEntityGlobal(client, target, float(SDKCall_GetMaxHealth(target)), 0.1, 1.0, HEAL_ABSOLUTE);
 		}
 	}
+	
+	int weapon = Store_GetClientWeaponEntityFromStoreIndex(target, previousActiveWeaponStoreIndex);
+	if (weapon > MaxClients && GetEntPropEnt(target, Prop_Send, "m_hActiveWeapon") != weapon)
+		SetPlayerActiveWeapon(target, weapon);
+	
+	weapon = Store_GetClientWeaponEntityFromStoreIndex(target, previousLastWeaponStoreIndex);
+	if (weapon > MaxClients)
+		SetEntPropEnt(target, Prop_Send, "m_hLastWeapon", weapon);
 	
 	SetEntityRenderMode(target, RENDER_NORMAL);
 	SetEntityRenderColor(target, 255, 255, 255, 255);

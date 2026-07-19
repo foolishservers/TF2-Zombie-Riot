@@ -1,0 +1,652 @@
+"Phrases"
+{
+	// Blitzkrieg.
+	"Blitzkrieg_Encounter_TrueForm_1"
+	{
+		"en"		"NAHAHAHAHAHAHAHAHAHAHAHA!!!!!"
+		"ko"		"으하하하하하!!!"
+	}
+	"Blitzkrieg_Encounter_TrueForm_2"
+	{
+		"en"		"ICH WERD EUCH ALLE UMBRINGEN!"
+		"ko"		"전부 다 죽여버린다!!"
+	}
+	"Blitzkrieg_Encounter_TrueForm_3"
+	{
+		"en"		"DAS IS PURE KRAFT!"
+		"ko"		"이게 바로 순수한 힘이다!!"
+	}
+	"Blitzkrieg_Encounter_TrueForm_4"
+	{
+		"en"		"DENKSTE DAS WAR ALLES!!?!?!?!"
+		"ko"		"넌 그게 끝이라고 생각한거냐!?"
+	}
+	"Blitzkrieg_Encounter_TrueForm_5"
+	{
+		"en"		"DUUUUUUUUUUUUUUU KLEINE RATTE!"
+		"ko"		"이 쥐새끼같은 놈아!"
+	}
+	"Blitzkrieg_Encounter_TrueForm_6"
+	{
+		"en"		"KOMMT HER IHR KLEINEN VIECHER!!"
+		"ko"		"이리 기어와라, 보잘 것 없는 놈들아!"
+	}
+	"Blitzkrieg_Encounter_TrueForm_7"
+	{
+		"en"		"DIE WAHRE POWER VON RUIANIAN UND EXPIDONSANS!"
+		"ko"		"이것이 루이나와 엑스피돈사의 진정함 힘이다!!!"
+	}
+	"Blitzkrieg_Encounter_TrueForm_8"
+	{
+		"en"		"VERPISS DICH!!!!!!!!!!!!!"
+		"ko"		"여기서 다 꺼져라!!"
+	}
+	"Blitzkrieg_Encounter_TrueForm_9"
+	{
+		"en"		"BLITZKRIEG GEGEN BLITZKRIEG, KOMMT HER!!!!!"
+		"ko"		"지금부터가 너와 나의 진짜 전격전이다!!!"
+	}
+	
+	"Blitzkrieg_Encounter_Hyper_Wave10_1"
+	{
+		"en"		"Hehehe.."
+		"ko"		"흐흐흐.."
+	}
+	"Blitzkrieg_Encounter_Hyper_Wave10_2"
+	{
+		"en"		"Shall we begin?"
+		"ko"		"준비 되셨나?"
+	}
+	
+	"Blitzkrieg_Encounter_Hyper_Wave20_1"
+	{
+		"en"		"A second chance at besting you."
+		"ko"		"너희를 죽일 기회가 또 한 번 생긴 거 같군."
+	}
+	"Blitzkrieg_Encounter_Hyper_Wave20_2"
+	{
+		"en"		"You may have lived last time, but can you do it again?"
+		"ko"		"너희가 한 번은 살아남았을진 몰라도, 두 번은 가능할 것 같나?"
+	}
+	"Blitzkrieg_Encounter_Hyper_Wave20_3"
+	{
+		"en"		"I'm back for more."
+		"ko"		"내가 돌아왔다."
+	}
+	
+	"Blitzkrieg_Encounter_Hyper_Wave30_1"
+	{
+		"en"		"Let me introduce you to my best friend......{azure}the Moon."
+		"ko"		"아무래도 너희들에게 새 친구를 소개해줘야 할 것 같군... {azure}저 달을 봐라."
+	}
+	"Blitzkrieg_Encounter_Hyper_Wave30_2"
+	{
+		"en"		"You're all a bunch of annoying mercs, aren't you."
+		"ko"		"너희들의 존재가 꽤나 스트레스군."
+	}
+	"Blitzkrieg_Encounter_Hyper_Wave30_3"
+	{
+		"en"		"Let's just get this over with."
+		"ko"		"그냥 빨리 끝내주도록 하지."
+	}
+	
+	"Blitzkrieg_Encounter_Hyper_Final_1"
+	{
+		"en"		"This is the end for you. {crimson}NO MORE RUNNING."
+		"ko"		"여기가 너희들의 끝이다! {crimson}더 이상 도망갈 곳도 없지."
+	}
+	"Blitzkrieg_Encounter_Hyper_Final_2"
+	{
+		"en"		"Your hubris will eventually {crimson} fail you."
+		"ko"		"너희들의 오만함이 결국 너희를 {crimson}패배하게 할 것이다."
+	}
+	"Blitzkrieg_Encounter_Hyper_Final_3"
+	{
+		"en"		"POWER LIMITER: DISABLED{crimson} GOOD LUCK.{default}."
+		"ko"		"파워 리미터: 비활성화{crimson} 행운이라도 빌어보게나. 하하하!!!{default}."
+	}
+	
+	"Blitzkrieg_LastMann_TrueForm_1"
+	{
+		"en"		"BISTE AUßER PUSTE? VERRECK!"
+		"ko"		"지쳤냐? 그럼 그대로 뒈져버려!!"
+	}
+	"Blitzkrieg_LastMann_TrueForm_2"
+	{
+		"en"		"NA WIE GEHTS DIE ALEINE {crimson}HMMMMMMMMMM?"
+		"ko"		"이제 널 어떻게 요리해야할까? {crimson}흐으으으음?"
+	}
+	"Blitzkrieg_LastMann_TrueForm_3"
+	{
+		"en"		"DU BIST EIN DRECKES FAKE, {crimson}GIB AUF!"
+		"ko"		"멍청한 인간들아, {crimson}파멸을 맞이해라!!!"
+	}
+	"Blitzkrieg_LastMann_TrueForm_4"
+	{
+		"en"		"DIE WAHRE KRAFT DER ALLIANCE!!!{crimson} IST HIIIIIIIIIIIERRRR!!"
+		"ko"		"연합의 진정한 힘이{crimson} 드디어 승리했도다!!"
+	}
+	"Blitzkrieg_LastMann_TrueForm_5"
+	{
+		"en"		"{crimson}KOMM HER!!! HAU NICHT AB DU WEICHEI!"
+		"ko"		"{crimson}어차피 죽을 건데 뭐 이리 도망을 치는거냐!!!!"
+	}
+	
+	"Blitzkrieg_LastMann_Hyper_1"
+	{
+		"en"		"Unlike you filthy organics, I do not require oxygen to live."
+		"ko"		"너희 유기체들은 살아남으려면 산소가 필요했었지? 난 필요없다. 너희와 나는 차원이 다른 존재지."
+	}
+	"Blitzkrieg_LastMann_Hyper_2"
+	{
+		"en"		"How does it feel to be {crimson} all alone?"
+		"ko"		"그래, {crimson}혼자 남는 기분이 어떠냐?"
+	}
+	"Blitzkrieg_LastMann_Hyper_3"
+	{
+		"en"		"There is no hope for you.{crimson}Yield before I break you."
+		"ko"		"희망을 버려라. {crimson}죽기 전에 항복을 권하지."
+	}
+	"Blitzkrieg_LastMann_Hyper_4"
+	{
+		"en"		"Death comes for{crimson} YOU."
+		"ko"		"{crimson}네 죽음이 다가오고 있다..."
+	}
+	"Blitzkrieg_LastMann_Hyper_5"
+	{
+		"en"		"All your friends have already{crimson} perished. You're next."
+		"ko"		"네 친구들은 이미 {crimson}죽었다. 다음 차례는 너다."
+	}
+	
+	"Blitzkrieg_LastMann_1"
+	{
+		"en"		"Only one human remains."
+		"ko"		"단 한 놈 남았다."
+	}
+	"Blitzkrieg_LastMann_2"
+	{
+		"en"		"Steel triumphs flesh it seems."
+		"ko"		"기계의 승리가 드리우고 있군..."
+	}
+	"Blitzkrieg_LastMann_3"
+	{
+		"en"		"You are hopeless."
+		"ko"		"희망을 버려라."
+	}
+	"Blitzkrieg_LastMann_4"
+	{
+		"en"		"Your death is{crimson} Inevitable."
+		"ko"		"{crimson}넌 죽음을 피할 수 없다."
+	}
+	"Blitzkrieg_LastMann_5"
+	{
+		"en"		"All your friends have already{crimson} perished. You're next."
+		"ko"		"네 친구들은 이미 {crimson}죽었다. 다음 차례는 너다."
+	}
+	
+	"Blitzkrieg_Lose_TrueForm_1"
+	{
+		"en"		"Willste NOCHMAL versuchen? HMMMMM????"
+		"ko"		"다시 해볼 생각이냐? 흐으음????"
+	}
+	"Blitzkrieg_Lose_TrueForm_2"
+	{
+		"en"		"GIBSTE SCHON AUF? TRAURIG."
+		"ko"		"벌써 포기하겠다고? 쓰레기 같은 것들!"
+	}
+	
+	"Blitzkrieg_Lose_Hyper_1"
+	{
+		"en"		"Onto the rest of the {crimson}planet."
+		"ko"		"이제 {crimson}지구{default}만 남았군."
+	}
+	"Blitzkrieg_Lose_Hyper_2"
+	{
+		"en"		"Breathing is optional, {crimson}but not for you."
+		"ko"		"명을 이어가는 건 자유지만, {crimson}네 놈만은 안돼."
+	}
+	
+	"Blitzkrieg_Lose_1"
+	{
+		"en"		"{crimson}Annihilated.{default}"
+		"ko"		"{crimson}말살 완료.{default}"
+	}
+	"Blitzkrieg_Lose_2"
+	{
+		"en"		"Hopeless scrap."
+		"ko"		"가망 없는 쓰레기들."
+	}
+	"Blitzkrieg_Lose_3"
+	{
+		"en"		"Such {crimson}pathetic {default} weaponry."
+		"ko"		"{crimson}원시시대만도 못 한 것들!{default}"
+	}
+	"Blitzkrieg_Lose_4"
+	{
+		"en"		"Your death is{crimson} Inevitable."
+		"ko"		"{crimson}넌 죽음을 피할 수 없다."
+	}
+	
+	"Blitzkrieg_TimeOver_1"
+	{
+		"en"		"It's already {crimson}too late,{default} my army has arrived..."
+		"ko"		"{crimson}너무 늦었네.{default} 이미 나의 군대가 이 곳에 도착했다..."
+	}
+	"Blitzkrieg_TimeOver_2"
+	{
+		"en"		"My army has you surrounded from all sides, {crimson}surrender{default} or perish."
+		"ko"		"선택해라. {crimson}항복,{default} 아니면 죽음."
+	}
+	"Blitzkrieg_TimeOver_3"
+	{
+		"en"		"My army can always use {crimson}excellent specimens{default} like you."
+		"ko"		"나의 군대에 너희 같은 {crimson}훌륭한 인재{default}는 언제나 환영이지. 거부권은 없네."
+	}
+	
+	"Blitzkrieg_Draw_IonCannon_Hyper_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Have a gift from yours truly {yellow}{1}{default}!"
+		"ko"		"널 위한 작은 선물이다, {yellow}{1}{default}!"
+	}
+	"Blitzkrieg_Draw_IonCannon_Hyper_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Lookout above {yellow}{1}{default}!"
+		"ko"		"네 위를 봐라, {yellow}{1}{default}!"
+	}
+	"Blitzkrieg_Draw_IonCannon_Hyper_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"A present for {yellow}{1}{default}!"
+		"ko"		"{yellow}{1}{default}를 위한 선물이지!"
+	}
+	"Blitzkrieg_Draw_IonCannon_Hyper_4"
+	{
+		"#format"	"{1:N}"
+		"en"		"Move along now, {yellow}{1}{default}!"
+		"ko"		"도망쳐 봐라, {yellow}{1}{default}!"
+	}
+	
+	"Blitzkrieg_LifeLoss_TrueForm_1"
+	{
+		"en"		"DAS WARS NOCH NET!"
+		"ko"		"이게 전부가 아니다!!!"
+	}
+	"Blitzkrieg_LifeLoss_TrueForm_2"
+	{
+		"en"		"ICH KILL DICH!"
+		"ko"		"널 찢어발겨주마!!!"
+	}
+	"Blitzkrieg_LifeLoss_TrueForm_3"
+	{
+		"en"		"AAAAAAHHHHHAAAAAAAAAAAAAAAA!"
+		"ko"		"하하하하하!!!"
+	}
+	"Blitzkrieg_LifeLoss_TrueForm_4"
+	{
+		"en"		"ICH WERD DEIN DRECKS KOPF ZERSTÜCKELN!"
+		"ko"		"네 역겨운 머리통을 몸과 분리시켜주마!!!"
+	}
+	
+	"Blitzkrieg_Final_LifeLoss_TrueForm_1"
+	{
+		"en"		"{crimson}FRISS DAS!!!"
+		"ko"		"{crimson}이거나 먹어라!!!"
+	}
+	"Blitzkrieg_Final_LifeLoss_TrueForm_2"
+	{
+		"en"		"{crimson}KOMMSTE NOCH KLAR DIGGA???"
+		"ko"		"{crimson}아직도 살아있는거냐???"
+	}
+	"Blitzkrieg_Final_LifeLoss_TrueForm_3"
+	{
+		"en"		"{crimson}DIE TECHNOLOGIE DER EXPIDONSANS IST DIE BESTE!!!!!"
+		"ko"		"{crimson}엑스피돈사의 기술력은 세계 제일!!!"
+	}
+	
+	"Blitzkrieg_Final_LifeLoss_Hyper_1"
+	{
+		"en"		"{crimson}Here's a fun fact, the atmosphere drastically lowers the potential of this attack... Guess what space lacks!"
+		"ko"		"{crimson}재밌는 걸 하나 알려주지, 대기가 있으면 이 공격의 위력은 굉장히 약해지지. 우주엔 뭐가 없는지 맞혀봐라!"
+	}
+	"Blitzkrieg_Final_LifeLoss_Hyper_2"
+	{
+		"en"		"{crimson}MUHAHAHAHAHAH!"
+		"ko"		"{crimson}음하하하하하!!"
+	}
+	"Blitzkrieg_Final_LifeLoss_Hyper_3"
+	{
+		"en"		"{crimson}THE {aqua}TRUE{default} POWER OF {azure}THE MOON, IN THE PALMS OF MY HANDS!"
+		"ko"		"{aqua}진정한 {azure}달{crimson}의 힘이 내 손 안에 있다!!!"
+	}
+	"Blitzkrieg_Final_LifeLoss_Hyper_4"
+	{
+		"en"		"{crimson}MY POWER TRANSCENDS ANYTHING YOU ORGANICS COULD EVEN COMPREHEND!"
+		"ko"		"{crimson}내 힘은 너희 같은 유기체가 이해할 수 있는 영역을 초월했다!!!"
+	}
+	
+	"Blitzkrieg_First_LifeLoss_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"This is only just the beginning {yellow}{1}{default}!"
+		"ko"		"이건 그냥 시작일 뿐이라고, {yellow}{1}{default}!"
+	}
+	"Blitzkrieg_First_LifeLoss_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"You think this is the end {yellow}{1}{default}?"
+		"ko"		"이게 정말 끝일거라 생각하나, {yellow}{1}{default}?"
+	}
+	"Blitzkrieg_First_LifeLoss_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"YOU FOOL {yellow}{1}{default}!"
+		"ko"		"넌 너무 어리석군, {yellow}{1}{default}!"
+	}
+	"Blitzkrieg_First_LifeLoss_4"
+	{
+		"#format"	"{1:N}"
+		"en"		"There's plenty more where that came from {yellow}{1}{default}!"
+		"ko"		"아직 끝난게 아니다, {yellow}{1}{default}!"
+	}
+	
+	"Blitzkrieg_Second_LifeLoss_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Don't get too cocky {yellow}{1}{default}!"
+		"ko"		"아직 자만하면 안 되지, {yellow}{1}{default}!"
+	}
+	"Blitzkrieg_Second_LifeLoss_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Thy end is near {yellow}{1}{default}!"
+		"ko"		"네 종말이 다가오고 있다, {yellow}{1}{default}!"
+	}
+	"Blitzkrieg_Second_LifeLoss_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"{yellow}{1}{default} are you sure you want to proceed further??"
+		"ko"		"{yellow}{1}{default}, 정말로 계속 버티려는거냐?"
+	}
+	"Blitzkrieg_Second_LifeLoss_4"
+	{
+		"#format"	"{1:N}"
+		"en"		"There's plenty more where that came from {yellow}{1}{default}!"
+		"ko"		"네가 점점 더 흥미로워지는군, {yellow}{1}{default}!"
+	}
+	
+	"Blitzkrieg_Third_LifeLoss_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Your own hubris has lead to this. {yellow}{1}{default}, prepare for complete {crimson}BLITZKRIEG."
+		"ko"		"너의 자만심이 여기까지 오게 만든 거다, {yellow}{1}{default}. 기대해라. 진정한 {crimson}전격전{default}를."
+	}
+	"Blitzkrieg_Third_LifeLoss_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Thy end is {crimson} Now {yellow}{1}{default}. Thou shall feel true {crimson}BLITZKRIEG."
+		"ko"		"네 종말이 {crimson}코 앞이다{default}, {yellow}{1}{default}... 진정한 {crimson}전격전{default}를 기대해라!"
+	}
+	"Blitzkrieg_Third_LifeLoss_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"You've really done it now...... {crimson} ITS TIME TO DIE. {yellow}{1} {crimson}PREPARE FOR FULL BLITZKRIEG."
+		"ko"		"슬슬 감이 오나? {crimson}이제 죽을 시간이다. {yellow}{1}{default}! {crimson}전격전을 맞이하라."
+	}
+	"Blitzkrieg_Third_LifeLoss_4"
+	{
+		"#format"	"{1:N}"
+		"en"		"You cannot hope to stop {crimson}BLITZKRIEG{default} with such lackluster weaponry {yellow}{1}{default}!"
+		"ko"		"그런 조잡한 무기로 {crimson}전격전{default}을 막을 수 있으리란 희망은 버려라. {yellow}{1}{default}!"
+	}
+	
+	"Blitzkrieg_Final_LifeLoss_1"
+	{
+		"en"		"{crimson}I AM A GOD."
+		"ko"		"{crimson}나는 신이다."
+	}
+	"Blitzkrieg_Final_LifeLoss_2"
+	{
+		"en"		"{crimson}THY PUNISHMENT IS DEATH."
+		"ko"		"{crimson}너희들에게 내릴 벌은 죽음이다."
+	}
+	"Blitzkrieg_Final_LifeLoss_3"
+	{
+		"en"		"{crimson}RUNNING WILL ONLY DELAY THE INEVITABLE."
+		"ko"		"{crimson}도망치는 건 필연적인 죽음을 미룰 뿐이지."
+	}
+	
+	"Blitzkrieg_Spawn_Minion_Wave30"
+	{
+		"en"		"The minions have joined the battle."
+		"ko"		"하수인들이 이 곳에 도착했군."
+	}
+	"Blitzkrieg_Spawn_Minion_Final"
+	{
+		"en"		"And now its those two's turn."
+		"ko"		"이제 너희 둘의 차례다."
+	}
+	
+	"Blitzkrieg_Death_TrueForm_1"
+	{
+		"en"		"MISST!"
+		"ko"		"젠장!"
+	}
+	"Blitzkrieg_Death_TrueForm_2"
+	{
+		"en"		"ICH KRIEG DICH NOCH!"
+		"ko"		"너희를 반드시 죽여버리겠다!"
+	}
+	
+	"Blitzkrieg_Death_Final_1"
+	{
+		"en"		"NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"
+		"ko"		"안 돼!!!!!!!!!!!!!!!!!!!!!!"
+	}
+	"Blitzkrieg_Death_Final_2"
+	{
+		"en"		"error"
+		"ko"		"오류 발생"
+	}
+	
+	"Blitzkrieg_Death_Hyper_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Next time you won't be this lucky, {yellow}{1}{default}. {crimson}Next time."
+		"ko"		"다음 번엔 그리 쉽지 않을 거다, {yellow}{1}{default}. {crimson}다음엔 말이지."
+	}
+	"Blitzkrieg_Death_Hyper_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Will you ever be this lucky again {yellow}{1}{default}? Will{crimson} you?"
+		"ko"		"이번에도 운이 좋았군, {yellow}{1}{default}. {crimson}그렇지?"
+	}
+	"Blitzkrieg_Death_Hyper_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"I pity you {yellow}%N{crimson}. Because next time I'll come back stronger."
+		"ko"		"{yellow}{1}{default}, 너가 안타깝군. {crimson}왜냐하면 내가 더 강력해져서 돌아올테니까."
+	}
+	
+	"Blitzkrieg_Death_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"No..... this... cannot be. You win this time, {yellow}{1}{default}. {crimson}this time."
+		"ko"		"이런, 이번에는 너의 승리다. {yellow}{1}{default}. {crimson}이번엔 말이지."
+	}
+	"Blitzkrieg_Death_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"It seems I've failed to best you {yellow}%N{default}."
+		"ko"		"내가 최선을 다하지 못했군, {yellow}{1}{default}."
+	}
+	"Blitzkrieg_Death_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"HOW {yellow}{1}{default}. How did you beat me before my army could arrive. {crimson}...Doesn't matter,{default} there's always a next time..."
+		"ko"		"어떻게 한거지, {yellow}{1}{default}? 어떻게 내 군대가 도착하기 전에 나를 쓰러트린 거냐? {crimson}...그건 중요하지 않지.{default} 항상 다음 기회가 있는 법이니."
+	}
+	"Blitzkrieg_Death_4"
+	{
+		"#format"	"{1:N}"
+		"en"		"I'll be back for you {yellow}{1}{default}."
+		"ko"		"다음에 두고 보자고, {yellow}{1}{default}."
+	}
+	
+	// Fake Kahml.
+	"FakeKahml_SpecialAttack"
+	{
+		"en"		"{crimson}I Will BREAK YOU"
+		"ko"		"{crimson}널 박살내주마."
+	}
+	"FakeKahml_NanoMachineStart"
+	{
+		"en"		"I don't have time for this."
+		"ko"		"이러고 있을 시간이 없다."
+	}
+	"FakeKahml_NanoMachineEnd"
+	{
+		"en"		"You Lived, Good work."
+		"ko"		"살아남았군. 훌륭하다."
+	}
+	"FakeKahml_Death"
+	{
+		"en"		"You're boring me. I'm leaving."
+		"ko"		"점점 지겹군. 잘 있어라."
+	}
+	
+	// Donnerkrieg.
+	"Donnerkrieg_Encounter"
+	{
+		"en"		"I have arrived to render judgement."
+		"ko"		"심판을 내리기 위해 이 곳에 왔다."
+	}
+	
+	"Donnerkrieg_Win_1"
+	{
+		"en"		"Wait no, please stop."
+		"ko"		"아니, 잠깐! 멈춰!"
+	}
+	"Donnerkrieg_Win_2"
+	{
+		"en"		"You stopped The rouge machine."
+		"ko"		"너희가 저 미친 기계를 드디어 저지해냈어."
+	}
+	"Donnerkrieg_Win_3"
+	{
+		"en"		"We don't have to fight anymore, for you see..."
+		"ko"		"보다시피 우린 이제 싸울 필요가 없어..."
+	}
+	"Donnerkrieg_Win_4"
+	{
+		"en"		"We had no choice."
+		"ko"		"우리에겐 선택의 여지가 없었어."
+	}
+	"Donnerkrieg_Win_5"
+	{
+		"en"		"If we hadn't complied he would have destroyed us."
+		"ko"		"만약 그를 따르지 않았다면, 분명 우리를 죽였을 거야."
+	}
+	"Donnerkrieg_Win_6"
+	{
+		"en"		"The corruption had fully gotten to him."
+		"ko"		"아무래도 저 기계에도 혼돈이 잠식되었던 거 같아."
+	}
+	"Donnerkrieg_Win_7"
+	{
+		"en"		"However, that doesn't matter anymore."
+		"ko"		"이젠 상관없는 일이 되었지만."
+	}
+	"Donnerkrieg_Win_8"
+	{
+		"en"		"With Blitzkrieg gone, the army has been set free, and so..."
+		"ko"		"블리츠크리그도 사라졌으니, 그의 수하들도 전부 자유의 몸이 됐어..."
+	}
+	"Donnerkrieg_Win_9"
+	{
+		"en"		"Blitzkrieg's army is happy to serve you as thanks for setting us free..."
+		"ko"		"우리를 자유의 몸으로 만들어줬으니, 그의 군대는 이제 너희를 따를 거야."
+	}
+	"Donnerkrieg_Win_10"
+	{
+		"en"		"Oh also our true names are, {aqua}Stella{snow}, that's me."
+		"ko"		"아, 그리고 우리 진짜 이름을 알려줄게. 나는 {aqua}스텔라{snow}야."
+	}
+	"Donnerkrieg_Win_11"
+	{
+		"en"		"And he's {crimson}Karlas{snow}!"
+		"ko"		"그리고 이 쪽은 {crimson}카를라스{snow}야!"
+	}
+	
+	"Donnerkrieg_Ready_NightmareCannon_1"
+	{
+		"en"		"{crimson}That's it, {default}I'm going to kill you."
+		"ko"		"{crimson}더 이상 못 참겠군.{default} 너희 모두 죽여주마."
+	}
+	"Donnerkrieg_Ready_NightmareCannon_2"
+	{
+		"en"		"{crimson}Hm, {default}wonder how this will end..."
+		"ko"		"{crimson}흠, {default}어떻게 끝이 날지 참 기대되는군..."
+	}
+	"Donnerkrieg_Ready_NightmareCannon_3"
+	{
+		"en"		"{crimson}PREPARE {default}Thyself, {yellow}Judgement {default}is near."
+		"ko"		"{crimson}각오해라, {yellow}심판이 {default}멀지 않았다."
+	}
+	"Donnerkrieg_Ready_NightmareCannon_4"
+	{
+		"en"		"Just thinking about recharging this gives me a headache."
+		"ko"		"이걸 재충전할 생각을 하니 머리가 아프군..."
+	}
+	"Donnerkrieg_Ready_NightmareCannon_5"
+	{
+		"en"		"Ya know, I'm getting quite bored of {crimson}this."
+		"ko"		"이 싸움이 점점 {crimson}지겨워지고 있는 걸."
+	}
+	
+	"Donnerkrieg_Ready_NightmareCannon_Special_1"
+	{
+		"en"		"Oh not again, now train's gone and {crimson}left{default}."
+		"ko"		"아 이런, 이제 집으로 돌아갈 기차는 이미 떠나버렸네."
+	}
+	"Donnerkrieg_Ready_NightmareCannon_Special_2"
+	{
+		"en"		"Aiming this thing is actually quite {crimson}complex {default}ya know."
+		"ko"		"이걸 조준하는 건 꽤나 {crimson}복잡한{default} 일이라고."
+	}
+	
+	"Donnerkrieg_NightmareCannon_1"
+	{
+		"en"		"{crimson}NIGHTMARE, CANNON!"
+		"ko"		"{crimson}악몽포 전개!"
+	}
+	"Donnerkrieg_NightmareCannon_2"
+	{
+		"en"		"{crimson}JUDGEMENT BE UPON THEE!"
+		"ko"		"{crimson}저들에게 죽음을!"
+	}
+	"Donnerkrieg_NightmareCannon_3"
+	{
+		"en"		"{crimson}Annihilation"
+		"ko"		"{crimson}섬멸 개시!"
+	}
+	
+	"Donnerkrieg_NightmareCannon_Special_1"
+	{
+		"en"		"{crimson}And the city's too far to walk to the end while I..."
+		"ko"		"걸어서 돌아가기엔 너무 {purple}먼 곳{default}인데... 특히 내가.."
+	}
+	"Donnerkrieg_NightmareCannon_Special_2"
+	{
+		"en"		"However it's still{crimson} worth the effort."
+		"ko"		"하지만 {crimson}충분히 그럴 가치가 있지."
+	}
+	
+	// Shared.
+	"Blitzkrieg_Trophies"
+	{
+		"en"		"{default}You now have access to: {crimson}''Blitzkrieg's Army''{default}!"
+		"ko"		"{default}이제 당신은 새로운 세력을 배럭으로 호출할 수 있게 되었습니다...: {crimson}''블리츠크리그의 군대''{default}!"
+	}
+}

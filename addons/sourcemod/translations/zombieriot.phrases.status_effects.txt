@@ -19,7 +19,7 @@
 		"en"	"{yellow}Scales with playercount, unless youre the buff owner or enemies benefit from it."
 		"es"	"{yellow}Escala con la cantidad de jugadores, a menos que seas el emisor del buff o si el enemigo se beneficia de este."
 		"it"	"{yellow}Scala con il numero di giocatori, a meno che tu non sia il proprietario del buff o che i nemici non ne beneficino."
-		"ko"	"{yellow}플레이어 수에 따라 효과가 증가합니다. 당신이 버프를 건 장본인이거나 적도 똑같이 효과를 받는게 아니라면 말이죠."
+		"ko"	"{yellow}플레이어 수에 따라 수치가 조정됩니다. 당신이 버프를 건 장본인이거나 적도 똑같이 효과를 받는게 아니라면 말이죠."
 	}
 	"Teslar Shock"
 	{
@@ -3931,7 +3931,7 @@
 	"Red Mist Counter Desc"
 	{
 		"en"	"automatically attack nearby enemies who hit you when not attacking\nHas limited range, goes on cooldown if used too many times \nor taken too much damage at once"
-		"ko"	"공격하지 않는 동안 자신을 공격한 적에게 자동으로 반격합니다.\n제한된 사거리를 보유, 일정 횟수 사용 혹은 한번에 너무 큰 피해를 받을 시 쿨다운으로 돌입합니다."
+		"ko"	"공격하지 않는 동안 자신을 공격한 적에게 자동으로 반격합니다.\n제한된 사거리를 보유, 일정 횟수 사용 혹은 한번에 너무 큰 피해를 받을 시 쿨타임으로 돌입합니다."
 	}
 	"Red Mist Onrush"
 	{

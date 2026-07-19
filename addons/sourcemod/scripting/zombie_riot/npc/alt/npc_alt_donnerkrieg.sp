@@ -203,10 +203,9 @@ methodmap Donnerkrieg < CClotBody
 		
 		npc.m_flNextRangedBarrage_Spam = GetGameTime(npc.index) + 15.0;
 		
-		
 		EmitSoundToAll("mvm/mvm_tele_deliver.wav");
 		
-		NPCTalkMessage(npc.index, "I have arrived to render judgement");
+		Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Encounter");
 		
 		g_b_angered=false;
 
@@ -227,15 +226,19 @@ methodmap Donnerkrieg < CClotBody
 	}
 }
 
-static void NPCTalkMessage(int iNPC, const char[] message, bool identityRevealed = false)
+static void Donnerkrieg_NPCTalkMessage(int iNPC, const char[] message, bool identityRevealed = false, any ...)
 {
+	char buffer[255];
+	VFormat(buffer, sizeof(buffer), message, 4);
 	if (identityRevealed)
 	{
-		PrintNPCMessageWithPrefixes(iNPC, "aqua", message, .customName = "Stella", .messageColor = "snow", .customNameIsTranslated = true);
+		// PrintNPCMessageWithPrefixes(iNPC, "aqua", message, .customName = "Stella", .messageColor = "snow", .customNameIsTranslated = true);
+		NPC_TalkMessageWithTranslationCheck(iNPC, "aqua", buffer, .name = "Stella", .messageColor = "snow");
 	}
 	else
 	{
-		PrintNPCMessageWithPrefixes(iNPC, "crimson", message);
+		// PrintNPCMessageWithPrefixes(iNPC, "crimson", message);
+		NPC_TalkMessageWithTranslationCheck(iNPC, "crimson", buffer);
 	}
 }
 
@@ -333,11 +336,11 @@ static void Internal_ClotThink(int iNPC)
 			}
 			if(GameTime > g_f_blitz_dialogue_timesincehasbeenhurt)
 			{
-				NPCTalkMessage(npc.index, "Blitzkrieg's army is happy to serve you as thanks for setting us free...");
+				Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Win_9");
 				npc.m_bDissapearOnDeath = true;
 
-				NPCTalkMessage(npc.index, "Oh also our true names are, {aqua}Stella{snow}, that's me.", true);
-				NPCTalkMessage(npc.index, "And he's {crimson}Karlas{snow}!", true);
+				Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Win_10", true);
+				Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Win_11", true);
 				
 				RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
 				for (int client = 1; client <= MaxClients; client++)
@@ -345,49 +348,49 @@ static void Internal_ClotThink(int iNPC)
 					if(IsValidClient(client) && GetClientTeam(client) == 2 && TeutonType[client] != TEUTON_WAITING && PlayerPoints[client] > 500)
 					{
 						Items_GiveNamedItem(client, "Blitzkrieg's Army");
-						CPrintToChat(client,"{default}이제 당신은 새로운 세력을 배럭으로 호출할 수 있게 되었습니다...: {crimson}''블리츠크리그의 군대''{default}!");
+						CPrintToChat(client, "%T", "Blitzkrieg_Trophies", client);
 					}
 				}
 			}
 			else if(GameTime + 3.0 > g_f_blitz_dialogue_timesincehasbeenhurt && i_SaidLineAlready[npc.index] < 8)
 			{
 				i_SaidLineAlready[npc.index] = 8;
-				NPCTalkMessage(npc.index, "With Blitzkrieg gone, the army has been set free, and so...");
+				Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Win_8");
 			}
 			else if(GameTime + 5.0 > g_f_blitz_dialogue_timesincehasbeenhurt && i_SaidLineAlready[npc.index] < 7)
 			{
 				i_SaidLineAlready[npc.index] = 7;
-				NPCTalkMessage(npc.index, "However, that doesn't matter anymore.");
+				Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Win_7");
 			}
 			else if(GameTime + 8.0 > g_f_blitz_dialogue_timesincehasbeenhurt && i_SaidLineAlready[npc.index] < 6)
 			{
 				i_SaidLineAlready[npc.index] = 6;
-				NPCTalkMessage(npc.index, "The corruption had fully gotten to him.");
+				Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Win_6");
 			}
 			else if(GameTime + 10.0 > g_f_blitz_dialogue_timesincehasbeenhurt && i_SaidLineAlready[npc.index] < 5)
 			{
 				i_SaidLineAlready[npc.index] = 5;
-				NPCTalkMessage(npc.index, "If we hadn't complied he would have destroyed us.");
+				Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Win_5");
 			}
 			else if(GameTime + 12.0 > g_f_blitz_dialogue_timesincehasbeenhurt && i_SaidLineAlready[npc.index] < 4)
 			{
 				i_SaidLineAlready[npc.index] = 4;
-				NPCTalkMessage(npc.index, "We had no choice.");
+				Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Win_4");
 			}
 			else if(GameTime + 14.0 > g_f_blitz_dialogue_timesincehasbeenhurt && i_SaidLineAlready[npc.index] < 3)
 			{
 				i_SaidLineAlready[npc.index] = 3;
-				NPCTalkMessage(npc.index, "We don't have to fight anymore, for you see...");
+				Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Win_3");
 			}
 			else if(GameTime + 16.0 > g_f_blitz_dialogue_timesincehasbeenhurt && i_SaidLineAlready[npc.index] < 2)
 			{
 				i_SaidLineAlready[npc.index] = 2;
-				NPCTalkMessage(npc.index, "You stopped The rouge machine.");
+				Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Win_2");
 			}
 			else if(GameTime + 18.0 > g_f_blitz_dialogue_timesincehasbeenhurt && i_SaidLineAlready[npc.index] < 1)
 			{
 				i_SaidLineAlready[npc.index] = 1;
-				NPCTalkMessage(npc.index, "Wait no, please stop.");
+				Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Win_1");
 				ReviveAll(true);
 			}
 		}
@@ -623,15 +626,15 @@ static void Donnerkrieg_Nightmare_Logic(int ref, int PrimaryThreatIndex)
 			{
 				case 1:
 				{
-					NPCTalkMessage(npc.index, "{crimson}That's it, {default}I'm going to kill you.");	
+					Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Ready_NightmareCannon_1");	
 				}
 				case 2:
 				{
-					NPCTalkMessage(npc.index, "{crimson}Hm, {default}wonder how this will end...");	
+					Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Ready_NightmareCannon_2");	
 				}
 				case 3:
 				{
-					NPCTalkMessage(npc.index, "{crimson}PREPARE {default}Thyself, {yellow}Judgement {default}is near.");	
+					Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Ready_NightmareCannon_3");	
 				}
 				case 4:
 				{
@@ -639,24 +642,23 @@ static void Donnerkrieg_Nightmare_Logic(int ref, int PrimaryThreatIndex)
 					{
 						case 5:
 						{
-							NPCTalkMessage(npc.index, "Oh not again, now train's gone and {crimson}left{default}.");	
+							Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Ready_NightmareCannon_Special_1");	
 							npc.m_bFUCKYOU_move_anim = true;
 						}				
 						default:
 						{
-							NPCTalkMessage(npc.index, "Oh not again, now cannon's gone and {crimson}recharged{default}.");	
+							Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Ready_NightmareCannon_4");	
 						}
-							
 					}
 				}
 				case 5:
 				{
-					NPCTalkMessage(npc.index, "Aiming this thing is actually quite {crimson}complex {default}ya know.");	
+					Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Ready_NightmareCannon_Special_2");	
 					npc.m_bFUCKYOU = true;
 				}
 				case 6:
 				{
-					NPCTalkMessage(npc.index, "Ya know, I'm getting quite bored of {crimson}this.");	
+					Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_Ready_NightmareCannon_5");	
 				}
 			}
 			
@@ -679,34 +681,20 @@ static void Donnerkrieg_Nightmare_Logic(int ref, int PrimaryThreatIndex)
 				{
 					fl_BEAM_ChargeUpTime[npc.index] = GameTime + 99.0;
 					if(!npc.m_bFUCKYOU && !npc.m_bFUCKYOU_move_anim)
-					{	
-						switch(GetRandomInt(1,3))
-						{
-							case 1:
-							{
-								NPCTalkMessage(npc.index, "{crimson}NIGHTMARE, CANNON!");
-							}
-							case 2:
-							{
-								NPCTalkMessage(npc.index, "{crimson}JUDGEMENT BE UPON THEE!");
-							}
-							case 3:
-							{
-								NPCTalkMessage(npc.index, "{crimson}Annihilation!");	
-							}
-						}
+					{
+						Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_NightmareCannon_%d", _, GetRandomInt(1, 3));
 					}
 					else
 					{
 						if(npc.m_bFUCKYOU_move_anim)
 						{
-							NPCTalkMessage(npc.index, "{crimson}And the city's too far to walk to the end while I...");	
+							Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_NightmareCannon_Special_1");	
 							npc.m_bFUCKYOU_move_anim = false;
 						}
 						else if(npc.m_bFUCKYOU)
 						{
 							npc.m_bFUCKYOU = false;
-							NPCTalkMessage(npc.index, "However it's still{crimson} worth the effort.");	
+							Donnerkrieg_NPCTalkMessage(npc.index, "Donnerkrieg_NightmareCannon_Special_2");	
 						}
 					}
 					

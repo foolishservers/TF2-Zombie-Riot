@@ -343,9 +343,9 @@ methodmap Kahmlstein < CClotBody
 	}
 }
 
-static void NPCTalkMessage(int iNPC, const char[] message)
+static void AltKahmlstein_NPCTalkMessage(int iNPC, const char[] message)
 {
-	PrintNPCMessageWithPrefixes(iNPC, "blue", message);
+	NPC_TalkMessageWithTranslationCheck(iNPC, "blue", message);
 }
 
 static void Internal_ClotThink(int iNPC)
@@ -567,7 +567,7 @@ static void Internal_ClotThink(int iNPC)
 			fl_attack_timeout[npc.index]=GameTime + 0.5;
 			EmitSoundToAll("mvm/mvm_tank_horn.wav");
 			EmitSoundToAll("vo/heavy_domination16.mp3");
-			NPCTalkMessage(npc.index, "{crimson}I Will BREAK YOU");
+			AltKahmlstein_NPCTalkMessage(npc.index, "FakeKahml_SpecialAttack");
 			fl_kahml_combo_reset_timer[npc.index] = GameTime + 12.5;
 			i_kahml_combo_offest[npc.index]++;
 			if(IsValidEntity(npc.m_iWearable1))
@@ -626,7 +626,7 @@ static void Internal_ClotThink(int iNPC)
 		}
 		if(fl_kahml_nano_reset[npc.index] <= GameTime && !b_kahml_annihilation[npc.index] && !b_kahml_inNANOMACHINESSON[npc.index])
 		{
-			NPCTalkMessage(npc.index, "I don't have time for this.");
+			AltKahmlstein_NPCTalkMessage(npc.index, "FakeKahml_NanoMachineStart");
 			fl_kahml_main_melee_damage[npc.index] = 20.0 * fl_kahml_galactic_strenght[npc.index];
 			fl_kahml_bulletres[npc.index] = 0.75;
 			fl_kahml_meleeres[npc.index] = 0.9;
@@ -660,7 +660,7 @@ static void Internal_ClotThink(int iNPC)
 			fl_kahml_bulletres[npc.index] = 1.0;
 			fl_kahml_meleeres[npc.index] = 1.0;
 			fl_kahml_melee_speed[npc.index] = 0.4;
-			NPCTalkMessage(npc.index, "You Lived, Good work.");
+			AltKahmlstein_NPCTalkMessage(npc.index, "FakeKahml_NanoMachineEnd");
 			fl_kahml_nano_reset[npc.index] = 120.0 + GameTime;
 			fl_kahml_combo_reset_timer[npc.index] = 60.0 + GameTime;
 			i_kahml_combo_offest[npc.index] = 0;
@@ -942,8 +942,8 @@ static void Internal_NPCDeath(int entity)
 	npc.PlayDeathSound();	
 	float WorldSpaceVec[3]; WorldSpaceCenter(npc.index, WorldSpaceVec);
 	ParticleEffectAt(WorldSpaceVec, "teleported_blue", 0.5);
-	NPCTalkMessage(npc.index, "You're boring me, im leaving.");
-
+	AltKahmlstein_NPCTalkMessage(npc.index, "FakeKahml_Death");
+	
 	if(npc.index==EntRefToEntIndex(RaidBossActive))
 		RaidBossActive=INVALID_ENT_REFERENCE;
 	

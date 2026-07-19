@@ -977,13 +977,9 @@ public Action NPC_TraceAttack(int victim, int& attacker, int& inflictor, float& 
 					played_headshotsound_already[attacker] = GetGameTime()
 				}
 				else*/
-				if(!WasAlreadyPlayed)
+				if(!WasAlreadyPlayed && Blitzed_By_Riot)
 				{
-#if defined ZR
 					DisplayCritAboveNpc(victim, attacker, Blitzed_By_Riot);
-#else
-					DisplayCritAboveNpc(victim, attacker, false);
-#endif
 				//	played_headshotsound_already_Case[attacker] = random_case;
 				//	played_headshotsound_already_Pitch[attacker] = pitch;
 				}
@@ -1338,10 +1334,12 @@ public Action NPC_OnTakeDamage(int victim, int &attacker, int &inflictor, float 
 	}
 #endif
 	
+	Npcs_AddToAssist(attacker, weapon, victim);
 	//LogEntryInvicibleTest(victim, attacker, damage, 21);
 	OnTakeDamageBleedNpc(victim, attacker, inflictor, damage, damagetype, weapon, damagePosition, GameTime);
 	//LogEntryInvicibleTest(victim, attacker, damage, 22);
 
+	AdjustDamageForce(damageForce);
 	npcBase.m_vecpunchforce(damageForce, true);
 	if(!npcBase.m_bDissapearOnDeath) //Make sure that if they just vanish, its always false. so their deathsound plays.
 	{
@@ -1353,7 +1351,7 @@ public Action NPC_OnTakeDamage(int victim, int &attacker, int &inflictor, float 
 		{
 			npcBase.m_bGib = true;
 		}
-		else if((damage * fl_GibVulnerablity[victim]) > (ReturnEntityMaxHealth(victim) * 1.5))
+		else if((damage * fl_GibVulnerablity[victim]) > (ReturnEntityMaxHealth(victim) * 0.8))
 		{
 			npcBase.m_bGib = true;
 		}
@@ -1603,57 +1601,124 @@ void OnTakeDamageBleedNpc(int victim, int &attacker, int &inflictor, float &dama
 	{
 		if(!(damagetype & (DMG_SHOCK)))
 		{
+			bool PlayToAll = false;
 			if (f_CooldownForHurtParticle[victim] < GameTime)
 			{
+				PlayToAll = true;
+				//Play To All
 				if(EnableSilentMode)
 					f_CooldownForHurtParticle[victim] = GameTime + 1.0;
 				else
 					f_CooldownForHurtParticle[victim] = GameTime + 0.25;
+			}
 
-				if(npcBase.m_iBleedType == BLEEDTYPE_NORMAL)
+			if(npcBase.m_iBleedType == BLEEDTYPE_NORMAL)
+			{
+				TE_ParticleInt(g_particleImpactFlesh, damagePosition);
+				if(PlayToAll)
 				{
-					TE_ParticleInt(g_particleImpactFlesh, damagePosition);
 					TE_SendToAllInRange(damagePosition, RangeType_Visibility);
 				}
-				else if (npcBase.m_iBleedType == BLEEDTYPE_METAL)
+				else
 				{
-					damagePosition[2] -= 40.0;
-					TE_ParticleInt(g_particleImpactMetal, damagePosition);
+					if(attacker > 0 && attacker < MaxClients)
+						TE_SendToClient(attacker);
+				}
+			}
+			else if (npcBase.m_iBleedType == BLEEDTYPE_METAL)
+			{
+				damagePosition[2] -= 40.0;
+				TE_ParticleInt(g_particleImpactMetal, damagePosition);
+				if(PlayToAll)
+				{
 					TE_SendToAllInRange(damagePosition, RangeType_Visibility);
 				}
-				else if (npcBase.m_iBleedType == BLEEDTYPE_RUBBER)
+				else
 				{
-					TE_ParticleInt(g_particleImpactRubber, damagePosition);
+					if(attacker > 0 && attacker < MaxClients)
+						TE_SendToClient(attacker);
+				}
+			}
+			else if (npcBase.m_iBleedType == BLEEDTYPE_RUBBER)
+			{
+				TE_ParticleInt(g_particleImpactRubber, damagePosition);
+				if(PlayToAll)
+				{
 					TE_SendToAllInRange(damagePosition, RangeType_Visibility);
 				}
-				else if (npcBase.m_iBleedType == BLEEDTYPE_XENO)
+				else
 				{
-					//If you cant find any good blood effect, use this one and just recolour it.
-					TE_BloodSprite(damagePosition, { 0.0, 0.0, 0.0 }, 125, 255, 125, 255, 32);
+					if(attacker > 0 && attacker < MaxClients)
+						TE_SendToClient(attacker);
+				}
+			}
+			else if (npcBase.m_iBleedType == BLEEDTYPE_XENO)
+			{
+				//If you cant find any good blood effect, use this one and just recolour it.
+				TE_BloodSprite(damagePosition, { 0.0, 0.0, 0.0 }, 125, 255, 125, 255, 32);
+				if(PlayToAll)
+				{
 					TE_SendToAllInRange(damagePosition, RangeType_Visibility);
 				}
-				else if (npcBase.m_iBleedType == BLEEDTYPE_DWELLER)
+				else
 				{
-					//If you cant find any good blood effect, use this one and just recolour it.
-					TE_BloodSprite(damagePosition, { 0.0, 0.0, 0.0 }, 65, 65, 255, 255, 32);
+					if(attacker > 0 && attacker < MaxClients)
+						TE_SendToClient(attacker);
+				}
+			}
+			else if (npcBase.m_iBleedType == BLEEDTYPE_DWELLER)
+			{
+				//If you cant find any good blood effect, use this one and just recolour it.
+				TE_BloodSprite(damagePosition, { 0.0, 0.0, 0.0 }, 65, 65, 255, 255, 32);
+				if(PlayToAll)
+				{
 					TE_SendToAllInRange(damagePosition, RangeType_Visibility);
 				}
-				else if (npcBase.m_iBleedType == BLEEDTYPE_VOID)
+				else
 				{
-					//If you cant find any good blood effect, use this one and just recolour it.
-					TE_BloodSprite(damagePosition, { 0.0, 0.0, 0.0 }, 200, 0, 200, 255, 32);
+					if(attacker > 0 && attacker < MaxClients)
+						TE_SendToClient(attacker);
+				}
+			}
+			else if (npcBase.m_iBleedType == BLEEDTYPE_VOID)
+			{
+				//If you cant find any good blood effect, use this one and just recolour it.
+				TE_BloodSprite(damagePosition, { 0.0, 0.0, 0.0 }, 200, 0, 200, 255, 32);
+				if(PlayToAll)
+				{
 					TE_SendToAllInRange(damagePosition, RangeType_Visibility);
 				}
-				else if (npcBase.m_iBleedType == BLEEDTYPE_UMBRAL)
+				else
 				{
-					//If you cant find any good blood effect, use this one and just recolour it.
-					TE_BloodSprite(damagePosition, { 0.0, 0.0, 0.0 }, 200, 200, 200, 255, 32);
+					if(attacker > 0 && attacker < MaxClients)
+						TE_SendToClient(attacker);
+				}
+			}
+			else if (npcBase.m_iBleedType == BLEEDTYPE_UMBRAL)
+			{
+				//If you cant find any good blood effect, use this one and just recolour it.
+				TE_BloodSprite(damagePosition, { 0.0, 0.0, 0.0 }, 200, 200, 200, 255, 32);
+				if(PlayToAll)
+				{
 					TE_SendToAllInRange(damagePosition, RangeType_Visibility);
 				}
-				else if (npcBase.m_iBleedType == BLEEDTYPE_PORTAL)
+				else
 				{
-					TE_ParticleInt(g_particleImpactPortal, damagePosition);
+					if(attacker > 0 && attacker < MaxClients)
+						TE_SendToClient(attacker);
+				}
+			}
+			else if (npcBase.m_iBleedType == BLEEDTYPE_PORTAL)
+			{
+				TE_ParticleInt(g_particleImpactPortal, damagePosition);
+				if(PlayToAll)
+				{
 					TE_SendToAllInRange(damagePosition, RangeType_Visibility);
+				}
+				else
+				{
+					if(attacker > 0 && attacker < MaxClients)
+						TE_SendToClient(attacker);
 				}
 			}
 		}
@@ -2508,6 +2573,7 @@ void NPC_DeadEffects(int entity)
 			Attributes_OnKill(entity, client, WeaponLastHit);
 			Npc_WeaponOnKillDo(entity, client, WeaponLastHit);
 		}
+		Npc_TriggerAllAssists(entity);
 	}
 }
 void Npc_WeaponOnKillDo(int entity, int client, int weapon)
@@ -3038,7 +3104,27 @@ void NPC_TalkMessageWithTranslationCheck(int iNPC, const char[] npcColor, const 
  */
 void NPC_TalkMessageFormat(int entity, const char[] npcColor, const char[] message, const char[] customName = "", const char[] messageColor = "default", any ...) {
 	bool shouldNameTranslation = TranslationPhraseExists(customName);	
+	char finalNpcColor[32], finalMessageColor[32];
 	char finalName[256], finalMessage[256];
+	
+	if (finalNpcColor[0] == '\0')
+		FormatEx(finalNpcColor, sizeof(finalNpcColor), "{%s}", npcColor);
+	else
+		Format(finalNpcColor, sizeof(finalNpcColor), "{%s}", finalNpcColor);
+	
+	// Sometimes colors are defined with {}, sometimes without... get rid of dupes to accommodate for everything
+	ReplaceString(finalNpcColor, sizeof(finalNpcColor), "{{", "{");
+	ReplaceString(finalNpcColor, sizeof(finalNpcColor), "}}", "}");
+	
+	if (finalMessageColor[0] == '\0')
+		FormatEx(finalMessageColor, sizeof(finalMessageColor), "{%s}", messageColor);
+	else
+		Format(finalMessageColor, sizeof(finalMessageColor), "{%s}", finalMessageColor);
+	
+	// Sometimes colors are defined with {}, sometimes without... get rid of dupes to accommodate for everything
+	ReplaceString(finalMessageColor, sizeof(finalMessageColor), "{{", "{");
+	ReplaceString(finalMessageColor, sizeof(finalMessageColor), "}}", "}");
+	
 	for (int client = 1; client <= MaxClients; client++)
 	{
 		if (!IsClientInGame(client) || IsFakeClient(client))
@@ -3072,11 +3158,11 @@ void NPC_TalkMessageFormat(int entity, const char[] npcColor, const char[] messa
 		VFormat(finalMessage, sizeof(finalMessage), message, 6);
 		
 		char fullText[512];
-		FormatEx(fullText, sizeof(fullText), "%s%s%s: %s", npcColor, finalName, messageColor, finalMessage);
+		FormatEx(fullText, sizeof(fullText), "%s%s%s: %s", finalNpcColor, finalName, finalMessageColor, finalMessage);
 		if (strlen(fullText) > 250)
 		{
-			CPrintToChat(client, "%s%s%s:", npcColor, finalName, messageColor);
-			CPrintToChat(client, "%s%s", messageColor, finalMessage);
+			CPrintToChat(client, "%s%s%s:", finalNpcColor, finalName, finalMessageColor);
+			CPrintToChat(client, "%s%s", finalMessageColor, finalMessage);
 		}
 		else
 		{
@@ -3085,3 +3171,48 @@ void NPC_TalkMessageFormat(int entity, const char[] npcColor, const char[] messa
 	}
 }
 #endif
+
+void AdjustDamageForce(float Damageforce[3])
+{
+	int Scaleup = 0;
+	for(int i; i < 3; i++)
+	{
+		if(!ClampDetect(Damageforce[i], -3000.0, 3000.0))
+		{
+			Scaleup++;
+		}
+	}
+	if(Scaleup >= 3)
+	{
+		ScaleVector(Damageforce, 10.0);
+	}
+	ScaleVector(Damageforce, 0.5);
+}
+
+
+void Npcs_AddToAssist(int attacker, int weapon, int victim)
+{
+	int weaponforward = -1;
+	if(weapon != -1)
+		weaponforward = EntIndexToEntRef(weapon);
+	Set_HitDetectionCooldown(attacker, victim, GetGameTime() + 3.0, KillAssist,weaponforward);
+}
+void Npc_TriggerAllAssists(int victim)
+{
+	int killer = EntRefToEntIndex(LastHitRef[victim]);
+	for(int assist=1; assist<=MaxClients; assist++)
+	{
+		if(IsEntityAlive(assist) && assist != killer)
+		{
+			int WeaponRef = 0;
+			if(IsIn_HitDetectionCooldown(assist, victim, KillAssist, WeaponRef))
+			{
+				WeaponRef = EntRefToEntIndex(WeaponRef);
+				if(IsValidEntity(WeaponRef))
+				{
+					Attributes_Trigger_HealOnKill(assist, victim, WeaponRef, 0.75 * 0.9);
+				}
+			}
+		}
+	}
+}

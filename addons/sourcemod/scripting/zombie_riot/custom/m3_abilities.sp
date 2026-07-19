@@ -1102,7 +1102,7 @@ public void BuilderMenu(int client)
 		SetStoreMenuLogic(client, false);
 		static char buffer[128];
 		Menu menu = new Menu(BuilderMenuM);
-		AnyMenuOpen[client] = 1.0;
+		AnyMenuOpen[client] = 1;
 
 		if(Dungeon_Mode() && Dungeon_InSetup())
 		{
@@ -1247,7 +1247,7 @@ public int BuilderMenuM(Menu menu, MenuAction action, int client, int choice)
 	{
 		case MenuAction_Select:
 		{
-			AnyMenuOpen[client] = 0.0;
+			AnyMenuOpen[client] = 0;
 			ResetStoreMenuLogic(client);
 			char buffer[24];
 			menu.GetItem(choice, buffer, sizeof(buffer));
@@ -1297,7 +1297,7 @@ public int BuilderMenuM(Menu menu, MenuAction action, int client, int choice)
 		}
 		case MenuAction_Cancel:
 		{
-			AnyMenuOpen[client] = 0.0;
+			AnyMenuOpen[client] = 0;
 			ResetStoreMenuLogic(client);
 		}
 	}
@@ -1585,7 +1585,7 @@ public void GearTesting(int client)
 
 			SetEntityMoveType(client, MOVETYPE_NONE);
 
-			i_ClientHasCustomGearEquipped[client] = 2;
+			i_ClientHasCustomGearEquipped[client] = CUSTOMGEAR_QUANTUM_SUIT;
 
 			IncreaseEntityDamageTakenBy(client, 0.5, 3.0);
 			
@@ -1640,7 +1640,7 @@ public Action QuantumActivate(Handle cut_timer, int ref)
 			i_HealthBeforeSuit[client] = GetClientHealth(client);
 			i_HealthBeforeSuitMaxHP[client] = ReturnEntityMaxHealth(client);
 
-			i_ClientHasCustomGearEquipped[client] = 2;
+			i_ClientHasCustomGearEquipped[client] = CUSTOMGEAR_QUANTUM_SUIT;
 			
 			Store_GiveAll(client, 50, true);
 			ViewChange_PlayerModel(client);
@@ -1680,7 +1680,7 @@ public Action QuantumActivate(Handle cut_timer, int ref)
 		{
 			SetEntityMoveType(client, MOVETYPE_WALK);
 
-			i_ClientHasCustomGearEquipped[client] = 0;
+			i_ClientHasCustomGearEquipped[client] = CUSTOMGEAR_NONE;
 		}
 	}
 	return Plugin_Handled;
@@ -1691,7 +1691,7 @@ public Action QuantumDeactivate(Handle cut_timer, int ref)
 	int client = EntRefToEntIndex(ref);
 	if(IsValidClient(client) && i_HealthBeforeSuit[client] > 0)
 	{
-		i_ClientHasCustomGearEquipped[client] = 0;
+		i_ClientHasCustomGearEquipped[client] = CUSTOMGEAR_NONE;
 		int health = i_HealthBeforeSuit[client];
 
 		i_HealthBeforeSuit[client] = 0;

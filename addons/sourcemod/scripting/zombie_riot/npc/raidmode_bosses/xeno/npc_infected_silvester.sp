@@ -1860,16 +1860,15 @@ bool SharedGiveupSilvester(int entity, int entity2)
 				case 1:
 				{
 					if(!XenoExtraLogic())
-						RaidbossBlueGoggles_NPCTalkMessage(entity2, "There is a far greater enemy than us, not even we can beat him.");
+						RaidbossBlueGoggles_NPCTalkMessage(entity2, "Waldch_Win_1");
 					else
-						RaidbossBlueGoggles_NPCTalkMessage(entity2, "It appears like you already know what you are get yourselves into.");
+						RaidbossBlueGoggles_NPCTalkMessage(entity2, "Waldch_Win_Lab_1");
 
 					i_TalkDelayCheck += 1;
 				}
 				case 2:
 				{
-					
-					RaidbossBlueGoggles_NPCTalkMessage(entity2, "I doubt you can defeat him, but if you do somehow manage to, you will help us in defeating {darkblue}Chaos{default}.");
+					RaidbossBlueGoggles_NPCTalkMessage(entity2, "Waldch_Win_2");
 					i_TalkDelayCheck += 1;
 				}
 				case 3:

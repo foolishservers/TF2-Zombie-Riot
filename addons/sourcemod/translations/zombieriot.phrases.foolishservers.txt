@@ -467,6 +467,16 @@
 		"en"	"Barricade is mounted, damage taken is reduced\n{yellow}but when the mounted Barricade also takes damage.\n{crimson}If hit by a raid boss, it will be destroyed faster."
 		"ko"	"바리케이드를 장착한 경우, 받는 피해가 감소하지만\n{yellow}장착한 바리케이드도 피해를 입습니다.\n{crimson}레이드 보스에게 피격되면 더 빨리 파괴됩니다."
 	}
+	"Identifying Targets"
+	{
+		"en"	"Identifying Targets"
+		"ko"	"타겟 식별"
+	}
+	"Identifying Targets Desc"
+	{
+		"en"	"Increases Damage Taken by 20％"
+		"ko"	"대상이 받는 피해가 20％ 증가합니다."
+	}
 	
 	//무기 이름
 	"Chaos Infected Launcher"
@@ -538,6 +548,28 @@
 	{
 		"en"		"Improvised Armor"
 		"ko"		"급조된 증가 장갑"
+	}
+	"Killing Order"
+	{
+		"en"		"Killing Order"
+		"ko"		"살상 명령"
+	}
+	
+	"Survivalist Kit"
+	{
+		"en"		"Survivalist Kit"
+		"ko"		"생존주의자 키트"
+	}
+	
+	"Survivalist's Carbine"
+	{
+		"en"		"Survivalist's Carbine"
+		"ko"		"생존주의자의 소총"
+	}
+	"Survivalist's Knife"
+	{
+		"en"		"Survivalist's Knife"
+		"ko"		"생존주의자의 칼"
 	}
 	
 	//무기 설명
@@ -692,8 +724,81 @@
 	
 	"Improvised Armor Desc"
 	{
-		"en"	"Final Max Armor +300\n-Max Armor -10％"
-		"ko"	"-최종 최대 아머 +300\n-최대 아머 10％ 감소"
+		"en"	"Final Max Armor +300\n-Max Armor -20％"
+		"ko"	"-최종 최대 아머 +300\n-최대 아머 20％ 감소"
+	}
+	
+	"Killing Order Pap 1"
+	{
+		"en"	"Change projectile to hitscan\n-Increased damage\n-Increased attackspeed"
+		"ko"	"-피해량, 공격 속도 증가\n공격 방식이 히트스캔으로 변경"
+	}
+	"Killing Order Pap 2"
+	{
+		"en"	"-Additional damage to hit target for 4 seconds\n-Increased damage\n-Increased attackspeed"
+		"ko"	"-피해량, 공격 속도 증가\n적중한 대상에게 4초 동안 추가 피해"
+	}
+	"Killing Order Pap 3"
+	{
+		"en"	"-Increased damage\n-Increased attackspeed"
+		"ko"	"-피해량, 공격 속도 증가"
+	}
+	"Killing Order Pap 4"
+	{
+		"en"	"-Increased damage\n-Increased attackspeed"
+		"ko"	"-피해량, 공격 속도 증가"
+	}
+	
+	"Survivalist's Carbine Desc"
+	{
+		"en"		"-Fast-reload but low clip size"
+		"ko"		"-재장전이 빠르지만, 탄창이 작음"
+	}
+	"Survivalist's Knife Desc"
+	{
+		"en"		"-High-damage but slow attack rate"
+		"ko"		"-피해량이 높지만, 공격 속도가 느림"
+	}
+	
+	"Survivalist Kit Desc"
+	{
+		"en"		"-Provides an fast-reload carbine, high-damage knife"
+		"ko"		"-재장전이 빠른 카빈과 높은 피해를 주는 칼을 보유"
+	}
+	"Survivalist Kit Pap 1 Desc"
+	{
+		"en"		"New melee alt-fire ability - Reserved Health:\nAttacking with melee will reserve health and consume via M2\nImproved stats."
+		"ko"		"근접 무기 우클릭 능력 해금 - 체력 회복:\n적을 근접 무기로 타격 시, 체력을 모으고 우클릭으로 소모하여 회복할 수 있음.\n전반적인 능력치 증가"
+	}
+	"Survivalist Kit Pap 2 Desc"
+	{
+		"en"		"New primary alt-fire ability - Fire Grenade:\nFire aoe attack immediately\nImproved stats."
+		"ko"		"주무기 우클릭 능력 해금 - 유탄 발사:\n우클릭 시 즉각 유탄이 발사됨.\n전반적인 능력치 증가"
+	}
+	"Survivalist Kit Pap 3 Desc"
+	{
+		"en"		"New ability - Revive:\nIf damage is higher than your health, consume all reserved health and gives uber.\nOnly one chance on wave/raid.\nImproved stats."
+		"ko"		"능력 해금 - 소생:\n만약 죽을 피해를 받으면, 모은 체력을 전부 소모하고 우버를 잠깐 받음.\n레이드/웨이브 당 한 번만 사용 가능\n전반적인 능력치 증가"
+	}
+	"Survivalist Kit Pap 4 Desc"
+	{
+		"en"		"Improved stats."
+		"ko"		"전반적인 능력치 증가"
+	}
+	"Survivalist Kit Pap 5 Desc"
+	{
+		"en"		"Improved stats."
+		"ko"		"전반적인 능력치 증가"
+	}
+	"Survivalist Kit Pap 6 Desc"
+	{
+		"en"		"Improved stats."
+		"ko"		"전반적인 능력치 증가"
+	}
+	"Survivalist Kit Pap 7 Desc"
+	{
+		"en"		"Improved stats."
+		"ko"		"전반적인 능력치 증가"
 	}
 	
 	//Etc
@@ -775,5 +880,94 @@
 	{
 		"en"		"Item Description"
 		"ko"		"아이템 설명"
+	}
+	
+	//Common
+	"Wave_WaitingTime"
+	{
+		"#format"	"{1:.1f}"
+		"en"		"You were given extra {1} seconds to prepare."
+		"ko"		"준비 시간으로 {1}초 드립니다."
+	}
+	"Wave_WaitingTime_RaidBoss_LastMann"
+	{
+		"en"		"You were given extra 45 seconds to prepare for the raidboss... Get ready."
+		"ko"		"레이드 보스 준비 시간으로 45초 드립니다. 준비하세요!"
+	}
+	"Wave_WaitingTime_RaidBoss"
+	{
+		"en"		"You were given extra 30 seconds to prepare for the raidboss... Get ready."
+		"ko"		"레이드 보스 준비 시간으로 30초 드립니다. 준비하세요!"
+	}
+	"Wave_WaitingTime_LastMann_AprilFools26"
+	{
+		"en"		"You were given extra 5 seconds to prepare..."
+		"ko"		"준비 시간으로 5초 드립니다..."
+	}
+	"Wave_WaitingTime_LastMann"
+	{
+		"en"		"You were given extra 45 seconds to prepare..."
+		"ko"		"준비 시간으로 45초 드립니다..."
+	}
+	
+	"Wave_BreakTime_AprilFools26"
+	{
+		"en"		"You were given extra 5 seconds to prepare, as most of your team died......"
+		"ko"		"팀의 대부분이 사망하여 5초의 준비 시간을 드립니다..."
+	}
+	"Wave_BreakTime"
+	{
+		"en"		"You were given extra 30 seconds to prepare, as most of your team died......"
+		"ko"		"팀의 대부분이 사망하여 30초의 준비 시간을 드립니다..."
+	}
+	
+	"Wave_Setup_Disallow_Ready"
+	{
+		"en"		"You cannot ready up for 30 seconds."
+		"ko"		"30초 간은 준비할 수 없습니다."
+	}
+	"Wave_Setup_Allow_Ready"
+	{
+		"en"		"You may now ready up."
+		"ko"		"이제 준비(F4)를 할 수 있습니다."
+	}
+	
+	"Wave_Vote_TieBreaker"
+	{
+		"#format"	"{1:d}"
+		"en"		"Vote for the top {1} options!"
+		"ko"		"{1}개의 선택지 중 하나를 고르세요!"
+	}
+	"Wave_Vote_Modifier"
+	{
+		"en"		"Vote for the wave modifier!"
+		"ko"		"임무 난이도 투표!"
+	}
+	
+	//Auto Loadout.
+	"Ranged - H&K G36 Carbine Route"
+	{
+		"en" 		"SMG: H&K G36 Carbine Route [Easy]"
+		"ko"		"기관단총: H&K G36 카빈 루트 [추천]"
+	}
+	"Ranged - Grigori Shotgun Route"
+	{
+		"en" 		"Shotgun: Grigori Shotgun Route [Hard]"
+		"ko"		"산탄총: 그리고리 산탄총 루트 [어려움]"
+	}
+	"Medic - Basic"
+	{
+		"en" 		"Basic Medic [Hard]"
+		"ko"		"메딕 스타터팩 [어려움]"
+	}
+	"Mage - Gravaton Spell"
+	{
+		"en" 		"Gravaton Spell [Normal]"
+		"ko"		"중력 마법 [보통]"
+	}
+	"Melee - Steel Dagger"
+	{
+		"en" 		"Steel Dagger [Hard]"
+		"ko"		"강철 단검 [어려움]"
 	}
 }
