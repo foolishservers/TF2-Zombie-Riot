@@ -367,8 +367,8 @@ methodmap Vhxis < CClotBody
 		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", skin);
 		SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", skin);
 		SetEntProp(npc.m_iWearable5, Prop_Send, "m_nSkin", skin);
-		NPCTalkMessage(npc.index, "You're nothing before the power of the Void!");
-
+		
+		RaidBossVhxis_NPCTalkMessage(npc.index, "Vhxis_Encounter");
 		
 		SetEntityRenderColor(npc.index, 200, 0, 200, 255);
 		SetEntityRenderColor(npc.m_iWearable1, 200, 0, 200, 255);
@@ -393,9 +393,9 @@ methodmap Vhxis < CClotBody
 	}
 }
 
-static void NPCTalkMessage(int entity, const char[] message)
+static void RaidBossVhxis_NPCTalkMessage(int entity, const char[] message)
 {
-	PrintNPCMessageWithPrefixes(entity, "purple", message);
+	NPC_TalkMessageWithTranslationCheck(entity, "purple", message);
 }
 
 public void Vhxis_ClotThink(int iNPC)
@@ -412,7 +412,7 @@ public void Vhxis_ClotThink(int iNPC)
 	{
 		if(npc.m_iChanged_WalkCycle != 10)
 		{
-			NPCTalkMessage(npc.index, "You fools!... You think I made the Void?!");
+			RaidBossVhxis_NPCTalkMessage(npc.index, "Vhxis_Death_1");
 			if(IsValidEntity(npc.m_iWearable1))
 			{
 				AcceptEntityInput(npc.m_iWearable1, "Disable");
@@ -430,7 +430,7 @@ public void Vhxis_ClotThink(int iNPC)
 		{
 			npc.m_bDissapearOnDeath = true;
 			RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
-			CPrintToChatAll("{purple}공허가 풀려나고 말았습니다...");
+			CPrintToChatAll("%t", "Vhxis_Death_2");
 		}
 		return;
 	}
@@ -439,7 +439,7 @@ public void Vhxis_ClotThink(int iNPC)
 		ForcePlayerLoss();
 		RaidBossActive = INVALID_ENT_REFERENCE;
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
-		NPCTalkMessage(npc.index, "You almost released the Void, I have to keep it in check, piss off!");
+		RaidBossVhxis_NPCTalkMessage(npc.index, "Vhxis_TimeOver");
 		return;
 	}
 
@@ -550,7 +550,7 @@ public Action Vhxis_OnTakeDamage(int victim, int &attacker, int &inflictor, floa
 	if((ReturnEntityMaxHealth(npc.index)/4) >= GetEntProp(npc.index, Prop_Data, "m_iHealth") && !npc.Anger) //npc.Anger after half hp/400 hp
 	{
 		npc.Anger = true;
-		NPCTalkMessage(npc.index, "Die already! I'm giving it all already!!");
+		RaidBossVhxis_NPCTalkMessage(npc.index, "Vhxis_Anger");
 	}
 	return Plugin_Changed;
 }
@@ -1275,8 +1275,6 @@ bool VoidVhxis_VoidMagic(Vhxis npc, float gameTime)
 	return false;
 }
 
-
-
 public void VoidVhxisWin(int entity)
 {
 	i_RaidGrantExtra[entity] = RAIDITEM_INDEX_WIN_COND;
@@ -1286,5 +1284,5 @@ public void VoidVhxisWin(int entity)
 
 	AlreadySaidWin = true;
 	//b_NpcHasDied[client]
-	NPCTalkMessage(entity, "Back to the Void gate I go.");
+	RaidBossVhxis_NPCTalkMessage(entity, "Vhxis_Lose");
 }
