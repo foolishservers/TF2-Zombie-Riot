@@ -105,6 +105,15 @@ void KitSurvivalist_Enable(int client, int weapon)
 	}
 }
 
+public void KitSurvivalist_Unequip(int client)
+{
+	// If I sold it, remove it.
+	if (!Store_HasNamedItem(client, "Survivalist Kit"))
+		ReservedHealth[client] = 0.0;
+	
+	delete WeaponTimer[client];
+}
+
 static Action KitSurvivalist_Timer(Handle timer, DataPack pack)
 {
 	pack.Reset();
@@ -112,7 +121,6 @@ static Action KitSurvivalist_Timer(Handle timer, DataPack pack)
 	int weapon = EntRefToEntIndex(pack.ReadCell());
 	if (!client || !IsPlayerAlive(client) || !IsValidEntity(weapon))
 	{
-		KitSurvivalist_CleanUp(client);
 		WeaponTimer[client] = null;
 		return Plugin_Stop;
 	}
@@ -120,12 +128,6 @@ static Action KitSurvivalist_Timer(Handle timer, DataPack pack)
 	KitSurvivalist_UpdateHud(client);
 	
 	return Plugin_Continue;
-}
-
-static void KitSurvivalist_CleanUp(int client)
-{
-	// If I reset revive cooltime here, you can unequip exploit. So denied it.
-	ReservedHealth[client] = 0.0;
 }
 
 static void KitSurvivalist_UpdateHud(int client, bool immediate = false)
@@ -188,7 +190,7 @@ public void KitSurvivalist_Primary_M2(int client, int weapon, bool crit, int slo
 	Ability_Apply_Cooldown(client, slot, 35.0);
 	
 	//okay, interesting
-	float damage = 250.0;
+	float damage = WeaponLevel[weapon] > 3 ? 200.0 : 150.0;
 	damage *= Attributes_Get(weapon, 335, 1.0);		
 	damage *= Attributes_Get(weapon, 1, 1.0);		
 	damage *= Attributes_Get(weapon, 2, 1.0);
@@ -272,7 +274,9 @@ public void KitSurvivalist_OnTakeDamage(int victim, int &attacker, int &inflicto
 		if (KitSurvivalist_RefillHealthState(victim) > Survivalist_Revive_None)
 			return;
 		
-		damage = float(health - 1);
+		// Ignore this damage. then set health to 1.
+		damage = 0.0;
+		SetEntityHealth(victim, 1);
 		
 		ReviveRound[victim] = Waves_GetRoundScale();
 		ReviveRaid[victim] = RaidbossIgnoreBuildingsLogic(1);
@@ -281,8 +285,7 @@ public void KitSurvivalist_OnTakeDamage(int victim, int &attacker, int &inflicto
 		// to prevent reapply.
 		ReviveCooltime[victim] = GetGameTime() + 180.0;
 		
-		// Make sure player can take damage from this attack!!
-		RequestFrame(Frame_RefillHealth, GetClientUserId(victim));
+		KitSurvivalist_RefillHealth(victim);
 	}
 }
 
@@ -346,15 +349,6 @@ static bool KitSurvivalist_Grenade_TraceFilter(int entity, int contentsMask, any
 	}
 	
 	return !entity;
-}
-
-static void Frame_RefillHealth(int userid)
-{
-	int client = GetClientOfUserId(userid);
-	if (client && TeutonType[client] == TEUTON_NONE && IsPlayerAlive(client) && dieingstate[client] == 0)
-	{
-		KitSurvivalist_RefillHealth(client);
-	}
 }
 
 static int KitSurvivalist_RefillHealthState(int client)
