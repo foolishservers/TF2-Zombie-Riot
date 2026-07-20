@@ -185,7 +185,7 @@ public void KitSurvivalist_Primary_M2(int client, int weapon, bool crit, int slo
 	}
 	
 	Rogue_OnAbilityUse(client, weapon);
-	Ability_Apply_Cooldown(client, slot, 25.0);
+	Ability_Apply_Cooldown(client, slot, 35.0);
 	
 	//okay, interesting
 	float damage = 250.0;
