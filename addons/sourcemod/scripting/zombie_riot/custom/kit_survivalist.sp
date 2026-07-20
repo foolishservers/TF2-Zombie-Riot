@@ -107,10 +107,6 @@ void KitSurvivalist_Enable(int client, int weapon)
 
 public void KitSurvivalist_Unequip(int client)
 {
-	// If I sold it, remove it.
-	if (!Store_HasNamedItem(client, "Survivalist Kit"))
-		ReservedHealth[client] = 0.0;
-	
 	delete WeaponTimer[client];
 }
 
