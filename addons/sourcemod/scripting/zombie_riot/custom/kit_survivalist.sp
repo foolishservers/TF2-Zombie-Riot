@@ -186,7 +186,7 @@ public void KitSurvivalist_Primary_M2(int client, int weapon, bool crit, int slo
 	Ability_Apply_Cooldown(client, slot, 35.0);
 	
 	//okay, interesting
-	float damage = WeaponLevel[weapon] > 3 ? 200.0 : 150.0;
+	float damage = WeaponLevel[client] > 3 ? 200.0 : 150.0;
 	damage *= Attributes_Get(weapon, 335, 1.0);		
 	damage *= Attributes_Get(weapon, 1, 1.0);		
 	damage *= Attributes_Get(weapon, 2, 1.0);
