@@ -1258,7 +1258,7 @@ public Action GlobalTimer(Handle timer)
 	
 	Zombie_Delay_Warning();
 	Spawners_Timer();
-	Store_HandleAutoPapList();
+	Store_HandleAutoPurchases();
 	AutoLoadouts_Handle();
 	CheckForLowAmmo();
 	
