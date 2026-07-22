@@ -119,7 +119,7 @@ public void Weapon_Dimension_Wand(int client, int weapon, bool crit)
 		
 		delay_hud[client] = 0.0;
 			
-		float speed = 1300.0;
+		float speed = 1500.0;
 		speed *= Attributes_Get(weapon, 103, 1.0);
 		
 		speed *= Attributes_Get(weapon, 104, 1.0);
@@ -319,7 +319,7 @@ public void Weapon_Dimension_Summon_Normal_PAP_PAP(int client, int weapon, bool 
 		case 3:
 			Dimension_Summon_Npc(client, "npc_combine_soldier_deutsch_ritter" ,weapon, 1.4, 1.3, "utaunt_arcane_yellow_lights");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_zombie_pyro_giant_main" ,weapon, 1.4, 1.3, "utaunt_arcane_yellow_lights");	
+			Dimension_Summon_Npc(client, "npc_alt_mecha_pyro_giant" ,weapon, 1.4, 1.3, "utaunt_arcane_yellow_lights");	
 		case 5:
 			Dimension_Summon_Npc(client, "npc_spy_boss" ,weapon, 1.75, 1.2, "utaunt_arcane_yellow_lights");
 		case 6:
@@ -362,7 +362,7 @@ public void Weapon_Dimension_Summon_Blitz_PAP(int client, int weapon, bool &resu
 		case 1:
 			Dimension_Summon_Npc(client, "npc_alt_medic_berserker" ,weapon, 1.3, 1.2, "teleporter_red_exit_level3");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_alt_soldier_barrager" ,weapon, 1.1, 1.5, "teleporter_red_exit_level3");
+			Dimension_Summon_Npc(client, "npc_alt_soldier_barrager" ,weapon, 1.3, 1.5, "teleporter_red_exit_level3");
 		case 3:
 			Dimension_Summon_Npc(client, "npc_alt_combine_soldier_deutsch_ritter" ,weapon, 1.3, 1.2, "teleporter_red_exit_level3");
 		case 4:
@@ -475,11 +475,11 @@ public void Weapon_Dimension_Summon_Dweller(int client, int weapon, bool &result
 		case 1:
 			Dimension_Summon_Npc(client, "npc_abysspredator" ,weapon, 1.0, 1.3, "utaunt_spirit_winter_rings");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_abyssreefbreaker" ,weapon, 1.3, 1.2, "utaunt_spirit_winter_rings");
+			Dimension_Summon_Npc(client, "npc_abyssreefbreaker" ,weapon, 1.3, 1.4, "utaunt_spirit_winter_rings");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_abyssspewer" ,weapon, 1.0, 1.3, "utaunt_spirit_winter_rings");
+			Dimension_Summon_Npc(client, "npc_abyssspewer" ,weapon, 1.0, 1.4, "utaunt_spirit_winter_rings");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_dweller_grunwald_beserker" ,weapon, 1.6, 1.3, "utaunt_spirit_winter_rings");
+			Dimension_Summon_Npc(client, "npc_dweller_grunwald_beserker" ,weapon, 1.6, 1.4, "utaunt_spirit_winter_rings");
 		case 5:
 			Dimension_Summon_Npc(client, "npc_abyssswarmcaller" ,weapon, 1.0, 1.3, "utaunt_spirit_winter_rings");
 		case 6:
@@ -495,11 +495,11 @@ public void Weapon_Dimension_Summon_Dweller_PAP(int client, int weapon, bool &re
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_dweller_guard" ,weapon, 1.3, 0.75, "utaunt_spirit_winter_rings");
+			Dimension_Summon_Npc(client, "npc_dweller_guard" ,weapon, 1.3, 1.2, "utaunt_spirit_winter_rings");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_dweller_caster" ,weapon, 1.0, 0.9, "utaunt_spirit_winter_rings");
+			Dimension_Summon_Npc(client, "npc_dweller_caster" ,weapon, 1.1, 1.0, "utaunt_spirit_winter_rings");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_dweller_grunwald_knight" ,weapon, 1.2, 1.3, "utaunt_spirit_winter_rings");
+			Dimension_Summon_Npc(client, "npc_dweller_grunwald_knight" ,weapon, 1.3, 1.3, "utaunt_spirit_winter_rings");
 		case 4:
 			Dimension_Summon_Npc(client, "npc_dweller_specialist" ,weapon, 1.3, 1.4, "utaunt_spirit_winter_rings");
 		case 5:
@@ -567,13 +567,13 @@ public void Weapon_Dimension_Summon_Interitus(int client, int weapon, bool &resu
 		case 2:
 			Dimension_Summon_Npc(client, "npc_skin_hunter" ,weapon, 1.0, 1.4, "teleported_blue");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_freezing_cleaner" ,weapon, 1.1, 1.0, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_rajul" ,weapon, 1.3, 1.3, "teleported_blue");
 		case 4:
 			Dimension_Summon_Npc(client, "npc_airborn_explorer" ,weapon, 1.3, 1.5, "teleported_blue");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_irritated_person" ,weapon, 1.5, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_qanaas" ,weapon, 1.2, 1.5, "teleported_blue");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_winter_sniper" ,weapon, 1.0, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_snowey_gunner" ,weapon, 1.2, 1.4, "teleported_blue");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -588,11 +588,11 @@ public void Weapon_Dimension_Summon_Interitus_PAP(int client, int weapon, bool &
 		case 1:
 			Dimension_Summon_Npc(client, "npc_perro" ,weapon, 1.3, 1.3, "teleported_blue");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_abomination" ,weapon, 1.3, 1.2, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_irritated_person" ,weapon, 1.5, 1.2, "teleported_blue");
 		case 3:
 			Dimension_Summon_Npc(client, "npc_enforcer" ,weapon, 1.0, 1.5, "teleported_blue");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_behemoth" ,weapon, 1.5, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_hitman" ,weapon, 1.0, 1.3, "teleported_blue");
 		case 5:
 			Dimension_Summon_Npc(client, "npc_braindead" ,weapon, 1.3, 1.4, "teleported_blue");
 		case 6:
@@ -824,9 +824,9 @@ public void Weapon_Dimension_Summon_Aperture_PAP(int client, int weapon, bool &r
 		case 4:
 			Dimension_Summon_Npc(client, "npc_aperture_sniper_perfected" ,weapon, 1.0, 1.4, "teleported_blue");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_aperture_fueler" ,weapon, 1.5, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_fueler" ,weapon, 1.5, 1.5, "teleported_blue");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_aperture_suppressor" ,weapon, 1.5, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_suppressor" ,weapon, 1.5, 1.5, "teleported_blue");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
