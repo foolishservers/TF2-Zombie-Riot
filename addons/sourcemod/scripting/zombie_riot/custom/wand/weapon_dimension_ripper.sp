@@ -319,7 +319,7 @@ public void Weapon_Dimension_Summon_Normal_PAP_PAP(int client, int weapon, bool 
 		case 3:
 			Dimension_Summon_Npc(client, "npc_combine_soldier_deutsch_ritter" ,weapon, 1.4, 1.3, "utaunt_arcane_yellow_lights");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_alt_mecha_pyro_giant" ,weapon, 1.4, 1.3, "utaunt_arcane_yellow_lights");	
+			Dimension_Summon_Npc(client, "npc_zombie_pyro_giant_main" ,weapon, 1.4, 1.3, "utaunt_arcane_yellow_lights");	
 		case 5:
 			Dimension_Summon_Npc(client, "npc_spy_boss" ,weapon, 1.75, 1.2, "utaunt_arcane_yellow_lights");
 		case 6:
@@ -370,7 +370,7 @@ public void Weapon_Dimension_Summon_Blitz_PAP(int client, int weapon, bool &resu
 		case 5:
 			Dimension_Summon_Npc(client, "npc_alt_schwertkrieg" ,weapon, 1.5, 1.3, "teleporter_red_exit_level3");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_alt_mecha_pyro_giant_main" ,weapon, 1.5, 1.3, "teleporter_red_exit_level3");
+			Dimension_Summon_Npc(client, "npc_alt_mecha_pyro_giant" ,weapon, 1.5, 1.3, "teleporter_red_exit_level3");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
