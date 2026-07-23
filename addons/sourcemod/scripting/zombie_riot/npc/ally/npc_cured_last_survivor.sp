@@ -940,7 +940,7 @@ public void CuredFatherGrigori_ClotThink(int iNPC)
 		b_BobsCuringHand_Revived[npc.m_iTargetWalkTo] >= GREGPOINTS_REV_NEEDED &&
 		 TeutonType[npc.m_iTargetWalkTo] == TEUTON_NONE &&
 		  dieingstate[npc.m_iTargetWalkTo] > 0 && 
-		  !b_LeftForDead[npc.m_iTargetWalkTo])
+		  !b_LeftForDead[npc.m_iTargetWalkTo] && !Inv_Rose_Of_SelfHarm[npc.m_iTargetWalkTo])
 		{
 			//walk to client.
 			float vecTarget[3]; WorldSpaceCenter(npc.m_iTargetWalkTo, vecTarget);

@@ -4725,7 +4725,7 @@ public void Citizen_ClotThink(int iNPC)
 		{
 			if(ally <= MaxClients)
 			{
-				if(dieingstate[ally] > 0)
+				if(dieingstate[ally] > 0 && !Inv_Rose_Of_SelfHarm[ally])
 				{
 					ReviveClientFromOrToEntity(ally, npc.index, _, medic ? 0 : 1);
 					isReviving = true;

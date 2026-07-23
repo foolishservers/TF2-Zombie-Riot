@@ -77,6 +77,21 @@ methodmap Allymedic < CClotBody
 		public get()							{ return fl_AbilityOrAttack[this.index][0]; }
 		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][0] = TempValueForProperty; }
 	}
+	property int m_iTargetTemp
+	{
+		public get()							{ return i_MedkitAnnoyance[this.index]; }
+		public set(int TempValueForProperty) 	{ i_MedkitAnnoyance[this.index] = TempValueForProperty; }
+	}
+	property int m_iLimitRevive
+	{
+		public get()							{ return i_AmountProjectiles[this.index]; }
+		public set(int TempValueForProperty) 	{ i_AmountProjectiles[this.index] = TempValueForProperty; }
+	}
+	property int m_iWhatWaves
+	{
+		public get()							{ return i_AttacksTillMegahit[this.index]; }
+		public set(int TempValueForProperty) 	{ i_AttacksTillMegahit[this.index] = TempValueForProperty; }
+	}
 	
 	public Allymedic(float vecPos[3], float vecAng[3], int ally)
 	{
@@ -109,6 +124,10 @@ methodmap Allymedic < CClotBody
 		
 		npc.m_flSpeed = 400.0;
 		npc.m_flBuildUber = 0.0;
+		npc.m_iTargetTemp = 0;
+		npc.m_iTargetWalkTo = 0;
+		npc.m_iLimitRevive = 2;
+		npc.m_iWhatWaves = Waves_GetRoundScale();
 		npc.m_iWearable5 = INVALID_ENT_REFERENCE;
 		Is_a_Medic[npc.index] = true;
 		npc.m_bFUCKYOU = false;
@@ -171,13 +190,10 @@ methodmap Allymedic < CClotBody
 			AcceptEntityInput(iBeam, "ClearParent");
 			RemoveEntity(iBeam);
 			
-			EmitSoundToAll("weapons/medigun_no_target.wav", this.index, SNDCHAN_WEAPON);
-			
 			this.Healing = false;
 		}
 	}
 }
-
 
 static void Allymedic_ClotThink(int iNPC)
 {
@@ -200,36 +216,72 @@ static void Allymedic_ClotThink(int iNPC)
 	
 	npc.m_flNextThinkTime = gameTime + 0.1;
 
+	if(npc.m_iWhatWaves!=Waves_GetRoundScale())
+	{
+		int GetReviveCount = CountPlayersOnRed(0);
+		if(GetReviveCount>=8)
+			GetReviveCount=RoundToCeil(float(GetReviveCount)/8.0);
+		else
+			GetReviveCount=0;
+		npc.m_iLimitRevive = 2+GetReviveCount;
+		npc.m_iWhatWaves=Waves_GetRoundScale();
+	}
+
 	if(npc.m_flGetClosestTargetTime < gameTime)
 	{
 		npc.m_iTargetAlly = GetClosestAlly(npc.index);
 		npc.m_flGetClosestTargetTime = gameTime + 50000.0;
 	}
 	npc.m_iTarget = GetAllyEmergency(npc.index);
-	
-	float vecTarget[3];
-	if(IsValidAlly(npc.index, npc.m_iTargetAlly))
+	if(npc.m_iLimitRevive>0)
 	{
-		if(IsValidAlly(npc.index, npc.m_iTarget))
+		if(IsValidAlly(npc.index, npc.m_iTargetWalkTo))
 		{
-			int MaxHealth = ReturnEntityMaxHealth(npc.m_iTargetAlly);
-			int Health = GetEntProp(npc.m_iTargetAlly, Prop_Data, "m_iHealth");
-			if(Health>MaxHealth)
+			if(IsValidClient(npc.m_iTargetWalkTo) && dieingstate[npc.m_iTargetWalkTo] <= 0)
 			{
-				if(!npc.m_flReloadDelay)
-					npc.m_flReloadDelay=gameTime+3.0;
-				if(npc.m_flReloadDelay < gameTime)
-				{
-					npc.m_iTargetAlly=npc.m_iTarget;
-					npc.m_flReloadDelay=0.0;
-				}
+				npc.m_iLimitRevive--;
+				npc.m_iTargetWalkTo=0;
+			}
+			else if(!Citizen_ThatIsDowned(npc.m_iTargetWalkTo))
+				npc.m_iTargetWalkTo=0;
+		}
+		else
+			npc.m_iTargetWalkTo = GetAllyDown(npc.index);
+	}
+	bool ReviveNow;
+	float vecTarget[3];
+	if(IsValidEntity(npc.m_iTargetWalkTo))
+	{
+		if(!npc.m_flReloadDelay)
+			npc.m_flReloadDelay=gameTime+3.0;
+		if(npc.m_flReloadDelay < gameTime)
+		{
+			npc.m_iTargetAlly=npc.m_iTargetWalkTo;
+			npc.m_flReloadDelay=0.0;
+		}
+		ReviveNow=true;
+	}
+	else if(IsValidAlly(npc.index, npc.m_iTarget))
+	{
+		int MaxHealth = ReturnEntityMaxHealth(npc.m_iTargetAlly);
+		int Health = GetEntProp(npc.m_iTargetAlly, Prop_Data, "m_iHealth");
+		if(Health>MaxHealth)
+		{
+			if(!npc.m_flReloadDelay)
+				npc.m_flReloadDelay=gameTime+3.0;
+			if(npc.m_flReloadDelay < gameTime)
+			{
+				npc.m_iTargetAlly=npc.m_iTarget;
+				npc.m_flReloadDelay=0.0;
 			}
 		}
-	
+	}
+	if(IsValidAlly(npc.index, npc.m_iTargetAlly) || ReviveNow)
+	{
 		WorldSpaceCenter(npc.m_iTargetAlly, vecTarget);
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-		switch(Medic_Work(npc, flDistanceToTarget))
+		switch(Medic_Work(npc, flDistanceToTarget, ReviveNow))
 		{
 			case 0:
 			{
@@ -263,7 +315,24 @@ static void Allymedic_ClotThink(int iNPC)
 		}
 	}
 	else
+	{
+		if(npc.m_iChanged_WalkCycle != 1)
+		{
+			npc.StopPathing();
+			npc.m_bisWalking = false;
+			npc.SetActivity("ACT_MP_STAND_SECONDARY");
+			npc.m_flSpeed = 0.0;
+			npc.m_iChanged_WalkCycle = 1;
+		}
+		if(npc.m_bnew_target)
+		{
+			npc.StopHealing();
+			npc.Healing = false;
+			npc.m_bnew_target = false;
+			npc.m_iTargetTemp=npc.m_iTargetAlly;
+		}
 		npc.m_flGetClosestTargetTime=0.0;
+	}
 	npc.PlayIdleAlertSound();
 }
 
@@ -307,51 +376,21 @@ static void Allymedic_NPCDeath(int entity)
 	npc.StopHealing();
 }
 
-static int Medic_Work(Allymedic npc, float distance)
+static int Medic_Work(Allymedic npc, float distance, bool Bypass)
 {
-	if(!npc.m_iTargetWalkTo)
-		npc.m_iTargetWalkTo = GetClosestAllyPlayerGreg(npc.index);
-			
-	float vecTarget[3]; WorldSpaceCenter(npc.m_iTargetAlly, vecTarget);
 	float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
-	if(npc.m_iTargetWalkTo)
-	{
-		if (GetTeam(npc.m_iTargetWalkTo)==GetTeam(npc.index) && 
-		b_BobsCuringHand_Revived[npc.m_iTargetWalkTo] >= 0 &&
-		 TeutonType[npc.m_iTargetWalkTo] == TEUTON_NONE &&
-		  dieingstate[npc.m_iTargetWalkTo] > 0 && 
-		  !b_LeftForDead[npc.m_iTargetWalkTo])
-		{
-			WorldSpaceCenter(npc.m_iTargetWalkTo, vecTarget);
-			distance = GetVectorDistance(vecTarget, VecSelfNpc, true);
-			if(distance < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED*14.8)
-			{
-				if(!npc.m_bnew_target)
-				{
-					npc.StartHealing();
-					npc.m_iWearable4 = ConnectWithBeam(npc.m_iWearable3, npc.m_iTargetAlly, 255, 160, 70, 1.5, 1.5, 0.0, LASERBEAM);
-					npc.Healing = true;
-					npc.m_bnew_target = true;
-				}
-				ReviveClientFromOrToEntity(npc.m_iTargetWalkTo, npc.index, 1);
-				return 1;
-			}
-			else
-			{
-				npc.StopHealing();
-				npc.m_bnew_target = false;
-				npc.SetGoalEntity(npc.m_iTargetWalkTo);
-                return 0;
-			}
-			//return 0;
-		}
-		npc.m_iTargetWalkTo=0;
-	}
-
-	if(IsValidAlly(npc.index, npc.m_iTargetAlly))
+	float vecTarget[3]; WorldSpaceCenter(npc.m_iTargetAlly, vecTarget);
+	if(IsValidAlly(npc.index, npc.m_iTargetAlly) || Bypass)
 	{
 		if(distance < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED*14.8 && Can_I_See_Ally(npc.index, npc.m_iTargetAlly))
 		{
+			if(npc.m_iTargetTemp!=npc.m_iTargetAlly)
+			{
+				npc.StopHealing();
+				npc.Healing = false;
+				npc.m_bnew_target = false;
+				npc.m_iTargetTemp=npc.m_iTargetAlly;	
+			}
 			if(!npc.m_bnew_target)
 			{
 				npc.StartHealing();
@@ -371,19 +410,37 @@ static int Medic_Work(Allymedic npc, float distance)
 					healing_Amount*=0.33;
 				if(f_TimeUntillNormalHeal[npc.m_iTargetAlly] > GetGameTime())
 					Healing_GiveArmor*=0.33;
-				bool JustCuredArmor = false;
-				if(Armor_Charge[npc.m_iTargetAlly] < 0)
+				if(dieingstate[npc.m_iTargetAlly] > 0)
 				{
-					JustCuredArmor = true;
-					Healing_GiveArmor *= 4.0;
+					ReviveClientFromOrToEntity(npc.m_iTargetAlly, npc.index, 1, 1);
+					healing_Amount*=0.0;
 				}
-				GiveArmorViaPercentage(npc.m_iTargetAlly, Healing_GiveArmor, 1.0, true,_,npc.index);
-				if(JustCuredArmor && Armor_Charge[npc.m_iTargetAlly] > 0)
-					Armor_Charge[npc.m_iTargetAlly] = 0;
+				else
+				{
+					bool JustCuredArmor = false;
+					if(Armor_Charge[npc.m_iTargetAlly] < 0)
+					{
+						JustCuredArmor = true;
+						Healing_GiveArmor *= 4.0;
+					}
+					GiveArmorViaPercentage(npc.m_iTargetAlly, Healing_GiveArmor, 1.0, true,_,npc.index);
+					if(JustCuredArmor && Armor_Charge[npc.m_iTargetAlly] > 0)
+						Armor_Charge[npc.m_iTargetAlly] = 0;
+				}
 			}
 			else
+			{
 				GrantEntityArmor(npc.m_iTargetAlly, false, 0.5, 0.7, 0, (float(MaxHealth / 400)));
-			HealEntityGlobal(npc.index, npc.m_iTargetAlly, float(MaxHealth / 80)*healing_Amount, 1.5);
+				if(Citizen_ThatIsDowned(npc.m_iTargetAlly))
+				{
+					healing_Amount*=0.0;
+					int speed = 6;
+					Rogue_ReviveSpeed(speed);
+					Citizen_ReviveTicks(npc.m_iTargetAlly, speed, 0);
+				}
+			}
+			if(healing_Amount>0.0)
+				HealEntityGlobal(npc.index, npc.m_iTargetAlly, float(MaxHealth / 80)*healing_Amount, 1.5);
 			ApplyStatusEffect(npc.index, npc.m_iTargetAlly, "Healing Resolve", 1.1);
 			ApplyStatusEffect(npc.index, npc.m_iTargetAlly, "Healing Adaptiveness All", 1.1);
             ApplyStatusEffect(npc.index, npc.m_iTargetAlly, "Weapon Clocking", 1.1);
@@ -403,11 +460,19 @@ static int Medic_Work(Allymedic npc, float distance)
                         npc.PlayChargingCompleteSound();
                         npc.m_flBuildUber=181.0;
                     }
-                    if(Ratio<0.5)
+                    if(!HasSpecificBuff(npc.m_iTargetAlly, "UBERCHARGED") && !IsInvuln(npc.m_iTargetAlly) && Ratio<0.5)
                     {
-                        npc.PlayUberSound();
-                        npc.m_flBuildUber=60.0;
-                        npc.m_bFUCKYOU=true;
+						bool NowUber;
+						if(IsValidClient(npc.m_iTargetAlly) && dieingstate[npc.m_iTargetAlly] <= 0)
+							NowUber=true;
+						else if(!Citizen_ThatIsDowned(npc.m_iTargetAlly))
+							NowUber=true;
+						if(NowUber)
+						{
+							npc.PlayUberSound();
+							npc.m_flBuildUber=60.0;
+							npc.m_bFUCKYOU=true;
+						}
                     }
                 }
                 else
@@ -434,12 +499,14 @@ static int Medic_Work(Allymedic npc, float distance)
 		else
 		{
 			npc.StopHealing();
+			npc.Healing = false;
 			npc.m_bnew_target = false;					
 		}
 	}
 	else 
 	{
 		npc.StopHealing();
+		npc.Healing = false;
 		npc.m_bnew_target = false;		
 		return 1;
 	}
@@ -488,4 +555,65 @@ static int GetAllyEmergency(int entity)
 		}
 	}
 	return IsTarget; 
+}
+
+static int GetAllyDown(int entity)
+{
+	float VecSelfNpc[3]; WorldSpaceCenter(entity, VecSelfNpc);
+	float TargetDistance = 0.0; 
+	int ClosestTarget = 0;
+	for(int client = 1; client <= MaxClients; client++)
+	{
+		if(IsValidClient(client))
+		{
+			if(GetTeam(client) == GetTeam(entity) && TeutonType[client] == TEUTON_NONE
+			&& dieingstate[client] > 0 && !b_LeftForDead[client] && !Inv_Rose_Of_SelfHarm[client])
+			{
+				float TargetLocation[3]; WorldSpaceCenter(client, TargetLocation);
+				float fdistance = GetVectorDistance(VecSelfNpc, TargetLocation, true); 
+				if(TargetDistance) 
+				{
+					if(fdistance < TargetDistance) 
+					{
+						ClosestTarget = client; 
+						TargetDistance = fdistance;		  
+					}
+				} 
+				else 
+				{
+					ClosestTarget = client; 
+					TargetDistance = fdistance;
+				}
+			}
+		}
+	}
+	if(dieingstate[ClosestTarget] <= 0)
+	{
+		for(int a; a < i_MaxcountNpcTotal; a++)
+		{
+			int ally = EntRefToEntIndexFast(i_ObjectsNpcsTotal[a]);
+			if(ally != INVALID_ENT_REFERENCE && ally != entity)
+			{
+				if(!view_as<CClotBody>(ally).m_bThisEntityIgnored && !b_ThisEntityIgnoredByOtherNpcsAggro[ally] && GetTeam(ally) == GetTeam(entity) && Citizen_ThatIsDowned(ally))
+				{
+					float TargetLocation[3]; WorldSpaceCenter(ally, TargetLocation);
+					float fdistance = GetVectorDistance(VecSelfNpc, TargetLocation, true); 
+					if(TargetDistance) 
+					{
+						if(fdistance < TargetDistance) 
+						{
+							ClosestTarget = ally; 
+							TargetDistance = fdistance;		  
+						}
+					} 
+					else 
+					{
+						ClosestTarget = ally; 
+						TargetDistance = fdistance;
+					}
+				}
+			}
+		}
+	}
+	return ClosestTarget;
 }
