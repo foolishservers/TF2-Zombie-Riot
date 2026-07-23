@@ -592,7 +592,7 @@ public void Weapon_Dimension_Summon_Interitus_PAP(int client, int weapon, bool &
 		case 3:
 			Dimension_Summon_Npc(client, "npc_enforcer" ,weapon, 1.0, 1.5, "teleported_blue");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_hitman" ,weapon, 1.0, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_dimension_abomination", weapon, 1.3, 1.2, "teleported_blue");
 		case 5:
 			Dimension_Summon_Npc(client, "npc_braindead" ,weapon, 1.3, 1.4, "teleported_blue");
 		case 6:

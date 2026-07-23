@@ -1350,7 +1350,9 @@ void NPC_ConfigSetup()
 	AmbitiousTrader_OnMapStart_NPC();
 	AgentSmithFollower_Setup();
 	KevinmeryFollower_Setup();
-
+	
+	Dimension_Ripper_Base_OnMapStart_NPC();
+	
 	VScript_CacheNPCs();
 }
 
@@ -2962,3 +2964,8 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/npc_zs_ally_soldier.sp"
 #include "npc/gmod_zs/npc_zs_ally_heavy.sp"
 #include "npc/gmod_zs/npc_zs_ally_sniper.sp"
+
+// Dimension ripper
+#include "npc/ally/dimension_ripper/npc_dimension_ripper_base.sp"
+
+// #include "npc/foolish/npc_get_it_on_heavy.sp"
