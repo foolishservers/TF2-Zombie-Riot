@@ -87,35 +87,3 @@ void Weapon_AddonsCustom_OnKill(int attacker)
 		return;
 }
 
-public void Weapon_AddonsCustom_NPCTakeDamage(int attacker, int victim, float &damage, int weapon, float damagePosition[3], int damagetype)
-{
-	/*┌이녀석은 아래 싱크 허드(원/근거리 저항)에 사용되는 기능때문에 있어야함, 하지만 일부 무기는 있든 없든 상관 없음.*/
-	/*if(!CheckInHud())
-		return;*/
-	/*적에게 피해를 주면 트리거 됨*/
-	if(!IsValidEntity(victim) || GetTeam(victim) == TFTeam_Red)
-		return;
-	if(!IsValidClient(attacker))
-		return;
-	switch(i_CustomWeaponEquipLogic[weapon])
-	{
-		case WEAPON_MAJORSTEAM_LAUNCHER:MajorSteam_Launcher_NPCTakeDamage(attacker, victim, damage, weapon, damagetype);
-		case WEAPON_MINECRAFT_SWORD:MSword_NPCTakeDamage(attacker, victim, damage, weapon);
-	}
-}
-
-public void Weapon_AddonsCustom_PlayerTakeDamage(int victim, int attacker, float &damage, int weapon, float damagePosition[3], int damagetype)
-{
-	/*if(!CheckInHud())
-		return;*/
-	/*플레이어가 피해를 받으면 트리거 됨*/
-	if(!IsValidEntity(attacker) || GetTeam(attacker) == TFTeam_Red)
-		return;
-	if(!IsValidClient(victim))
-		return;
-	switch(i_CustomWeaponEquipLogic[weapon])
-	{
-		case WEAPON_MAJORSTEAM_LAUNCHER:MajorSteam_Launcher_PlayerTakeDamage(victim, attacker, damage, weapon)
-	}
-}
-

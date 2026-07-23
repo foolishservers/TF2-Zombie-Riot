@@ -963,8 +963,8 @@ void Barracks_BuildingThink(int entity)
 		return;
 	}
 	
-	npc.m_flNextThinkTime = GameTime + 0.2;
 	int client = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
+	npc.m_flNextThinkTime = GameTime + (Store_HasNamedItem(client, "Modern Defense") ? 0.1 : 0.2);
 
 	if(!IsValidClient(client))
 		return;
@@ -1502,7 +1502,7 @@ static void HE_StrikeThink(DataPack pack)
 	RequestFrames(HE_StrikeThink, frames_offset, pack2);
 }
 
-static Action HEGrenade_StartTouch(int entity, int target)
+/*static Action HEGrenade_StartTouch(int entity, int target)
 {
 	int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
 	if(!IsValidEntity(owner))
@@ -1515,7 +1515,7 @@ static Action HEGrenade_StartTouch(int entity, int target)
 	GetEntPropVector(entity, Prop_Data, "m_vecAbsOrigin", ProjectileLoc);
 	Explode_Logic_Custom(fl_Extra_Damage[entity], owner, owner, -1, ProjectileLoc, fl_Dead_Ringer_Invis[entity]);
 	return Plugin_Handled;
-}
+}*/
 
 static void Barracks_ModernDefense_Mode(BarrackBody npc, int client, bool mounted, float SelfPos[3], float GameTime)
 {

@@ -691,7 +691,7 @@ void StatusEffects_Baka()
 	data.DamageDealMulti				= -1.0;
 	data.AttackspeedBuff				= -1.0;
 	data.MovementspeedModif			= -1.0;
-	data.Positive 					= true;
+	data.Positive 					= false;
 	data.ShouldScaleWithPlayerCount 	= false;
 	data.Slot						= 0;
 	data.SlotPriority					= 0;
@@ -701,6 +701,46 @@ void StatusEffects_Baka()
 	data.OnTakeDamage_PostAttacker		= INVALID_FUNCTION;
 	data.Status_SpeedFunc 			= INVALID_FUNCTION;
 	data.HudDisplay_Func 				= Taunt_Hud_Func;
+	StatusEffect_AddGlobal(data);
+
+	strcopy(data.BuffName, sizeof(data.BuffName), "Depot Transfer");
+	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "➡]");
+	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
+	//-1.0 means unused
+	data.DamageTakenMulti 			= -1.0;
+	data.DamageDealMulti				= -1.0;
+	data.AttackspeedBuff				= -1.0;
+	data.MovementspeedModif			= -1.0;
+	data.Positive 					= true;
+	data.ShouldScaleWithPlayerCount 	= false;
+	data.Slot						= 0;
+	data.SlotPriority					= 0;
+	data.OnTakeDamage_TakenFunc 		= INVALID_FUNCTION;
+	data.OnTakeDamage_DealFunc 		= INVALID_FUNCTION;
+	data.OnTakeDamage_PostVictim		= INVALID_FUNCTION;
+	data.OnTakeDamage_PostAttacker		= INVALID_FUNCTION;
+	data.Status_SpeedFunc 			= INVALID_FUNCTION;
+	data.HudDisplay_Func 				= INVALID_FUNCTION;
+	StatusEffect_AddGlobal(data);
+
+	strcopy(data.BuffName, sizeof(data.BuffName), "Eye for an Eye");
+	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "☄");
+	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
+	//-1.0 means unused
+	data.DamageTakenMulti 			= -1.0;
+	data.DamageDealMulti				= 0.0;
+	data.AttackspeedBuff				= -1.0;
+	data.MovementspeedModif			= -1.0;
+	data.Positive 					= false;
+	data.ShouldScaleWithPlayerCount 	= false;
+	data.Slot						= 0;
+	data.SlotPriority					= 0;
+	data.OnTakeDamage_TakenFunc 		= INVALID_FUNCTION;
+	data.OnTakeDamage_DealFunc 		= Eye_For_Eye_Func;
+	data.OnTakeDamage_PostVictim		= INVALID_FUNCTION;
+	data.OnTakeDamage_PostAttacker		= INVALID_FUNCTION;
+	data.Status_SpeedFunc 			= INVALID_FUNCTION;
+	data.HudDisplay_Func 				= INVALID_FUNCTION;
 	StatusEffect_AddGlobal(data);
 }
 
@@ -742,11 +782,17 @@ float Barricade_Stabilizer_ResistanceFunc(int attacker, int victim, StatusEffect
 	int building = EntRefToEntIndex(i2_MountedInfoAndBuilding[1][victim]);
 	if(building != -1)
 	{
-		if(StrEqual(c_NpcName[building], "Barricade"))
+		bool b_DecorativeObject, b_ExplosiveBarrel;
+		if(StrEqual(c_NpcName[building], "Decorative Object"))
+			b_DecorativeObject=true;
+		else if(StrEqual(c_NpcName[building], "Explosive Barrel"))
+			b_ExplosiveBarrel=true;
+		if(StrEqual(c_NpcName[building], "Barricade") || b_DecorativeObject || b_ExplosiveBarrel)
 		{
 			if(!CheckInHud())
 			{
-				int health = GetEntProp(building, Prop_Data, "m_iHealth") - RoundToCeil(basedamage *(RaidbossIgnoreBuildingsLogic(1) ? 1.5 : 1.0));
+				int health = GetEntProp(building, Prop_Data, "m_iHealth") - RoundToCeil(basedamage *(RaidbossIgnoreBuildingsLogic(1) ? 1.5 : 1.0)
+				* (b_DecorativeObject ? 1.0 : 2.0) * (b_ExplosiveBarrel ? 1.0 : 5.0));
 				if(health > 0)
 				{
 					ObjectGeneric objstats = view_as<ObjectGeneric>(building);
@@ -770,9 +816,21 @@ float Barricade_Stabilizer_ResistanceFunc(int attacker, int victim, StatusEffect
 						i2_MountedInfoAndBuilding[0][victim] = INVALID_ENT_REFERENCE;
 					}
 					DestroyBuildingDo(building);
+					if(!HasSpecificBuff(victim, "Solid Stance") && IsValidEnemy(attacker, victim) && b_ExplosiveBarrel)
+					{
+						SetEntPropFloat(victim, Prop_Send, "m_flNextAttack", GetGameTime() + 1.5);
+						ApplyStatusEffect(victim, victim, "Ragdolled", 1.5);
+						FreezeNpcInTime(victim, 1.5);
+						Custom_Knockback(attacker, victim, 1500.0, true);
+						if(!HasSpecificBuff(victim, "Fluid Movement"))
+						{
+							TF2_AddCondition(victim, TFCond_LostFooting, 1.5);
+							TF2_AddCondition(victim, TFCond_AirCurrent, 1.5);
+						}
+					}
 				}
 			}
-			f_Resistance=Barricade_Stabilizer_FeedBack(victim);
+			f_Resistance=Barricade_Stabilizer_FeedBack(victim, GetEntProp(building, Prop_Data, "m_iMaxHealth"), b_DecorativeObject, b_ExplosiveBarrel);
 		}
 	}
 	return f_Resistance;
@@ -784,17 +842,23 @@ void Barricade_Stabilizer_Hud_Func(int attacker, int victim, StatusEffect Apply_
 		RemoveSpecificBuff(victim, "Barricade Stabilizer");
 	#if defined ZR
 	float Ratio = 0.0;
+	bool b_ExplosiveBarrel;
 	int building = EntRefToEntIndex(i2_MountedInfoAndBuilding[1][victim]);
 	if(building != -1)
 	{
-		if(StrEqual(c_NpcName[building], "Barricade"))
+		if(StrEqual(c_NpcName[building], "Explosive Barrel"))
+			b_ExplosiveBarrel=true;
+		else if(StrEqual(c_NpcName[building], "Barricade") || StrEqual(c_NpcName[building], "Decorative Object"))
 		{
 			int health = GetEntProp(building, Prop_Data, "m_iHealth");
 			int maxhealth = GetEntProp(building, Prop_Data, "m_iMaxHealth");
 			Ratio = float(health)/float(maxhealth) * 100.0;
 		}
 	}
-	Format(HudToDisplay, SizeOfChar, "[⛉ %.0f％]", Ratio);
+	if(b_ExplosiveBarrel)
+		Format(HudToDisplay, SizeOfChar, "[☢ WTF]");
+	else
+		Format(HudToDisplay, SizeOfChar, "[⛉ %.0f％]", Ratio);
 	#endif
 }
 
@@ -819,6 +883,26 @@ void Taunt_Hud_Func(int attacker, int victim, StatusEffect Apply_MasterStatusEff
 		Delay = float(GetRandomInt(2, 6)) + GameTime;
 	}
 	Format(HudToDisplay, SizeOfChar, "[⫘ %is]", RoundToCeil(Delay - GameTime));
+}
+
+float Eye_For_Eye_Func(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int damagetype)
+{
+	DataPack pack = new DataPack();
+	pack.WriteCell(attacker);
+	pack.WriteCell(victim);
+	RequestFrame(Delayd_payback_DMG, pack);
+	return 1.0;
+}
+
+static void Delayd_payback_DMG(DataPack pack)
+{
+	pack.Reset();
+	int attacker = pack.ReadCell();
+	int victim = pack.ReadCell();
+	if(!IsValidEntity(attacker) || !IsValidEntity(victim))
+		return;
+	float Health = float(GetClientHealth(attacker));
+	SDKHooks_TakeDamage(attacker, victim, victim, (Health>125.0 ? Health/10.0: Health*3.0), DMG_TRUEDAMAGE|DMG_PREVENT_PHYSICS_FORCE);
 }
 
 float Chaos_Coil_Func(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int damagetype, float &basedamage, float DamageBuffExtraScaling)

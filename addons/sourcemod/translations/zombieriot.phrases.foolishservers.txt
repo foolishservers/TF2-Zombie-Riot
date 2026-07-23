@@ -273,8 +273,8 @@
 	}
 	"Inv Barricade Stabilizer desc"
 	{
-		"en"	"Barricade is mounted, damage taken is reduced, but when the mounted Barricade also takes damage.\nIf hit by a raid boss, it will be destroyed faster."
-		"ko"	"바리케이드를 장착한 경우, 받는 피해가 감소하지만, 장착한 바리케이드도 피해를 입습니다.\n레이드 보스에게 피격되면 더 빨리 파괴됩니다."
+		"en"	"Barricade or Decorative Object is mounted, damage taken is reduced, but when the mounted Building also takes damage.\nIf hit by a raid boss, it will be destroyed faster."
+		"ko"	"바리케이드및 장식물을 장착한 경우, 받는 피해가 감소하지만, 장착한 구조물도 피해를 입습니다.\n레이드 보스에게 피격되면 더 빨리 파괴됩니다."
 	}
 	"Inv Barricade Stabilizer desc Extra"
 	{
@@ -318,8 +318,8 @@
 	}
 	"Inv Modern Defense desc"
 	{
-		"en"	"Barracks uses Hitscan instead of Projectiles."
-		"ko"	"배럭이 투사체 대신 히트스캔을 사용합니다."
+		"en"	"Barracks building use Hitscan Bullets instead of Projectiles"
+		"ko"	"배럭이 투사체 대신 히트스캔을 사용합니다"
 	}
 	"Mortar Support"
 	{
@@ -328,8 +328,8 @@
 	}
 	"Inv Mortar Support desc"
 	{
-		"en"	"Barracks uses Explosive Projectiles."
-		"ko"	"배럭이 폭발성 투사체를 사용합니다."
+		"en"	"Barracks building can now target enemies through the wall and deal aoe damage"
+		"ko"	"배럭이 벽넘어 적에게 범위 공격을 합니다"
 	}
 	"Grigori's Personal 12g Ammo"
 	{
@@ -464,8 +464,8 @@
 	}
 	"Barricade Stabilizer Desc"
 	{
-		"en"	"Barricade is mounted, damage taken is reduced\n{yellow}but when the mounted Barricade also takes damage.\n{crimson}If hit by a raid boss, it will be destroyed faster."
-		"ko"	"바리케이드를 장착한 경우, 받는 피해가 감소하지만\n{yellow}장착한 바리케이드도 피해를 입습니다.\n{crimson}레이드 보스에게 피격되면 더 빨리 파괴됩니다."
+		"en"	"Barricade or Decorative Object is mounted, damage taken is reduced\n{yellow}but when the mounted Barricade also takes damage.\n{crimson}If hit by a raid boss, it will be destroyed faster."
+		"ko"	"바리케이드 또는 장식물을 장착한 경우, 받는 피해가 감소하지만\n{yellow}장착한 구조물도 피해를 입습니다.\n{crimson}레이드 보스에게 피격되면 더 빨리 파괴됩니다."
 	}
 	"Identifying Targets"
 	{
@@ -476,6 +476,36 @@
 	{
 		"en"	"Increases Damage Taken by 20％"
 		"ko"	"대상이 받는 피해가 20％ 증가합니다."
+	}
+	"Taunt"
+	{
+		"en"	"Taunt"
+		"ko"	"도발"
+	}
+	"Taunt Desc"
+	{
+		"en"	"Taunt levels increase. You get Karma."
+		"ko"	"도발 수치가 증가합니다."
+	}
+	"Depot Transfer"
+	{
+		"en"	"Depot Transfer"
+		"ko"	"창고 이송"
+	}
+	"Depot Transfer Desc"
+	{
+		"en"	"Building Cooldown Reduced."
+		"ko"	"구조물 재사용 대기시간이 감소합니다."
+	}
+	"Eye for an Eye"
+	{
+		"en"	"Eye for an Eye"
+		"ko"	"눈에는 눈"
+	}
+	"Eye for an Eye Desc"
+	{
+		"en"	"If you cause damage, you will receive it back."
+		"ko"	"피해를 주면 되돌려 받습니다."
 	}
 	
 	//무기 이름
@@ -799,6 +829,120 @@
 	{
 		"en"		"Improved stats."
 		"ko"		"전반적인 능력치 증가"
+	}
+	
+	//추가 장비 이름
+	"Have's Mysterious Brew"
+	{
+		"en"	"Have's Mysterious Brew"
+		"ko"	"하베의 신비로운 맥주"
+	}
+	
+	//추가 장비 설명
+	"Mysterious Brew Desc"
+	{
+		"en"	"On use, grant a random status effect"
+		"ko"	"사용 시 무작위 상태 효과를 부여합니다"
+	}
+	"Mysterious Brew Desc Extra"
+	{
+		"en"	"A strange beverage brewed by a forest creature. No clue what's inside of it, but it smells terrible. It'd call you crazy for drinking this, but hey, you do you."
+		"ko"	"숲속 생물이 만든 이상한 음료. 안에 뭐가 들어있는지는 전혀 모르겠지만, 냄새는 끔찍하다. ''이걸 마시면 미쳤다고 하겠지만, 뭐, 네 마음대로 해.''"
+	}
+	"Get_DrinkRND_1"
+	{
+		"en" 		"Armour Point Regenerativen"
+		"ko" 		"아머 포인트 재생"
+	}
+	"Get_DrinkRND_2"
+	{
+		"en" 		"HP Regenerativen"
+		"ko" 		"체력 재생"
+	}
+	"Get_DrinkRND_3"
+	{
+		"en" 		"Poison"
+		"ko" 		"독"
+	}
+	"Get_DrinkRND_4"
+	{
+		"en" 		"Energy Drink!"
+		"ko" 		"에너지 드링크!"
+	}
+	"Get_DrinkRND_5"
+	{
+		"en" 		"No Health?"
+		"ko" 		"체력 없다?"
+	}
+	"Get_DrinkRND_6"
+	{
+		"en" 		"Banner Trio"
+		"ko" 		"삼신기"
+	}
+	"Get_DrinkRND_7"
+	{
+		"en" 		"Burning"
+		"ko" 		"화상"
+	}
+	"Get_DrinkRND_8"
+	{
+		"en" 		"Slow"
+		"ko" 		"둔화"
+	}
+	"Get_DrinkRND_9"
+	{
+		"en" 		"Uber"
+		"ko" 		"무적"
+	}
+	"Get_DrinkRND_10"
+	{
+		"en" 		"Smite"
+		"ko" 		"단죄"
+	}
+	"Get_DrinkRND_11"
+	{
+		"en" 		"Toxic Gas"
+		"ko" 		"독 가스"
+	}
+	"Get_DrinkRND_12"
+	{
+		"en" 		"Teleport"
+		"ko" 		"순간이동"
+	}
+	"Get_DrinkRND_13"
+	{
+		"en" 		"Building Super Recharging"
+		"ko" 		"구조물 슈퍼 재충전"
+	}
+	"Get_DrinkRND_14"
+	{
+		"en" 		"Overmana Overload"
+		"ko" 		"마나 폭발"
+	}
+	"Get_DrinkRND_15"
+	{
+		"en" 		"Mana Regenerativen"
+		"ko" 		"마나 재생"
+	}
+	"Get_DrinkRND_16"
+	{
+		"en" 		"Dimensional Ripper"
+		"ko" 		"차원 찢게"
+	}
+	"Get_DrinkRND_17"
+	{
+		"en"		"Armor Melt"
+		"ko"		"아머 멜트"
+	}
+	"Get_DrinkRND_18"
+	{
+		"en"		"Broken Armor"
+		"ko"		"아머 박살"
+	}
+	"Get_DrinkRND_19"
+	{
+		"en"		"Eye for an Eye"
+		"ko"		"눈에는 눈"
 	}
 	
 	//Etc

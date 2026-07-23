@@ -64,11 +64,11 @@ void TFProjectile_Rocket_SpawnFrame(int ref)
 				float vecSwingStart[3], vecAngles[3];
 				GetAbsOrigin(entity, vecSwingStart);
 				int particle = ParticleEffectAt(vecSwingStart, "critical_rocket_blue", 0.0); //Inf duartion
-				i_rocket_particle[entity]= EntIndexToEntRef(particle);
+				i_WandParticle[entity]= EntIndexToEntRef(particle);
 				GetEntPropVector(entity, Prop_Data, "m_angRotation", vecAngles);
 				TeleportEntity(particle, NULL_VECTOR, vecAngles, NULL_VECTOR);
 				SetParent(entity, particle);
-				SDKHook(entity, SDKHook_StartTouchPost, MajorSteam_ProjectileTouch);
+				WandProjectile_ApplyFunctionToEntity(entity, MajorSteam_ProjectileTouch);
 			}
 		}
 	}
@@ -78,7 +78,7 @@ static void MajorSteam_ProjectileTouch(int entity, int target)
 {
 	if(target > 0 && target < MAXENTITIES)
 	{
-		int particle = EntRefToEntIndex(i_rocket_particle[entity]);
+		int particle = EntRefToEntIndex(i_WandParticle[entity]);
 		if(IsValidEntity(particle))
 			RemoveEntity(particle);
 	}

@@ -474,9 +474,68 @@ float MoveSpeed(int client, bool maxspeed = false, bool upspeed = false)
 	return Speed;
 }
 
-float Barricade_Stabilizer_FeedBack(int client)
+float Barricade_Stabilizer_FeedBack(int client, int BarricadeHP, bool IsDecorativeObject, bool IsExplosiveBarrel)
 {
 	float f_Resistance=0.95;
+	
+	if(Store_HasWeaponKit(client))
+	{
+		if(IsExplosiveBarrel)
+		{
+			f_Resistance*=0.98;
+			if(BarricadeHP>=15)
+				f_Resistance*=0.97;
+			if(BarricadeHP>=30)
+				f_Resistance*=0.96236;
+			if(BarricadeHP>=50)
+				f_Resistance*=0.98;
+			if(BarricadeHP>=100)
+				f_Resistance*=0.95;
+			if(BarricadeHP>=140)
+				f_Resistance*=0.912673;
+			if(BarricadeHP>=200)
+				f_Resistance*=0.9;
+		}
+		else if(IsDecorativeObject)
+		{
+			if(BarricadeHP>=15)
+				f_Resistance*=0.98;
+			if(BarricadeHP>=76)
+				f_Resistance*=0.97;
+			if(BarricadeHP>=125)
+				f_Resistance*=0.96236;
+			if(BarricadeHP>=200)
+				f_Resistance*=0.98;
+			if(BarricadeHP>=350)
+				f_Resistance*=0.95;
+			if(BarricadeHP>=490)
+				f_Resistance*=0.912673;
+			if(BarricadeHP>=800)
+				f_Resistance*=0.9;
+		}
+		else
+		{
+			if(BarricadeHP>=350)
+				f_Resistance*=0.98;
+			if(BarricadeHP>=700)
+				f_Resistance*=0.97;
+			if(BarricadeHP>=1100)
+				f_Resistance*=0.96236;
+			if(BarricadeHP>=2000)
+				f_Resistance*=0.98;
+			if(BarricadeHP>=2950)
+				f_Resistance*=0.95;
+			if(BarricadeHP>=4200)
+				f_Resistance*=0.97;
+			if(BarricadeHP>=5500)
+				f_Resistance*=0.9409;
+			if(BarricadeHP>=10000)
+				f_Resistance*=0.9;
+		}
+		/*PrintToChat(client, "Resistance: %.1f", f_Resistance);
+		PrintToChat(client, "Barricade HP: %i", BarricadeHP);*/
+		return f_Resistance;
+	}
 	
 	if(Store_HasNamedItem(client, "Construction Novice"))
 		f_Resistance*=0.98;
