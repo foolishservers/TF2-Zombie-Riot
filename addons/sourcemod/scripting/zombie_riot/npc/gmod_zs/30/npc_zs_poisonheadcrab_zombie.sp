@@ -254,13 +254,14 @@ public void ZSPoisonheadcrabZombie_ClotThink(int iNPC)
 								
 								if(target > 0) 
 								{
+									if(!ShouldNpcDealBonusDamage(target))
 									{
-										if(!ShouldNpcDealBonusDamage(target))
-										SDKHooks_TakeDamage(target, npc.index, npc.index, 380.0, DMG_CLUB, -1, _, vecHit);
-									
+									Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 50 : 10);
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 380.0, DMG_CLUB, -1, _, vecHit);
+									}
 									else
+									{
 										SDKHooks_TakeDamage(target, npc.index, npc.index, 720.0, DMG_CLUB, -1, _, vecHit);
-										Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 50 : 10);
 									}
 									
 									// Hit particle

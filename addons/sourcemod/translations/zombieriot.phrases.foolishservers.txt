@@ -602,6 +602,134 @@
 		"ko"		"생존주의자의 칼"
 	}
 	
+	"Dimension Ripper"
+	{
+		"en"		"Dimension Ripper"
+		"ko"		"차원 찢개"
+	}
+	
+	"Dimension: Normal"
+	{
+		"en"		"Dimension: Normal"
+		"ko"		"차원: 감염된 자들"
+	}
+	"Dimension: Blitz"
+	{
+		"en"		"Dimension: Blitz"
+		"ko"		"차원: 블리츠크리그의 군대"
+	}
+	"Dimension: Xeno"
+	{
+		"en"		"Dimension: Xeno"
+		"ko"		"차원: 제노 감염"
+	}
+	"Dimension: Medieval"
+	{
+		"en"		"Dimension: Medieval"
+		"ko"		"차원: 중세"
+	}
+	"Dimension: Deep Sea"
+	{
+		"en"		"Dimension: Deep Sea"
+		"ko"		"차원: 심해의 자식들"
+	}
+	"Dimension: Expidonsa"
+	{
+		"en"		"Dimension: Expidonsa"
+		"ko"		"차원: 엑스피돈사"
+	}
+	"Dimension: Interitus"
+	{
+		"en"		"Dimension: Interitus"
+		"ko"		"차원: 인테리투스"
+	}
+	"Dimension: Ruina"
+	{
+		"en"		"Dimension: Ruina"
+		"ko"		"차원: 루이나"
+	}
+	"Dimension: Void"
+	{
+		"en"		"Dimension: Void"
+		"ko"		"차원: 공허의 유산"
+	}
+	"Dimension: Almina"
+	{
+		"en"		"Dimension: Almina"
+		"ko"		"차원: 알미나"
+	}
+	"Dimension: Vesta"
+	{
+		"en"		"Dimension: Vesta"
+		"ko"		"차원: 베스타"
+	}
+	"Dimension: Lab"
+	{
+		"en"		"Dimension: Lab"
+		"ko"		"차원: 연구소"
+	}
+	
+	"Dimension: Normal - Hardcore"
+	{
+		"en"		"Dimension: Normal - Hardcore"
+		"ko"		"차원 왜곡: 감염된 자들"
+	}
+	"Dimension: Blitz - Hardcore"
+	{
+		"en"		"Dimension: Blitz - Hardcore"
+		"ko"		"차원 왜곡: 블리츠크리그의 군대"
+	}
+	"Dimension: Xeno - Hardcore"
+	{
+		"en"		"Dimension: Xeno - Hardcore"
+		"ko"		"차원 왜곡: 제노 감염"
+	}
+	"Dimension: Medieval - Hardcore"
+	{
+		"en"		"Dimension: Medieval - Hardcore"
+		"ko"		"차원 왜곡: 중세"
+	}
+	"Dimension: Deep Sea - Hardcore"
+	{
+		"en"		"Dimension: Deep Sea - Hardcore"
+		"ko"		"차원 왜곡: 심해의 자식들"
+	}
+	"Dimension: Expidonsa - Hardcore"
+	{
+		"en"		"Dimension: Expidonsa - Hardcore"
+		"ko"		"차원 왜곡: 엑스피돈사"
+	}
+	"Dimension: Interitus - Hardcore"
+	{
+		"en"		"Dimension: Interitus - Hardcore"
+		"ko"		"차원 왜곡: 인테리투스"
+	}
+	"Dimension: Ruina - Hardcore"
+	{
+		"en"		"Dimension: Ruina - Hardcore"
+		"ko"		"차원 왜곡: 루이나"
+	}
+	"Dimension: Void - Hardcore"
+	{
+		"en"		"Dimension: Void - Hardcore"
+		"ko"		"차원 왜곡: 공허의 유산"
+	}
+	"Dimension: Almina - Hardcore"
+	{
+		"en"		"Dimension: Almina - Hardcore"
+		"ko"		"차원 왜곡: 알미나"
+	}
+	"Dimension: Vesta - Hardcore"
+	{
+		"en"		"Dimension: Vesta - Hardcore"
+		"ko"		"차원 왜곡: 베스타"
+	}
+	"Dimension: Lab - Hardcore"
+	{
+		"en"		"Dimension: Lab - Hardcore"
+		"ko"		"차원 왜곡: 연구소"
+	}
+	
 	//무기 설명
 	"Chaos Infected Launcher desc"
 	{
@@ -675,81 +803,95 @@
 	
 	"Cosmic Terror Desc"
 	{
-		"en" "Have you ever looked at the sky and wondered if you could use that as a weapon?\nWell wonder-no-more!\nIntroducing the ''Cosmic Terror''\nEnjoy eviscerating your foes with the power of the moon!"
-		"fr" "Avez-vous observé le ciel vous demandant si vous pourriez l'utiliser comme une arme?\nVoici le Terreur Cosmique!\nExterminez vos ennemis avec la puissance de la Lune!"
-		"ru" "Вы когда-нибудь смотрели на небо и думали, можно ли использовать его в качестве оружия?\nЧто ж, не удивляйтесь!\nПредставляем вам «Космический террор»\nНаслаждайтесь уничтожением своих врагов с помощью силы луны!"
-		"chi" "你是否曾仰望天空，想过是否可以将其用作武器?\n不必再等待!\n介绍“宇宙恐怖”\n享受与月亮的力量掏空你的敌人!"
+		"en"	"Have you ever looked at the sky and wondered if you could use that as a weapon?\nWell wonder-no-more!\nIntroducing the ''Cosmic Terror''\nEnjoy eviscerating your foes with the power of the moon!"
+		"fr"	"Avez-vous observé le ciel vous demandant si vous pourriez l'utiliser comme une arme?\nVoici le Terreur Cosmique!\nExterminez vos ennemis avec la puissance de la Lune!"
+		"ru"	"Вы когда-нибудь смотрели на небо и думали, можно ли использовать его в качестве оружия?\nЧто ж, не удивляйтесь!\nПредставляем вам «Космический террор»\nНаслаждайтесь уничтожением своих врагов с помощью силы луны!"
+		"chi"	"你是否曾仰望天空，想过是否可以将其用作武器?\n不必再等待!\n介绍“宇宙恐怖”\n享受与月亮的力量掏空你的敌人!"
+		"ko"	"하늘을 보면서 저걸 무기로 쓸 수 있지 않을까란 생각 해본 적 있나요?\n당연히 가능합니다!\n이 ''코즈믹 테러''를 사용하면 말이죠.\n달의 힘으로 적을 가루로 만들어 보세요!"
 	}
 	"Cosmic Terror Desc pap1"
 	{
-		"en" "Do you need more power? more oomph?\nWell look no further, introducing 3 magnifying lenses that almost double the potential damage\nWarning: Warranty void on purchase."
-		"fr" "Double les dégats.\nVoici 3 lunnetes de magnification massives pour donner plus de puissance à votre arme ultime.\n(Garantie anulée avec achat du kit de lunnetes de magnification gigantesques.)"
-		"ru" "Вам нужно больше силы? Больше мощи?\nНу тогда смотрите дальше, представляем вам 3 увеличительные линзы, которые почти удваивают потенциальный урон\nПредупреждение: Гарантия аннигилируется при покупке."
-		"chi" "你需要更多的动力吗?更多的性感吗?\n我们不会再看了，介绍3个放大镜，几乎是潜在损害的两倍\n警告:购买保修无效。"
+		"en"	"Do you need more power? more oomph?\nWell look no further, introducing 3 magnifying lenses that almost double the potential damage\nWarning: Warranty void on purchase."
+		"fr"	"Double les dégats.\nVoici 3 lunnetes de magnification massives pour donner plus de puissance à votre arme ultime.\n(Garantie anulée avec achat du kit de lunnetes de magnification gigantesques.)"
+		"ru"	"Вам нужно больше силы? Больше мощи?\nНу тогда смотрите дальше, представляем вам 3 увеличительные линзы, которые почти удваивают потенциальный урон\nПредупреждение: Гарантия аннигилируется при покупке."
+		"chi"	"你需要更多的动力吗?更多的性感吗?\n我们不会再看了，介绍3个放大镜，几乎是潜在损害的两倍\n警告:购买保修无效。"
+		"ko"	"출력이 더 필요하다고요?\n3개의 돋보기 렌즈를 추가한 이 개량판은 피해량을 2배로 끌어올립니다.\n경고: 판매 시 보증 무효"
 	}
 	"Cosmic Terror Desc pap2"
 	{
-		"en" "Whats better than 1 death beam?\n4 more death beams of course\nThanks to these extra beams we have recreated the power of the moon!\nWarning: Warranty annihilated on purchase."
-		"fr" "Quadruple les rayons.\nAvec un total de quatre rayons, nous avons répliqué la puissance totale de la lune!\n(Garantie exterminée avec achat.)"
-		"ru" "Что может быть лучше одного луча смерти?\nЧетыре луча смерти, конечно\nБлагодаря этим дополнительным лучам мы воссоздали силу луны!\nПредупреждение: Гарантия аннигилируется при покупке."
-		"chi" "什么比一个激光更好?\n当然是更多激光！\n多亏这些光束，我们成功复刻出了月球之力！\n警告:购买时保修失效。"
+		"en"	"Whats better than 1 death beam?\n4 more death beams of course\nThanks to these extra beams we have recreated the power of the moon!\nWarning: Warranty annihilated on purchase."
+		"fr"	"Quadruple les rayons.\nAvec un total de quatre rayons, nous avons répliqué la puissance totale de la lune!\n(Garantie exterminée avec achat.)"
+		"ru"	"Что может быть лучше одного луча смерти?\nЧетыре луча смерти, конечно\nБлагодаря этим дополнительным лучам мы воссоздали силу луны!\nПредупреждение: Гарантия аннигилируется при покупке."
+		"chi"	"什么比一个激光更好?\n当然是更多激光！\n多亏这些光束，我们成功复刻出了月球之力！\n警告:购买时保修失效。"
+		"ko"	"죽음의 광선 하나보다 좋은 게 뭐냐고요?\n그건 바로 4개의 죽음의 광선이죠!\n이 광선들 덕에 우린 달의 힘을 재창조해낼 수 있었습니다!\n경고: 판매 시 보증 무효"
 	}
 	"Cosmic Terror Extra Desc"
 	{
-		"en"	"Firerate bonuses affect the speed of the beam\nReload rate bonuses affect how fast you gain heat."
-		"fr"	"Améliorations de cadence de tir améliore la vitesse du rayon laser.\nAméliorations de vitesse du rechargement ralentit le rechauffement de l'arme."
+		"en"	"Firerate bonuses affect the damage of the beam\nReload rate bonuses affect how fast you gain heat."
+		"ko"	"공격 속도 증가는 빔의 피해량을 늘립니다.\n재장전 속도 증가는 과열 속도를 늦춥니다."
 	}
 	
 	"Beam Wand Desc"
 	{
-		"en"	"Increased damage\nHold M1 for a constant beam to eviscerate your enemies. M2: Magic overdrive, more mana=stronger but higher CD."
+		"en"	"Hold M1 for a constant beam to eviscerate your enemies.\nM2 Ability gives attackspeed for a short time."
 		"fr"	"Laser constant qui épuise le Mana. M2 pompe plus de Mana dans l'attaque pour améliorer les dégats."
 		"ru"	"Удерживайте М1 для постоянного луча уничтожения. М2 - усиление магии, больше маны = сильнее, но выше восстановление."
-		"chi"   "按住M1发出一个恒定的光束来清除你的敌人。M2:魔法超速。更多的法力值=更强更快的CD"
+		"chi"	"按住M1发出一个恒定的光束来清除你的敌人。M2:魔法超速。更多的法力值=更强更快的CD"
+		"ko"	"M1를 꾹 눌러서 적을 제거할 때까지 빔을 유지하세요.\n우클릭 능력 사용시 짧은 시간 동안 공격 속도 증가"
 	}
 	"Beam Wand Pap 1"
 	{
 		"en"	"Increased damage and attackspeed"
 		"fr"	"Dégats et cadence des attaques améliorés"
 		"ru"	"Увеличенный урон и скорость атаки."
-		"chi"   "增加伤害和攻击速度。"
+		"chi"	"增加伤害和攻击速度。"
+		"ko"	"공격 속도와 피해량 증가"
 	}
 	"Beam Wand Pap 2"
 	{
 		"en"	"Increased damage and attackspeed"
 		"fr"	"Dégats et cadence des attaques améliorés"
 		"ru"	"Увеличенный урон и скорость атаки."
-		"chi"   "增加伤害和攻击速度。"
+		"chi"	"增加伤害和攻击速度。"
+		"ko"	"공격 속도와 피해량 증가"
 	}
 	"Beam Wand pap Alt 1"
 	{
 		"en"	"Increased damage\Have you ever wondered what it would be like to fire 2 laser beams?\nWell, wonder-no-more!\nHold Mouse1 to attack\nOnce charge is full press Mouse2 to use it!"
 		"fr"	"Chargez une attaque avec M1, utilisez la charge avec M2.\nTire 2 rayons laser."
 		"ru"	"Вы когда-нибудь задумывались, каково это - стрелять двумя лазерными лучами?\nНу, теперь это реальность!\nУдерж. ЛКМ для атаки\n, при полном заряде нажмите ПКМ для использования!"
-		"chi"   "你有没有想过发射两束激光会是什么样子?\n 左键攻击\n一旦充能完毕，按右键使用它!"
+		"chi"	"你有没有想过发射两束激光会是什么样子?\n 左键攻击\n一旦充能完毕，按右键使用它!"
+		"ko"	"피해량 대폭 증가\n레이저 광선 1개로는 부족한가요? 그럼 2개를 써보세요!\nM1를 눌러서 공격하고 충전이 다 되면 M2를 눌러서 사용하세요!"
 	}
 	"Beam Wand pap Alt 2"
 	{
 		"en"	"Increased damage\So, you want more power?\nIntroducing the ''Particle Cannon''tm\nPress RELOAD to switch between the particle Beam/Cannon\nThe particle cannon also has its own Mouse2 ability\nParticle cannon cannot pierce multiple targets!"
 		"fr"	"Appuyez sur RELOAD pour changer entre le rayon laser et le cannon à particules.\nAbilité change avec l'utilisation du cannon.\nCannon à particules ne peut pas perçer les ennemis."
 		"ru"	"Итак, вы хотите больше мощности?\nПредставляем «Нейтронная пушка»tm\nНажмите ПЕРЕЗАРЯДКУ для перекл. между нейтронным лучом/пушкой\nНейтронная пушка также имеет свою собственную способность на ПКМ\nНейтронная пушка не может пробить несколько целей!"
-		"chi"   "所以，你想要更大的力量?\n介绍“粒子炮”\n按R在粒子束/炮之间切换\n粒子炮也有自己的鼠标右键技能\n粒子炮不能拼接多个目标!"
+		"chi"	"所以，你想要更大的力量?\n介绍“粒子炮”\n按R在粒子束/炮之间切换\n粒子炮也有自己的鼠标右键技能\n粒子炮不能拼接多个目标!"
+		"ko"	"피해량 증가\n아직도 모자른가요?\n그럼 이 ''파티클 캐논''을 써보시죠!\n재장전 키를 눌러 광선과 캐논으로 전환할 수 있습니다.\n파티클 캐논도 M2 능력이 따로 있답니다.\n다만 얘는 적 관통이 안돼요!"
 	}
 	
 	"Necromancy Staff Desc"
 	{
 		"en"	"M2 Summons a minion.\nNot having your wand in your hand will half minion damage.\nMinion will only attack marked enemies\nM1 Marks enemies for 5 seconds"
+		"ko"	"우클릭으로 소환수를 소환합니다\n이 스태프를 들고 있지 않다면 소환수의 피해량이 반으로 감소합니다\n소환수는 오직 마킹한 적만 공격합니다\n좌클릭 공격은 5초 동안 적을 마킹합니다."
 	}
 	"Necromancy Staff Pap 1"
 	{
-		"en"	"Increased damage and attackspeed, loses camo detection"
-		"fr"	"Dégats et cadence des attaques améliorés, votre minion ne peut plus détecter le camouflage."
-		"ru"	"Увеличенный урон и скорость атаки, потеря обнаружения камуфляжа."
-		"chi"   "增加伤害和攻击速度，失去伪装检测"
+		"en"	"Increased damage and attackspeed"
+		"fr"	"Dégats et cadence des attaques améliorés"
+		"ru"	"Увеличенный урон и скорость атаки"
+		"chi"   "增加伤害和攻击速度"
+		"ko"	"피해량과 공격 속도 증가"
 	}
 	"Necromancy Staff Pap 2"
 	{
 		"en"	"Increased damage and attackspeed"
+		"fr"	"Dégats et cadence des attaques améliorés"
+		"ru"	"Увеличенный урон и скорость атаки"
+		"chi"   "增加伤害和攻击速度"
+		"ko"	"피해량과 공격 속도 증가"
 	}
 	
 	"Improvised Armor Desc"
@@ -792,8 +934,8 @@
 	
 	"Survivalist Kit Desc"
 	{
-		"en"		"-Provides an fast-reload carbine, high-damage knife"
-		"ko"		"-재장전이 빠른 카빈과 높은 피해를 주는 칼을 보유"
+		"en"		"Two is one, One is none.\n-Provides an fast-reload carbine, high-damage knife"
+		"ko"		"둘은 하나고, 하나는 없는 것과 다름 없다.\n-재장전이 빠른 카빈과 높은 피해를 주는 칼을 보유"
 	}
 	"Survivalist Kit Pap 1 Desc"
 	{
@@ -807,8 +949,8 @@
 	}
 	"Survivalist Kit Pap 3 Desc"
 	{
-		"en"		"New ability - Revive:\nIf damage is higher than your health, consume all reserved health and gives uber.\nOnly one chance on wave/raid.\nImproved stats."
-		"ko"		"능력 해금 - 소생:\n만약 죽을 피해를 받으면, 모은 체력을 전부 소모하고 우버를 잠깐 받음.\n레이드/웨이브 당 한 번만 사용 가능\n전반적인 능력치 증가"
+		"en"		"New ability - Revive:\nIf damage is higher than your health, consume all reserved health and gives uber.\nOnly one chance on wave/raid.\nIncreased attack rate and damage, Decreased reload speed."
+		"ko"		"능력 해금 - 소생:\n만약 죽을 피해를 받으면, 모은 체력을 전부 소모하고 우버를 잠깐 받음.\n레이드/웨이브 당 한 번만 사용 가능\n공격 속도와 피해량 증가, 재장전 속도 감소"
 	}
 	"Survivalist Kit Pap 4 Desc"
 	{
@@ -829,6 +971,11 @@
 	{
 		"en"		"Improved stats."
 		"ko"		"전반적인 능력치 증가"
+	}
+	"Dim Desc"
+	{
+		"en"		"Forbidden weapon known to mankind. \nBuild up charges by hitting enemies with projectiles \nM2 to summon your ally npcs \n Enhancing this weapon in different route will summon different set of npcs!"
+		"ko"		"인류에게 대대로 전해진 금지된 무기입니다.\n투사체를 적중해 에너지를 쌓고 M2를 눌러 소환수를 스폰.\n무기 강화 루트에 따라 다른 그룹의 npc들이 등장"
 	}
 	
 	//추가 장비 이름
@@ -1086,6 +1233,164 @@
 	{
 		"en"		"Vote for the wave modifier!"
 		"ko"		"임무 난이도 투표!"
+	}
+	
+	//LastMann.
+	"Special_LastMann_Yakuza"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}Something awakens inside {1}......."
+		"ko"		"{crimson}알 수 없는 잠재력이 {1}의 몸에서 깨어나고 있다..."
+	}
+	"Special_LastMann_Zealot"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}{1} descended into a fanatical worship of Sigmar, and set out to cleanse the unrighteous themselves."
+		"ko"		"{crimson}정의를 더럽히는 자들을 시그마에 대한 광적인 신앙으로 정화하기 위해 {1}이 나섰다."
+	}
+	"Special_LastMann_Fractal"
+	{
+		"#format"	"{1:N}"
+		"en"		"{purple}Twirl{crimson}'s Essence enters {1}..."
+		"ko"		"{purple}트윌{crimson}의 정수가 {1}에게 흘러들어가고 있다..."
+	}
+	"Special_LastMann_Soldine"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}Expidonsa Activates {1}'s emergency protocols..."
+		"ko"		"{crimson}{1}의 엑스피돈사 긴급 프로토콜이 실행되었다..."
+	}
+	"Special_LastMann_Purnell"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}{1} gets filled with the unyielding desire to avenge his patients."
+		"ko"		"{crimson}{1}의 환자들의 복수를 향한 꺾이지 않는 욕망이 가득 차고 있다."
+	}
+	"Special_LastMann_Blacksmith"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}{1} Seems to be completly and utterly screwed."
+		"ko"		"{crimson}나사를 조이던 {1}의 인생도 조여지기 시작했다."
+	}
+	"Special_LastMann_Blitzkrieg"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}The Machine Within {1} screams: FOR VICTORY"
+		"ko"		"{crimson}{1}의 기계 몸이 울부짖는다. 승리를 향해!"
+	}
+	"Special_LastMann_Flagellant"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}The undying soul {1} refuses to ever die."
+		"ko"		"{crimson}{1}의 고행에는 수많은 피가 흐를 것이다."
+	}
+	"Special_LastMann_Leper"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}The King {1} cannot stand this any longer..!"
+		"ko"		"{crimson}수많은 자들이 혼돈을 마주하고 무릎 꿇는다. 허나 {1}은(는) 아니다. 적어도 오늘은."
+	}
+	"Special_LastMann_Dweller"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}The sea entirely corrupts {1}."
+		"ko"		"{crimson}바다의 힘이 {1}를 완벽히 잠식시켰다."
+	}
+	"Special_LastMann_Merchant"
+	{
+		"en"		"{crimson}The merchant knows not who to trade with... Thus massively enrages."
+		"ko"		"{crimson}거래할 상대를 잃은 상인이 격분한다..."
+	}
+	"Special_LastMann_Cheese"
+	{
+		"#format"	"{1:N}"
+		"en"		"{darkviolet}{1} decides to inject themselves with plasma as a last resort..."
+		"ko"		"{darkviolet}{1}이(가) 생각해낸 최후의 저항은, 자기 자신이 플라즈마가 되는 것이었다..."
+	}
+	"Special_LastMann_Arsenal"
+	{
+		"#format"	"{1:N}"
+		"en"		"{gold}{1} is now alone, however giving up isn't in their vocabulary."
+		"ko"		"{gold}{1}은 이제 혼자가 되었지만, 포기라는 단어는 그들의 사전에 없다."
+	}
+	"Special_LastMann_Purge"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}{1}'s purging protocol activates."
+		"ko"		"{crimson}{1}, 분쇄 프로토콜 실행."
+	}
+	"Special_LastMann_HeartBroken"
+	{
+		"#format"	"{1:N}"
+		"en"		"{purple}What kindled this flame of wrath that burns within {1}..?"
+		"ko"		"{purple}{1}의 마음을 처참하게 찢어놓은 자는 누구인가.."
+	}
+	"Special_LastMann_RedMist_MOSB"
+	{
+		"#format"	"{1:N}"
+		"en"		"{maroon}The mountain of dead bodies resonates with {darkgrey}{1}..."
+		"ko"		"{maroon}웃는 시체들의 산이 {darkgrey}{1}{maroon}와(과) 공명한다..."
+	}
+	"Special_LastMann_RedMist"
+	{
+		"#format"	"{1:N}"
+		"en"		"{darkgrey}Even with all this strength {fullred}{1} {darkgrey}still failed to protect everyone."
+		"ko"		"{darkgrey}도시 최강의 무력으로도 {fullred}{1}{darkgrey}는 모두를 지킬 수 없었다.."
+	}
+	"Special_LastMann_Barracks_Shared"
+	{
+		"#format"	"{1:N}"
+		"en"		"{green}{1} and their soldiers are making their last stand."
+		"ko"		"{green}{1}와 그의 병사들은 최후의 저항을 준비하고 있다."
+	}
+	"Special_LastMann_Barracks_Alt"
+	{
+		"en"		"{red}The remnants of Blitzkrieg army overcharge their systems to the maximum, it’s TOTAL BLITZKRIEG."
+		"ko"		"{red}블리츠크리그 잔당들은 시스템을 최대 한도로 과충전한다. 총력 전격전의 시작이다."
+	}
+	"Special_LastMann_Barracks_Combine"
+	{
+		"en"		"{yellow}Not wanting to see you die like Guln, the soldiers of his army quickly load the anti-chaos weaponry, no more mercy."
+		"ko"		"{yellow}당신이 굴른과 같은 운명을 맞이하는 걸 피하기 위해, 그의 군대는 혼돈 섬멸 장비를 준비한다. 더 이상 자비란 없다."
+	}
+	"Special_LastMann_Barracks_Almina"
+	{
+		"en"		"{blue}Soldiers arm their best gears, remebering what cruel fate they had to go through under Whiteflower and Dwellers"
+		"ko"		"{blue}병사들은 최고의 무기를 준비한다. 배풍등과 드웰러 밑에서 고통받던 잔혹한 기억을 떠올리며."
+	}
+	"Special_LastMann_Barracks_Expidonsa"
+	{
+		"#format"	"{1:N}"
+		"en"		"{blue}Expidonsa declares code Epsilon, use of experimental technology has been authorized, no more holding back."
+		"ko"		"{blue}엑스피돈사는 코드 엡실론을 발령하고, 실험적 기술의 사용을 승인했다. 더 이상 머뭇거릴 틈이 없다."
+	}
+	"Special_LastMann_Barracks_Alaxios"
+	{
+		"#format"	"{1:N}"
+		"en"		"{red}A chanting of war can be heard from Alaxios army, they will not go down without a fight."
+		"ko"		"{red}알락시오스의 군대에서 전투의 함성이 들려온다. 그들은 절대 함락되지 않을 것이다."
+	}
+	"Special_LastMann_Merc_RaidBoss"
+	{
+		"en"		"‼ - FOCUSED\n{crimson}Both of us die today. One, just a little later than the other."
+		"ko"		"‼ - (집중)\n{crimson}오늘 살아돌아가는 자는 없겠지. 하지만 먼저 죽는 건 너야."
+	}
+	"Special_LastMann_Merc_RaidBoss_TimeOver"
+	{
+		"en"		"‼ - HORRIFIED\n{crimson}CAN'T FOCUS. CAN'T THINK. NOTHING ELSE MATTERS. RUN FOR YOUR LIFE OR FIGHT FOR IT!"
+		"ko"		"‼ - (공포)\n{crimson}집중할 수가 없어. 아무 생각도 못하겠어. 괜찮아. 도망치거나 맞서 싸워!"
+	}
+	"Special_LastMann_Merc"
+	{
+		"#format"	"{1:N}"
+		"en"		"☠ - Miserable\n{crimson}How does it feel, knowing you're not coming back up {1}..?"
+		"ko"		"☠ - (비참함)\n{crimson}저런, 다시는 올라올 수 없게 되었네. 기분이 어때, {1}..?"
+	}
+	"Special_LastMann_Prescript"
+	{
+		"#format"	"{1:N}"
+		"en"		"{blue}The Prescript demands you kill everyone in your sight who apposes you {crimson}{1}."
+		"ko"		"{blue}지령은... {crimson}{1}의 시야 안에 있는 모두를 죽이라는 군."
 	}
 	
 	//Auto Loadout.

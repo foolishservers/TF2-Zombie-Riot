@@ -584,6 +584,7 @@ float f_ExtraDropChanceRarity = 1.0;
 bool applied_lastmann_buffs_once = false;
 int i_WaveHasFreeplay = 0;
 float fl_MatrixReflect[MAXENTITIES];
+float fl_NextAmmoBoxAnnotation[MAXPLAYERS];
 
 char s_MissionClient[64]; // Who hired us for the current job
 
@@ -1031,6 +1032,7 @@ void ZR_MapStart()
 	Zero(f_TimeAfterSpawn);
 	Zero2(f_ArmorCurrosionImmunity);
 	Zero(fl_MatrixReflect);
+	Zero(fl_NextAmmoBoxAnnotation);
 	Reset_stats_Amphi_Global();
 	Reset_stats_PHLOG_Global();
 	Amphi_Map_Precache();
@@ -1258,8 +1260,9 @@ public Action GlobalTimer(Handle timer)
 	
 	Zombie_Delay_Warning();
 	Spawners_Timer();
-	Store_HandleAutoPapList();
+	Store_HandleAutoPurchases();
 	AutoLoadouts_Handle();
+	CheckForLowAmmo();
 	
 	if(frame % 100)
 		return Plugin_Continue;
@@ -2446,53 +2449,53 @@ void TriggerLastmanLogic(int killed, int Hurtviasdkhook)
 					SetEntityRenderColor(client, 255, 255, 255, 255);
 					SetEntityCollisionGroup(client, 5);
 				}
-
+				
 				if(Yakuza_IsNotInJoint(client))
 				{
 					Yakuza_AddCharge(client, 99999);
 					Yakuza_Lastman(1);
-					CPrintToChatAll("{crimson}Something awakens inside %N.......",client);
+					CPrintToChatAll("%t", "Special_LastMann_Yakuza", client);
 				}
 				if(Zealot_Sugmar(client))
 				{
 					Yakuza_Lastman(2);
-					CPrintToChatAll("{crimson}%N descended into a fanatical worship of Sigmar, and set out to cleanse the unrighteous themselves.",client);
+					CPrintToChatAll("%t", "Special_LastMann_Zealot", client);
 				}
 				if(Fractal_LastMann(client))
 				{
 					//get some cool line.
 					Max_Fractal_Crystals(client);
-					CPrintToChatAll("{purple}Twirl{crimson}'s Essence enters %N...",client);
+					CPrintToChatAll("%t", "Special_LastMann_Fractal", client);
 					Yakuza_Lastman(3);
 				}
 				if(Wkit_Soldin_LastMann(client))
 				{
 					ChargeSoldineMeleeHit(client,client,true, 999.9);
 					ChargeSoldineRocketJump(client, client, true, 999.9);
-					CPrintToChatAll("{crimson}Expidonsa Activates %N's emergency protocols...",client);
+					CPrintToChatAll("%t", "Special_LastMann_Soldine", client);
 					Yakuza_Lastman(4);
 				}
 				if(Purnell_Lastman(client))
 				{
-					CPrintToChatAll("{crimson}%N gets filled with the unyielding desire to avenge his patients.",client);
+					CPrintToChatAll("%t", "Special_LastMann_Purnell", client);
 					Yakuza_Lastman(5);
 				}
 				if(Blacksmith_Lastman(client))
 				{
-					CPrintToChatAll("{crimson}%N Seems to be completly and utterly screwed.",client);
+					CPrintToChatAll("%t", "Special_LastMann_Blacksmith", client);
 					Yakuza_Lastman(6);
 				}
 				if(BlitzKit_LastMann(client))
 				{
-					CPrintToChatAll("{crimson}The Machine Within %N screams: FOR VICTORY",client);
+					CPrintToChatAll("%t", "Special_LastMann_Blitzkrieg", client);
 					Yakuza_Lastman(7);
 				}
 				if(IsFlaggilant(client) || IsClientLeper(client))
 				{
 					if(IsFlaggilant(client))
-						CPrintToChatAll("{crimson}The undying soul %N refuses to ever die.",client);
+						CPrintToChatAll("%t", "Special_LastMann_Flagellant", client);
 					else if(IsClientLeper(client))
-						CPrintToChatAll("{crimson}The King %N cannot stand this any longer..!",client);
+						CPrintToChatAll("%t", "Special_LastMann_Leper", client);
 						
 					int weapon = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
 					if(weapon != -1)
@@ -2503,17 +2506,17 @@ void TriggerLastmanLogic(int killed, int Hurtviasdkhook)
 				}
 				if(SeaMelee_IsDweller(client))
 				{
-					CPrintToChatAll("{crimson}The sea entirely corrupts %N.",client);
+					CPrintToChatAll("%t", "Special_LastMann_Dweller", client);
 					Yakuza_Lastman(9);
 				}
 				if(Merchant_IsAMerchant(client))
 				{
-					CPrintToChatAll("{crimson}The merchant knows not who to trade with... Thus massively enrages.",client);
+					CPrintToChatAll("%t", "Special_LastMann_Merchant");
 					Yakuza_Lastman(10);
 				}
 				if(Is_Cheesed_Up(client))
 				{
-					CPrintToChatAll("{darkviolet}%N decides to inject themselves with plasma as a last resort...", client);
+					CPrintToChatAll("%t", "Special_LastMann_Cheese", client);
 					Yakuza_Lastman(11);
 				}
 				/*
@@ -2525,17 +2528,17 @@ void TriggerLastmanLogic(int killed, int Hurtviasdkhook)
 				*/
 				if(Wkit_Omega_LastMann(client))
 				{
-					CPrintToChatAll("{gold}%N is now alone, however giving up isn't in their vocabulary.",client);
+					CPrintToChatAll("%t", "Special_LastMann_Arsenal", client);
 					Yakuza_Lastman(13);
 				}
 				if(PurgeKit_LastMann(client))
 				{
-					CPrintToChatAll("{crimson}%N's purging protocol activates.",client);
+					CPrintToChatAll("%t", "Special_LastMann_Purge", client);
 					Yakuza_Lastman(14);
 				}
 				if(IsHeartBroken(client))
 				{
-					CPrintToChatAll("{purple}What kindled this flame of wrath that burns within %N..?",client);
+					CPrintToChatAll("%t", "Special_LastMann_HeartBroken",client);
 					HeartBrokenMassRevive(client);
 					Yakuza_Lastman(15);
 				}
@@ -2543,38 +2546,38 @@ void TriggerLastmanLogic(int killed, int Hurtviasdkhook)
 				{
 					if(Abno_Pages[client] & ABNORMPAGE_MOSB)//special lms text
 					{
-						CPrintToChatAll("{maroon}The mountain of dead bodies resonates with {darkgrey}%N...",client);
+						CPrintToChatAll("%t", "Special_LastMann_RedMist_MOSB", client);
 					}
 					else//normal lms
 					{
-						CPrintToChatAll("{darkgrey}Even with all this strength {fullred}%N {darkgrey}still failed to protect everyone",client);
+						CPrintToChatAll("%t", "Special_LastMann_RedMist", client);
 					}
 					Yakuza_Lastman(16);
 				}
 				if(IsBarracks(client))
 				{
-					CPrintToChatAll("{green}%N and their soldiers are making their last stand.",client);
+					CPrintToChatAll("%t", "Special_LastMann_Barracks_Shared", client);
 					switch (WhatCiv(client))
 					{
 						case Alternative:
 						{
-							CPrintToChatAll("{red}The remnants of Blitzkrieg army overcharge their systems to the maximum, it’s TOTAL BLITZKRIEG.",client);
+							CPrintToChatAll("%t", "Special_LastMann_Barracks_Alt", client);
 						}
 						case Combine:
 						{
-							CPrintToChatAll("{yellow}Not wanting to see you die like Guln, the soldiers of his army quickly load the anti-chaos weaponry, no more mercy.",client);
+							CPrintToChatAll("%t", "Special_LastMann_Barracks_Combine", client);
 						}
 						case Almina_Thorns:
 						{
-							CPrintToChatAll("{blue}Soldiers arm their best gears, remebering what cruel fate they had to go through under Whiteflower and Dwellers",client);
+							CPrintToChatAll("%t", "Special_LastMann_Barracks_Almina", client);
 						}
 						case Thorns:
 						{
-							CPrintToChatAll("{blue}Expidonsa declares code Epsilon, use of experimental technology has been authorized, no more holding back.",client);
+							CPrintToChatAll("%t", "Special_LastMann_Barracks_Expidonsa", client);
 						}
 						default:
 						{
-							CPrintToChatAll("{red}A chanting of war can be heard from Alaxios army, they will not go down without a fight.",client);
+							CPrintToChatAll("%t", "Special_LastMann_Barracks_Alaxios", client);
 						}
 					}
 					Yakuza_Lastman(17);
@@ -2585,23 +2588,23 @@ void TriggerLastmanLogic(int killed, int Hurtviasdkhook)
 					{
 						if(RaidModeTime > GetGameTime())
 						{
-							CPrintToChatAll("‼ - FOCUSED\n{crimson}Both of us die today. One, just a little later than the other.");
+							CPrintToChatAll("%t", "Special_LastMann_Merc_RaidBoss");
 						}
 						else
 						{
-							CPrintToChatAll("‼ - HORRIFIED\n{crimson}CAN'T FOCUS. CAN'T THINK. NOTHING ELSE MATTERS. RUN FOR YOUR LIFE OR FIGHT FOR IT!");
+							CPrintToChatAll("%t", "Special_LastMann_Merc_RaidBoss_TimeOver");
 						}
 					}
 					else
 					{
-						CPrintToChatAll("☠ - Miserable\n{crimson}How does it feel, knowing you're not coming back up %N..?", client);
+						CPrintToChatAll("%t", "Special_LastMann_Merc", client);
 					}
 					
 					Yakuza_Lastman(18);
 				}
 				if(Is_Prescript_User(client))
 				{
-					CPrintToChatAll("{blue}The Prescript demands you kill everyone in your sight who apposes you {crimson}%N.",client);
+					CPrintToChatAll("%t", "Special_LastMann_Prescript", client);
 					Yakuza_Lastman(19);
 					Prescript_LastmanBuff(client);
 				}
@@ -3187,6 +3190,11 @@ void GiveXP(int client, int xp, bool freeplay = false, bool SetXpAndLevelSilentl
 	}
 
 	float DecimalXp = float(xp);
+	if(Level[client] < 5)
+	{
+		//much lower xp gain
+		DecimalXp *= 0.25;
+	}
 
 	if(!SetXpAndLevelSilently)
 	{
@@ -3982,4 +3990,87 @@ void LoadNPCTalkTranslations()
 	LoadTranslations("zombieriot.phrases.interitustalk");
 	LoadTranslations("zombieriot.phrases.waldchtalk");
 	LoadTranslations("zombieriot.phrases.blitzkriegtalk");
+	LoadTranslations("zombieriot.phrases.roguetalk");
+}
+
+void CheckForLowAmmo()
+{
+	for (int client = 1; client <= MaxClients; client++)
+	{
+		if (!IsValidClient(client) || !IsEntityAlive(client))
+			continue;
+		
+		if (Level[client] > 5)
+			continue;
+		
+		float gameTime = GetGameTime();
+		if (fl_NextAmmoBoxAnnotation[client] > gameTime)
+			continue;
+		
+		int weapon = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
+		if (weapon == -1)
+			continue;
+		
+		int ammoType = GetAmmoType_WeaponPrimary(weapon);
+		if (IsBadAmmoType(ammoType))
+			continue;
+		
+		int ammo = GetAmmo(client, ammoType);
+		if (ammo <= 10)
+		{
+			const float duration = 5.9;
+			fl_NextAmmoBoxAnnotation[client] = gameTime + duration;
+			
+			SetDefaultHudPosition(client, .duration = duration);
+			ShowSyncHudText(client, SyncHud_Notifaction, "%T", "Low On Ammo", client);
+			
+			char buffer[128];
+			int entity = MaxClients + 1;
+			while((entity = FindEntityByClassname(entity, "obj_building")) != -1)
+			{
+				NPC_GetPluginById(i_NpcInternalId[entity], buffer, sizeof(buffer));
+				if(!StrContains(buffer, "obj_ammobox"))
+				{
+					float vecTarget[3];
+					vecTarget[2] += 60.0;
+					
+					static int uniqueId = 12000;
+					Format(buffer, sizeof(buffer), "%T", "Show Ammo Box", client);
+					Event event = CreateEvent("show_annotation");
+					if(event)
+					{
+						event.SetFloat("worldNormalX", vecTarget[0]);
+						event.SetFloat("worldNormalY", vecTarget[1]);
+						event.SetFloat("worldNormalZ", vecTarget[2]);
+						event.SetInt("follow_entindex", entity);
+						event.SetFloat("lifetime", duration);
+						event.SetString("text", buffer);
+						event.SetString("play_sound", "vo/null.mp3");
+						KillMostCurrentIDAnnotation(client, i_CurrentIdBeforeAnnoation[client]);
+						event.SetInt("id", uniqueId++);
+						i_CurrentIdBeforeAnnoation[client] = uniqueId;
+						event.FireToClient(client);
+						event.Cancel();
+						
+						if (uniqueId >= 20000)
+							uniqueId = 12000;
+					}
+					break;
+				}
+			}
+		}
+	}
+}
+
+bool IsBadAmmoType(int ammoType)
+{
+	return ammoType == -1 ||
+	ammoType == 0 ||
+	ammoType == 1 ||
+	ammoType == 2 ||
+	ammoType ==	Ammo_Jar ||
+	ammoType == Ammo_Hand_Grenade ||
+	ammoType == Ammo_Potion_Supply ||
+	ammoType == Ammo_Metal_Sub ||
+	ammoType == Ammo_ClassSpecific;
 }

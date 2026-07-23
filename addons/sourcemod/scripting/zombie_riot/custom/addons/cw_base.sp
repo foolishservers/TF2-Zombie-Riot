@@ -86,4 +86,3 @@ void Weapon_AddonsCustom_OnKill(int attacker)
 	if(!IsValidEntity(attacker))
 		return;
 }
-

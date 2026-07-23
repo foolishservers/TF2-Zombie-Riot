@@ -3810,7 +3810,7 @@
 		"it"	"Aumenta i danni, la dimensione dei colpi e la velocità d'attacco.\nLa percentuale di danni reali è ora del 15％"
 		"ko"	"피해량, 장탄수, 공격 속도 증가\n-트루 대미지 전환량이 15％로 증가."
 	}
-
+	
 	"Riot Gun Desc"
 	{
 		"en"	"-if Armor, resistance from front attacks.\n-15％ Res\n-R stuns targets in front of you and increases attack speed\n-slower with shield on\n-Shield Break: gain speed with a cooldown\n-M2 shoves enemies, gain armor on hit\n-on hurt, you + ally CD Reduced"
@@ -4621,6 +4621,11 @@
 		"en"	"-Increased damage\n-Increased attackspeed"
 		"it"	"Aumento dei danni e della cadenza di fuoco"
 		"ko"	"-피해량, 공격 속도 증가"
+	}
+	"Dim desc"
+	{
+		"en"	"Forbidden weapon known to mankind. \nBuild up charges by hitting enemies with projectiles \nM2 to summon your ally npcs \n Enhancing this weapon in different route will summon different set of npcs!"
+		"ko"	"인류에게 대대로 전해진 금지된 무기입니다. \n투사체를 적중해 에너지를 쌓고 M2를 눌러 소환수를 스폰. \n무기 강화루트에 따라 다른 그룹의 npc들이 등장"
 	}
 	"CastleBreaker Desc"
 	{

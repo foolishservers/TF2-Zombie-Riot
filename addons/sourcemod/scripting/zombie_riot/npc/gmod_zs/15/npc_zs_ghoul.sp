@@ -208,14 +208,17 @@ public void Ghoul_ClotThink(int iNPC)
 						{
 							float damageAmount = ShouldNpcDealBonusDamage(target) ? 100.0 : 80.0;
 							SDKHooks_TakeDamage(target, npc.index, npc.index, damageAmount, DMG_CLUB, -1, _, vecHit);
-							Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 30 : 10);
-							int flagsStun = 0;
-							if(!HasSpecificBuff(target, "Fluid Movement"))
-										flagsStun |= TF_STUNFLAG_SLOWDOWN;
+							if (!i_IsABuilding[target])
+							{
+								Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 30 : 10);
+								int flagsStun = 0;
+								if(!HasSpecificBuff(target, "Fluid Movement"))
+											flagsStun |= TF_STUNFLAG_SLOWDOWN;
 
-							if(target <= MaxClients)
-								TF2_StunPlayer(target, 2.0, 0.5, flagsStun);
-							ApplyStatusEffect(npc.index, target, "Cellular Breakdown", 8.0);
+								if(target <= MaxClients)
+									TF2_StunPlayer(target, 2.0, 0.5, flagsStun);
+								ApplyStatusEffect(npc.index, target, "Cellular Breakdown", 8.0);
+							}
 							npc.PlayMeleeHitSound();
 						}
 						else

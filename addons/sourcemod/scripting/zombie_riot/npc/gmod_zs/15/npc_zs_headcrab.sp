@@ -102,6 +102,7 @@ methodmap ZSHeadcrab < CSeaBody
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_flNextMeleeAttack = 0.0;
 		npc.m_flAttackHappens = 0.0;
+		npc.m_flMeleeArmor = 3.0;
 		f_ExtraOffsetNpcHudAbove[npc.index] = -65.0;
 
 		return npc;

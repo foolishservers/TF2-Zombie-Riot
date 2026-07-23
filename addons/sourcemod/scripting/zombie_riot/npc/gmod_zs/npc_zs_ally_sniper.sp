@@ -402,6 +402,10 @@ int AllySniperSelfDefense(AllySniper npc, float gameTime)
 					damageDealt *= 3.0;
 				
 				SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_BULLET, -1, _, ThrowPos[npc.index]);
+				if (!IsInvuln(target) && !i_IsABuilding[target])
+				{
+					ApplyStatusEffect(npc.index, target, "Silenced", 3.0);
+				}
 			} 
 		}
 	}
