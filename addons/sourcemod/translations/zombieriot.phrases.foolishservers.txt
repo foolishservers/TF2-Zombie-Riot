@@ -797,9 +797,8 @@
 	}
 	"Cosmic Terror Extra Desc"
 	{
-		"en"	"Firerate bonuses affect the speed of the beam\nReload rate bonuses affect how fast you gain heat."
-		"fr"	"Améliorations de cadence de tir améliore la vitesse du rayon laser.\nAméliorations de vitesse du rechargement ralentit le rechauffement de l'arme."
-		"ko"	"빔의 속도는 공격 속도에 비례합니다.\n재장전 속도 증가는 과열 속도를 늦춥니다."
+		"en"	"Firerate bonuses affect the damage of the beam\nReload rate bonuses affect how fast you gain heat."
+		"ko"	"공격 속도 증가는 빔의 피해량을 늘립니다.\n재장전 속도 증가는 과열 속도를 늦춥니다."
 	}
 	
 	"Beam Wand Desc"
