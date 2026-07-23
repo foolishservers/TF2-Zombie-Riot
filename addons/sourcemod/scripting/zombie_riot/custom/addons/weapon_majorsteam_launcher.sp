@@ -209,7 +209,7 @@ public void MajorSteam_Launcher_NPCTakeDamage(int victim, int &attacker, int &in
 {
 	if(!CheckInHud() && i_MajorSteam_Launcher_WeaponPap[attacker]==1)
 	{
-		if(b_MajorSteam_Launcher_HasTrophy[client])
+		if(b_MajorSteam_Launcher_HasTrophy[attacker])
 		{
 			ApplyStatusEffect(attacker, victim, "Cryo", 1.0);
 			Elemental_AddCyroDamage(victim, attacker, RoundFloat(damage*0.65), 1);
