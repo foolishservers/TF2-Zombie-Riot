@@ -572,6 +572,134 @@
 		"ko"		"생존주의자의 칼"
 	}
 	
+	"Dimension Ripper"
+	{
+		"en"		"Dimension Ripper"
+		"ko"		"차원 찢개"
+	}
+	
+	"Dimension: Normal"
+	{
+		"en"		"Dimension: Normal"
+		"ko"		"차원: 감염된 자들"
+	}
+	"Dimension: Blitz"
+	{
+		"en"		"Dimension: Blitz"
+		"ko"		"차원: 블리츠크리그의 군대"
+	}
+	"Dimension: Xeno"
+	{
+		"en"		"Dimension: Xeno"
+		"ko"		"차원: 제노 감염"
+	}
+	"Dimension: Medieval"
+	{
+		"en"		"Dimension: Medieval"
+		"ko"		"차원: 중세"
+	}
+	"Dimension: Deep Sea"
+	{
+		"en"		"Dimension: Deep Sea"
+		"ko"		"차원: 심해의 자식들"
+	}
+	"Dimension: Expidonsa"
+	{
+		"en"		"Dimension: Expidonsa"
+		"ko"		"차원: 엑스피돈사"
+	}
+	"Dimension: Interitus"
+	{
+		"en"		"Dimension: Interitus"
+		"ko"		"차원: 인테리투스"
+	}
+	"Dimension: Ruina"
+	{
+		"en"		"Dimension: Ruina"
+		"ko"		"차원: 루이나"
+	}
+	"Dimension: Void"
+	{
+		"en"		"Dimension: Void"
+		"ko"		"차원: 공허의 유산"
+	}
+	"Dimension: Almina"
+	{
+		"en"		"Dimension: Almina"
+		"ko"		"차원: 알미나"
+	}
+	"Dimension: Vesta"
+	{
+		"en"		"Dimension: Vesta"
+		"ko"		"차원: 베스타"
+	}
+	"Dimension: Lab"
+	{
+		"en"		"Dimension: Lab"
+		"ko"		"차원: 연구소"
+	}
+	
+	"Dimension: Normal - Hardcore"
+	{
+		"en"		"Dimension: Normal - Hardcore"
+		"ko"		"차원 왜곡: 감염된 자들"
+	}
+	"Dimension: Blitz - Hardcore"
+	{
+		"en"		"Dimension: Blitz - Hardcore"
+		"ko"		"차원 왜곡: 블리츠크리그의 군대"
+	}
+	"Dimension: Xeno - Hardcore"
+	{
+		"en"		"Dimension: Xeno - Hardcore"
+		"ko"		"차원 왜곡: 제노 감염"
+	}
+	"Dimension: Medieval - Hardcore"
+	{
+		"en"		"Dimension: Medieval - Hardcore"
+		"ko"		"차원 왜곡: 중세"
+	}
+	"Dimension: Deep Sea - Hardcore"
+	{
+		"en"		"Dimension: Deep Sea - Hardcore"
+		"ko"		"차원 왜곡: 심해의 자식들"
+	}
+	"Dimension: Expidonsa - Hardcore"
+	{
+		"en"		"Dimension: Expidonsa - Hardcore"
+		"ko"		"차원 왜곡: 엑스피돈사"
+	}
+	"Dimension: Interitus - Hardcore"
+	{
+		"en"		"Dimension: Interitus - Hardcore"
+		"ko"		"차원 왜곡: 인테리투스"
+	}
+	"Dimension: Ruina - Hardcore"
+	{
+		"en"		"Dimension: Ruina - Hardcore"
+		"ko"		"차원 왜곡: 루이나"
+	}
+	"Dimension: Void - Hardcore"
+	{
+		"en"		"Dimension: Void - Hardcore"
+		"ko"		"차원 왜곡: 공허의 유산"
+	}
+	"Dimension: Almina - Hardcore"
+	{
+		"en"		"Dimension: Almina - Hardcore"
+		"ko"		"차원 왜곡: 알미나"
+	}
+	"Dimension: Vesta - Hardcore"
+	{
+		"en"		"Dimension: Vesta - Hardcore"
+		"ko"		"차원 왜곡: 베스타"
+	}
+	"Dimension: Lab - Hardcore"
+	{
+		"en"		"Dimension: Lab - Hardcore"
+		"ko"		"차원 왜곡: 연구소"
+	}
+	
 	//무기 설명
 	"Chaos Infected Launcher desc"
 	{
@@ -645,81 +773,96 @@
 	
 	"Cosmic Terror Desc"
 	{
-		"en" "Have you ever looked at the sky and wondered if you could use that as a weapon?\nWell wonder-no-more!\nIntroducing the ''Cosmic Terror''\nEnjoy eviscerating your foes with the power of the moon!"
-		"fr" "Avez-vous observé le ciel vous demandant si vous pourriez l'utiliser comme une arme?\nVoici le Terreur Cosmique!\nExterminez vos ennemis avec la puissance de la Lune!"
-		"ru" "Вы когда-нибудь смотрели на небо и думали, можно ли использовать его в качестве оружия?\nЧто ж, не удивляйтесь!\nПредставляем вам «Космический террор»\nНаслаждайтесь уничтожением своих врагов с помощью силы луны!"
-		"chi" "你是否曾仰望天空，想过是否可以将其用作武器?\n不必再等待!\n介绍“宇宙恐怖”\n享受与月亮的力量掏空你的敌人!"
+		"en"	"Have you ever looked at the sky and wondered if you could use that as a weapon?\nWell wonder-no-more!\nIntroducing the ''Cosmic Terror''\nEnjoy eviscerating your foes with the power of the moon!"
+		"fr"	"Avez-vous observé le ciel vous demandant si vous pourriez l'utiliser comme une arme?\nVoici le Terreur Cosmique!\nExterminez vos ennemis avec la puissance de la Lune!"
+		"ru"	"Вы когда-нибудь смотрели на небо и думали, можно ли использовать его в качестве оружия?\nЧто ж, не удивляйтесь!\nПредставляем вам «Космический террор»\nНаслаждайтесь уничтожением своих врагов с помощью силы луны!"
+		"chi"	"你是否曾仰望天空，想过是否可以将其用作武器?\n不必再等待!\n介绍“宇宙恐怖”\n享受与月亮的力量掏空你的敌人!"
+		"ko"	"하늘을 보면서 저걸 무기로 쓸 수 있지 않을까란 생각 해본 적 있나요?\n당연히 가능합니다!\n이 ''코즈믹 테러''를 사용하면 말이죠.\n달의 힘으로 적을 가루로 만들어 보세요!"
 	}
 	"Cosmic Terror Desc pap1"
 	{
-		"en" "Do you need more power? more oomph?\nWell look no further, introducing 3 magnifying lenses that almost double the potential damage\nWarning: Warranty void on purchase."
-		"fr" "Double les dégats.\nVoici 3 lunnetes de magnification massives pour donner plus de puissance à votre arme ultime.\n(Garantie anulée avec achat du kit de lunnetes de magnification gigantesques.)"
-		"ru" "Вам нужно больше силы? Больше мощи?\nНу тогда смотрите дальше, представляем вам 3 увеличительные линзы, которые почти удваивают потенциальный урон\nПредупреждение: Гарантия аннигилируется при покупке."
-		"chi" "你需要更多的动力吗?更多的性感吗?\n我们不会再看了，介绍3个放大镜，几乎是潜在损害的两倍\n警告:购买保修无效。"
+		"en"	"Do you need more power? more oomph?\nWell look no further, introducing 3 magnifying lenses that almost double the potential damage\nWarning: Warranty void on purchase."
+		"fr"	"Double les dégats.\nVoici 3 lunnetes de magnification massives pour donner plus de puissance à votre arme ultime.\n(Garantie anulée avec achat du kit de lunnetes de magnification gigantesques.)"
+		"ru"	"Вам нужно больше силы? Больше мощи?\nНу тогда смотрите дальше, представляем вам 3 увеличительные линзы, которые почти удваивают потенциальный урон\nПредупреждение: Гарантия аннигилируется при покупке."
+		"chi"	"你需要更多的动力吗?更多的性感吗?\n我们不会再看了，介绍3个放大镜，几乎是潜在损害的两倍\n警告:购买保修无效。"
+		"ko"	"출력이 더 필요하다고요?\n3개의 돋보기 렌즈를 추가한 이 개량판은 피해량을 2배로 끌어올립니다.\n경고: 판매 시 보증 무효"
 	}
 	"Cosmic Terror Desc pap2"
 	{
-		"en" "Whats better than 1 death beam?\n4 more death beams of course\nThanks to these extra beams we have recreated the power of the moon!\nWarning: Warranty annihilated on purchase."
-		"fr" "Quadruple les rayons.\nAvec un total de quatre rayons, nous avons répliqué la puissance totale de la lune!\n(Garantie exterminée avec achat.)"
-		"ru" "Что может быть лучше одного луча смерти?\nЧетыре луча смерти, конечно\nБлагодаря этим дополнительным лучам мы воссоздали силу луны!\nПредупреждение: Гарантия аннигилируется при покупке."
-		"chi" "什么比一个激光更好?\n当然是更多激光！\n多亏这些光束，我们成功复刻出了月球之力！\n警告:购买时保修失效。"
+		"en"	"Whats better than 1 death beam?\n4 more death beams of course\nThanks to these extra beams we have recreated the power of the moon!\nWarning: Warranty annihilated on purchase."
+		"fr"	"Quadruple les rayons.\nAvec un total de quatre rayons, nous avons répliqué la puissance totale de la lune!\n(Garantie exterminée avec achat.)"
+		"ru"	"Что может быть лучше одного луча смерти?\nЧетыре луча смерти, конечно\nБлагодаря этим дополнительным лучам мы воссоздали силу луны!\nПредупреждение: Гарантия аннигилируется при покупке."
+		"chi"	"什么比一个激光更好?\n当然是更多激光！\n多亏这些光束，我们成功复刻出了月球之力！\n警告:购买时保修失效。"
+		"ko"	"죽음의 광선 하나보다 좋은 게 뭐냐고요?\n그건 바로 4개의 죽음의 광선이죠!\n이 광선들 덕에 우린 달의 힘을 재창조해낼 수 있었습니다!\n경고: 판매 시 보증 무효"
 	}
 	"Cosmic Terror Extra Desc"
 	{
 		"en"	"Firerate bonuses affect the speed of the beam\nReload rate bonuses affect how fast you gain heat."
 		"fr"	"Améliorations de cadence de tir améliore la vitesse du rayon laser.\nAméliorations de vitesse du rechargement ralentit le rechauffement de l'arme."
+		"ko"	"빔의 속도는 공격 속도에 비례합니다.\n재장전 속도 증가는 과열 속도를 늦춥니다."
 	}
 	
 	"Beam Wand Desc"
 	{
-		"en"	"Increased damage\nHold M1 for a constant beam to eviscerate your enemies. M2: Magic overdrive, more mana=stronger but higher CD."
+		"en"	"Hold M1 for a constant beam to eviscerate your enemies.\nM2 Ability gives attackspeed for a short time."
 		"fr"	"Laser constant qui épuise le Mana. M2 pompe plus de Mana dans l'attaque pour améliorer les dégats."
 		"ru"	"Удерживайте М1 для постоянного луча уничтожения. М2 - усиление магии, больше маны = сильнее, но выше восстановление."
-		"chi"   "按住M1发出一个恒定的光束来清除你的敌人。M2:魔法超速。更多的法力值=更强更快的CD"
+		"chi"	"按住M1发出一个恒定的光束来清除你的敌人。M2:魔法超速。更多的法力值=更强更快的CD"
+		"ko"	"M1를 꾹 눌러서 적을 제거할 때까지 빔을 유지하세요.\n우클릭 능력 사용시 짧은 시간 동안 공격 속도 증가"
 	}
 	"Beam Wand Pap 1"
 	{
 		"en"	"Increased damage and attackspeed"
 		"fr"	"Dégats et cadence des attaques améliorés"
 		"ru"	"Увеличенный урон и скорость атаки."
-		"chi"   "增加伤害和攻击速度。"
+		"chi"	"增加伤害和攻击速度。"
+		"ko"	"공격 속도와 피해량 증가"
 	}
 	"Beam Wand Pap 2"
 	{
 		"en"	"Increased damage and attackspeed"
 		"fr"	"Dégats et cadence des attaques améliorés"
 		"ru"	"Увеличенный урон и скорость атаки."
-		"chi"   "增加伤害和攻击速度。"
+		"chi"	"增加伤害和攻击速度。"
+		"ko"	"공격 속도와 피해량 증가"
 	}
 	"Beam Wand pap Alt 1"
 	{
 		"en"	"Increased damage\Have you ever wondered what it would be like to fire 2 laser beams?\nWell, wonder-no-more!\nHold Mouse1 to attack\nOnce charge is full press Mouse2 to use it!"
 		"fr"	"Chargez une attaque avec M1, utilisez la charge avec M2.\nTire 2 rayons laser."
 		"ru"	"Вы когда-нибудь задумывались, каково это - стрелять двумя лазерными лучами?\nНу, теперь это реальность!\nУдерж. ЛКМ для атаки\n, при полном заряде нажмите ПКМ для использования!"
-		"chi"   "你有没有想过发射两束激光会是什么样子?\n 左键攻击\n一旦充能完毕，按右键使用它!"
+		"chi"	"你有没有想过发射两束激光会是什么样子?\n 左键攻击\n一旦充能完毕，按右键使用它!"
+		"ko"	"피해량 대폭 증가\n레이저 광선 1개로는 부족한가요? 그럼 2개를 써보세요!\nM1를 눌러서 공격하고 충전이 다 되면 M2를 눌러서 사용하세요!"
 	}
 	"Beam Wand pap Alt 2"
 	{
 		"en"	"Increased damage\So, you want more power?\nIntroducing the ''Particle Cannon''tm\nPress RELOAD to switch between the particle Beam/Cannon\nThe particle cannon also has its own Mouse2 ability\nParticle cannon cannot pierce multiple targets!"
 		"fr"	"Appuyez sur RELOAD pour changer entre le rayon laser et le cannon à particules.\nAbilité change avec l'utilisation du cannon.\nCannon à particules ne peut pas perçer les ennemis."
 		"ru"	"Итак, вы хотите больше мощности?\nПредставляем «Нейтронная пушка»tm\nНажмите ПЕРЕЗАРЯДКУ для перекл. между нейтронным лучом/пушкой\nНейтронная пушка также имеет свою собственную способность на ПКМ\nНейтронная пушка не может пробить несколько целей!"
-		"chi"   "所以，你想要更大的力量?\n介绍“粒子炮”\n按R在粒子束/炮之间切换\n粒子炮也有自己的鼠标右键技能\n粒子炮不能拼接多个目标!"
+		"chi"	"所以，你想要更大的力量?\n介绍“粒子炮”\n按R在粒子束/炮之间切换\n粒子炮也有自己的鼠标右键技能\n粒子炮不能拼接多个目标!"
+		"ko"	"피해량 증가\n아직도 모자른가요?\n그럼 이 ''파티클 캐논''을 써보시죠!\n재장전 키를 눌러 광선과 캐논으로 전환할 수 있습니다.\n파티클 캐논도 M2 능력이 따로 있답니다.\n다만 얘는 적 관통이 안돼요!"
 	}
 	
 	"Necromancy Staff Desc"
 	{
 		"en"	"M2 Summons a minion.\nNot having your wand in your hand will half minion damage.\nMinion will only attack marked enemies\nM1 Marks enemies for 5 seconds"
+		"ko"	"우클릭으로 소환수를 소환합니다\n이 스태프를 들고 있지 않다면 소환수의 피해량이 반으로 감소합니다\n소환수는 오직 마킹한 적만 공격합니다\n좌클릭 공격은 5초 동안 적을 마킹합니다."
 	}
 	"Necromancy Staff Pap 1"
 	{
-		"en"	"Increased damage and attackspeed, loses camo detection"
-		"fr"	"Dégats et cadence des attaques améliorés, votre minion ne peut plus détecter le camouflage."
-		"ru"	"Увеличенный урон и скорость атаки, потеря обнаружения камуфляжа."
-		"chi"   "增加伤害和攻击速度，失去伪装检测"
+		"en"	"Increased damage and attackspeed"
+		"fr"	"Dégats et cadence des attaques améliorés"
+		"ru"	"Увеличенный урон и скорость атаки"
+		"chi"   "增加伤害和攻击速度"
+		"ko"	"피해량과 공격 속도 증가"
 	}
 	"Necromancy Staff Pap 2"
 	{
 		"en"	"Increased damage and attackspeed"
+		"fr"	"Dégats et cadence des attaques améliorés"
+		"ru"	"Увеличенный урон и скорость атаки"
+		"chi"   "增加伤害和攻击速度"
+		"ko"	"피해량과 공격 속도 증가"
 	}
 	
 	"Improvised Armor Desc"
@@ -762,8 +905,8 @@
 	
 	"Survivalist Kit Desc"
 	{
-		"en"		"-Provides an fast-reload carbine, high-damage knife"
-		"ko"		"-재장전이 빠른 카빈과 높은 피해를 주는 칼을 보유"
+		"en"		"Two is one, One is none.\n-Provides an fast-reload carbine, high-damage knife"
+		"ko"		"둘은 하나고, 하나는 없는 것과 다름 없다.\n-재장전이 빠른 카빈과 높은 피해를 주는 칼을 보유"
 	}
 	"Survivalist Kit Pap 1 Desc"
 	{
@@ -777,8 +920,8 @@
 	}
 	"Survivalist Kit Pap 3 Desc"
 	{
-		"en"		"New ability - Revive:\nIf damage is higher than your health, consume all reserved health and gives uber.\nOnly one chance on wave/raid.\nImproved stats."
-		"ko"		"능력 해금 - 소생:\n만약 죽을 피해를 받으면, 모은 체력을 전부 소모하고 우버를 잠깐 받음.\n레이드/웨이브 당 한 번만 사용 가능\n전반적인 능력치 증가"
+		"en"		"New ability - Revive:\nIf damage is higher than your health, consume all reserved health and gives uber.\nOnly one chance on wave/raid.\nIncreased attack rate and damage, Decreased reload speed."
+		"ko"		"능력 해금 - 소생:\n만약 죽을 피해를 받으면, 모은 체력을 전부 소모하고 우버를 잠깐 받음.\n레이드/웨이브 당 한 번만 사용 가능\n공격 속도와 피해량 증가, 재장전 속도 감소"
 	}
 	"Survivalist Kit Pap 4 Desc"
 	{
@@ -799,6 +942,12 @@
 	{
 		"en"		"Improved stats."
 		"ko"		"전반적인 능력치 증가"
+	}
+	
+	"Dim Desc"
+	{
+		"en"		"Forbidden weapon known to mankind. \nBuild up charges by hitting enemies with projectiles \nM2 to summon your ally npcs \n Enhancing this weapon in different route will summon different set of npcs!"
+		"ko"		"인류에게 대대로 전해진 금지된 무기입니다.\n투사체를 적중해 에너지를 쌓고 M2를 눌러 소환수를 스폰.\n무기 강화 루트에 따라 다른 그룹의 npc들이 등장"
 	}
 	
 	//Etc
