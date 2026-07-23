@@ -185,26 +185,32 @@ static Action Timer_MSword_Attack(Handle timer, DataPack pack)
 	return Plugin_Stop;
 }
 
-public void MSword_NPCTakeDamage(int attacker, int victim, float &damage, int weapon)
+public void MSword_NPCTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int zr_custom_damage)
 {
-	if(!IsValidEntity(victim) || GetTeam(victim) == TFTeam_Red)
-		return;
-	if(!IsValidClient(attacker))
-		return;
 	if(CheckInHud())
 		return;
-	else if(!(GetEntityFlags(attacker) & FL_ONGROUND))
+	
+	if(!IsValidEntity(victim) || GetTeam(victim) == TFTeam_Red)
+		return;
+	
+	if(!IsValidClient(attacker))
+		return;
+	
+	
+	if(!(GetEntityFlags(attacker) & FL_ONGROUND))
 	{
-		damage*=Attributes_Get(weapon, 410, 1.1);
+		damage *= Attributes_Get(weapon, 410, 1.1);
 		DisplayCritAboveNpc(victim, attacker, true, _, _, false);
 	}
+	
 	float f_Silenced = Attributes_Get(weapon, 411, 1.0);
-	f_Silenced-=1.0;
-	if(f_Silenced>0.0)
+	f_Silenced -= 1.0;
+	if(f_Silenced > 0.0)
 		ApplyStatusEffect(attacker, victim, "Silenced", f_Silenced);
+	
 	f_Silenced = Attributes_Get(weapon, 397, 1.0);
-	f_Silenced-=1.0;
-	if(f_Silenced>0.0)
+	f_Silenced -= 1.0;
+	if(f_Silenced > 0.0)
 		NPC_Ignite(victim, attacker, f_Silenced, weapon);
 }
 
