@@ -544,7 +544,7 @@ void Nemal_NPCTalkMessage(int iNPC, const char[] message, any ...)
 {
 	char buffer[255];
 	VFormat(buffer, sizeof(buffer), message, 3);
-	NPC_TalkMessageWithTranslationCheck(iNPC, "lightblue", message);
+	NPC_TalkMessageWithTranslationCheck(iNPC, "lightblue", buffer);
 }
 
 static void Nemal_NPCTalkMessageAbout(int iNPC, const char[] message, int client)
