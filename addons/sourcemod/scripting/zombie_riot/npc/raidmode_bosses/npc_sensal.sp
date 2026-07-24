@@ -490,7 +490,7 @@ static void RaidBossSensal_NPCTalkMessage(int entity, const char[] message, bool
 
 static void RaidBossSensal_NPCTalkMessageAbout(int entity, const char[] message, int client)
 {
-	NPC_TalkMessageFormat(entity, "blue", "%t", _, _, buffer, client);
+	NPC_TalkMessageFormat(entity, "blue", "%t", _, _, message, client);
 }
 
 static void Internal_ClotThink(int iNPC)
