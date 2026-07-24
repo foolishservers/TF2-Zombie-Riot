@@ -10,12 +10,12 @@
 	"Stella_Encounter_1"
 	{
 		"en"		"Luckily {purple}Twirl{snow} wasn't the one who found you first. For us that is, not you"
-		"ko"		"{purple}트윌{snow}님보다 먼저 너희를 찾아내서 다행이네. 너희한텐 좋은 일이 아니겠지만."
+		"ko"		"{purple}트윌{snow}님보다 먼저 너희를 찾아내서 다행이네. 너희한텐 유감이지만!"
 	}
 	"Stella_Encounter_2"
 	{
 		"en"		"Man this place is horrid, can't wait to get this job done as soon as possible."
-		"ko"		"아.. 이 장소는 정말 끔찍해. 최대한 빨리 끝내고 돌아가자."
+		"ko"		"정말.. 여기 개끔찍해. 최대한 빨리 끝내고 돌아가자."
 	}
 	"Stella_Encounter_3"
 	{
@@ -30,7 +30,7 @@
 	"Stella_Encounter_5"
 	{
 		"en"		"I'm in a good mood, so I'll just let you know, if you take too long, this area will soon become ground zero, good luck."
-		"ko"		"기분이 좋으니까, 너희에게 하나 알려줄게. 시간 오래 끌면, 여긴 잿더미가 될 거야~ 그러니 행운을 빌게?"
+		"ko"		"지금 기분 좋으니까, 너희에게 하나 알려줄게. 시간 오래 끌면, 여긴 잿더미가 될 거야~ 그러니 행운을 빌게?"
 	}
 	"Stella_Encounter_6"
 	{
@@ -40,7 +40,7 @@
 	"Stella_Encounter_7"
 	{
 		"en"		"We have arrived to eradicate you."
-		"ko"		"너희를 막기 위해 우리가 이 곳에 왔다."
+		"ko"		"크흠.. 너희를 막기 위해 우리가 이 곳에 왔다."
 	}
 	
 	"Stella_Lose_1"
@@ -210,12 +210,12 @@
 	"Stella_NightmareCannon_9"
 	{
 		"en"		"Shall {crimson}Eviscerate you all"
-		"ko"		"{crimson}너희를 모두 제거하겠다."
+		"ko"		"{crimson}너희를 모두 제거하주마!"
 	}
 	"Stella_NightmareCannon_10"
 	{
 		"en"		"You all are about to see your own doomed reflections.. heh"
-		"ko"		"이거 반사되는 걸 쟤네한테 꼭 보여주고 싶었거든.. 하핫"
+		"ko"		"이거 반사되는 걸 쟤네한테 꼭 보여주고 싶었거든.. 크하핫."
 	}
 	"Stella_NightmareCannon_11"
 	{
@@ -227,7 +227,7 @@
 	{
 		"#format"	"{1:d}"
 		"en"		"It seems my master forgot to set a proper dialogue line for this specific number, how peculiar. Anyway, here's the ID: {1}"
-		"ko"		"음.. 내 주인님이 이 번호에 맞는 대사를 설정하시는 걸 깜빡하신 거 같아. 어쨌든 {1}이 그 번호야!"
+		"ko"		"음.. 내 주인님께서 이 번호에 맞는 대사를 설정하시는 걸 깜빡하신 거 같아. 어쨌든 {1}이 그 번호야!"
 	}
 	
 	"Stella_Struggle_1"
@@ -248,7 +248,7 @@
 	"Stella_Struggle_4"
 	{
 		"en"		"{snow}Its getting kinda cold.."
-		"ko"		"{snow}점점 추워지는 것 같아.."
+		"ko"		"{snow}나 추워.."
 	}
 	
 	"Stella_Bob_Appeared_1"
@@ -264,7 +264,7 @@
 	"Stella_Bob_Appeared_3"
 	{
 		"en"		"I wanted to play with them more. Karlas, you too, don't you?"
-		"ko"		"쳇, 쟤네랑 더 놀고 싶었는데. 그치, 카를라스?"
+		"ko"		"칫, 쟤네랑 더 놀고 싶었는데. 그치, 카를라스?"
 	}
 	
 	"Stella_Exhausted_1"
@@ -291,7 +291,7 @@
 	"Stella_Anger_2"
 	{
 		"en"		"This ain't over yet.."
-		"ko"		"아직 끝난 거 아니거든?!"
+		"ko"		"건방져.. 아직 끝난 거 아니거든?!"
 	}
 	"Stella_Anger_3"
 	{
@@ -328,13 +328,13 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"{crimson}Karlas{snow}'s Old blade, interesting choice {gold}{1}"
-		"ko"		"어머, {crimson}카를라스{snow}가 예전에 쓰던 검이네? 흥미로운 선택인 걸, {gold}{1}{snow}."
+		"ko"		"엣, 그건 {crimson}카를라스{snow}가 예전에 쓰던 검이네? 재밌네, {gold}{1}{snow}."
 	}
 	"Stella_Response_Fantasy_Blade_2"
 	{
 		"#format"	"{1:N}"
 		"en"		"So what if I told you {gold}{1}{snow} that you're using the failed version.."
-		"ko"		"어.. {gold}{1}{snow}, 지금 쓰는 건 실패한 버전인데.. 그거 계속 쓸거야?"
+		"ko"		"어.. {gold}{1}{snow}, 지금 쓰는 건 실패한 버전인데.. 그거 계속 쓸거야? 진심?"
 	}
 	
 	"Stella_Response_Nightmare_Cannon_1"
@@ -347,14 +347,14 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"I don't approve of this {gold}{1}{snow}."
-		"ko"		"난 그 무기 용납 못하겠어. {gold}{1}{snow}."
+		"ko"		"하아? 난 그 무기 용납 못하겠어. {gold}{1}{snow}."
 	}
 	
 	"Stella_Response_Impact_Lance_1"
 	{
 		"#format"	"{1:N}"
 		"en"		"Pointy stick go into enemy, right {gold}{1}{snow}?"
-		"ko"		"그걸로 날 찌를 생각이구나. 그렇지, {gold}{1}{snow}?"
+		"ko"		"그걸로 날 찌를 생각이구나. 솔직히 찔렸지, {gold}{1}{snow}?"
 	}
 	"Stella_Response_Impact_Lance_2"
 	{
@@ -373,7 +373,7 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"Oi, {gold}{1}{snow} I helped create that spell, you can't just steal it and use it aggainst me."
-		"ko"		"야, {gold}{1}{snow}! 그건 내 도움으로 만든 건데, 그걸 훔친 다음에 나한테 쓴다고? 절대 용서 못해!"
+		"ko"		"야!! {gold}{1}{snow}! 그건 내 도움으로 만든 건데, 그걸 훔친 다음에 나한테 쓴다고? 절대 용서 못해!"
 	}
 	
 	"Stella_Response_Pulse_Cannon_1"
@@ -393,7 +393,7 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"Gravity is a harness, you {gold}{1}{snow} have not harnessed it"
-		"ko"		"중력도 무기가 될 수 있지. {gold}{1}{snow}, 넌 재능 없어."
+		"ko"		"중력도 잘 다루면 무기가 될 수 있지. 근데 {gold}{1}{snow}, 넌 재능 없어."
 	}
 	"Stella_Response_Gravaton_Spell_2"
 	{
@@ -406,7 +406,7 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"Here's some interesting information for you {gold}{1}{snow} the feedback loop Prisim has been obsolete for AGES"
-		"ko"		"{gold}{1}{snow}, 재밌는 거 하나 알려줄까? 그거 구제불능 쓰레기야."
+		"ko"		"{gold}{1}{snow}, 재밌는 거 하나 알려줄까? 그거 존나 구려."
 	}
 	
 	"Stella_Response_Bobs_Sexy_Gun"
@@ -426,7 +426,7 @@
 	"Stella_Response_Dweller"
 	{
 		"en"		"{crimson}Karlas{default}? I think we should contact them to hurry up with the ion attack."
-		"ko"		"{crimson}카를라스{default}? 우리 이온 공격을 빨리 하라고 위에 연락해야 할 거 같지 않아?"
+		"ko"		"{crimson}카를라스{default}? 이온 공격 빨리 하라고 위에 연락해야 하는 거 아니야??"
 	}
 	
 	// Karlas.
