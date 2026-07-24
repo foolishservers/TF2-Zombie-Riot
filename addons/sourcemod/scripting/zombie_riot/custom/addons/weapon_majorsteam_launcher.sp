@@ -173,7 +173,7 @@ static Action Timer_MajorSteam_Launcher(Handle timer, DataPack pack)
 
 public void MajorSteam_Launcher_PlayerTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, int equipped_weapon, float damagePosition[3], int zr_custom_damage)
 {
-	if(!CheckInHud())
+	if(CheckInHud())
 		return;
 	
 	if(!IsValidEntity(attacker) || GetTeam(attacker) == TFTeam_Red)
