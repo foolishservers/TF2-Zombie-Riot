@@ -69,11 +69,6 @@ static any ClotSummon(int client, float vecPos[3], float vecAng[3], int ally)
 
 methodmap InfectedMessenger < CClotBody
 {
-	property int i_GunMode
-	{
-		public get()							{ return i_TimesSummoned[this.index]; }
-		public set(int TempValueForProperty) 	{ i_TimesSummoned[this.index] = TempValueForProperty; }
-	}
 	public void PlayIdleSound()
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
@@ -145,9 +140,7 @@ methodmap InfectedMessenger < CClotBody
 
 		func_NPCDeath[npc.index] = ClotDeath;
 		func_NPCOnTakeDamage[npc.index] = InfectedMessenger_OnTakeDamage;
-		SDKHook(npc.index, SDKHook_OnTakeDamagePost, InfectedMessenger_OnTakeDamagePost);
 		func_NPCThink[npc.index] = ClotThink;
-		npc.i_GunMode = Waves_GetRoundScale();
 		
 		npc.m_flSpeed = 100.0;
 		npc.m_flGetClosestTargetTime = 0.0;
@@ -156,8 +149,8 @@ methodmap InfectedMessenger < CClotBody
 		npc.m_flRangedArmor = 0.2;
 		int WaveSetting = 1;
 		i_RaidGrantExtra[npc.index] = WaveSetting;
-		npc.WhatWaves = 0;
-		npc.InWaves = 0;
+		npc.WhatWaves = 2;
+		npc.InWaves = Waves_GetRoundScale()+1+npc.WhatWaves;
 		npc.g_TimesSummoned = 0;
 		g_infected_messenger_died=false;
 		g_infected_messenger_die=0.0;
@@ -297,7 +290,7 @@ static void ClotThink(int iNPC)
 	if(npc.m_iTargetAlly && !IsValidAlly(npc.index, npc.m_iTargetAlly))
 		npc.m_iTargetAlly = 0;
 	
-	if(!g_infected_messenger_died && (npc.i_GunMode <= (Waves_GetRoundScale() - 2) || RaidbossIgnoreBuildingsLogic(1) || LastMann))
+	if(!g_infected_messenger_died && ((npc.InWaves - (Waves_GetRoundScale()+1) <= 0) || RaidbossIgnoreBuildingsLogic(1) || LastMann))
 	{
 		CPrintToChatAll("{green}감염된 전령병{default}: 잘 있어라 멍청이들 난 간다");
 		LastHitRef[npc.index] = -1;
@@ -308,6 +301,7 @@ static void ClotThink(int iNPC)
 		b_DissapearOnDeath[npc.index] = true;
 		b_DoGibThisNpc[npc.index] = true;
 		b_NoKillFeed[npc.index] = true;
+		g_infected_messenger_died = true;
 		SmiteNpcToDeath(npc.index);
 		return;
 	}
@@ -389,11 +383,15 @@ public Action InfectedMessenger_OnTakeDamage(int victim, int &attacker, int &inf
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
 	}
-	if((ReturnEntityMaxHealth(npc.index)/2) >= GetEntProp(npc.index, Prop_Data, "m_iHealth") && !npc.Anger) 
-	{
+	if(g_infected_messenger_died)
+		return Plugin_Continue;
+	
+	float maxhealth = float(ReturnEntityMaxHealth(npc.index));
+	float health = float(GetEntProp(npc.index, Prop_Data, "m_iHealth"));
+	float Ratio = health / maxhealth;
+	if((maxhealth/2) >= health && !npc.Anger)
 		npc.Anger = true;
-	}
-	if(RoundToCeil(damage) >= GetEntProp(npc.index, Prop_Data, "m_iHealth"))
+	if(RoundToCeil(damage) >= health)
 	{
 		if(!g_infected_messenger_died)
 		{
@@ -407,6 +405,30 @@ public Action InfectedMessenger_OnTakeDamage(int victim, int &attacker, int &inf
 			
 			SetEntProp(npc.index, Prop_Data, "m_iHealth", 1);
 			damage = 0.0;
+		}
+	}
+	else
+	{
+		if(Ratio <= 0.85 && npc.g_TimesSummoned < 1)
+		{
+			npc.g_TimesSummoned = 1;
+			npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
+			npc.PlaySummonSound();
+			CPrintToChatAll("{crimson}감염된 전령병{default}: 젠장 기습이다!!!! 이곳에 지원군을 보내라 지금 당장!!!!");
+			InfectedMessengerSpawnEnemy(npc.index,"npc_zs_cleaner",50000, RoundToCeil(6.0 * MultiGlobalEnemy));
+			InfectedMessengerSpawnEnemy(npc.index,"npc_zs_zombie_soldier",30000, RoundToCeil(2.0 * MultiGlobalEnemy));
+			InfectedMessengerSpawnEnemy(npc.index,"npc_zs_mlsm",50000, RoundToCeil(6.0 * MultiGlobalEnemy));
+			InfectedMessengerSpawnEnemy(npc.index,"npc_infected_tomislav_main",20000, RoundToCeil(4.0 * MultiGlobalEnemy));
+			InfectedMessengerSpawnEnemy(npc.index,"npc_zs_zombie_sniper_jarate",40000, RoundToCeil(2.0 * MultiGlobalEnemy));
+		}
+		else if(Ratio <= 0.20 && npc.g_TimesSummoned < 2)
+		{
+			npc.g_TimesSummoned = 2;
+			npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
+			npc.PlaySummonSound();
+			CPrintToChatAll("{crimson}감염된 전령병{default}: 아직도 놈들이 살아있다!!! 이곳에 당장 공습을 때려!!!!");
+			InfectedMessengerSpawnEnemy(npc.index,"npc_zs_manhattan_parrot",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
+			InfectedMessengerSpawnEnemy(npc.index,"npc_zs_kamikaze_demo",6000, RoundToCeil(8.0 * MultiGlobalEnemy));
 		}
 	}
 	return Plugin_Changed;
@@ -449,34 +471,7 @@ static void Spawn_Chaos(InfectedMessenger npc)
 		SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
 	}
 }
-public void InfectedMessenger_OnTakeDamagePost(int victim, int attacker, int inflictor, float damage, int damagetype) 
-{
-	InfectedMessenger npc = view_as<InfectedMessenger>(victim);
-	float maxhealth = float(ReturnEntityMaxHealth(npc.index));
-	float health = float(GetEntProp(npc.index, Prop_Data, "m_iHealth"));
-	float Ratio = health / maxhealth;
-	if(Ratio <= 0.85 && npc.g_TimesSummoned < 1)
-	{
-		npc.g_TimesSummoned = 1;
-		npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
-		npc.PlaySummonSound();
-		CPrintToChatAll("{crimson}감염된 전령병{default}: 젠장 기습이다!!!! 이곳에 지원군을 보내라 지금 당장!!!!");
-		InfectedMessengerSpawnEnemy(npc.index,"npc_zs_cleaner",50000, RoundToCeil(6.0 * MultiGlobalEnemy));
-		InfectedMessengerSpawnEnemy(npc.index,"npc_zs_zombie_soldier",30000, RoundToCeil(2.0 * MultiGlobalEnemy));
-		InfectedMessengerSpawnEnemy(npc.index,"npc_zs_mlsm",50000, RoundToCeil(6.0 * MultiGlobalEnemy));
-		InfectedMessengerSpawnEnemy(npc.index,"npc_infected_tomislav_main",20000, RoundToCeil(4.0 * MultiGlobalEnemy));
-		InfectedMessengerSpawnEnemy(npc.index,"npc_zs_zombie_sniper_jarate",40000, RoundToCeil(2.0 * MultiGlobalEnemy));
-	}
-	else if(Ratio <= 0.20 && npc.g_TimesSummoned < 2)
-	{
-		npc.g_TimesSummoned = 2;
-		npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
-		npc.PlaySummonSound();
-		CPrintToChatAll("{crimson}감염된 전령병{default}: 아직도 놈들이 살아있다!!! 이곳에 당장 공습을 때려!!!!");
-		InfectedMessengerSpawnEnemy(npc.index,"npc_zs_manhattan_parrot",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
-		InfectedMessengerSpawnEnemy(npc.index,"npc_zs_kamikaze_demo",6000, RoundToCeil(8.0 * MultiGlobalEnemy));
-	}
-}
+
 void InfectedMessengerSpawnEnemy(int infectedmessenger, char[] plugin_name, int health = 0, int count, bool is_a_boss = false)
 {
 	if(GetTeam(infectedmessenger) == TFTeam_Red)
