@@ -341,7 +341,7 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"You're trying to copy me, {gold}{1}{snow}?"
-		"ko"		"{gold}{1}{snow}, 너 지금 나 따라하는 거야?"
+		"ko"		"{gold}{1}{snow}, 너 지금 나 따라하는 거야?!"
 	}
 	"Stella_Response_Nightmare_Cannon_2"
 	{
@@ -367,7 +367,7 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"Laser based spell's are one of Ruina's specialties, {gold}{1}{snow} You don't even know the first thing about them.."
-		"ko"		"레이저 기반 마법은 루이나의 전문 분야라고, {gold}{1}{snow}. 너는 그들에 대해 전혀 몰랐겠지만.."
+		"ko"		"레이저 기반 마법은 루이나의 전문 분야라고, {gold}{1}{snow}. 넌 전혀 몰랐지?"
 	}
 	"Stella_Response_Prismatic_Wand_2"
 	{
