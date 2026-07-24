@@ -6,9 +6,21 @@ static int g_BluePoint;
 static int g_RedPoint;
 static int LSPR;
 
+static int g_ProjectileModelArmor;
+static int g_ProjectileModel;
+
+static bool b_OneDown[MAXPLAYERS];
+
 static const char g_TeleSounds[][] = {
 	"weapons/rescue_ranger_teleport_receive_01.wav",
 	"weapons/rescue_ranger_teleport_receive_02.wav"
+};
+
+static const char SupportWeaponList[][] =
+{
+	"SupportWeapon SMG-43",
+	"SupportWeapon APW-1 Sniperrifle",
+	"SupportWeapon RS-422 Rail Gun",
 };
 
 static const char g_PortalSounds[]=")misc/halloween/spell_teleport.wav";
@@ -19,9 +31,14 @@ void Addon_M3_Precache()
 	g_RedPoint = PrecacheModel("sprites/redglow1.vmt");
 	g_Laser = PrecacheModel(LASERBEAM);
 	LSPR = PrecacheModel("sprites/lgtning.vmt");
+	
+	g_ProjectileModel = PrecacheModel("models/healthvial.mdl");
+	g_ProjectileModelArmor = PrecacheModel("models/Items/battery.mdl");
+	
 	PrecacheSound("weapons/gas_can_explode.wav");
 	PrecacheSound("ambient/explosions/explode_9.wav");
 	PrecacheSound("player/pl_scout_dodge_can_drink.wav");
+	PrecacheSound("weapons/air_burster_explode3.wav");
 	PrecacheSound(g_PortalSounds);
 	PrecacheSoundArray(g_TeleSounds);
 	/*if(FileExists("sound/baka_zr/sd_de_01.mp3", true))
@@ -71,9 +88,7 @@ stock void Addon_M3_Abilities(int client, int slot)
 	switch(slot)
 	{
 		case 1000:DrinkRND(client);
-		case 65:
-		{
-		}
+		case 1001:Seeyou_in_HELL(client);
 	}
 }
 
@@ -84,20 +99,98 @@ stock void Addon_M3_WaveEnd()
 
 stock void Addon_M3_ClearAll()
 {
+	Zero(b_OneDown);
 	return;
+}
+
+static void Seeyou_in_HELL(int client)
+{
+	float GameTime = GetGameTime();
+	float cooldown = M3_Ability_Cooldown(client);
+	if(CvarInfiniteCash.BoolValue)
+		cooldown=0.0;
+	if(dieingstate[client] > 0)
+	{
+		if(cooldown > GameTime)
+		{
+			float Ability_CD = cooldown - GameTime;
+
+			if(Ability_CD <= 0.0)
+				Ability_CD = 0.0;
+
+			ClientCommand(client, "playgamesound items/medshotno1.wav");
+			SetDefaultHudPosition(client);
+			SetGlobalTransTarget(client);
+			ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);
+			return;
+		}
+		if(b_OneDown[client])
+		{
+			ClientCommand(client, "playgamesound items/medshotno1.wav");
+			SetDefaultHudPosition(client);
+			SetGlobalTransTarget(client);
+			ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Already Used");
+			return;
+		}
+		M3_Ability_Cooldown(client, GameTime + (60.0 * CooldownReductionAmount(client)));
+		b_OneDown[client]=true;
+		
+		float clientpos[3];
+		GetEntPropVector(client, Prop_Send, "m_vecOrigin", clientpos);
+		EmitSoundToAll("weapons/air_burster_explode3.wav", 0, SNDCHAN_AUTO, 90, SND_NOFLAGS, 0.8, SNDPITCH_NORMAL, -1, clientpos);
+		spawnRing_Vectors(clientpos, 0.0, 0.0, 0.0, 0.0, LASERBEAM, 145, 47, 47, 200, 1, 1.0, 3.0, 1.0, 3, 650.0);
+		SpawnSmallExplosion(clientpos);
+		MakePlayerGiveResponseVoice(client, 4);
+		Explode_Logic_Custom(0.0, client, client, -1, clientpos, 650.0, _, _, true, _, false, _, KamikazeBoomb);
+		CreateTimer(0.1, Timer_Seeyou_in_HELL_Reload, GetClientUserId(client), TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
+	}
+	else
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		SetGlobalTransTarget(client);
+		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Use Only Down");
+	}
+}
+
+static void KamikazeBoomb(int entity, int victim, float damage, int weapon)
+{
+	if(IsValidEntity(entity) && IsValidEntity(victim) && GetTeam(entity) != GetTeam(victim) && Can_I_See_Enemy(entity, victim))
+	{
+		FreezeNpcInTime(victim, (b_thisNpcIsARaid[victim] || b_thisNpcIsABoss[victim] ? 1.0 : 3.0), true);
+		ApplyStatusEffect(entity, victim, "Silenced", (b_thisNpcIsARaid[victim] || b_thisNpcIsABoss[victim] ? 1.0 : 3.0));
+		float MaxHealth = float(ReturnEntityMaxHealth(victim));
+		damage=(MaxHealth*0.01)+(Pow(float(CashSpentTotal[entity]), 1.18)/9.0);
+		SDKHooks_TakeDamage(victim, entity, entity, damage, DMG_BLAST|DMG_PREVENT_PHYSICS_FORCE);
+	}
+}
+
+static Action Timer_Seeyou_in_HELL_Reload(Handle timer, any userid)
+{
+	int client = GetClientOfUserId(userid);
+	if(IsValidClient(client))
+	{
+		if(dieingstate[client] <= 0 || TeutonType[client] != TEUTON_NONE || !IsPlayerAlive(client))
+		{
+			b_OneDown[client]=false;
+			return Plugin_Stop;
+		}
+		return Plugin_Continue;
+	}
+	return Plugin_Stop;
 }
 
 static void DrinkRND(int client, int Overrides=-1)
 {
 	float cooldown=M3_Ability_Cooldown(client);
 	float GameTime = GetGameTime();
-	if(cooldown < GameTime || Overrides!=-1)
+	if(cooldown < GameTime || Overrides!=-1 || CvarInfiniteCash.BoolValue)
 	{
 		EmitSoundToAll("player/pl_scout_dodge_can_drink.wav", client, SNDCHAN_STATIC, 70, _, 0.9);
 		if(Overrides==-1)
 			M3_Ability_Cooldown(client, GameTime + (30.0 * CooldownReductionAmount(client)));
 		int GetRND=Overrides;
-		if(GetRND==-1) GetRND=GetRandomInt(1, 17);
+		if(GetRND==-1) GetRND=GetRandomInt(1, 21);
 		float AddTime;
 		char RNDDrinkName[512];
 		FormatEx(RNDDrinkName, sizeof(RNDDrinkName), "Get_DrinkRND_%i", GetRND);
@@ -216,7 +309,17 @@ static void DrinkRND(int client, int Overrides=-1)
 			}
 			case 19:
 			{
-				ApplyStatusEffect(client, client, "Eye for an Eye", 10.0);
+				ApplyStatusEffect(client, client, "Eye for an Eye", GetRandomFloat(10.0, 20.0));
+				return;
+			}
+			case 20:
+			{
+				ApplyStatusEffect(client, client, "Nightmare Terror", GetRandomFloat(10.0, 20.0));
+				return;
+			}
+			case 21:
+			{
+				ApplyStatusEffect(client, client, "Defibrillator", 20.0);
 				return;
 			}
 			default:AddTime=20.0;
@@ -483,7 +586,6 @@ static bool PickRandomAreaLoc(int client, float min, float max, float output[3])
 			output = vPredictedPos;
 			CurrentPoints = Accumulated_Points;
 		}
-		AreasCollected += 1;
 		AreasCollected += 1;
 		if(AreasCollected >= MAXTRIESVILLAGER)
 		{
@@ -995,6 +1097,66 @@ static int Dimension_Summon_Npc_Parkuri(int client, int SetWave, bool Elite=fals
 		if(EntRefToEntIndex(RaidBossActive) == WhoIsNPC)
 			RaidBossActive = INVALID_ENT_REFERENCE;
 		return WhoIsNPC;
+	}
+	return -1;
+}
+
+static int ThrowTheGrenade(int client, bool IsSticky=false, float speed=1500.0)
+{
+	int entity;		
+	if(b_StickyExtraGrenades[client])
+		entity = CreateEntityByName("tf_projectile_pipe_remote");
+	else
+		entity = CreateEntityByName("tf_projectile_pipe");
+
+	if(IsValidEntity(entity))
+	{
+		
+		SetEntitySpike(entity, 3);
+		b_StickyIsSticking[entity] = true; //Make them not stick to npcs.
+		static float pos[3], ang[3], vel_2[3];
+		GetClientEyeAngles(client, ang);
+		GetClientEyePosition(client, pos);	
+	
+		ang[0] -= 8.0;
+		
+		vel_2[0] = Cosine(DegToRad(ang[0]))*Cosine(DegToRad(ang[1]))*speed;
+		vel_2[1] = Cosine(DegToRad(ang[0]))*Sine(DegToRad(ang[1]))*speed;
+		vel_2[2] = Sine(DegToRad(ang[0]))*speed;
+		vel_2[2] *= -1;
+		
+		int team = GetClientTeam(client);
+		
+		SetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity", client);
+		SetEntProp(entity, Prop_Send, "m_iTeamNum", team, 1);
+		SetEntProp(entity, Prop_Send, "m_nSkin", (team-2));
+		SetEntPropFloat(entity, Prop_Send, "m_flDamage", 0.0); 
+		SetEntPropEnt(entity, Prop_Send, "m_hThrower", client);
+		SetEntPropEnt(entity, Prop_Send, "m_hOriginalLauncher", 0);
+		if(b_StickyExtraGrenades[client])
+			SetEntProp(entity, Prop_Send, "m_iType", 1);
+
+		for(int i; i<4; i++)
+		{
+			SetEntProp(entity, Prop_Send, "m_nModelIndexOverrides", g_ProjectileModelArmor, _, i);
+		}
+		
+		SetVariantInt(team);
+		AcceptEntityInput(entity, "TeamNum", -1, -1, 0);
+		SetVariantInt(team);
+		AcceptEntityInput(entity, "SetTeam", -1, -1, 0); 
+		
+		SetEntPropEnt(entity, Prop_Send, "m_hLauncher", EntRefToEntIndex(i_StickyAccessoryLogicItem[client]));
+		//Make them barely bounce at all.
+		DispatchSpawn(entity);
+		TeleportEntity(entity, pos, ang, vel_2);
+		
+		IsCustomTfGrenadeProjectile(entity, 9999999.0);
+		CClotBody npc = view_as<CClotBody>(entity);
+		npc.m_bThisEntityIgnored = true;
+		
+		SetEntProp(entity, Prop_Data, "m_nNextThinkTick", -1);
+		return entity;
 	}
 	return -1;
 }

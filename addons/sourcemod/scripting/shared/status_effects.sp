@@ -724,7 +724,7 @@ void StatusEffects_Baka()
 	StatusEffect_AddGlobal(data);
 
 	strcopy(data.BuffName, sizeof(data.BuffName), "Eye for an Eye");
-	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "☄");
+	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "⌫");
 	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
 	//-1.0 means unused
 	data.DamageTakenMulti 			= -1.0;
@@ -741,6 +741,26 @@ void StatusEffects_Baka()
 	data.OnTakeDamage_PostAttacker		= INVALID_FUNCTION;
 	data.Status_SpeedFunc 			= INVALID_FUNCTION;
 	data.HudDisplay_Func 				= INVALID_FUNCTION;
+	StatusEffect_AddGlobal(data);
+
+	strcopy(data.BuffName, sizeof(data.BuffName), "Defibrillator");
+	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "↻");
+	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
+	//-1.0 means unused
+	data.DamageTakenMulti 			= -1.0;
+	data.DamageDealMulti				= -1.0;
+	data.AttackspeedBuff				= -1.0;
+	data.MovementspeedModif			= -1.0;
+	data.Positive 					= true;
+	data.ShouldScaleWithPlayerCount 	= false;
+	data.Slot						= 0;
+	data.SlotPriority					= 0;
+	data.OnTakeDamage_TakenFunc 		= INVALID_FUNCTION;
+	data.OnTakeDamage_DealFunc 		= INVALID_FUNCTION;
+	data.OnTakeDamage_PostVictim		= INVALID_FUNCTION;
+	data.OnTakeDamage_PostAttacker		= INVALID_FUNCTION;
+	data.Status_SpeedFunc 			= INVALID_FUNCTION;
+	data.HudDisplay_Func 				= Defibrillator_Func;
 	StatusEffect_AddGlobal(data);
 }
 
@@ -885,13 +905,29 @@ void Taunt_Hud_Func(int attacker, int victim, StatusEffect Apply_MasterStatusEff
 	Format(HudToDisplay, SizeOfChar, "[⫘ %is]", RoundToCeil(Delay - GameTime));
 }
 
-float Eye_For_Eye_Func(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int damagetype)
+float Eye_For_Eye_Func(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int damagetype, float damage)
 {
-	DataPack pack = new DataPack();
-	pack.WriteCell(attacker);
-	pack.WriteCell(victim);
-	RequestFrame(Delayd_payback_DMG, pack);
+	if(!CheckInHud())
+	{
+		DataPack pack = new DataPack();
+		pack.WriteCell(attacker);
+		pack.WriteCell(victim);
+		pack.WriteFloat(damage);
+		RequestFrame(Delayd_payback_DMG, pack);
+	}
 	return 1.0;
+}
+
+void Defibrillator_Func(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int SizeOfChar, char[] HudToDisplay)
+{
+	if(dieingstate[victim] > 159 || (dieingstate[victim] > 0 && !b_LeftForDead[victim]))
+	{
+		b_LeftForDead[victim] = true;
+		dieingstate[victim] = 159;
+		KillDyingGlowEffect(victim);
+		RemoveSpecificBuff(victim, "Defibrillator");
+	}
+	Format(HudToDisplay, SizeOfChar, "↻");
 }
 
 static void Delayd_payback_DMG(DataPack pack)
@@ -899,10 +935,10 @@ static void Delayd_payback_DMG(DataPack pack)
 	pack.Reset();
 	int attacker = pack.ReadCell();
 	int victim = pack.ReadCell();
+	float damage = pack.ReadFloat();
 	if(!IsValidEntity(attacker) || !IsValidEntity(victim))
 		return;
-	float Health = float(GetClientHealth(attacker));
-	SDKHooks_TakeDamage(attacker, victim, victim, (Health>125.0 ? Health/10.0: Health*3.0), DMG_TRUEDAMAGE|DMG_PREVENT_PHYSICS_FORCE);
+	SDKHooks_TakeDamage(attacker, victim, victim, damage*0.25, DMG_TRUEDAMAGE|DMG_PREVENT_PHYSICS_FORCE);
 }
 
 float Chaos_Coil_Func(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int damagetype, float &basedamage, float DamageBuffExtraScaling)
@@ -1384,6 +1420,7 @@ void StatusEffect_OnTakeDamage_DealNegative(int victim, int attacker, float &dam
 			Call_PushArray(Apply_MasterStatusEffect, sizeof(Apply_MasterStatusEffect));
 			Call_PushArray(Apply_StatusEffect, sizeof(Apply_StatusEffect));
 			Call_PushCell(damagetype);
+			Call_PushCell(damage);
 			Call_Finish(DamageToNegate);
 		}
 		if(!Apply_MasterStatusEffect.ShouldScaleWithPlayerCount || Apply_StatusEffect.TotalOwners[attacker])

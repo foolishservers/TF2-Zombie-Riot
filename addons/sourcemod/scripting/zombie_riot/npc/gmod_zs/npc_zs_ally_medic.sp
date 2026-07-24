@@ -423,6 +423,9 @@ static int Medic_Work(Allymedic npc, float distance, bool Bypass)
 						JustCuredArmor = true;
 						Healing_GiveArmor *= 4.0;
 					}
+					else
+						Healing_GiveArmor *= 2.0;
+					
 					GiveArmorViaPercentage(npc.m_iTargetAlly, Healing_GiveArmor, 1.0, true,_,npc.index);
 					if(JustCuredArmor && Armor_Charge[npc.m_iTargetAlly] > 0)
 						Armor_Charge[npc.m_iTargetAlly] = 0;
@@ -560,14 +563,14 @@ static int GetAllyEmergency(int entity)
 static int GetAllyDown(int entity)
 {
 	float VecSelfNpc[3]; WorldSpaceCenter(entity, VecSelfNpc);
-	float TargetDistance = 0.0; 
+	float TargetDistance = 0.0;
 	int ClosestTarget = 0;
 	for(int client = 1; client <= MaxClients; client++)
 	{
 		if(IsValidClient(client))
 		{
 			if(GetTeam(client) == GetTeam(entity) && TeutonType[client] == TEUTON_NONE
-			&& dieingstate[client] > 0 && !b_LeftForDead[client] && !Inv_Rose_Of_SelfHarm[client])
+			&& dieingstate[client] > 0 && !b_LeftForDead[client] && !Store_HasNamedItem(client, "Rose of SelfHarm"))
 			{
 				float TargetLocation[3]; WorldSpaceCenter(client, TargetLocation);
 				float fdistance = GetVectorDistance(VecSelfNpc, TargetLocation, true); 
@@ -587,14 +590,17 @@ static int GetAllyDown(int entity)
 			}
 		}
 	}
-	if(dieingstate[ClosestTarget] <= 0)
+	/*if(dieingstate[ClosestTarget] <= 0)
 	{
+		TargetDistance = 0.0;
+		ClosestTarget = 0;
 		for(int a; a < i_MaxcountNpcTotal; a++)
 		{
 			int ally = EntRefToEntIndexFast(i_ObjectsNpcsTotal[a]);
 			if(ally != INVALID_ENT_REFERENCE && ally != entity)
 			{
-				if(!view_as<CClotBody>(ally).m_bThisEntityIgnored && !b_ThisEntityIgnoredByOtherNpcsAggro[ally] && GetTeam(ally) == GetTeam(entity) && Citizen_ThatIsDowned(ally))
+				if(!view_as<CClotBody>(ally).m_bThisEntityIgnored && !b_ThisEntityIgnoredByOtherNpcsAggro[ally]
+				&& GetTeam(ally) == GetTeam(entity) && Citizen_ThatIsDowned(ally))
 				{
 					float TargetLocation[3]; WorldSpaceCenter(ally, TargetLocation);
 					float fdistance = GetVectorDistance(VecSelfNpc, TargetLocation, true); 
@@ -614,6 +620,6 @@ static int GetAllyDown(int entity)
 				}
 			}
 		}
-	}
+	}*/
 	return ClosestTarget;
 }

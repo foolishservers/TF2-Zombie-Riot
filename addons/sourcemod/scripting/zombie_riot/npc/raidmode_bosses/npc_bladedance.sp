@@ -539,7 +539,7 @@ public void RaidbossBladedance_NPCDeath(int entity)
 	
 	if(i_RaidGrantExtra[npc.index] == 1 && GameRules_GetRoundState() == RoundState_ZombieRiot)
 	{
-		RaidBossBladedance_NPCTalkMessage(npc.index, "Bladedance_Win")
+		RaidBossBladedance_NPCTalkMessage(npc.index, "Bladedance_Win");
 		CPrintToChatAll("%t", "Bladedance_Escape");
 		for (int client = 1; client <= MaxClients; client++)
 		{

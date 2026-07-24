@@ -507,6 +507,26 @@
 		"en"	"If you cause damage, you will receive it back."
 		"ko"	"피해를 주면 되돌려 받습니다."
 	}
+	"Defibrillator"
+	{
+		"en"	"Defibrillator"
+		"ko"	"제세동기"
+	}
+	"Defibrillator Desc"
+	{
+		"en"	"It is revived automatically."
+		"ko"	"자동으로 소생됩니다."
+	}
+	"Skill Aura"
+	{
+		"en"	"Skill Aura"
+		"ko"	"스킬 아우라"
+	}
+	"Skill Aura Desc"
+	{
+		"en"	"Ability Cooldown Reduced by 6％"
+		"ko"	"어빌리티 쿨다운 6％ 감소"
+	}
 	
 	//무기 이름
 	"Chaos Infected Launcher"
@@ -984,6 +1004,11 @@
 		"en"	"Have's Mysterious Brew"
 		"ko"	"하베의 신비로운 맥주"
 	}
+	"See You In Hell"
+	{
+		"en"	"See You In Hell"
+		"ko"	"지옥에서 보자"
+	}
 	
 	//추가 장비 설명
 	"Mysterious Brew Desc"
@@ -998,98 +1023,108 @@
 	}
 	"Get_DrinkRND_1"
 	{
-		"en" 		"Armour Point Regenerativen"
-		"ko" 		"아머 포인트 재생"
+		"en" 	"Armour Point Regenerativen"
+		"ko" 	"아머 포인트 재생"
 	}
 	"Get_DrinkRND_2"
 	{
-		"en" 		"HP Regenerativen"
-		"ko" 		"체력 재생"
+		"en" 	"HP Regenerativen"
+		"ko" 	"체력 재생"
 	}
 	"Get_DrinkRND_3"
 	{
-		"en" 		"Poison"
-		"ko" 		"독"
+		"en" 	"Poison"
+		"ko" 	"독"
 	}
 	"Get_DrinkRND_4"
 	{
-		"en" 		"Energy Drink!"
-		"ko" 		"에너지 드링크!"
+		"en" 	"Energy Drink!"
+		"ko" 	"에너지 드링크!"
 	}
 	"Get_DrinkRND_5"
 	{
-		"en" 		"No Health?"
-		"ko" 		"체력 없다?"
+		"en" 	"No Health?"
+		"ko" 	"체력 없다?"
 	}
 	"Get_DrinkRND_6"
 	{
-		"en" 		"Banner Trio"
-		"ko" 		"삼신기"
+		"en" 	"Banner Trio"
+		"ko" 	"삼신기"
 	}
 	"Get_DrinkRND_7"
 	{
-		"en" 		"Burning"
-		"ko" 		"화상"
+		"en" 	"Burning"
+		"ko" 	"화상"
 	}
 	"Get_DrinkRND_8"
 	{
-		"en" 		"Slow"
-		"ko" 		"둔화"
+		"en" 	"Slow"
+		"ko" 	"둔화"
 	}
 	"Get_DrinkRND_9"
 	{
-		"en" 		"Uber"
-		"ko" 		"무적"
+		"en" 	"Uber"
+		"ko" 	"무적"
 	}
 	"Get_DrinkRND_10"
 	{
-		"en" 		"Smite"
-		"ko" 		"단죄"
+		"en" 	"Smite"
+		"ko" 	"단죄"
 	}
 	"Get_DrinkRND_11"
 	{
-		"en" 		"Toxic Gas"
-		"ko" 		"독 가스"
+		"en" 	"Toxic Gas"
+		"ko" 	"독 가스"
 	}
 	"Get_DrinkRND_12"
 	{
-		"en" 		"Teleport"
-		"ko" 		"순간이동"
+		"en" 	"Teleport"
+		"ko" 	"순간이동"
 	}
 	"Get_DrinkRND_13"
 	{
-		"en" 		"Building Super Recharging"
-		"ko" 		"구조물 슈퍼 재충전"
+		"en" 	"Building Super Recharging"
+		"ko" 	"구조물 슈퍼 재충전"
 	}
 	"Get_DrinkRND_14"
 	{
-		"en" 		"Overmana Overload"
-		"ko" 		"마나 폭발"
+		"en" 	"Overmana Overload"
+		"ko" 	"마나 폭발"
 	}
 	"Get_DrinkRND_15"
 	{
-		"en" 		"Mana Regenerativen"
-		"ko" 		"마나 재생"
+		"en" 	"Mana Regenerativen"
+		"ko" 	"마나 재생"
 	}
 	"Get_DrinkRND_16"
 	{
-		"en" 		"Dimensional Ripper"
-		"ko" 		"차원 찢게"
+		"en" 	"Dimension Ripper"
+		"ko" 	"차원 찢개"
 	}
 	"Get_DrinkRND_17"
 	{
-		"en"		"Armor Melt"
-		"ko"		"아머 멜트"
+		"en"	"Armor Melt"
+		"ko"	"아머 멜트"
 	}
 	"Get_DrinkRND_18"
 	{
-		"en"		"Broken Armor"
-		"ko"		"아머 박살"
+		"en"	"Broken Armor"
+		"ko"	"아머 박살"
 	}
 	"Get_DrinkRND_19"
 	{
-		"en"		"Eye for an Eye"
-		"ko"		"눈에는 눈"
+		"en"	"Eye for an Eye"
+		"ko"	"눈에는 눈"
+	}
+	"Get_DrinkRND_20"
+	{
+		"en"	"A True Nightmare"
+		"ko"	"실현된 악몽"
+	}
+	"Get_DrinkRND_21"
+	{
+		"en"	"Auto Revive"
+		"ko"	"자동 소생"
 	}
 	
 	//Etc
@@ -1164,6 +1199,16 @@
 	{
 		"en"		"{crimson}[ZR]{snow} You have found!"
 		"ko"		"{crimson}[ZR]{snow} 아이템을 발견했습니다!"
+	}
+	"Already Used"
+	{
+		"en"		"Already Used"
+		"ko"		"이미 사용됨"
+	}
+	"Use Only Down"
+	{
+		"en"		"Use Only Down"
+		"ko"		"쓰러져 있을 때만 발동 가능"
 	}
 	
 	//Store

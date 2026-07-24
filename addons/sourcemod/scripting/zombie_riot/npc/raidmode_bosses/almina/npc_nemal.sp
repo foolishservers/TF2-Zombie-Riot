@@ -491,7 +491,7 @@ methodmap Nemal < CClotBody
 			
 		RaidModeScaling *= amount_of_people; //More then 9 and he raidboss gets some troubles, bufffffffff
 		TripleLol = false;
-		if(!StrContains(data, "triple_enemies"))
+		if(StrContains(data, "triple_enemies") != -1)
 		{
 			TripleLol = true;
 			i_RaidGrantExtra[npc.index] = 4;
@@ -544,7 +544,7 @@ void Nemal_NPCTalkMessage(int iNPC, const char[] message, any ...)
 {
 	char buffer[255];
 	VFormat(buffer, sizeof(buffer), message, 3);
-	NPC_TalkMessageWithTranslationCheck(iNPC, "lightblue", message);
+	NPC_TalkMessageWithTranslationCheck(iNPC, "lightblue", buffer);
 }
 
 static void Nemal_NPCTalkMessageAbout(int iNPC, const char[] message, int client)

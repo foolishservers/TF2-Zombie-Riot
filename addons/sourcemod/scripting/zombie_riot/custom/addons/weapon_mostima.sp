@@ -78,7 +78,7 @@ public Action Timer_LockDown_Wand(Handle timer, DataPack pack)
 		{
 			LockDown_Wand_Hud(client, GameTime);
 			
-			KeyofOrdered_charges_Max[client]=110*(1.0/Attributes_Get(weapon, 41, 1.0));
+			KeyofOrdered_charges_Max[client]=110*(1.0/Attributes_Get(weapon, 41, 1.0))*CooldownReductionAmount(client);
 			if(KeyofOrdered_charges[client] < KeyofOrdered_charges_Max[client])KeyofOrdered_charges[client] += 0.1;
 			if(KeyofOrdered_charges[client] > KeyofOrdered_charges_Max[client])KeyofOrdered_charges[client] = KeyofOrdered_charges_Max[client];
 			if(i_Current_Pap[client]>=2 && Passive_delay[client] < GameTime)
