@@ -596,7 +596,7 @@ methodmap Karlas < CClotBody
 
 		if(StrContains(data, "overdrive") != -1)
 		{
-			Karlas_Lines(npc, ">:)");
+			RaidBossKarlas_NPCTalkeMessage(npc, ">:)");
 			b_lostOVERDRIVE[npc.index] = true;
 
 			NpcSpeechBubble(npc.index, ">:)", 7, {255,9,9,255}, {0.0,0.0,120.0}, "");
@@ -639,7 +639,7 @@ static void Win_Line(int entity)
 	if(npc.Ally)
 		return;
 		
-	Karlas_Lines(npc, "Oyaya?");
+	RaidBossKarlas_NPCTalkeMessage(npc, "Karlas_Lose", true);
 }
 void Set_Karlas_Ally(int karlas, int stella, int wave = -2, bool bob, bool tripple)
 {	
@@ -675,7 +675,7 @@ static void Internal_ClotThink(int iNPC)
 	
 	if(RaidModeTime < GetGameTime() && !npc.Ally && !b_lostOVERDRIVE[npc.index])
 	{
-		Karlas_Lines(npc, ">:)");
+		RaidBossKarlas_NPCTalkeMessage(npc, ">:)");
 		b_lostOVERDRIVE[npc.index] = true;
 
 		NpcSpeechBubble(npc.index, ">:)", 7, {255,9,9,255}, {0.0,0.0,120.0}, "");
@@ -915,7 +915,7 @@ static bool Healing_Logic(Karlas npc, int PrimaryThreatIndex, float flDistanceTo
 		if(flDistanceToAlly < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 5.0) && Can_I_See_Enemy_Only(npc.index, Ally))
 		{
 			NpcSpeechBubble(npc.index, "..!", 7, {255,9,9,255}, {0.0,0.0,120.0}, "");
-			Karlas_Lines(npc, "..!");
+			RaidBossKarlas_NPCTalkeMessage(npc, "..!");
 			CPrintToChatAll("{crimson}Karlas Heals Stella, and provides himself with some adrenaline...");
 			HealEntityGlobal(npc.index, Ally, float((AllyMaxHealth / 7)), 1.0, 0.0, HEAL_ABSOLUTE);
 			ApplyStatusEffect(npc.index, npc.index, "Ancient Melodies", 5.0);
@@ -2311,11 +2311,7 @@ static Action Internal_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 		if(IsValidEntity(ally))
 		{
 			ApplyStatusEffect(ally, ally, "Extreme Anxiety", 999.0);
-			switch(GetRandomInt(0, 1))
-			{
-				case 0: Karlas_Lines(npc, "*heavy breathing*");
-				case 1: Karlas_Lines(npc, "*slight pain grunt*");
-			}
+			RaidBossKarlas_NPCTalkeMessage(npc, "Karlas_Exhausted_%d", true, GetRandomInt(1, 2));
 			RaidModeTime +=17.0; //Extra time due to invuln
 		
 			Stella donner = view_as<Stella>(ally);
@@ -2706,11 +2702,12 @@ static void Internal_NPCDeath(int entity)
 			if(!b_bobwave[npc.index])
 			{
 				ApplyStatusEffect(stella.index, stella.index, "Extreme Anxiety", 999.0);
+				RaidBossStella_NPCTalkMessage(stella, "Stella_Anger_%d", GetRandomInt(1, 3));
 				switch(GetRandomInt(1,3))
 				{
-					case 1: Stella_Lines(stella,"흠, 어쩔 수 없이 나 혼자 처리해야하나.");
-					case 2: Stella_Lines(stella,"아직 끝나지 않았어..");
-					case 3: Stella_Lines(stella,"감히 {crimson}카를라스{snow}에게 손을 대다니!");
+					case 1: RaidBossStella_NPCTalkMessage(stella, "흠, 어쩔 수 없이 나 혼자 처리해야하나.");
+					case 2: RaidBossStella_NPCTalkMessage(stella,"아직 끝나지 않았어..");
+					case 3: RaidBossStella_NPCTalkMessage(stella,"감히 {crimson}카를라스{snow}에게 손을 대다니!");
 				}
 			}
 		}
@@ -2897,7 +2894,9 @@ public Action Fusion_RepeatSound_Doublevoice(Handle timer, DataPack pack)
 	return Plugin_Handled; 
 }
 
-void Karlas_Lines(Karlas npc, const char[] text)
+void RaidBossKarlas_NPCTalkeMessage(Karlas npc, const char[] text, bool translated = false, any ...)
 {
-	PrintNPCMessageWithPrefixes(npc.index, "{crimson}", text, .messageColor = "{snow}");
+	char buffer[256];
+	VFormat(buffer, sizeof(buffer), text, 4);
+	PrintNPCMessageWithPrefixes(npc.index, "{crimson}", buffer, translated, .messageColor = "{snow}");
 }
