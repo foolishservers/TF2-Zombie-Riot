@@ -1743,7 +1743,7 @@ void PrintPapDescription(int client, Item item, ItemInfo info, int type = PAP_DE
 	if(strlen(bufferSizeSplit) > 240) //If 240 exists, split.
 	{
 		Format(Display2, sizeof(Display2), "%s", bufferSizeSplit[239]);
-		CPrintToChat(client, "%s%s-", STORE_COLOR ,Display1);
+		CPrintToChat(client, "%s%s", STORE_COLOR ,Display1);
 	}
 	else
 		CPrintToChat(client, "%s%s", STORE_COLOR ,Display1);
