@@ -488,7 +488,7 @@ static void RaidBossSensal_NPCTalkMessage(int entity, const char[] message, bool
 	PrintNPCMessageWithPrefixes(entity, "blue", buffer, translated);
 }
 
-static void RaidBossSensal_NPCTalkMessageAbout(int entity, const char[] message, int client, bool translated = false)
+static void RaidBossSensal_NPCTalkMessageAbout(int entity, const char[] message, int client)
 {
 	NPC_TalkMessageFormat(entity, "blue", "%t", _, _, buffer, client);
 }
@@ -2360,7 +2360,7 @@ static void Sensal_Weapon_Lines(Sensal npc, int client)
 	{
 		if(mentionClient)
 		{
-			RaidBossSensal_NPCTalkMessageAbout(npc.index, Text_Lines, client, true);
+			RaidBossSensal_NPCTalkMessageAbout(npc.index, Text_Lines, client);
 		}
 		else
 		{
