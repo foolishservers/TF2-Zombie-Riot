@@ -495,14 +495,7 @@ methodmap Stella < CClotBody
 			fl_Extra_Speed[spawn_index] = fl_Extra_Speed[this.index];
 		}
 	}
-
-	public char[] GetName()
-	{
-		char Name[255];
-		Format(Name, sizeof(Name), "%s%s%s:", NameColour, c_NpcName[this.index], TextColour);
-		return Name;
-	}
-
+	
 	public void NC_StartupSound()
 	{
 		EmitSoundToAll("mvm/sentrybuster/mvm_sentrybuster_spin.wav");
@@ -912,17 +905,7 @@ methodmap Stella < CClotBody
 		
 		if(!b_bobwave[npc.index] && !b_tripple_raid[npc.index])
 		{
-			switch(GetRandomInt(0, 6))
-			{
-				case 0: Stella_Lines(npc, "다행히도 {purple}트윌{snow}님보다 먼저 널 찾아내서 다행이군. 너한텐 좋은 일이 아니겠지만.");
-				case 1: Stella_Lines(npc, "이 장소는 정말 끔찍하군. 빨리 일을 끝내고 싶은데.");
-				case 2: Stella_Lines(npc, "{crimson}카를라스{snow}, 쓸데없는 잡담은 그만. 일할 시간이야.");
-				case 3: Stella_Lines(npc, "심판을 내리기 위해 여기에 왔다.");
-				case 4: Stella_Lines(npc, "너무 오래 걸리면 이 지역이 곧 폭심지가 될 거야. 행운을 빈다.");
-				case 5: Stella_Lines(npc, "우리가 해야할 일은, 이 곳이 유리화되기 전에 최대한 빨리 정리하는 것...");
-				case 6: Stella_Lines(npc, "널 제거하기 위해 이 곳에 왔다.");
-			}
-			
+			RaidBossStella_NPCTalkMessage(npc, "Stella_Encounter_%d", true, GetRandomInt(1, 7));
 		}
 		
 		c_NpcName[npc.index] = "Stella";
@@ -979,20 +962,11 @@ static void Win_Line(int entity)
 
 	if(npc.Ally)
 	{
-		switch(GetRandomInt(0, 2))
-		{
-			case 0: Stella_Lines(npc, "허, 벌써 전멸이라니, 생각했던것보다 훨씬 쉬운데...");
-			case 1: Stella_Lines(npc, "{darkblue}심해{snow}가 이렇게 처리가 쉬웠나?");
-			case 2: Stella_Lines(npc, "저 시체 날아가는 꼴이 정말 {gold}환상적이군{snow}!");
-		}
+		RaidBossStella_NPCTalkMessage(npc, "Stella_Lose_%d", true, GetRandomInt(1, 3));
 	}
 	else
 	{
-		switch(GetRandomInt(0, 1))
-		{
-			case 0: Stella_Lines(npc, "{crimson}카를라스{snow}를 짓밟은 대가다.");
-			case 1: Stella_Lines(npc, "여전히 {purple}트윌{snow}님이 남아있어서 다행이군...");
-		}
+		RaidBossStella_NPCTalkMessage(npc, "Stella_Lose_No_Karlas_%d", true, GetRandomInt(1, 2));
 	}
 }
 static Action OffsetLoseTimer(Handle Timer, int ref)
@@ -1042,14 +1016,8 @@ static void Internal_ClotThink(int iNPC)
 		if(!npc.m_bSaidWinLine)
 		{
 			npc.m_bSaidWinLine = true;
-			switch(GetRandomInt(0,3))
-			{
-				case 0: Stella_Lines(npc, "네 패배다!");
-				case 1: Stella_Lines(npc, "너무 느려!");
-				case 2: Stella_Lines(npc, "시간 종료!");
-				case 3: Stella_Lines(npc, "그렇게 오래 살아봤자 남은건 먼지가 될 뿐인데...");
-			}
-			Stella_Lines(npc, "네 놈은 5초 동안 우리 루이나의 이온 폭격에 살아남을 궁리나 해라.");
+			RaidBossStella_NPCTalkMessage(npc, "Stella_TimeOver_%d", true, GetRandomInt(1, 4));
+			RaidBossStella_NPCTalkMessage(npc, "Stella_TimeOver_Special", true);
 			Ruina_Ion_Storm(npc.index);	//This is very stupid, I love it.
 		}
 		CreateTimer(5.0, OffsetLoseTimer, EntIndexToEntRef(npc.index),TIMER_FLAG_NO_MAPCHANGE);
@@ -1069,15 +1037,11 @@ static void Internal_ClotThink(int iNPC)
 			b_LastMannLines[npc.index] = true;
 			if(npc.Ally)
 			{
-				switch(GetRandomInt(0,1))
-				{
-					case 0:Stella_Lines(npc, "이제 숨 좀 돌리겠군...");
-					case 1:Stella_Lines(npc, "하, 거의 다 끝났다. 이제{crimson} 한 놈만 더{snow}!");
-				}
+				RaidBossStella_NPCTalkMessage(npc, "Stella_LastMann_%d", true, GetRandomInt(1, 2));
 			}
 			else
 			{
-				Stella_Lines(npc, "널 형체도 못 알아보게끔 뭉개주마.");
+				RaidBossStella_NPCTalkMessage(npc, "Stella_LastMann_No_Karlas", true);
 			}
 		}
 	}
@@ -1724,26 +1688,8 @@ static bool Stella_Nightmare_Logic(Stella npc, int PrimaryThreatIndex, float vec
 		npc.m_bKarlasRetreat = true;
 		int max_dialogue = i_current_wave[npc.index] >= 20 ? 11 : 9;
 		int chose = GetRandomInt(1, max_dialogue);
-		switch(chose)
-		{
-			case 1: Stella_Lines(npc, "{snow}좋아. {crimson}이제 끝내야지.{snow}.");	
-			case 2: Stella_Lines(npc, "{crimson}흠, {snow}어떻게 끝날지 참으로 기대되는군...");
-			case 3: Stella_Lines(npc, "{crimson}각오해라, {aqua}심판이 멀지 않았다.{snow}.");
-			case 4: Stella_Lines(npc, "이건 너무 뻔한데. 네 앞길 말이다.");
-			case 5: Stella_Lines(npc, "슬슬 네 {crimson}허세{snow}가 너무 거슬리는군.");
-			case 6: Stella_Lines(npc, "교만에 빠졌군.");
-			case 7: Stella_Lines(npc, "꽤 번거롭겠는데.");
-			case 8: Stella_Lines(npc, "마스터....");
-			case 9: Stella_Lines(npc, "내 이름을 걸고...");
-
-			case 10:Stella_Lines(npc, "{crimson}카를라스{snow}, 거울 사용 허락은 분명히 해뒀겠지?");
-			case 11:Stella_Lines(npc, "{crimson}카를라스{snow}, {purple}그 분{snow}에게 새로운 거울의 사용 허락을 맡아왔겠지?");
-
-			//case 4: Stella_Lines(npc, "Oh not again now train's gone and {crimson}Left{snow}.");
-			//case 5: Stella_Lines(npc, "Oh not again now cannon's gone and {crimson}recharged{snow}.");
-			//case 9: Stella_Lines(npc, "Heh {crimson}This is{snow} gonna be funny.");
-			//case 12:Stella_Lines(npc, "I've got a question for you, how do you think Holy Water is made?");
-		}
+		
+		RaidBossStella_NPCTalkMessage(npc, "Stella_NightmareCannon_Ready_%d", true, chose);
 		//CPrintToChatAll("Chose %i", chose);
 		npc.m_iNC_Dialogue = chose;
 
@@ -1773,28 +1719,14 @@ static bool Stella_Nightmare_Logic(Stella npc, int PrimaryThreatIndex, float vec
 		f_NpcTurnPenalty[npc.index] = 1.0;
 		SDKUnhook(npc.index, SDKHook_Think, Normal_Laser_Think);
 		CreateTimer(0.75, Donner_Nightmare_Offset, npc.index, TIMER_FLAG_NO_MAPCHANGE);
-
-		switch(npc.m_iNC_Dialogue)
+		
+		if (0 < npc.m_iNC_Dialogue < 12)
 		{
-			case 1: Stella_Lines(npc, "그리고 이 포로 널 갈아주마.");
-			case 2: Stella_Lines(npc, "그리고 {crimson}너희에겐 끔찍한 결말{snow}일테니.");
-			case 3: Stella_Lines(npc, "{crimson}저 놈들에게 심판을{snow}!");
-			case 4: Stella_Lines(npc, "네 앞길이{crimson} 피바다{snow}로 도배될 테니깐 말이다.");
-			case 5: Stella_Lines(npc, "그리고 그런 허세는 대부분 {crimson}이런걸 들이대주면 고쳐지더군.");
-			case 6: Stella_Lines(npc, "그 교만이 널 이 프랙탈 빔으로부터 지켜주진 않을거다.");
-			case 7: Stella_Lines(npc, "그러니 이걸로 그 문제를 {crimson}제거{snow}하면 되겠지!");
-			case 8: Stella_Lines(npc, "{aqua}스파크!");
-			case 9: Stella_Lines(npc, "너희를 전부 {crimson}멸절시킨다.");
-
-			case 10:Stella_Lines(npc, "저들에게 자신의 파멸을 보여주고 싶군. 하!");
-			case 11:Stella_Lines(npc, "돌아가면 알겠지.");
-
-			//case 4: Stella_Lines(npc, "And the city's to far to walk to the end while I...");
-			//case 5: Stella_Lines(npc, "And the Cannons's Capacitor's to small..");
-			//case 9: Stella_Lines(npc, "{crimson}HERE COMES THE FUNNY{snow}.");
-			//case 12:Stella_Lines(npc, "By boiling the hell out of it, {aqua}hehehe....");
-
-			default: CPrintToChatAll("%s It seems my master forgot to set a proper dialogue line for this specific number, how peculiar. Anyway, here's the ID: [%i]", npc.GetName(), npc.m_iNC_Dialogue);
+			RaidBossStella_NPCTalkMessage(npc, "Stella_NightmareCannon_%d", true, npc.m_iNC_Dialogue);
+		}
+		else
+		{	
+			CPrintToChatAll("%t %t", "NPCTalk_Stella", "Stella_NightmareCannon_Error", npc.m_iNC_Dialogue);
 		}
 		
 		npc.AddActivityViaSequence("taunt_mourning_mercs_medic");
@@ -2109,14 +2041,7 @@ static Action Internal_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 		{
 			//only actually bother saying something if stella will exist during the iron will state.
 			//aka only if karlas is alive.
-			int chose = GetRandomInt(1, 4);
-			switch(chose)
-			{
-				case 1: Stella_Lines(npc, "{snow}넌... 이게 정말로 끝일거라고 생각하나..?!");	
-				case 2: Stella_Lines(npc, "{snow}어떻게 이런 일이...");
-				case 3: Stella_Lines(npc, "{snow}카를라스...");
-				case 4: Stella_Lines(npc, "{snow}점점 추워지는군..");
-			}
+			RaidBossStella_NPCTalkMessage(npc, "Stella_Struggle_%d", true, GetRandomInt(1, 4));
 			RaidModeTime +=17.0; //Extra time due to invuln
 			
 			if(!npc.m_flInvulnerability)
@@ -2180,22 +2105,62 @@ static void Stella_Weapon_Lines(Stella npc, int client)
 		return;
 
 	bool valid = true;
+	//////////////////////////
+	// Below one is true by default!!!!!
+	// If you want to add new lines, should check your dialogue mention player.
+	//////////////////////////
+	bool mentionClient = true;
 	char Text_Lines[255];
 
 	Text_Lines = "";
 
 	switch(i_CustomWeaponEquipLogic[weapon])
 	{
-		case WEAPON_KIT_BLITZKRIEG_CORE: switch(GetRandomInt(0,1)) 	{case 0: Format(Text_Lines, sizeof(Text_Lines), "블리츠크리그, 나를 하수인으로 만든 자. 너도 그 놈과 똑같을까, {gold}%N{snow} ?", client); 								case 1: Format(Text_Lines, sizeof(Text_Lines), "{gold}%N{snow} 네가 그 블리츠크리그의 무기를 계속 쓰겠다면, 나도 정면으로 너에게 침을 뱉을 수 밖에 없다.", client);}
-		case WEAPON_FANTASY_BLADE: switch(GetRandomInt(0,1)) 		{case 0: Format(Text_Lines, sizeof(Text_Lines), "{crimson}카를라스{snow}의 오래된 검이라니, 흥미로운 선택이군, {gold}%N", client); 														case 1: Format(Text_Lines, sizeof(Text_Lines), "그건 카를라스가 버릴 정도로 구식인 물건인데. {gold}%N{snow}, 좀 더 세련된걸 갖고 오지 그랬나.", client);}	
-		case WEAPON_ION_BEAM_NIGHT: switch(GetRandomInt(0,1)) 		{case 0: Format(Text_Lines, sizeof(Text_Lines), "날 복제하려하는 건가, {gold}%N{snow}?", client); 																			case 1: Format(Text_Lines, sizeof(Text_Lines), "이런 것도 가져오다니, 참으로 놀라운데.", client);}
-		case WEAPON_IMPACT_LANCE: switch(GetRandomInt(0,1)) 		{case 0: Format(Text_Lines, sizeof(Text_Lines), "그런 뾰족한 막대기로 적을 찌르려는거냐, {gold}%N{snow}?", client); 																	case 1: Format(Text_Lines, sizeof(Text_Lines), "{gold}%N{snow}, 넌 카를라스처럼 창을 잘 다루지 못 할 거다.", client);}	
-		case WEAPON_ION_BEAM: switch(GetRandomInt(0,1)) 			{case 0: Format(Text_Lines, sizeof(Text_Lines), "레이저 기반 마법들은 루이나의 전문 분야다. {gold}%N{snow} 넌 그것도 모르고 있겠지.",client); 	case 1: Format(Text_Lines, sizeof(Text_Lines), "{gold}%N{snow}, 그것도 네가 훔쳤다고 생각할 수 밖에 없군.", client);}	
-		case WEAPON_ION_BEAM_PULSE: switch(GetRandomInt(0,1)) 		{case 0: Format(Text_Lines, sizeof(Text_Lines), "지금 {purple}트윌{snow}님의 레이저를 사용하는거냐? 네가 지금 무슨 짓을 벌이고 있는지도 모르는군. {gold}%N", client); 	case 1: Format(Text_Lines, sizeof(Text_Lines), "{purple}트윌{snow}님이 이걸 보시면 어떻게 반응하실지 참으로 기대된다, {gold}%N{snow}. 솔직히 재밌겠는데.", client);}	
-		case WEAPON_GRAVATON_WAND: switch(GetRandomInt(0,1)) 		{case 0: Format(Text_Lines, sizeof(Text_Lines), "중력 마법,  {gold} %N{snow} 네가 그걸 사용할 줄 알다니.", client); 													case 1: Format(Text_Lines, sizeof(Text_Lines), "그 중력 마법의 진짜배기를 {gold}%N{snow} 너에게 보여주고 싶군.", client);}
-		case WEAPON_ION_BEAM_FEED: 	Format(Text_Lines, sizeof(Text_Lines), "프리즘 피드백 루프? {gold}%N{snow}, 그건 몇 년 동안 사용되지 않은 물건이다.", client);
-		case WEAPON_BOBS_GUN:  		Format(Text_Lines, sizeof(Text_Lines), "밥의 총이라니, 그냥 포기해야겠군.", client); 
-		case WEAPON_KIT_FRACTAL:	Format(Text_Lines, sizeof(Text_Lines), "{aqua}프랙탈{snow}은 아직 개발 중이라고 들었는데, {gold}%N{snow} 네 놈이 그걸 어떻게 얻은거지?", client); 
+		case WEAPON_KIT_BLITZKRIEG_CORE:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Stella_Response_Blitzkreig_Kit_%d", GetRandomInt(1, 2));
+		}
+		case WEAPON_FANTASY_BLADE:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Stella_Response_Fantasy_Blade_%d", GetRandomInt(1, 2));
+		}
+		case WEAPON_ION_BEAM_NIGHT:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Stella_Response_Nightmare_Cannon_%d", GetRandomInt(1, 2));
+		}
+		case WEAPON_IMPACT_LANCE:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Stella_Response_Impact_Lance_%d", GetRandomInt(1, 2));
+		}
+		case WEAPON_ION_BEAM:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Stella_Response_Prismatic_Wand_%d", GetRandomInt(1, 2));
+		}
+		case WEAPON_ION_BEAM_PULSE:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Stella_Response_Pulse_Cannon_%d", GetRandomInt(1, 2));
+		}
+		case WEAPON_GRAVATON_WAND:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Stella_Response_Gravaton_Spell_%d", GetRandomInt(1, 2));
+		}
+		case WEAPON_ION_BEAM_FEED:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Stella_Response_Feedback_Loop");
+		}
+		case WEAPON_BOBS_GUN:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Stella_Response_Bobs_Sexy_Gun");
+		}
+		case WEAPON_KIT_FRACTAL:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Stella_Response_Fractal_Kit");
+		}
+		case WEAPON_DWELLER_MISC:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Stella_Response_Dweller");
+			mentionClient = false;
+		}
 		default:
 		{
 			valid = false;
@@ -2204,7 +2169,15 @@ static void Stella_Weapon_Lines(Stella npc, int client)
 
 	if(valid)
 	{
-		Stella_Lines(npc, Text_Lines);
+		if (mentionClient)
+		{
+			RaidBossStella_NPCTalkMessageAbout(npc, Text_Lines, client);
+		}
+		else
+		{
+			RaidBossStella_NPCTalkMessage(npc, Text_Lines);
+		}
+		
 		fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(17.0, 26.0);
 		b_said_player_weaponline[client] = true;
 	}
@@ -2239,12 +2212,7 @@ static void Internal_NPCDeath(int entity)
 	{
 		if(b_bobwave[npc.index])
 		{
-			switch(GetRandomInt(1,3))
-			{
-				case 1: Stella_Lines(npc, "흠, 아무래도 우리의 턴은 끝난것 같군.");
-				case 2: Stella_Lines(npc, "와우, 보기만 해도 정말 재밌었어.");
-				case 3: Stella_Lines(npc, "더 놀고 싶었는데. 아깝네.");
-			}
+			RaidBossStella_NPCTalkMessage(npc, "Stella_Bob_Appeared_%d", GetRandomInt(1, 3));
 		}
 		else
 		{
@@ -2255,21 +2223,12 @@ static void Internal_NPCDeath(int entity)
 					Karlas karl = view_as<Karlas>(npc.Ally);
 					karl.Anger = true;
 					NpcSpeechBubble(npc.Ally, ">>:(", 7, {255,9,9,255}, {0.0,0.0,120.0}, "");
-					switch(GetRandomInt(1,3))
-					{
-						case 1: Stella_Lines(npc, "흠, {crimson}카를라스{snow}에게 맡겨야겠어.");
-						case 2: Stella_Lines(npc, "여전히 {crimson}카를라스{snow}와 싸워야할거다.");
-						case 3: Stella_Lines(npc, "회전하는 칼은 마음에 드나?");
-					}	
+					RaidBossStella_NPCTalkMessage(npc, "Stella_Exhausted_%d", GetRandomInt(1, 3));
 				}
 			}
 			else
 			{
-				switch(GetRandomInt(1,2))
-				{
-					case 1: Stella_Lines(npc, "흠, 일단 철수한다.{crimson} 지금은.");
-					case 2: Stella_Lines(npc, "좋아. 우린 떠난다.{crimson} 다음 기회가 올 때까지는 말이지.{snow} ");
-				}
+				RaidBossStella_NPCTalkMessage(npc, "Stella_Death_%d", GetRandomInt(1, 2));
 			}
 		}
 	}
@@ -2791,9 +2750,9 @@ static int i_Get_Laser_Target(Stella npc, float Range = -1.0)
 		//CPrintToChatAll("Chose Target: %N with angle var: %f", Tmp_Target, Angle_Val);
 		return Tmp_Target;
 	}
-		
 }
-void Stella_Lines(Stella npc, const char[] text)
+
+void RaidBossStella_NPCTalkMessage(Stella npc, const char[] text, bool translated = false, any ...)
 {
 	if(b_test_mode[npc.index])
 		return;
@@ -2801,6 +2760,20 @@ void Stella_Lines(Stella npc, const char[] text)
 	//if in laststand state, don't speak about stuff.
 	if(npc.m_flInvulnerability)
 		return;
+	
+	char buffer[256];
+	VFormat(buffer, sizeof(buffer), text, 4);
+	PrintNPCMessageWithPrefixes(npc.index, NameColour, buffer, translated, .messageColor = TextColour);
+}
 
-	PrintNPCMessageWithPrefixes(npc.index, NameColour, text, .messageColor = TextColour);
+static void RaidBossStella_NPCTalkMessageAbout(Stella npc, const char[] text, int client)
+{
+	if(b_test_mode[npc.index])
+		return;
+	
+	//if in laststand state, don't speak about stuff.
+	if(npc.m_flInvulnerability)
+		return;
+	
+	NPC_TalkMessageFormat(npc.index, NameColour, "%t", _, TextColour, text, client);
 }

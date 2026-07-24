@@ -3990,6 +3990,7 @@ void LoadNPCTalkTranslations()
 	LoadTranslations("zombieriot.phrases.interitustalk");
 	LoadTranslations("zombieriot.phrases.blitzkriegtalk");
 	LoadTranslations("zombieriot.phrases.roguetalk");
+	LoadTranslations("zombieriot.phrases.ruinatalk");
 }
 
 void CheckForLowAmmo()

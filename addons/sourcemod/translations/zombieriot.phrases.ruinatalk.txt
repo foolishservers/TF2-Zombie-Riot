@@ -1,0 +1,448 @@
+"Phrases"
+{
+	// Stella.
+	"NPCTalk_Stella"
+	{
+		"en"		"Stella"
+		"ko"		"스텔라"
+	}
+	
+	"Stella_Encounter_1"
+	{
+		"en"		"Luckily {purple}Twirl{snow} wasn't the one who found you first. For us that is, not you"
+		"ko"		"{purple}트윌{snow}님보다 먼저 너희를 찾아내서 다행이네. 너희한텐 좋은 일이 아니겠지만."
+	}
+	"Stella_Encounter_2"
+	{
+		"en"		"Man this place is horrid, can't wait to get this job done as soon as possible."
+		"ko"		"아.. 이 장소는 정말 끔찍해. 최대한 빨리 끝내고 돌아가자."
+	}
+	"Stella_Encounter_3"
+	{
+		"en"		"Hey {crimson}Karlas{snow}, enough \"chit chat\" it's time to work"
+		"ko"		"{crimson}카를라스{snow}, 쓸데없는 잡담은 이제 그만. 일할 시간이야."
+	}
+	"Stella_Encounter_4"
+	{
+		"en"		"We have arrived to render Judgement."
+		"ko"		"흠흠.. 우리는 너희들에게 심판을 내리기 위해 이 곳에 왔다."
+	}
+	"Stella_Encounter_5"
+	{
+		"en"		"I'm in a good mood, so I'll just let you know, if you take too long, this area will soon become ground zero, good luck."
+		"ko"		"기분이 좋으니까, 너희에게 하나 알려줄게. 시간 오래 끌면, 여긴 잿더미가 될 거야~ 그러니 행운을 빌게?"
+	}
+	"Stella_Encounter_6"
+	{
+		"en"		"All we have to do is keep them occupied long enough for the ones above to start glassing the area..."
+		"ko"		"우리가 할 일은 번개로 이 곳을 모두 유리로 만들기 전까지 얘네를 최대한 붙잡아두는 것..."
+	}
+	"Stella_Encounter_7"
+	{
+		"en"		"We have arrived to eradicate you."
+		"ko"		"너희를 막기 위해 우리가 이 곳에 왔다."
+	}
+	
+	"Stella_Lose_1"
+	{
+		"en"		"Huh, they're all dead, guess they were easier to stop then I expected..."
+		"ko"		"허, 벌써 전멸이라니, 생각했던 것보다 훨씬 쉬웠잖아..."
+	}
+	"Stella_Lose_2"
+	{
+		"en"		"HAH, the {darkblue}sea{snow} isn't THAT hard to beat"
+		"ko"		"하! {darkblue}심해{snow}도 별 것 아니었구만?"
+	}
+	"Stella_Lose_3"
+	{
+		"en"		"Oh boy, their ragdoll's were {gold}amazing{snow}!"
+		"ko"		"어머, 쟤네 시체 날라가는 거 봤어? {gold}꼴사납네~{snow}"
+	}
+	"Stella_Lose_No_Karlas_1"
+	{
+		"en"		"You killed {crimson}Karlas{snow}, and I {crimson}erased{snow} your existance"
+		"ko"		"너희가 {crimson}카를라스{snow}를 죽였어. 그러니 {crimson}너희 존재를 이 세상에서 지워주지.{snow}"
+	}
+	"Stella_Lose_No_Karlas_2"
+	{
+		"en"		"Well, atleast I still have {purple}Twirl{snow}..."
+		"ko"		"그래도 나한테 아직 {purple}트윌{snow}님이 계시니까..."
+	}
+	
+	"Stella_TimeOver_1"
+	{
+		"en"		"You lose!"
+		"ko"		"패배 확정~!"
+	}
+	"Stella_TimeOver_2"
+	{
+		"en"		"Too late!"
+		"ko"		"너무 늦었다구?"
+	}
+	"Stella_TimeOver_3"
+	{
+		"en"		"Times UP!"
+		"ko"		"시간 초과!"
+	}
+	"Stella_TimeOver_4"
+	{
+		"en"		"Atleast you survived this long, now its time for it all to end..."
+		"ko"		"흠.. 그렇게 오래 버텨봤자 이젠 먼지가 될 일만 남았는데..."
+	}
+	"Stella_TimeOver_Special"
+	{
+		"en"		"You have around 5 seconds until everything gets completely nuked by Ruina's ION barrage, good luck."
+		"ko"		"여긴 5초 뒤에 루이나의 이온 공격에 전부 잿더미가 되버릴꺼야. 행운을 빌게~"
+	}
+	
+	"Stella_LastMann_1"
+	{
+		"en"		"We'd better not choke now..."
+		"ko"		"후.. 이제야 숨 좀 돌리겠네..."
+	}
+	"Stella_LastMann_2"
+	{
+		"en"		"Ahaha, its almost over now, just{crimson} one more left{snow}!"
+		"ko"		"하하, 이제 거의 다 끝났네. {crimson}한 놈만 더!{snow}"
+	}
+	"Stella_LastMann_No_Karlas"
+	{
+		"en"		"I'm about to turn you into an unrecognisable mass of sea for {crimson}what you've DONE TO KARLAS"
+		"ko"		"너희가 카를라스를 했던 짓을 생각하면... {crimson}너를 형체를 알아보지 못할 정도로 뭉개줘야겠지.{snow}"
+	}
+	
+	"Stella_NightmareCannon_Ready_1"
+	{
+		"en"		"{snow}Thats it {crimson}I'm going to kill you{snow}."
+		"ko"		"{snow}좋아. {crimson}슬슬 끝내야지.{snow}"
+	}
+	"Stella_NightmareCannon_Ready_2"
+	{
+		"en"		"{crimson}hm, {snow}Wonder how this will end..."
+		"ko"		"{crimson}흠, {snow}어떻게 끝날지 기대되네~"
+	}
+	"Stella_NightmareCannon_Ready_3"
+	{
+		"en"		"{crimson}PREPARE {snow}Thyself, {aqua}Judgement {crimson}Is near{snow}."
+		"ko"		"{crimson}각오해.{snow} {aqua}심판{snow}이 머지않았으니깐."
+	}
+	"Stella_NightmareCannon_Ready_4"
+	{
+		"en"		"Aiming this thing is actually quite {crimson}complex {snow}ya know."
+		"ko"		"이걸 조준하는 건 꽤나 {crimson}까다롭단 말이지.{snow}"
+	}
+	"Stella_NightmareCannon_Ready_5"
+	{
+		"en"		"I'm getting quite bored of {crimson}this{snow} whole charade"
+		"ko"		"지루하네~ {crimson}이 짓거리. 더는 못 봐주겠는 걸?{snow}"
+	}
+	"Stella_NightmareCannon_Ready_6"
+	{
+		"en"		"Oh how {crimson}Tiny{snow} you all look from up here."
+		"ko"		"너희 말이야. {crimson}너무 귀여운 걸?{snow}"
+	}
+	"Stella_NightmareCannon_Ready_7"
+	{
+		"en"		"This has become quite troublesome."
+		"ko"		"일이 꽤나 번거로워졌는데.."
+	}
+	"Stella_NightmareCannon_Ready_8"
+	{
+		"en"		"Master...."
+		"ko"		"마스터...."
+	}
+	"Stella_NightmareCannon_Ready_9"
+	{
+		"en"		"I, in the name of..."
+		"ko"		"내 이름을 걸고..."
+	}
+	"Stella_NightmareCannon_Ready_10"
+	{
+		"en"		"Hey {crimson}Karlas{snow}, you got the new mirror?"
+		"ko"		"{crimson}카를라스{snow}, 거울은 가져왔지?"
+	}
+	"Stella_NightmareCannon_Ready_11"
+	{
+		"en"		"{crimson}Karlas{snow}, you did ask for persmission to use {purple}her{snow} mirror right?"
+		"ko"		"{crimson}카를라스{snow}, {purple}그 분{snow}께 거울을 써도 좋다고 허락은 받았지?"
+	}
+	
+	"Stella_NightmareCannon_1"
+	{
+		"en"		"And I'll Do IT WITH THIS CANNON."
+		"ko"		"이 악몽포로 말이야."
+	}
+	"Stella_NightmareCannon_2"
+	{
+		"en"		"This is gonna end {crimson}Poorly for you all{snow}."
+		"ko"		"물론 {crimson}너희들에게는 끔찍한 결말이겠지만~{snow}"
+	}
+	"Stella_NightmareCannon_3"
+	{
+		"en"		"{crimson}JUDGEMENT BE UPON THEE{snow}!"
+		"ko"		"{crimson}그들에게 심판을!{snow}"
+	}
+	"Stella_NightmareCannon_4"
+	{
+		"en"		"However its still{crimson} worth the effort{snow}."
+		"ko"		"그래도.. 충분히 {crimson}그 값{snow}을 하는 물건이지."
+	}
+	"Stella_NightmareCannon_5"
+	{
+		"en"		"So I'll use you all as {crimson}tools for my amusement"
+		"ko"		"그러니까.. 너희 모두 {crimson}내 장난감{snow}이 되어줘야겠어."
+	}
+	"Stella_NightmareCannon_6"
+	{
+		"en"		"But your tiny stature won't save you from my Fractal Beam Emitter"
+		"ko"		"{crimson}내 프랙탈 빔 방출기로 다 갈아버리고 싶을 정도야.{snow}"
+	}
+	"Stella_NightmareCannon_7"
+	{
+		"en"		"So I'll just {crimson}remove{snow} the troublesome component!"
+		"ko"		"귀찮으니까 {crimson}그냥 다 밀어버려야겠다!{snow}"
+	}
+	"Stella_NightmareCannon_8"
+	{
+		"en"		"{aqua}SPARK!"
+		"ko"		"{aqua}스파크!"
+	}
+	"Stella_NightmareCannon_9"
+	{
+		"en"		"Shall {crimson}Eviscerate you all"
+		"ko"		"{crimson}너희를 모두 제거하겠다."
+	}
+	"Stella_NightmareCannon_10"
+	{
+		"en"		"You all are about to see your own doomed reflections.. heh"
+		"ko"		"이거 반사되는 걸 쟤네한테 꼭 보여주고 싶었거든.. 하핫"
+	}
+	"Stella_NightmareCannon_11"
+	{
+		"en"		"Guess we'll findout once we return."
+		"ko"		"됐어. 돌아가서 혼 좀 한 번 나지 뭐."
+	}
+	
+	"Stella_NightmareCannon_Error"
+	{
+		"#format"	"{1:d}"
+		"en"		"It seems my master forgot to set a proper dialogue line for this specific number, how peculiar. Anyway, here's the ID: {1}"
+		"ko"		"음.. 내 주인님이 이 번호에 맞는 대사를 설정하시는 걸 깜빡하신 거 같아. 어쨌든 {1}이 그 번호야!"
+	}
+	
+	"Stella_Struggle_1"
+	{
+		"en"		"{snow}You... You really think thats all I have....?!"
+		"ko"		"{snow}너희... 지금 이게 끝이라고 생각해?!"
+	}
+	"Stella_Struggle_2"
+	{
+		"en"		"{snow}Oh lord.. this actually hurts..."
+		"ko"		"{snow}너무 아파.."
+	}
+	"Stella_Struggle_3"
+	{
+		"en"		"{snow}Karlas..."
+		"ko"		"{snow}카를라스..."
+	}
+	"Stella_Struggle_4"
+	{
+		"en"		"{snow}Its getting kinda cold.."
+		"ko"		"{snow}점점 추워지는 것 같아.."
+	}
+	
+	"Stella_Bob_Appeared_1"
+	{
+		"en"		"Huh, I guess our turn's over"
+		"ko"		"우리는 여기까진가 보네~"
+	}
+	"Stella_Bob_Appeared_2"
+	{
+		"en"		"Oh boy, this is gonna be fun to watch"
+		"ko"		"오, 볼 구경거리가 생겼잖아?"
+	}
+	"Stella_Bob_Appeared_3"
+	{
+		"en"		"I wanted to play with them more. Karlas, you too, don't you?"
+		"ko"		"쳇, 쟤네랑 더 놀고 싶었는데. 그치, 카를라스?"
+	}
+	
+	"Stella_Exhausted_1"
+	{
+		"en"		"Hmph, I'll let {crimson}Karlas{snow} handle this."
+		"ko"		"앗.. 나머진 {crimson}카를라스{snow}에게 맡겨야 겠네."
+	}
+	"Stella_Exhausted_2"
+	{
+		"en"		"You still have {crimson}Karlas{snow} to deal with... heh"
+		"ko"		"헤에.. 아직 {crimson}카를라스{snow}가 남았다고?"
+	}
+	"Stella_Exhausted_3"
+	{
+		"en"		"I hope you like spining blades."
+		"ko"		"{crimson}카를라스{snow}, 회전하는 칼은 마음에 들어?"
+	}
+	
+	"Stella_Anger_1"
+	{
+		"en"		"Hmph, Guess I'll handle this alone."
+		"ko"		"이런, 어쩔 수 없이 나 혼자 처리해야겠네."
+	}
+	"Stella_Anger_2"
+	{
+		"en"		"This ain't over yet.."
+		"ko"		"아직 끝난 거 아니거든?!"
+	}
+	"Stella_Anger_3"
+	{
+		"en"		"How dare you hurt {crimson}Karlas{snow}!"
+		"ko"		"감히 {crimson}카를라스{snow}를 다치게 하다니!"
+	}
+	
+	"Stella_Death_1"
+	{
+		"en"		"Hmph, I'll let this slide,{crimson} for now."
+		"ko"		"으으.. 일단은 가게 냅두자고. {crimson}지금은."
+	}
+	"Stella_Death_2"
+	{
+		"en"		"Fine, we're leaving.{crimson} Until next time that is{snow} heh"
+		"ko"		"일단 철수! {crimson}다음 번엔 반드시..{snow}"
+	}
+	
+	// Stella Weapon Lines.
+	"Stella_Response_Blitzkreig_Kit_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Blitzkrieg, that thing dared to disobey me, but will you {gold}{1}{snow} do the same?"
+		"ko"		"블리츠크리그는 나를 거역하고 무릎 꿇렸지. {gold}{1}{snow}, 너도 나한테 그럴 거야?"
+	}
+	"Stella_Response_Blitzkreig_Kit_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"I'll make you {gold}{1}{snow} feel the same pain Blitzkrieg inflicted on us."
+		"ko"		"{gold}{1}{snow}, 너도 우리가 블리츠크리그에게 당했던 수모를 느끼게 해줄게."
+	}
+	
+	"Stella_Response_Fantasy_Blade_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}Karlas{snow}'s Old blade, interesting choice {gold}{1}"
+		"ko"		"어머, {crimson}카를라스{snow}가 예전에 쓰던 검이네? 흥미로운 선택인 걸, {gold}{1}{snow}."
+	}
+	"Stella_Response_Fantasy_Blade_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"So what if I told you {gold}{1}{snow} that you're using the failed version.."
+		"ko"		"어.. {gold}{1}{snow}, 지금 쓰는 건 실패한 버전인데.. 그거 계속 쓸거야?"
+	}
+	
+	"Stella_Response_Nightmare_Cannon_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"You're trying to copy me, {gold}{1}{snow}?"
+		"ko"		"{gold}{1}{snow}, 너 지금 나 따라하는 거야?"
+	}
+	"Stella_Response_Nightmare_Cannon_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"I don't approve of this {gold}{1}{snow}."
+		"ko"		"난 그 무기 용납 못하겠어. {gold}{1}{snow}."
+	}
+	
+	"Stella_Response_Impact_Lance_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Pointy stick go into enemy, right {gold}{1}{snow}?"
+		"ko"		"그걸로 날 찌를 생각이구나. 그렇지, {gold}{1}{snow}?"
+	}
+	"Stella_Response_Impact_Lance_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"{gold}{1}{snow}, You will never become as proficient with the lance as {crimson}Karlas."
+		"ko"		"{gold}{1}{snow}, 너가 그 창을 {crimson}카를라스{snow}만큼 다룰 날은 절대 안 올 껄."
+	}
+	
+	"Stella_Response_Prismatic_Wand_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Laser based spell's are one of Ruina's specialties, {gold}{1}{snow} You don't even know the first thing about them.."
+		"ko"		"레이저 기반 마법은 루이나의 전문 분야라고, {gold}{1}{snow}. 너는 그들에 대해 전혀 몰랐겠지만.."
+	}
+	"Stella_Response_Prismatic_Wand_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Oi, {gold}{1}{snow} I helped create that spell, you can't just steal it and use it aggainst me."
+		"ko"		"야, {gold}{1}{snow}! 그건 내 도움으로 만든 건데, 그걸 훔친 다음에 나한테 쓴다고? 절대 용서 못해!"
+	}
+	
+	"Stella_Response_Pulse_Cannon_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"And you're using {purple}Twirl's{snow} prefered laser, I hope you know what you're getting yourself into {gold}{1}{snow}."
+		"ko"		"지금 {purple}트윌{snow}님이 가장 좋아하는 레이저를 쓰고 있는 거야? 하.. {gold}{1}{snow}, 지금 무슨 짓을 하는지는 알아둬."
+	}
+	"Stella_Response_Pulse_Cannon_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"If {purple}Twirl{snow} catches wing of what you're using {gold}%N{snow}, good luck."
+		"ko"		"{gold}{1}{snow}, {purple}트윌{snow}님이 너가 지금 뭐 쓰고 있는지 알면... 아니야. 니가 혼 좀 나는 걸 보고 싶네."
+	}
+	
+	"Stella_Response_Gravaton_Spell_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Gravity is a harness, you {gold}{1}{snow} have not harnessed it"
+		"ko"		"중력도 무기가 될 수 있지. {gold}{1}{snow}, 넌 재능 없어."
+	}
+	"Stella_Response_Gravaton_Spell_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Wonder how you'd react {gold}{1}{snow}, if you saw the real one."
+		"ko"		"{gold}{1}{snow}, 진짜 중력 마법을 보면 너가 어떤 반응일지 궁금한 걸?"
+	}
+	
+	"Stella_Response_Feedback_Loop"
+	{
+		"#format"	"{1:N}"
+		"en"		"Here's some interesting information for you {gold}{1}{snow} the feedback loop Prisim has been obsolete for AGES"
+		"ko"		"{gold}{1}{snow}, 재밌는 거 하나 알려줄까? 그거 구제불능 쓰레기야."
+	}
+	
+	"Stella_Response_Bobs_Sexy_Gun"
+	{
+		"#format"	"{1:N}"
+		"en"		"Oh, bob's gun well might as well go and sleep... I give up {gold}{1}{snow}."
+		"ko"		"{gold}{1}{snow}, 항복~ 밥의 총이면 알아서 할테니까 난 돌아가서 잠이나 더 자고 올게.."
+	}
+	
+	"Stella_Response_Fractal_Kit"
+	{
+		"#format"	"{1:N}"
+		"en"		"I thought the {aqua}Fractal{snow} was still being developed, how did you {gold}{1}{snow} get your hands on it?"
+		"ko"		"{gold}{1}{snow}, {aqua}프랙탈{snow}은 아직 개발 중이라고 들었는데 너가 그걸 어떻게 가지고 있는 거야?"
+	}
+	
+	"Stella_Response_Dweller"
+	{
+		"en"		"{crimson}Karlas{default}? I think we should contact them to hurry up with the ion attack."
+		"ko"		"{crimson}카를라스{default}? 우리 이온 공격을 빨리 하라고 위에 연락해야 할 거 같지 않아?"
+	}
+	
+	// Karlas.
+	"Karlas_Exhausted_1"
+	{
+		"en"		"*heavy breathing*"
+		"ko"		"*거친 숨소리*"
+	}
+	"Karlas_Exhausted_2"
+	{
+		"en"		"*slight pain grunt*"
+		"ko"		"*고통스러워하는 신음소리*"
+	}
+	"Karlas_Lose"
+	{
+		"en"		"Oyaya?"
+		"ko"		"*기뻐하는 소리*"
+	}
+}

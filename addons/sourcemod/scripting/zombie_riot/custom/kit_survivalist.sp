@@ -321,7 +321,7 @@ static void KitSurvivalist_GiveReservedHealth(int client)
 	
 	ReservedHealth[client] += health;
 	if (ReservedHealth[client] > limit)
-		ReservedHealth[client] = health;
+		ReservedHealth[client] = limit;
 }
 
 static bool KitSurvivalist_TraceWallsOnly(int entity, int contentsMask)
