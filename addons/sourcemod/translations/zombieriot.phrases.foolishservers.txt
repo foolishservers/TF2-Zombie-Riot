@@ -525,7 +525,7 @@
 	"Skill Aura Desc"
 	{
 		"en"	"Ability Cooldown Reduced by 6％"
-		"ko"	"어빌리티 쿨다운 6％ 감소"
+		"ko"	"능력 쿨다운 6％ 감소"
 	}
 	
 	//무기 이름
@@ -999,9 +999,9 @@
 	}
 	
 	//추가 장비 이름
-	"Have's Mysterious Brew"
+	"Boyo's Mysterious Brew"
 	{
-		"en"	"Have's Mysterious Brew"
+		"en"	"Boyo's Mysterious Brew"
 		"ko"	"하베의 신비로운 맥주"
 	}
 	"See You In Hell"

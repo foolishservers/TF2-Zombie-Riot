@@ -840,6 +840,10 @@ stock float CooldownReductionAmount(int client)
 	{
 		Cooldown *= 0.6;
 	}
+	if(HasSpecificBuff(client, "Skill Aura"))
+	{
+		Cooldown *= 0.94;
+	}
 	if(i_CurrentEquippedPerk[client] & PERK_ENERGY_DRINK)
 		Cooldown *= 0.85;
 	if(i_CurrentEquippedPerk[client] & PERK_ENERGY_DRINK_X)

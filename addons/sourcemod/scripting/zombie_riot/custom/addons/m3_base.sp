@@ -89,6 +89,7 @@ stock void Addon_M3_Abilities(int client, int slot)
 	{
 		case 1000:DrinkRND(client);
 		case 1001:Seeyou_in_HELL(client);
+		case 1002:Seeyou_in_HELL(client);
 	}
 }
 
@@ -101,6 +102,43 @@ stock void Addon_M3_ClearAll()
 {
 	Zero(b_OneDown);
 	return;
+}
+static void DeployingSupportWeapon(int client)
+{
+	float GameTime = GetGameTime();
+	float cooldown = M3_Ability_Cooldown(client);
+	if(CvarInfiniteCash.BoolValue)
+		cooldown=0.0;
+	if(dieingstate[client] > 0)
+	{
+		if(cooldown > GameTime)
+		{
+			float Ability_CD = cooldown - GameTime;
+
+			if(Ability_CD <= 0.0)
+				Ability_CD = 0.0;
+
+			ClientCommand(client, "playgamesound items/medshotno1.wav");
+			SetDefaultHudPosition(client);
+			SetGlobalTransTarget(client);
+			ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);
+			return;
+		}
+		M3_Ability_Cooldown(client, GameTime + (60.0 * CooldownReductionAmount(client)));
+		int entity = ThrowTheGrenade(client, b_StickyExtraGrenades[client]);
+		if(IsValidEntity(entity))
+		{
+		
+		
+		}
+	}
+	else
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		SetGlobalTransTarget(client);
+		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Use Only Down");
+	}
 }
 
 static void Seeyou_in_HELL(int client)
@@ -513,7 +551,6 @@ stock void TimedLgtning(int client, float flPos[3])
 	
 	EmitAmbientSound("ambient/explosions/explode_9.wav", LgtningPos, client, SNDLEVEL_HELICOPTER);
 }
-
 
 static bool PickRandomAreaLoc(int client, float min, float max, float output[3])
 {
@@ -1111,7 +1148,6 @@ static int ThrowTheGrenade(int client, bool IsSticky=false, float speed=1500.0)
 
 	if(IsValidEntity(entity))
 	{
-		
 		SetEntitySpike(entity, 3);
 		b_StickyIsSticking[entity] = true; //Make them not stick to npcs.
 		static float pos[3], ang[3], vel_2[3];
@@ -1152,8 +1188,7 @@ static int ThrowTheGrenade(int client, bool IsSticky=false, float speed=1500.0)
 		TeleportEntity(entity, pos, ang, vel_2);
 		
 		IsCustomTfGrenadeProjectile(entity, 9999999.0);
-		CClotBody npc = view_as<CClotBody>(entity);
-		npc.m_bThisEntityIgnored = true;
+		view_as<CClotBody>(entity).m_bThisEntityIgnored = true;
 		
 		SetEntProp(entity, Prop_Data, "m_nNextThinkTick", -1);
 		return entity;

@@ -63,7 +63,7 @@ public Action Timer_LockDown_Wand(Handle timer, DataPack pack)
 	pack.Reset();
 	int client = pack.ReadCell();
 	int weapon = EntRefToEntIndex(pack.ReadCell());
-	if(!IsValidClient(client) || !IsClientInGame(client) || !IsPlayerAlive(client) || !IsValidEntity(weapon))
+	if(!IsValidClient(client) || !IsPlayerAlive(client) || !IsValidEntity(weapon))
 	{
 		LockDownTimer[client] = null;
 		return Plugin_Stop;
@@ -89,6 +89,14 @@ public Action Timer_LockDown_Wand(Handle timer, DataPack pack)
 					if(IsValidEntity(entity) && GetTeam(entity) != TFTeam_Red)
 					{
 						ApplyStatusEffect(client, entity, "Subjective Time Dilation", 1.0);
+					}
+				}
+				for(int Ally = 1; Ally <= MaxClients; Ally++)
+				{
+					if(IsValidClient(Ally) && IsPlayerAlive(Ally))
+					{
+						if(GetTeam(client) == GetTeam(Ally) && TeutonType[Ally] == TEUTON_NONE)
+							ApplyStatusEffect(client, Ally, "Skill Aura", 1.0);
 					}
 				}
 			}
