@@ -623,6 +623,7 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "autoloadouts.sp"
 #include "sm_skyboxprops.sp"
 #include "random_pickups.sp"
+//#include "mana.sp"
 #include "shared/sound_manualdownload.sp"
 #include "custom/homing_projectile_logic.sp"
 #include "custom/weapon_slug_rifle.sp"
@@ -3983,10 +3984,8 @@ void WeaponUpdateDo()
 
 void LoadNPCTalkTranslations()
 {
-	LoadTranslations("zombieriot.phrases.silvestertalk");
-	LoadTranslations("zombieriot.phrases.nemaltalk");
+	LoadTranslations("zombieriot.phrases.expidonsatalk");
 	LoadTranslations("zombieriot.phrases.interitustalk");
-	LoadTranslations("zombieriot.phrases.waldchtalk");
 	LoadTranslations("zombieriot.phrases.blitzkriegtalk");
 	LoadTranslations("zombieriot.phrases.roguetalk");
 }
