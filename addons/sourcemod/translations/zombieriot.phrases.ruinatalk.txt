@@ -56,12 +56,12 @@
 	"Stella_Lose_3"
 	{
 		"en"		"Oh boy, their ragdoll's were {gold}amazing{snow}!"
-		"ko"		"어머, 쟤네 시체 날라가는 거 봤어? {gold}꼴사납네~{snow}"
+		"ko"		"어머, 쟤네 시체 날라가는 거 봤어? {gold}꼴사납네~"
 	}
 	"Stella_Lose_No_Karlas_1"
 	{
 		"en"		"You killed {crimson}Karlas{snow}, and I {crimson}erased{snow} your existance"
-		"ko"		"너희가 {crimson}카를라스{snow}를 죽였어. 그러니 {crimson}너희 존재를 이 세상에서 지워주지.{snow}"
+		"ko"		"너희가 {crimson}카를라스{snow}를 죽였어. 그러니 {crimson}너희 존재를 이 세상에서 지워주지."
 	}
 	"Stella_Lose_No_Karlas_2"
 	{
@@ -103,18 +103,18 @@
 	"Stella_LastMann_2"
 	{
 		"en"		"Ahaha, its almost over now, just{crimson} one more left{snow}!"
-		"ko"		"하하, 이제 거의 다 끝났네. {crimson}한 놈만 더!{snow}"
+		"ko"		"하하, 이제 거의 다 끝났네. {crimson}한 놈만 더!"
 	}
 	"Stella_LastMann_No_Karlas"
 	{
 		"en"		"I'm about to turn you into an unrecognisable mass of sea for {crimson}what you've DONE TO KARLAS"
-		"ko"		"너희가 카를라스를 했던 짓을 생각하면... {crimson}너를 형체를 알아보지 못할 정도로 뭉개줘야겠지.{snow}"
+		"ko"		"너희가 카를라스를 했던 짓을 생각하면... {crimson}너를 형체를 알아보지 못할 정도로 뭉개줘야겠지."
 	}
 	
 	"Stella_NightmareCannon_Ready_1"
 	{
 		"en"		"{snow}Thats it {crimson}I'm going to kill you{snow}."
-		"ko"		"{snow}좋아. {crimson}슬슬 끝내야지.{snow}"
+		"ko"		"{snow}좋아. {crimson}슬슬 끝내야지."
 	}
 	"Stella_NightmareCannon_Ready_2"
 	{
@@ -129,17 +129,17 @@
 	"Stella_NightmareCannon_Ready_4"
 	{
 		"en"		"Aiming this thing is actually quite {crimson}complex {snow}ya know."
-		"ko"		"이걸 조준하는 건 꽤나 {crimson}까다롭단 말이지.{snow}"
+		"ko"		"이걸 조준하는 건 꽤나 {crimson}까다롭단 말이지."
 	}
 	"Stella_NightmareCannon_Ready_5"
 	{
 		"en"		"I'm getting quite bored of {crimson}this{snow} whole charade"
-		"ko"		"지루하네~ {crimson}이 짓거리. 더는 못 봐주겠는 걸?{snow}"
+		"ko"		"지루하네~ {crimson}이 짓거리. 더는 못 봐주겠는 걸?"
 	}
 	"Stella_NightmareCannon_Ready_6"
 	{
 		"en"		"Oh how {crimson}Tiny{snow} you all look from up here."
-		"ko"		"너희 말이야. {crimson}너무 귀여운 걸?{snow}"
+		"ko"		"너희 말이야. {crimson}너무 귀여운 걸?"
 	}
 	"Stella_NightmareCannon_Ready_7"
 	{
@@ -175,12 +175,12 @@
 	"Stella_NightmareCannon_2"
 	{
 		"en"		"This is gonna end {crimson}Poorly for you all{snow}."
-		"ko"		"물론 {crimson}너희들에게는 끔찍한 결말이겠지만~{snow}"
+		"ko"		"물론 {crimson}너희들에게는 끔찍한 결말이겠지만~"
 	}
 	"Stella_NightmareCannon_3"
 	{
 		"en"		"{crimson}JUDGEMENT BE UPON THEE{snow}!"
-		"ko"		"{crimson}그들에게 심판을!{snow}"
+		"ko"		"{crimson}그들에게 심판을!"
 	}
 	"Stella_NightmareCannon_4"
 	{
@@ -195,12 +195,12 @@
 	"Stella_NightmareCannon_6"
 	{
 		"en"		"But your tiny stature won't save you from my Fractal Beam Emitter"
-		"ko"		"{crimson}내 프랙탈 빔 방출기로 다 갈아버리고 싶을 정도야.{snow}"
+		"ko"		"{crimson}내 프랙탈 빔 방출기로 다 갈아버리고 싶을 정도야."
 	}
 	"Stella_NightmareCannon_7"
 	{
 		"en"		"So I'll just {crimson}remove{snow} the troublesome component!"
-		"ko"		"귀찮으니까 {crimson}그냥 다 밀어버려야겠다!{snow}"
+		"ko"		"귀찮으니까 {crimson}그냥 다 밀어버려야겠다!"
 	}
 	"Stella_NightmareCannon_8"
 	{
@@ -307,7 +307,7 @@
 	"Stella_Death_2"
 	{
 		"en"		"Fine, we're leaving.{crimson} Until next time that is{snow} heh"
-		"ko"		"일단 철수! {crimson}다음 번엔 반드시..{snow}"
+		"ko"		"일단 철수! {crimson}다음 번엔 반드시.."
 	}
 	
 	// Stella Weapon Lines.
