@@ -8420,8 +8420,8 @@
 	}
 	"Das Naggenvatcher Doctor"
 	{
-		"en"	"Das Naggenvatcher Doctor"
-		"ko"	"다스 고르통보호기 메딕"
+		"en"	"Captain Quetz"
+		"ko"	"캡틴 퀘츠"
 	}
 	"Stone Age Maker"
 	{
