@@ -1,13 +1,14 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-static int g_Laser;
 static int g_BluePoint;
 static int g_RedPoint;
 static int LSPR;
 
 static int g_ProjectileModelArmor;
 static int g_ProjectileModel;
+
+static float f_SupportWeapon_Timer[MAXPLAYERS];
 
 static bool b_OneDown[MAXPLAYERS];
 
@@ -20,7 +21,7 @@ static const char SupportWeaponList[][] =
 {
 	"SupportWeapon SMG-43",
 	"SupportWeapon APW-1 Sniperrifle",
-	"SupportWeapon RS-422 Rail Gun",
+	"SupportWeapon RD-3 Grenade Launcher",
 };
 
 static const char g_PortalSounds[]=")misc/halloween/spell_teleport.wav";
@@ -29,7 +30,6 @@ void Addon_M3_Precache()
 {
 	g_BluePoint = PrecacheModel("sprites/blueglow1.vmt");
 	g_RedPoint = PrecacheModel("sprites/redglow1.vmt");
-	g_Laser = PrecacheModel(LASERBEAM);
 	LSPR = PrecacheModel("sprites/lgtning.vmt");
 	
 	g_ProjectileModel = PrecacheModel("models/healthvial.mdl");
@@ -75,9 +75,37 @@ stock void Addon_OnBombDrop(int entity, const char [] name)
 {
 	if(!IsValidEntity(entity))
 		return;
-	if(StrContains(name, "ZR_ReinforcePOD_", false) != -1)
+	if(StrContains(name, "ZR_SupportWeaponPOD_", false) != -1)
 	{
-	
+		int client = GetEntPropEnt(entity, Prop_Data, "m_hOwnerEntity");
+		float position[3];
+		GetEntPropVector(entity, Prop_Data, "m_vecAbsOrigin", position);
+		AcceptEntityInput(entity, "KillHierarchy");
+		position[2]-=10.0;
+		if(IsValidClient(client))
+		{
+			Explode_Logic_Custom(0.0, client, client, -1, position, 125.0, _, _, true, _, false, _, PodKill);
+			int Prop = CreateEntityByName("prop_dynamic");
+			if(IsValidEntity(Prop))
+			{
+				//position[2]+=30.0;
+				DispatchKeyValue(Prop, "model", "models/props_urban/urban_crate002.mdl");
+				DispatchKeyValue(Prop, "angles", "0 0 0");
+				DispatchKeyValue(Prop, "solid", "0");
+				TeleportEntity(Prop, position, NULL_VECTOR, NULL_VECTOR);
+				DispatchSpawn(Prop);
+				/*CClotBody npc = view_as<CClotBody>(Prop);
+				npc.m_bThisEntityIgnored = true;*/
+				
+				M3_Ability_Duration(Prop, GetGameTime() + 30.0);
+				
+				SetEntProp(Prop, Prop_Data, "m_nNextThinkTick", -1);
+				DataPack pack;
+				CreateDataTimer(0.1, Timer_SupportWeapon_Get, pack, TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
+				pack.WriteCell(EntIndexToEntRef(Prop));
+				pack.WriteCell(GetClientUserId(client));
+			}
+		}
 	}
 }
 
@@ -89,7 +117,7 @@ stock void Addon_M3_Abilities(int client, int slot)
 	{
 		case 1000:DrinkRND(client);
 		case 1001:Seeyou_in_HELL(client);
-		case 1002:Seeyou_in_HELL(client);
+		case 1002:DeployingSupportWeapon(client);
 	}
 }
 
@@ -101,6 +129,7 @@ stock void Addon_M3_WaveEnd()
 stock void Addon_M3_ClearAll()
 {
 	Zero(b_OneDown);
+	ZeroFloat(f_SupportWeapon_Timer);
 	return;
 }
 static void DeployingSupportWeapon(int client)
@@ -109,36 +138,215 @@ static void DeployingSupportWeapon(int client)
 	float cooldown = M3_Ability_Cooldown(client);
 	if(CvarInfiniteCash.BoolValue)
 		cooldown=0.0;
-	if(dieingstate[client] > 0)
+	if(cooldown > GameTime)
 	{
-		if(cooldown > GameTime)
+		float Ability_CD = cooldown - GameTime;
+
+		if(Ability_CD <= 0.0)
+			Ability_CD = 0.0;
+
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		SetGlobalTransTarget(client);
+		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);
+		return;
+	}
+	int entity = ThrowTheGrenade(client, b_StickyExtraGrenades[client]);
+	if(IsValidEntity(entity))
+	{
+		M3_Ability_Delay(entity, GameTime + 5.0);
+		M3_Ability_Duration(entity, 0.0);
+		i_AttacksTillReload[entity]=0;
+		DataPack pack;
+		CreateDataTimer(0.1, Timer_SupportWeapon_Stratagems, pack, TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
+		pack.WriteCell(EntIndexToEntRef(entity));
+		pack.WriteCell(GetClientUserId(client));
+		M3_Ability_Cooldown(client, GameTime + (300.0 * CooldownReductionAmount(client)));
+	}
+}
+
+static Action Timer_SupportWeapon_Stratagems(Handle timer, DataPack pack)
+{
+	pack.Reset();
+	int entity = EntRefToEntIndex(pack.ReadCell());
+	int client = GetClientOfUserId(pack.ReadCell());
+	if(IsValidEntity(entity) && entity>MaxClients)
+	{
+		if(IsValidClient(client))
 		{
-			float Ability_CD = cooldown - GameTime;
-
-			if(Ability_CD <= 0.0)
-				Ability_CD = 0.0;
-
-			ClientCommand(client, "playgamesound items/medshotno1.wav");
-			SetDefaultHudPosition(client);
-			SetGlobalTransTarget(client);
-			ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);
-			return;
+			float position[3], Laserpos[3];
+			GetEntPropVector(entity, Prop_Data, "m_vecAbsOrigin", position);
+			
+			EmitSoundToAll("ambient/energy/weld1.wav", 0, SNDCHAN_AUTO, SNDLEVEL_NORMAL, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, position);
+			Laserpos[0] = position[0];
+			Laserpos[1] = position[1];
+			Laserpos[2] = position[2] + 1500.0;
+			
+			TE_SetupBeamPoints(Laserpos, position, g_iLaserMaterial_Trace, -1, 0, 0, 0.1, 0.1, 25.0, 0, 0.0, {0, 150, 255, 150}, 3);
+			TE_SendToAll();
+			Laserpos[2] -= 1490.0;
+			TE_SetupGlowSprite(Laserpos, g_BluePoint, 0.1, 1.0, 150);
+			TE_SendToAll();
+			if(M3_Ability_Delay(entity) < GetGameTime())
+			{
+				switch(i_AttacksTillReload[entity])
+				{
+					case 1:
+					{
+						Drop_Prop(client, position, 2000.0, "ZR_SupportWeaponPOD_", "models/props_urban/urban_crate002.mdl");
+						EmitSoundToAll("weapons/air_burster_explode3.wav", 0, SNDCHAN_AUTO, SNDLEVEL_TRAIN, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, position);
+						i_AttacksTillReload[entity]=2;
+					}
+					default:
+					{
+						i_AttacksTillReload[entity]++;
+					}
+				}
+   			}
+   			if(i_AttacksTillReload[entity]>=2)
+   			{
+   				RemoveEntity(entity);
+   				return Plugin_Stop;	
+   			}
+   			return Plugin_Continue;	
 		}
-		M3_Ability_Cooldown(client, GameTime + (60.0 * CooldownReductionAmount(client)));
-		int entity = ThrowTheGrenade(client, b_StickyExtraGrenades[client]);
-		if(IsValidEntity(entity))
+		else
 		{
-		
-		
+			return Plugin_Stop;	
 		}
 	}
 	else
 	{
-		ClientCommand(client, "playgamesound items/medshotno1.wav");
-		SetDefaultHudPosition(client);
-		SetGlobalTransTarget(client);
-		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Use Only Down");
+		return Plugin_Stop;	
 	}
+}
+
+static Action Timer_SupportWeapon_Get(Handle timer, DataPack pack)
+{
+	pack.Reset();
+	int entity = EntRefToEntIndex(pack.ReadCell());
+	int client = GetClientOfUserId(pack.ReadCell());
+	if(IsValidEntity(entity) && entity>MaxClients)
+	{
+		if(IsValidClient(client))
+		{
+			float position[3], position2[3];
+			GetEntPropVector(entity, Prop_Data, "m_vecAbsOrigin", position);
+			for(int target=1; target<=MaxClients; target++)
+			{
+				if(IsValidClient(target) && IsPlayerAlive(target) && TeutonType[target] == TEUTON_NONE)
+				{
+					if(i_ClientHasCustomGearEquipped[target]!=CUSTOMGEAR_NONE)
+						continue;
+					GetEntPropVector(target, Prop_Send, "m_vecOrigin", position2);
+					float distance = GetVectorDistance(position, position2, true);
+					if(distance<=2500.0)
+					{
+						int RNDSupportWeapons=GetRandomInt(0, 2);
+						int SupportWeapon = Store_GiveSpecificItem(target, SupportWeaponList[RNDSupportWeapons]);
+						if(IsValidEntity(SupportWeapon))
+						{
+							if(Store_HasNamedItem(client, "Accurate Marksman"))
+							{
+								Attributes_SetMulti(SupportWeapon, 106, 0.9);
+								Attributes_SetMulti(SupportWeapon, 103, 1.2);
+							}
+							if(Store_HasNamedItem(client, "Ammo Coat"))
+								Attributes_SetMulti(SupportWeapon, 2, 1.5);
+							if(Store_HasNamedItem(client, "Compacted Rounds"))
+							{
+								Attributes_SetMulti(SupportWeapon, 6, 0.87);
+								Attributes_SetMulti(SupportWeapon, 97, 0.87);
+								Attributes_SetMulti(SupportWeapon, 4, 1.25);
+							}
+							if(Store_HasNamedItem(client, "Ammo Coat Elite"))
+								Attributes_SetMulti(SupportWeapon, 2, 1.6);
+							if(Store_HasNamedItem(client, "Antidote Coated Bullets"))
+								Attributes_SetMulti(SupportWeapon, 2, 1.6);
+							if(Store_HasNamedItem(client, "Anti-Matter Bullets"))
+								Attributes_SetMulti(SupportWeapon, 2, 1.65);
+							if(Store_HasNamedItem(client, "Expidonsan's Black hole Storage Unit"))
+							{
+								Attributes_SetMulti(SupportWeapon, 2, 1.6);
+								Attributes_SetMulti(SupportWeapon, 6, 0.87);
+								Attributes_SetMulti(SupportWeapon, 97, 0.87);
+								Attributes_SetMulti(SupportWeapon, 4, 1.25);
+							}
+							if(Store_HasNamedItem(client, "Birdeye Ammo"))
+							{
+								Attributes_SetMulti(SupportWeapon, 2, 1.75);
+								Attributes_SetMulti(SupportWeapon, 106, 0.9);
+								Attributes_SetMulti(SupportWeapon, 103, 1.1);
+								Attributes_SetMulti(SupportWeapon, 6, 0.95);
+								Attributes_SetMulti(SupportWeapon, 97, 0.95);
+							}
+							if(Store_HasNamedItem(client, "Waldch's Railgun Rounds"))
+							{
+								Attributes_SetMulti(SupportWeapon, 2, 1.75);
+								Attributes_SetMulti(SupportWeapon, 106, 0.8);
+								Attributes_SetMulti(SupportWeapon, 103, 1.25);
+								Attributes_SetMulti(SupportWeapon, 6, 0.925);
+								Attributes_SetMulti(SupportWeapon, 97, 0.9);
+							}
+							if(Store_HasNamedItem(client, "Cheesy Doomsday Pack"))
+							{
+								Attributes_SetMulti(SupportWeapon, 2, 2.0);
+								Attributes_SetMulti(SupportWeapon, 106, 0.65);
+								Attributes_SetMulti(SupportWeapon, 103, 1.5);
+								Attributes_SetMulti(SupportWeapon, 6, 0.85);
+								Attributes_SetMulti(SupportWeapon, 97, 0.85);
+							}
+							i_ClientHasCustomGearEquipped[target] = CUSTOMGEAR_SUPPORT_WEAPON;
+							if(RNDSupportWeapons!=1)
+							{
+								DataPack pack2 = new DataPack();
+								CreateDataTimer(0.5, Timer_SupportWeapon_ClipFullUp, pack2, TIMER_FLAG_NO_MAPCHANGE);
+								pack2.WriteCell(EntIndexToEntRef(SupportWeapon));
+								pack2.WriteCell(GetClientUserId(target));
+								Clip_GiveWeaponClipFullUp(target, SupportWeapon);
+							}
+						}
+						SetAmmo(target, 1, 9999);
+						SetAmmo(target, 2, 9999);
+						RemoveEntity(entity);
+						f_SupportWeapon_Timer[target] =  GetGameTime() + 50.0;
+						ApplyStatusEffect(target, target, "Support Weapon License", 9999.9);
+						return Plugin_Stop;	
+					}
+				}
+			}
+   			if(M3_Ability_Duration(entity) < GetGameTime())
+   			{
+   				RemoveEntity(entity);
+   				return Plugin_Stop;	
+   			}
+   			return Plugin_Continue;	
+		}
+		else
+		{
+   			RemoveEntity(entity);
+			return Plugin_Stop;	
+		}
+	}
+	else
+	{
+		return Plugin_Stop;	
+	}
+}
+
+static Action Timer_SupportWeapon_ClipFullUp(Handle timer, DataPack pack)
+{
+	pack.Reset();
+	int weapon = EntRefToEntIndex(pack.ReadCell());
+	int client = GetClientOfUserId(pack.ReadCell());
+	if(!IsValidEntity(client)|| !IsValidEntity(weapon))
+		return;
+	Clip_GiveWeaponClipFullUp(client, weapon);
+}
+
+stock float GetSupportWeaponTimer(int client)
+{
+	return f_SupportWeapon_Timer[client] - GetGameTime();
 }
 
 static void Seeyou_in_HELL(int client)
@@ -197,9 +405,21 @@ static void KamikazeBoomb(int entity, int victim, float damage, int weapon)
 	{
 		FreezeNpcInTime(victim, (b_thisNpcIsARaid[victim] || b_thisNpcIsABoss[victim] ? 1.0 : 3.0), true);
 		ApplyStatusEffect(entity, victim, "Silenced", (b_thisNpcIsARaid[victim] || b_thisNpcIsABoss[victim] ? 1.0 : 3.0));
+		ApplyStatusEffect(entity, victim, "Teslar Shock", (b_thisNpcIsARaid[victim] || b_thisNpcIsABoss[victim] ? 1.0 : 3.0));
 		float MaxHealth = float(ReturnEntityMaxHealth(victim));
 		damage=(MaxHealth*0.01)+(Pow(float(CashSpentTotal[entity]), 1.18)/9.0);
 		SDKHooks_TakeDamage(victim, entity, entity, damage, DMG_BLAST|DMG_PREVENT_PHYSICS_FORCE);
+	}
+}
+static void PodKill(int entity, int victim, float damage, int weapon)
+{
+	if(IsValidEntity(entity) && IsValidEntity(victim) && GetTeam(entity) != GetTeam(victim) && Can_I_See_Enemy(entity, victim))
+	{
+		float MaxHealth = float(ReturnEntityMaxHealth(victim));
+		damage=(MaxHealth*2.0);
+		if(b_thisNpcIsARaid[victim] || b_thisNpcIsABoss[victim] || b_IsGiant[victim])
+			damage=(MaxHealth*0.05)+(Pow(float(CashSpentTotal[entity]), 1.18)/10.0);
+		SDKHooks_TakeDamage(victim, entity, entity, damage, DMG_TRUEDAMAGE|DMG_PREVENT_PHYSICS_FORCE);
 	}
 }
 
@@ -1141,7 +1361,7 @@ static int Dimension_Summon_Npc_Parkuri(int client, int SetWave, bool Elite=fals
 static int ThrowTheGrenade(int client, bool IsSticky=false, float speed=1500.0)
 {
 	int entity;		
-	if(b_StickyExtraGrenades[client])
+	if(IsSticky)
 		entity = CreateEntityByName("tf_projectile_pipe_remote");
 	else
 		entity = CreateEntityByName("tf_projectile_pipe");
@@ -1169,7 +1389,7 @@ static int ThrowTheGrenade(int client, bool IsSticky=false, float speed=1500.0)
 		SetEntPropFloat(entity, Prop_Send, "m_flDamage", 0.0); 
 		SetEntPropEnt(entity, Prop_Send, "m_hThrower", client);
 		SetEntPropEnt(entity, Prop_Send, "m_hOriginalLauncher", 0);
-		if(b_StickyExtraGrenades[client])
+		if(IsSticky)
 			SetEntProp(entity, Prop_Send, "m_iType", 1);
 
 		for(int i; i<4; i++)

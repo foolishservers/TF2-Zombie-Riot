@@ -782,6 +782,26 @@ void StatusEffects_Baka()
 	data.Status_SpeedFunc 			= INVALID_FUNCTION;
 	data.HudDisplay_Func 				= INVALID_FUNCTION;
 	StatusEffect_AddGlobal(data);
+
+	strcopy(data.BuffName, sizeof(data.BuffName), "Support Weapon License");
+	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "⚔");
+	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
+	//-1.0 means unused
+	data.DamageTakenMulti 			= -1.0;
+	data.DamageDealMulti				= -1.0;
+	data.AttackspeedBuff				= -1.0;
+	data.MovementspeedModif			= -1.0;
+	data.Positive 					= false;
+	data.ShouldScaleWithPlayerCount 	= false;
+	data.Slot						= 0;
+	data.SlotPriority					= 0;
+	data.OnTakeDamage_TakenFunc 		= INVALID_FUNCTION;
+	data.OnTakeDamage_DealFunc 		= INVALID_FUNCTION;
+	data.OnTakeDamage_PostVictim		= INVALID_FUNCTION;
+	data.OnTakeDamage_PostAttacker		= INVALID_FUNCTION;
+	data.Status_SpeedFunc 			= INVALID_FUNCTION;
+	data.HudDisplay_Func 				= SupportWeapon_Func;
+	StatusEffect_AddGlobal(data);
 }
 
 float AOESlowdown_Func(int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect)
@@ -948,6 +968,28 @@ void Defibrillator_Func(int attacker, int victim, StatusEffect Apply_MasterStatu
 		RemoveSpecificBuff(victim, "Defibrillator");
 	}
 	Format(HudToDisplay, SizeOfChar, "↻");
+}
+
+void SupportWeapon_Func(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int SizeOfChar, char[] HudToDisplay)
+{
+	static const char SupportWeaponList[][] =
+	{
+		"SupportWeapon SMG-43",
+		"SupportWeapon APW-1 Sniperrifle",
+		"SupportWeapon RD-3 Grenade Launcher",
+	};
+
+	int i_GetTime = RoundToCeil(GetSupportWeaponTimer(victim));
+	if(i_GetTime<=0||!IsValidClient(victim)||(IsValidClient(victim) && (TeutonType[victim] != TEUTON_NONE || !IsPlayerAlive(victim))))
+	{
+		i_ClientHasCustomGearEquipped[victim] = CUSTOMGEAR_NONE;
+		for(int i = 0; i < (sizeof(SupportWeaponList)); i++) { Store_RemoveSpecificItem(victim, SupportWeaponList[i]);}
+		TF2_RegeneratePlayer(victim);
+		Store_ApplyAttribs(victim);
+		Store_GiveAll(victim, GetClientHealth(victim));
+		RemoveSpecificBuff(victim, "Support Weapon License");
+	}
+	Format(HudToDisplay, SizeOfChar, "[⚔ %is]", i_GetTime);
 }
 
 static void Delayd_payback_DMG(DataPack pack)

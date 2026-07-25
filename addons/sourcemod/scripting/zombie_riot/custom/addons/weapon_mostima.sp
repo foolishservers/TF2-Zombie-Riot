@@ -139,7 +139,7 @@ public void LockDown_Wand_Secondary_Attack(int client, int weapon, bool crit, in
 			ClientCommand(client, "playgamesound items/medshotno1.wav");
 			SetDefaultHudPosition(client);
 			SetGlobalTransTarget(client);
-			ShowSyncHudText(client,  SyncHud_Notifaction, "Not enough energy");
+			ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Not enough Energy");
 			return;
 		}
 	}
@@ -329,18 +329,23 @@ static void LockDown_Wand_Hud(int client, float GameTime)
 
 	char HUDText[255] = "";
 
+	SetGlobalTransTarget(client);
 	if(KeyofOrdered_duration[client] < GameTime)
 	{
 		if(KeyofOrdered_charges[client] >= KeyofOrdered_charges_Max[client])
-			Format(HUDText, sizeof(HUDText), "%sKey of Ordered Ready!", HUDText);
+			Format(HUDText, sizeof(HUDText), "%t", "LockDown Staff Desc AbilityReady");
 		else
-			Format(HUDText, sizeof(HUDText), "%sKey of Ordered Charges: [%.1f/%.1f]", HUDText, KeyofOrdered_charges[client], KeyofOrdered_charges_Max[client]);
+		{
+			Format(HUDText, sizeof(HUDText), "%t", "LockDown Staff Desc AbilityCharging");
+			Format(HUDText, sizeof(HUDText), "%s [%.1f/%.1f]", HUDText, KeyofOrdered_charges[client], KeyofOrdered_charges_Max[client]);
+		}
 	}
 	else
 	{
 		int Mana_Max = RoundToCeil(400.0*Mana_Regen_Level[client]);
 		float Duration = KeyofOrdered_duration[client]-GameTime;
-		Format(HUDText, sizeof(HUDText), "%sKey of Ordered Active! [%.1f]", HUDText, Duration);
+		Format(HUDText, sizeof(HUDText), "%t", "LockDown Staff Desc AbilityActive");
+		Format(HUDText, sizeof(HUDText), "%s [%.1f]", HUDText, Duration);
 		if(Current_Mana[client] < Mana_Max)
 		{
 			Current_Mana[client]+=RoundToCeil(float(Mana_Max)*0.15);

@@ -286,7 +286,7 @@ static void MajorSteam_Launcher_M1_PreThink(int client)
 				ClientCommand(client, "playgamesound items/medshotno1.wav");
 				SetDefaultHudPosition(client);
 				SetGlobalTransTarget(client);
-				ShowSyncHudText(client,  SyncHud_Notifaction, "You need to Reload by %i!", (i_MajorSteam_Launcher_WeaponPap[client]==1 ? 11 : 6));
+				ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "You need to Reload by Ammo", (i_MajorSteam_Launcher_WeaponPap[client]==1 ? 11 : 6));
 			}
 			b_MajorSteam_Launcher_Toggle[client]=false;
 			SDKUnhook(client, SDKHook_PreThink, MajorSteam_Launcher_M1_PreThink);
@@ -307,21 +307,24 @@ static void MajorSteam_Launcher_HUD(int client)
 	{
 		char C_point_hints[512]="";
 		
+		SetGlobalTransTarget(client);
 		Format(C_point_hints, sizeof(C_point_hints),
-		"Shield: %1.f％", (float(i_MajorSteam_Launcher_Resistance[client])/1000.0)*100.0);
+		"%t", "MajorSteam Shield");
+		Format(C_point_hints, sizeof(C_point_hints),
+		"%s: %1.f％", C_point_hints, (float(i_MajorSteam_Launcher_Resistance[client])/1000.0)*100.0);
 		if(Armor_Charge[client] < 1)
 		{
 			Format(C_point_hints, sizeof(C_point_hints),
-			"%s\n[Reactor startup requires Armor!]", C_point_hints);
+			"%s\n[%t]", C_point_hints, "MajorSteam Requires Armor");
 		}
 		else if(Waves_InSetup() || i_MajorSteam_Launcher_Resistance[client]>=1000)
 		{
 			Format(C_point_hints, sizeof(C_point_hints),
-			"%s\n[Reactor Idle Mode]", C_point_hints);
+			"%s\n[%t]", C_point_hints, "MajorSteam Reactor Idle");
 		}
 		else if(f_MajorSteam_Launcher_Delay[client] > GetGameTime())
 			Format(C_point_hints, sizeof(C_point_hints),
-			"%s\n[Reactor Restarting in %1.fs]", C_point_hints, (f_MajorSteam_Launcher_Delay[client]-GetGameTime()));
+			"%s\n[%t %1.fs]", C_point_hints, "MajorSteam Reactor Restart", (f_MajorSteam_Launcher_Delay[client]-GetGameTime()));
 		else
 		{
 			Format(C_point_hints, sizeof(C_point_hints),

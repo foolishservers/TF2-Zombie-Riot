@@ -1741,19 +1741,35 @@ void PrintPapDescription(int client, Item item, ItemInfo info, int type = PAP_DE
 	char DescDo2[256];
 	Format(DescDo2, sizeof(DescDo2), "%s", info.Rogue_Desc);
 	TranslateItemName(client, DescDo, DescDo2, bufferSizeSplit, sizeof(bufferSizeSplit));
-	char Display1[240];
-	char Display2[240];
-	Format(Display1, sizeof(Display1), "%s", bufferSizeSplit);
-	if(strlen(bufferSizeSplit) > 240) //If 240 exists, split.
+	ReplaceString(bufferSizeSplit, sizeof(bufferSizeSplit), "/n", ";");
+	ReplaceString(bufferSizeSplit, sizeof(bufferSizeSplit), "\n", ";");
+	
+	static char countext[2][240];
+	if(StrContains(bufferSizeSplit, ";") != -1)
 	{
-		Format(Display2, sizeof(Display2), "%s", bufferSizeSplit[239]);
-		CPrintToChat(client, "%s%s-", STORE_COLOR ,Display1);
+		//Due to the peculiarity of Korean language(maybe other language), Breaking by bytes causes problems with text output!!
+		//solution, manually split.
+		int count = ExplodeString(bufferSizeSplit, ";", countext, sizeof(countext), sizeof(countext[]));
+		for(int ii = 0; ii < count; ii++)
+		{
+			if(ii>=count)break;
+			CPrintToChat(client, "%s%s", STORE_COLOR, countext[ii]);
+		}
 	}
 	else
-		CPrintToChat(client, "%s%s", STORE_COLOR ,Display1);
+	{
+		Format(countext[0], sizeof(countext[]), "%s", bufferSizeSplit);
+		if(strlen(bufferSizeSplit) > 240) //If 240 exists, split.
+		{
+			Format(countext[1], sizeof(countext[]), "%s", bufferSizeSplit[239]);
+			CPrintToChat(client, "%s%s-", STORE_COLOR ,countext[0]);
+		}
+		else
+			CPrintToChat(client, "%s%s", STORE_COLOR ,countext[0]);
 
-	if(Display2[0])
-		CPrintToChat(client, "%s%s", STORE_COLOR ,Display2);
+		if(countext[1][0])
+			CPrintToChat(client, "%s%s", STORE_COLOR ,countext[1]);
+	}
 }
 
 void Store_RogueEndFightReset()
@@ -7544,6 +7560,39 @@ void Clip_GiveWeaponClipBack(int client, int weapon)
 	SetEntData(weapon, iAmmoTable, item.CurrentClipSaved[client]);
 
 	SetEntProp(weapon, Prop_Send, "m_iClip1", item.CurrentClipSaved[client]); // weapon clip amount bullets
+}
+
+void Clip_GiveWeaponClipFullUp(int client, int weapon)
+{
+	if(StoreWeapon[weapon] < 1)
+		return;
+
+	if(client < 1)
+		return;
+	
+	static Item item;
+	StoreItems.GetArray(StoreWeapon[weapon], item);
+	
+	if(!item.Owned[client])
+		return;
+
+	ItemInfo info;
+	if(item.GetItemInfo(item.Owned[client]-1, info))
+	{
+		if(info.HasNoClip)
+		{
+			return;
+		}
+		if(info.NoSafeClip)
+		{
+			return;
+		}
+	}
+	int clip = Config_GetClipOfEntity(weapon);
+	int iAmmoTable = FindSendPropInfo("CBaseCombatWeapon", "m_iClip1");
+	item.CurrentClipSaved[client]=clip;
+	SetEntData(weapon, iAmmoTable, clip);
+	SetEntProp(weapon, Prop_Send, "m_iClip1", clip);
 }
 
 void Store_TryRefreshMenu(int client)
