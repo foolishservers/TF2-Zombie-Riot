@@ -2,11 +2,11 @@
 #pragma newdecls required
 
 static int g_BluePoint;
-static int g_RedPoint;
+//static int g_RedPoint;
 static int LSPR;
 
 static int g_ProjectileModelArmor;
-static int g_ProjectileModel;
+//static int g_ProjectileModel;
 
 static float f_SupportWeapon_Timer[MAXPLAYERS];
 
@@ -29,10 +29,10 @@ static const char g_PortalSounds[]=")misc/halloween/spell_teleport.wav";
 void Addon_M3_Precache()
 {
 	g_BluePoint = PrecacheModel("sprites/blueglow1.vmt");
-	g_RedPoint = PrecacheModel("sprites/redglow1.vmt");
+	//g_RedPoint = PrecacheModel("sprites/redglow1.vmt");
 	LSPR = PrecacheModel("sprites/lgtning.vmt");
 	
-	g_ProjectileModel = PrecacheModel("models/healthvial.mdl");
+	//g_ProjectileModel = PrecacheModel("models/healthvial.mdl");
 	g_ProjectileModelArmor = PrecacheModel("models/Items/battery.mdl");
 	
 	PrecacheSound("weapons/gas_can_explode.wav");
@@ -340,8 +340,10 @@ static Action Timer_SupportWeapon_ClipFullUp(Handle timer, DataPack pack)
 	int weapon = EntRefToEntIndex(pack.ReadCell());
 	int client = GetClientOfUserId(pack.ReadCell());
 	if(!IsValidEntity(client)|| !IsValidEntity(weapon))
-		return;
+		return Plugin_Handled;
+	
 	Clip_GiveWeaponClipFullUp(client, weapon);
+	return Plugin_Continue;
 }
 
 stock float GetSupportWeaponTimer(int client)
