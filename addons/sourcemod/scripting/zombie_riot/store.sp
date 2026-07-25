@@ -1735,40 +1735,31 @@ void PrintPapDescription(int client, Item item, ItemInfo info, int type = PAP_DE
 	
 	SPrintToChat(client, "%s", bufferHeader);
 	
-	char bufferSizeSplit[512];
-	char DescDo[256];
-	Format(DescDo, sizeof(DescDo), "%s", info.Desc);
-	char DescDo2[256];
-	Format(DescDo2, sizeof(DescDo2), "%s", info.Rogue_Desc);
-	TranslateItemName(client, DescDo, DescDo2, bufferSizeSplit, sizeof(bufferSizeSplit));
-	ReplaceString(bufferSizeSplit, sizeof(bufferSizeSplit), "/n", ";");
-	ReplaceString(bufferSizeSplit, sizeof(bufferSizeSplit), "\n", ";");
+	char descriptionBuffer[1024];
 	
-	static char countext[2][240];
-	if(StrContains(bufferSizeSplit, ";") != -1)
+	char DescDo[256];
+	FormatEx(DescDo, sizeof(DescDo), "%s", info.Desc);
+	char DescDo2[256];
+	FormatEx(DescDo2, sizeof(DescDo2), "%s", info.Rogue_Desc);
+	
+	TranslateItemName(client, DescDo, DescDo2, descriptionBuffer, sizeof(descriptionBuffer));
+	ReplaceString(descriptionBuffer, sizeof(descriptionBuffer), "/n", ";");
+	ReplaceString(descriptionBuffer, sizeof(descriptionBuffer), "\n", ";");
+	
+	if(StrContains(descriptionBuffer, ";") != -1)
 	{
-		//Due to the peculiarity of Korean language(maybe other language), Breaking by bytes causes problems with text output!!
-		//solution, manually split.
-		int count = ExplodeString(bufferSizeSplit, ";", countext, sizeof(countext), sizeof(countext[]));
-		for(int ii = 0; ii < count; ii++)
+		char lines[12][240];
+		int count = ExplodeString(descriptionBuffer, ";", lines, sizeof(lines), sizeof(lines[]));
+		
+		for(int i = 0; i < count; i++)
 		{
-			if(ii>=count)break;
-			CPrintToChat(client, "%s%s", STORE_COLOR, countext[ii]);
+			if(lines[i][0])
+				PrintChatChunked(client, lines[i], 240, STORE_COLOR);
 		}
 	}
 	else
 	{
-		Format(countext[0], sizeof(countext[]), "%s", bufferSizeSplit);
-		if(strlen(bufferSizeSplit) > 240) //If 240 exists, split.
-		{
-			Format(countext[1], sizeof(countext[]), "%s", bufferSizeSplit[239]);
-			CPrintToChat(client, "%s%s-", STORE_COLOR ,countext[0]);
-		}
-		else
-			CPrintToChat(client, "%s%s", STORE_COLOR ,countext[0]);
-
-		if(countext[1][0])
-			CPrintToChat(client, "%s%s", STORE_COLOR ,countext[1]);
+		PrintChatChunked(client, descriptionBuffer, 240, STORE_COLOR);
 	}
 }
 

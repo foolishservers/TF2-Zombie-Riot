@@ -3245,12 +3245,18 @@ void Projectile_DealElementalDamage(int victim, int attacker, float Scale = 1.0)
 }
 
 //bool OnlyWarnOnceEver = true;
+/**
+ * 
+ * @param client  To get attributes from and to see what is my enemy!
+ * @param entity  Entity that gets forwarded or traced from/Distance checked.
+ * @param weapon  What to get attributes from aswell, if its from an npc, always -1
+ *                Idealy: entity is projectile if its a projectile weapon
+ *                If its happening from an NPC or player itself, set both client and entity to the same thing.
+ */
 stock void Explode_Logic_Custom(float damage,
-int client, //To get attributes from and to see what is my enemy!
-int entity,	//Entity that gets forwarded or traced from/Distance checked.
-int weapon,	//What to get attributes from aswell, if its from an npc, always -1
-//Idealy: entity is projectile if its a projectile weapon
-//If its happening from an NPC or player itself, set both client and entity to the same thing.
+int client,
+int entity,
+int weapon,
 float spawnLoc[3] = {0.0,0.0,0.0},
 float explosionRadius = EXPLOSION_RADIUS,
 float ExplosionDmgMultihitFalloff = EXPLOSION_AOE_DAMAGE_FALLOFF,
@@ -6250,3 +6256,49 @@ int GetPlayerFromShared(Address pShared)
 	}
 	return -1;
 }
+
+
+stock int GetUtf8SafeCutPos(const char[] str, int maxBytes)
+{
+	int len = strlen(str);
+	if (len <= maxBytes)
+		return len;
+
+	int pos = maxBytes;
+	while (pos > 0 && (str[pos] & 0xC0) == 0x80)
+	{
+		pos--;
+	}
+	return pos;
+}
+
+stock void PrintChatChunked(int client, const char[] text, int maxBytes, const char[] prefix)
+{
+	int len = strlen(text);
+	int offset = 0;
+
+	while (offset < len)
+	{
+		int remaining = len - offset;
+		int cutPos;
+
+		if (remaining <= maxBytes)
+		{
+			cutPos = remaining;
+		}
+		else
+		{
+			cutPos = GetUtf8SafeCutPos(text[offset], maxBytes);
+			if (cutPos <= 0)
+				cutPos = maxBytes;
+		}
+
+		char chunk[256];
+		strcopy(chunk, cutPos + 1, text[offset]);
+
+		CPrintToChat(client, "%s%s", prefix, chunk);
+
+		offset += cutPos;
+	}
+}
+
