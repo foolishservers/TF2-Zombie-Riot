@@ -2427,7 +2427,7 @@ public Action Player_OnTakeDamageAlive_DeathCheck(int victim, int &attacker, int
 					if(i_WeaponVMTExtraSetting[entity] != -1)
 						continue;
 
-					if(!autoRevive)
+					if(!autoRevive || HasSpecificBuff(victim, "Defibrillator"))
 					{
 						SetEntityRenderMode(entity, RENDER_NORMAL);
 						SetEntityRenderColor(entity, 255, 125, 125, 255);
@@ -2438,7 +2438,7 @@ public Action Player_OnTakeDamageAlive_DeathCheck(int victim, int &attacker, int
 						SetEntityRenderColor(entity, 255, 255, 255, 10);
 					}
 				}
-				if(!autoRevive)
+				if(!autoRevive || HasSpecificBuff(victim, "Defibrillator"))
 				{
 					SetEntityRenderMode(victim, RENDER_NORMAL);
 					SetEntityRenderColor(victim, 255, 125, 125, 255);

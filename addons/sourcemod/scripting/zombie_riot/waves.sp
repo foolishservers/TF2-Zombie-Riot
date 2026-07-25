@@ -2212,7 +2212,7 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 			if(WaveWhich == Rounds_Default)
 			{
 				float WaitingTimeGive = wave.EnemyData.WaitingTimeGive;
-				if(!LastMann && WaitingTimeGive > 0.0)
+				if((!LastMann || Is_a_boss == 2) && WaitingTimeGive > 0.0)
 				{
 					CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_WaitingTime", WaitingTimeGive);
 					GiveProgressDelay(WaitingTimeGive);

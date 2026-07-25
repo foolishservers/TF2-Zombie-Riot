@@ -58,6 +58,26 @@ int MaxRevivesAllowed()
 
 	return ReviveAllowMax;
 }
+
+float M3_Ability_Cooldown(int client, float AddTime=0.0)
+{
+	if(AddTime!=0.0)
+		ability_cooldown[client]=AddTime;
+	return ability_cooldown[client];
+}
+float M3_Ability_Duration(int entity, float AddTime=0.0)
+{
+	if(AddTime!=0.0)
+		f_Duration[entity]=AddTime;
+	return f_Duration[entity];
+}
+float M3_Ability_Delay(int entity, float AddTime=0.0)
+{
+	if(AddTime!=0.0)
+		f_HealDelay[entity]=AddTime;
+	return f_HealDelay[entity];
+}
+
 static const char g_ReinforceReadySounds[] = "mvm/mvm_bought_in.wav";
 
 static char gExplosive1;
@@ -102,6 +122,7 @@ public void M3_Abilities_Precache()
 	PrecacheSound("weapons/air_burster_explode3.wav");
 	HookEntityOutput("func_movelinear", "OnFullyOpen", OnBombDrop);
 	PrecacheSound("weapons/slam/throw.wav");
+	Addon_M3_Precache();
 }
 public void M3_ClearAll()
 {

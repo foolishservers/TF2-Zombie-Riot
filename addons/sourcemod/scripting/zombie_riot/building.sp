@@ -944,6 +944,10 @@ stock void ApplyBuildingCollectCooldown(int building, int client, float Duration
 	{
 		Building_Collect_Cooldown[building][client] = FAR_FUTURE;
 	}
+	else if(HasSpecificBuff(client, "Depot Transfer"))
+	{
+		Building_Collect_Cooldown[building][client] = GetGameTime() + 0.5;
+	}
 	else
 	{
 		Building_Collect_Cooldown[building][client] = GetGameTime() + Duration;

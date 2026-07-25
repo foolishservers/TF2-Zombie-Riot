@@ -4759,6 +4759,7 @@
 		"en"	"Drone connection Required!"
 		"ko"	"드론 연결 필요!"
 	}
+
 	"Zealot Dash Denie Spam"
 	{
 		"en" 		"You cant dash, you must hit someone with your rapier at least once!"

@@ -43,6 +43,7 @@ static void ClotPrecache()
 	PrecacheSoundCustom("#zombiesurvival/expidonsa_waves/raid_sensal_group.mp3");
 	PrecacheSoundCustom("#zombiesurvival/ruina/raid_ruina_trio.mp3");
 	PrecacheSoundCustom("#zombiesurvival/victoria_1/wave_45.mp3");
+	PrecacheSoundCustom("#zombiesurvival/xeno_raid/mr_duo_battle.mp3");
 	PrecacheSoundCustom(RAIDBOSS_TWIRL_THEME);
 	PrecacheModel("models/items/tf_gift.mdl", true);
 	PrecacheModel("models/player/spy.mdl");
@@ -211,7 +212,7 @@ methodmap CyberGrindGM < CClotBody
 			
 			npc.m_flAddRiadTime = StringToFloat(buffers[0]);
 			npc.m_iOverlordComboAttack = 100;
-			npc.m_flCoolDown = GetGameTime() + 0.5;
+			npc.m_flCoolDown = GetGameTime() + 1.0;
 			return npc;
 		}
 		else if(!StrContains(data, "difficulty"))
@@ -461,7 +462,7 @@ methodmap CyberGrindGM < CClotBody
 			func_NPCOnTakeDamage[npc.index] = INVALID_FUNCTION;
 			func_NPCThink[npc.index] = CyberGrindGM_OverrideMusic;
 			npc.m_iOverlordComboAttack = 0;
-			npc.m_flCoolDown = GetGameTime() + 0.5;
+			npc.m_flCoolDown = GetGameTime() + 1.0;
 			return npc;
 		}
 		else if(!StrContains(data, "the_ruina_trio_bgm"))
@@ -470,7 +471,7 @@ methodmap CyberGrindGM < CClotBody
 			func_NPCOnTakeDamage[npc.index] = INVALID_FUNCTION;
 			func_NPCThink[npc.index] = CyberGrindGM_OverrideMusic;
 			npc.m_iOverlordComboAttack = 1;
-			npc.m_flCoolDown = GetGameTime() + 0.5;
+			npc.m_flCoolDown = GetGameTime() + 1.0;
 			return npc;
 		}
 		else if(!StrContains(data, "xeno_duo"))
@@ -479,7 +480,7 @@ methodmap CyberGrindGM < CClotBody
 			func_NPCOnTakeDamage[npc.index] = INVALID_FUNCTION;
 			func_NPCThink[npc.index] = CyberGrindGM_OverrideMusic;
 			npc.m_iOverlordComboAttack = 2;
-			npc.m_flCoolDown = GetGameTime() + 0.5;
+			npc.m_flCoolDown = GetGameTime() + 1.0;
 			return npc;
 		}
 		else if(!StrContains(data, "world_end"))
@@ -488,7 +489,7 @@ methodmap CyberGrindGM < CClotBody
 			func_NPCOnTakeDamage[npc.index] = INVALID_FUNCTION;
 			func_NPCThink[npc.index] = CyberGrindGM_OverrideMusic;
 			npc.m_iOverlordComboAttack = 3;
-			npc.m_flCoolDown = GetGameTime() + 0.5;
+			npc.m_flCoolDown = GetGameTime() + 1.0;
 			return npc;
 		}
 		else if(!StrContains(data, "is_twirl"))

@@ -863,6 +863,8 @@ void ZR_PluginStart()
 	
 	RegAdminCmd("zr_spawn_gift", CommandSpawnGift, ADMFLAG_ROOT, "Usage: zr_spawn_gift [xp:0 / Item:1] <0:Common 1:Uncommon 2:Rare 3:Legend 4:Mythic>");
 	
+	RegAdminCmd("zr_rnd_test", CommandAdminRND, ADMFLAG_ROOT, "Usage: zr_rnd_test [int]");
+	
 	CookieXP = new Cookie("zr_xp", "Your XP", CookieAccess_Protected);
 	CookieScrap = new Cookie("zr_Scrap", "Your Scrap", CookieAccess_Protected);
 
