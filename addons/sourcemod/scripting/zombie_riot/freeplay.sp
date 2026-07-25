@@ -252,13 +252,13 @@ void Freeplay_OnNPCDeath(int entity)
 int Freeplay_GetDangerLevelCurrent()
 {
 	//0.5% chance for danger lvl 0 stuff.
-	if(GetRandomFloat(0.0, 1.0) <= 0.0025)
+	if(GetRandomFloat(0.0, 1.0) <= 0.003)
 	{
 		return 0;
 	}
 	int DangerLevel = 1;
 
-	float DefaultChance = 0.035 * float(EnemyChance);
+	float DefaultChance = 0.04 * float(EnemyChance);
 	for(int LoopMax = 1; LoopMax < 6 ; LoopMax++)
 	{
 		//theres a default 10% chance to roll higher enemies.
@@ -339,6 +339,12 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 						enemy.Health = RoundToFloor((6000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 						enemy.Data = "wave_40;blitzmayhem";
 					}
+					case 6:
+					{
+						enemy.Index = NPC_GetByPlugin("npc_blitzkrieg");
+						enemy.Health = RoundToFloor((6000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+						enemy.Data = "wave_40;blitzmayhem";
+					}
 					default:
 					{
 						enemy.Index = NPC_GetByPlugin("npc_blitzkrieg");
@@ -409,7 +415,7 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 			case 9:	
 			{
 				enemy.Index = NPC_GetByPlugin("npc_bob_the_first_last_savior");
-				enemy.Health = RoundToFloor((6000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+				enemy.Health = RoundToFloor((7500000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 				enemy.ExtraDamage = (f_FreeplayDamageExtra * 0.65);
 				enemy.Data = "nobackup";
 			}
@@ -858,6 +864,7 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 				enemy.Health = RoundToFloor(((3000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound())) * HealthMulti);
 				enemy.ExtraDamage = 1.09;
 				enemy.ExtraThinkSpeed = 0.75;
+				enemy.Is_Boss = 1;
 				count = 1;
 			}
 			else if(roll == 8)
@@ -2888,57 +2895,57 @@ void Freeplay_SetupStart(bool extra = false)
 			/// HEALTH SKULLS ///
 			case 0:
 			{
-				strcopy(message, sizeof(message), "{red}모든 적의 최대 체력이 3000 만큼 증가!");
-				HealthBonus += 3000;
+				strcopy(message, sizeof(message), "{red}모든 적의 최대 체력이 2000 만큼 증가!");
+				HealthBonus += 2000;
 			}
 			case 1:
 			{
-				strcopy(message, sizeof(message), "{red}모든 적의 최대 체력이 5000 만큼 증가!");
-				HealthBonus += 5000;
+				strcopy(message, sizeof(message), "{red}모든 적의 최대 체력이 4000 만큼 증가!");
+				HealthBonus += 4000;
 			}
 			case 2:
-			{
-				strcopy(message, sizeof(message), "{red}모든 적들의 최대 체력이 8% 만큼 증가!");
-				HealthMulti *= 1.08;
-			}
-			case 3:
 			{
 				strcopy(message, sizeof(message), "{red}모든 적들의 최대 체력이 4% 만큼 증가!");
 				HealthMulti *= 1.04;
 			}
-			case 4:
+			case 3:
 			{
-				strcopy(message, sizeof(message), "{green}모든 적들의 최대 체력이 8% 만큼 감소.");
-				HealthMulti *= 0.92;
+				strcopy(message, sizeof(message), "{red}모든 적들의 최대 체력이 2% 만큼 증가!");
+				HealthMulti *= 1.02;
 			}
-			case 5:
+			case 4:
 			{
 				strcopy(message, sizeof(message), "{green}모든 적들의 최대 체력이 4% 만큼 감소.");
 				HealthMulti *= 0.96;
 			}
+			case 5:
+			{
+				strcopy(message, sizeof(message), "{green}모든 적들의 최대 체력이 2% 만큼 감소.");
+				HealthMulti *= 0.98;
+			}
 			case 6:
 			{
-				strcopy(message, sizeof(message), "{yellow}모든 적의 최대 체력이 {green}2000 만큼 감소. {yellow}하지만 {red}최대 체력이 7% 만큼 증가.");
-				HealthBonus -= 2000;
-				HealthMulti *= 1.07;
+				strcopy(message, sizeof(message), "{yellow}모든 적의 최대 체력이 {green}2500 만큼 감소. {yellow}하지만 {red}최대 체력이 5% 만큼 증가.");
+				HealthBonus -= 2500;
+				HealthMulti *= 1.05;
 			}
 			case 7:
 			{
-				strcopy(message, sizeof(message), "{yellow}모든 적의 최대 체력이 {green}5000 만큼 감소. {yellow}하지만 {red}최대 체력이 10% 만큼 증가.");
+				strcopy(message, sizeof(message), "{yellow}모든 적의 최대 체력이 {green}5000 만큼 감소. {yellow}하지만 {red}최대 체력이 7.5% 만큼 증가.");
 				HealthBonus -= 5000;
-				HealthMulti *= 1.1;
+				HealthMulti *= 1.075;
 			}
 			case 8:
 			{
-				strcopy(message, sizeof(message), "{yellow}모든 적의 최대 체력이 {red}3000 만큼 증가. {yellow}하지만 {green}최대 체력이 7% 만큼 감소.");
-				HealthBonus += 3000;
-				HealthMulti /= 1.07;
+				strcopy(message, sizeof(message), "{yellow}모든 적의 최대 체력이 {red}2500 만큼 증가. {yellow}하지만 {green}최대 체력이 5% 만큼 감소.");
+				HealthBonus += 2500;
+				HealthMulti *= 0.95;
 			}
 			case 9:
 			{
-				strcopy(message, sizeof(message), "{yellow}모든 적의 최대 체력이 {red}5000 만큼 증가. {yellow}하지만 {green}최대 체력이 10% 만큼 감소.");
+				strcopy(message, sizeof(message), "{yellow}모든 적의 최대 체력이 {red}5000 만큼 증가. {yellow}하지만 {green}최대 체력이 7.5% 만큼 감소.");
 				HealthBonus += 5000;
-				HealthMulti /= 1.1;
+				HealthMulti *= 0.925;
 			}
 
 			/// BUFF/DEBUFF SKULLS //
@@ -3040,13 +3047,13 @@ void Freeplay_SetupStart(bool extra = false)
 			}
 			case 17:
 			{
-				strcopy(message, sizeof(message), "{green}다음에 등장하는 적 300 마리가 신경 쇠악 디버프를 보유한 채로 등장.");
-				CrippleDebuff += 300;
+				strcopy(message, sizeof(message), "{green}다음에 등장하는 적 400 마리가 신경 손상 디버프를 보유한 채로 등장.");
+				CrippleDebuff += 400;
 			}
 			case 18:
 			{
-				strcopy(message, sizeof(message), "{green}다음에 등장하는 적 300 마리가 뇌진탕 디버프를 보유한 채로 등장.");
-				CudgelDebuff += 300;
+				strcopy(message, sizeof(message), "{green}다음에 등장하는 적 400 마리가 뇌진탕 디버프를 보유한 채로 등장.");
+				CudgelDebuff += 400;
 			}
 			case 19:
 			{
@@ -3067,6 +3074,21 @@ void Freeplay_SetupStart(bool extra = false)
 			}
 			case 22:
 			{
+				strcopy(message, sizeof(message), "{green}이제 적을 처치할때마다 추가 자금을 3 만큼 획득.");
+				KillBonus += 3;
+			}
+			case 23:
+			{
+				strcopy(message, sizeof(message), "{green}이제 적을 처치할때마다 추가 자금을 4 만큼 획득.");
+				KillBonus += 4;
+			}
+			case 24:
+			{
+				strcopy(message, sizeof(message), "{green}이제 적을 처치할때마다 추가 자금을 5 만큼 획득.");
+				KillBonus += 5;
+			}
+			case 25:
+			{
 				if(KillBonus < 1)
 				{
 					Freeplay_SetupStart();
@@ -3076,30 +3098,30 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}적 처치시 얻는 자금이 1 만큼 감소!");
 				KillBonus--;
 			}
-			case 23:
+			case 26:
 			{
-				if(CashBonus < 100)
+				if(CashBonus < 50)
 				{
 					Freeplay_SetupStart();
 					return;
 				}
 	
-				strcopy(message, sizeof(message), "{red}웨이브마다 얻는 자금이 100 만큼 감소!");
-				CashBonus -= 100;
+				strcopy(message, sizeof(message), "{red}웨이브마다 얻는 자금이 50 만큼 감소!");
+				CashBonus -= 50;
 			}
-			case 24:
+			case 27:
 			{
-				strcopy(message, sizeof(message), "{green}웨이브마다 얻는 자금이 120 만큼 증가.");
-				CashBonus += 120;
+				strcopy(message, sizeof(message), "{green}웨이브마다 얻는 자금이 150 만큼 증가.");
+				CashBonus += 150;
 			}
-			case 25:
+			case 28:
 			{
-				strcopy(message, sizeof(message), "{green}웨이브마다 얻는 자금이 180 만큼 증가.");
-				CashBonus += 180;
+				strcopy(message, sizeof(message), "{green}웨이브마다 얻는 자금이 200 만큼 증가.");
+				CashBonus += 200;
 			}
 	
 			/// PERK SKULLS ///
-			case 26:
+			case 29:
 			{
 				if(PerkMachine == 1)
 				{
@@ -3110,7 +3132,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}이제 모든 적들이 옵시디언 호프 퍽을 사용하여, 저항력이 +20% 증가하고 최대 체력이 +15% 증가!");
 				PerkMachine = 1;
 			}
-			case 27:
+			case 30:
 			{
 				if(PerkMachine == 2)
 				{
@@ -3121,7 +3143,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}이제 모든 적들이 모닝 커피 퍽을 사용하여, 피해량이 35% 증가!");
 				PerkMachine = 2;
 			}
-			case 28: // YOUR ATTEMPTS AT DEATH ARE IN, VAIN
+			case 31: // YOUR ATTEMPTS AT DEATH ARE IN, VAIN
 			{
 				if(PerkMachine == 3)
 				{
@@ -3132,7 +3154,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}이제 모든 적들이 명사수 맥주 퍽을 사용하여, 피해량이 15% 증가!");
 				PerkMachine = 3;
 			}
-			case 29:
+			case 32:
 			{
 				if(PerkMachine == 4)
 				{
@@ -3143,7 +3165,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}이제 모든 적들이 신속 홉 퍽을 사용하여, 둔화 효과에 면역이 되었습니다!");
 				PerkMachine = 4;
 			}
-			case 30:
+			case 33:
 			{
 				if(PerkMachine == 0)
 				{
@@ -3156,7 +3178,7 @@ void Freeplay_SetupStart(bool extra = false)
 			}
 	
 			/// MISCELANEOUS SKULLS ///
-			case 31:
+			case 34:
 			{
 				if(friendunit)
 				{
@@ -3166,17 +3188,17 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{green}아주 강력한 아군 유닛이 참가합니다.");
 				friendunit = true;
 			}
-			case 32:
+			case 35:
 			{
-				strcopy(message, sizeof(message), "{red}미니 보스 생성 확률이 10% 만큼 증가!");
-				MiniBossChance *= 1.1;
+				strcopy(message, sizeof(message), "{red}미니 보스 생성 확률이 25% 만큼 증가!");
+				MiniBossChance *= 1.25;
 			}
-			case 33:
+			case 36:
 			{
-				strcopy(message, sizeof(message), "{green}미니 보스 생성 확률이 10% 만큼 감소.");
-				MiniBossChance *= 0.9;
+				strcopy(message, sizeof(message), "{green}미니 보스 생성 확률이 25% 만큼 감소.");
+				MiniBossChance *= 0.75;
 			}
-			case 34:
+			case 37:
 			{
 				if(EnemyBosses == 1)
 				{
@@ -3194,7 +3216,7 @@ void Freeplay_SetupStart(bool extra = false)
 					EnemyBosses = 6;
 				}
 			}
-			case 35:
+			case 38:
 			{
 				if(ImmuneNuke == 1)
 				{
@@ -3212,7 +3234,7 @@ void Freeplay_SetupStart(bool extra = false)
 					ImmuneNuke = 4;
 				}
 			}
-			case 36:
+			case 39:
 			{
 				//if(EnemyChance > 8)
 				//{
@@ -3223,7 +3245,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}이제 더욱 강력한 적들의 등장 확률이 높아졌습니다!");
 				EnemyChance++;
 			}
-			case 37:
+			case 40:
 			{
 				if(EnemyChance < 3)
 				{
@@ -3236,17 +3258,17 @@ void Freeplay_SetupStart(bool extra = false)
 			}
 	
 			/// SAMU'S SKULLS (new!) ///
-			case 38:
+			case 41:
 			{
 				strcopy(message, sizeof(message), "{red}모든 적들의 이동 속도가 10% 만큼 증가!");
 				SpeedMult += 0.1;
 			}
-			case 39:
+			case 42:
 			{
-				strcopy(message, sizeof(message), "{red}모든 적들의 이동 속도가 15% 만큼 증가!");
-				SpeedMult += 0.15;
+				strcopy(message, sizeof(message), "{red}모든 적들의 이동 속도가 20% 만큼 증가!");
+				SpeedMult += 0.2;
 			}
-			case 40:
+			case 43:
 			{
 				if(SpeedMult < 0.25)
 				{
@@ -3258,7 +3280,7 @@ void Freeplay_SetupStart(bool extra = false)
 				if(SpeedMult < 0.25)
 					SpeedMult = 0.25;
 			}
-			case 41:
+			case 44:
 			{
 				if(SpeedMult < 0.25)
 				{
@@ -3270,19 +3292,33 @@ void Freeplay_SetupStart(bool extra = false)
 				if(SpeedMult < 0.25)
 					SpeedMult = 0.25;
 			}
-			case 42:
+			case 45:
 			{
 				strcopy(message, sizeof(message), "{green}모든 적들의 근접 피해 저항력이 15% 만큼 감소.");
 				MeleeMult += 0.15;
 			}
-			case 43:
+			case 46:
 			{
 				strcopy(message, sizeof(message), "{green}모든 적들의 근접 피해 저항력이 20% 만큼 감소.");
 				MeleeMult += 0.2;
 			}
-			case 44:
+			case 47:
 			{
 				if(MeleeMult < 0.01) // 95% melee res max
+				{
+					Freeplay_SetupStart();
+					return;
+				}
+				strcopy(message, sizeof(message), "{red}모든 적들의 근접 피해 저항력이 10% 만큼 증가.");
+				MeleeMult -= 0.1;
+				if(MeleeMult < 0.01)
+				{
+					MeleeMult = 0.01;
+				}
+			}
+			case 48:
+			{
+				if(MeleeMult < 0.01)
 				{
 					Freeplay_SetupStart();
 					return;
@@ -3294,43 +3330,43 @@ void Freeplay_SetupStart(bool extra = false)
 					MeleeMult = 0.01;
 				}
 			}
-			case 45:
-			{
-				if(MeleeMult < 0.01)
-				{
-					Freeplay_SetupStart();
-					return;
-				}
-				strcopy(message, sizeof(message), "{red}모든 적들의 근접 피해 저항력이 20% 만큼 증가.");
-				MeleeMult -= 0.2;
-				if(MeleeMult < 0.01)
-				{
-					MeleeMult = 0.01;
-				}
-			}
-			case 46:
+			case 49:
 			{
 				strcopy(message, sizeof(message), "{green}모든 적들의 원거리 피해 저항력이 15% 만큼 감소.");
 				RangedMult += 0.15;
 			}
-			case 47:
+			case 50:
 			{
 				strcopy(message, sizeof(message), "{green}모든 적들의 원거리 피해 저항력이 20% 만큼 감소.");
 				RangedMult += 0.2;
 			}
-			case 48:
+			case 51:
 			{
 				strcopy(message, sizeof(message), "{red}모든 적들의 공격 속도가 x0.9 만큼 증가!");
 				ExtraAttackspeed *= 0.9;
 			}
-			case 49:
+			case 52:
 			{
 				strcopy(message, sizeof(message), "{green}모든 적들의 공격 속도가 5% 만큼 감소.");
 				ExtraAttackspeed += 0.05;
 			}
-			case 50:
+			case 53:
 			{
 				if(RangedMult < 0.01) // 95% ranged res max
+				{
+					Freeplay_SetupStart();
+					return;
+				}
+				strcopy(message, sizeof(message), "{red}모든 적들의 원거리 피해 저항력이 10% 만큼 증가.");
+				RangedMult -= 0.1;
+				if(RangedMult < 0.01)
+				{
+					RangedMult = 0.01;
+				}
+			}
+			case 54:
+			{
+				if(RangedMult < 0.01)
 				{
 					Freeplay_SetupStart();
 					return;
@@ -3342,21 +3378,7 @@ void Freeplay_SetupStart(bool extra = false)
 					RangedMult = 0.01;
 				}
 			}
-			case 51:
-			{
-				if(RangedMult < 0.01)
-				{
-					Freeplay_SetupStart();
-					return;
-				}
-				strcopy(message, sizeof(message), "{red}모든 적들의 원거리 피해 저항력이 20% 만큼 증가.");
-				RangedMult -= 0.2;
-				if(RangedMult < 0.01)
-				{
-					RangedMult = 0.01;
-				}
-			}
-			case 52, 53:
+			case 55, 56:
 			{
 				if(ExplodingNPC)
 				{
@@ -3369,7 +3391,7 @@ void Freeplay_SetupStart(bool extra = false)
 				EmitSoundToAll("ui/mm_medal_silver.wav");
 			}
 			
-			case 54:
+			case 57:
 			{
 				Freeplay_SetupStart();
 				return;
@@ -3384,7 +3406,7 @@ void Freeplay_SetupStart(bool extra = false)
 				EnemyShields += 3;
 				*/
 			}
-			case 55:
+			case 58:
 			{
 				Freeplay_SetupStart();
 				/*
@@ -3399,7 +3421,7 @@ void Freeplay_SetupStart(bool extra = false)
 				EnemyShields += 6;
 				*/
 			}
-			case 56:
+			case 59:
 			{
 				Freeplay_SetupStart();
 				return;
@@ -3414,7 +3436,7 @@ void Freeplay_SetupStart(bool extra = false)
 				EnemyShields -= 2;
 				*/
 			}
-			case 57:
+			case 60:
 			{
 				Freeplay_SetupStart();
 				return;
@@ -3430,7 +3452,7 @@ void Freeplay_SetupStart(bool extra = false)
 				*/
 			}
 			
-			case 58:
+			case 61:
 			{
 				if(VoidBuff > 2)
 				{
@@ -3443,7 +3465,7 @@ void Freeplay_SetupStart(bool extra = false)
 					VoidBuff++;
 				}
 			}
-			case 59:
+			case 62:
 			{
 				if(VestaBuff)
 				{
@@ -3456,7 +3478,7 @@ void Freeplay_SetupStart(bool extra = false)
 					VestaBuff = true;
 				}
 			}
-			case 60:
+			case 63:
 			{
 				if(SquadBuff)
 				{
@@ -3469,7 +3491,7 @@ void Freeplay_SetupStart(bool extra = false)
 					SquadBuff = true;
 				}
 			}
-			case 61:
+			case 64:
 			{
 				if(Coffee)
 				{
@@ -3482,7 +3504,7 @@ void Freeplay_SetupStart(bool extra = false)
 					Coffee = true;
 				}
 			}
-			case 62:
+			case 65:
 			{
 				if(StrangleDebuff > 3)
 				{
@@ -3495,7 +3517,7 @@ void Freeplay_SetupStart(bool extra = false)
 					StrangleDebuff++;
 				}
 			}
-			case 63:
+			case 66:
 			{
 				if(ProsperityDebuff > 3)
 				{
@@ -3508,7 +3530,7 @@ void Freeplay_SetupStart(bool extra = false)
 					ProsperityDebuff++;
 				}
 			}
-			case 64:
+			case 67:
 			{
 				if(SilenceDebuff)
 				{
@@ -3521,10 +3543,10 @@ void Freeplay_SetupStart(bool extra = false)
 					SilenceDebuff = true;
 				}
 			}
-			case 65:
+			case 68:
 			{
-				// 10% chance, otherwise retry.
-				if(GetRandomFloat(0.0, 1.0) <= 0.1)
+				// 25% chance, otherwise retry.
+				if(GetRandomFloat(0.0, 1.0) <= 0.25)
 				{
 					strcopy(message, sizeof(message), "{green}!! 새롭고 특별한 무기를 구매할 수 있게 되었습니다 !!");
 					Rogue_RareWeapon_Collect();
@@ -3535,7 +3557,7 @@ void Freeplay_SetupStart(bool extra = false)
 					return;
 				}
 			}
-			case 66:
+			case 69:
 			{
 				if(UnlockedSpeed)
 				{
@@ -3546,7 +3568,7 @@ void Freeplay_SetupStart(bool extra = false)
 				Store_DiscountNamedItem("Adrenaline", 999);
 				strcopy(message, sizeof(message), "{green}이제 패시브 상점에서 아드레날린을 구매할 수 있습니다!");
 			}
-			case 67:
+			case 70:
 			{
 				if(CheesyPresence)
 				{
@@ -3559,7 +3581,7 @@ void Freeplay_SetupStart(bool extra = false)
 					CheesyPresence = true;
 				}
 			}
-			case 68:
+			case 71:
 			{
 				if(EloquenceBuff > 2)
 				{
@@ -3572,7 +3594,7 @@ void Freeplay_SetupStart(bool extra = false)
 					EloquenceBuff++;
 				}
 			}
-			case 69:
+			case 72:
 			{
 				if(RampartBuff > 2)
 				{
@@ -3585,7 +3607,7 @@ void Freeplay_SetupStart(bool extra = false)
 					RampartBuff++;
 				}
 			}
-			case 70:
+			case 73:
 			{
 				if(zombiecombine)
 				{
@@ -3595,7 +3617,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}이봐, 내가 생각을 좀 해본건데. 만약, {gold}콤바인과, {red}좀비가, {red}합쳐진다면...");
 				zombiecombine = true;
 			}
-			case 71:
+			case 74:
 			{
 				if(moremen)
 				{
@@ -3605,7 +3627,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}대가리 수가 더 많아야되지 않겠냐!");
 				moremen = 1;
 			}
-			case 72:
+			case 75:
 			{
 				if(immutable)
 				{
@@ -3615,7 +3637,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{purple}차원의 틈을 통해 초자연적인 존재들이 다가오고 있다...");
 				immutable = true;
 			}
-			case 73:
+			case 76:
 			{
 				if(merlton)
 				{
@@ -3628,7 +3650,7 @@ void Freeplay_SetupStart(bool extra = false)
 					merlton = true;
 				}
 			}
-			case 74:
+			case 77:
 			{
 				if(EloquenceBuffEnemies > 2)
 				{
@@ -3641,7 +3663,7 @@ void Freeplay_SetupStart(bool extra = false)
 					EloquenceBuffEnemies++;
 				}
 			}
-			case 75:
+			case 78:
 			{
 				if(RampartBuffEnemies > 2)
 				{
@@ -3654,7 +3676,7 @@ void Freeplay_SetupStart(bool extra = false)
 					RampartBuffEnemies++;
 				}
 			}
-			case 76:
+			case 79:
 			{
 				if(HurtleBuffEnemies > 2)
 				{
@@ -3667,7 +3689,7 @@ void Freeplay_SetupStart(bool extra = false)
 					HurtleBuffEnemies++;
 				}
 			}
-			case 77:
+			case 80:
 			{
 				if(HurtleBuff > 2)
 				{
@@ -3680,7 +3702,7 @@ void Freeplay_SetupStart(bool extra = false)
 					HurtleBuff++;
 				}
 			}
-			case 78:
+			case 81:
 			{
 				if(LoveNahTonic)
 				{
@@ -3693,26 +3715,26 @@ void Freeplay_SetupStart(bool extra = false)
 					LoveNahTonic = true;
 				}
 			}
-			case 79:
+			case 82:
 			{
 				strcopy(message, sizeof(message), "{yellow}흠, 내가 생각해본건데, 해골을 더 많이 추가해야할 것 같아.");
 				ExtraSkulls++;
 			}
-			case 80:
+			case 83:
 			{
 				strcopy(message, sizeof(message), "{yellow}흠, 내가 생각해본건데, 해골을 더 많이 추가해야할 것 같아.");
 				ExtraSkulls++;
 			//	strcopy(message, sizeof(message), "{yellow}흠, 지금 생각해본건데, 해골 2개를 더 추가해보면 더 재밌어질 것 같아.");
 			//	ExtraSkulls += 2;
 			}
-			case 81:
+			case 84:
 			{
 				strcopy(message, sizeof(message), "{yellow}흠, 내가 생각해본건데, 해골을 더 많이 추가해야할 것 같아.");
 				ExtraSkulls++;
 			//	strcopy(message, sizeof(message), "{red}쓰읍- {crimson}존나 재밌네!{red} 그럼 해골을 3개씩 추가해보자고!!!");
 			//	ExtraSkulls += 3;
 			}
-			case 82:
+			case 85:
 			{
 				if(Schizophrenia)
 				{
@@ -3722,7 +3744,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}이 해골을 집어들자, 갑자기 당신의 머릿속에 어떤 목소리가 속삭이고 있다...");
 				Schizophrenia = true;
 			}
-			case 83:
+			case 86:
 			{
 				if(DarknessComing)
 				{
@@ -3732,7 +3754,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}어둠이 몰려오고 있어. {crimson}어서 도망가!");
 				DarknessComing = true;
 			}
-			case 84:
+			case 87:
 			{
 				if(thespewer)
 				{
@@ -3742,7 +3764,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}당신의 마지막 상대는... {crimson}부영양의 분출자!");
 				thespewer = true;
 			}
-			case 85:
+			case 88:
 			{
 				if(sigmaller)
 				{
@@ -3752,7 +3774,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}Holy smokes, it's him. {crimson}The SIGMALLER!");
 				sigmaller = true;
 			}
-			case 86:
+			case 89:
 			{
 				if(UnlockedMegeHPRegen)
 				{
