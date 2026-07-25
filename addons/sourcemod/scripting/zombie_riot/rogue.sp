@@ -803,7 +803,31 @@ static void DisplayHintVote()
 		{
 			Vote vote;
 			Voting.GetArray(top[0], vote);
+			
+			for(int client = 1; client <= MaxClients; client++)
+			{
+				if(IsClientInGame(client))
+				{
+					SetGlobalTransTarget(client);
+					
+					char buffer[256];
+					FormatEx(buffer, sizeof(buffer), "Votes: %d/%d, %ds left\n1. %t%s: (%d)", count, total, RoundFloat(VoteEndTime - GetGameTime()), vote.Name, vote.Append, votes[top[0]]);
+					
+					for(int i = 1; i < sizeof(top); i++)
+					{
+						if(top[i] != -1)
+						{
+							Voting.GetArray(top[i], vote);
 
+							Format(buffer, sizeof(buffer), "%s\n%d. %t%s: (%d)", buffer, i + 1, vote.Name, vote.Append, votes[top[i]]);
+						}
+					}
+					
+					PrintHintText(client, "%s", buffer);
+				}
+			}
+			
+			/*
 			SetGlobalTransTarget(LANG_SERVER);
 
 			char buffer[256];
@@ -820,6 +844,7 @@ static void DisplayHintVote()
 			}
 
 			PrintHintTextToAll(buffer);
+			*/
 		}
 	}
 	else
