@@ -2054,6 +2054,14 @@ static stock bool OnTakeDamageBackstab(int victim, int &attacker, int &inflictor
 			{
 				damage *= 1.25;
 			}
+			float attrib = Attributes_Get(weapon, Attrib_ExplosiveHeadshot, 0.0);
+			if(attrib >= 1.0)
+			{
+				float WorldSpaceVec[3]; WorldSpaceCenter(victim, WorldSpaceVec);
+				SpawnSmallExplosion(WorldSpaceVec);
+				Explode_Logic_Custom(damage, attacker, attacker, -1, WorldSpaceVec);
+				damage*=0.0;
+			}
 		}
 		else
 		{

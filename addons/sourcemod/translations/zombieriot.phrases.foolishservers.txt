@@ -755,6 +755,12 @@
 		"ko"		"차원 왜곡: 연구소"
 	}
 	
+	"Sniper Rifle - pap1"
+	{
+		"en"		"Heavy Caliber Sniper Rifle"
+		"ko"		"대구경 저격소총"
+	}
+	
 	//무기 설명
 	"Chaos Infected Launcher desc"
 	{

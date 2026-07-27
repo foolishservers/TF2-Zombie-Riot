@@ -562,9 +562,12 @@ static void DrinkRND(int client, int Overrides=-1)
 			}
 			case 18:
 			{
-				Armor_Charge[client]=0;
-				f_Armor_BreakSoundDelay[client] = GameTime + 5.0;	
-				EmitSoundToClient(client, "npc/assassin/ball_zap1.wav", client, SNDCHAN_STATIC, 60, _, 1.0, GetRandomInt(95,105));
+				if(Armor_Charge[client] > 0)
+				{
+					Armor_Charge[client]=0;
+					f_Armor_BreakSoundDelay[client] = GameTime + 5.0;	
+					EmitSoundToClient(client, "npc/assassin/ball_zap1.wav", client, SNDCHAN_STATIC, 60, _, 1.0, GetRandomInt(95,105));
+				}
 				return;
 			}
 			case 19:
