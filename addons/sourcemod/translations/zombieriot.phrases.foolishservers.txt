@@ -1555,6 +1555,40 @@
 		"ko"		"모두 이 곳에서 죽을 것이다. 하지만... 가장 마지막에 묻힐 사람은 바로 당신이겠지."
 	}
 	
+	//Store.
+	"Store_Grigori_Regular_Discount"
+	{
+		"en"		"{green}Father Grigori{default}: My child, I'm offering new wares!"
+		"ko"		"{green}그리고리 신부{default}: 형제여, 지금 막 새로운 상품이 입고되었다네!"
+	}
+	"Store_Grigori_Special_Discount"
+	{
+		"en"		"{green}Father Grigori{default}: My child, I'm offering extra for a limited time!"
+		"ko"		"{green}그리고리 신부{default}: 형제여, 지금 새로운 상품을 입고했다네! 판매 시간이 그리 길지 않으니 주의하게!"
+	}
+	"Store_World_Machine_Regular_Discount"
+	{
+		"en"		"{purple}The World Machine{default}: Come here! I managed to get some items!"
+		"ko"		"{purple}월드 머신{default}: 방금 새로운 아이템을 들여왔어요!"
+	}
+	"Store_World_Machine_Special_Discount"
+	{
+		"en"		"{purple}The World Machine{default}: Come here! I managed to get some items, but they vanish fast!"
+		"ko"		"{purple}월드 머신{default}: 방금 새로운 아이템을 들여왔어요! 오래 팔 수 없는 물건이니까, 주의하세요!"
+	}
+	"Store_Recovered_Item"
+	{
+		"en"		"{green}Recovered Items:"
+		"ko"		"{green}되찾은 아이템:"
+	}
+	"Store_Recovered_Item_With_Discount"
+	{
+		"#format"	"{1:d}"
+		"en"		"{green}Recovered at {1}％ off:"
+		"ko"		"{green}{1}％ 할인과 함께 되찾은 아이템:"
+	}
+	
+	
 	//Auto Loadout.
 	"Ranged - H&K G36 Carbine Route"
 	{

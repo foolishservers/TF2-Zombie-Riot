@@ -3111,16 +3111,16 @@ void Store_RandomizeNPCStore(int StoreFlags, int addItem = 0, float override = -
 		if(i_SpecialGrigoriReplace == 0)
 		{
 			if(addItem == 0)
-				CPrintToChatAll("{green}그리고리 신부{default}: 형제여, 지금 막 새로운 상품이 입고되었다네!");
+				CPrintToChatAll("%t", "Store_Grigori_Regular_Discount");
 			else
-				CPrintToChatAll("{green}그리고리 신부{default}: 형제여, 지금 새로운 상품을 입고했다네! 판매 시간이 그리 길지 않으니 주의하게!");
+				CPrintToChatAll("%t", "Store_Grigori_Special_Discount");
 		}
 		else
 		{
 			if(addItem == 0)
-				CPrintToChatAll("{purple}세상 기계{default}: 방금 새로운 아이템을 들여왔어요!");
+				CPrintToChatAll("%t", "Store_World_Machine_Regular_Discount");
 			else
-				CPrintToChatAll("{purple}세상 기계{default}: 방금 새로운 아이템을 들여왔어요! 오래 가진 않는 물건이니까, 조심하세요!");
+				CPrintToChatAll("%t", "Store_World_Machine_Special_Discount");
 		}
 		bool OneSuperSale = (override < 0.0 && !rogue);
 		SortIntegers(indexes, amount, Sort_Random);
@@ -3146,20 +3146,29 @@ void Store_RandomizeNPCStore(int StoreFlags, int addItem = 0, float override = -
 			item.NPCSeller_Discount = ApplySale;
 			if(addItem != 0 && item.NPCSeller_WaveStart <= 0)
 			{
-				CPrintToChatAll("{green}%s [$$]",item.Name);
+				if (TranslationPhraseExists(item.Name))
+					CPrintToChatAll("{green}%t [$$]", item.Name);
+				else
+					CPrintToChatAll("{green}%s [$$]", item.Name);
 				item.NPCSeller_WaveStart = 3;
 				if(item.NPCSeller_Discount == 0.8)
 					item.NPCSeller_Discount = 0.7;
 			}
 			else if(OneSuperSale)
 			{
-				CPrintToChatAll("{green}%s [$$]",item.Name);
+				if (TranslationPhraseExists(item.Name))
+					CPrintToChatAll("{green}%t [$$]", item.Name);
+				else
+					CPrintToChatAll("{green}%s [$$]", item.Name);
 				OneSuperSale = false;
 				item.NPCSeller_Discount = 0.7;
 			}
 			else if(item.NPCSeller_WaveStart <= 0)
 			{
-				CPrintToChatAll("{palegreen}%s%s",item.Name, item.NPCSeller_Discount < 1.0 ? " [$]" : "");
+				if (TranslationPhraseExists(item.Name))
+					CPrintToChatAll("{palegreen}%t%s", item.Name, item.NPCSeller_Discount < 1.0 ? " [$]" : "");
+				else
+					CPrintToChatAll("{palegreen}%s%s", item.Name, item.NPCSeller_Discount < 1.0 ? " [$]" : "");
 			}
 			item.NPCSeller = true;
 			StoreItems.SetArray(indexes[i], item);
@@ -3199,23 +3208,23 @@ void Store_RandomizeNPCStore(int StoreFlags, int addItem = 0, float override = -
 		int SellsMax = addItem;
 		if(SellsMax > 0 && amount > 0)
 		{
-			char buffer[256];
 			if(override < 0.0 || override > 0.95)
 			{
-				strcopy(buffer, sizeof(buffer), "{green}Recovered Items:{palegreen}");
+				CPrintToChatAll("%t", "Store_Recovered_Item");
 			}
 			else
 			{
-				Format(buffer, sizeof(buffer), "{green}Recovered at -%d％ off:{palegreen}", RoundFloat((1.0 - override) * 100.0));
+				CPrintToChatAll("%t", "Store_Recovered_Item_With_Discount", RoundFloat((1.0 - override) * 100.0));
 			}
-
-			for(int i; i<SellsMax && i<amount; i++) //amount of items to sell
+			
+			ArrayList soldItemKeys = new ArrayList(ByteCountToCells(64));
+			
+			for(int i; i < SellsMax && i < amount; i++)
 			{
 				StoreItems.GetArray(indexes[i], item);
 
 				if(amount > SellsMax)
 				{
-					// Skip some items to increase the rate of other sections
 					if(sections.FindValue(item.Section) != -1)
 					{
 						SellsMax++;
@@ -3223,22 +3232,46 @@ void Store_RandomizeNPCStore(int StoreFlags, int addItem = 0, float override = -
 					}
 				}
 
-				// Blah: Item
-				// Blash, Item
-				Format(buffer, sizeof(buffer), "%s%s %s", buffer, i ? "," : "", item.Name);
+				soldItemKeys.PushString(item.Name); // item.Name == 번역 phrase 키
 
 				item.NPCSeller = true;
 				float ApplySale = 1.0;
-
 				if(override >= 0.0)
 					ApplySale = override;
-					
+
 				item.NPCSeller_Discount = ApplySale;
 				StoreItems.SetArray(indexes[i], item);
 				sections.Push(item.Section);
 			}
+			
+			char nameKey[64];
+			char translatedName[128];
+			char buffer[256];
 
-			CPrintToChatAll(buffer);
+			for(int client = 1; client <= MaxClients; client++)
+			{
+				if(!IsClientInGame(client) || IsFakeClient(client))
+					continue;
+				
+				buffer[0] = '\0';
+				
+				for(int i = 0; i < soldItemKeys.Length; i++)
+				{
+					soldItemKeys.GetString(i, nameKey, sizeof(nameKey));
+
+					// Translation.
+					if (TranslationPhraseExists(nameKey))
+						FormatEx(translatedName, sizeof(translatedName), "%T", nameKey, client);
+					else
+						strcopy(translatedName, sizeof(translatedName), nameKey);
+					
+					Format(buffer, sizeof(buffer), "%s%s%s", buffer, i ? ", " : "", translatedName);
+				}
+				
+				CPrintToChat(client, "%s%s", "{palegreen}", buffer);
+			}
+
+			delete soldItemKeys;
 		}
 
 		delete sections;
