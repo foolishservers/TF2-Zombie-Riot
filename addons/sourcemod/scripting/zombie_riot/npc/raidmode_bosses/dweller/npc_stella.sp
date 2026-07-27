@@ -2175,7 +2175,7 @@ static void Stella_Weapon_Lines(Stella npc, int client)
 		}
 		else
 		{
-			RaidBossStella_NPCTalkMessage(npc, Text_Lines);
+			RaidBossStella_NPCTalkMessage(npc, Text_Lines, true);
 		}
 		
 		fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(17.0, 26.0);
