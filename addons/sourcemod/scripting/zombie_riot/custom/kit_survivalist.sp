@@ -105,6 +105,30 @@ void KitSurvivalist_Enable(int client, int weapon)
 	}
 }
 
+bool KitSurvivalist_IsEnabled(int client)
+{
+	return (WeaponTimer[client] != null);
+}
+
+void KitSurvivalist_LastmanBuff(int client)
+{
+	ClientCommand(client, "playgamesound items/smallmedkit1.wav");
+	
+	float maxhealth = float(ReturnEntityMaxHealth(client));
+	float healing = maxhealth - float(GetClientHealth(client));
+	HealEntityGlobal(client, client, healing, _, 2.0, HEAL_SELFHEAL);
+	
+	if (WeaponLevel[client])
+		ReservedHealth[client] = maxhealth;
+	
+	if (WeaponLevel[client] > 2)
+	{
+		ReviveRound[client] = -1;
+		ReviveRaid[client] = false;
+		ReviveCooltime[client] = GetGameTime();
+	}
+}
+
 public void KitSurvivalist_Unequip(int client)
 {
 	delete WeaponTimer[client];
@@ -182,8 +206,15 @@ public void KitSurvivalist_Primary_M2(int client, int weapon, bool crit, int slo
 		return;
 	}
 	
+	float cooltime = 35.0;
+	if (LastMann) {
+		cooltime = 27.5;
+	}
+	else if (WeaponLevel[client] > 5) {
+		cooltime = 30.0;
+	}
 	Rogue_OnAbilityUse(client, weapon);
-	Ability_Apply_Cooldown(client, slot, 35.0);
+	Ability_Apply_Cooldown(client, slot, cooltime);
 	
 	//okay, interesting
 	float damage = WeaponLevel[client] > 3 ? 200.0 : 150.0;
@@ -240,8 +271,15 @@ public void KitSurvivalist_Melee_M2(int client, int weapon, bool crit, int slot)
 	
 	MakePlayerGiveResponseVoice(client, 1); //haha!
 	
+	float cooltime = 30.0;
+	if (LastMann) {
+		cooltime = 25.0;
+	}
+	else if (WeaponLevel[client] > 5) {
+		cooltime = 27.5;
+	}
 	Rogue_OnAbilityUse(client, weapon);
-	Ability_Apply_Cooldown(client, slot, 30.0);
+	Ability_Apply_Cooldown(client, slot, cooltime);
 }
 
 public void KitSurvivalist_OnDealDamage_Melee(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int zr_custom_damage)
@@ -287,7 +325,10 @@ public void KitSurvivalist_OnTakeDamage(int victim, int &attacker, int &inflicto
 
 static void KitSurvivalist_GiveReservedHealth(int client)
 {
-	float limit = float(SDKCall_GetMaxHealth(client)) * 0.5;
+	float limit = float(SDKCall_GetMaxHealth(client));
+	if (!LastMann)
+		limit *= 0.5;
+	
 	if (ReservedHealth[client] >= limit)
 		return;
 	
@@ -318,6 +359,9 @@ static void KitSurvivalist_GiveReservedHealth(int client)
 	
 	if (WeaponLevel[client] > 6)
 		health = 75.0;
+	
+	if (LastMann)
+		health *= 1.5;
 	
 	ReservedHealth[client] += health;
 	if (ReservedHealth[client] > limit)
@@ -367,7 +411,7 @@ static int KitSurvivalist_RefillHealthState(int client)
 
 static void KitSurvivalist_RefillHealth(int client)
 {
-	GiveCompleteInvul(client, 1.5);
+	GiveCompleteInvul(client, 2.0);
 	
 	float HealedAlly[3];
 	GetEntPropVector(client, Prop_Data, "m_vecAbsOrigin", HealedAlly);

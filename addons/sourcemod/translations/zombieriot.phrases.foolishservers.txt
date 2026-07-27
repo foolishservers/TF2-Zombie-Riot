@@ -1555,6 +1555,11 @@
 		"en"		"{blue}The Prescript demands you kill everyone in your sight who apposes you {crimson}{1}."
 		"ko"		"{blue}지령은... {crimson}{1}의 시야 안에 있는 모두를 죽이라는 군."
 	}
+	"Special_LastMann_Survivalist"
+	{
+		"en"		"Everyone here will die. But... the last one to be buried will be YOU."
+		"ko"		"모두 이 곳에서 죽을 것이다. 하지만... 가장 마지막에 묻힐 사람은 바로 당신이겠지."
+	}
 	
 	//Auto Loadout.
 	"Ranged - H&K G36 Carbine Route"
