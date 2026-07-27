@@ -2609,6 +2609,12 @@ void TriggerLastmanLogic(int killed, int Hurtviasdkhook)
 					Yakuza_Lastman(19);
 					Prescript_LastmanBuff(client);
 				}
+				if(KitSurvivalist_IsEnabled(client))
+				{
+					CPrintToChatAll("%t", "Special_LastMann_Survivalist");
+					// Yakuza_Lastman(100);
+					KitSurvivalist_LastmanBuff(client);
+				}
 				
 				for(int i=1; i<=MaxClients; i++)
 				{
