@@ -1693,11 +1693,6 @@
 		"en"		"Sensal's scythe becomes red!\nActivating this will make it blue again."
 		"ko"		"센살의 낫이 빨간색이 됩니다!\n착용 시 다시 파란 색이 됩니다."
 	}
-	"There Can Be Only One Desc"
-	{
-		"en"		"Buy greg some ammo, he'll need it."
-		"ko"		"그리고리 신부에게 탄을 사주세요. 그가 필요로 할 겁니다."
-	}
 	"Bob's Curing Hand Desc"
 	{
 		"en"		"The Sea infection has been beaten, but so have you."
