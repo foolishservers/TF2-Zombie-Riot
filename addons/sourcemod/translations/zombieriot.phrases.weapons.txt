@@ -4016,6 +4016,11 @@
 		"en"		"Merc's Revolver"
 		"ko"		"용병의 리볼버"
 	}
+	"Wanted's Revolver"
+	{
+		"en"		"Wanted's Revolver"
+		"ko"		"현상 수배자의 리볼버"
+	}
 	"Greater Garbage"
 	{
 		"en"		"Greater Garbage"
