@@ -1512,18 +1512,16 @@
 	}
 	"Special_LastMann_Barracks_Almina"
 	{
-		"en"		"{blue}Soldiers arm their best gears, remebering what cruel fate they had to go through under Whiteflower and Dwellers"
+		"en"		"{blue}Soldiers arm their best gears, remembering what cruel fate they had to go through under Whiteflower and Dwellers"
 		"ko"		"{blue}병사들은 최고의 무기를 준비한다. 배풍등과 드웰러 밑에서 고통받던 잔혹한 기억을 떠올리며."
 	}
 	"Special_LastMann_Barracks_Expidonsa"
 	{
-		"#format"	"{1:N}"
 		"en"		"{blue}Expidonsa declares code Epsilon, use of experimental technology has been authorized, no more holding back."
 		"ko"		"{blue}엑스피돈사는 코드 엡실론을 발령하고, 실험적 기술의 사용을 승인했다. 더 이상 머뭇거릴 틈이 없다."
 	}
 	"Special_LastMann_Barracks_Alaxios"
 	{
-		"#format"	"{1:N}"
 		"en"		"{red}A chanting of war can be heard from Alaxios army, they will not go down without a fight."
 		"ko"		"{red}알락시오스의 군대에서 전투의 함성이 들려온다. 그들은 절대 함락되지 않을 것이다."
 	}

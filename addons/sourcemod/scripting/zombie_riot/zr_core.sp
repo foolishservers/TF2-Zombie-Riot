@@ -2562,23 +2562,27 @@ void TriggerLastmanLogic(int killed, int Hurtviasdkhook)
 					{
 						case Alternative:
 						{
-							CPrintToChatAll("%t", "Special_LastMann_Barracks_Alt", client);
+							CPrintToChatAll("%t", "Special_LastMann_Barracks_Alt");
 						}
 						case Combine:
 						{
-							CPrintToChatAll("%t", "Special_LastMann_Barracks_Combine", client);
+							CPrintToChatAll("%t", "Special_LastMann_Barracks_Combine");
 						}
 						case Almina_Thorns:
 						{
-							CPrintToChatAll("%t", "Special_LastMann_Barracks_Almina", client);
+							CPrintToChatAll("%t", "Special_LastMann_Barracks_Almina");
+						}
+						case Almina_Thornless:
+						{
+							CPrintToChatAll("%t", "Special_LastMann_Barracks_Almina");
 						}
 						case Thorns:
 						{
-							CPrintToChatAll("%t", "Special_LastMann_Barracks_Expidonsa", client);
+							CPrintToChatAll("%t", "Special_LastMann_Barracks_Expidonsa");
 						}
 						default:
 						{
-							CPrintToChatAll("%t", "Special_LastMann_Barracks_Alaxios", client);
+							CPrintToChatAll("%t", "Special_LastMann_Barracks_Alaxios");
 						}
 					}
 					Yakuza_Lastman(17);
