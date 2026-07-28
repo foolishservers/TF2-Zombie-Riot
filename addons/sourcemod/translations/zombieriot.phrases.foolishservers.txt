@@ -1549,8 +1549,8 @@
 	}
 	"Special_LastMann_Survivalist"
 	{
-		"en"		"Everyone here will die. But... the last one to be buried will be YOU."
-		"ko"		"모두 이 곳에서 죽을 것이다. 하지만... 가장 마지막에 묻힐 사람은 바로 당신이겠지."
+		"en"		"{crimson}Everyone here will die. But... the last one to be buried will be YOU."
+		"ko"		"{crimson}모두 이 곳에서 죽을 것이다. 하지만... 가장 마지막에 묻힐 사람은 바로 당신이겠지."
 	}
 	
 	//Store.
