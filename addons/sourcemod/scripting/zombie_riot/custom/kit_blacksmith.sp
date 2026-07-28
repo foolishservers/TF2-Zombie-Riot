@@ -538,7 +538,7 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 				if(Attributes_Get(weapon, Attrib_IsSniperRifle, 0.0) != 0.0)
 				{
 					BlockNormal = true;
-					switch(GetURandomInt() % 4)
+					switch(GetURandomInt() % 6)
 					{
 						case 0:
 							Tinker_SR_ExplosiveHeadshot(tinker.Rarity, tinker);
@@ -550,6 +550,10 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 							Tinker_SR_DepletedUranium(tinker.Rarity, tinker);
 						case 4:
 							Tinker_SR_HighSpeedFeedMechanism(tinker.Rarity, tinker);
+						case 5:
+							Tinker_SR_HollowPointBullets(tinker.Rarity, tinker);
+						default:
+							Tinker_SR_ExplosiveHeadshot(tinker.Rarity, tinker);
 					}
 				}
 			}
@@ -1103,8 +1107,11 @@ void Blacksmith_PrintAttribValue(int client, int attrib, float value, float luck
 		case Attrib_ExplosiveHeadshot:
 			Format(buffer, sizeof(buffer), "%s 폭발성 헤드샷 피해량", buffer);
 			
-		case 305:
+		case 304:
 			Format(buffer, sizeof(buffer), "%s 완전 충전 시 피해량", buffer);
+			
+		case 390:
+			Format(buffer, sizeof(buffer), "%s 헤드샷 피해량", buffer);
 	}
 	
 	CPrintToChat(client, "%s {yellow}(%d％)", buffer, RoundToCeil(luck * 100.0));
@@ -2076,9 +2083,9 @@ static void Tinker_SR_ExplosiveHeadshot(int rarity, TinkerEnum tinker)
 
 	switch(rarity)
 	{
-		case 0:{tinker.Value[0] = 1.0 + EHSLuck;tinker.Value[1] = 0.6 + DamageLuck;tinker.Value[2] = 2.5 - AttackSpeedLuck;}
-		case 1:{tinker.Value[0] = 1.25 + EHSLuck;tinker.Value[1] = 0.7 + DamageLuck;tinker.Value[2] = 2.0 - AttackSpeedLuck;}
-		case 2:{tinker.Value[0] = 1.5 + EHSLuck;tinker.Value[1] = 0.8 + DamageLuck;tinker.Value[2] = 1.85 - AttackSpeedLuck;}
+		case 0:{tinker.Value[0] = 1.0 + EHSLuck;tinker.Value[1] = 0.6 + DamageLuck;tinker.Value[2] = 2.0 - AttackSpeedLuck;}
+		case 1:{tinker.Value[0] = 1.25 + EHSLuck;tinker.Value[1] = 0.7 + DamageLuck;tinker.Value[2] = 1.75 - AttackSpeedLuck;}
+		case 2:{tinker.Value[0] = 1.5 + EHSLuck;tinker.Value[1] = 0.8 + DamageLuck;tinker.Value[2] = 1.5 - AttackSpeedLuck;}
 	}
 }
 static void Tinker_SR_KillerFocus(int rarity, TinkerEnum tinker)
@@ -2091,8 +2098,8 @@ static void Tinker_SR_KillerFocus(int rarity, TinkerEnum tinker)
 
 	switch(rarity)
 	{
-		case 0:{tinker.Value[0] = 1.0 + ChargeRate;tinker.Value[1] = 0.8 + DamageLuck;}
-		case 1:{tinker.Value[0] = 1.1 + ChargeRate;tinker.Value[1] = 0.825 + DamageLuck;}
+		case 0:{tinker.Value[0] = 1.0 + ChargeRate;tinker.Value[1] = 0.7 + DamageLuck;}
+		case 1:{tinker.Value[0] = 1.1 + ChargeRate;tinker.Value[1] = 0.75 + DamageLuck;}
 		case 2:{tinker.Value[0] = 1.2 + ChargeRate;tinker.Value[1] = 0.85 + DamageLuck;}
 	}
 }
@@ -2101,19 +2108,17 @@ static void Tinker_SR_SuperCoolingChamber(int rarity, TinkerEnum tinker)
 {
 	strcopy(tinker.Name, sizeof(tinker.Name), "초냉각 약실");
 	tinker.Attrib[0] = 304;
-	tinker.Attrib[1] = 2;
-	tinker.Attrib[2] = 6;
-	tinker.Attrib[3] = 41;
+	tinker.Attrib[1] = 6;
+	tinker.Attrib[2] = 41;
 	float FullChargeDMGLuck = (0.5 * (tinker.Luck[0]));
-	float DamageLuck = (0.3 * (tinker.Luck[1]));
-	float AttackSpeedLuck = (0.25 * (tinker.Luck[2]));
-	float ChargeRate = (0.5 * (tinker.Luck[3]));
+	float AttackSpeedLuck = (0.25 * (1.0 + (-1.0*(tinker.Luck[1]))));
+	float ChargeRate = (0.35 * (1.0 + (-1.0*(tinker.Luck[2]))));
 
 	switch(rarity)
 	{
-		case 0:{tinker.Value[0] = 1.2 + FullChargeDMGLuck;tinker.Value[1] = 0.7 + DamageLuck;tinker.Value[2] = 1.5 + AttackSpeedLuck;tinker.Value[3] = 0.6 - ChargeRate;}
-		case 1:{tinker.Value[0] = 1.5 + FullChargeDMGLuck;tinker.Value[1] = 0.65 + DamageLuck;tinker.Value[2] = 1.6 + AttackSpeedLuck;tinker.Value[3] = 0.6 - ChargeRate;}
-		case 2:{tinker.Value[0] = 1.8 + FullChargeDMGLuck;tinker.Value[1] = 0.6 + DamageLuck;tinker.Value[2] = 1.7 + AttackSpeedLuck;tinker.Value[3] = 0.6 - ChargeRate;}
+		case 0:{tinker.Value[0] = 1.3 + FullChargeDMGLuck;tinker.Value[1] = 1.4 + AttackSpeedLuck;tinker.Value[2] = 0.7 - ChargeRate;}
+		case 1:{tinker.Value[0] = 1.5 + FullChargeDMGLuck;tinker.Value[1] = 1.5 + AttackSpeedLuck;tinker.Value[2] = 0.7 - ChargeRate;}
+		case 2:{tinker.Value[0] = 1.7 + FullChargeDMGLuck;tinker.Value[1] = 1.6 + AttackSpeedLuck;tinker.Value[2] = 0.7 - ChargeRate;}
 	}
 }
 
@@ -2139,14 +2144,30 @@ static void Tinker_SR_HighSpeedFeedMechanism(int rarity, TinkerEnum tinker)
 	strcopy(tinker.Name, sizeof(tinker.Name), "고속 급탄 메커니즘");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 6;
-	float DamageLuck = (0.4 * (tinker.Luck[0]));
-	float AttackSpeedLuck = (0.3 * (tinker.Luck[1]));
+	float DamageLuck = (0.325 * (1.0 + (-1.0*(tinker.Luck[0]))));
+	float AttackSpeedLuck = (0.25 * (tinker.Luck[1]));
 
 	switch(rarity)
 	{
-		case 0:{tinker.Value[0] = 0.9 - DamageLuck;tinker.Value[1] = 1.0 - AttackSpeedLuck;}
-		case 1:{tinker.Value[0] = 0.95 - DamageLuck;tinker.Value[1] = 0.9 - AttackSpeedLuck;}
+		case 0:{tinker.Value[0] = 0.9 - DamageLuck;tinker.Value[1] = 0.9 - AttackSpeedLuck;}
+		case 1:{tinker.Value[0] = 0.95 - DamageLuck;tinker.Value[1] = 0.8 - AttackSpeedLuck;}
 		case 2:{tinker.Value[0] = 1.0 - DamageLuck;tinker.Value[1] = 0.75 - AttackSpeedLuck;}
+	}
+}
+
+static void Tinker_SR_HollowPointBullets(int rarity, TinkerEnum tinker)
+{
+	strcopy(tinker.Name, sizeof(tinker.Name), "할로우 포인트 탄환");
+	tinker.Attrib[0] = 2;
+	tinker.Attrib[1] = 390;
+	float DamageLuck = (0.25 * (tinker.Luck[0]));
+	float HeadDMGLuck = (0.3 * (tinker.Luck[1]));
+
+	switch(rarity)
+	{
+		case 0:{tinker.Value[0] = 0.75 + DamageLuck;tinker.Value[1] = 1.35 + HeadDMGLuck;}
+		case 1:{tinker.Value[0] = 0.7 + DamageLuck;tinker.Value[1] = 1.5 + HeadDMGLuck;}
+		case 2:{tinker.Value[0] = 0.675 + DamageLuck;tinker.Value[1] = 1.672 + HeadDMGLuck;}
 	}
 }
 
