@@ -159,7 +159,7 @@ static void KitSurvivalist_UpdateHud(int client, bool immediate = false)
 	char buffer[256];
 	if (WeaponLevel[client] >= 1)
 	{
-		FormatEx(buffer, sizeof(buffer), "Reserved Health [+%d]", RoundToCeil(ReservedHealth[client]));
+		FormatEx(buffer, sizeof(buffer), "%T", "Survivalist Kit Reserved Health", client, RoundToCeil(ReservedHealth[client]));
 	}
 	
 	if (WeaponLevel[client] >= 3)
@@ -168,20 +168,20 @@ static void KitSurvivalist_UpdateHud(int client, bool immediate = false)
 		{
 			case Survivalist_Revive_Disabled:
 			{
-				Format(buffer, sizeof(buffer), "%s\nRevive: Disabled", buffer);
+				Format(buffer, sizeof(buffer), "%s\n%T", buffer, "Survivalist Kit Disabled", client);
 			}
 			case Survivalist_Revive_Cooltime:
 			{
 				float cooltime = ReviveCooltime[client] - GetGameTime();
-				Format(buffer, sizeof(buffer), "%s\nRevive: %.1f (s)", buffer, cooltime);
+				Format(buffer, sizeof(buffer), "%s\n%T", buffer, "Survivalist Kit Cooltime", client, cooltime);
 			}
 			case Survivalist_Revive_NotEnoughHealth:
 			{
-				Format(buffer, sizeof(buffer), "%s\nRevive: More Health to Use", buffer);
+				Format(buffer, sizeof(buffer), "%s\n%T", buffer, "Survivalist Kit Not Enough Health", client);
 			}
 			case Survivalist_Revive_None:
 			{
-				Format(buffer, sizeof(buffer), "%s\nRevive: Ready", buffer);
+				Format(buffer, sizeof(buffer), "%s\n%T", buffer, "Survivalist Kit Can Revive", client);
 			}
 		}
 	}

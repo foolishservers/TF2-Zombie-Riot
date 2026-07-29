@@ -308,8 +308,8 @@
 	}
 	"Inv Compressed Explosive desc"
 	{
-		"en"	"Victorian Launcher Only\nIncreases Explosion Radius by 33％"
-		"ko"	"빅토리아 런처 전용\n폭발 범위 +33％"
+		"en"	"Vestan Launcher Only\nIncreases Explosion Radius by 33％"
+		"ko"	"베스타 런처 전용\n폭발 범위 +33％"
 	}
 	"Modern Defense"
 	{
@@ -1322,12 +1322,70 @@
 		"en"		"You need to Reload by {1}"
 		"ko"		"최소 {1}이상 장전 해야합니다"
 	}
+	"Survivalist Kit Reserved Health"
+	{
+		"#format"	"{1:d}"
+		"en"		"Reserved Health [+{1}]"
+		"ko"		"비축된 체력 [+{1}]"
+	}
+	"Survivalist Kit Can Revive"
+	{
+		"en"		"Revive: Ready"
+		"ko"		"소생: 준비 완료"
+	}
+	"Survivalist Kit Disabled"
+	{
+		"en"		"Revive: Disabled"
+		"ko"		"소생: 비활성화"
+	}
+	"Survivalist Kit Cooltime"
+	{
+		"#format"	"{1:.1f}"
+		"en"		"Revive: {1} (s)"
+		"ko"		"소생: {1}초 남음"
+	}
+	"Survivalist Kit Not Enough Health"
+	{
+		"en"		"Revive: More Health to Use"
+		"ko"		"소생: 체력 비축분 부족"
+	}
 	
 	//Store
 	"Item Description"
 	{
 		"en"		"Item Description"
 		"ko"		"아이템 설명"
+	}
+	"Store_Grigori_Regular_Discount"
+	{
+		"en"		"{green}Father Grigori{default}: My child, I'm offering new wares!"
+		"ko"		"{green}그리고리 신부{default}: 형제여, 지금 막 새로운 상품이 입고되었다네!"
+	}
+	"Store_Grigori_Special_Discount"
+	{
+		"en"		"{green}Father Grigori{default}: My child, I'm offering extra for a limited time!"
+		"ko"		"{green}그리고리 신부{default}: 형제여, 지금 새로운 상품을 입고했다네! 판매 시간이 그리 길지 않으니 주의하게!"
+	}
+	"Store_World_Machine_Regular_Discount"
+	{
+		"en"		"{purple}The World Machine{default}: Come here! I managed to get some items!"
+		"ko"		"{purple}월드 머신{default}: 방금 새로운 아이템을 들여왔어요!"
+	}
+	"Store_World_Machine_Special_Discount"
+	{
+		"en"		"{purple}The World Machine{default}: Come here! I managed to get some items, but they vanish fast!"
+		"ko"		"{purple}월드 머신{default}: 방금 새로운 아이템을 들여왔어요! 오래 팔 수 없는 물건이니까, 주의하세요!"
+	}
+	"Store_Recovered_Item"
+	{
+		"en"		"{green}Recovered Items:"
+		"ko"		"{green}되찾은 아이템:"
+	}
+	"Store_Recovered_Item_With_Discount"
+	{
+		"#format"	"{1:d}"
+		"en"		"{green}Recovered at {1}％ off:"
+		"ko"		"{green}{1}％ 할인과 함께 되찾은 아이템:"
 	}
 	
 	//Common
@@ -1553,40 +1611,6 @@
 		"ko"		"{crimson}모두 이 곳에서 죽을 것이다. 하지만... 가장 마지막에 묻힐 사람은 바로 당신이겠지."
 	}
 	
-	//Store.
-	"Store_Grigori_Regular_Discount"
-	{
-		"en"		"{green}Father Grigori{default}: My child, I'm offering new wares!"
-		"ko"		"{green}그리고리 신부{default}: 형제여, 지금 막 새로운 상품이 입고되었다네!"
-	}
-	"Store_Grigori_Special_Discount"
-	{
-		"en"		"{green}Father Grigori{default}: My child, I'm offering extra for a limited time!"
-		"ko"		"{green}그리고리 신부{default}: 형제여, 지금 새로운 상품을 입고했다네! 판매 시간이 그리 길지 않으니 주의하게!"
-	}
-	"Store_World_Machine_Regular_Discount"
-	{
-		"en"		"{purple}The World Machine{default}: Come here! I managed to get some items!"
-		"ko"		"{purple}월드 머신{default}: 방금 새로운 아이템을 들여왔어요!"
-	}
-	"Store_World_Machine_Special_Discount"
-	{
-		"en"		"{purple}The World Machine{default}: Come here! I managed to get some items, but they vanish fast!"
-		"ko"		"{purple}월드 머신{default}: 방금 새로운 아이템을 들여왔어요! 오래 팔 수 없는 물건이니까, 주의하세요!"
-	}
-	"Store_Recovered_Item"
-	{
-		"en"		"{green}Recovered Items:"
-		"ko"		"{green}되찾은 아이템:"
-	}
-	"Store_Recovered_Item_With_Discount"
-	{
-		"#format"	"{1:d}"
-		"en"		"{green}Recovered at {1}％ off:"
-		"ko"		"{green}{1}％ 할인과 함께 되찾은 아이템:"
-	}
-	
-	
 	//Auto Loadout.
 	"Ranged - H&K G36 Carbine Route"
 	{
@@ -1691,7 +1715,7 @@
 	"Expidonsan Battery Device Desc"
 	{
 		"en"		"Sensal's scythe becomes red!\nActivating this will make it blue again."
-		"ko"		"센살의 낫이 빨간색이 됩니다!\n착용 시 다시 파란 색이 됩니다."
+		"ko"		"센살의 낫이 빨간색이 됩니다!\n착용 시 다시 파란색이 됩니다."
 	}
 	"Bob's Curing Hand Desc"
 	{
@@ -1701,7 +1725,7 @@
 	"Alminan and Expidonsan Training Desc"
 	{
 		"en"		"The Angelica Shotgonnus, its halo and arm halo become more energetic.\nit also unlocks scythe recolour options!"
-		"ko"		"안젤리카 샷거누스의 헤일로와 팔에 에너지가 넘치게 됩니다.\n더 많은 센살의 낫 색상 옵션도 생겼어요!"
+		"ko"		"안젤리카 샷거누스의 헤일로와 팔에 에너지가 넘치게 됩니다.\n센살의 낫 색상 추가 옵션도 생겼어요!"
 	}
 	"Scythe Color Option 1 Desc"
 	{
@@ -1761,7 +1785,7 @@
 	"Omega's Medallion Desc"
 	{
 		"en"		"You got spared by Omega! He gave you one of his medallions as a treat.\nYou can wear it with pride, congratulations."
-		"ko"		"당신은 오메가와 오해를 풀고 친구가 되었습니다. 그가 기념으로 당신에게 선물을 주었군요.\n장비하면 좀 더 간지나게 될 겁니다. 축하합니다."
+		"ko"		"당신은 오메가와 오해를 풀고 친구가 되었습니다. 그가 기념으로 당신에게 자기 메달리언을 주었군요.\n장비하면 좀 더 간지나게 될 겁니다. 축하합니다."
 	}
 	"A Block of Cheese Desc"
 	{
