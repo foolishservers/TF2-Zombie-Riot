@@ -88,7 +88,7 @@ methodmap ZSMedicHealer < CClotBody
 	}
 	public ZSMedicHealer(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSMedicHealer npc = view_as<ZSMedicHealer>(CClotBody(vecPos, vecAng, "models/player/medic.mdl", "1.0", "15000", ally));
+		ZSMedicHealer npc = view_as<ZSMedicHealer>(CClotBody(vecPos, vecAng, "models/player/medic.mdl", "1.0", "7500", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		

@@ -124,7 +124,7 @@ methodmap InfectedFireFighter < CClotBody
 	
 	public InfectedFireFighter(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedFireFighter npc = view_as<InfectedFireFighter>(CClotBody(vecPos, vecAng, "models/player/pyro.mdl", "1.0", "50000", ally, false, true));
+		InfectedFireFighter npc = view_as<InfectedFireFighter>(CClotBody(vecPos, vecAng, "models/player/pyro.mdl", "1.0", "12500", ally, false, true));
 		
 		i_NpcWeight[npc.index] = 3;
 		

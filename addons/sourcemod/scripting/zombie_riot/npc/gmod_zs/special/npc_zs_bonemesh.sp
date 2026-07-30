@@ -146,7 +146,7 @@ public void Bonemesh_ClotThink(int iNPC)
 	
 	if(npc.m_flNextRangedAttackHappening < GetGameTime())
 	{
-		npc.m_flNextRangedAttackHappening = GetGameTime() + 2.5;
+		npc.m_flNextRangedAttackHappening = GetGameTime() + 4;
 		DesertYadeamDoHealEffect(npc.index, 200.0);
 	}
 	if(npc.m_flNextDelayTime > GetGameTime(npc.index))

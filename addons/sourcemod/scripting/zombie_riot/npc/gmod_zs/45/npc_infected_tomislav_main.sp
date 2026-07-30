@@ -104,7 +104,7 @@ methodmap InfectedTomislavMain < CClotBody
 
 	public InfectedTomislavMain(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedTomislavMain npc = view_as<InfectedTomislavMain>(CClotBody(vecPos, vecAng, "models/player/heavy.mdl", "1.0", "30000", ally));
+		InfectedTomislavMain npc = view_as<InfectedTomislavMain>(CClotBody(vecPos, vecAng, "models/player/heavy.mdl", "1.0", "15000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");

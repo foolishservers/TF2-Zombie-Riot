@@ -116,7 +116,7 @@ methodmap Headcrabmilloperator < CClotBody
 	
 	public Headcrabmilloperator(float vecPos[3], float vecAng[3], int ally)
 	{
-		Headcrabmilloperator npc = view_as<Headcrabmilloperator>(CClotBody(vecPos, vecAng, "models/player/pyro.mdl", "1.0", "17500", ally));
+		Headcrabmilloperator npc = view_as<Headcrabmilloperator>(CClotBody(vecPos, vecAng, "models/player/pyro.mdl", "1.0", "8750", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		

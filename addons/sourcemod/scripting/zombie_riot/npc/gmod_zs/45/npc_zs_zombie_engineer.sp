@@ -132,7 +132,7 @@ methodmap InfectedEngineer < CClotBody
 	
 	public InfectedEngineer(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedEngineer npc = view_as<InfectedEngineer>(CClotBody(vecPos, vecAng, "models/player/engineer.mdl", "1.00", "20000", ally));
+		InfectedEngineer npc = view_as<InfectedEngineer>(CClotBody(vecPos, vecAng, "models/player/engineer.mdl", "1.00", "10000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		

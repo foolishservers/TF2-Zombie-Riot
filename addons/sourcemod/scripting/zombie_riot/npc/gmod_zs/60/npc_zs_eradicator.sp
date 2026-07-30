@@ -105,7 +105,7 @@ methodmap Eradicator < CClotBody
 	
 	public Eradicator(float vecPos[3], float vecAng[3], int ally)
 	{
-		Eradicator npc = view_as<Eradicator>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "70000", ally, false));
+		Eradicator npc = view_as<Eradicator>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "35000", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		

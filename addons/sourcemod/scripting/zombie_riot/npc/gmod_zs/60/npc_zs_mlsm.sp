@@ -98,7 +98,7 @@ methodmap MassShootingLover < CClotBody
 
 	public MassShootingLover(float vecPos[3], float vecAng[3], int ally)
 	{
-		MassShootingLover npc = view_as<MassShootingLover>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "50000", ally));
+		MassShootingLover npc = view_as<MassShootingLover>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "25000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
