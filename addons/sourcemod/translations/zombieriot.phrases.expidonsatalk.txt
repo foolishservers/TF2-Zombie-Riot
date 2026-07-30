@@ -352,7 +352,7 @@
 	"SilvesterXeno_Waldch_Teleport_5"
 	{
 		"en"	"Our enemies are HERE not THERE {darkblue}Waldch{default}!"
-		"ko"	"{darkblue}왈츠{default}! 몇 번이나 말해야 알아듣는 거야?"
+		"ko"	"{darkblue}왈츠{default}! 우리 적은 거기가 아니라 여기 있다고!!!"
 	}
 	
 	// Silvester in Nemal
