@@ -437,16 +437,11 @@ methodmap TheMessenger < CClotBody
 	}
 }
 
-static void NPCTalkMessage(int iNPC, const char[] message)
-{
-	PrintNPCMessageWithPrefixes(iNPC, "lightblue", message);
-}
-
 void TheMessenger_NPCTalkMessage(int iNPC, const char[] message, any ...)
 {
 	char buffer[255];
 	VFormat(buffer, sizeof(buffer), message, 3);
-	PrintNPCMessageWithPrefixes(iNPC, "lightblue", message);
+	NPC_TalkMessageWithTranslationCheck(iNPC, "lightblue", buffer);
 }
 
 public void TheMessenger_ClotThink(int iNPC)
