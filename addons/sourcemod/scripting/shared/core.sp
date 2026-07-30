@@ -3826,7 +3826,11 @@ void ReviveClientFromOrToEntity(int target, int client, int extralogic = 0, int 
 	if(medigun > 0)
 	{
 		speed = RoundToNearest(float(speed) * 0.65);
+		if(HasSpecificBuff(client, "Inspire"))
+			speed *= RoundToNearest(float(speed) * (1.0/0.65));
 	}
+	else if(HasSpecificBuff(client, "Inspire"))
+		speed *= 2;
 	if(HasSpecificBuff(client, "Dimensional Turbulence"))
 	{
 		speed *= 2;
