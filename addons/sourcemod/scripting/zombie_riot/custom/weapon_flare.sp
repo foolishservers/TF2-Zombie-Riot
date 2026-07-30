@@ -22,7 +22,6 @@ public void KillingOrder_Fire(int client, int weapon, bool crit)
 	float targetPos[3], hitPos[3];
 	
 	bool headshot;
-	bool hit;
 	int target = -1;
 	Handle trace = TR_TraceRayFilterEx(pos, ang, MASK_SHOT, RayType_Infinite, BulletAndMeleeTrace, client);
 	
