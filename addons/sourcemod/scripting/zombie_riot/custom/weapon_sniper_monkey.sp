@@ -4,15 +4,18 @@
 static bool SmartBounce;
 static int LastHitTarget;
 static int SuppliesUsed;
+static bool SniperSupply_DropPerWave[MAXPLAYERS];
 
 void SniperMonkey_ResetUses()
 {
 	SuppliesUsed = 0;
+	Zero(SniperSupply_DropPerWave);
 }
 void SniperMonkey_ClearAll()
 {
 	SmartBounce = false;
 	SuppliesUsed = 0;
+	Zero(SniperSupply_DropPerWave);
 }
 
 float SniperMonkey_BouncingBullets(int victim, int &attacker, int &inflictor, float damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3])
@@ -291,5 +294,123 @@ public void Weapon_SupplyDropElite(int client, int weapon, bool &result, int slo
 		SetDefaultHudPosition(client);
 		SetGlobalTransTarget(client);
 		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);	
+	}
+}
+
+
+static Handle SniperSupply_Management[MAXPLAYERS] = {null, ...};
+
+public void SniperSupply_OnMap(int client, int weapon)
+{
+	Zero(SniperSupply_DropPerWave);
+}
+
+public void SniperSupply_Deploy(int client, int weapon)
+{
+	if(SniperSupply_Management[client] != null)
+	{
+		delete SniperSupply_Management[client];
+		SniperSupply_Management[client] = null;
+		DataPack pack;
+		SniperSupply_Management[client] = CreateDataTimer(0.1, Timer_Management_SniperSupply, pack, TIMER_REPEAT);
+		pack.WriteCell(client);
+		pack.WriteCell(weapon);
+	}
+	else
+	{
+		DataPack pack;
+		SniperSupply_Management[client] = CreateDataTimer(0.1, Timer_Management_SniperSupply, pack, TIMER_REPEAT);
+		pack.WriteCell(client);
+		pack.WriteCell(weapon);
+	}
+}
+
+public void SniperSupply_Holster(int client)
+{
+	if(SniperSupply_Management[client] != null)
+	{
+		delete SniperSupply_Management[client];
+		SniperSupply_Management[client] = null;
+	}
+}
+
+static Action Timer_Management_SniperSupply(Handle timer, DataPack pack)
+{
+	pack.Reset();
+	int client = pack.ReadCell();
+	int weapon = pack.ReadCell();
+	if(!IsValidClient(client) || !IsClientInGame(client) || !IsPlayerAlive(client) || !IsValidEntity(weapon))
+	{
+		if(SniperSupply_Management[client] != null)
+		{
+			delete SniperSupply_Management[client];
+			SniperSupply_Management[client] = null;
+		}
+		return Plugin_Stop;
+	}
+	
+	if(Ability_Check_Cooldown(client, 1) <= 0.0 && !SniperSupply_DropPerWave[client])
+	{
+		int target = -1;
+		for(int entitycount; entitycount<i_MaxcountNpcTotal; entitycount++)
+		{
+			int entity = EntRefToEntIndexFast(i_ObjectsNpcsTotal[entitycount]);
+			if(IsValidEntity(entity) && !b_NpcHasDied[entity] && b_NpcForcepowerupspawn[entity] != 2 && GetTeam(entity) != TFTeam_Red
+			&& !b_thisNpcIsARaid[entity] && !b_thisNpcIsABoss[entity])
+			{
+				target = entity;
+				break;
+			}
+		}
+		
+		if(target != -1)
+		{
+			b_NpcForcepowerupspawn[target] = 2;
+			CClotBody npc = view_as<CClotBody>(target);
+			if(!IsValidEntity(npc.m_iTeamGlow))
+			{
+				Update_TransmitState(target);
+				npc.m_iTeamGlow = TF2_CreateGlow(target);
+				
+				SetVariantColor(view_as<int>({125, 200, 255, 200}));
+				AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
+			}
+			else
+			{
+				if(IsValidEntity(npc.m_iTeamGlow)) 
+				{
+					Update_TransmitState(target);
+					SetVariantColor(view_as<int>({125, 200, 255, 200}));
+					AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
+				}		
+			}
+			ClientCommand(client, "playgamesound ui/quest_status_tick_expert_friend.wav");
+			Ability_Apply_Cooldown(client, 1, 90.0);
+			SniperSupply_DropPerWave[client]=true;
+		}
+		else
+			Ability_Apply_Cooldown(client, 1, 5.0, .ignoreCooldown=true);
+	}
+	
+	return Plugin_Continue;
+}
+
+public void SniperSupply_R(int client, int weapon, bool crit, int slot)
+{
+	if(SniperSupply_Management[client] != null)
+	{
+		delete SniperSupply_Management[client];
+		SniperSupply_Management[client] = null;
+		DataPack pack;
+		SniperSupply_Management[client] = CreateDataTimer(0.1, Timer_Management_SniperSupply, pack, TIMER_REPEAT);
+		pack.WriteCell(client);
+		pack.WriteCell(weapon);
+	}
+	else
+	{
+		DataPack pack;
+		SniperSupply_Management[client] = CreateDataTimer(0.1, Timer_Management_SniperSupply, pack, TIMER_REPEAT);
+		pack.WriteCell(client);
+		pack.WriteCell(weapon);
 	}
 }

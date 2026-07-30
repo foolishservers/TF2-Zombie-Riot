@@ -964,10 +964,12 @@ void Barracks_BuildingThink(int entity)
 	}
 	
 	int client = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
-	npc.m_flNextThinkTime = GameTime + (Store_HasNamedItem(client, "Modern Defense") ? 0.1 : 0.2);
-
 	if(!IsValidClient(client))
+	{
+		npc.m_flNextThinkTime = GameTime + 0.2;
 		return;
+	}
+	npc.m_flNextThinkTime = GameTime + (Store_HasNamedItem(client, "Modern Defense") ? 0.1 : 0.2);
 	
 	if(GetTeam(client) != 2)
 		return;

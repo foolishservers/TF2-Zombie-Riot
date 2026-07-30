@@ -378,6 +378,11 @@ public MRESReturn OnMedigunPostFramePost(int medigun) {
 								ApplyStatusEffect(owner, owner, "Healing Adaptiveness Ranged", 0.15);
 								ApplyStatusEffect(owner, healTarget, "Healing Adaptiveness Ranged", 0.15);
 							}
+							case 2:
+							{
+								ApplyStatusEffect(owner, owner, "Healing Adaptiveness All", 0.15);
+								ApplyStatusEffect(owner, healTarget, "Healing Adaptiveness All", 0.15);
+							}
 						}
 					}
 #if defined ZR
@@ -693,14 +698,14 @@ float MedigunGetUberDuration(int owner)
 public void Adaptive_MedigunChangeBuff(int client, int weapon, bool crit, int slot)
 {
 	//only swithc with crouch R
-	if(NeedCrouchAbility(client))
+	if(GetClientButtons(client) & IN_DUCK)
 	{
 		MedigunChangeModeRInternal(client, weapon, crit, slot, NeedCrouchAbility(client));
 		return;
 	}
 	ClientCommand(client, "playgamesound weapons/vaccinator_toggle.wav");
 	MedigunModeSet[client]++;
-	if(MedigunModeSet[client] > 1)
+	if(MedigunModeSet[client] > 2)
 	{
 		MedigunModeSet[client] = 0;
 	}

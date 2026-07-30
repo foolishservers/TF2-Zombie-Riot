@@ -3,7 +3,7 @@
 
 float Uranium_TimeTillBigHit[MAXPLAYERS][MAXENTITIES];
 
-static bool SniperRifle_HeadShot[MAXPLAYERS];
+bool SniperRifle_HeadShot[MAXPLAYERS];
 static int SniperRifle_Ignore[MAXPLAYERS];
 static float SniperRifle_ExplodDMG[MAXPLAYERS];
 static float SniperRifle_Charge[MAXPLAYERS];
