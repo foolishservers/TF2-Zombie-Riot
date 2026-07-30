@@ -610,18 +610,22 @@
 	"Harrison_Talk_Support-12"
 	{
 		"en"	"I need more space in here."
+		"ko"	"이 방을 조금 넓힐 필요가 있겠어."
 	}
 	"Harrison_Talk_Support-13"
 	{
 		"en"	"*ugh* Can we kill them quicker? I need a beer."
+		"ko"	"저 놈들을 빨리 죽일 순 없나? 얼른 돌아가서 맥주 한 잔이나 마시고 싶군."
 	}
 	"Harrison_Talk_Support-14"
 	{
 		"en"	"*sigh* alright."
+		"ko"	"*한숨* 알겠다."
 	}
 	"Harrison_Talk_Support-15"
 	{
 		"en"	"Huh? Oh… leave it until we are done here."
+		"ko"	"허? 우리가 처리할 때까지 지켜보고 계시죠."
 	}
 	"Harrison_Talk_Intro"
 	{
@@ -930,17 +934,18 @@
 	"Castellan_And_Sensal_Talk-11"
 	{
 		"en"	"{default}Before Sensal left, he asked Captino Menius to share the evidence he collected to you.\nCaptino Menius hands you the classified document with Vesta and Expidonsan logo printed on it: {unique}''A copy of Truthful Evidence''{default}!"
-		"ko"	"{default}센살이 떠나기전, 메니우스에게 부탁하여\n당신에게 베스타와 엑스피돈사의 로고가 박힌 서류폴더 하나를 건냅니다: {unique}''진실된 증거자료 [사본]''{default}!"
+		"ko"	"{default}센살이 떠나기 전, 메니우스에게 부탁하여\n당신에게 베스타와 엑스피돈사의 로고가 박힌 서류폴더 하나를 건냅니다: {unique}''진실된 증거자료 [사본]''{default}!"
 	}
 	"Castellan_And_Sensal_Talk-12"
 	{
-		"en"	"{crimson}Meanwhile, you realize Castellan was watching with mixed emotions as he was retreating…{default}"
-		"ko"	"{crimson}그리고 여러분은 카스텔란이 퇴각하면서 이를 노려보고 있음을 깨닫습니다…{default}"
+		"en"	"{crimson}Meanwhile, you realize Castellan was watching with mixed emotions as he was retreating…"
+		"ko"	"{crimson}그리고 여러분은 카스텔란이 퇴각하면서 이를 노려보고 있음을 깨닫습니다…"
 	}
+	
 	"CaptinoMenius_Talk-1-1"
 	{
 		"en"	"As a reminder, we are here to stop Vesta’s stealthy invasion towards Ziberia"
-		"ko"	"다시한번 자네들에게 우리 임무를 상기시켜주자면 우리는 지베리아에서 일어나는 베스타인들의 비밀스러운 침공을 저지하는것이고"
+		"ko"	"다시 한번 자네들에게 우리 임무를 상기시켜주자면 우리는 지베리아에서 일어나는 베스타인들의 비밀스러운 침공을 저지하는것이고"
 	}
 	"CaptinoMenius_Talk-1-2"
 	{
@@ -950,32 +955,32 @@
 	"CaptinoMenius_Talk-2-1"
 	{
 		"en"	"Well done, that surely wasn’t an easy one to deal with. However since he teleported away to his superior officer, I guess our cover is blown now."
-		"ko"	"잘했네 제군들, 방금건 확실히 쉬운 적은 아니였던거 같군. 그러나 그가 텔레포트로 무사히 도망친 만큼 우리가 여깄다는게 알려지는건 시간문제일거지"
+		"ko"	"잘했네 제군들, 방금 건 확실히 쉬운 적은 아니였어. 그러나 그가 텔레포트로 무사히 도망친 만큼 우리가 침투한 사실이 알려지는 건 시간 문제일테지."
 	}
 	"CaptinoMenius_Talk-2-2"
 	{
 		"en"	"According to the data, the closest company you will face is Irongate Defense Units. They are well known for their high defense as their name shows so you will need more firepower."
-		"ko"	"내 정보에 의하면 근처 중대는 아이언게이트 방어 유닛들이라네. 그들은 이름답게 높은 방어수단을 자랑하니 더 많은 화력을 준비하기를 바라겠다네."
+		"ko"	"내 정보에 의하면 근처 중대는 강철 게이트 방어 유닛들이라네. 그 이름답게 높은 방어수단을 자랑하니 더 많은 화력을 준비하길 바라지."
 	}
 	"CaptinoMenius_Talk-3-1"
 	{
 		"en"	"Huh, what a huge wall we just dealt with. You just bought some time for breathing, great work."
-		"ko"	"흠, 참 거대한 벽을 상대했었군 그래. 숨 쉴 시간정도는 벌은거 같군, 잘해주었다네."
+		"ko"	"허, 참 거대한 벽을 상대한 것 같군. 숨 돌릴 시간정도는 벌었어, 잘해주었다네."
 	}
 	"CaptinoMenius_Talk-3-2"
 	{
 		"en"	"We got another enemies to deal with named Trooper Team."
-		"ko"	"곧 상대할 적들은 트루퍼 팀 소속이라네."
+		"ko"	"곧 조우할 적들은 트루퍼 팀 소속이라네."
 	}
 	"CaptinoMenius_Talk-3-3"
 	{
 		"en"	"They are well known for their firepower and explosives so beware. Also, it seems like they got aggressive version of drones you have encountered."
-		"ko"	"그들은 높은 화력과 폭발물들을 가지고 있으니 조심하고. 아 참, 저들은 방금 봤었던 드론들의 공격적인 버전도 가지고 있는것 같군."
+		"ko"	"그들은 높은 화력과 폭발물들을 가지고 있으니 조심하게나. 아 참, 저들은 방금 봤었던 드론들의 공격적인 버전도 가지고 있는것 같군."
 	}
 	"CaptinoMenius_Talk-4-1"
 	{
 		"en"	"Good, since we got rid of that artillery man, we should be safe. For now at least."
-		"ko"	"좋군, 이제 저 수성포를 조종할 사람을 잠시 물렸으니 이제 안전할거다. 한동안."
+		"ko"	"좋군, 이제 저 수성포를 조종할 사람을 잠시 물렸으니 이제 안전할걸세. 한동안."
 	}
 	"CaptinoMenius_Talk-4-2"
 	{
@@ -989,19 +994,512 @@
 	}
 	"CaptinoMenius_Talk-6"
 	{
-		"en"	"{grey}Sensal arrived after he received the transmission from Captino Menius, but Castellan had already left with his army. Ziberia is in deep trouble now…{default}"
-		"ko"	"{grey}센살이 캡티노 메니우스의 전보를 받고 도착했지만, 카스텔란은 이미 그의 군대와 함께 전장으로 떠났습니다. 이제 지베리아는 큰 위험에 처했습니다.{default}"
+		"en"	"{grey}Sensal arrived after he received the transmission from Captino Menius, but Castellan had already left with his army. Ziberia is in deep trouble now…"
+		"ko"	"{grey}센살이 캡티노 메니우스의 전보를 받고 도착했지만, 카스텔란은 이미 그의 군대와 함께 전장으로 떠났습니다. 이제 지베리아는 큰 위험에 처했습니다."
 	}
 	"CaptinoMenius_Sensal_And_Zeina_Talk-1"
 	{
 		"en"	"We're here to help with this outbreak. Thanks to our scouts relaying your location to us."
+		"ko"	"이 사태를 막는 걸 돕기 위해 우리가 왔네. 우리 정찰병 덕분에 자네들 위치를 전달받을 수 있었다네."
 	}
 	"CaptinoMenius_Sensal_And_Zeina_Talk-2"
 	{
 		"en"	"Hey mercs. Guess I'm the one helping you guys out this time."
+		"ko"	"반갑네 제군들. 이번엔 우리가 자네들을 도울 차례라네."
 	}
 	"CaptinoMenius_Sensal_And_Zeina_Talk-3"
 	{
 		"en"	"Hello, mercs. I'm back to help out, and this time it's with a void outbreak."
+		"ko"	"반갑네 제군들. 이번 공허 확산 사태로부터 자네들을 돕기 위해 내가 왔네."
+	}
+	
+	// God Alaxios.
+	"God_Alaxios_Sea_Death_Throes_1"
+	{
+		"en"		"{lightblue}God Alaxios stands down... he is free..."
+		"ko"		"{lightblue}알락시오스가 무릎을 꿇습니다... 그는 이제 잠식으로부터 자유로워졌습니다..."
+	}
+	"God_Alaxios_Sea_Death_Throes_2"
+	{
+		"en"		"{lightblue}...?"
+		"ko"		"{lightblue}...?"
+	}
+	"God_Alaxios_Sea_Death_Throes_3"
+	{
+		"en"		"{lightblue}...!?!?!?"
+		"ko"		"{lightblue}...!?!?!?"
+	}
+	"God_Alaxios_Sea_Death_Throes_4"
+	{
+		"en"		"{lightblue}!"
+		"ko"		"{lightblue}!"
+	}
+	"God_Alaxios_Sea_Death_Throes_5"
+	{
+		"en"		"{crimson}The infection won't let go. It wants him the most."
+		"ko"		"{crimson}세상에. 바다는 그를 놓아주지 않았습니다. 오히려 그가 더 날뛰길 원하고 있습니다."
+	}
+	
+	"God_Alaxios_Sea_LastMann_1"
+	{
+		"en"		"{crimson}STOP BEING SO WEAK, HELP ME!!!!!"
+		"ko"		"{crimson}아직 죽으면 안돼, 제발. 날 죽여줘!!!!!"
+	}
+	"God_Alaxios_Sea_LastMann_2"
+	{
+		"en"		"{crimson}I'M UNDER CONTROL, HELP ME....."
+		"ko"		"{crimson}내 몸이 조종당하고 있어, 도와다오....."
+	}
+	"God_Alaxios_Sea_LastMann_3"
+	{
+		"en"		"{crimson}THIS THING IS TOO MUCH, HELP!!!!!!!!!"
+		"ko"		"{crimson}머리가 깨질 것만 같다!!!! 제발 나를 도와줘!!!"
+	}
+	"God_Alaxios_LastMann_1"
+	{
+		"en"		"You have no chance alone!"
+		"ko"		"너 혼자서는 아무것도 하지 못 한다!"
+	}
+	"God_Alaxios_LastMann_2"
+	{
+		"en"		"Your weaponry frails in comparison to Atlantis!!"
+		"ko"		"너의 무기술은 아틀란티스에 비하면 허약하다!!"
+	}
+	"God_Alaxios_LastMann_3"
+	{
+		"en"		"Consider surrendering?!"
+		"ko"		"지금 항복할텐가?!"
+	}
+	
+	"God_Alaxios_TimeOver"
+	{
+		"en"		"No.. No No!! They are coming, prepare to fight together NOW!!!"
+		"ko"		"안 돼... 놈들이 온다, 모두 전투 준비!!! 너희도 저들과 맞서 싸워야 한다!!"
+	}
+	"God_Alaxios_Sea_TimeOver"
+	{
+		"en"		"{green}The Xeno infection sides with you...??!\nSuddenly a battle ensues between Xeno and the Sea infection with Alaxios in possession.."
+		"ko"		"{green}제노 감염체들이... 당신의 편을 들기 시작했습니다...??!\n갑자기 제노 감염체와 감염된 알락시오스가 이끄는 시테러 감염체들이 싸우기 시작합니다.."
+	}
+	
+	"God_Alaxios_Win"
+	{
+		"en"		"{crimson}EEEEEEEEEEEEEEENOOOOOOOOUGH!!!"
+		"ko"		"{crimson}이제 그만!!!!!!!!"
+	}
+	"God_Alaxios_Win_1"
+	{
+		"en"		"I will NOT tolerate this dispute any longer!"
+		"ko"		"이 부질 없는 싸움을 더는 용납할 수 없다!"
+	}
+	"God_Alaxios_Win_2"
+	{
+		"en"		"You have to understand, WE have a {blue}common enemy{default}, and that is {blue}Dweller{default}."
+		"ko"		"반드시 이해해둬라. 너네가 생각하는 {blue}공공의 적{default}은 우리가 아니다. 진짜 적은 {blue}드웰러{default}지."
+	}
+	"God_Alaxios_Win_3"
+	{
+		"en"		"More wars with each other means more opportunity for them to rise."
+		"ko"		"우리가 이렇게 서로 싸우기만 할수록, 그 놈들에게 더 성장할 기회만 주는 꼴이지."
+	}
+	"God_Alaxios_Win_4"
+	{
+		"en"		"And whilst I am immortal and my army unkillable, we are not incorruptible."
+		"ko"		"비록 나와 내 군대는 불멸의 존재이더라도, 그들에게 잠식당하는 것까지는 버틸 수는 없다."
+	}
+	"God_Alaxios_Win_5"
+	{
+		"en"		"However, I saw your prowess and your abilities."
+		"ko"		"하지만, 너희의 능력과 힘을 지금 여기서 느꼈다."
+	}
+	"God_Alaxios_Win_6"
+	{
+		"en"		"You can wield {blue}Dweller's{default} weapons without succumbing to their corruption, from what I can see at least..."
+		"ko"		"너라면 {blue}드웰러{default}의 무기조차도 아무 이상 없이 다룰 수 있을 것이다. 잠식조차 되지 않을테니..."
+	}
+	"God_Alaxios_Win_7"
+	{
+		"en"		"As such, we need your aid. YOU are our greatest opportunity to cleanse this world of watery horrors."
+		"ko"		"그래서 너희의 도움이 필요하다. 너희들이야말로 이 세계를 심해 속 공포로부터 정화할 수 있는 가장 큰 대항책이다."
+	}
+	"God_Alaxios_Win_8"
+	{
+		"en"		"Of course, we will support you as much as we can. As one, we will thrive once again."
+		"ko"		"물론 우리도 최선을 다해 너희를 지원할 것이다. 우리는 하나되어 다시 번영하게 되리라."
+	}
+	"God_Alaxios_Win_9"
+	{
+		"en"		"When you invade them, we will make sure that their main forces are distracted by us."
+		"ko"		"너희가 그 놈들 사이로 침투하면, 우리가 그 놈들의 주력 병력의 시선을 끌겠다."
+	}
+	"God_Alaxios_Win_10"
+	{
+		"en"		"ALL HAIL THE MERCENARIES!! {crimson}FOR ATLANTISSSSS!!!!!!!!!!!!!!"
+		"ko"		"용병들이여 만세!!! {crimson}아틀란티스를 위해!!!!"
+	}
+	
+	"God_Alaxios_Trophies"
+	{
+		"en"		"{default}You feel something around you... and gained: {lightblue}''Alaxios's Godly assistance''{default}!"
+		"ko"		"{default}무언가 알 수 없는 찬란한 기운이 감돕니다... 당신이 얻은 것: {lightblue}''알락시오스의 신성한 축복''{default}!"
+	}
+	
+	"God_Alaxios_Death_1"
+	{
+		"en"		"I have failed Atlantis..."
+		"ko"		"아틀란티스를 지키는데 실패하다니..."
+	}
+	"God_Alaxios_Death_2"
+	{
+		"en"		"How was my army defeated..?"
+		"ko"		"우리의 군대가 패퇴했단 말인가..?"
+	}
+	"God_Alaxios_Death_3"
+	{
+		"en"		"You don't know what you are doing!"
+		"ko"		"네 놈이 지금 뭘 하고 있는지 알고는 있나!"
+	}
+	"God_Alaxios_Death_4"
+	{
+		"en"		"We should be fighting together, not against each other, the {blue}sea{default} will be your doom..."
+		"ko"		"우린 서로 협력해야만 했다. 이렇게 싸우는게 아니라. {blue}바다가{default} 네 파멸을 가져오리라..."
+	}
+	"God_Alaxios_Sea_Death_1"
+	{
+		"en"		"I'm.. I'm free..?"
+		"ko"		"드디어.. 자유인 건가..?"
+	}
+	"God_Alaxios_Sea_Death_2"
+	{
+		"en"		"{lightblue}God Alaxios instantly leaves the battlefield... you couldn't even trace him."
+		"ko"		"{lightblue}갓 알락시오스가 미친듯이 전장을 뛰쳐나갑니다... 그의 자취조차 볼 수 없었습니다."
+	}
+	
+	"God_Alaxios_Sea_Summon_1"
+	{
+		"en"		"{lightblue}God Alaxios calls upon the infected."
+		"ko"		"{lightblue}갓 알락시오스가 잠식된 자들을 불러냅니다."
+	}
+	"God_Alaxios_Sea_Summon_2"
+	{
+		"en"		"{lightblue}God Alaxios attracts nearby creatures."
+		"ko"		"{lightblue}갓 알락시오스가 주변의 생명체들을 이끌어오고 있습니다..."
+	}
+	"God_Alaxios_Sea_Summon_3"
+	{
+		"en"		"{lightblue}God Alaxios is reviving dead sea creatures."
+		"ko"		"{lightblue}갓 알락시오스가 죽은 바다의 생명체들을 되살려냅니다..."
+	}
+	"God_Alaxios_Sea_Summon_4"
+	{
+		"en"		"{lightblue}God Alaxios is never alone, infected or not..."
+		"ko"		"{lightblue}갓 알락시오스는 혼자가 아닙니다... 잠식된 자든 무엇이든간에."
+	}
+	"God_Alaxios_Summon_1"
+	{
+		"en"		"You don't know the dangers you're getting yourself into fighting me and my army at the same time!"
+		"ko"		"넌 모르겠지, 나와 내 군대가 힘을 합치면 얼마나 위험한지를!"
+	}
+	"God_Alaxios_Summon_2"
+	{
+		"en"		"My army will always help me back up!"
+		"ko"		"나의 군대가 나를 도우리라!"
+	}
+	"God_Alaxios_Summon_3"
+	{
+		"en"		"Me and my army, as one, will never be defeated!"
+		"ko"		"나와 내 군대는 하나가 되어 결코 패배하지 않을 것이다!"
+	}
+	"God_Alaxios_Summon_4"
+	{
+		"en"		"Together for Atlantis! As one and for all!"
+		"ko"		"아틀란티스를 위해 뭉치고! 하나가 되어 모두를 위한다!"
+	}
+	
+	"God_Alaxios_Sea_Anger_1"
+	{
+		"en"		"{lightblue}God Alaxios Screams for help..."
+		"ko"		"{lightblue}갓 알락시오스가 도움을 요청하는 비명을 지릅니다..."
+	}
+	"God_Alaxios_Sea_Anger_2"
+	{
+		"en"		"{lightblue}God Alaxios's head is under full control, free him."
+		"ko"		"{lightblue}갓 알락시오스는 지금 몸의 주도권을 완전히 잃었습니다. 그를 구하십시오."
+	}
+	"God_Alaxios_Sea_Anger_3"
+	{
+		"en"		"{lightblue}God Alaxios, even if strong, can't resist everything."
+		"ko"		"{lightblue}갓 알락시오스, 그 강인한 자도 잠식에 저항할 수 없었습니다."
+	}
+	"God_Alaxios_Sea_Anger_4"
+	{
+		"en"		"{lightblue}Free him, help him."
+		"ko"		"{lightblue}그를 도와주십시오."
+	}
+	"God_Alaxios_Anger_1"
+	{
+		"en"		"{crimson}ISVOLI!!!! FOR THE PEOPLE!!!!!!!!!!"
+		"ko"		"{crimson}ISVOLI!!!! 우리 왕국을 위하여!!!!!!!!!!"
+	}
+	"God_Alaxios_Anger_2"
+	{
+		"en"		"{crimson}ISVOLI!!!! FOR ALL THAT IS FORSAKEN!!!!!!!"
+		"ko"		"{crimson}ISVOLI!!!! 잊혀진 자들을 위하여!!!!!!!"
+	}
+	"God_Alaxios_Anger_3"
+	{
+		"en"		"{crimson}ISVOLI!!!! FOR THE FUTURE!!!!!!!"
+		"ko"		"{crimson}ISVOLI!!!! 미래를 위하여!!!!"
+	}
+	"God_Alaxios_Anger_4"
+	{
+		"en"		"{crimson}ISVOLI!!!! FOR ATLANTIS!!!!!!!!!"
+		"ko"		"{crimson}ISVOLI!!!! 아틀란티스를 위하여!!!!"
+	}
+	
+	"God_Alaxios_Sea_Lose_1"
+	{
+		"en"		"{lightblue}... You failed as expected, hopefully the xeno can put an end to the sea-Terror clan."
+		"ko"		"{lightblue}... 예상했던대로, 당신은 실패했습니다. 이젠 제노 감염원이 드웰러 집단을 종식시킬 수 있길 바랄 뿐입니다."
+	}
+	"God_Alaxios_Sea_Lose_2"
+	{
+		"en"		"{crimson}The enemy of my enemy is my ally as they say."
+		"ko"		"{crimson}적의 적은 나의 동맹이라는 말이 있지요."
+	}
+	"God_Alaxios_Sea_Lose_3"
+	{
+		"en"		"{green}You thus offer yourself to the xeno infection to fight it......"
+		"ko"		"{green}드웰러와 맞서 싸우기 위해 당신은 제노를 받아들이고 말았습니다......"
+	}
+	"God_Alaxios_Lose_1"
+	{
+		"en"		"Atlantis will never fall!"
+		"ko"		"아틀란티스는 절대 무너지지 않을 것이다!"
+	}
+	"God_Alaxios_Lose_2"
+	{
+		"en"		"I still have to take care of the {blue}deep sea{default}..."
+		"ko"		"여전히 그 {blue}심해{default} 놈들을 신경 써야만 한다..."
+	}
+	"God_Alaxios_Lose_3"
+	{
+		"en"		"Threaten our livelyhood and you pay!"
+		"ko"		"우리의 생계를 위협하면 이렇게 대가를 치르게 될 것이다!"
+	}
+	"God_Alaxios_Lose_4"
+	{
+		"en"		"I have to inform {blue}Sensal{default} about this."
+		"ko"		"이 사실을 {blue}센살{default}에게 알려야겠군."
+	}
+	
+	// Bob the First.
+	"Bob_The_First_Sea_Encounter_Chaos_Intrusion"
+	{
+		"en"		"The chaos is everywhere, we're too late, join me, dont attack.\nProve me your innocence."
+		"ko"		"혼돈이 사방에 있네. 우린 너무 늦었어. 공격을 멈추고, 나와 함께 해라.\n너희의 결백을 증명해보도록."
+	}
+	"Bob_The_First_Sea_Fight_Chaos_Intrusion"
+	{
+		"en"		"Nevermind then, you're one of the affected."
+		"ko"		"이런. 너희도 이미 혼돈에 잠식당했군."
+	}
+	
+	"Bob_The_First_Sea_Encounter_1"
+	{
+		"en"		"I'll Handle this one."
+		"ko"		"이건 내가 직접 처리하도록 하지."
+	}
+	"Bob_The_First_Sea_Encounter_2"
+	{
+		"en"		"Stella and Karlas, you did enough, stand back."
+		"ko"		"스텔라, 카를라스. 너희는 충분히 잘해줬어. 이제 물러나게."
+	}
+	"Bob_The_First_Sea_Encounter_3"
+	{
+		"en"		"I know enough about infections and its weaknesses to fend you off."
+		"ko"		"나는 지금의 감염 사태과 그들의 약점에 대해 충분히 알고 있다. 그러니 내가 널 막겠다."
+	}
+	
+	"Bob_The_First_Real_Name"
+	{
+		"en"		"Bob The First"
+		"ko"		"밥 1세"
+	}
+	
+	"Bob_The_First_Sea_Pistol_Phase"
+	{
+		"#format"	"{1:t}"
+		"en"		"{crimson}{1} uses his immensive willpower to regain some strength..."
+		"ko"		"{crimson}{1}의 엄청난 의지력으로 잃어버린 힘을 되찾고 있다..."
+	}
+	"Bob_The_First_Sea_Pistol_Phase_1"
+	{
+		"en"		"Hope my sharp shooting skills will miss your brain, curing is still an option."
+		"ko"		"내 사격이 너희의 머리를 빗겨나가길 빌어라. 치유는 아직 고려 중이니."
+	}
+	"Bob_The_First_Sea_Pistol_Phase_2"
+	{
+		"en"		"If only I could cure it off you with this handgun, have to take lives to save lives."
+		"ko"		"이 권총으로 그걸 치료해낼 수만 있다면 좋을 텐데. 생명을 살리려면 다른 생명을 빼앗아야 한다니."
+	}
+	"Bob_The_First_Sea_Pistol_Phase_3"
+	{
+		"en"		"I'm starting to reach my limit..."
+		"ko"		"나를 한계까지 오게 만드는 군..."
+	}
+	
+	"Bob_The_First_Sea_LastMann_1"
+	{
+		"en"		"One infected left."
+		"ko"		"이제 감염원 하나만이 남았군."
+	}
+	"Bob_The_First_Sea_LastMann_2"
+	{
+		"en"		"This nightmare ends soon."
+		"ko"		"이 악몽도 곧 끝나겠군."
+	}
+	"Bob_The_First_Sea_LastMann_3"
+	{
+		"en"		"Last. Infected. Left."
+		"ko"		"너가. 마지막. 남은. 감염원이다."
+	}
+	
+	"Bob_The_First_Sea_TimeOver_1"
+	{
+		"en"		"You weren't supposed to have this infection."
+		"ko"		"너희가 이것에 잠식되었으리라고는 상정하지 못했다."
+	}
+	"Bob_The_First_Sea_TimeOver_2"
+	{
+		"en"		"No choice but to kill you, it consumes you."
+		"ko"		"너희를 죽이는 것 말곤 방법이 없다. 그것이 너희를 삼켜버릴테니."
+	}
+	"Bob_The_First_Sea_TimeOver_3"
+	{
+		"en"		"Nobody wins."
+		"ko"		"그 누구의 승리도 아니로군."
+	}
+	
+	"Bob_The_First_Sea_Lose_His_Temper"
+	{
+		"en"		"You think you can fool me!? I'll destroy you!"
+		"ko"		"나를 속일 수 있다 생각한 거냐!? 죽여주마!!"
+	}
+	
+	"Bob_The_First_Sea_Win_Xeno_1"
+	{
+		"en"		"So..."
+		"ko"		"그래서..."
+	}
+	"Bob_The_First_Sea_Win_Xeno_2"
+	{
+		"en"		"What do you think will happen..?"
+		"ko"		"앞으로 무슨 일이 일어날 거라 생각하지?"
+	}
+	"Bob_The_First_Sea_Win_Xeno_3"
+	{
+		"en"		"Wait... no... you were fighting it..! No this.. This cannot be!"
+		"ko"		"잠깐... 안돼... 너희는 그것과 싸우고 있었잖아..! 이건.. 일어나면 안되는 일이야!"
+	}
+	"Bob_The_First_Sea_Win_Xeno_4"
+	{
+		"en"		"I'm too hurt, I can't, I have to run... I can't...."
+		"ko"		"지금 상태로는.. 상대할 수.. 없어.. 도망쳐야 해... 난 그걸 막을 수 없어..."
+	}
+	"Bob_The_First_Sea_Win_Xeno_5"
+	{
+		"en"		"{white}Bob the First leaves in a hurry... something is wrong, should you follow him.....? Too late now..."
+		"ko"		"{white}밥 1세가 황급히 자리를 떴습니다... 뭔가 잘못되었습니다. 그를 따라가야 했을까요? 이미 늦은 것 같네요..."
+	}
+	
+	"Bob_The_First_Sea_Win_1"
+	{
+		"en"		"No..."
+		"ko"		"안돼..."
+	}
+	"Bob_The_First_Sea_Win_2"
+	{
+		"en"		"This infection..."
+		"ko"		"이 감염이..."
+	}
+	"Bob_The_First_Sea_Win_3"
+	{
+		"en"		"How did this thing make you this powerful..?"
+		"ko"		"어떻게 이런 것이 너희를 이렇게나 강하게 만든 거지..?"
+	}
+	"Bob_The_First_Sea_Win_4"
+	{
+		"en"		"Took out every single Dweller and took the infection in yourselves..."
+		"ko"		"설마 모든 드웰러를 처치하고, 그들의 잔재까지 떠안은 건..."
+	}
+	"Bob_The_First_Sea_Win_5"
+	{
+		"en"		"You people fighting these cities and infections..."
+		"ko"		"이 도시와 잠식에 맞서 싸우고 있었던 너희였었나..."
+	}
+	"Bob_The_First_Sea_Win_6"
+	{
+		"en"		"However..."
+		"ko"		"하지만..."
+	}
+	"Bob_The_First_Sea_Win_7"
+	{
+		"en"		"I will remove what does not belong to you..."
+		"ko"		"그건 너희의 것이 아니니 내가 제거해주겠다."
+	}
+	
+	"Bob_The_First_Sea_Anger_Xeno_1"
+	{
+		"en"		"You're in the wrong place in the wrong time!"
+		"ko"		"너희는 지금 여기에 있어서는 안돼!"
+	}
+	"Bob_The_First_Sea_Anger_Xeno_2"
+	{
+		"en"		"This is not how it goes!"
+		"ko"		"무언가 잘못 돌아가고 있단 말이다!"
+	}
+	"Bob_The_First_Sea_Anger_Xeno_3"
+	{
+		"en"		"Stop trying to change fate!"
+		"ko"		"운명을 바꾸려하지 마라!"
+	}
+	
+	"Bob_The_First_Sea_Anger_1"
+	{
+		"en"		"Enough of this!"
+		"ko"		"이제 그만!"
+	}
+	"Bob_The_First_Sea_Anger_2"
+	{
+		"en"		"Do you see yourself? Your slaughter?"
+		"ko"		"이때까지의 일을 돌아본 적은 있나? 이 모든 학살극을?"
+	}
+	"Bob_The_First_Sea_Anger_3"
+	{
+		"en"		"You are no god."
+		"ko"		"너희는 신이 아니다."
+	}
+	"Bob_The_First_Sea_Anger_4"
+	{
+		"en"		"Xeno. Dweller. Then there's you."
+		"ko"		"제노. 드웰러. 그리고 너."
+	}
+	
+	"Bob_The_First_Sea_Lose"
+	{
+		"en"		"Deep sea threat cleaned, finally at peace..."
+		"ko"		"심해의 위협은 사라졌다. 드디어 평화가 찾아오겠군..."
+	}
+	
+	"Bob_The_First_Sea_Trophies"
+	{
+		"en"		"Bob has cured you of the sea, you gained: {yellow}''Bob's Curing Hand''{default}!"
+		"ko"		"밥이 당신에게 깃든 심해의 감염원을 전부 제거해주었습니다. 당신이 얻은 것은... {yellow}''밥의 치유의 손길''{default}!"
+	}
+	"Bob_The_First_Sea_Trophies_Coolwin"
+	{
+		"en"		"You didn't attack bob for no reason and thus he gives you: {yellow}''Bob's Curing Hand''{default}!"
+		"ko"		"당신은 이유 없이 밥을 공격하지 않았습니다. 그런 밥이 당신에게 준 것은... {yellow}''밥의 치유의 손길''{default}!"
 	}
 }

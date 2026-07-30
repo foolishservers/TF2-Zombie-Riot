@@ -448,25 +448,11 @@ methodmap RaidbossBobTheFirst < CClotBody
 		{
 			if(ZR_Get_Modifier() == 1)
 			{
-				NPCTalkMessage(npc.index, "The chaos is everywhere, we're too late, join me, dont attack.\nProve me your innocence.");
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Encounter_Chaos_Intrusion", true);
 			}
 			else
 			{
-				switch(GetRandomInt(0,2))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "I'll Handle this one.");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "Stella and Karlas, you did enough, stand back.");
-					}
-					case 2:
-					{
-						NPCTalkMessage(npc.index, "I know enough about infections and its weaknesses to fend you off.");
-					}
-				}
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Encounter_%d", true, GetRandomInt(1, 3));
 			}
 		}
 		
@@ -474,9 +460,11 @@ methodmap RaidbossBobTheFirst < CClotBody
 	}
 }
 
-static void NPCTalkMessage(int iNPC, const char[] message)
+static void RaidbossBobTheFirst_NPCTalkMessage(int iNPC, const char[] message, bool translated = false, any ...)
 {
-	PrintNPCMessageWithPrefixes(iNPC, "white", message);
+	char buffer[256];
+	VFormat(buffer, sizeof(buffer), message, 4);
+	PrintNPCMessageWithPrefixes(iNPC, "white", buffer, translated);
 }
 
 public void RaidbossBobTheFirst_ClotThink(int iNPC)
@@ -552,22 +540,8 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 		{
 			if(!b_BobPistolPhaseSaid[npc.index])
 			{
-				CPrintToChatAll("{crimson}%s 의 엄청난 의지력으로 인해 그의 힘이 되돌아오고 있다...", NpcStats_ReturnNpcName(npc.index, true));
-				switch(GetRandomInt(0,2))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "Hope my sharp shooting skills will miss your brain, curing is still an option.");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "If only i could cure it off you with this handgun, have to take lives to save lives.");
-					}
-					case 2:
-					{
-						NPCTalkMessage(npc.index, "Im starting to reach my limit...");
-					}
-				}
+				CPrintToChatAll("%t", "Bob_The_First_Sea_Pistol_Phase", "Bob_The_First_Real_Name");
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Pistol_Phase_%d", true, GetRandomInt(1, 3));
 				int MaxHealth = ReturnEntityMaxHealth(npc.index);
 				HealEntityGlobal(npc.index, npc.index, float((MaxHealth / 10)), 1.0, 0.0, HEAL_ABSOLUTE);
 			}
@@ -610,21 +584,7 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 		if(!npc.m_fbGunout)
 		{
 			npc.m_fbGunout = true;
-			switch(GetRandomInt(0,2))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "One infected left.");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "This nightmare ends soon.");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "Last. Infected. Left.");
-				}
-			}
+			RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_LastMann_%d", true, GetRandomInt(1, 3));
 		}
 	}
 	//Raidmode timer runs out, they lost.
@@ -642,18 +602,8 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 				if(IsClientInGame(client) && IsPlayerAlive(client))
 					ForcePlayerSuicide(client);
 			}
-
-			switch(GetURandomInt() % 3)
-			{
-				case 0:
-					NPCTalkMessage(npc.index, "You weren't supposed to have this infection.");
-				
-				case 1:
-					NPCTalkMessage(npc.index, "No choice but to kill you, it consumes you.");
-				
-				case 2:
-					NPCTalkMessage(npc.index, "Nobody wins.");
-			}
+			
+			RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_TimeOver_%d", true, GetRandomInt(1, 3));
 			
 			// Play funny animation intro
 			npc.StopPathing();
@@ -663,8 +613,7 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 		}
 		else
 		{
-
-			NPCTalkMessage(npc.index, "You think you can fool me!? I'll destroy you!");
+			RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Lose_His_Temper", true);
 			
 			SetEntProp(npc.index, Prop_Data, "m_iHealth", ReturnEntityMaxHealth(npc.index) -1);
 			fl_Extra_Damage[npc.index] = 999.9;
@@ -699,34 +648,34 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 				case 2:
 				{
 					ReviveAll(true);
-					NPCTalkMessage(npc.index, "So...");
+					RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_Xeno_1", true);
 					npc.m_flNextThinkTime = gameTime + 5.0;
 				}
 				case 3:
 				{
-					NPCTalkMessage(npc.index, "What do you think will happen..?");
+					RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_Xeno_2", true);
 					npc.m_flNextThinkTime = gameTime + 4.0;
 				}
 				case 4:
 				{
-					NPCTalkMessage(npc.index, "Wait... no... you were fighting it..! No this.. This cannot be!");
+					RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_Xeno_3", true);
 					npc.m_flNextThinkTime = gameTime + 4.0;
 				}
 				case 5:
 				{
-					NPCTalkMessage(npc.index, "I'm too hurt, I can't, I have to run... I can't....");
+					RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_Xeno_4", true);
 					npc.m_flNextThinkTime = gameTime + 4.0;
 				}
 				case 6:
 				{
-					NPCTalkMessage(npc.index, "...");
+					RaidbossBobTheFirst_NPCTalkMessage(npc.index, "...");
 					npc.m_flNextThinkTime = gameTime + 2.0;
 				}
 				case 7:
 				{
 					GiveProgressDelay(30.0);
 					SmiteNpcToDeath(npc.index);
-					CPrintToChatAll("{white}밥 1세가 급하게 자리를 떴습니다... 뭔가가 잘못 됐습니다. 그를 따라가야했을까요...? 그러기엔 너무 늦은것 같습니다...");
+					CPrintToChatAll("%t", "Bob_The_First_Sea_Win_Xeno_5");
 					MusicEnum music;
 					strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/medieval_raid/special_mutation/incomming_boss_wait_scary.mp3");
 					music.Time = 100;
@@ -747,37 +696,37 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 				case 2:
 				{
 					ReviveAll(true);
-					NPCTalkMessage(npc.index, "No...");
+					RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_1", true);
 					npc.m_flNextThinkTime = gameTime + 5.0;
 				}
 				case 3:
 				{
-					NPCTalkMessage(npc.index, "This infection...");
+					RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_2", true);
 					npc.m_flNextThinkTime = gameTime + 3.0;
 				}
 				case 4:
 				{
-					NPCTalkMessage(npc.index, "How did this thing make you this powerful..?");
+					RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_3", true);
 					npc.m_flNextThinkTime = gameTime + 4.0;
 				}
 				case 5:
 				{
-					NPCTalkMessage(npc.index, "Took out every single Dweller and took the infection in yourselves...");
+					RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_4", true);
 					npc.m_flNextThinkTime = gameTime + 4.0;
 				}
 				case 6:
 				{
-					NPCTalkMessage(npc.index, "You people fighting these cities and infections...");
+					RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_5", true);
 					npc.m_flNextThinkTime = gameTime + 4.0;
 				}
 				case 7:
 				{
-					NPCTalkMessage(npc.index, "However...");
+					RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_6", true);
 					npc.m_flNextThinkTime = gameTime + 3.0;
 				}
 				case 8:
 				{
-					NPCTalkMessage(npc.index, "I will remove what does not belong to you...");
+					RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_7", true);
 					npc.m_flNextThinkTime = gameTime + 3.0;
 					CreateTimer(12.0, SafetyFixBobDo, EntIndexToEntRef(npc.index));
 				}
@@ -880,34 +829,11 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 
 		if(XenoExtraLogic())
 		{
-			switch(GetURandomInt() % 3)
-			{
-				case 0:
-					NPCTalkMessage(npc.index, "You're in the wrong place in the wrong time!");
-				
-				case 1:
-					NPCTalkMessage(npc.index, "This is not how it goes!");
-				
-				case 2:
-					NPCTalkMessage(npc.index, "Stop trying to change fate!");
-			}
+			RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Anger_Xeno_%d", true, GetRandomInt(1, 3));
 		}
 		else
 		{
-			switch(GetURandomInt() % 4)
-			{
-				case 0:
-					NPCTalkMessage(npc.index, "Enough of this!");
-				
-				case 1:
-					NPCTalkMessage(npc.index, "Do you see yourself? Your slaughter?");
-				
-				case 2:
-					NPCTalkMessage(npc.index, "You are no god.");
-				
-				case 3:
-					NPCTalkMessage(npc.index, "Xeno. Dweller. Then there's you.");
-			}
+			RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Anger_%d", true, GetRandomInt(1, 3));
 		}
 
 		npc.m_flNextMeleeAttack = gameTime + 2.0;
@@ -950,7 +876,7 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 			{
 				b_ThisEntityIgnoredByOtherNpcsAggro[npc.index] = false;
 				if(ZR_Get_Modifier() == 1 && i_RaidGrantExtra[npc.index] == 1)
-					NPCTalkMessage(npc.index, "Nevermind then, you're one of the affected.");
+					RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Fight_Chaos_Intrusion", true);
 			}
 		}
 		int summon;
@@ -1829,12 +1755,11 @@ static void GivePlayerItems(int coolwin = 0)
 		{
 			Items_GiveNamedItem(client, "Bob's Curing Hand");
 			if(coolwin == 0)
-				CPrintToChat(client, "{default}밥이 당신에게 깃든 심해의 감염원을 전부 제거해주었습니다. 당신이 얻은 것은... : {yellow}''밥의 치유의 손길''{default}!");
+				CPrintToChat(client, "%T", "Bob_The_First_Sea_Trophies", client);
 			else
-				CPrintToChat(client, "{default}당신은 밥을 공격하지 않았고, 그런 밥이 당신에게 준 것은... : {yellow}''밥의 치유의 손길''{default}!");
+				CPrintToChat(client, "%T", "Bob_The_First_Sea_Trophies_Coolwin", client);
 		}
 	}
-
 }
 
 public Action Smite_Timer_Bob(Handle Smite_Logic, DataPack pack)
@@ -2234,10 +2159,8 @@ public void Raidmode_BobFirst_Win(int entity)
 {
 	i_RaidGrantExtra[entity] = RAIDITEM_INDEX_WIN_COND;
 	func_NPCThink[entity] = INVALID_FUNCTION;
-	NPCTalkMessage(entity, "Deep sea threat cleaned, finally at peace...");
+	RaidbossBobTheFirst_NPCTalkMessage(entity, "Bob_The_First_Sea_Lose", true);
 }
-
-
 
 public Action SafetyFixBobDo(Handle timer, int refbob)
 {
