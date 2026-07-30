@@ -185,19 +185,15 @@ methodmap CyberGrindGM < CClotBody
 		{
 			func_NPCDeath[npc.index] = INVALID_FUNCTION;
 			func_NPCOnTakeDamage[npc.index] = INVALID_FUNCTION;
-			func_NPCThink[npc.index] = INVALID_FUNCTION;
+			func_NPCThink[npc.index] = CyberGrindGM_OverrideMusic;
 			
 			char buffers[3][64];
 			ExplodeString(data, ";", buffers, sizeof(buffers), sizeof(buffers[]));
 			ReplaceString(buffers[0], 64, "set_wavelimit", "");
 			
-			WaveStart_SubWaveStart(GetGameTime() + StringToFloat(buffers[0]));
-			
-			b_NpcForcepowerupspawn[npc.index] = 0;
-			i_RaidGrantExtra[npc.index] = 0;
-			b_DissapearOnDeath[npc.index] = true;
-			b_DoGibThisNpc[npc.index] = true;
-			SmiteNpcToDeath(npc.index);
+			npc.m_flAddRiadTime = StringToFloat(buffers[0]);
+			npc.m_iOverlordComboAttack = 101;
+			npc.m_flCoolDown = GetGameTime() + 1.0;
 			return npc;
 		}
 		else if(!StrContains(data, "set_raidlimit"))
@@ -723,6 +719,7 @@ static void CyberGrindGM_OverrideMusic(int iNPC)
 				Music_SetRaidMusic(music);
 			}
 			case 100: RaidModeTime += npc.m_flAddRiadTime;
+			case 101: WaveStart_SubWaveStart(GetGameTime() + npc.m_flAddRiadTime);
 		}
 		b_NpcForcepowerupspawn[npc.index] = 0;
 		i_RaidGrantExtra[npc.index] = 0;

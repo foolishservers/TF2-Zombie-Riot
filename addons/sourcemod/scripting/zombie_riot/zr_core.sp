@@ -350,6 +350,7 @@ enum
 	WEAPON_IS_STICKYBOMB = 1005,
 	WEAPON_IS_AUTOSHOTGUN = 1006,
 	WEAPON_KIT_SURVIVALIST = 1007,
+	WEAPON_ADAPTIVE_MEDIGUN = 1008,
 };
 
 enum
@@ -763,6 +764,7 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "custom/addons/weapon_majorsteam_launcher.sp"
 #include "custom/addons/weapon_mostima.sp"
 #include "custom/addons/weapon_minecraft_sword.sp"
+#include "custom/addons/weapon_mini_semi_gun.sp"
 #include "custom/kit_soldine.sp"
 #include "custom/weapon_kritzkrieg.sp"
 #include "custom/wand/weapon_bubble_wand.sp"

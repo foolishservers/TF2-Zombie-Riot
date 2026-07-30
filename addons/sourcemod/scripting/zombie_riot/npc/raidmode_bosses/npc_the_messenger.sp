@@ -437,11 +437,6 @@ methodmap TheMessenger < CClotBody
 	}
 }
 
-static void NPCTalkMessage(int iNPC, const char[] message)
-{
-	PrintNPCMessageWithPrefixes(iNPC, "lightblue", message);
-}
-
 void TheMessenger_NPCTalkMessage(int iNPC, const char[] message, any ...)
 {
 	char buffer[255];
