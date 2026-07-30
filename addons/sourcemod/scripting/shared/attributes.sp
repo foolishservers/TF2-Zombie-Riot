@@ -75,6 +75,8 @@ enum
 	Attrib_MaxArmor_Multiplier = 5000,
 	Attrib_MaxArmor_BaseAdditive = 5001,
 	Attrib_MaxArmor_FinalAdditive = 5002,
+	Attrib_IsSniperRifle = 5003,
+	Attrib_ExplosiveHeadshot = 5004,
 };
 
 StringMap WeaponAttributes[MAXENTITIES + 1];
@@ -407,17 +409,20 @@ void Attributes_OnHit(int client, int victim, int weapon, float &damage, int& da
 				float ArmorMax = Attributes_Get(weapon, Attrib_ArmorOnHitMax, 1.0);
 				GiveArmorViaPercentage(client, value / ArmorMax, ArmorMax);
 			}
+			
+			value = Attributes_Get(weapon, 795, 1.0);	// bonus damage to burning players
+			if(value != 1.0)
+			{
+				damage *= value;
+			}
 #endif
-	
 			value = Attributes_Get(weapon, 149, 0.0);	// bleeding duration
 			if(value)
 				StartBleedingTimer(victim, client, Attributes_Get(weapon, 2, 1.0) * 4.0, RoundFloat(value * 2.0), weapon, damagetype);
 			
 			value = Attributes_Get(weapon, 208, 0.0);	// Set DamageType Ignite
-
 			if(value)
 			{
-
 				if(value == 1.0)
 					value = 7.5;
 
@@ -425,7 +430,8 @@ void Attributes_OnHit(int client, int victim, int weapon, float &damage, int& da
 					value = 2.0;
 					
 				NPC_Ignite(victim, client, value, weapon);
-			}	
+			}
+			
 			value = Attributes_Get(weapon, 638, 0.0);
 			if(value)	// Extinquisher
 			{
