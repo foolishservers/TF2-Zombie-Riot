@@ -441,7 +441,7 @@ void TheMessenger_NPCTalkMessage(int iNPC, const char[] message, any ...)
 {
 	char buffer[255];
 	VFormat(buffer, sizeof(buffer), message, 3);
-	PrintNPCMessageWithPrefixes(iNPC, "lightblue", message);
+	PrintNPCMessageWithPrefixes(iNPC, "lightblue", buffer);
 }
 
 public void TheMessenger_ClotThink(int iNPC)
