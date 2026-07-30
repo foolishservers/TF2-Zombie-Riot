@@ -380,7 +380,7 @@ static void Seeyou_in_HELL(int client)
 			ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Already Used");
 			return;
 		}
-		M3_Ability_Cooldown(client, GameTime + (60.0 * CooldownReductionAmount(client)));
+		M3_Ability_Cooldown(client, GameTime + (10.0 * CooldownReductionAmount(client)));
 		b_OneDown[client]=true;
 		
 		float clientpos[3];
