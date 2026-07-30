@@ -413,7 +413,8 @@ void Attributes_OnHit(int client, int victim, int weapon, float &damage, int& da
 			value = Attributes_Get(weapon, 795, 1.0);	// bonus damage to burning players
 			if(value != 1.0)
 			{
-				damage *= value;
+				if(IgniteFor[victim] > 0)
+					damage *= value;
 			}
 #endif
 			value = Attributes_Get(weapon, 149, 0.0);	// bleeding duration

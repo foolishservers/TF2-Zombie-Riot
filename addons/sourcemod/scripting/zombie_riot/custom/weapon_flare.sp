@@ -15,31 +15,20 @@ public void KillingOrder_Fire(int client, int weapon, bool crit)
 	b_LagCompNPC_ExtendBoundingBox = true;
 	StartLagCompensation_Base_Boss(client);
 	
-	float pos[3], ang[3], endPos[3], hullMin[3], hullMax[3], direction[3];
+	float pos[3], ang[3];
 	GetClientEyePosition(client, pos);
 	GetClientEyeAngles(client, ang);
 	
-	hullMin[0] = -1.0;		//Very small bounds to mimic actual hitscan.
-	hullMin[1] = hullMin[0];
-	hullMin[2] = hullMin[0];
-	hullMax[0] = -hullMin[0];
-	hullMax[1] = -hullMin[1];
-	hullMax[2] = -hullMin[2];
-	
-	GetAngleVectors(ang, direction, NULL_VECTOR, NULL_VECTOR);
-	ScaleVector(direction, 9999.0);
-	AddVectors(pos, direction, endPos);
-	
 	float targetPos[3], hitPos[3];
-	hitPos = endPos;
 	
 	bool headshot;
 	int target = -1;
-	Handle trace = TR_TraceHullFilterEx(pos, endPos, hullMin, hullMax, MASK_SHOT, BulletAndMeleeTrace, client);
-	if(TR_GetFraction(trace) < 1.0)
+	Handle trace = TR_TraceRayFilterEx(pos, ang, MASK_SHOT, RayType_Infinite, BulletAndMeleeTrace, client);
+	
+	TR_GetEndPosition(hitPos, trace);
+	
+	if(TR_DidHit(trace))
 	{
-		TR_GetEndPosition(hitPos, trace);
-		
 		target = TR_GetEntityIndex(trace);
 		if(target > 0)
 		{
@@ -129,7 +118,7 @@ public void KillingOrder_Fire(int client, int weapon, bool crit)
 	
 	FinishLagCompensation_Base_boss();
 	
-	Offset_Vector({ 60.9, 13.1, -15.1 }, ang, pos);
+	CalcCorrectWeaponShootPosition({ 60.9, 13.1, -15.1 }, pos, ang);
 	TE_Particle("dxhr_sniper_rail", pos, _, ang, .controlpoint = 1, .controlpointattachment = PATTACH_WORLDORIGIN, .controlpointoffset = hitPos);
 	
 	EmitGameSoundToAll(headshot ? SOUND_KILLINGORDER_FIRE_CRIT : SOUND_KILLINGORDER_FIRE, weapon);
@@ -141,4 +130,17 @@ public void KillingOrder_OnDealDamage(int victim, int &attacker, int &inflictor,
 		return;
 	
 	ApplyStatusEffect(attacker, victim, "Identifying Targets", 4.0);
+}
+
+void CalcCorrectWeaponShootPosition(const float vecOffset[3], float vecStartPosition[3], const float vecAngles[3]) {
+	float vecForward[3], vecRight[3], vecUp[3];
+	GetAngleVectors(vecAngles, vecForward, vecRight, vecUp);
+	
+	ScaleVector(vecForward, vecOffset[0]);
+	ScaleVector(vecRight, vecOffset[1]);
+	ScaleVector(vecUp, vecOffset[2]);
+	
+	AddVectors(vecStartPosition, vecForward, vecStartPosition);
+	AddVectors(vecStartPosition, vecRight, vecStartPosition);
+	AddVectors(vecStartPosition, vecUp, vecStartPosition);
 }
