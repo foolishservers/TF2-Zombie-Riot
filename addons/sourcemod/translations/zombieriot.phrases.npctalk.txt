@@ -1330,8 +1330,8 @@
 	"Bob_The_First_Sea_Pistol_Phase"
 	{
 		"#format"	"{1:t}"
-		"en"		"{crimson}{1} uses his immensive willpower to regain some strength..."
-		"ko"		"{crimson}{1}의 엄청난 의지력으로 잃어버린 힘을 되찾고 있다..."
+		"en"		"{crimson}{1} uses his immense willpower to regain some strength..."
+		"ko"		"{crimson}{1}이 놀라운 의지력으로 잃어버린 힘을 회복하고 있다..."
 	}
 	"Bob_The_First_Sea_Pistol_Phase_1"
 	{
