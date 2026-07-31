@@ -391,7 +391,7 @@ public void ZSSoldierGiant_ClotDamaged_Post(int victim, int attacker, int inflic
 				float pos[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos);
 				float ang[3]; GetEntPropVector(npc.index, Prop_Data, "m_angRotation", ang);
 				
-				int spawn_index = NPC_CreateByName("npc_zombie_soldier_minion_grave", -1, pos, ang, GetTeam(npc.index));
+				int spawn_index = NPC_CreateByName("npc_zs_soldier_minion_grave", -1, pos, ang, GetTeam(npc.index));
 				if(spawn_index > MaxClients)
 				{
 					NpcStats_CopyStats(npc.index, spawn_index);

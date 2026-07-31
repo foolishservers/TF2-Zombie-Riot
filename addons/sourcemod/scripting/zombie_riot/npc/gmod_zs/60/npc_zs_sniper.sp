@@ -50,7 +50,7 @@ methodmap InfectedSniper < CClotBody
 
 	public InfectedSniper(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedSniper npc = view_as<InfectedSniper>(CClotBody(vecPos, vecAng, "models/player/sniper.mdl", "1.0", "20000", ally));
+		InfectedSniper npc = view_as<InfectedSniper>(CClotBody(vecPos, vecAng, "models/player/sniper.mdl", "1.0", "10000", ally));
 		
 		i_NpcWeight[npc.index] = 2;
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");

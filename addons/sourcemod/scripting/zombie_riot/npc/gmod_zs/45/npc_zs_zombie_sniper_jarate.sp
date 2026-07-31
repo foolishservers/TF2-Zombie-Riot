@@ -83,7 +83,7 @@ methodmap InfectedSniperjarate < CClotBody
 	
 	public InfectedSniperjarate(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedSniperjarate npc = view_as<InfectedSniperjarate>(CClotBody(vecPos, vecAng, "models/player/sniper.mdl", "1.0", "22500", ally));
+		InfectedSniperjarate npc = view_as<InfectedSniperjarate>(CClotBody(vecPos, vecAng, "models/player/sniper.mdl", "1.0", "11250", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		npc.SetActivity("ACT_MP_RUN_MELEE");
