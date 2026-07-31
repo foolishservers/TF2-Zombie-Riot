@@ -22,6 +22,8 @@ static const float Cooldowns[] = { 150.0, 130.0, 110.0, 90.0, 70.0, 50.0, 30.0 }
 static int SmithLevel[MAXPLAYERS] = {-1, ...};
 static int i_AdditionalSupportBuildings[MAXPLAYERS] = {0, ...};
 
+static int i_TinkerTracerIndex;
+
 static int ParticleRef[MAXPLAYERS] = {-1, ...};
 static Handle EffectTimer[MAXPLAYERS];
 
@@ -29,6 +31,8 @@ static ArrayList Tinkers;
 
 void Blacksmith_RoundStart()
 {
+	i_TinkerTracerIndex = PrecacheModel(CLAW_TRAIL_RED);
+	
 	Zero(i_AdditionalSupportBuildings);
 	delete Tinkers;
 }
@@ -234,6 +238,127 @@ public Action Blacksmith_TimerEffect(Handle timer, int client)
 	i_AdditionalSupportBuildings[client] = 0;
 	EffectTimer[client] = null;
 	return Plugin_Stop;
+}
+
+public void Weapon_Blacksmith_ShootBullet(int client, int weapon, bool crit, int slot)
+{
+	float pos[3], ang[3];
+	GetClientEyePosition(client, pos);
+	GetClientEyeAngles(client, ang);
+	
+	float hitPos[3];
+	
+	bool headshot;
+	int target = -1;
+	Handle trace = TR_TraceRayFilterEx(pos, ang, MASK_SHOT, RayType_Infinite, Trace_DontHitEntityOrPlayer, client);
+	
+	TR_GetEndPosition(hitPos, trace);
+	
+	if(TR_DidHit(trace))
+	{
+		target = TR_GetEntityIndex(trace);
+		if(target > 0)
+		{
+			headshot = (TR_GetHitGroup(trace) == HITGROUP_HEAD && !b_CannotBeHeadshot[target]);
+		}
+	}
+	delete trace;
+	
+	CalcCorrectWeaponShootPosition({ 60.9, 13.1, -15.1 }, pos, ang);
+	TE_SetupBeamPoints(pos, hitPos, i_TinkerTracerIndex, 0, 0, 0, 0.3, 3.0, 3.0, 0, 0.0, {255, 255, 255, 255}, 3);
+	TE_SendToAll(0.0);
+	
+	if(target < 0)
+		return;
+	
+	if(target == 0)
+	{
+		switch(GetRandomInt(1,3))
+		{
+			case 1:
+				EmitSoundToAll("weapons/fx/rics/arrow_impact_metal.wav", 0, SNDCHAN_STATIC, 70, _, 0.8, .origin = hitPos);
+			
+			case 2:
+				EmitSoundToAll("weapons/fx/rics/arrow_impact_metal2.wav", 0, SNDCHAN_STATIC, 70, _, 0.8, .origin = hitPos);
+			
+			case 3:
+				EmitSoundToAll("weapons/fx/rics/arrow_impact_metal4.wav", 0, SNDCHAN_STATIC, 70, _, 0.8, .origin = hitPos);
+		}
+		return;
+	}
+	else if(GetTeam(client) != GetTeam(target))
+	{
+		float damage = 50.0;
+		damage *= Attributes_Get(weapon, 2, 1.0);
+		
+		if (headshot)
+		{
+			DisplayCritAboveNpc(target, client, true);
+			
+			if(i_HeadshotAffinity[client] == 1)
+			{
+				damage *= 1.42;
+			}
+			else
+			{
+				damage *= 1.185;
+			}
+			
+			if(i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER)
+			{
+				damage *= 1.25;
+			}
+			if(i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER_X)
+			{
+				damage *= 1.35;
+			}
+		}
+		else
+		{
+			if(i_HeadshotAffinity[client] == 1)
+			{
+				damage *= 0.75;
+			}
+		}
+		
+		float vecForward[3];
+		GetAngleVectors(ang, vecForward, NULL_VECTOR, NULL_VECTOR);
+		
+		float PushforceDamage[3];
+		CalculateDamageForce(vecForward, 10000.0, PushforceDamage);
+		
+		float targetPos[3];
+		WorldSpaceCenter(target, targetPos);
+		
+		SDKHooks_TakeDamage(target, client, client, damage, DMG_BULLET, weapon, PushforceDamage, targetPos);
+	}
+	else
+	{
+		if(i_NpcIsABuilding[target])
+		{
+			if(view_as<ObjectGeneric>(target).m_bConstructBuilding && IsValidEntity(view_as<ObjectGeneric>(target).m_iConstructDeathModel))
+				return;
+			
+			//heal building?
+			bool RepairDone = false;
+			if(IsValidEntity(weapon) && IsValidClient(client))
+				RepairDone = Building_RepairObject(client, target, weapon, {0.0,0.0,0.0}, -1, 0.5);
+			
+			if(!RepairDone)
+				return;
+			
+			int count;
+			int[] players = new int[MaxClients];
+			for(int i = 1; i <= MaxClients; i++)
+			{
+				if(i != client && IsClientInGame(i))
+					players[count++] = i;
+			}
+			
+			EmitSoundToClient(client, SOUND_HOSE_HEALED, client, SNDCHAN_STATIC, 70, _, 0.8);
+			EmitSound(players, count, SOUND_HOSE_HEALED, 0, SNDCHAN_STATIC, 70, _, 0.8, .origin = hitPos);
+		}
+	}
 }
 
 public void Weapon_BlacksmithMelee_M2(int client, int weapon, bool crit, int slot)
@@ -558,7 +683,7 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 				}
 			}
 		}
-		if(Attributes_Get(client, Attrib_DisallowTinker, 0.0) != 0.0)
+		if(Attributes_Get(weapon, Attrib_DisallowTinker, 0.0) != 0.0)
 		{
 			ClientCommand(client, "playgamesound items/medshotno1.wav");
 			SetDefaultHudPosition(client);
@@ -667,7 +792,6 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 					}
 				}
 			}
-
 			else if(slot < TFWeaponSlot_Melee)
 			{
 				if(Attributes_Has(weapon, 101) || Attributes_Has(weapon, 102) || Attributes_Has(weapon, 103) || Attributes_Has(weapon, 104))
@@ -813,8 +937,8 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 				ApplyBuildingCollectCooldown(entity, client, 2.0);
 				return;
 			}
-	}
-
+		}
+		
 		CPrintToChat(client, "{yellow}%s (Tier %d)", tinker.Name, tinker.Rarity + 1);
 
 		for(int i; i < sizeof(tinker.Attrib); i++)
