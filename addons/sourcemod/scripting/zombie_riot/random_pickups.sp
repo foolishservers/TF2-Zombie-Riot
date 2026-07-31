@@ -66,7 +66,7 @@ public Action RandomPickup_DelayBetweenSpawns(Handle timer)
 	return Plugin_Continue;
 }
 
-bool RandomPickup_SpawnPickup(float VectorGoal[3])
+int RandomPickup_SpawnPickup(float VectorGoal[3])
 {
 	static float hullcheckmaxs_Player[3];
 	static float hullcheckmins_Player[3];
@@ -106,8 +106,9 @@ bool RandomPickup_SpawnPickup(float VectorGoal[3])
 			MaxPickups *= 2;
 		}
 		CreateTimer(RandomPickupTime * MaxPickups, Timer_RemoveEntity, EntIndexToEntRef(prop), TIMER_FLAG_NO_MAPCHANGE);
-	}	
-	return true;
+		return prop;
+	}
+	return -1;
 }
 
 public void RandomPickup_TouchPickup(int entity, int other)

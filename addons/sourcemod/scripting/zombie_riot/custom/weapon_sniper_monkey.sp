@@ -296,8 +296,6 @@ public void Weapon_SupplyDropElite(int client, int weapon, bool &result, int slo
 		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);	
 	}
 }
-
-
 static Handle SniperSupply_Management[MAXPLAYERS] = {null, ...};
 
 public void SniperSupply_OnMap(int client, int weapon)
@@ -348,6 +346,8 @@ static Action Timer_Management_SniperSupply(Handle timer, DataPack pack)
 		}
 		return Plugin_Stop;
 	}
+	if(CvarInfiniteCash.BoolValue)
+		SniperSupply_DropPerWave[client]=false;
 	
 	if(Ability_Check_Cooldown(client, 1) <= 0.0 && !SniperSupply_DropPerWave[client])
 	{
@@ -356,7 +356,8 @@ static Action Timer_Management_SniperSupply(Handle timer, DataPack pack)
 		{
 			int entity = EntRefToEntIndexFast(i_ObjectsNpcsTotal[entitycount]);
 			if(IsValidEntity(entity) && !b_NpcHasDied[entity] && b_NpcForcepowerupspawn[entity] != 2 && GetTeam(entity) != TFTeam_Red
-			&& !b_thisNpcIsARaid[entity] && !b_thisNpcIsABoss[entity])
+			&& GetTeam(entity) != TFTeam_Stalkers && !b_ThisEntityIgnored[entity] && !b_NpcIsInvulnerable[entity] && !b_thisNpcIsARaid[entity] && !b_thisNpcIsABoss[entity]
+			&& !b_StaticNPC[entity] && !b_ThisEntityIgnoredByOtherNpcsAggro[entity])
 			{
 				target = entity;
 				break;
@@ -369,22 +370,25 @@ static Action Timer_Management_SniperSupply(Handle timer, DataPack pack)
 			CClotBody npc = view_as<CClotBody>(target);
 			if(!IsValidEntity(npc.m_iTeamGlow))
 			{
+				npc.m_bTeamGlowDefault = false;
 				Update_TransmitState(target);
 				npc.m_iTeamGlow = TF2_CreateGlow(target);
 				
-				SetVariantColor(view_as<int>({125, 200, 255, 200}));
+				SetVariantColor(view_as<int>({136, 200, 5, 200}));
 				AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
 			}
 			else
 			{
 				if(IsValidEntity(npc.m_iTeamGlow)) 
 				{
+					npc.m_bTeamGlowDefault = false;
 					Update_TransmitState(target);
-					SetVariantColor(view_as<int>({125, 200, 255, 200}));
+					SetVariantColor(view_as<int>({136, 200, 5, 200}));
 					AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
 				}		
 			}
 			ClientCommand(client, "playgamesound ui/quest_status_tick_expert_friend.wav");
+			Rogue_OnAbilityUse(client, weapon);
 			Ability_Apply_Cooldown(client, 1, 90.0);
 			SniperSupply_DropPerWave[client]=true;
 		}
@@ -395,22 +399,100 @@ static Action Timer_Management_SniperSupply(Handle timer, DataPack pack)
 	return Plugin_Continue;
 }
 
+public void SniperSupply_M1(int client, int weapon, bool crit, int slot)
+{
+	static float vAngles[3], vOrigin[3];
+	GetClientEyePosition(client, vOrigin);
+	GetClientEyeAngles(client, vAngles);
+	Handle trace = TR_TraceRayFilterEx(vOrigin, vAngles, MASK_SHOT, RayType_Infinite, BulletAndMeleeTrace, client);
+	if(TR_GetFraction(trace) < 1.0)
+	{
+		TR_GetEndPosition(vOrigin, trace);
+		int target = TR_GetEntityIndex(trace);
+		if(target > 0 && !b_CannotBeHeadshot[target])
+		{
+			if(TR_GetHitGroup(trace) == HITGROUP_HEAD)
+			{
+				DisplayCritAboveNpc(target, client, true);
+				SniperRifle_HeadShot[client]=true;
+			}
+		}
+	}
+	delete trace;
+	if(SniperRifle_HeadShot[client])
+	{
+		if(i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER
+		|| i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER_X)
+		{
+			float Ability_CD = Ability_Check_Cooldown(client, 3)-3.0;
+			if(Ability_CD <= 0.0)
+				Ability_CD = 0.0;
+			Ability_Apply_Cooldown(client, 3, Ability_CD, .ignoreCooldown=true);
+			Ability_CD = Ability_Check_Cooldown(client, 1)-5.0;
+			if(Ability_CD <= 0.0)
+				Ability_CD = 0.0;
+			Ability_Apply_Cooldown(client, 1, Ability_CD, .ignoreCooldown=true);
+		}
+		SniperRifle_HeadShot[client]=false;
+	}
+	if(TF2_IsPlayerInCondition(client, TFCond_FocusBuff))
+	{
+		int KITER_Pack=RandomPickup_SpawnPickup(vOrigin);
+		if(IsValidEntity(KITER_Pack))
+		{
+			int MaxPickups = 8;
+			if(ZR_Get_Modifier() == KITERS_DREAM)
+				MaxPickups *= 2;
+			CClotBody npc = view_as<CClotBody>(KITER_Pack);
+			if(!IsValidEntity(npc.m_iTeamGlow))
+			{
+				npc.m_bTeamGlowDefault = false;
+				Update_TransmitState(KITER_Pack);
+				npc.m_iTeamGlow = TF2_CreateGlow(KITER_Pack);
+				
+				SetVariantColor(view_as<int>({136, 200, 5, 200}));
+				AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
+				CreateTimer(45.0 * MaxPickups, Timer_RemoveEntity, EntIndexToEntRef(npc.m_iTeamGlow), TIMER_FLAG_NO_MAPCHANGE);
+			}
+			else
+			{
+				if(IsValidEntity(npc.m_iTeamGlow)) 
+				{
+					npc.m_bTeamGlowDefault = false;
+					Update_TransmitState(KITER_Pack);
+					SetVariantColor(view_as<int>({136, 200, 5, 200}));
+					AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
+					CreateTimer(45.0 * MaxPickups, Timer_RemoveEntity, EntIndexToEntRef(npc.m_iTeamGlow), TIMER_FLAG_NO_MAPCHANGE);
+				}		
+			}
+			if(Ability_Check_Cooldown(client, 3) < 999.0 && Attributes_Get(weapon, Attrib_PapNumber, 0.0)==2)
+				Ability_Apply_Cooldown(client, 3, 9999999.0, .ignoreCooldown=true);
+			else
+				Ability_Apply_Cooldown(client, 3, 60.0);
+			vOrigin[2] += 5.0;
+			spawnRing_Vectors(vOrigin, 0.0, 0.0, 0.0, 0.0, LASERBEAM, 0, 255, 0, 255, 5, 0.5, 3.0, 1.0, 3, 150.0);
+			ClientCommand(client, "playgamesound ui/medic_alert.wav");
+			TF2_RemoveCondition(client, TFCond_FocusBuff);
+		}
+	}
+}
+
 public void SniperSupply_R(int client, int weapon, bool crit, int slot)
 {
-	if(SniperSupply_Management[client] != null)
+	float Ability_CD = Ability_Check_Cooldown(client, slot);
+	
+	if(Ability_CD <= 0.0 || CvarInfiniteCash.BoolValue)
+		Ability_CD = 0.0;
+	if(Ability_CD <= 0.0 || Ability_CD > 999.0)
 	{
-		delete SniperSupply_Management[client];
-		SniperSupply_Management[client] = null;
-		DataPack pack;
-		SniperSupply_Management[client] = CreateDataTimer(0.1, Timer_Management_SniperSupply, pack, TIMER_REPEAT);
-		pack.WriteCell(client);
-		pack.WriteCell(weapon);
+		if(TF2_IsPlayerInCondition(client, TFCond_FocusBuff))
+			TF2_RemoveCondition(client, TFCond_FocusBuff);
+		else
+			TF2_AddCondition(client, TFCond_FocusBuff, 5.0);
+		return;
 	}
-	else
-	{
-		DataPack pack;
-		SniperSupply_Management[client] = CreateDataTimer(0.1, Timer_Management_SniperSupply, pack, TIMER_REPEAT);
-		pack.WriteCell(client);
-		pack.WriteCell(weapon);
-	}
+	ClientCommand(client, "playgamesound items/medshotno1.wav");
+	SetDefaultHudPosition(client);
+	SetGlobalTransTarget(client);
+	ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);
 }

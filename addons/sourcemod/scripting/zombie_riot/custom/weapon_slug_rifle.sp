@@ -64,7 +64,6 @@ public void Weapon_SniperRifle_M1(int client, int weapon, bool crit, int slot)
 		}
 		delete trace;
 	}
-
 }
 
 void WeaponUranium_OnTakeDamage(int attacker,int victim, float &damage, float damagePosition[3])
