@@ -104,7 +104,7 @@ methodmap ZSHuntsman < CClotBody
 	
 	public ZSHuntsman(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSHuntsman npc = view_as<ZSHuntsman>(CClotBody(vecPos, vecAng, "models/player/sniper.mdl", "1.0", "12500", ally));
+		ZSHuntsman npc = view_as<ZSHuntsman>(CClotBody(vecPos, vecAng, "models/player/sniper.mdl", "1.0", "6250", ally));
 
 		SetVariantInt(2);
 		AcceptEntityInput(npc.index, "SetBodyGroup");

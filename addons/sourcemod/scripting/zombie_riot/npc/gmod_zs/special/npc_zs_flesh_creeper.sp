@@ -863,6 +863,7 @@ public Action FleshCreeper_OnTakeDamage(int victim, int &attacker, int &inflicto
 public void FleshCreeper_NPCDeath(int entity)
 {
 	FleshCreeper npc = view_as<FleshCreeper>(entity);
+	SpawnMoney(npc.index, true);
 	if(!npc.m_bGib)
 	{
 		npc.PlayDeathSound();	

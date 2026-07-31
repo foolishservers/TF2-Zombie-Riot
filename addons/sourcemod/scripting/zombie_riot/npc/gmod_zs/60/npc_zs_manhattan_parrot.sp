@@ -76,7 +76,7 @@ methodmap ManhattanParrot < CClotBody
 	}
 	public ManhattanParrot(float vecPos[3], float vecAng[3], int ally)
 	{
-		ManhattanParrot npc = view_as<ManhattanParrot>(CClotBody(vecPos, vecAng, "models/player/demo.mdl", "1.0", "30000", ally));
+		ManhattanParrot npc = view_as<ManhattanParrot>(CClotBody(vecPos, vecAng, "models/player/demo.mdl", "1.0", "15000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		

@@ -96,7 +96,7 @@ methodmap ZSoldierGrave < CClotBody
 	
 	public ZSoldierGrave(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSoldierGrave npc = view_as<ZSoldierGrave>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "30000", ally));
+		ZSoldierGrave npc = view_as<ZSoldierGrave>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "15000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		

@@ -125,7 +125,7 @@ methodmap ZSVILEPoisonheadcrabZombie < CClotBody
 	
 	public ZSVILEPoisonheadcrabZombie(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZSVILEPoisonheadcrabZombie npc = view_as<ZSVILEPoisonheadcrabZombie>(CClotBody(vecPos, vecAng, "models/zombie/poison.mdl", "1.15", "80000", ally));
+		ZSVILEPoisonheadcrabZombie npc = view_as<ZSVILEPoisonheadcrabZombie>(CClotBody(vecPos, vecAng, "models/zombie/poison.mdl", "1.15", "40000", ally));
 		
 		i_NpcWeight[npc.index] = 2;
 		

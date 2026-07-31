@@ -88,7 +88,7 @@ methodmap StoneAgeMaker < CClotBody
 	
 	public StoneAgeMaker(float vecPos[3], float vecAng[3], int ally)
 	{
-		StoneAgeMaker npc = view_as<StoneAgeMaker>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "40000", ally));
+		StoneAgeMaker npc = view_as<StoneAgeMaker>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "20000", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");

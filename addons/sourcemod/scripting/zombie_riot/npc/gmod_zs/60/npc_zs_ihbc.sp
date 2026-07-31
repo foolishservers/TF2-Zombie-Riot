@@ -89,7 +89,7 @@ methodmap InfectedHazardous < CClotBody
 	
 	public InfectedHazardous(float vecPos[3], float vecAng[3], int ally)
 	{
-		InfectedHazardous npc = view_as<InfectedHazardous>(CClotBody(vecPos, vecAng, "models/player/medic.mdl", "1.0", "45000", ally));
+		InfectedHazardous npc = view_as<InfectedHazardous>(CClotBody(vecPos, vecAng, "models/player/medic.mdl", "1.0", "22500", ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		
