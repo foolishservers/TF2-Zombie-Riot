@@ -1041,20 +1041,20 @@ static void CyberGrindGM_ClotThink(int iNPC)
 						NPCPritToChat(npc.index, "{slateblue}", "MrV Talk 12", false, false);
 					//Citizen_SpawnAtPoint("b");
 					//Citizen_SpawnAtPoint();
-					if(CyberGrind_Difficulty==4)
+					float SelfPos[3];
+					GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", SelfPos);
+					float AllyAng[3];
+					GetEntPropVector(npc.index, Prop_Data, "m_angRotation", AllyAng);
+					int Spawner_entity = GetRandomActiveSpawner();
+					if(IsValidEntity(Spawner_entity))
 					{
-						float SelfPos[3];
-						GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", SelfPos);
-						float AllyAng[3];
-						GetEntPropVector(npc.index, Prop_Data, "m_angRotation", AllyAng);
-						int Spawner_entity = GetRandomActiveSpawner();
-						if(IsValidEntity(Spawner_entity))
-						{
-							GetEntPropVector(Spawner_entity, Prop_Data, "m_vecOrigin", SelfPos);
-							GetEntPropVector(Spawner_entity, Prop_Data, "m_angRotation", AllyAng);
-						}
-						NPC_CreateByName("npc_invisible_trigger_man", -1, SelfPos, AllyAng, TFTeam_Stalkers, "cybergrind_ex_hard");
+						GetEntPropVector(Spawner_entity, Prop_Data, "m_vecOrigin", SelfPos);
+						GetEntPropVector(Spawner_entity, Prop_Data, "m_angRotation", AllyAng);
 					}
+					if(CyberGrind_Difficulty==4)
+						NPC_CreateByName("npc_invisible_trigger_man", -1, SelfPos, AllyAng, TFTeam_Stalkers, "cybergrind_ex_hard");
+					else
+						NPC_CreateByName("npc_invisible_trigger_man", -1, SelfPos, AllyAng, TFTeam_Stalkers, "fast_building_cooldown");
 					Spawn_Cured_Grigori();
 					//CyberGrindGM_Talk("Rebels Arrive", true);
 					/*if(CyberGrind_Difficulty!=4)

@@ -91,14 +91,17 @@ bool NeedCrouchAbility(int client)
 	}
 	return NeedCrouch;
 }
-
 public void MedigunChangeModeR(int client, int weapon, bool crit, int slot)
 {
-	MedigunChangeModeRInternal(client, weapon, crit, slot);
-}
 
-public void MedigunChangeModeRInternal(int client, int weapon, bool crit, int slot)
+	MedigunChangeModeRInternal(client, weapon, crit, slot, false);
+}
+public void MedigunChangeModeRInternal(int client, int weapon, bool crit, int slot, bool checkCrouch)
 {
+	//only swithc with crouch R
+	if(checkCrouch && !(GetClientButtons(client) & IN_DUCK))
+		return;
+
 	if(b_MediunDamageModeSet[client])
 	{
 		b_MediunDamageModeSet[client] = false;
@@ -112,7 +115,6 @@ public void MedigunChangeModeRInternal(int client, int weapon, bool crit, int sl
 	Medigun_SetModeDo(client, weapon);
 	medigun_hud_delay[client] = 0.0; //update hud fast
 }
-
 public void Medigun_SetModeDo(int client, int weapon)
 {
 	if(!b_IsAMedigun[weapon])
@@ -375,6 +377,11 @@ public MRESReturn OnMedigunPostFramePost(int medigun) {
 							{
 								ApplyStatusEffect(owner, owner, "Healing Adaptiveness Ranged", 0.15);
 								ApplyStatusEffect(owner, healTarget, "Healing Adaptiveness Ranged", 0.15);
+							}
+							case 2:
+							{
+								ApplyStatusEffect(owner, owner, "Healing Adaptiveness All", 0.15);
+								ApplyStatusEffect(owner, healTarget, "Healing Adaptiveness All", 0.15);
 							}
 						}
 					}
@@ -652,6 +659,7 @@ stock int CreateParticleOnBackPack(const char[] sParticle, int client)
 	return entity;
 }
 
+
 float MedigunGetUberDuration(int owner)
 {
 	//so it starts at 1.0
@@ -686,15 +694,15 @@ float MedigunGetUberDuration(int owner)
 	return Attribute;
 }
 
+
 public void Adaptive_MedigunChangeBuff(int client, int weapon, bool crit, int slot)
 {
-	// If I crouch, change medigun mode.
+	//only swithc with crouch R
 	if(GetClientButtons(client) & IN_DUCK)
 	{
-		MedigunChangeModeRInternal(client, weapon, crit, slot);
+		MedigunChangeModeRInternal(client, weapon, crit, slot, NeedCrouchAbility(client));
 		return;
 	}
-	
 	ClientCommand(client, "playgamesound weapons/vaccinator_toggle.wav");
 	MedigunModeSet[client]++;
 	if(MedigunModeSet[client] > 1)
@@ -702,6 +710,7 @@ public void Adaptive_MedigunChangeBuff(int client, int weapon, bool crit, int sl
 		MedigunModeSet[client] = 0;
 	}
 }
+
 
 public void ReduceMediFluidCost(int client, int &cost)
 {

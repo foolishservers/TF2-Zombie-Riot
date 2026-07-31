@@ -203,6 +203,8 @@
 	{
 		"en"	"You have cleared [EX Hard] Cyber ​​Grind!\nStart with extra 30 extra credits."
 		"ko"	"[EX Hard] 난이도의 사이버 그라인드를 클리어했습니다!\n시작 자금 +30"
+		//"en"	"When equipped, You get Silvester Wings..\nRemember. He watches."
+		//"ko"	"착용시, 실베스터의 날개를 얻습니다..\n기억하십시오. 그가 지켜보고 있습니다."
 	}
 	
 	//인벤토리 모듈
@@ -1067,18 +1069,8 @@
 	
 	"Custom Mini Semi Gun: Overheating FeedBack Desc"
 	{
-		"en"		"The longer you hold down fire, the more damage and tighter spread your weapon deals"
-		"ko"		"공격 버튼을 오래 누르고 있을수록, 이 무기의 피해량및 집탄율 증가"
-	}
-	"Custom Mini Semi Gun: Overheating FeedBack - Overclocking MAX"
-	{
-		"en"		"[Overclock MOD]\nMAX Overheat"
-		"ko"		"[과부하 모드]\n최대 과열 도달"
-	}
-	"Custom Mini Semi Gun: Overheating FeedBack - Overclocking Charge"
-	{
-		"en"		"[Overclock MOD]\nHeating up:"
-		"ko"		"[과부하 모드]\n예열중:"
+		"en"		"The longer you hold down fire, the more damage and tighter spread your weapon deals\nWhen used, if the maximum overheating value reaches 200%, damage is tripled according to the overheating value, and if the overheating is below 100%, the overheating value increases faster"
+		"ko"		"공격 버튼을 오래 누르고 있을수록, 이 무기의 피해량및 집탄율 증가\nM2: 사용 시, 사용 시, 최대 과열 수치 200%, 과열 수치에 따른 피해량 3배, 과열이 100％ 미만인 경우 과열 수치가 더 빨리 증가"
 	}
 	"Custom Mini Semi Gun: Overheating FeedBack - MAX"
 	{
@@ -1089,6 +1081,22 @@
 	{
 		"en"		"Heating up:"
 		"ko"		"예열 중:"
+	}
+	"Custom Mini Semi Gun: Overheating FeedBack - Overclocking"
+	{
+		"en"		"[Overclock MOD]"
+		"ko"		"[과부하 모드]"
+	}
+	"Custom Mini Semi Gun: Overheating FeedBack - Meltdown in"
+	{
+		"#format"	"{1:d}"
+		"en"		"Meltdown in T-{1}s"
+		"ko"		"멜트다운까지 {1}초 남음"
+	}
+	"Custom Mini Semi Gun: Overheating FeedBack - Fully Meltdown"
+	{
+		"en"		"Fully Meltdown...: [DMG, ATK DOWN]"
+		"ko"		"멜트 다운...: [피해량, 공속 감소]"
 	}
 	"Custom Mini Semi Gun: Bullet Storm Desc"
 	{

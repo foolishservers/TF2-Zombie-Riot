@@ -309,7 +309,7 @@ static void Cybergrind_EX_Hard_Mode_ClotThink(int iNPC)
 		return;
 	npc.m_flNextThinkTime = gameTime + 0.1;
 	
-	if(!Waves_Started() && Waves_InSetup())
+	if(!(Waves_Started() && !Waves_InSetup()))
 	{
 		for(int client = 1; client <= MaxClients; client++)
 		{
@@ -1157,14 +1157,14 @@ static void Invisible_TRIGGER_Man_ClotThink(int iNPC)
 				}
 			}
 
-			if(npc.m_flCoolDown && npc.m_flCoolDown < gameTime)
+			/*if(npc.m_flCoolDown && npc.m_flCoolDown < gameTime)
 			{
 				b_NpcForcepowerupspawn[npc.index] = 0;
 				i_RaidGrantExtra[npc.index] = 0;
 				b_DissapearOnDeath[npc.index] = true;
 				b_DoGibThisNpc[npc.index] = true;
 				SmiteNpcToDeath(npc.index);
-			}
+			}*/
 		} 
 	}
 	
