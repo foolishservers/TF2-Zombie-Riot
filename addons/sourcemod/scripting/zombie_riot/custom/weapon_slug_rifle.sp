@@ -234,8 +234,19 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 		
 	float accurate = 0.005;
 	accurate *= Attributes_Get(weapon, 106, 1.0);
+	
 	if(SniperRifle_RestTime[client]==0.0)
 		accurate=0.0;
+	else
+	{
+		float AimSpreadDegrading=FloatAbs(SniperRifle_RestTime[client]-GetGameTime());
+		AimSpreadDegrading=1.0*(AimSpreadDegrading/2.24);
+		if(AimSpreadDegrading<0.0)
+			AimSpreadDegrading=0.0;
+		if(AimSpreadDegrading>3.0)
+			AimSpreadDegrading=3.0;
+		accurate*=AimSpreadDegrading;
+	}
 	float x = GetRandomFloat( -1.0*accurate, accurate ) + GetRandomFloat( -1.0*accurate, accurate );
 	float y = GetRandomFloat( -1.0*accurate, accurate ) + GetRandomFloat( -1.0*accurate, accurate );
 	
@@ -244,7 +255,7 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 		accurate *= Attributes_Get(weapon, 41, 1.0);
 	
 	SniperRifle_RestTime[client] = GetGameTime()+((i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER
-		|| i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER_X) ? 0.2 : 0.8);
+		|| i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER_X) ? 0.72 : 1.0);
 	
 	static float vAngles[3], vOrigin[3], vecRight[3], vecUp[3];
 	GetClientEyePosition(client, vOrigin);
