@@ -660,7 +660,8 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 			}
 			default:
 			{
-				if(Attributes_Get(weapon, Attrib_IsSniperRifle, 0.0) != 0.0)
+				int Attrib = RoundToCeil(Attributes_Get(weapon, Attrib_IsSniperRifle, 0.0));
+				if(Attrib==1)
 				{
 					BlockNormal = true;
 					switch(GetURandomInt() % 6)
@@ -677,6 +678,29 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 							Tinker_SR_HighSpeedFeedMechanism(tinker.Rarity, tinker);
 						case 5:
 							Tinker_SR_HollowPointBullets(tinker.Rarity, tinker);
+						default:
+							Tinker_SR_ExplosiveHeadshot(tinker.Rarity, tinker);
+					}
+				}
+				else if(Attrib==2)
+				{
+					BlockNormal = true;
+					switch(GetURandomInt() % 7)
+					{
+						case 0:
+							Tinker_SR_ExplosiveHeadshot(tinker.Rarity, tinker);
+						case 1:
+							Tinker_SR_KillerFocus(tinker.Rarity, tinker);
+						case 2:
+							TinkerIntensiveClip(tinker.Rarity, tinker);
+						case 3:
+							TinkerConcentratedClip(tinker.Rarity, tinker);
+						case 4:
+							Tinker_SR_HighSpeedFeedMechanism(tinker.Rarity, tinker);
+						case 5:
+							Tinker_SR_HollowPointBullets(tinker.Rarity, tinker);
+						case 6:
+							TinkerSmallerSmarterBullets(tinker.Rarity, tinker);
 						default:
 							Tinker_SR_ExplosiveHeadshot(tinker.Rarity, tinker);
 					}

@@ -773,12 +773,6 @@
 		"ko"		"대구경 저격소총"
 	}
 	
-	"Custom Sniper Rifle Desc"
-	{
-		"en"		"Heavy Caliber Sniper Rifle"
-		"ko"		"대구경 저격소총"
-	}
-	
 	"Custom Mini Semi Gun: Overheating FeedBack"
 	{
 		"en"		"Overheating FeedBack"
@@ -788,6 +782,42 @@
 	{
 		"en"		"Bullet Storm"
 		"ko"		"납탄 폭풍"
+	}
+	
+	"Custom Mini Semi Gun: Dead Eye"
+	{
+		"en"		"Overheating FeedBack"
+		"ko"		"괴열 피드백"
+	}
+	"Custom Sniper Rifle: Diligence"
+	{
+		"en"		"Diligence"
+		"ko"		"딜리전스"
+	}
+	"Custom Sniper Rifle: Diligence - Desc"
+	{
+		"en"		"Semi Automatic Rifle, you cannot hold down to shoot.\nIncreased damage, but you have to reload.\nM2: Zooming is possible and damage is increased. However, movement speed is reduced.\n-This Marksman rifle trades magazine capacity and rate of fire for powerful, accurate shots."
+		"ko"		"반자동 소총, 이 무기는 꾹 눌러서 사격할 수 없음.\n피해량 증가, 대신 장전을 해야함.\nM2: 조준이 가능하며 피해량이 증가함, 대신 이동속도가 감소됨\n-장탄 수와 연사율은 낮아졌지만 강력하고 정확한 사격이 가능한 지정사수소총입니다."
+	}
+	"Custom Sniper Rifle: Diligence Counter"
+	{
+		"en"		"Diligence Counter"
+		"ko"		"딜리전스 카운터"
+	}
+	"Custom Sniper Rifle: Diligence Counter - Desc"
+	{
+		"en"		"Increased damage, reduced movement speed and Increased damage while Zoom, no recoil, Increased headshot damage\nIncreased magazine capacity, decreased reload speed\nApply silence to the victim, 40s cooldown\n-A modified Diligence rifle, offering increased damage."
+		"ko"		"피해량 증가, 조준중 피해량 증가, 조준중 이속 감소 완화, 반동 없음, 헤드샷 피해량 증가\n장탄수 증가, 재장전 속도 감소\n피해자에게 침묵을 적용, 40초 쿨다운\n-개조형 딜리전스 소총으로, 대미지가 증가했습니다."
+	}
+	"Custom Sniper Rifle: Heavy Caliber RSASS"
+	{
+		"en"		"Heavy Caliber R.S.A.S.S"
+		"ko"		"대구경 R.S.A.S.S"
+	}
+	"Custom Sniper Rifle: Heavy Caliber R.S.A.S.S - Desc"
+	{
+		"en"		"Increased damage, Increased Damage while Zoom, Increased headshot damage\nIncreased magazine capacity, decreased reload speed\nYour aim will be fixed to nearby enemy and Always Headshot\nApply vulnerability to the victim, 40s cooldown\n-This is the weapon used by the legendary mercenary who once swept through all enemies.\n''Enemy contact''"
+		"ko"		"피해량 증가, 조준중 피해량 증가, 헤드샷 피해량 증가\n장탄수 증가, 재장전 속도 감소\nR:사용시 바라본 적에게 에임이 고정되며 항상 헤드샷 판정이 됨.\n피해자에게 피해 취약을 적용, 40초 쿨다운\n-한때 모든 적을 휩쓸던 전설의 용병이 사용하던 무기입니다.\n''적과 조우했다.''"
 	}
 	
 	//무기 설명

@@ -615,3 +615,8 @@ static float GetRailcannonPercentage(int weapon, int client)
 	return flMultiplier;
 }
 */
+
+public bool client_Is_Zoom_Active(int client)
+{
+	return Zoom_Active[client];
+}
