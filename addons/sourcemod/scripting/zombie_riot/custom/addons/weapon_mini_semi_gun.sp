@@ -145,7 +145,7 @@ public void Weapon_Mini_Semi_Gun_OverheatingFeedBack_M1(int client, int weapon, 
 	OverheatingFeedBack_RestTime[client] = GameTime + Attributes_Get(weapon, 6, 0.25) *0.4;
 	if(OverheatingFeedBack_FullMeltdown[client])
 		Ratio*=0.5;
-	Attributes_Set(weapon, 1, Ratio+1.0);
+	Attributes_Set(weapon, 1, (Ratio*0.5)+1.0);
 	float spread = 0.7-(0.35*Ratio);
 	if(spread < 0.3)spread = 0.3;
 	Attributes_Set(weapon, 106, spread);
