@@ -119,6 +119,9 @@ public void SniperRifle_NPCTakeDamage(int victim, int &attacker, int &inflictor,
 				TE_Particle("mvm_soldier_shockwave", damagePosition, NULL_VECTOR, {0.0,0.0,0.0}, -1, _, _, _, _, _, _, _, _, _, 0.0, .clientspec = attacker);
 			}
 		}
+		
+		if(!b_ThisWasAnNpc[victim] && Attributes_Get(weapon, Attrib_IsSniperRifle, 0.0)==2.0)
+			b_DoGibThisNpc[victim] = true;
 	}
 }
 static void Func_ExplosiveHeadshot(int entity, int victim, float damage, int weapon)
@@ -153,7 +156,11 @@ public void Weapon_SniperRifle_DMR_R(int client, int weapon, bool crit, int slot
 		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Already Used");
 		return;
 	}
-	if(i_SemiAutoWeapon_AmmoCount[weapon] <= 0
+	float Attrib = 1.0;
+	Attrib *= Attributes_Get(weapon, 3, 1.0);
+	Attrib *= Attributes_Get(weapon, 4, 1.0);
+	int MaxAmmo = RoundToCeil(float(i_SemiAutoStats_MaxAmmo[weapon])*Attrib);
+	if(i_SemiAutoWeapon_AmmoCount[weapon] < MaxAmmo
 	|| GetEntPropFloat(weapon, Prop_Send, "m_flNextPrimaryAttack") > GameTime)
 	{
 		ClientCommand(client, "playgamesound items/medshotno1.wav");
@@ -223,6 +230,34 @@ public void Weapon_SniperRifle_DMR_M2(int client, int weapon, bool crit, int slo
 
 public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slot)
 {
+	if(!IsValidEntity(weapon))
+		return;
+	if(i_SemiAutoWeapon_AmmoCount[weapon] <= 0)
+	{
+		int STOPIT = GetEntProp(weapon, Prop_Send, "m_nKillComboCount");
+		SetEntProp(weapon, Prop_Send, "m_nKillComboCount", STOPIT+1);
+		if(STOPIT>5)
+		{
+			int health = GetClientHealth(client);
+			float WorldSpaceVec[3]; WorldSpaceCenter(client, WorldSpaceVec);
+			TimedLgtning(client, WorldSpaceVec);
+			if(!IsInvuln(client))
+				SDKHooks_TakeDamage(client, 0, 0, float(health/2), DMG_TRUEDAMAGE|DMG_PREVENT_PHYSICS_FORCE);
+			SetEntPropFloat(client, Prop_Send, "m_flNextAttack", GetGameTime() + 5.0);
+			ApplyStatusEffect(client, client, "Ragdolled", 5.0);
+			FreezeNpcInTime(client, 5.0);
+			TF2_AddCondition(client, TFCond_LostFooting, 5.0);
+			TF2_AddCondition(client, TFCond_AirCurrent, 5.0);
+			SetEntProp(weapon, Prop_Send, "m_nKillComboCount", 0);
+			return;
+		}
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		ShowSyncHudText(client,  SyncHud_Notifaction, "STOP USE BUG!!!!!");
+		return;
+	}
+	SetEntProp(weapon, Prop_Send, "m_nKillComboCount", 0);
+
 	if(Attributes_Get(weapon, Attrib_ExplosiveHeadshot, 1.0) > 1.0)
 	{
 		float charge=GetEntPropFloat(weapon, Prop_Send, "m_flChargedDamage");
@@ -232,10 +267,10 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 	if(SniperRifle_RestTime[client] < GetGameTime())
 		SniperRifle_RestTime[client]=0.0;
 		
-	float accurate = 0.005;
+	float accurate = 1.0;
 	accurate *= Attributes_Get(weapon, 106, 1.0);
 	
-	if(SniperRifle_RestTime[client]==0.0)
+	if(SniperRifle_RestTime[client]==0.0 || SniperRifle_AIMBOTTime[client]!=0.0)
 		accurate=0.0;
 	else
 	{
@@ -243,19 +278,20 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 		AimSpreadDegrading=1.0*(AimSpreadDegrading/2.24);
 		if(AimSpreadDegrading<0.0)
 			AimSpreadDegrading=0.0;
-		if(AimSpreadDegrading>3.0)
-			AimSpreadDegrading=3.0;
+		if(AimSpreadDegrading>4.0)
+			AimSpreadDegrading=4.0;
 		accurate*=AimSpreadDegrading;
 	}
-	float x = GetRandomFloat( -1.0*accurate, accurate ) + GetRandomFloat( -1.0*accurate, accurate );
-	float y = GetRandomFloat( -1.0*accurate, accurate ) + GetRandomFloat( -1.0*accurate, accurate );
+	float x = GetRandomFloat( -0.05*accurate, 0.05*accurate ) + GetRandomFloat( -0.05*accurate, 0.05*accurate );
+	float y = GetRandomFloat( -0.05*accurate, 0.05*accurate ) + GetRandomFloat( -0.05*accurate, 0.05*accurate );
 	
 	accurate = 50.0;
 	if(client_Is_Zoom_Active(client))
 		accurate *= Attributes_Get(weapon, 41, 1.0);
 	
-	SniperRifle_RestTime[client] = GetGameTime()+((i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER
-		|| i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER_X) ? 0.72 : 1.0);
+	if(!SniperRifle_RestTime[client])
+		SniperRifle_RestTime[client] = GetGameTime()+((i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER
+			|| i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER_X) ? 0.72 : 1.0);
 	
 	static float vAngles[3], vOrigin[3], vecRight[3], vecUp[3];
 	GetClientEyePosition(client, vOrigin);
@@ -285,19 +321,39 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 		}
 		if(IsValidEntity(target) && IsValidEnemy(client, target))
 		{
-			if(SniperRifle_AIMBOTTime[client]!=0.0)
+			if((f_HeadshotDamageMultiNpc[target] <= 0.0 || b_CannotBeHeadshot[target]) && TR_GetHitGroup(trace) == HITGROUP_HEAD)
 			{
-				SniperRifle_HeadShot[client]=true;
-				b_HeadShot=true;
+				SniperRifle_HeadShot[client]=false;
+				b_HeadShot=false;
+				GetEntPropVector(target, Prop_Data, "m_vecAbsOrigin", vAngles);
+				if(b_BoundingBoxVariant[target] == BBV_Giant)
+				{
+					vAngles[2] += 120.0;
+				}
+				else
+				{
+					vAngles[2] += 82.0;
+				}
+				TE_ParticleInt(g_particleMissText, vAngles);
+				TE_SendToClient(client);
+				EmitSoundToClient(client, "physics/metal/metal_box_impact_bullet1.wav", target, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(95, 105));
+				accurate=0.0;
 			}
-		
-			if(!b_CannotBeHeadshot[target] && TR_GetHitGroup(trace) == HITGROUP_HEAD)
+			else
 			{
-				SniperRifle_Ignore[client]=EntIndexToEntRef(target);
-				SniperRifle_HeadShot[client]=true;
-				b_HeadShot=true;
-				if(client_Is_Zoom_Active(client))
-					accurate *= Attributes_Get(weapon, 304, 1.0);
+				if(SniperRifle_AIMBOTTime[client]!=0.0 && f_HeadshotDamageMultiNpc[target] > 0.0 && !b_CannotBeHeadshot[target])
+				{
+					SniperRifle_HeadShot[client]=true;
+					b_HeadShot=true;
+				}
+				if(TR_GetHitGroup(trace) == HITGROUP_HEAD)
+				{
+					SniperRifle_Ignore[client]=EntIndexToEntRef(target);
+					SniperRifle_HeadShot[client]=true;
+					b_HeadShot=true;
+					if(client_Is_Zoom_Active(client))
+						accurate *= Attributes_Get(weapon, 304, 1.0);
+				}
 			}
 			CalculateBulletDamageForce(vecRight, 1.0, vecUp);
 			CalcCorrectCWeaponDMG(target, client, client, accurate,

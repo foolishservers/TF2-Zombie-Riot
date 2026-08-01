@@ -776,7 +776,7 @@
 	"Custom Mini Semi Gun: Overheating FeedBack"
 	{
 		"en"		"Overheating FeedBack"
-		"ko"		"괴열 피드백"
+		"ko"		"과열 피드백"
 	}
 	"Custom Mini Semi Gun: Bullet Storm"
 	{
