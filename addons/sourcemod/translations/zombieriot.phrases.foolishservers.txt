@@ -790,6 +790,22 @@
 		"ko"		"납탄 폭풍"
 	}
 	
+	"Custom Mini Semi Gun: Dead Eye"
+	{
+		"en"		"Overheating FeedBack"
+		"ko"		"괴열 피드백"
+	}
+	"Custom Sniper Rifle: Diligence"
+	{
+		"en"		"Diligence"
+		"ko"		"딜리전스"
+	}
+	"Custom Sniper Rifle: Diligence - Dec"
+	{
+		"en"		"Diligence"
+		"ko"		"딜리전스"
+	}
+	
 	//무기 설명
 	"Chaos Infected Launcher desc"
 	{
