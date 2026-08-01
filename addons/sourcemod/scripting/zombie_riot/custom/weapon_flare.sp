@@ -51,16 +51,11 @@ public void KillingOrder_Fire(int client, int weapon, bool crit)
 		{
 			if(f_HeadshotDamageMultiNpc[target] <= 0.0)
 			{
-				float targetPos[3];
 				GetEntPropVector(target, Prop_Data, "m_vecAbsOrigin", targetPos);
 				if(b_BoundingBoxVariant[target] == BBV_Giant)
-				{
 					targetPos[2] += 120.0;
-				}
 				else
-				{
 					targetPos[2] += 82.0;
-				}
 				TE_ParticleInt(g_particleMissText, targetPos);
 				TE_SendToClient(client);
 				EmitSoundToClient(client, "physics/metal/metal_box_impact_bullet1.wav", target, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(95, 105));
