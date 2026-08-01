@@ -806,8 +806,8 @@
 	}
 	"Custom Sniper Rifle: Diligence Counter - Desc"
 	{
-		"en"		"Increased damage, reduced movement speed and Increased damage while Zoom, no recoil, Increased headshot damage\nIncreased magazine capacity, decreased reload speed\n-A modified Diligence rifle, offering increased damage."
-		"ko"		"피해량 증가, 조준중 피해량 증가, 조준중 이속 감소 완화, 반동 없음, 헤드샷 피해량 증가\n장탄수 증가, 재장전 속도 감소\n-개조형 딜리전스 소총으로, 대미지가 증가했습니다."
+		"en"		"Increased damage, reduced movement speed and Increased damage while Zoom, no recoil, Increased headshot damage\nIncreased magazine capacity, decreased reload speed\nApply silence to the victim, 40s cooldown\n-A modified Diligence rifle, offering increased damage."
+		"ko"		"피해량 증가, 조준중 피해량 증가, 조준중 이속 감소 완화, 반동 없음, 헤드샷 피해량 증가\n장탄수 증가, 재장전 속도 감소\n피해자에게 침묵을 적용, 40초 쿨다운\n-개조형 딜리전스 소총으로, 대미지가 증가했습니다."
 	}
 	"Custom Sniper Rifle: Heavy Caliber RSASS"
 	{
@@ -816,8 +816,8 @@
 	}
 	"Custom Sniper Rifle: Heavy Caliber R.S.A.S.S - Desc"
 	{
-		"en"		"Increased damage, Increased Damage while Zoom, Increased headshot damage\nIncreased magazine capacity, decreased reload speed\n\n-"
-		"ko"		"피해량 증가, 조준중 피해량 증가, 헤드샷 피해량 증가\n장탄수 증가, 재장전 속도 감소\n-"
+		"en"		"Increased damage, Increased Damage while Zoom, Increased headshot damage\nIncreased magazine capacity, decreased reload speed\nYour aim will be fixed to nearby enemy and Always Headshot\nApply vulnerability to the victim, 40s cooldown\n-This is the weapon used by the legendary mercenary who once swept through all enemies.\n''Enemy contact''"
+		"ko"		"피해량 증가, 조준중 피해량 증가, 헤드샷 피해량 증가\n장탄수 증가, 재장전 속도 감소\nR:사용시 바라본 적에게 에임이 고정되며 항상 헤드샷 판정이 됨.\n피해자에게 피해 취약을 적용, 40초 쿨다운\n-한때 모든 적을 휩쓸던 전설의 용병이 사용하던 무기입니다.\n''적과 조우했다.''"
 	}
 	
 	//무기 설명

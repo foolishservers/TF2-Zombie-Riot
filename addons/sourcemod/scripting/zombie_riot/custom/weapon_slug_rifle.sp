@@ -9,14 +9,19 @@ static float SniperRifle_ExplodDMG[MAXPLAYERS];
 static float SniperRifle_Charge[MAXPLAYERS];
 static float SniperRifle_RestTime[MAXPLAYERS];
 
+static int SniperRifle_DMR_AIMBOT[MAXPLAYERS];
+static float SniperRifle_AIMBOTTime[MAXPLAYERS];
+
 void Uranium_MapStart()
 {
 	Zero2(Uranium_TimeTillBigHit);
 	Zero(SniperRifle_HeadShot);
 	Zero(SniperRifle_Ignore);
+	Zero(SniperRifle_DMR_AIMBOT);
 	ZeroFloat(SniperRifle_ExplodDMG);
 	ZeroFloat(SniperRifle_Charge);
 	ZeroFloat(SniperRifle_RestTime);
+	ZeroFloat(SniperRifle_AIMBOTTime);
 	PrecacheSound("weapons/doom_scout_pistol.wav");
 	PrecacheSound("weapons/doom_scout_pistol_crit.wav");
 	PrecacheSound("weapons/csgo_awp_shoot.wav");
@@ -134,6 +139,76 @@ public void Weapon_SniperRifle_DMR_Holster(int client, int weapon)
 		Attributes_Set(weapon, 107, 1.0);
 		TF2_AddCondition(client, TFCond_SpeedBuffAlly, 0.00001);
 	}
+	SDKUnhook(client, SDKHook_PreThink, Weapon_SniperRifle_DMR_M1_PreThink);
+}
+
+public void Weapon_SniperRifle_DMR_R(int client, int weapon, bool crit, int slot)
+{
+	float GameTime = GetGameTime();
+	if(SniperRifle_AIMBOTTime[client] > GameTime)
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		SetGlobalTransTarget(client);
+		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Already Used");
+		return;
+	}
+	if(i_SemiAutoWeapon_AmmoCount[weapon] <= 0
+	|| GetEntPropFloat(weapon, Prop_Send, "m_flNextPrimaryAttack") > GameTime)
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		return;
+	}
+	float Ability_CD = Ability_Check_Cooldown(client, slot);
+
+	if(Ability_CD <= 0.0 || CvarInfiniteCash.BoolValue)
+		Ability_CD = 0.0;
+	if(Ability_CD > 0.0)
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		SetGlobalTransTarget(client);
+		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);
+		return;
+	}
+	Handle swingTrace;
+	float vecSwingForward[3];
+	StartLagCompensation_Base_Boss(client);
+	DoSwingTrace_Custom(swingTrace, client, vecSwingForward, 9900.0, false, 9900.0, true); //infinite range, and does not ignore walls!
+	FinishLagCompensation_Base_boss();
+	
+	int target = TR_GetEntityIndex(swingTrace);	
+	delete swingTrace;
+	if(!IsValidEnemy(client, target, true))
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		return;
+	}
+	Rogue_OnAbilityUse(client, weapon);
+	Ability_Apply_Cooldown(client, slot, 65.0);
+	MakePlayerGiveResponseVoice(client, 1);
+	ApplyStatusEffect(client, client, "Aimbot", 2.0);
+	SniperRifle_DMR_AIMBOT[client] = EntIndexToEntRef(target);
+	SniperRifle_AIMBOTTime[client] = GameTime + 2.0;	
+	TF2_AddCondition(client, TFCond_HalloweenCritCandy, 2.0, client);
+	SDKUnhook(client, SDKHook_PreThink, Weapon_SniperRifle_DMR_M1_PreThink);
+	SDKHook(client, SDKHook_PreThink, Weapon_SniperRifle_DMR_M1_PreThink);
+}
+
+static void Weapon_SniperRifle_DMR_M1_PreThink(int client)
+{
+	if(SniperRifle_AIMBOTTime[client] > GetGameTime())
+	{
+		int ChargeEnemy = EntRefToEntIndex(SniperRifle_DMR_AIMBOT[client]);
+		if(IsValidEnemy(client, ChargeEnemy, true))
+			LookAtTarget(client, ChargeEnemy);
+		return;
+	}
+	SniperRifle_DMR_AIMBOT[client] = -1;
+	SniperRifle_AIMBOTTime[client] = 0.0;
+	if(TF2_IsPlayerInCondition(client, TFCond_HalloweenCritCandy))
+		TF2_RemoveCondition(client, TFCond_HalloweenCritCandy);
+	SDKUnhook(client, SDKHook_PreThink, Weapon_SniperRifle_DMR_M1_PreThink);
 }
 
 public void Weapon_SniperRifle_DMR_M2(int client, int weapon, bool crit, int slot)
@@ -199,6 +274,12 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 		}
 		if(IsValidEntity(target) && IsValidEnemy(client, target))
 		{
+			if(SniperRifle_AIMBOTTime[client]!=0.0)
+			{
+				SniperRifle_HeadShot[client]=true;
+				b_HeadShot=true;
+			}
+		
 			if(!b_CannotBeHeadshot[target] && TR_GetHitGroup(trace) == HITGROUP_HEAD)
 			{
 				SniperRifle_Ignore[client]=EntIndexToEntRef(target);
@@ -211,11 +292,12 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 			CalcCorrectCWeaponDMG(target, client, client, accurate,
 			DMG_BULLET, weapon, vecUp,
 			vecRight, ZR_DAMAGE_NONE, b_HeadShot, b_HeadShot ? 2 : 0);
-			if(Attributes_Get(weapon, Attrib_PapNumber, 1.0)>=2.0 && Uranium_TimeTillBigHit[attacker][victim] < GetGameTime())
+			if(Attributes_Get(weapon, Attrib_PapNumber, 1.0)>=2.0 && Uranium_TimeTillBigHit[client][target] < GetGameTime())
 			{
-				ApplyStatusEffect(npc.index, target, "Silenced", (IsValidClient(target) ? 5.0 : (b_thisNpcIsARaid[target] || b_thisNpcIsABoss[target] ? 3.0 : 5.0)));
+				ApplyStatusEffect(client, target, "Silenced", (b_thisNpcIsARaid[target] || b_thisNpcIsABoss[target]) ? 3.0 : 5.0);
 				if(Attributes_Get(weapon, Attrib_PapNumber, 1.0)>=3.0)
-					IncreaseEntityDamageTakenBy(target, 0.2, 2.5, true);
+					IncreaseEntityDamageTakenBy(target, 0.1, (b_thisNpcIsARaid[target] || b_thisNpcIsABoss[target]) ? 3.0 : 5.0, true);
+				Uranium_TimeTillBigHit[client][target] = GetGameTime() + 40.0;
 			}
 		}
 	}
@@ -223,29 +305,13 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 	
 	//view_as<CClotBody>(weapon).GetAttachment("muzzle", vecDir, vAngles);
 	//Offset_Vector({ 60.9, 13.1, -15.1 }, vecDir, vecDir);
-	CalcCorrectWeaponShootPosition(vOrigin, vecDir);
+	CalcCorrectWeaponShootPosition({ 60.9, 13.1, -15.1 }, vOrigin, vecDir);
 	ShootLaser(weapon, "tfc_sniper_distortion_trail", vOrigin, vecRight, false);
 	ShootLaser(weapon, b_HeadShot ? "bullet_tracer01_red_crit" : "bullet_tracer01_red", vOrigin, vecRight, false);
 	EmitSoundToAll(
 	Attributes_Get(weapon, Attrib_PapNumber, 1.0)>=3.0 ? (b_HeadShot ? "weapons/csgo_awp_shoot_crit.wav" : "weapons/csgo_awp_shoot.wav") 
 	: (b_HeadShot ? "weapons/doom_scout_pistol_crit.wav" : "weapons/doom_scout_pistol.wav")
 	, weapon);
-}
-
-stock void CalcCorrectWeaponShootPosition(float vecStartPosition[3], const float vecAngles[3])
-{
-	float vecForward[3], vecRight[3], vecUp[3];
-	GetAngleVectors(vecAngles, vecForward, vecRight, vecUp);
-
-	static const float vecOffset[3] = { 60.9, 13.1, -15.1 };
-	ScaleVector(vecForward, vecOffset[0]);
-	ScaleVector(vecRight, vecOffset[1]);
-	ScaleVector(vecUp, vecOffset[2]);
-	// ScaleVector(vecUp, GetEntityFlags(client) & FL_DUCKING ? 8.0 : -3.0);
-
-	AddVectors(vecStartPosition, vecForward, vecStartPosition);
-	AddVectors(vecStartPosition, vecRight, vecStartPosition);
-	AddVectors(vecStartPosition, vecUp, vecStartPosition);
 }
 
 stock void CalcCorrectCWeaponDMG(int target = 0, int inflictor = 0, int attacker = 0, float damage = 0.0,
