@@ -19,6 +19,8 @@ void Uranium_MapStart()
 	ZeroFloat(SniperRifle_RestTime);
 	PrecacheSound("weapons/doom_scout_pistol.wav");
 	PrecacheSound("weapons/doom_scout_pistol_crit.wav");
+	PrecacheSound("weapons/csgo_awp_shoot.wav");
+	PrecacheSound("weapons/csgo_awp_shoot_crit.wav");
 }
 
 void EnemyResetUranium(int enemy)
@@ -128,14 +130,20 @@ public void Weapon_SniperRifle_DMR_Holster(int client, int weapon)
 {
 	Weapon_Railcannon_Pap2_Holster(client, -1, false, -1);
 	if(IsValidEntity(weapon))
+	{
 		Attributes_Set(weapon, 107, 1.0);
+		TF2_AddCondition(client, TFCond_SpeedBuffAlly, 0.00001);
+	}
 }
 
 public void Weapon_SniperRifle_DMR_M2(int client, int weapon, bool crit, int slot)
 {
 	Weapon_Railcannon_Pap2_Zoom(client, -1, false, -1);
 	if(IsValidEntity(weapon))
-		Attributes_Set(weapon, 107, client_Is_Zoom_Active(client) ? 0.7 : 1.0);
+	{
+		Attributes_Set(weapon, 107, client_Is_Zoom_Active(client) ? Attributes_Get(weapon, 75, 1.0) : 1.0);
+		TF2_AddCondition(client, TFCond_SpeedBuffAlly, 0.00001);
+	}
 }
 
 public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slot)
@@ -149,21 +157,19 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 	if(SniperRifle_RestTime[client] < GetGameTime())
 		SniperRifle_RestTime[client]=0.0;
 		
-	float accurate = 0.01;
+	float accurate = 0.005;
 	accurate *= Attributes_Get(weapon, 106, 1.0);
 	if(SniperRifle_RestTime[client]==0.0)
 		accurate=0.0;
 	float x = GetRandomFloat( -1.0*accurate, accurate ) + GetRandomFloat( -1.0*accurate, accurate );
 	float y = GetRandomFloat( -1.0*accurate, accurate ) + GetRandomFloat( -1.0*accurate, accurate );
 	
+	accurate = 50.0;
 	if(client_Is_Zoom_Active(client))
-	{
-		accurate = 50.0;
 		accurate *= Attributes_Get(weapon, 41, 1.0);
-		accurate *= Attributes_Get(weapon, 390, 1.0);
-	}
 	
-	SniperRifle_RestTime[client] = GetGameTime()+0.8;
+	SniperRifle_RestTime[client] = GetGameTime()+((i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER
+		|| i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER_X) ? 0.2 : 0.8);
 	
 	static float vAngles[3], vOrigin[3], vecRight[3], vecUp[3];
 	GetClientEyePosition(client, vOrigin);
@@ -198,11 +204,19 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 				SniperRifle_Ignore[client]=EntIndexToEntRef(target);
 				SniperRifle_HeadShot[client]=true;
 				b_HeadShot=true;
+				if(client_Is_Zoom_Active(client))
+					accurate *= Attributes_Get(weapon, 304, 1.0);
 			}
 			CalculateBulletDamageForce(vecRight, 1.0, vecUp);
 			CalcCorrectCWeaponDMG(target, client, client, accurate,
 			DMG_BULLET, weapon, vecUp,
 			vecRight, ZR_DAMAGE_NONE, b_HeadShot, b_HeadShot ? 2 : 0);
+			if(Attributes_Get(weapon, Attrib_PapNumber, 1.0)>=2.0 && Uranium_TimeTillBigHit[attacker][victim] < GetGameTime())
+			{
+				ApplyStatusEffect(npc.index, target, "Silenced", (IsValidClient(target) ? 5.0 : (b_thisNpcIsARaid[target] || b_thisNpcIsABoss[target] ? 3.0 : 5.0)));
+				if(Attributes_Get(weapon, Attrib_PapNumber, 1.0)>=3.0)
+					IncreaseEntityDamageTakenBy(target, 0.2, 2.5, true);
+			}
 		}
 	}
 	delete trace;
@@ -212,7 +226,10 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 	CalcCorrectWeaponShootPosition(vOrigin, vecDir);
 	ShootLaser(weapon, "tfc_sniper_distortion_trail", vOrigin, vecRight, false);
 	ShootLaser(weapon, b_HeadShot ? "bullet_tracer01_red_crit" : "bullet_tracer01_red", vOrigin, vecRight, false);
-	EmitSoundToAll(b_HeadShot ? "weapons/doom_scout_pistol_crit.wav" : "weapons/doom_scout_pistol.wav", weapon);
+	EmitSoundToAll(
+	Attributes_Get(weapon, Attrib_PapNumber, 1.0)>=3.0 ? (b_HeadShot ? "weapons/csgo_awp_shoot_crit.wav" : "weapons/csgo_awp_shoot.wav") 
+	: (b_HeadShot ? "weapons/doom_scout_pistol_crit.wav" : "weapons/doom_scout_pistol.wav")
+	, weapon);
 }
 
 stock void CalcCorrectWeaponShootPosition(float vecStartPosition[3], const float vecAngles[3])
