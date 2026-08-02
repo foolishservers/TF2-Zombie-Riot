@@ -1013,6 +1013,64 @@
 		"ko"	"반갑네 제군들. 이번 공허 확산 사태로부터 자네들을 돕기 위해 내가 왔네."
 	}
 	
+	// Calmaticus.
+	"Calmaticus_Encounter"
+	{
+		"en"		"You all will be one with the virus."
+		"ko"		"너희도 감염체가 될 것이다."
+	}
+	"Calmaticus_Encounter_Enraged"
+	{
+		"en"		"YOU WILL BECOME DNA SUPPLEMENTS."
+		"ko"		"너희는 DNA 공급원이 될 것이다."
+	}
+	
+	"Calmaticus_Lose"
+	{
+		"en"		"{snow}???{default}: Good job Calmaticus, head back to the lab."
+		"ko"		"{snow}???{default}: 아주 잘 했다, 칼마티커스. 이제 연구소로 돌아와라."
+	}
+	"Calmaticus_Lose_Enraged"
+	{
+		"en"		"{crimson}You afterall... had no chance."
+		"ko"		"{crimson}결국... 당신들에겐 승산이 없었던 거야."
+	}
+	
+	"Calmaticus_Trophies"
+	{
+		"en"		"You cut its heart to ensure his death and gained: {green}''Calmaticus' Heart Piece''{default}!"
+		"ko"		"당신은 그의 확인 사살을 위해 심장을 떼어냈습니다. 당신이 얻은 것은... {green}''칼마티커스'의 심장 조각''{default}!"
+	}
+	
+	// Vivithorn.
+	"Vivithorn_Encounter"
+	{
+		"en"		"..."
+		"ko"		"..."
+	}
+	"Vivithorn_FirstMatch_Death"
+	{
+		"en"		"I have to activate Project Calmaticus..."
+		"ko"		"칼마티커스 프로젝트를 가동시킬 때가 왔군..."
+	}
+	"Vivithorn_Rematch_Death"
+	{
+		"en"		"{green}Vivithorn escapes... but heavily wounded..."
+		"ko"		"{green}비비쏜이 도주했습니다... 중상을 입은 채로 말이죠..."
+	}
+	
+	// Xeno Duo Shared
+	"XenoDuo_LastMann"
+	{
+		"en"		"{green}The infection got all your friends... Run while you can."
+		"ko"		"{green}감염이 당신의 동료를 전부 집어삼키고 말았습니다... 가능하면 도망치세요."
+	}
+	"XenoDuo_TimeOver"
+	{
+		"en"		"{green}The infection proves too strong for you to resist as you join his side..."
+		"ko"		"{green}감염은 저항하기엔 너무나도 강력했습니다. 이제 그들과 같아져 버렸군요..."
+	}
+	
 	// God Alaxios.
 	"God_Alaxios_Sea_Death_Throes_1"
 	{
@@ -1756,6 +1814,7 @@
 		"ko"		"대체 왜 안 죽는 거냔 말이다!!!!!"
 	}
 	
+	// I'm Sorry. Messenger is inversed win message.
 	"Messenger_Win_FirstMatch_1"
 	{
 		"en"		"Judgement delivered."
