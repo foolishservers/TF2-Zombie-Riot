@@ -235,7 +235,7 @@
 	}
 	"Inv Mini Shell Pouch desc"
 	{
-		"en"	"Multi Pellet Weapon Only\n50％ more Max Clip, and Reload Speed +5％\Damage -30％, Bullets per shot -20％, Accuracy -30％\n The commander kit’s shotgun increases attack speed by 20%"
+		"en"	"Multi Pellet Weapon Only\n50％ more Max Clip, and Reload Speed +5％\Damage -30％, Bullets per shot -20％, Accuracy -30％\nThe Commander’s Shotgun increases Attack Speed by 20％"
 		"ko"	"산탄 무기 전용\n장탄수 +50％, 장속 +5％\n피해량 -30％, 탄환수 -20％, 집탄율 -30％\n지휘관 킷의 샷건은 공속이 20％ 증가"
 	}
 	"Rose of SelfHarm"
