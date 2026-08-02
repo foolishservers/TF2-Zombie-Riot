@@ -1039,7 +1039,7 @@ static void CyberMessenger_OnTakeDamagePost(int victim, int attacker, int inflic
 		f_MessengerSpeedUp[npc.index] = 1.65;
 		npc.m_flSpeed = 330.0;
 
-		TheMessenger_NPCTalkMessage(entity, "Messenger_Anger_CyberGrind_%d", true, GetRandomInt(1, 2));
+		TheMessenger_NPCTalkMessage(npc.index, "Messenger_Anger_CyberGrind_%d", true, GetRandomInt(1, 2));
 	}
 }
 

@@ -1517,7 +1517,7 @@
 	"Messenger_Encounter_CyberGrind"
 	{
 		"en"		"ROUND THREE."
-		"ko"		"3차전은 준비 됐겠지, 죄인들!"
+		"ko"		"3차전은 준비됐겠지, 죄인들!"
 	}
 	"Messenger_Encounter_BossrushDuo"
 	{
