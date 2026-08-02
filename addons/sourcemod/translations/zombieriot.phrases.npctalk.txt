@@ -1525,6 +1525,12 @@
 		"ko"		"죽을 준비는 했겠지, 죄인들?"
 	}
 	
+	"Messenger_Encounter_CyberGrind_Inform"
+	{
+		"en"		"This time, I've prepared a special trick for you sinners. Now, savor the combination of hellfire and frostbite!!"
+		"ko"		"이번엔 너희 죄인들을 위해 특별한 트릭을 준비했지. 지옥불과 서릿발의 조합을 맛보거라!!"
+	}
+	
 	"Messenger_Behold_Khalm"
 	{
 		"en"		"{crimson}AHAHAHAHHAHAHAHA!!! KNEEL BEFORE THE LORD'S MIGHT!"
@@ -1555,8 +1561,8 @@
 	
 	"Messenger_TimeOver_CyberGrind"
 	{
-		"en"		"..........."
-		"ko"		"..........."
+		"en"		"Well, well.. Looks like round 3 was a bit TOUGH, huh??"
+		"ko"		"이런 이런.. 3차전은 좀 빡셌나?"
 	}
 	
 	"Messenger_LastMann_FirstMatch_1"
@@ -1598,8 +1604,8 @@
 	
 	"Messenger_LastMann_CyberGrind"
 	{
-		"en"		"FINALLY!!!!"
-		"ko"		"드디어!!!!"
+		"en"		"FINALLY!!!! YOU'RE THE LAST ONE LEFT!!!!!"
+		"ko"		"드디어!!!! 너만 남았다!!!!!"
 	}
 	
 	"Messenger_GroupAttack_1"
@@ -1626,6 +1632,22 @@
 	{
 		"en"		"You fucks are just a waste of my time."
 		"ko"		"나는 너희들과 이 지랄하면서 놀 시간이 없다."
+	}
+	
+	"Messenger_GroupAttack_CyberGrind_1"
+	{
+		"en"		"No more holding back!!!"
+		"ko"		"더 이상 봐주지 않는다!!!"
+	}
+	"Messenger_GroupAttack_CyberGrind_2"
+	{
+		"en"		"You're worth the time it takes to kill you. I'll finish you all with this attack!!"
+		"ko"		"너희같은 죄인을 죽이는데 시간이 아깝지 않지. 이 공격으로 너희를 끝내주마!!"
+	}
+	"Messenger_GroupAttack_CyberGrind_3"
+	{
+		"en"		"You sinners! {crimson}I shall EXECUTE you myself!!!"
+		"ko"		"죄인들! {crimson}즉결 처형의 시간이다!!!"
 	}
 	
 	"Messenger_Response_Messenger"
@@ -1686,6 +1708,12 @@
 		"ko"		"씨발 씨발 씨발 {crimson}씨발!!!{default}"
 	}
 	
+	"Messenger_Death_CyberGrind"
+	{
+		"en"		"THREE times?! I lost THREE times?!"
+		"ko"		"세 번씩이나 졌단 말인가!!"
+	}
+	
 	"Messenger_Anger_1"
 	{
 		"en"		"AHAHAHAHAHHA, all of you are so{crimson}FUCKED!!"
@@ -1715,6 +1743,17 @@
 	{
 		"en"		"{crimson}DIE ALREADY!!!"
 		"ko"		"{crimson}좀 뒈져라!!!"
+	}
+	
+	"Messenger_Anger_CyberGrind_1"
+	{
+		"en"		"JUST FUCKING DIE ALREADY!!!!!!!!!!!!!"
+		"ko"		"제발 좀 쳐 뒈져!!!!!!!!!!!!!"
+	}
+	"Messenger_Anger_CyberGrind_2"
+	{
+		"en"		"WHY WON'T YOU JUST DIE?!"
+		"ko"		"대체 왜 안 죽는 거냔 말이다!!!!!"
 	}
 	
 	"Messenger_Win_FirstMatch_1"
@@ -1749,7 +1788,11 @@
 		"ko"		"이제 만족하십니까? 주군이시여...."
 	}
 	
-	
+	"Messenger_Win_CyberGrind"
+	{
+		"en"		"Finally, victory is MINE! You fucking idiots..."
+		"ko"		"드디어.. 나의 승리다! 이 머저리 새기들..."
+	}
 	
 	// Bladedance.
 	"Bladedance_Encounter"
