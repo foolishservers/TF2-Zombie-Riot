@@ -120,7 +120,7 @@ stock bool Custom_Inventory_Enable(int client, int entity, int Attribute)
 
 public void Custom_Inventory_Attribute(int client, int weapon)
 {
-	if(i_WeaponArchetype[weapon] == Archetype_Charger && Custom_Inventory_IsShotgun(weapon))
+	if(i_WeaponArchetype[weapon] == Archetype_Charger && Custom_Inventory_IsShotgun(weapon, client))
 	{
 		if(Inv_Slug_Shell_Pouch[client])
 		{
@@ -134,6 +134,7 @@ public void Custom_Inventory_Attribute(int client, int weapon)
 		
 			if(Pellets>1)
 			{
+				bool CompleteFailure;
 				switch(i_CustomWeaponEquipLogic[weapon])
 				{
 					case WEAPON_BOOMSTICK, WEAPON_IS_SHOTGUN, WEAPON_ANGELIC_SHOTGUN, WEAPON_IS_AUTOSHOTGUN:
@@ -163,6 +164,22 @@ public void Custom_Inventory_Attribute(int client, int weapon)
 						{
 							Attributes_Set(weapon, 45, 0.25);
 							Pellets=RoundToCeil(4.0*ExtraPellets);
+							Attributes_SetMulti(weapon, 2, float(Pellets));
+							if(i_WeaponDamageFalloff[weapon]==1.0)
+								i_WeaponDamageFalloff[weapon]=0.99;
+							else
+								i_WeaponDamageFalloff[weapon]-=0.01;
+						}
+					}
+					default: CompleteFailure=true;
+				}
+				if(CompleteFailure)
+				{
+					if(IsValidClient(client) && Inv_ReconstructiveShotgun_Enable(client))
+					{
+						if(ExtraPellets)
+						{
+							Attributes_Set(weapon, 45, 0.1);
 							Attributes_SetMulti(weapon, 2, float(Pellets));
 							if(i_WeaponDamageFalloff[weapon]==1.0)
 								i_WeaponDamageFalloff[weapon]=0.99;
@@ -201,6 +218,9 @@ public void Custom_Inventory_Attribute(int client, int weapon)
 				Attributes_Set(weapon, 97, 1.0);
 			Attributes_SetMulti(weapon, 4, 1.5);
 			Attributes_SetMulti(weapon, 97, 0.95);
+			if(Inv_ReconstructiveShotgun_Enable(client))
+				Attributes_SetMulti(weapon, 5, 0.8);
+			
 			if(i_WeaponDamageFalloff[weapon]==1.0)
 				i_WeaponDamageFalloff[weapon]=0.99;
 			else
@@ -345,7 +365,7 @@ public float Custom_Inventory_NPCOnTakeDamage(int victim, int attacker, int infl
 
 	if(IsValidClient(attacker))
 	{
-		if(Inv_Dragon_Breath_Shell[attacker] && Custom_Inventory_IsShotgun(weapon))
+		if(Inv_Dragon_Breath_Shell[attacker] && Custom_Inventory_IsShotgun(weapon, attacker))
 		{
 			if(!(damagetype & DMG_TRUEDAMAGE) && !(i_HexCustomDamageTypes[victim] & ZR_DAMAGE_DO_NOT_APPLY_BURN_OR_BLEED))
 			{
@@ -374,7 +394,7 @@ public float Custom_Inventory_NPCOnTakeDamage(int victim, int attacker, int infl
 			float YPOS = GetVectorDistance(attackerPos, victimPos);
 			if(YPOS>100.0) damage *= 1.10;
 		}
-		if(Store_HasNamedItem(attacker, "Grigori's Personal 12g Ammo"))
+		if(Store_HasNamedItem(attacker, "Grigori's Personal 12g Ammo") && Custom_Inventory_IsShotgun(weapon, attacker))
 		{
 			float value = Attributes_Get(weapon, Attrib_ArmorOnHitMax, 0.0);
 			if(PreventSameFrameGivearmor[attacker] == GetGameTime())
@@ -385,6 +405,7 @@ public float Custom_Inventory_NPCOnTakeDamage(int victim, int attacker, int infl
 				PreventSameFrameGivearmor[attacker] = GetGameTime();
 				if(b_thisNpcIsARaid[victim])
 					value *= 2.0;
+				value *= 1.5;
 					
 				float attackerPos[3], victimPos[3];
 				GetEntPropVector(attacker, Prop_Send, "m_vecOrigin", attackerPos);
@@ -417,7 +438,7 @@ bool Inv_Mining_Foreman_Hat_Enable(int client)
 	return Inv_Mining_Foreman_Hat[client];
 }
 
-bool Custom_Inventory_IsShotgun(int weapon)
+bool Custom_Inventory_IsShotgun(int weapon, int client=-1)
 {
 	if(IsValidEntity(weapon) && i_WeaponArchetype[weapon] == Archetype_Charger)
 	{
@@ -430,6 +451,8 @@ bool Custom_Inventory_IsShotgun(int weapon)
 					return true;
 			}
 		}
+		if(IsValidClient(client) && Inv_ReconstructiveShotgun_Enable(client))
+			return true;
 	}
 	return false;
 }
@@ -447,6 +470,8 @@ float Custom_Inventory_Falloff(int attacker, int weapon)
 					return 0.77;
 			}
 		}
+		if(Inv_ReconstructiveShotgun_Enable(attacker))
+			return 0.77;
 	}
 	if(IsValidEntity(weapon) && Inv_Mini_Shell[attacker] && i_WeaponArchetype[weapon] == Archetype_Charger)
 	{
@@ -459,6 +484,8 @@ float Custom_Inventory_Falloff(int attacker, int weapon)
 					return 0.83;
 			}
 		}
+		if(Inv_ReconstructiveShotgun_Enable(attacker))
+			return 0.83;
 	}
 	return 1.0;
 }

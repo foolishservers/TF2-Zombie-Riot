@@ -16,6 +16,7 @@ static float Barracks_PowerHitTime[MAXPLAYERS];				// Timer for the Crouch + M1 
 static float Barracks_NovaCDTime[MAXPLAYERS];				// Cd for the healing nova of the shotgun
 static float ReDash[MAXPLAYERS];							// For the 5s window of the Chain Hit
 static int WeaponSMGID[MAXPLAYERS];
+static int WeaponReconstructiveShotgunID[MAXPLAYERS];
 bool BR_Precached = false;
 
 /*
@@ -51,6 +52,7 @@ public void Barracks_OnMapStart()
 	Zero(Barracks_NovaCDTime);
 	Zero(Barracks_PowerHitTime);
 	Zero(WeaponSMGID);
+	Zero(WeaponReconstructiveShotgunID);
 	
 	BR_Precached = false;
 }
@@ -162,6 +164,16 @@ public void Enable_CastleSiege(int client, int weapon)
 {
 	WeaponSMGID[client] = EntIndexToEntRef(weapon);
 }
+public void Enable_Barracks_Hunter(int client, int weapon)
+{
+	WeaponReconstructiveShotgunID[client] = EntIndexToEntRef(weapon);
+}
+bool Inv_ReconstructiveShotgun_Enable(int client)
+{
+	int IsValidShotgun = EntRefToEntIndex(WeaponReconstructiveShotgunID[client]);
+	return IsValidEntity(IsValidShotgun);
+}
+
 public void Weapon_CastleSiege_M2(int client, int weapon, bool crit, int slot)
 {
 	EmitSoundToClient(client, WEAPON_SWITCH_SOUND, client, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
@@ -191,7 +203,7 @@ public void Barracks_CastleSiegeMode(int client, int weapon, bool crit, int slot
 		return;
 	}
 	Rogue_OnAbilityUse(client, weapon);
-	Ability_Apply_Cooldown(client, slot, 65.0);
+	Ability_Apply_Cooldown(client, slot, 40.0);
 	FakeClientCommandEx(client, "voicemenu 2 1");
 	ApplyStatusEffect(client, client, "Barracks Prepare Siege", 3.5 + (float(WeaponPap[client]) * 2.5));
 }
