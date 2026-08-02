@@ -235,8 +235,8 @@
 	}
 	"Inv Mini Shell Pouch desc"
 	{
-		"en"	"Multi Pellet Weapon Only\n50％ more Max Clip, and Reload Speed +5％\Damage -30％, Bullets per shot -20％, Accuracy -30％"
-		"ko"	"산탄 무기 전용\n장탄수 +50％, 장속 +5％\n피해량 -30％, 탄환수 -20％, 집탄율 -30％"
+		"en"	"Multi Pellet Weapon Only\n50％ more Max Clip, and Reload Speed +5％\Damage -30％, Bullets per shot -20％, Accuracy -30％\nThe Commander’s Shotgun increases Attack Speed by 20％"
+		"ko"	"산탄 무기 전용\n장탄수 +50％, 장속 +5％\n피해량 -30％, 탄환수 -20％, 집탄율 -30％\n지휘관 킷의 샷건은 공속이 20％ 증가"
 	}
 	"Rose of SelfHarm"
 	{
@@ -342,6 +342,16 @@
 	{
 		"en"	"Multi Pellet Weapon Only\nGain armor per enemy hit upto half of your armor.\nIf recently hurt, its only 25％\Damage -20％"
 		"ko"	"산탄 무기 전용\n적중시 아머를 회복하며 최대 아머의 절반까지 회복\n최근에 피해를 받았다면, 이 효과가 25％로 감소합니다.\n피해량 -20％"
+	}
+	"Barracks Mastery"
+	{
+		"en"	"Barracks Mastery"
+		"ko"	"배럭 마스터리"
+	}
+	"Inv Barracks Mastery desc"
+	{
+		"en"	"The Commander Kit Only\nBarracks units’ max HP increases by 15％ and Barracks units Overheal by 50％\nResource Regen increase by 15％"
+		"ko"	"지휘관 킷 전용\n배럭 유닛 최대 체력 15％ 증가, 배럭 유닛은 50％ 과치료되서 나옵니다\n자원 수급량 15％ 증가"
 	}
 	
 	//인벤토리 첼린지
@@ -548,6 +558,16 @@
 	{
 		"en"	"Revive downed allies faster while Uber is active."
 		"ko"	"우버 지속 중 쓰러진 아군을 더 빠르게 소생시킴."
+	}
+	"Barracks Prepare Siege"
+	{
+		"en"	"Barracks Prepare Siege"
+		"ko"	"배럭 전투준비"
+	}
+	"Barracks Prepare Siege Desc"
+	{
+		"en"	"Training and Research Speed increases."
+		"ko"	"훈련 및 연구 속도가 증가합니다."
 	}
 	
 	//무기 이름
@@ -767,12 +787,6 @@
 		"ko"		"차원 왜곡: 연구소"
 	}
 	
-	"Sniper Rifle - pap1"
-	{
-		"en"		"Heavy Caliber Sniper Rifle"
-		"ko"		"대구경 저격소총"
-	}
-	
 	"Custom Mini Semi Gun: Overheating FeedBack"
 	{
 		"en"		"Overheating FeedBack"
@@ -784,40 +798,26 @@
 		"ko"		"납탄 폭풍"
 	}
 	
-	"Custom Mini Semi Gun: Dead Eye"
-	{
-		"en"		"Overheating FeedBack"
-		"ko"		"괴열 피드백"
-	}
 	"Custom Sniper Rifle: Diligence"
 	{
 		"en"		"Diligence"
 		"ko"		"딜리전스"
-	}
-	"Custom Sniper Rifle: Diligence - Desc"
-	{
-		"en"		"Semi Automatic Rifle, you cannot hold down to shoot.\nIncreased damage, but you have to reload.\nM2: Zooming is possible and damage is increased. However, movement speed is reduced.\n-This Marksman rifle trades magazine capacity and rate of fire for powerful, accurate shots."
-		"ko"		"반자동 소총, 이 무기는 꾹 눌러서 사격할 수 없음.\n피해량 증가, 대신 장전을 해야함.\nM2: 조준이 가능하며 피해량이 증가함, 대신 이동속도가 감소됨\n-장탄 수와 연사율은 낮아졌지만 강력하고 정확한 사격이 가능한 지정사수소총입니다."
 	}
 	"Custom Sniper Rifle: Diligence Counter"
 	{
 		"en"		"Diligence Counter"
 		"ko"		"딜리전스 카운터"
 	}
-	"Custom Sniper Rifle: Diligence Counter - Desc"
-	{
-		"en"		"Increased damage, reduced movement speed and Increased damage while Zoom, no recoil, Increased headshot damage\nIncreased magazine capacity, decreased reload speed\nApply silence to the victim, 40s cooldown\n-A modified Diligence rifle, offering increased damage."
-		"ko"		"피해량 증가, 조준중 피해량 증가, 조준중 이속 감소 완화, 반동 없음, 헤드샷 피해량 증가\n장탄수 증가, 재장전 속도 감소\n피해자에게 침묵을 적용, 40초 쿨다운\n-개조형 딜리전스 소총으로, 대미지가 증가했습니다."
-	}
 	"Custom Sniper Rifle: Heavy Caliber RSASS"
 	{
 		"en"		"Heavy Caliber R.S.A.S.S"
 		"ko"		"대구경 R.S.A.S.S"
 	}
-	"Custom Sniper Rifle: Heavy Caliber R.S.A.S.S - Desc"
+	
+	"Custom Barracks Kit: The CastleSiege"
 	{
-		"en"		"Increased damage, Increased Damage while Zoom, Increased headshot damage\nIncreased magazine capacity, decreased reload speed\nYour aim will be fixed to nearby enemy and Always Headshot\nApply vulnerability to the victim, 40s cooldown\n-This is the weapon used by the legendary mercenary who once swept through all enemies.\n''Enemy contact''"
-		"ko"		"피해량 증가, 조준중 피해량 증가, 헤드샷 피해량 증가\n장탄수 증가, 재장전 속도 감소\nR:사용시 바라본 적에게 에임이 고정되며 항상 헤드샷 판정이 됨.\n피해자에게 피해 취약을 적용, 40초 쿨다운\n-한때 모든 적을 휩쓸던 전설의 용병이 사용하던 무기입니다.\n''적과 조우했다.''"
+		"en"		"The CastleSiege"
+		"ko"		"공성전"
 	}
 	
 	//무기 설명
@@ -1134,6 +1134,38 @@
 		"ko"		"발사되는 탄환수 +300％증가\n사격중 이동 불가, 발사당 4발의 탄약을 소모."
 	}
 	
+	"Custom Sniper Rifle: Diligence - Desc"
+	{
+		"en"		"Semi Automatic Rifle, you cannot hold down to shoot.\nIncreased damage, but you have to reload.\nM2: Zooming is possible and damage is increased. However, movement speed is reduced.\n-This Marksman rifle trades magazine capacity and rate of fire for powerful, accurate shots."
+		"ko"		"반자동 소총, 이 무기는 꾹 눌러서 사격할 수 없음.\n피해량 증가, 대신 장전을 해야함.\nM2: 조준이 가능하며 피해량이 증가함, 대신 이동속도가 감소됨\n-장탄 수와 연사율은 낮아졌지만 강력하고 정확한 사격이 가능한 지정사수소총입니다."
+	}
+	"Custom Sniper Rifle: Diligence Counter - Desc"
+	{
+		"en"		"Increased damage, reduced movement speed and Increased damage while Zoom, no recoil, Increased headshot damage\nIncreased magazine capacity, decreased reload speed\nApply silence to the victim, 40s cooldown\n-A modified Diligence rifle, offering increased damage."
+		"ko"		"피해량 증가, 조준중 피해량 증가, 조준중 이속 감소 완화, 반동 없음, 헤드샷 피해량 증가\n장탄수 증가, 재장전 속도 감소\n피해자에게 침묵을 적용, 40초 쿨다운\n-개조형 딜리전스 소총으로, 대미지가 증가했습니다."
+	}
+	"Custom Sniper Rifle: Heavy Caliber RSASS - Desc"
+	{
+		"en"		"Increased damage, Increased Damage while Zoom, Increased headshot damage\nIncreased magazine capacity, decreased reload speed\nYour aim will be fixed to nearby enemy and Always Headshot\nApply vulnerability to the victim, 40s cooldown\n-This is the weapon used by the legendary mercenary who once swept through all enemies.\n''Enemy contact''"
+		"ko"		"피해량 증가, 조준중 피해량 증가, 헤드샷 피해량 증가\n장탄수 증가, 재장전 속도 감소\nR:사용시 바라본 적에게 에임이 고정되며 항상 헤드샷 판정이 됨.\n피해자에게 피해 취약을 적용, 40초 쿨다운\n-한때 모든 적을 휩쓸던 전설의 용병이 사용하던 무기입니다.\n''적과 조우했다.''"
+	}
+
+	"Custom Barracks Kit: The CastleSiege Desc"
+	{
+		"en"		"Deals more damage to marked enemies"
+		"ko"		"표적 상태인 대상에게 피해량이 증가합니다"
+	}
+	"Custom Barracks Kit: The CastleSiege Desc Default"
+	{
+		"en"		"Improved stats."
+		"ko"		"전반적인 능력치 증가"
+	}
+	"Custom Barracks Kit: The CastleSiege Desc New Trick"
+	{
+		"en"		"Pressing R increases the barracks training and research speed\nWhen hitting an marked enemy with another ranged weapon\nThis weapon's R cooldown is reduced"
+		"ko"		"R 키 사용 시, 배럭의 훈련 및 연구 속도가 증가합니다,\n다른 원거리 무기로 표적 상태인 대상 적중 시,\n이 무기의 R 키 쿨 다운이 감소합니다"
+	}
+	
 	//추가 장비 이름
 	"Boyo's Mysterious Brew"
 	{
@@ -1266,6 +1298,11 @@
 	{
 		"en"	"Auto Revive"
 		"ko"	"자동 소생"
+	}
+	"Get_DrinkRND_22"
+	{
+		"en"	"Taunt"
+		"ko"	"도발"
 	}
 	"See You In Hell Desc"
 	{
