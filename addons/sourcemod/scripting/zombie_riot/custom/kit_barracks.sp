@@ -15,6 +15,7 @@ static float Barrack_HUDDelay[MAXPLAYERS];					// Hud delay
 static float Barracks_PowerHitTime[MAXPLAYERS];				// Timer for the Crouch + M1 of the Italian Business
 static float Barracks_NovaCDTime[MAXPLAYERS];				// Cd for the healing nova of the shotgun
 static float ReDash[MAXPLAYERS];							// For the 5s window of the Chain Hit
+static int WeaponSMGID[MAXPLAYERS];
 bool BR_Precached = false;
 
 /*
@@ -49,6 +50,7 @@ public void Barracks_OnMapStart()
 	Zero(ReDash);
 	Zero(Barracks_NovaCDTime);
 	Zero(Barracks_PowerHitTime);
+	Zero(WeaponSMGID);
 	
 	BR_Precached = false;
 }
@@ -154,7 +156,44 @@ public void Weapon_Marker_M2(int client, int weapon, bool crit, int slot)
 public void Weapon_Hunter_M2(int client, int weapon, bool crit, int slot)
 {
 	EmitSoundToClient(client, WEAPON_SWITCH_SOUND, client, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
+	FakeClientCommandEx(client, "use tf_weapon_smg");
+}
+public void Enable_CastleSiege(int client, int weapon)
+{
+	WeaponSMGID[client] = EntIndexToEntRef(weapon);
+}
+public void Weapon_CastleSiege_M2(int client, int weapon, bool crit, int slot)
+{
+	EmitSoundToClient(client, WEAPON_SWITCH_SOUND, client, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	FakeClientCommandEx(client, "use tf_weapon_revolver");
+}
+public void Barracks_OnTakeDamage_CastleSiege(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int zr_custom_damage)
+{
+	if(CheckInHud())
+	return;
+	if(HasSpecificBuff(victim, "Marked"))
+		damage*=1.0+(float(WeaponPap[attacker]) * 0.2);
+}
+public void Barracks_CastleSiegeMode(int client, int weapon, bool crit, int slot)
+{
+	if(!IsValidClient(client) || !IsPlayerAlive(client))
+		return;
+	float Ability_CD = Ability_Check_Cooldown(client, slot);
+
+	if(Ability_CD <= 0.0 || CvarInfiniteCash.BoolValue)
+		Ability_CD = 0.0;
+	if(Ability_CD > 0.0)
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		SetGlobalTransTarget(client);
+		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);
+		return;
+	}
+	Rogue_OnAbilityUse(client, weapon);
+	Ability_Apply_Cooldown(client, slot, 65.0);
+	FakeClientCommandEx(client, "voicemenu 2 1");
+	ApplyStatusEffect(client, client, "Barracks Prepare Siege", 3.5 + (float(WeaponPap[client]) * 2.5));
 }
 public void Barracks_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int zr_custom_damage)
 {
@@ -164,6 +203,15 @@ public void Barracks_OnTakeDamage(int victim, int &attacker, int &inflictor, flo
 	if(HasSpecificBuff(victim, "Marked"))
 	{
 		SummonerRenerateResources(attacker, 3.0 + (WeaponPap[attacker] * 2), 0.0, true);
+		int IsValidSMG = EntRefToEntIndex(WeaponSMGID[attacker]);
+		if(IsValidEntity(IsValidSMG))
+		{
+			float Ability_CD = Ability_Check_Cooldown(attacker, 3, IsValidSMG);
+			Ability_CD-=2.0;
+			if(Ability_CD <= 0.0 || CvarInfiniteCash.BoolValue)
+				Ability_CD = 0.0;
+			Ability_Apply_Cooldown(attacker, 3, Ability_CD, IsValidSMG, true);
+		}
 	}
 	
 	ApplyStatusEffect(attacker, victim, "Marked", 4.0 + (WeaponPap[attacker] * 2));
@@ -177,6 +225,15 @@ public void Barracks_OnTakeDamage_Hunter(int victim, int &attacker, int &inflict
 	if(HasSpecificBuff(victim, "Marked"))
 	{
 		damage *= (1.2 + ((WeaponPap[attacker] * 0.1)));
+		int IsValidSMG = EntRefToEntIndex(WeaponSMGID[attacker]);
+		if(IsValidEntity(IsValidSMG))
+		{
+			float Ability_CD = Ability_Check_Cooldown(attacker, 3, IsValidSMG);
+			Ability_CD-=1.0;
+			if(Ability_CD <= 0.0 || CvarInfiniteCash.BoolValue)
+				Ability_CD = 0.0;
+			Ability_Apply_Cooldown(attacker, 3, Ability_CD, IsValidSMG, true);
+		}
 	}
 	if(Ability_Check_Cooldown(attacker, 2) < 0.0)
 	{

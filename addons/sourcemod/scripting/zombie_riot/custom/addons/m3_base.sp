@@ -450,7 +450,7 @@ static void DrinkRND(int client, int Overrides=-1)
 		if(Overrides==-1)
 			M3_Ability_Cooldown(client, GameTime + (30.0 * CooldownReductionAmount(client)));
 		int GetRND=Overrides;
-		if(GetRND==-1) GetRND=GetRandomInt(1, 21);
+		if(GetRND==-1) GetRND=GetRandomInt(1, 22);
 		float AddTime;
 		char RNDDrinkName[512];
 		FormatEx(RNDDrinkName, sizeof(RNDDrinkName), "Get_DrinkRND_%i", GetRND);
@@ -583,6 +583,11 @@ static void DrinkRND(int client, int Overrides=-1)
 			case 21:
 			{
 				ApplyStatusEffect(client, client, "Defibrillator", 20.0);
+				return;
+			}
+			case 22:
+			{
+				ApplyStatusEffect(client, client, "Taunt", GetRandomFloat(10.0, 20.0));
 				return;
 			}
 			default:AddTime=20.0;

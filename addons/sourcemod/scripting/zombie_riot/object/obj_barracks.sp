@@ -2431,6 +2431,8 @@ public int SummonerMenuH(Menu menu, MenuAction action, int client, int choice)
 							{
 								TimeUntillResearch *= 0.5;
 							}
+							if(HasSpecificBuff(client, "Barracks Prepare Siege"))
+								TimeUntillResearch *= 0.55;
 							ResearchIn[client] = ResearchStartedIn[client] + TimeUntillResearch;
 							if(CvarInfiniteCash.BoolValue)
 							{
@@ -2464,6 +2466,8 @@ public int SummonerMenuH(Menu menu, MenuAction action, int client, int choice)
 								{
 									ModifySpawnRate *= (1.0 / 1.2);
 								}
+								if(HasSpecificBuff(client, "Barracks Prepare Siege"))
+									ModifySpawnRate *= 0.55;
 								TrainingIn[client] = TrainingStartedIn[client] + (ModifySpawnRate * float(LastMann ? (GetSData(CivType[client], item, TrainTime) / 3) : GetSData(CivType[client], item, TrainTime)));
 								if(CvarInfiniteCash.BoolValue)
 								{

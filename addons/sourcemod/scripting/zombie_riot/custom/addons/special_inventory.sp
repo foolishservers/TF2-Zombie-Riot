@@ -69,14 +69,20 @@ stock bool Custom_Inventory_Enable(int client, int entity, int Attribute)
 {
 	switch(Attribute)
 	{
-		case 1000:Inv_Golden_Crown[client]=true;
+		case 1000:{Inv_Golden_Crown[client]=true;Inv_Mining_Foreman_Hat[client]=true;Inv_Barrack_Backup[client]=true;}
 		case 1001:Inv_LSandvich_SafeHouse[client]=true;
 		case 1002:Inv_Slug_Shell_Pouch[client]=true;
-		case 1003:Inv_Mining_Foreman_Hat[client]=true;
+		case 1003:
+		{
+			//none
+		}
 		case 1004:Inv_Scrap_Backpack[client]=true;
 		case 1005:Inv_Dragon_Breath_Shell[client]=true;
 		case 1006:Inv_Mini_Shell[client]=true;
-		case 1007:Inv_Barrack_Backup[client]=true;
+		case 1007:
+		{
+			//none
+		}
 		case 1008:Inv_MarketGardener_Uniform[client]=true;
 		case 1009:
 		{
