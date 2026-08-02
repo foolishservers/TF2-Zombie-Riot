@@ -66,6 +66,7 @@ methodmap CyberMessenger < CClotBody
 	{
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_AUTO, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
+	
 	public void PlayProjectileSound() 
 	{
 		if(this.m_flidle_talk > GetGameTime(this.index))
@@ -73,19 +74,23 @@ methodmap CyberMessenger < CClotBody
 		this.m_flidle_talk = GetGameTime(this.index) + 0.1;
 		EmitSoundToAll(g_MessengerThrowIce[GetRandomInt(0, sizeof(g_MessengerThrowIce) - 1)], this.index, SNDCHAN_AUTO, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
+	
 	public void PlayMeleeSound()
 	{
 		EmitSoundToAll(g_MeleeAttackSounds, this.index, SNDCHAN_AUTO, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
+	
 	public void PlayMeleeHitSound() 
 	{
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_AUTO, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_AUTO, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
+	
 	public void PlayRangedSound() 
 	{
 		EmitSoundToAll(g_RangedSound, this.index, SNDCHAN_WEAPON, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
+	
 	public void PlayHurtSound() 
 	{
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, _, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
@@ -252,7 +257,6 @@ methodmap CyberMessenger < CClotBody
 		SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", skin);
 		SetEntProp(npc.m_iWearable5, Prop_Send, "m_nSkin", skin);
 		SetEntProp(npc.m_iWearable6, Prop_Send, "m_nSkin", skin);
-
 		
 		npc.m_iTeamGlow = TF2_CreateGlow(npc.index);
 		npc.m_bTeamGlowDefault = false;
@@ -278,25 +282,14 @@ static void CyberMessenger_ClotThink(int iNPC)
 		ForcePlayerLoss();
 		RaidBossActive = INVALID_ENT_REFERENCE;
 		BlockLoseSay = true;
-		switch(GetRandomInt(0,3))
-		{
-			case 0:CPrintToChatAll("{lightblue}메신저{default}: 쪽팔리는 줄 알아라.");
-			case 1:CPrintToChatAll("{lightblue}메신저{default}: 진심인가?");
-			case 2:CPrintToChatAll("{lightblue}메신저{default}: 뭐라 할 말이 없군.");
-			default:CPrintToChatAll("{lightblue}메신저{default}: ...........");
-		}
+		TheMessenger_NPCTalkMessage(npc.index, "Messenger_TimeOver_CyberGrind");
 	}
 	if(LastMann)
 	{
 		if(!npc.m_fbGunout)
 		{
 			npc.m_fbGunout = true;
-			switch(GetRandomInt(0,2))
-			{
-				case 0:CPrintToChatAll("{lightblue}메신저{default}: 죽으라고!!!!");
-				case 1:CPrintToChatAll("{lightblue}메신저{default}: 사지를 찢어발겨주마!!!!");
-				case 3:CPrintToChatAll("{lightblue}메신저{default}: 으하하하하하!!!");
-			}
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_LastMann_CyberGrind");
 		}
 	}
 	

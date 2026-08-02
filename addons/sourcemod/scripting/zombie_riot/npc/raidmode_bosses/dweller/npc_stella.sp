@@ -2212,7 +2212,7 @@ static void Internal_NPCDeath(int entity)
 	{
 		if(b_bobwave[npc.index])
 		{
-			RaidBossStella_NPCTalkMessage(npc, "Stella_Bob_Appeared_%d", GetRandomInt(1, 3));
+			RaidBossStella_NPCTalkMessage(npc, "Stella_Bob_Appeared_%d", true, GetRandomInt(1, 3));
 		}
 		else
 		{
@@ -2223,12 +2223,12 @@ static void Internal_NPCDeath(int entity)
 					Karlas karl = view_as<Karlas>(npc.Ally);
 					karl.Anger = true;
 					NpcSpeechBubble(npc.Ally, ">>:(", 7, {255,9,9,255}, {0.0,0.0,120.0}, "");
-					RaidBossStella_NPCTalkMessage(npc, "Stella_Exhausted_%d", GetRandomInt(1, 3));
+					RaidBossStella_NPCTalkMessage(npc, "Stella_Exhausted_%d", true, GetRandomInt(1, 3));
 				}
 			}
 			else
 			{
-				RaidBossStella_NPCTalkMessage(npc, "Stella_Death_%d", GetRandomInt(1, 2));
+				RaidBossStella_NPCTalkMessage(npc, "Stella_Death_%d", true, GetRandomInt(1, 2));
 			}
 		}
 	}
