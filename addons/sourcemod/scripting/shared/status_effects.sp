@@ -871,7 +871,7 @@ float Barricade_Stabilizer_ResistanceFunc(int attacker, int victim, StatusEffect
 		{
 			if(!CheckInHud())
 			{
-				int health = GetEntProp(building, Prop_Data, "m_iHealth") - RoundToCeil(basedamage *(RaidbossIgnoreBuildingsLogic(1) ? 1.0 : 0.5)
+				int health = GetEntProp(building, Prop_Data, "m_iHealth") - RoundToCeil(basedamage *(RaidbossIgnoreBuildingsLogic(1) ? 0.75 : 0.5)
 				* (b_DecorativeObject ? 1.0 : 2.0) * (b_ExplosiveBarrel ? 1.0 : 5.0));
 				if(health > 0)
 				{

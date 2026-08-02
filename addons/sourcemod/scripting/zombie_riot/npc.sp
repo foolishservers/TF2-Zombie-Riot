@@ -2960,6 +2960,7 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/bosses/npc_zs_soldier_barrager.sp"
 #include "npc/gmod_zs/bosses/npc_zs_unspeakable.sp"
 #include "npc/gmod_zs/bosses/npc_doctor_unclean_one.sp"
+//#include "npc/gmod_zs/npc_zs_pukepus.sp"
 #include "npc/gmod_zs/npc_zs_ally_medic.sp"
 #include "npc/gmod_zs/npc_zs_ally_soldier.sp"
 #include "npc/gmod_zs/npc_zs_ally_heavy.sp"

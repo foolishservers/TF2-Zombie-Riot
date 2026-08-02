@@ -8,6 +8,7 @@ static int SniperRifle_Ignore[MAXPLAYERS];
 static float SniperRifle_ExplodDMG[MAXPLAYERS];
 static float SniperRifle_Charge[MAXPLAYERS];
 static float SniperRifle_RestTime[MAXPLAYERS];
+static float SniperRifle_SpreadTime[MAXPLAYERS];
 
 static int SniperRifle_DMR_AIMBOT[MAXPLAYERS];
 static float SniperRifle_AIMBOTTime[MAXPLAYERS];
@@ -21,6 +22,7 @@ void Uranium_MapStart()
 	ZeroFloat(SniperRifle_ExplodDMG);
 	ZeroFloat(SniperRifle_Charge);
 	ZeroFloat(SniperRifle_RestTime);
+	ZeroFloat(SniperRifle_SpreadTime);
 	ZeroFloat(SniperRifle_AIMBOTTime);
 	PrecacheSound("weapons/doom_scout_pistol.wav");
 	PrecacheSound("weapons/doom_scout_pistol_crit.wav");
@@ -145,6 +147,22 @@ public void Weapon_SniperRifle_DMR_Holster(int client, int weapon)
 	SDKUnhook(client, SDKHook_PreThink, Weapon_SniperRifle_DMR_M1_PreThink);
 }
 
+public void Weapon_SniperRifle_DMR_Deploy(int client, int weapon)
+{
+	if(IsValidEntity(weapon))
+	{
+		Attributes_Set(weapon, 1, 1.0);
+		Attributes_Set(weapon, 5, 1.0);
+		float Attrib = 1.0;
+		Attrib *= Attributes_Get(weapon, 6, 1.0);
+		if(Attrib!=1.0)
+		{
+			Attributes_Set(weapon, 5, 1.0/Attrib);
+			Attributes_SetMulti(weapon, 1, 1.0+(1.0*(1.0+(-1.0*(Attrib)))));
+		}
+	}
+}
+
 public void Weapon_SniperRifle_DMR_R(int client, int weapon, bool crit, int slot)
 {
 	float GameTime = GetGameTime();
@@ -232,6 +250,7 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 {
 	if(!IsValidEntity(weapon))
 		return;
+	float GameTime = GetGameTime();
 	if(i_SemiAutoWeapon_AmmoCount[weapon] <= 0)
 	{
 		int STOPIT = GetEntProp(weapon, Prop_Send, "m_nKillComboCount");
@@ -243,7 +262,7 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 			TimedLgtning(client, WorldSpaceVec);
 			if(!IsInvuln(client))
 				SDKHooks_TakeDamage(client, 0, 0, float(health/2), DMG_TRUEDAMAGE|DMG_PREVENT_PHYSICS_FORCE);
-			SetEntPropFloat(client, Prop_Send, "m_flNextAttack", GetGameTime() + 5.0);
+			SetEntPropFloat(client, Prop_Send, "m_flNextAttack", GameTime + 5.0);
 			ApplyStatusEffect(client, client, "Ragdolled", 5.0);
 			FreezeNpcInTime(client, 5.0);
 			TF2_AddCondition(client, TFCond_LostFooting, 5.0);
@@ -258,23 +277,17 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 	}
 	SetEntProp(weapon, Prop_Send, "m_nKillComboCount", 0);
 
-	if(Attributes_Get(weapon, Attrib_ExplosiveHeadshot, 1.0) > 1.0)
-	{
-		float charge=GetEntPropFloat(weapon, Prop_Send, "m_flChargedDamage");
-		if(charge<150.0 || !TF2_IsPlayerInCondition(client, TFCond_Zoomed))
-			EmitSoundToAll("weapons/sniper_shoot.wav", client, SNDCHAN_STATIC, 80, _, 1.0);
-	}
-	if(SniperRifle_RestTime[client] < GetGameTime())
-		SniperRifle_RestTime[client]=0.0;
+	if(SniperRifle_RestTime[client] < GameTime)
+		SniperRifle_SpreadTime[client]=0.0;
 		
 	float accurate = 1.0;
 	accurate *= Attributes_Get(weapon, 106, 1.0);
 	
-	if(SniperRifle_RestTime[client]==0.0 || SniperRifle_AIMBOTTime[client]!=0.0)
+	if(SniperRifle_SpreadTime[client]==0.0 || SniperRifle_AIMBOTTime[client]!=0.0)
 		accurate=0.0;
 	else
 	{
-		float AimSpreadDegrading=FloatAbs(SniperRifle_RestTime[client]-GetGameTime());
+		float AimSpreadDegrading=FloatAbs(SniperRifle_SpreadTime[client]-GameTime);
 		AimSpreadDegrading=1.0*(AimSpreadDegrading/2.24);
 		if(AimSpreadDegrading<0.0)
 			AimSpreadDegrading=0.0;
@@ -282,16 +295,15 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 			AimSpreadDegrading=4.0;
 		accurate*=AimSpreadDegrading;
 	}
-	float x = GetRandomFloat( -0.05*accurate, 0.05*accurate ) + GetRandomFloat( -0.05*accurate, 0.05*accurate );
-	float y = GetRandomFloat( -0.05*accurate, 0.05*accurate ) + GetRandomFloat( -0.05*accurate, 0.05*accurate );
+	if(!client_Is_Zoom_Active(client))
+		accurate*=1.65;
+	
+	float x = GetRandomFloat( -0.03*accurate, 0.03*accurate ) + GetRandomFloat( -0.03*accurate, 0.03*accurate );
+	float y = GetRandomFloat( -0.03*accurate, 0.03*accurate ) + GetRandomFloat( -0.03*accurate, 0.03*accurate );
 	
 	accurate = 50.0;
 	if(client_Is_Zoom_Active(client))
 		accurate *= Attributes_Get(weapon, 41, 1.0);
-	
-	if(!SniperRifle_RestTime[client])
-		SniperRifle_RestTime[client] = GetGameTime()+((i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER
-			|| i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER_X) ? 0.72 : 1.0);
 	
 	static float vAngles[3], vOrigin[3], vecRight[3], vecUp[3];
 	GetClientEyePosition(client, vOrigin);
@@ -305,6 +317,8 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 	NormalizeVector(vecDir, vecDir);
 	GetVectorAngles(vecDir, vecDir);
 	bool b_HeadShot;
+	b_LagCompNPC_ExtendBoundingBox = true;
+	StartLagCompensation_Base_Boss(client);
 	Handle trace = TR_TraceRayFilterEx(vOrigin, vecDir, MASK_SHOT, RayType_Infinite, BulletAndMeleeTrace, client);
 	if(TR_GetFraction(trace) < 1.0)
 	{
@@ -341,34 +355,39 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 			}
 			else
 			{
-				if(SniperRifle_AIMBOTTime[client]!=0.0 && f_HeadshotDamageMultiNpc[target] > 0.0 && !b_CannotBeHeadshot[target])
-				{
-					SniperRifle_HeadShot[client]=true;
-					b_HeadShot=true;
-				}
-				if(TR_GetHitGroup(trace) == HITGROUP_HEAD)
+				if(!i_NpcIsABuilding[target] && f_HeadshotDamageMultiNpc[target] > 0.0 && !b_CannotBeHeadshot[target] && (SniperRifle_AIMBOTTime[client]!=0.0 || TR_GetHitGroup(trace) == HITGROUP_HEAD))
 				{
 					SniperRifle_Ignore[client]=EntIndexToEntRef(target);
 					SniperRifle_HeadShot[client]=true;
 					b_HeadShot=true;
-					if(client_Is_Zoom_Active(client))
-						accurate *= Attributes_Get(weapon, 304, 1.0);
 				}
 			}
+			if(SniperRifle_RestTime[client] < GameTime || SniperRifle_AIMBOTTime[client]!=0.0)
+				accurate *= Attributes_Get(weapon, 304, 1.0);
 			CalculateBulletDamageForce(vecRight, 1.0, vecUp);
 			CalcCorrectCWeaponDMG(target, client, client, accurate,
 			DMG_BULLET, weapon, vecUp,
 			vecRight, ZR_DAMAGE_NONE, b_HeadShot, b_HeadShot ? 2 : 0);
-			if(Attributes_Get(weapon, Attrib_PapNumber, 1.0)>=2.0 && Uranium_TimeTillBigHit[client][target] < GetGameTime())
+			if(Attributes_Get(weapon, Attrib_PapNumber, 1.0)>=2.0 && Uranium_TimeTillBigHit[client][target] < GameTime)
 			{
 				ApplyStatusEffect(client, target, "Silenced", (b_thisNpcIsARaid[target] || b_thisNpcIsABoss[target]) ? 3.0 : 5.0);
 				if(Attributes_Get(weapon, Attrib_PapNumber, 1.0)>=3.0)
 					IncreaseEntityDamageTakenBy(target, 0.1, (b_thisNpcIsARaid[target] || b_thisNpcIsABoss[target]) ? 3.0 : 5.0, true);
-				Uranium_TimeTillBigHit[client][target] = GetGameTime() + 40.0;
+				Uranium_TimeTillBigHit[client][target] = GameTime + 40.0;
 			}
 		}
 	}
 	delete trace;
+	FinishLagCompensation_Base_boss();
+	
+	if(SniperRifle_SpreadTime[client]==0.0)
+		SniperRifle_SpreadTime[client] = GameTime;
+	accurate = 0.8;
+	if(i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER)
+		accurate *= 0.853;
+	if(i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER_X)
+		accurate *= 0.853;
+	SniperRifle_RestTime[client] = GameTime + accurate;
 	
 	//view_as<CClotBody>(weapon).GetAttachment("muzzle", vecDir, vAngles);
 	//Offset_Vector({ 60.9, 13.1, -15.1 }, vecDir, vecDir);

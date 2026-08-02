@@ -334,7 +334,7 @@ public float Custom_Inventory_PlayerOnTakeDamage(int victim, int attacker, float
 
 public float Custom_Inventory_NPCOnTakeDamage(int victim, int attacker, int inflictor, float &damage, int &damagetype, int weapon)
 {
-	if(!IsValidEntity(victim) || CheckInHud())
+	if(!IsValidEntity(victim) || !IsValidEntity(weapon) || CheckInHud())
 		return damage;
 
 	if(IsValidClient(attacker))
@@ -413,7 +413,7 @@ bool Inv_Mining_Foreman_Hat_Enable(int client)
 
 bool Custom_Inventory_IsShotgun(int weapon)
 {
-	if(i_WeaponArchetype[weapon] == Archetype_Charger)
+	if(IsValidEntity(weapon) && i_WeaponArchetype[weapon] == Archetype_Charger)
 	{
 		switch(i_CustomWeaponEquipLogic[weapon])
 		{
@@ -430,7 +430,7 @@ bool Custom_Inventory_IsShotgun(int weapon)
 
 float Custom_Inventory_Falloff(int attacker, int weapon)
 {
-	if(Inv_Slug_Shell_Pouch[attacker] && i_WeaponArchetype[weapon] == Archetype_Charger)
+	if(IsValidEntity(weapon) && Inv_Slug_Shell_Pouch[attacker] && i_WeaponArchetype[weapon] == Archetype_Charger)
 	{
 		switch(i_CustomWeaponEquipLogic[weapon])
 		{
@@ -442,7 +442,7 @@ float Custom_Inventory_Falloff(int attacker, int weapon)
 			}
 		}
 	}
-	if(Inv_Mini_Shell[attacker] && i_WeaponArchetype[weapon] == Archetype_Charger)
+	if(IsValidEntity(weapon) && Inv_Mini_Shell[attacker] && i_WeaponArchetype[weapon] == Archetype_Charger)
 	{
 		switch(i_CustomWeaponEquipLogic[weapon])
 		{
@@ -457,7 +457,7 @@ float Custom_Inventory_Falloff(int attacker, int weapon)
 	return 1.0;
 }
 
-float MoveSpeed(int client, bool maxspeed = false, bool upspeed = false)
+stock float MoveSpeed(int client, bool maxspeed = false, bool upspeed = false)
 {
 	float Fvel[3];
 	GetEntPropVector(client, Prop_Data, "m_vecAbsVelocity", Fvel);
@@ -474,7 +474,7 @@ float MoveSpeed(int client, bool maxspeed = false, bool upspeed = false)
 	return Speed;
 }
 
-float Barricade_Stabilizer_FeedBack(int client, int BarricadeHP, bool IsDecorativeObject, bool IsExplosiveBarrel)
+stock float Barricade_Stabilizer_FeedBack(int client, int BarricadeHP, bool IsDecorativeObject, bool IsExplosiveBarrel)
 {
 	float f_Resistance=0.95;
 	
