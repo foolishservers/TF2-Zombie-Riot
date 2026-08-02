@@ -250,7 +250,11 @@ public void Weapon_Blacksmith_ShootBullet(int client, int weapon, bool crit, int
 	
 	bool headshot;
 	int target = -1;
-	Handle trace = TR_TraceRayFilterEx(pos, ang, MASK_SHOT, RayType_Infinite, Trace_DontHitEntityOrPlayer, client);
+	
+	b_LagCompNPC_ExtendBoundingBox = true;
+	StartLagCompensation_Base_Boss(client);
+	
+	Handle trace = TR_TraceRayFilterEx(pos, ang, MASK_SHOT, RayType_Infinite, Blacksmith_BulletTrace, client);
 	
 	TR_GetEndPosition(hitPos, trace);
 	
@@ -263,6 +267,8 @@ public void Weapon_Blacksmith_ShootBullet(int client, int weapon, bool crit, int
 		}
 	}
 	delete trace;
+	
+	FinishLagCompensation_Base_boss();
 	
 	CalcCorrectWeaponShootPosition({ 60.9, 13.1, -15.1 }, pos, ang);
 	TE_SetupBeamPoints(pos, hitPos, i_TinkerTracerIndex, 0, 0, 0, 0.3, 3.0, 3.0, 0, 0.0, {255, 255, 255, 255}, 3);
@@ -2355,4 +2361,113 @@ void DetectWeaponNoTinker(int weapon, int client)
 	tinker.Rarity = -1;
 	Tinkers.Erase(found);
 	PrintToChat(client, "%T", "Removed Tinker Attributes", client);
+}
+
+public bool Blacksmith_BulletTrace(int entity, int contentsMask, any iExclude)
+{
+	if(!entity)
+		return true;
+	
+	if(entity == iExclude)
+		return false;
+	
+	if(i_IsABuilding[entity])
+	{
+		if(i_IsABuilding[iExclude])
+		{
+			ObjectGeneric objstats = view_as<ObjectGeneric>(iExclude);
+			if(objstats.m_iExtrabuilding1 == entity)
+				return false;
+			else if(objstats.m_iExtrabuilding2 == entity)
+				return false;
+		}
+		
+		//dont try to collide with your dependant building.
+		if(EntRefToEntIndex(i_IDependOnThisBuilding[iExclude]) == entity)
+			return false;
+		
+		if(EntRefToEntIndex(Building_Mounted[iExclude]) == entity)
+			return false;
+		
+		return true;
+	}
+	
+	// Below lines are default bulletandmeleetrace.
+	if(entity > 0 && entity <= MaxClients) 
+	{
+		if(TeutonType[entity])
+		{
+			return false;
+		}
+	}
+	
+	if(b_ThisEntityIsAProjectileForUpdateContraints[entity])
+	{
+		return false;
+	}
+	else if(!b_NpcHasDied[entity])
+	{
+		if(!b_NpcIsTeamkiller[iExclude] && GetTeam(iExclude) == GetTeam(entity))
+		{
+			if(!b_AllowCollideWithSelfTeam[iExclude] && !b_AllowCollideWithSelfTeam[entity])
+				return false;
+		}
+		else if(!b_IsCamoNPC[entity] && b_CantCollidie[entity] && b_CantCollidieAlly[entity])
+		{
+			return false;
+		}
+	}
+
+	//if anything else is team
+	if(b_IsARespawnroomVisualiser[entity])
+	{
+		return false;
+	}	
+
+	if(b_ThisEntityIgnored[entity])
+	{
+		return false;
+	}
+	
+	if(!b_NpcIsTeamkiller[iExclude] && GetTeam(iExclude) == GetTeam(entity))
+	{
+		//buildings MUST pass through this if interacting with eacother.
+		int Wasbuilding = 0;
+		if(i_IsABuilding[iExclude])
+			Wasbuilding++;
+
+		if(i_IsABuilding[entity])
+			Wasbuilding++;
+		if(Wasbuilding == 2 || !b_AllowCollideWithSelfTeam[iExclude] || !b_AllowCollideWithSelfTeam[entity])
+		{
+			return false;
+		}
+	}
+	
+	if(Saga_EnemyDoomed(entity) && Saga_EnemyDoomed(iExclude))
+	{
+		return false;
+	}
+	
+	if(YakuzaTestStunOnlyTrace())
+	{
+		if(f_TimeFrozenStill[entity] < GetGameTime(entity))
+		{
+			//The target was NOT stunned.
+			return false;
+		}
+		//if its not a valid enemy ,ignore.
+		if(!IsValidEnemy(iExclude, entity, true, false))
+		{
+			return false;
+		}
+	}
+	
+	if(!b_NpcHasDied[iExclude])
+	{	
+		//1 means we treat it as a bullet trace
+		return NpcCollisionCheck(iExclude, entity, 1);
+	}
+	
+	return !(entity == iExclude);
 }
