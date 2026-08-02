@@ -3907,6 +3907,9 @@ void UpdateCustomFog()
 		return;
 	
 	int entity = EntRefToEntIndex(fogToUse);
+	if (!HasEntProp(entity, Prop_Data, "m_fog.enable"))
+		return;
+	
 	char buffer[64];
 	GetEntPropString(entity, Prop_Data, "m_iName", buffer, sizeof(buffer));
 	if (buffer[0] == '\0')
@@ -4000,9 +4003,7 @@ void WeaponUpdateDo()
 void LoadNPCTalkTranslations()
 {
 	LoadTranslations("zombieriot.phrases.expidonsatalk");
-	LoadTranslations("zombieriot.phrases.interitustalk");
 	LoadTranslations("zombieriot.phrases.blitzkriegtalk");
-	LoadTranslations("zombieriot.phrases.roguetalk");
 	LoadTranslations("zombieriot.phrases.ruinatalk");
 }
 

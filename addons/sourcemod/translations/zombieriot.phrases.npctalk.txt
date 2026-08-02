@@ -1013,6 +1013,64 @@
 		"ko"	"반갑네 제군들. 이번 공허 확산 사태로부터 자네들을 돕기 위해 내가 왔네."
 	}
 	
+	// Calmaticus.
+	"Calmaticus_Encounter"
+	{
+		"en"		"You all will be one with the virus."
+		"ko"		"너희도 감염체가 될 것이다."
+	}
+	"Calmaticus_Encounter_Enraged"
+	{
+		"en"		"YOU WILL BECOME DNA SUPPLEMENTS."
+		"ko"		"너희는 DNA 공급원이 될 것이다."
+	}
+	
+	"Calmaticus_Lose"
+	{
+		"en"		"{snow}???{default}: Good job Calmaticus, head back to the lab."
+		"ko"		"{snow}???{default}: 아주 잘 했다, 칼마티커스. 이제 연구소로 돌아와라."
+	}
+	"Calmaticus_Lose_Enraged"
+	{
+		"en"		"{crimson}You afterall... had no chance."
+		"ko"		"{crimson}결국... 당신들에겐 승산이 없었던 거야."
+	}
+	
+	"Calmaticus_Trophies"
+	{
+		"en"		"You cut its heart to ensure his death and gained: {green}''Calmaticus' Heart Piece''{default}!"
+		"ko"		"당신은 그의 확인 사살을 위해 심장을 떼어냈습니다. 당신이 얻은 것은... {green}''칼마티커스'의 심장 조각''{default}!"
+	}
+	
+	// Vivithorn.
+	"Vivithorn_Encounter"
+	{
+		"en"		"..."
+		"ko"		"..."
+	}
+	"Vivithorn_FirstMatch_Death"
+	{
+		"en"		"I have to activate Project Calmaticus..."
+		"ko"		"칼마티커스 프로젝트를 가동시킬 때가 왔군..."
+	}
+	"Vivithorn_Rematch_Death"
+	{
+		"en"		"{green}Vivithorn escapes... but heavily wounded..."
+		"ko"		"{green}비비쏜이 도주했습니다... 중상을 입은 채로 말이죠..."
+	}
+	
+	// Xeno Duo Shared
+	"XenoDuo_LastMann"
+	{
+		"en"		"{green}The infection got all your friends... Run while you can."
+		"ko"		"{green}감염이 당신의 동료를 전부 집어삼키고 말았습니다... 가능하면 도망치세요."
+	}
+	"XenoDuo_TimeOver"
+	{
+		"en"		"{green}The infection proves too strong for you to resist as you join his side..."
+		"ko"		"{green}감염은 저항하기엔 너무나도 강력했습니다. 이제 그들과 같아져 버렸군요..."
+	}
+	
 	// God Alaxios.
 	"God_Alaxios_Sea_Death_Throes_1"
 	{
@@ -1501,5 +1559,474 @@
 	{
 		"en"		"You didn't attack bob for no reason and thus he gives you: {yellow}''Bob's Curing Hand''{default}!"
 		"ko"		"당신은 이유 없이 밥을 공격하지 않았습니다. 그런 밥이 당신에게 준 것은... {yellow}''밥의 치유의 손길''{default}!"
+	}
+	
+	// Messenger.
+	"Messenger_Encounter_FirstMatch"
+	{
+		"en"		"Welcome, welcome sinners! I'm bearing a message to you all!"
+		"ko"		"잘 왔다, 죄인들아! 여기 너희에게 줄 전령이 하나 있다!"
+	}
+	"Messenger_Encounter_Rematch"
+	{
+		"en"		"Round two."
+		"ko"		"2차전은 준비됐겠지, 죄인들?"
+	}
+	"Messenger_Encounter_CyberGrind"
+	{
+		"en"		"ROUND THREE."
+		"ko"		"3차전은 준비됐겠지, 죄인들!"
+	}
+	"Messenger_Encounter_BossrushDuo"
+	{
+		"en"		"You're gonna die."
+		"ko"		"죽을 준비는 했겠지, 죄인들?"
+	}
+	
+	"Messenger_Encounter_CyberGrind_Inform"
+	{
+		"en"		"This time, I've prepared a special trick for you sinners. Now, savor the combination of hellfire and frostbite!!"
+		"ko"		"이번엔 너희 죄인들을 위해 특별한 트릭을 준비했지. 지옥불과 서릿발의 조합을 맛보거라!!"
+	}
+	
+	"Messenger_Behold_Khalm"
+	{
+		"en"		"{crimson}AHAHAHAHHAHAHAHA!!! KNEEL BEFORE THE LORD'S MIGHT!"
+		"ko"		"{crimson}으하하하하하!!! 전부 뒈져버려라!!"
+	}
+	
+	"Messenger_TimeOver_FirstMatch_1"
+	{
+		"en"		"Shame."
+		"ko"		"쪽팔리는 줄 알아라."
+	}
+	"Messenger_TimeOver_FirstMatch_2"
+	{
+		"en"		"Are you for real??"
+		"ko"		"진심인가?"
+	}
+	"Messenger_TimeOver_FirstMatch_3"
+	{
+		"en"		"No comment."
+		"ko"		"뭐라 할 말이 없군."
+	}
+	
+	"Messenger_TimeOver_Rematch"
+	{
+		"en"		"..........."
+		"ko"		"..........."
+	}
+	
+	"Messenger_TimeOver_CyberGrind"
+	{
+		"en"		"Well, well.. Looks like round 3 was a bit TOUGH, huh??"
+		"ko"		"이런 이런.. 3차전은 좀 빡셌나?"
+	}
+	
+	"Messenger_LastMann_FirstMatch_1"
+	{
+		"en"		"Your friends are dead. {crimson}Accept your fate."
+		"ko"		"네 놈의 친구들은 전부 죽었다. {crimson}네 운명을 받아들여라."
+	}
+	"Messenger_LastMann_FirstMatch_2"
+	{
+		"en"		"It's just you and me now."
+		"ko"		"너와 나만 남았다."
+	}
+	"Messenger_LastMann_FirstMatch_3"
+	{
+		"en"		"Time for you to forward my message to your superiors."
+		"ko"		"네 놈의 고용인에게 네 놈의 부고 소식을 전할 시간이군."
+	}
+	"Messenger_LastMann_FirstMatch_4"
+	{
+		"en"		"Give up, you cannot win."
+		"ko"		"포기해라. 넌 이길 수 없다."
+	}
+	
+	"Messenger_LastMann_Rematch_1"
+	{
+		"en"		"YOU ARE DEAD"
+		"ko"		"죽으라고!!!!"
+	}
+	"Messenger_LastMann_Rematch_2"
+	{
+		"en"		"I'LL FUCK YOU UP."
+		"ko"		"사지를 찢어발겨주마!!!!"
+	}
+	"Messenger_LastMann_Rematch_3"
+	{
+		"en"		"AHAHAHAHAHAHA"
+		"ko"		"으하하하하하!!!"
+	}
+	
+	"Messenger_LastMann_CyberGrind"
+	{
+		"en"		"FINALLY!!!! YOU'RE THE LAST ONE LEFT!!!!!"
+		"ko"		"드디어!!!! 너만 남았다!!!!!"
+	}
+	
+	"Messenger_GroupAttack_1"
+	{
+		"en"		"No more fucking around."
+		"ko"		"이제 애새끼 장난은 끝이다."
+	}
+	"Messenger_GroupAttack_2"
+	{
+		"en"		"Stop wasting my time shitheads."
+		"ko"		"내 시간이 너희같은 머저리들 때문에 낭비되고 있다."
+	}
+	"Messenger_GroupAttack_3"
+	{
+		"en"		"All sinners will {crimson}DIE."
+		"ko"		"모든 죄인은 {crimson}죽어야만 한다."
+	}
+	"Messenger_GroupAttack_4"
+	{
+		"en"		"You just brought infinite pain upon you."
+		"ko"		"그래봤자 무한한 고통을 느끼게 될 뿐이다."
+	}
+	"Messenger_GroupAttack_5"
+	{
+		"en"		"You fucks are just a waste of my time."
+		"ko"		"나는 너희들과 이 지랄하면서 놀 시간이 없다."
+	}
+	
+	"Messenger_GroupAttack_CyberGrind_1"
+	{
+		"en"		"No more holding back!!!"
+		"ko"		"더 이상 봐주지 않는다!!!"
+	}
+	"Messenger_GroupAttack_CyberGrind_2"
+	{
+		"en"		"You're worth the time it takes to kill you. I'll finish you all with this attack!!"
+		"ko"		"너희같은 죄인을 죽이는데 시간이 아깝지 않지. 이 공격으로 너희를 끝내주마!!"
+	}
+	"Messenger_GroupAttack_CyberGrind_3"
+	{
+		"en"		"You sinners! {crimson}I shall EXECUTE you myself!!!"
+		"ko"		"죄인들! {crimson}즉결 처형의 시간이다!!!"
+	}
+	
+	"Messenger_Response_Messenger"
+	{
+		"en"		"USING MY OWN WEAPON AGAINST ME? {crimson}GO FUCK YOURSELF."
+		"ko"		"지금 나를 상대로 내 무기를 쳐쓰려는 거냐? {crimson}네놈을 찢어발겨주마!"
+	}
+	
+	"Messenger_Death_FirstMatch_1"
+	{
+		"en"		"Ugh... little fucks.. This ain't over!"
+		"ko"		"으윽... 이런 개좆도 아닌 쓰레기들한테... 이게 끝이 아니다!"
+	}
+	"Messenger_Death_FirstMatch_2"
+	{
+		"en"		"You're just delaying the inevitable.."
+		"ko"		"너흰 그저 필연을 미룰 뿐이다.."
+	}
+	"Messenger_Death_FirstMatch_3"
+	{
+		"en"		"I may or may not have heavily underestimated you.."
+		"ko"		"어쩌면 네놈들을 과소평가 했을수도 있겠군.."
+	}
+	"Messenger_Death_FirstMatch_4"
+	{
+		"en"		"No..."
+		"ko"		"안 돼..."
+	}
+	
+	"Messenger_Death_Rematch_1"
+	{
+		"en"		"NOT TWICE."
+		"ko"		"두 번씩이나 졌단 말인가!!"
+	}
+	"Messenger_Death_Rematch_2"
+	{
+		"en"		"WHY"
+		"ko"		"어째서냐!!"
+	}
+	"Messenger_Death_Rematch_3"
+	{
+		"en"		"YOU WILL REGRET THIS."
+		"ko"		"이 일을 후회하게 해주마!!"
+	}
+	"Messenger_Death_Rematch_4"
+	{
+		"en"		"I've failed you..... my Lord.."
+		"ko"		"전 실패했습니다... 주군.."
+	}
+	"Messenger_Death_Rematch_5"
+	{
+		"en"		"How will I.... tell Him about my failure."
+		"ko"		"무슨 낯짝으로.. 그 분께 이 실패를 말할 수 있겠는가."
+	}
+	"Messenger_Death_Rematch_6"
+	{
+		"en"		"FUCK FUCK FUCK GOD FUCKING DAMNIT {crimson}FUCK!!!{default}"
+		"ko"		"씨발 씨발 씨발 {crimson}씨발!!!{default}"
+	}
+	
+	"Messenger_Death_CyberGrind"
+	{
+		"en"		"THREE times?! I lost THREE times?!"
+		"ko"		"세 번씩이나 졌단 말인가!!"
+	}
+	
+	"Messenger_Anger_1"
+	{
+		"en"		"AHAHAHAHAHHA, all of you are so{crimson}FUCKED!!"
+		"ko"		"으하하하하하, 전부 {crimson}뒈질 준비나 해라!!"
+	}
+	"Messenger_Anger_2"
+	{
+		"en"		"{purple}VOID{default}, GRANT ME STRENGTH!"
+		"ko"		"공허여, 내게 힘을 주소서!"
+	}
+	"Messenger_Anger_3"
+	{
+		"en"		"You think you won? I'M JUST GETTING STARTED."
+		"ko"		"거의 다 이겼다고 생각하나? 지금부터 시작이다!"
+	}
+	"Messenger_Anger_4"
+	{
+		"en"		"Remember those cats? {crimson} You're about to get it worse."
+		"ko"		"그 고양이들을 기억하나? {crimson}너희는 그것보다 더 심한 꼴을 당하게 될 거다."
+	}
+	"Messenger_Anger_5"
+	{
+		"en"		"{crimson}DEATH TO MY ENEMIES!!!."
+		"ko"		"{crimson}저들에게 죽음을!!!!!"
+	}
+	"Messenger_Anger_6"
+	{
+		"en"		"{crimson}DIE ALREADY!!!"
+		"ko"		"{crimson}좀 뒈져라!!!"
+	}
+	
+	"Messenger_Anger_CyberGrind_1"
+	{
+		"en"		"JUST FUCKING DIE ALREADY!!!!!!!!!!!!!"
+		"ko"		"제발 좀 쳐 뒈져!!!!!!!!!!!!!"
+	}
+	"Messenger_Anger_CyberGrind_2"
+	{
+		"en"		"WHY WON'T YOU JUST DIE?!"
+		"ko"		"대체 왜 안 죽는 거냔 말이다!!!!!"
+	}
+	
+	// I'm Sorry. Messenger is inversed win message.
+	"Messenger_Win_FirstMatch_1"
+	{
+		"en"		"Judgement delivered."
+		"ko"		"정의가 집행되었다."
+	}
+	"Messenger_Win_FirstMatch_2"
+	{
+		"en"		"Your penance is now over."
+		"ko"		"네 놈들의 죗값은 이걸로 전부 치뤘다."
+	}
+	"Messenger_Win_FirstMatch_3"
+	{
+		"en"		"Thus your reign of terror is no more."
+		"ko"		"네 놈들의 공포 정치도 이걸로 끝이다."
+	}
+	
+	"Messenger_Win_Rematch_1"
+	{
+		"en"		"{crimson}TAKE THAT YOU FUCKS"
+		"ko"		"{crimson}멍청한 병신새끼들!"
+	}
+	"Messenger_Win_Rematch_2"
+	{
+		"en"		"Message...... delivered...."
+		"ko"		"전령이... 전달되었다...."
+	}
+	"Messenger_Win_Rematch_3"
+	{
+		"en"		"Are you proud? My Lord...."
+		"ko"		"이제 만족하십니까? 주군이시여...."
+	}
+	
+	"Messenger_Win_CyberGrind"
+	{
+		"en"		"Finally, victory is MINE! You fucking idiots..."
+		"ko"		"드디어.. 나의 승리다! 이 머저리 새기들..."
+	}
+	
+	// Bladedance.
+	"Bladedance_Encounter"
+	{
+		"en"		"How did you get here? Why are you attacking me?? More void creatures?"
+		"ko"		"어떻게 여기까지 온 거지? 날 공격하는 이유가 뭐냐?? 또 다른 공허 괴물들이냐?"
+	}
+	
+	"Bladedance_BuffAlly_1"
+	{
+		"en"		"My copies, go!"
+		"ko"		"가라, 내 분신들아!"
+	}
+	"Bladedance_BuffAlly_2"
+	{
+		"en"		"I god damn hate fighting, get out!"
+		"ko"		"이젠 싸움도 정말 지긋지긋하군! 여기서 꺼져라!"
+	}
+	"Bladedance_BuffAlly_3"
+	{
+		"en"		"Wish you could lose at the casino I once owned!"
+		"ko"		"네놈들이 내 카지노에서 거하게 망하길 빈다!"
+	}
+	
+	"Bladedance_Anger"
+	{
+		"en"		"You have seen nothing I say! I'm the least of your worries!"
+		"ko"		"내 말은 못 들은 걸로 해라! 지금 나한테 신경 쓸 때가 아니란 말이다!"
+	}
+	
+	"Bladedance_Win"
+	{
+		"en"		"You and Bob the first.. you both misunderstand who the enemy is.. its {white}Whiteflower{default} you fools! He betrayed {crimson}Guln{default} aswell!"
+		"ko"		"너희랑 밥.. 1세는 진짜 적이 누군지 모른다.. {white}배풍등{default}이 {crimson}굴른{default}을 배신했단 말이다, 이 멍청이들아!"
+	}
+	"Bladedance_Escape"
+	{
+		"en"		"{crimson}Bladedance{default} escapes from you... and gains the ability to copy {crimson}you."
+		"ko"		"{crimson}칼춤{default}이 도망쳤습니다... {crimson}여러분을{default}을 복제할 수 있는 능력을 얻은 채로 말이죠."
+	}
+	"Bladedance_Trophies"
+	{
+		"en"		"{default}This battle wasn't something that should have happened. You had little to no chance... This is... {red}''Bob's True fear''{default}."
+		"ko"		"{default}이 전투는 일어나서는 안되는 일이었습니다. 당신에겐 선택의 기회가 없었지만 말이죠... 이건... {red}''밥의 진정한 공포''{default}입니다."
+	}
+	
+	// Whiteflower.
+	"Whiteflower_TimeOver"
+	{
+		"en"		"Out of time, you're completely surrounded.\nYou now belong to me.\nSubmit.\nHelp me kill Bob, and we will rule it all."
+		"ko"		"시간 초과다. 이제 너희는 완전히 포위되었다.\n이제 너흰 내 거야.\n이제 얌전히 나를 따라라.\n내가 밥을 죽이는걸 도와주면, 우리 모두 세상을 지배할 수 있다."
+	}
+	
+	"Whiteflower_Lose"
+	{
+		"en"		"Now all that's left...\nIs Bob."
+		"ko"		"이제 남은 건...\n밥 1세뿐이군."
+	}
+	
+	"Whiteflower_Death_1"
+	{
+		"en"		"Y-You... fucking rats... rot in hell Bob..."
+		"ko"		"이... 미친 쥐새끼들이... 지옥에서 썩어 문드러져라 밥..."
+	}
+	"Whiteflower_Death_2"
+	{
+		"en"		"Whiteflower perishes.\nHis army scatters."
+		"ko"		"배풍등이 소멸해간다.\n그의 무리가 사기를 잃고 흩어진다."
+	}
+	
+	"Whiteflower_AllyDeath_1"
+	{
+		"en"		"Argk... You're next."
+		"ko"		"그래.. 네 녀석 차례다."
+	}
+	"Whiteflower_AllyDeath_2"
+	{
+		"en"		"Why are you running?"
+		"ko"		"왜 도망가는거냐?"
+	}
+	"Whiteflower_AllyDeath_3"
+	{
+		"en"		"First my army so I'm alone? Pah!"
+		"ko"		"내 무리를 먼저 치고 날 상대하시겠다고? 하!"
+	}
+	"Whiteflower_AllyDeath_3_Freeplay"
+	{
+		"en"		"From one maniac to another huh?"
+		"ko"		"미친 놈이 또 다른 미친 놈을 싸지른다더니."
+	}
+	"Whiteflower_AllyDeath_4"
+	{
+		"en"		"You are dirty."
+		"ko"		"불결한 놈."
+	}
+	"Whiteflower_AllyDeath_5"
+	{
+		"en"		"From one maniac to another huh?"
+		"ko"		"미친 놈이 또 다른 미친 놈을 싸지른다더니."
+	}
+	"Whiteflower_AllyDeath_6"
+	{
+		"en"		"You are just like them, weak."
+		"ko"		"넌 저 놈들과 다를바 없다. 약해빠졌지."
+	}
+	"Whiteflower_AllyDeath_7"
+	{
+		"en"		"You are a fool."
+		"ko"		"멍청한 놈."
+	}
+	"Whiteflower_AllyDeath_8"
+	{
+		"en"		"Such ignorance."
+		"ko"		"어리석군."
+	}
+	"Whiteflower_AllyDeath_9"
+	{
+		"en"		"They at least believe in their leader, do you?"
+		"ko"		"저들은 적어도 나를 믿는다. 넌 도대체 무슨 가치가 있지?"
+	}
+	"Whiteflower_AllyDeath_9_Freeplay"
+	{
+		"en"		"Argk... You're next."
+		"ko"		"그래.. 네 녀석 차례다."
+	}
+	"Whiteflower_AllyDeath_10"
+	{
+		"en"		"I actually care for them, do you care for your own army?"
+		"ko"		"난 내 무리를 한 번도 소홀히 대한 적이 없다. 넌 안 그러겠지만."
+	}
+	"Whiteflower_AllyDeath_10_Freeplay"
+	{
+		"en"		"You are dirty."
+		"ko"		"역겨운 놈."
+	}
+	
+	"Whiteflower_AllyDeath_Alert"
+	{
+		"en"		"He weakens as you defeat his army."
+		"ko"		"당신이 그의 무리를 파괴한 이후, 그는 훨씬 약해졌습니다."
+	}
+	
+	// Vhxis.
+	"Vhxis_Encounter"
+	{
+		"en"		"You're nothing before the power of the Void!"
+		"ko"		"공허의 힘에 비하면, 너흰 아무것도 아니다!"
+	}
+	
+	"Vhxis_Death_1"
+	{
+		"en"		"You fools!... You think I made the Void?!"
+		"ko"		"이런 멍청한 놈들! 난 공허를 막고 있었단 말이다!"
+	}
+	"Vhxis_Death_2"
+	{
+		"en"		"{purple}The void has been released..."
+		"ko"		"{purple}비히시스가 막고 있던 공허가 풀려나고 말았습니다..."
+	}
+	
+	"Vhxis_TimeOver"
+	{
+		"en"		"You almost released the Void, I have to keep it in check, piss off!"
+		"ko"		"네 놈들 때문에 공허의 봉인이 거의 풀릴 뻔했다! 난 계속 공허를 막고 있어야 하니 얼른 꺼져라!"
+	}
+	
+	"Vhxis_Anger"
+	{
+		"en"		"Die already! I'm giving it all already!!"
+		"ko"		"빨리 죽어! 왜 이리 끈질긴 거냐!!!!!!!"
+	}
+	
+	"Vhxis_Lose"
+	{
+		"en"		"Back to the Void gate I go."
+		"ko"		"다시 공허 관문으로 돌아가야겠군."
 	}
 }

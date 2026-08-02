@@ -388,7 +388,7 @@ methodmap TheMessenger < CClotBody
 		
 		if (npc.m_bBossRushDuo)
 		{
-			TheMessenger_NPCTalkMessage(npc.index, "Messenger_Encounter_BossrushDuo");
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_Encounter_BossrushDuo", true);
 		}
 		else if(!final)
 		{
@@ -396,11 +396,11 @@ methodmap TheMessenger < CClotBody
 			{
 				IgniteTargetEffect(npc.m_iWearable1);
 				
-				TheMessenger_NPCTalkMessage(npc.index, "Messenger_Encounter_FirstMatch");
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_Encounter_FirstMatch", true);
 			}
 			else
 			{
-				TheMessenger_NPCTalkMessage(npc.index, "Messenger_Encounter_Rematch");
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_Encounter_Rematch", true);
 			}
 		}
 
@@ -437,11 +437,11 @@ methodmap TheMessenger < CClotBody
 	}
 }
 
-void TheMessenger_NPCTalkMessage(int iNPC, const char[] message, any ...)
+void TheMessenger_NPCTalkMessage(int iNPC, const char[] message, bool translated = false, any ...)
 {
 	char buffer[255];
-	VFormat(buffer, sizeof(buffer), message, 3);
-	NPC_TalkMessageWithTranslationCheck(iNPC, "lightblue", buffer);
+	VFormat(buffer, sizeof(buffer), message, 4);
+	PrintNPCMessageWithPrefixes(iNPC, "lightblue", buffer, translated);
 }
 
 public void TheMessenger_ClotThink(int iNPC)
@@ -460,7 +460,7 @@ public void TheMessenger_ClotThink(int iNPC)
 	if(i_RaidGrantExtra[npc.index] >= 6)
 	{
 		i_RaidGrantExtra[npc.index] = 6;
-		TheMessenger_NPCTalkMessage(npc.index, "Messenger_Behold_Khalm");
+		TheMessenger_NPCTalkMessage(npc.index, "Messenger_Behold_Khalm", true);
 		return;
 	}
 	/*
@@ -474,11 +474,11 @@ public void TheMessenger_ClotThink(int iNPC)
 		BlockLoseSay = true;
 		if(i_RaidGrantExtra[npc.index] <= 2)
 		{
-			TheMessenger_NPCTalkMessage(npc.index, "Messenger_TimeOver_FirstMatch_%d", GetRandomInt(1, 3));
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_TimeOver_FirstMatch_%d", true, GetRandomInt(1, 3));
 		}
 		else
 		{
-			TheMessenger_NPCTalkMessage(npc.index, "Messenger_TimeOver_Rematch");
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_TimeOver_Rematch", true);
 		}
 	}
 	if(LastMann)
@@ -488,11 +488,11 @@ public void TheMessenger_ClotThink(int iNPC)
 			npc.m_fbGunout = true;
 			if(i_RaidGrantExtra[npc.index] <= 2)
 			{
-				TheMessenger_NPCTalkMessage(npc.index, "Messenger_LastMann_FirstMatch_%d", GetRandomInt(1, 4));
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_LastMann_FirstMatch_%d", true, GetRandomInt(1, 4));
 			}
 			else
 			{
-				TheMessenger_NPCTalkMessage(npc.index, "Messenger_LastMann_Rematch_%d", GetRandomInt(1, 3));			
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_LastMann_Rematch_%d", true, GetRandomInt(1, 3));			
 			}
 		}
 	}
@@ -629,7 +629,7 @@ bool Messanger_Elemental_Attack_Projectiles(TheMessenger npc)
 				npc.m_iOverlordComboAttack = 4;
 				fl_TotalArmor[npc.index] = fl_TotalArmor[npc.index] * 0.9;
 				RaidModeScaling *= 1.1;
-				TheMessenger_NPCTalkMessage(npc.index, "Messenger_GroupAttack_%d", GetRandomInt(1, 5));
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_GroupAttack_%d", true, GetRandomInt(1, 5));
 				MessengerInitiateGroupAttack(npc);
 			}
 			return true;
@@ -821,7 +821,7 @@ public Action TheMessenger_OnTakeDamage(int victim, int &attacker, int &inflicto
 			if(i_CustomWeaponEquipLogic[weapon] == WEAPON_MESSENGER_LAUNCHER)
 			{
 				b_khamlWeaponRage[npc.index] = true;
-				TheMessenger_NPCTalkMessage(npc.index, "Messenger_Response_Messenger");
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_Response_Messenger", true);
 			}
 		}
 	}
@@ -868,11 +868,11 @@ public void TheMessenger_NPCDeath(int entity)
 	{
 		if(i_RaidGrantExtra[npc.index] <= 2)
 		{
-			TheMessenger_NPCTalkMessage(npc.index, "Messenger_Death_FirstMatch_%d", GetRandomInt(1, 4));
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_Death_FirstMatch_%d", true, GetRandomInt(1, 4));
 		}
 		else
 		{
-			TheMessenger_NPCTalkMessage(npc.index, "Messenger_Death_Rematch_%d", GetRandomInt(1, 6));
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_Death_Rematch_%d", true, GetRandomInt(1, 6));
 		}
 	}
 }
@@ -1291,7 +1291,7 @@ public void TheMessenger_OnTakeDamagePost(int victim, int attacker, int inflicto
 		f_MessengerSpeedUp[npc.index] = 1.65;
 		npc.m_flSpeed = 330.0;
 		
-		TheMessenger_NPCTalkMessage(npc.index, "Messenger_Anger_%d", GetRandomInt(1, 6));
+		TheMessenger_NPCTalkMessage(npc.index, "Messenger_Anger_%d", true, GetRandomInt(1, 6));
 	}
 }
 
@@ -1300,10 +1300,10 @@ public void TheMessenger_Win(int entity)
 {
 	if(i_RaidGrantExtra[entity] <= 2)
 	{
-		TheMessenger_NPCTalkMessage(entity, "Messenger_Win_FirstMatch_%d", GetRandomInt(1, 3));
+		TheMessenger_NPCTalkMessage(entity, "Messenger_Win_FirstMatch_%d", true, GetRandomInt(1, 3));
 	}
 	else
 	{
-		TheMessenger_NPCTalkMessage(entity, "Messenger_Win_Rematch_%d", GetRandomInt(1, 3));
+		TheMessenger_NPCTalkMessage(entity, "Messenger_Win_Rematch_%d", true, GetRandomInt(1, 3));
 	}
 }
