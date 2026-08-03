@@ -3024,7 +3024,7 @@ void ApplyLastmanOrDyingOverlay(int client)
 	{
 		switch(Yakuza_Lastman())
 		{
-			case 1,2,3,4,7,9, 15:
+			case 1,2,3,4,7,9,15,17:
 			{
 				return;
 			}
@@ -3043,6 +3043,11 @@ void ApplyLastmanOrDyingOverlay(int client)
 			case 18:
 			{
 				if(Gunsaw_IsMerc(client) && f_OneShotProtectionTimer[client] < GetGameTime())
+					return;
+			}
+			default:
+			{
+				if(Weapon_AddonsOverlayForLastMan(client, Yakuza_Lastman()))
 					return;
 			}
 		}
