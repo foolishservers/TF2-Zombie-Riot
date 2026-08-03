@@ -1901,11 +1901,6 @@
 		"en"		"You helped Kahml get rid of his chaos affliction.\nHe doesnt like to say thanks directly though.\nBuffs up the secondary ability duration by 2 seconds."
 		"ko"		"당신은 카멜슈타인이 혼돈에 고통받는 것을 끝냈습니다.\n그러나 그는 직접적으로 감사를 표하진 않는군요.\n보조 능력의 지속 시간이 2초 증가합니다."
 	}
-	"Almina's Last Hope Desc"
-	{
-		"en"		"You saved Almina from Whiteflower rule.\nBut can you save what’s left of Almina from the Dweller."
-		"ko"		"당신은 알미나를 배풍등의 지배에서 자유롭게 했습니다.\n하지만 드웰러의 공포가 알미나엔 남아있군요. 이번에도 그들을 구원할 수 있을까요?"
-	}
 	"Chaos Machina Waldch Chip Desc"
 	{
 		"en"		"You managed to kill off the machine, the impostor.."
@@ -2000,6 +1995,28 @@
 	{
 		"en"		"You stopped the almagest from escaping with their spaceship and held your base!\nTrophy!"
 		"ko"		"당신은 알마게스트로부터 요새를 보호하고, 그들이 우주선을 타고 탈출하는 걸 저지했습니다!\n트로피!"
+	}
+	
+	// Barracks Desc.
+	"Almina and Expidonsan's Help Desc"
+	{
+		"en"		"Alminans Offer their assistance!\nThorns might join up if you help his cause..."
+		"ko"		"알미나인들이 도움을 주러 왔습니다!\n쏜즈도 그와 대의를 같이 한다면 합류할 겁니다..."
+	}
+	"Almina's Last Hope Desc"
+	{
+		"en"		"Replaces Monk and Hussar with Thorns\nMaybe Almina's Training might help...\nActivate if you only want thorsn with normal barracks."
+		"ko"		"수도사와 후사르의 자리를 쏜즈로 대체합니다.\n알미나와의 훈련이 아마 도움이 되었을 겁니다...\n일반 배럭과 쏜즈를 원한다면 활성화하세요."
+	}
+	"Blitzkrieg's Army Desc"
+	{
+		"en"		"With Blitzkrieg being defeated, his army is at your disposal..."
+		"ko"		"블리츠크리그가 패배한 후, 그의 군대는 이제 당신의 명령을 기다립니다..."
+	}
+	"Guln's Companions Desc"
+	{
+		"en"		"Retain chaos with guln's army!"
+		"ko"		"굴른의 부대원들과 함께 혼돈을 격리하세요!"
 	}
 	
 	// Tinker attributes.

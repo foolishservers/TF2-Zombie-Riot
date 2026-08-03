@@ -3565,6 +3565,16 @@
 		"en"	"Broken off one of the elite rogue expidonsans. \nIt appears to be stronger than Sensal's tech, at least by the look of it."
 		"ko"	"정예 이탈자 엑스피돈사인들 중 하나에게서 떨어져 나온 것입니다.\n보아하니 센살의 기술력보다 더욱 강력한 것 같군요. 최소한 보이는 것으로는요."
 	}
+	"Almina's Last Hope..."
+	{
+		"en"		"Almina's Last Hope..."
+		"ko"		"알미나의 마지막 희망..."
+	}
+	"Almina's Last Hope Trophy Desc"
+	{
+		"en"		"You saved Almina from Whiteflower rule.\nBut can you save what’s left of Almina from the Dweller."
+		"ko"		"당신은 알미나를 배풍등의 지배에서 자유롭게 했습니다.\n하지만 드웰러의 공포가 알미나엔 남아있군요. 이번에도 그들을 구원할 수 있을까요?"
+	}
 	"Major Voided’s Hat"
 	{
 		"en"	"Major Voided’s Hat"

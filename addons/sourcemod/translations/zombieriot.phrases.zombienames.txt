@@ -8163,6 +8163,11 @@
 		"en"	"Major Avangard"
 		"ko"	"아방가르드 소령"
 	}
+	"SIGMALLER"
+	{
+		"en"	"SIGMALLER"
+		"ko"	"시그마 전령병"
+	}
 	"Ghoul"
 	{
 		"en"	"Ghoul"
