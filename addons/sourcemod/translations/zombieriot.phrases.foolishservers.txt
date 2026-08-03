@@ -2001,4 +2001,290 @@
 		"en"		"You stopped the almagest from escaping with their spaceship and held your base!\nTrophy!"
 		"ko"		"당신은 알마게스트로부터 요새를 보호하고, 그들이 우주선을 타고 탈출하는 걸 저지했습니다!\n트로피!"
 	}
+	
+	// Tinker attributes.
+	"TinkerAttrib_PhysicalDamage"
+	{
+		"en"		"Physical Damage"
+		"ko"		"물리 피해량"
+	}
+	"TinkerAttrib_BaseDamage"
+	{
+		"en"		"Base Damage"
+		"ko"		"기본 피해량"
+	}
+	"TinkerAttrib_ClipSize"
+	{
+		"en"		"Clip Size"
+		"ko"		"장탄수"
+	}
+	"TinkerAttrib_SweepingEdge_MaxHit"
+	{
+		"en"		"Sweeping Edge Max Hit"
+		"ko"		"휩쓸기 최대 적중 수"
+	}
+	"TinkerAttrib_FireRate"
+	{
+		"en"		"Fire Rate"
+		"ko"		"공격 속도"
+	}
+	"TinkerAttrib_HealingRate"
+	{
+		"en"		"Healing Rate"
+		"ko"		"치유 속도"
+	}
+	"TinkerAttrib_UberChargeRate"
+	{
+		"en"		"ÜberCharge Rate"
+		"ko"		"우버차지 충전 속도"
+	}
+	"TinkerAttrib_HealthOnHit"
+	{
+		"en"		"Health On Hit"
+		"ko"		"적중 시 회복"
+	}
+	"TinkerAttrib_MaxHealth"
+	{
+		"en"		"Max Health"
+		"ko"		"최대 체력"
+	}
+	"TinkerAttrib_SweepingEdge_ChargeRate"
+	{
+		"en"		"Sweeping Edge Charge Rate"
+		"ko"		"휩쓸기 충전 속도"
+	}
+	"TinkerAttrib_ChargeRate"
+	{
+		"en"		"Charge Rate"
+		"ko"		"충전 속도"
+	}
+	"TinkerAttrib_"
+	{
+		"en"		""
+		"ko"		""
+	}
+	"TinkerAttrib_"
+	{
+		"en"		""
+		"ko"		""
+	}
+	"TinkerAttrib_"
+	{
+		"en"		""
+		"ko"		""
+	}
+	"TinkerAttrib_"
+	{
+		"en"		""
+		"ko"		""
+	}
+	"TinkerAttrib_"
+	{
+		"en"		""
+		"ko"		""
+	}
+	"TinkerAttrib_"
+	{
+		"en"		""
+		"ko"		""
+	}
+	"TinkerAttrib_"
+	{
+		"en"		""
+		"ko"		""
+	}
+	"TinkerAttrib_"
+	{
+		"en"		""
+		"ko"		""
+	}
+	"TinkerAttrib_"
+	{
+		"en"		""
+		"ko"		""
+	}
+	"TinkerAttrib_"
+	{
+		"en"		""
+		"ko"		""
+	}
+	"TinkerAttrib_"
+	{
+		"en"		""
+		"ko"		""
+	}
+	
+	
+	"Tinker_SharedGlassy"
+	{
+		"en"		"Glassy"
+		"ko"		"유리 대포"
+	}
+	"Tinker_MeleeRapidSwing"
+	{
+		"en"		"Rapid Haste"
+		"ko"		"성급함"
+	}
+	"Tinker_MeleeHeavySwing"
+	{
+		"en"		"Heavy Swing"
+		"ko"		"묵직한 강타"
+	}
+	"Tinker_MeleeLongSwing"
+	{
+		"en"		"Extended Hands"
+		"ko"		"늘어나는 팔"
+	}
+	"Tinker_HasteMage"
+	{
+		"en"		"Hasty Mage"
+		"ko"		"성급한 마법사"
+	}
+	"Tinker_HeavyMage"
+	{
+		"en"		"Heavy Mage"
+		"ko"		"강격의 마법사"
+	}
+	"Tinker_ConcentratedMagic"
+	{
+		"en"		"Concentrated Magic"
+		"ko"		"집중형 마법"
+	}
+	"Tinker_TankMage"
+	{
+		"en"		"Resistive Mage"
+		"ko"		"튼튼한 마법사"
+	}
+	"Tinker_FastHeal"
+	{
+		"en"		"Healing Overdrive"
+		"ko"		"치유 과충전"
+	}
+	"Tinker_Overhealer"
+	{
+		"en"		"Omega Overheal"
+		"ko"		"오메가 과치료"
+	}
+	"Tinker_Uberer"
+	{
+		"en"		"Pure Uberer"
+		"ko"		"순수한 우버맨쉬"
+	}
+	"Tinker_BurstHeal"
+	{
+		"en"		"Burst Heal"
+		"ko"		"치유 극대화"
+	}
+	"Tinker_BuilderLongSwing"
+	{
+		"en"		"Building Extension"
+		"ko"		"확장 공사"
+	}
+	"Tinker_BuilderRepairMaster"
+	{
+		"en"		"Repair Master"
+		"ko"		"수리의 달인"
+	}
+	"Tinker_SlowHeavyProj"
+	{
+		"en"		"Slow Heavy Energy"
+		"ko"		"느리고 강한 에너지"
+	}
+	"Tinker_FastProj"
+	{
+		"en"		"Speeding Bullets"
+		"ko"		"급가속 탄환"
+	}
+	"Tinker_IntensiveClip"
+	{
+		"en"		"Intensive Clip"
+		"ko"		"대용량 탄창"
+	}
+	"Tinker_ConcentratedClip"
+	{
+		"en"		"Concentrated Clip"
+		"ko"		"대구경 탄환"
+	}
+	"Tinker_HeavyTrigger"
+	{
+		"en"		"Heavy Trigger"
+		"ko"		"중량 방아쇠"
+	}
+	"Tinker_SprayAndPray"
+	{
+		"en"		"Spray and Pray"
+		"ko"		"뿌리고 기도해라"
+	}
+	"Tinker_SmallerSmarterBullets"
+	{
+		"en"		"Smaller Smarter Bullets"
+		"ko"		"소형화 스마트 탄환"
+	}
+	
+	"Tinker_MS_Sharpness"
+	{
+		"en"		"Sharpness"
+		"ko"		"날카로움"
+	}
+	"Tinker_MS_Smite"
+	{
+		"en"		"Smite"
+		"ko"		"강타"
+	}
+	"Tinker_MS_SweepingEdge"
+	{
+		"en"		"Sweeping Edge"
+		"ko"		"휩쓸기"
+	}
+	"Tinker_MS_QuickCharge"
+	{
+		"en"		"Quick Charge"
+		"ko"		"빠른 충전"
+	}
+	"Tinker_MS_BaneofArthropods"
+	{
+		"en"		"Bane of Arthropods"
+		"ko"		"살충"
+	}
+	"Tinker_MS_FireAspect"
+	{
+		"en"		"Fire Aspect"
+		"ko"		"발화"
+	}
+	"Tinker_MS_CurseOfGlassy"
+	{
+		"en"		"Curse Of Glassy"
+		"ko"		"유리 저주"
+	}
+	
+	"Tinker_SR_ExplosiveHeadshot"
+	{
+		"en"		"Explosive Headshot"
+		"ko"		"폭발성 헤드샷"
+	}
+	"Tinker_SR_KillerFocus"
+	{
+		"en"		"Killer Focus"
+		"ko"		"살인적인 집중"
+	}
+	"Tinker_SR_SuperCoolingChamber"
+	{
+		"en"		"Super Cooling Chamber"
+		"ko"		"초냉각 약실"
+	}
+	"Tinker_SR_DepletedUranium"
+	{
+		"en"		"U-238"
+		"ko"		"U-238"
+	}
+	"Tinker_SR_HighSpeedFeedMechanism"
+	{
+		"en"		"High-Speed Feed Mechanism"
+		"ko"		"고속 급탄 메커니즘"
+	}
+	"Tinker_SR_HollowPointBullets"
+	{
+		"en"		"Hollow Point Bullets"
+		"ko"		"할로우 포인트 탄환"
+	}
 }
