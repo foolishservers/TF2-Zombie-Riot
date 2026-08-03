@@ -212,8 +212,9 @@ static Action Timer_Barracks(Handle timer, DataPack pack)
 		}
 	}
 	
-	if(i_ClientHasCustomGearEquipped[client] != CUSTOMGEAR_NONE || !IsEntityAlive(client,_, true))
+	if(valid && (i_ClientHasCustomGearEquipped[client] != CUSTOMGEAR_NONE || !IsEntityAlive(client,_, true)))
 		return Plugin_Continue;
+		
 	if(!valid)
 	{
 		h_Barrack_Timer[clientindx] = null;
