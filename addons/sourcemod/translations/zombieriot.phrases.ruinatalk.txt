@@ -270,7 +270,7 @@
 	"Stella_Exhausted_1"
 	{
 		"en"		"Hmph, I'll let {crimson}Karlas{snow} handle this."
-		"ko"		"앗.. 나머진 {crimson}카를라스{snow}에게 맡겨야 겠네."
+		"ko"		"앗.. 나머진 {crimson}카를라스{snow}에게 맡겨야겠네."
 	}
 	"Stella_Exhausted_2"
 	{
