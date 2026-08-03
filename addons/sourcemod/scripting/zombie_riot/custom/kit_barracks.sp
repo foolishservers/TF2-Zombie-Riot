@@ -17,6 +17,8 @@ static float Barracks_NovaCDTime[MAXPLAYERS];				// Cd for the healing nova of t
 static float ReDash[MAXPLAYERS];							// For the 5s window of the Chain Hit
 static int WeaponSMGID[MAXPLAYERS];
 static int WeaponReconstructiveShotgunID[MAXPLAYERS];
+static float WeaponReconstructiveShotgunBuffTime[MAXPLAYERS];	
+static float GlobalReconstructiveShotgunSoundTime;	
 bool BR_Precached = false;
 
 /*
@@ -41,18 +43,21 @@ public void Barracks_OnMapStart()
 	//precache + zero stuff
 	PrecacheSound(WEAPON_SWITCH_SOUND);
 	PrecacheSound(CRIME_SOUND);
+	PrecacheSound("items/samurai/tf_conch.wav");
 	Zero(CivType);
 	Zero(WeaponPap);
 	Zero(ShotgunHeal);
 	Zero(ShotgunHeal_Targets);
 	Zero(BarracksBuffMode);
-	Zero(Barrack_HUDDelay);
+	ZeroFloat(Barrack_HUDDelay);
 	Zero(ResourceGen);
-	Zero(ReDash);
-	Zero(Barracks_NovaCDTime);
-	Zero(Barracks_PowerHitTime);
+	ZeroFloat(ReDash);
+	ZeroFloat(Barracks_NovaCDTime);
+	ZeroFloat(Barracks_PowerHitTime);
 	Zero(WeaponSMGID);
 	Zero(WeaponReconstructiveShotgunID);
+	ZeroFloat(WeaponReconstructiveShotgunBuffTime);
+	GlobalReconstructiveShotgunSoundTime=0.0;
 	
 	BR_Precached = false;
 }
@@ -61,6 +66,9 @@ void PrecacheBarracksMusic()
 	if(!BR_Precached)
 	{
 		PrecacheSoundCustom("#zombiesurvival/medieval_raid/kazimierz_boss.mp3", _, 1);
+		PrecacheSoundCustom("#zombiesurvival/altwaves_and_blitzkrieg/music/wave60_2.mp3", _, 1);
+		PrecacheSoundCustom("#zombiesurvival/iberia/wave_30.mp3", _, 1);
+		PrecacheSoundCustom("#zombiesurvival/xeno_raid/xeno_shared_bossmusic.mp3", _, 1);
 		BR_Precached = true;
 	} 
 }
@@ -94,14 +102,123 @@ static Action Timer_Barracks(Handle timer, DataPack pack)
 	int client = EntRefToEntIndex(pack.ReadCell());
 	
 	bool valid = IsValidClient(client);
+	if(valid)
+	{
+		int i_IsValidEntitys = EntRefToEntIndex(WeaponReconstructiveShotgunID[clientindx]);
+		if(!IsValidEntity(i_IsValidEntitys))
+			valid=false;
+		i_IsValidEntitys = EntRefToEntIndex(WeaponSMGID[clientindx]);
+		if(!IsValidEntity(i_IsValidEntitys))
+			valid=false;
+	}
+	
+	if(valid && WeaponReconstructiveShotgunBuffTime[clientindx] > GetGameTime())
+	{
+		//750Hu.
+		float position[3]; WorldSpaceCenter(clientindx, position);
+		position[2]+=3.0;
+		spawnRing_Vectors(position, 1430.0, 0.0, 0.0, 5.0, LASERBEAM, 200, 50, 50, 125, 1, 0.11, 5.0, 1.1, 5, _, client);
+		position[2]-=3.0;
+		for(int entitycount; entitycount<i_MaxcountNpcTotal; entitycount++)
+		{
+			int npc = EntRefToEntIndexFast(i_ObjectsNpcsTotal[entitycount]);
+			if(IsValidEntity(npc) && GetTeam(npc) == TFTeam_Red && (npc <= MaxClients || !b_NpcHasDied[npc]))
+			{
+				float position2[3], distance;
+				GetEntPropVector(npc, Prop_Send, "m_vecOrigin", position2);
+				distance = GetVectorDistance(position, position2, true);
+				if(distance<511225.0)
+				{
+					switch(WhatCiv(clientindx))
+					{
+						case Almina_Thorns, Almina_Thornless:{
+							ApplyStatusEffect(clientindx, npc, "Very Defensive Backup", 1.0);
+						}
+						case Thorns:{
+							ApplyStatusEffect(clientindx, npc, "Expidonsan War Cry", 1.0);
+						}
+						case Combine:{
+							ApplyStatusEffect(clientindx, npc, "Ancient Melodies", 1.0);
+							ApplyStatusEffect(clientindx, npc, "Healing Adaptiveness All", 1.0);
+						}
+						case Alternative:{
+							ApplyStatusEffect(clientindx, npc, "Weapon Clocking", 1.0);
+							ApplyStatusEffect(clientindx, npc, "Weapon Overclock", 1.0);
+						}
+						default:{
+							ApplyStatusEffect(clientindx, npc, "Godly Motivation", 1.0);
+						}
+					}
+				}
+			}
+		}
+		for(int target=1; target<=MaxClients; target++)
+		{
+			if(IsValidClient(target) && IsPlayerAlive(target) && target!=clientindx && TeutonType[target] != TEUTON_WAITING)
+			{
+				float position2[3], distance;
+				WorldSpaceCenter(target, position2);
+				distance = GetVectorDistance(position, position2, true);
+				if(distance<511225.0)
+				{
+					if(TeutonType[target] != TEUTON_NONE)
+					{
+						TF2_RemoveCondition(target, TFCond_SpeedBuffAlly);
+						TF2_AddCondition(target, TFCond_SpeedBuffAlly, 1.0);
+					}
+					
+					switch(WhatCiv(clientindx))
+					{
+						case Almina_Thorns, Almina_Thornless:{
+							ApplyStatusEffect(clientindx, target, "Very Defensive Backup", 1.0);
+						}
+						case Thorns:{
+							ApplyStatusEffect(clientindx, target, "Expidonsan War Cry", 1.0);
+						}
+						case Combine:{
+							ApplyStatusEffect(clientindx, target, "Weapon Clocking", 1.0);
+							ApplyStatusEffect(clientindx, target, "Weapon Overclock", 1.0);
+						}
+						case Alternative:{
+							ApplyStatusEffect(clientindx, target, "War Cry", 1.0);
+							ApplyStatusEffect(clientindx, target, "Defensive Backup", 1.0);
+						}
+						default:{
+							ApplyStatusEffect(clientindx, target, "Godly Motivation", 1.0);
+						}
+					}
+				}
+			}
+		}
+		switch(WhatCiv(clientindx))
+		{
+			case Almina_Thorns, Almina_Thornless:{
+				ApplyStatusEffect(clientindx, clientindx, "Very Defensive Backup", 1.0);
+			}
+			case Thorns:{
+				ApplyStatusEffect(clientindx, clientindx, "Expidonsan War Cry", 1.0);
+			}
+			case Combine:{
+				ApplyStatusEffect(clientindx, clientindx, "Ancient Melodies", 1.0);
+				ApplyStatusEffect(clientindx, clientindx, "Healing Adaptiveness All", 1.0);
+			}
+			case Alternative:{
+				ApplyStatusEffect(clientindx, clientindx, "Weapon Clocking", 1.0);
+				ApplyStatusEffect(clientindx, clientindx, "Weapon Overclock", 1.0);
+			}
+			default:{
+				ApplyStatusEffect(clientindx, clientindx, "Godly Motivation", 1.0);
+			}
+		}
+	}
+	
+	if(valid && (i_ClientHasCustomGearEquipped[client] != CUSTOMGEAR_NONE || !IsEntityAlive(client,_, true)))
+		return Plugin_Continue;
+		
 	if(!valid)
 	{
 		h_Barrack_Timer[clientindx] = null;
 		return Plugin_Stop;
-	}
-	if(i_ClientHasCustomGearEquipped[client] != CUSTOMGEAR_NONE || !IsEntityAlive(client,_, true))
-	{
-		return Plugin_Continue;
 	}
 	
 	Barracks_HUD(client);
@@ -157,12 +274,87 @@ public void Weapon_Marker_M2(int client, int weapon, bool crit, int slot)
 }
 public void Weapon_Hunter_M2(int client, int weapon, bool crit, int slot)
 {
-	EmitSoundToClient(client, WEAPON_SWITCH_SOUND, client, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
-	FakeClientCommandEx(client, "use tf_weapon_smg");
+//	EmitSoundToClient(client, WEAPON_SWITCH_SOUND, client, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
+//	FakeClientCommandEx(client, "use tf_weapon_smg");
+
+	if(!IsValidClient(client) || !IsPlayerAlive(client))
+		return;
+	float Ability_CD = Ability_Check_Cooldown(client, slot);
+
+	if(Ability_CD <= 0.0 || CvarInfiniteCash.BoolValue)
+		Ability_CD = 0.0;
+	if(Ability_CD > 0.0)
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		SetGlobalTransTarget(client);
+		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);
+		return;
+	}
+	if(WeaponReconstructiveShotgunBuffTime[client] > GetGameTime())
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		SetGlobalTransTarget(client);
+		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Already Used");
+		return;
+	}
+	Rogue_OnAbilityUse(client, weapon);
+	Ability_Apply_Cooldown(client, slot, 90.0);
+	if(b_AlaxiosBuffItem[client])
+	{
+		int r = 200;
+		int g = 200;
+		int b = 255;
+		int a = 200;
+		EmitSoundToAll("mvm/mvm_tank_horn.wav", client, SNDCHAN_STATIC, 80, _, 0.45);
+		
+		spawnRing(client, 50.0 * 2.0, 0.0, 0.0, 5.0, "materials/sprites/laserbeam.vmt", r, g, b, a, 1, 0.5, 6.0, 6.1, 1);
+		spawnRing(client, 50.0 * 2.0, 0.0, 0.0, 25.0, "materials/sprites/laserbeam.vmt", r, g, b, a, 1, 0.4, 6.0, 6.1, 1);
+		spawnRing(client, 50.0 * 2.0, 0.0, 0.0, 45.0, "materials/sprites/laserbeam.vmt", r, g, b, a, 1, 0.3, 6.0, 6.1, 1);
+		spawnRing(client, 50.0 * 2.0, 0.0, 0.0, 65.0, "materials/sprites/laserbeam.vmt", r, g, b, a, 1, 0.2, 6.0, 6.1, 1);
+		spawnRing(client, 50.0 * 2.0, 0.0, 0.0, 85.0, "materials/sprites/laserbeam.vmt", r, g, b, a, 1, 0.1, 6.0, 6.1, 1);
+	}
+	
+	int AllyCount;
+	float position[3]; WorldSpaceCenter(client, position);
+	for(int entitycount; entitycount<i_MaxcountNpcTotal; entitycount++)
+	{
+		int npc = EntRefToEntIndexFast(i_ObjectsNpcsTotal[entitycount]);
+		if(IsValidEntity(npc) && GetTeam(npc) == TFTeam_Red && (npc <= MaxClients || !b_NpcHasDied[npc]))
+		{
+			float position2[3], distance;
+			GetEntPropVector(npc, Prop_Send, "m_vecOrigin", position2);
+			distance = GetVectorDistance(position, position2, true);
+			if(distance<511225.0)
+				AllyCount++;
+		}
+	}
+	for(int target=1; target<=MaxClients; target++)
+	{
+		if(IsValidClient(target) && IsPlayerAlive(target) && TeutonType[target] != TEUTON_WAITING)
+		{
+			float position2[3], distance;
+			WorldSpaceCenter(target, position2);
+			distance = GetVectorDistance(position, position2, true);
+			if(distance<511225.0)
+				AllyCount++;
+		}
+	}
+	//너무 씨그러운www
+	if(GlobalReconstructiveShotgunSoundTime < GetGameTime() && AllyCount > 2)
+	{
+		EmitSoundToAll("items/samurai/tf_conch.wav", client, SNDCHAN_STATIC, BOSS_ZOMBIE_SOUNDLEVEL , _, 0.5, GetRandomInt(80,110));
+		GlobalReconstructiveShotgunSoundTime = GetGameTime() + 15.0;
+	}
+	TF2_RemoveCondition(client, TFCond_SpeedBuffAlly);
+	TF2_AddCondition(client, TFCond_SpeedBuffAlly, 3.0);
+	WeaponReconstructiveShotgunBuffTime[client] = GetGameTime() + 8.0 + (float(WeaponPap[client]) * 2.0);
 }
 public void Enable_CastleSiege(int client, int weapon)
 {
 	WeaponSMGID[client] = EntIndexToEntRef(weapon);
+	Enable_Barracks(client, weapon);
 }
 public void Enable_Barracks_Hunter(int client, int weapon)
 {
@@ -174,17 +366,32 @@ bool Inv_ReconstructiveShotgun_Enable(int client)
 	return IsValidEntity(IsValidShotgun);
 }
 
-public void Weapon_CastleSiege_M2(int client, int weapon, bool crit, int slot)
+public void Barracks_OnLastManStand(int client)
 {
-	EmitSoundToClient(client, WEAPON_SWITCH_SOUND, client, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
-	FakeClientCommandEx(client, "use tf_weapon_revolver");
+	int IsValidWeapon = EntRefToEntIndex(WeaponSMGID[client]);
+	if(IsValidEntity(IsValidWeapon))
+		Ability_Apply_Cooldown(client, 2, 0.0, IsValidWeapon);
+	IsValidWeapon = EntRefToEntIndex(WeaponReconstructiveShotgunID[client]);
+	if(IsValidEntity(IsValidWeapon))
+		Ability_Apply_Cooldown(client, 2, 0.0, IsValidWeapon);
+		
+	Barracks_PowerHitTime[client] -= 50.0;
+	Barracks_NovaCDTime[client] -= 10.0;
 }
+
+//public void Weapon_CastleSiege_M2(int client, int weapon, bool crit, int slot)
+//{
+//	EmitSoundToClient(client, WEAPON_SWITCH_SOUND, client, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
+//	FakeClientCommandEx(client, "use tf_weapon_revolver");
+//}
 public void Barracks_OnTakeDamage_CastleSiege(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int zr_custom_damage)
 {
 	if(CheckInHud())
 	return;
 	if(HasSpecificBuff(victim, "Marked"))
 		damage*=1.0+(float(WeaponPap[attacker]) * 0.2);
+	ApplyStatusEffect(attacker, victim, "Marked", 4.0 + (WeaponPap[attacker] * 2));
+	SummonerRenerateResources(attacker, 0.1, 0.0, true);
 }
 public void Barracks_CastleSiegeMode(int client, int weapon, bool crit, int slot)
 {
@@ -218,11 +425,11 @@ public void Barracks_OnTakeDamage(int victim, int &attacker, int &inflictor, flo
 		int IsValidSMG = EntRefToEntIndex(WeaponSMGID[attacker]);
 		if(IsValidEntity(IsValidSMG))
 		{
-			float Ability_CD = Ability_Check_Cooldown(attacker, 3, IsValidSMG);
+			float Ability_CD = Ability_Check_Cooldown(attacker, 2, IsValidSMG);
 			Ability_CD-=2.0;
 			if(Ability_CD <= 0.0 || CvarInfiniteCash.BoolValue)
 				Ability_CD = 0.0;
-			Ability_Apply_Cooldown(attacker, 3, Ability_CD, IsValidSMG, true);
+			Ability_Apply_Cooldown(attacker, 2, Ability_CD, IsValidSMG, true);
 		}
 	}
 	
@@ -236,15 +443,16 @@ public void Barracks_OnTakeDamage_Hunter(int victim, int &attacker, int &inflict
 	
 	if(HasSpecificBuff(victim, "Marked"))
 	{
+		SummonerRenerateResources(attacker, 5.0 + (WeaponPap[attacker] * 3), 0.0, true);
 		damage *= (1.2 + ((WeaponPap[attacker] * 0.1)));
 		int IsValidSMG = EntRefToEntIndex(WeaponSMGID[attacker]);
 		if(IsValidEntity(IsValidSMG))
 		{
-			float Ability_CD = Ability_Check_Cooldown(attacker, 3, IsValidSMG);
-			Ability_CD-=1.0;
+			float Ability_CD = Ability_Check_Cooldown(attacker, 2, IsValidSMG);
+			Ability_CD-=3.0;
 			if(Ability_CD <= 0.0 || CvarInfiniteCash.BoolValue)
 				Ability_CD = 0.0;
-			Ability_Apply_Cooldown(attacker, 3, Ability_CD, IsValidSMG, true);
+			Ability_Apply_Cooldown(attacker, 2, Ability_CD, IsValidSMG, true);
 		}
 	}
 	if(Ability_Check_Cooldown(attacker, 2) < 0.0)
@@ -670,6 +878,26 @@ static void Barracks_HUD(int client)
 	else
 	{
 		Format(BarracksHud, sizeof(BarracksHud), "%s\nHealing Nova: [%.1f]", BarracksHud, NovaCD);
+	}
+	if(WeaponPap[client] >= 3)
+	{
+		float BuffTime = WeaponReconstructiveShotgunBuffTime[client] - GetGameTime();
+		if(BuffTime > 0.0)
+			Format(BarracksHud, sizeof(BarracksHud), "%s\nBattle-Banner ACTIVE!: [%.1f]", BarracksHud, BuffTime);
+		else
+		{
+			int IsValidShotgun = EntRefToEntIndex(WeaponReconstructiveShotgunID[client]);
+			if(IsValidEntity(IsValidShotgun))
+			{
+				BuffTime = Ability_Check_Cooldown(client, 2, IsValidShotgun);
+				if(BuffTime <= 0.0)
+					BuffTime = 0.0;
+				if(BuffTime > 0.0)
+					Format(BarracksHud, sizeof(BarracksHud), "%s\nBattle-Banner: [%.1f]", BarracksHud, BuffTime);
+				else
+					Format(BarracksHud, sizeof(BarracksHud), "%s\nBattle-Banner: Ready!", BarracksHud);
+			}
+		}
 	}
 
 	// Power-Strike + Chain-Hit, if you're wondering why it's called ReDash btw it's cause i thought about making it a dash, decided against it

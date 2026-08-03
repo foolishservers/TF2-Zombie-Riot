@@ -1069,11 +1069,13 @@ void Barracks_BuildingThink(int entity)
 					{
 						TrainingIndex[client] = TrainingQueue[client];
 						TrainingStartedIn[client] = GetGameTime();
-						float trainingTime = float(GetSData(CivType[client], TrainingQueue[client], TrainTime));
+						float trainingTime = float(LastMann ? (GetSData(CivType[client], TrainingQueue[client], TrainTime) / 3) : GetSData(CivType[client], TrainingQueue[client], TrainTime));
 						if(i_NormalBarracks_HexBarracksUpgrades[client] & ZR_BARRACKS_UPGRADES_CONSCRIPTION)
 						{
 							trainingTime *= 0.75;
 						}
+						if(HasSpecificBuff(client, "Barracks Prepare Siege"))
+							trainingTime *= 0.55;
 						if(CvarInfiniteCash.BoolValue)
 						{
 							trainingTime = 0.0;
