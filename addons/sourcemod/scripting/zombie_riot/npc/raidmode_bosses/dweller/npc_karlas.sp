@@ -2702,13 +2702,7 @@ static void Internal_NPCDeath(int entity)
 			if(!b_bobwave[npc.index])
 			{
 				ApplyStatusEffect(stella.index, stella.index, "Extreme Anxiety", 999.0);
-				RaidBossStella_NPCTalkMessage(stella, "Stella_Anger_%d", GetRandomInt(1, 3));
-				switch(GetRandomInt(1,3))
-				{
-					case 1: RaidBossStella_NPCTalkMessage(stella, "흠, 어쩔 수 없이 나 혼자 처리해야하나.");
-					case 2: RaidBossStella_NPCTalkMessage(stella,"아직 끝나지 않았어..");
-					case 3: RaidBossStella_NPCTalkMessage(stella,"감히 {crimson}카를라스{snow}에게 손을 대다니!");
-				}
+				RaidBossStella_NPCTalkMessage(stella, "Stella_Anger_%d", true, GetRandomInt(1, 3));
 			}
 		}
 	}
