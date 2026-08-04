@@ -2453,6 +2453,7 @@ void TriggerLastmanLogic(int killed, int Hurtviasdkhook)
 					SetEntityRenderColor(client, 255, 255, 255, 255);
 					SetEntityCollisionGroup(client, 5);
 				}
+				Weapon_AddonsCustomLastMan(client);
 				
 				if(Yakuza_IsNotInJoint(client))
 				{
@@ -2623,7 +2624,6 @@ void TriggerLastmanLogic(int killed, int Hurtviasdkhook)
 					KitSurvivalist_LastmanBuff(client);
 				}
 				
-				Weapon_AddonsCustomLastMan(client);
 				for(int i=1; i<=MaxClients; i++)
 				{
 					if(IsClientInGame(i) && !IsFakeClient(i))

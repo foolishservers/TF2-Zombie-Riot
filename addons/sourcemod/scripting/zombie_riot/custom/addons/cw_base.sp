@@ -4,6 +4,19 @@
 
 행운을 빕니다.
 */
+static int GetLastManPlayer;
+
+stock int CWPlayer_Lastman(int client = -1)
+{
+	if(client != -1)
+		GetLastManPlayer = GetClientUserId(client);
+	
+	client = GetClientOfUserId(GetLastManPlayer)
+	if(IsValidClient(client))
+		return client;
+	return -1;
+}
+
 public void Weapon_AddonsCustom_OnMapStart()
 {
 	/*초기화*/
@@ -11,6 +24,7 @@ public void Weapon_AddonsCustom_OnMapStart()
 	MajorSteam_Launcher_OnMapStart();
 	LockDown_Wand_MapStart();
 	MSword_OnMapStart();
+	GetLastManPlayer=-1;
 }
 
 public void Weapon_AddonsCustom_Enable(int client, int weapon)
@@ -23,10 +37,9 @@ public void Weapon_AddonsCustom_Enable(int client, int weapon)
 
 stock void Weapon_AddonsCustomLastMan(int client)
 {
-	if(client)
-	{
-		/*에러 제거용*/
-	}
+	if(!IsValidClient(client))
+		return;
+	CWPlayer_Lastman(client);
 	/*lms일때 트리거됨*/
 	/*if(Wkit_Omega_LastMann(client))
 	{
@@ -38,6 +51,7 @@ stock void Weapon_AddonsCustomLastMan(int client)
 		CPrintToChatAll("{blue}Diabolus Ex Machina", client);
 		Yakuza_Lastman(13);
 	}*/
+	
 	if(IsBarracks(client))
 		Barracks_OnLastManStand(client);
 }
@@ -59,7 +73,7 @@ stock bool Weapon_AddonsStartCustomSoundForLastMan(int client, int WhatSoundPlay
 		}*/
 		case 17:
 		{
-			switch(WhatCiv(client))
+			switch(WhatCiv(CWPlayer_Lastman()))
 			{
 				case Almina_Thorns, Almina_Thornless:{
 					EmitCustomToClient(client, "#zombiesurvival/iberia/wave_30.mp3",client, SNDCHAN_STATIC, SNDLEVEL_NONE, _, 1.5);
