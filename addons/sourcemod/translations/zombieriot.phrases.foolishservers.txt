@@ -1909,7 +1909,7 @@
 	"Corrupted Barney's Chainsaw Desc"
 	{
 		"en"		"I wonder what happened to Barney here..."
-		"ko"		"이 곳에서 바니한테 무슨 일이 있었던 거야..?"
+		"ko"		"도대체 이 곳에서 바니한테 무슨 일이 있었던 거야..?"
 	}
 	"Matrix's Curse Desc"
 	{
@@ -1939,7 +1939,7 @@
 	"Overlords Final Wish Desc"
 	{
 		"en"		"Restore and protect Bob the first, that is his final wish..."
-		"ko"		""
+		"ko"		"밥 1세를 구하고 지켜라. 그것이 그의 마지막 소원이었습니다..."
 	}
 	"Bob's true fear Desc"
 	{
