@@ -77,6 +77,7 @@ enum
 	Attrib_MaxArmor_FinalAdditive = 5002,
 	Attrib_IsSniperRifle = 5003,
 	Attrib_ExplosiveHeadshot = 5004,
+	Attrib_MaxHealthMulti = 5005,
 };
 
 StringMap WeaponAttributes[MAXENTITIES + 1];
@@ -768,4 +769,19 @@ float WeaponDamageAttributeMultipliers(int weapon, int Flags = MULTIDMG_NONE, in
 		DamageBonusLogic *= Attributes_Get(weapon, 2, 1.0); //non wand dmg multi
 	}
 	return DamageBonusLogic;
+}
+
+void Attributes_ApplyHealthModifier(int client, StringMap map)
+{
+	float multi = Attributes_Get(client, Attrib_MaxHealthMulti, 1.0);
+	if (multi <= 0.0) // little safe guard.
+	{
+		map.SetValue("26", 1.0);
+	}
+	else if (multi != 1.0)
+	{
+		float value;
+		map.GetValue("26", value);
+		map.SetValue("26", value * multi);
+	}
 }
