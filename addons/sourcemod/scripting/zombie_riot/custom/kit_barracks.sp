@@ -12,11 +12,10 @@ static int CivType[MAXPLAYERS];								// What civ is the player using, lms chec
 static int ShotgunHeal_Targets[MAXPLAYERS];					// How many targets will the shotgun aoe heal (Npcs)
 static float ShotgunHeal[MAXPLAYERS];						// How much is the shotgun healing
 static float Barrack_HUDDelay[MAXPLAYERS];					// Hud delay
-static float Barracks_PowerHitTime[MAXPLAYERS];				// Timer for the Crouch + M1 of the Italian Business
-static float Barracks_NovaCDTime[MAXPLAYERS];				// Cd for the healing nova of the shotgun
 static float ReDash[MAXPLAYERS];							// For the 5s window of the Chain Hit
 static int WeaponSMGID[MAXPLAYERS];
 static int WeaponReconstructiveShotgunID[MAXPLAYERS];
+static int WeaponBarracksItalianID[MAXPLAYERS];
 static float WeaponReconstructiveShotgunBuffTime[MAXPLAYERS];	
 static float GlobalReconstructiveShotgunSoundTime;	
 bool BR_Precached = false;
@@ -52,10 +51,9 @@ public void Barracks_OnMapStart()
 	ZeroFloat(Barrack_HUDDelay);
 	Zero(ResourceGen);
 	ZeroFloat(ReDash);
-	ZeroFloat(Barracks_NovaCDTime);
-	ZeroFloat(Barracks_PowerHitTime);
 	Zero(WeaponSMGID);
 	Zero(WeaponReconstructiveShotgunID);
+	Zero(WeaponBarracksItalianID);
 	ZeroFloat(WeaponReconstructiveShotgunBuffTime);
 	GlobalReconstructiveShotgunSoundTime=0.0;
 	
@@ -108,6 +106,9 @@ static Action Timer_Barracks(Handle timer, DataPack pack)
 		if(!IsValidEntity(i_IsValidEntitys))
 			valid=false;
 		i_IsValidEntitys = EntRefToEntIndex(WeaponSMGID[clientindx]);
+		if(!IsValidEntity(i_IsValidEntitys))
+			valid=false;
+		i_IsValidEntitys = EntRefToEntIndex(WeaponBarracksItalianID[clientindx]);
 		if(!IsValidEntity(i_IsValidEntitys))
 			valid=false;
 	}
@@ -360,6 +361,10 @@ public void Enable_Barracks_Hunter(int client, int weapon)
 {
 	WeaponReconstructiveShotgunID[client] = EntIndexToEntRef(weapon);
 }
+public void Enable_Barracks_Italian(int client, int weapon)
+{
+	WeaponBarracksItalianID[client] = EntIndexToEntRef(weapon);
+}
 bool Inv_ReconstructiveShotgun_Enable(int client)
 {
 	int IsValidShotgun = EntRefToEntIndex(WeaponReconstructiveShotgunID[client]);
@@ -373,10 +378,16 @@ public void Barracks_OnLastManStand(int client)
 		Ability_Apply_Cooldown(client, 2, 0.0, IsValidWeapon);
 	IsValidWeapon = EntRefToEntIndex(WeaponReconstructiveShotgunID[client]);
 	if(IsValidEntity(IsValidWeapon))
+	{
+		Ability_Apply_Cooldown(client, 1, 0.0, IsValidWeapon);
 		Ability_Apply_Cooldown(client, 2, 0.0, IsValidWeapon);
-		
-	Barracks_PowerHitTime[client] -= 50.0;
-	Barracks_NovaCDTime[client] -= 10.0;
+	}
+	IsValidWeapon = EntRefToEntIndex(WeaponBarracksItalianID[client]);
+	if(IsValidEntity(IsValidWeapon))
+	{
+		Ability_Apply_Cooldown(client, 1, 0.0, IsValidWeapon);
+		Ability_Apply_Cooldown(client, 2, 0.0, IsValidWeapon);
+	}
 }
 
 //public void Weapon_CastleSiege_M2(int client, int weapon, bool crit, int slot)
@@ -455,7 +466,7 @@ public void Barracks_OnTakeDamage_Hunter(int victim, int &attacker, int &inflict
 			Ability_Apply_Cooldown(attacker, 2, Ability_CD, IsValidSMG, true);
 		}
 	}
-	if(Ability_Check_Cooldown(attacker, 2) < 0.0)
+	if(Ability_Check_Cooldown(attacker, 1, weapon) < 0.0)
 	{
 		float pos1[3];
 		GetEntPropVector(attacker, Prop_Data, "m_vecAbsOrigin", pos1);
@@ -508,30 +519,7 @@ public void Barracks_OnTakeDamage_Hunter(int victim, int &attacker, int &inflict
 		DesertYadeamDoHealEffect(attacker, 600.0);
 		HealEntityGlobal(attacker, attacker, (ShotgunHeal[attacker]/20), _, 3.0); // User heals themselves for 5% of that much
 		ApplyStatusEffect(attacker, attacker, "Healing Decay", 15.0);	// You can only heal yourself once every 15s even on LMS, i don't wanna give too much self healing
-		if(!LastMann)
-		{
-			Ability_Apply_Cooldown(attacker, 2, 15.0);
-			if(i_CurrentEquippedPerk[attacker] & PERK_ENERGY_DRINK)
-			{
-				Barracks_NovaCDTime[attacker] = GetGameTime() + 12.75;
-			}
-			else
-			{
-				Barracks_NovaCDTime[attacker] = GetGameTime() + 15.0;
-			}
-		}
-		else
-		{
-			Ability_Apply_Cooldown(attacker, 2, 10.0);
-			if(i_CurrentEquippedPerk[attacker] & PERK_ENERGY_DRINK)
-			{
-				Barracks_NovaCDTime[attacker] = GetGameTime() + 8.5;
-			}
-			else
-			{
-				Barracks_NovaCDTime[attacker] = GetGameTime() + 10.0;
-			}
-		}
+		Ability_Apply_Cooldown(attacker, 1, (LastMann ? 10.0 : 15.0));
 	}
 }
 public void Barracks_OnTakeDamage_Italian(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int zr_custom_damage)
@@ -571,37 +559,14 @@ public void Barracks_OnTakeDamage_Italian(int victim, int &attacker, int &inflic
 						velocity[2] += 150.0;    // a little boost to alleviate arcing issues
 					TeleportEntity(attacker, NULL_VECTOR, NULL_VECTOR, velocity);
 					
-					if(!b_thisNpcIsARaid[victim])
+					if(!b_thisNpcIsARaid[victim] || LastMann)
 						FreezeNpcInTime(victim, 1.0);
 						
 					SummonerRenerateResources(attacker, 60.0, 0.0, true);
-					if(!LastMann)
-					{
-						Ability_Apply_Cooldown(attacker, 1, 70.0);
-						if(i_CurrentEquippedPerk[attacker] & PERK_ENERGY_DRINK)
-						{
-							Barracks_PowerHitTime[attacker] = GetGameTime() + 59.5;
-						}
-						else
-						{
-							Barracks_PowerHitTime[attacker] = GetGameTime() + 70.0;
-						}
-					}
-					else
-					{
-						Ability_Apply_Cooldown(attacker, 1, 45.0);
-						if(i_CurrentEquippedPerk[attacker] & PERK_ENERGY_DRINK)
-						{
-							Barracks_PowerHitTime[attacker] = GetGameTime() + 38.25;
-						}
-						else
-						{
-							Barracks_PowerHitTime[attacker] = GetGameTime() + 45.0;
-						}
-					}
+					Ability_Apply_Cooldown(attacker, 1, (LastMann ? 45.0 : 70.0));
 				}
 			}
-			if(Ability_Check_Cooldown(attacker, 1) <= 0.0)
+			if(Ability_Check_Cooldown(attacker, 1, weapon) <= 0.0)
 			{
 				int Crime = GetRandomInt(1, 2000);
 				if(Crime != 2000)	// Don't say that word...
@@ -622,34 +587,11 @@ public void Barracks_OnTakeDamage_Italian(int victim, int &attacker, int &inflic
 						velocity[2] += 150.0;    // a little boost to alleviate arcing issues
 					TeleportEntity(attacker, NULL_VECTOR, NULL_VECTOR, velocity);
 					
-					if(!b_thisNpcIsARaid[victim])
+					if(!b_thisNpcIsARaid[victim] || LastMann)
 						FreezeNpcInTime(victim, 1.0);
 					
 					SummonerRenerateResources(attacker, 50.0, 0.0, true);
-					if(!LastMann)
-					{
-						Ability_Apply_Cooldown(attacker, 1, 30.0);
-						if(i_CurrentEquippedPerk[attacker] & PERK_ENERGY_DRINK)
-						{
-							Barracks_PowerHitTime[attacker] = GetGameTime() + 25.5;
-						}
-						else
-						{
-							Barracks_PowerHitTime[attacker] = GetGameTime() + 30.0;
-						}
-					}
-					else
-					{
-						Ability_Apply_Cooldown(attacker, 1, 20.0);
-						if(i_CurrentEquippedPerk[attacker] & PERK_ENERGY_DRINK)
-						{
-							Barracks_PowerHitTime[attacker] = GetGameTime() + 17.0;
-						}
-						else
-						{
-							Barracks_PowerHitTime[attacker] = GetGameTime() + 20.0;
-						}
-					}
+					Ability_Apply_Cooldown(attacker, 1, (LastMann ? 20.0 : 30.0));
 					if(WeaponPap[attacker] >= 4)
 						ReDash[attacker] = GetGameTime() + 5.0;
 				}
@@ -682,30 +624,7 @@ public void Barracks_OnTakeDamage_Italian(int victim, int &attacker, int &inflic
 					FreezeNpcInTime(attacker, 3.0);
 					
 					SummonerRenerateResources(attacker, 120.0, 0.0, true);
-					if(!LastMann)
-					{
-						Ability_Apply_Cooldown(attacker, 1, 30.0);
-						if(i_CurrentEquippedPerk[attacker] & PERK_ENERGY_DRINK)
-						{
-							Barracks_PowerHitTime[attacker] = GetGameTime() + 25.5;	// For anybody that reads and wonders "Wait, isn't that an annoyance to write and calculate all cooldowns -15% cause energy drink? Yes, it is.
-						}
-						else
-						{
-							Barracks_PowerHitTime[attacker] = GetGameTime() + 30.0;
-						}
-					}
-					else
-					{
-						Ability_Apply_Cooldown(attacker, 1, 20.0);
-						if(i_CurrentEquippedPerk[attacker] & PERK_ENERGY_DRINK)
-						{
-							Barracks_PowerHitTime[attacker] = GetGameTime() + 17.0;
-						}
-						else
-						{
-							Barracks_PowerHitTime[attacker] = GetGameTime() + 20.0;
-						}
-					}
+					Ability_Apply_Cooldown(attacker, 1, (LastMann ? 20.0 : 30.0));
 				}
 			}
 		}
@@ -848,78 +767,74 @@ static void Barracks_HUD(int client)
 		return;
 
 	// Calculate remaining time by subtracting current time from expiration time, unironically was quite annoying to do due to the sheer amount of conditionals...
-	float PowerHit = Barracks_PowerHitTime[client] - GetGameTime();
-	float NovaCD = Barracks_NovaCDTime[client] - GetGameTime();
-
 	char BarracksHud[255];
 	
 	// Buff Mode Hud
-	if (WeaponPap[client] < 4)
+	if(WeaponPap[client] < 4)
 	{
 		Format(BarracksHud, sizeof(BarracksHud), "Barracks Abilities Status\n[Healing Nova Mode: LOCKED]");
 	}
 	else
 	{
-		if (BarracksBuffMode[client] == 0)
-		{
+		if(BarracksBuffMode[client] == 0)
 			Format(BarracksHud, sizeof(BarracksHud), "Barracks Abilities Status\n[Healing Nova Mode: Defense]");
-		}
 		else
-		{
 			Format(BarracksHud, sizeof(BarracksHud), "Barracks Abilities Status\n[Healing Nova Mode: Offense]");
-		}
 	}
 
 	// Heal Nova Hud
-	if (NovaCD <= 0.0)
+	int IsValidWeapons = EntRefToEntIndex(WeaponReconstructiveShotgunID[client]);
+	if(IsValidEntity(IsValidWeapons))
 	{
-		Format(BarracksHud, sizeof(BarracksHud), "%s\nHealing Nova: Ready!", BarracksHud);
-	}
-	else
-	{
-		Format(BarracksHud, sizeof(BarracksHud), "%s\nHealing Nova: [%.1f]", BarracksHud, NovaCD);
-	}
-	if(WeaponPap[client] >= 3)
-	{
-		float BuffTime = WeaponReconstructiveShotgunBuffTime[client] - GetGameTime();
-		if(BuffTime > 0.0)
-			Format(BarracksHud, sizeof(BarracksHud), "%s\nBattle-Banner ACTIVE!: [%.1f]", BarracksHud, BuffTime);
+		float NovaCD = Ability_Check_Cooldown(client, 1, IsValidWeapons);
+		if(NovaCD <= 0.0)
+			Format(BarracksHud, sizeof(BarracksHud), "%s\nHealing Nova: Ready!", BarracksHud);
 		else
+			Format(BarracksHud, sizeof(BarracksHud), "%s\nHealing Nova: [%.1f]", BarracksHud, NovaCD);
+			
+		if(WeaponPap[client] >= 3)
 		{
-			int IsValidShotgun = EntRefToEntIndex(WeaponReconstructiveShotgunID[client]);
-			if(IsValidEntity(IsValidShotgun))
+			float BuffTime = WeaponReconstructiveShotgunBuffTime[client] - GetGameTime();
+			if(BuffTime > 0.0)
+				Format(BarracksHud, sizeof(BarracksHud), "%s\nBattle-Banner ACTIVE!: [%.1f]", BarracksHud, BuffTime);
+			else
 			{
-				BuffTime = Ability_Check_Cooldown(client, 2, IsValidShotgun);
-				if(BuffTime <= 0.0)
-					BuffTime = 0.0;
-				if(BuffTime > 0.0)
-					Format(BarracksHud, sizeof(BarracksHud), "%s\nBattle-Banner: [%.1f]", BarracksHud, BuffTime);
-				else
-					Format(BarracksHud, sizeof(BarracksHud), "%s\nBattle-Banner: Ready!", BarracksHud);
+				IsValidWeapons = EntRefToEntIndex(WeaponReconstructiveShotgunID[client]);
+				if(IsValidEntity(IsValidWeapons))
+				{
+					BuffTime = Ability_Check_Cooldown(client, 2, IsValidWeapons);
+					if(BuffTime <= 0.0)
+						BuffTime = 0.0;
+					if(BuffTime > 0.0)
+						Format(BarracksHud, sizeof(BarracksHud), "%s\nBattle-Banner: [%.1f]", BarracksHud, BuffTime);
+					else
+						Format(BarracksHud, sizeof(BarracksHud), "%s\nBattle-Banner: Ready!", BarracksHud);
+				}
 			}
 		}
 	}
 
-	// Power-Strike + Chain-Hit, if you're wondering why it's called ReDash btw it's cause i thought about making it a dash, decided against it
-	if(WeaponPap[client] >= 2)
+	IsValidWeapons = EntRefToEntIndex(WeaponBarracksItalianID[client]);
+	if(IsValidEntity(IsValidWeapons))
 	{
-		float redashTimeLeft = ReDash[client] - GetGameTime();
-		if(WeaponPap[client] >= 4)	// This has to show ONLY if the pap is >= 4
+		// Power-Strike + Chain-Hit, if you're wondering why it's called ReDash btw it's cause i thought about making it a dash, decided against it
+		if(WeaponPap[client] >= 2)
 		{
-			if(redashTimeLeft > 0.0)
+			float redashTimeLeft = ReDash[client] - GetGameTime();
+			if(WeaponPap[client] >= 4)	// This has to show ONLY if the pap is >= 4
 			{
-				Format(BarracksHud, sizeof(BarracksHud), "%s\nChain Hit: ACTIVE! (Chain Window: %.1fs)", BarracksHud, redashTimeLeft);
+				if(redashTimeLeft > 0.0)
+				{
+					Format(BarracksHud, sizeof(BarracksHud), "%s\nChain Hit: ACTIVE! (Chain Window: %.1fs)", BarracksHud, redashTimeLeft);
+				}
 			}
-		}
-		if(redashTimeLeft <= 0.0)	// Show the cooldown only when the redash ends
-		{
-			if(PowerHit <= 0.0)
+			if(redashTimeLeft <= 0.0)	// Show the cooldown only when the redash ends
 			{
-				Format(BarracksHud, sizeof(BarracksHud), "%s\nPower-Strike: Ready!", BarracksHud);
-			}
-			else
-			{
-				Format(BarracksHud, sizeof(BarracksHud), "%s\nPower-Strike: [%.1f]", BarracksHud, PowerHit);
+				float PowerHit = Ability_Check_Cooldown(client, 1, IsValidWeapons);
+				if(PowerHit <= 0.0)
+					Format(BarracksHud, sizeof(BarracksHud), "%s\nPower-Strike: Ready!", BarracksHud);
+				else
+					Format(BarracksHud, sizeof(BarracksHud), "%s\nPower-Strike: [%.1f]", BarracksHud, PowerHit);
 			}
 		}
 	}
