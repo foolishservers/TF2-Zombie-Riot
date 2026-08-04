@@ -2104,12 +2104,8 @@
 	
 	"Mage Fragility Desc"
 	{
-		"en"	"-Gain 25％ more max mana and mana regen\n-Lose -100 HP"
-		"fr"	"+25％ Mana maximum et regénération de Mana, -100 santé"
-		///"ru"	"На 25％ больше максимальной маны и регенерации маны, но у вас на 100 меньше ед. здоровья"
-		"chi"   "增加25％的最大法力值和法力回复，生命值-100 "
-		"it"	"25％ più mana massimo e rigenerazione del mana, ma avrai 100 HP in meno"
-		"ko"	"-최대 마나, 마나 재생량 +25％\n-최대 체력 -100"
+		"en"	"-Gain 20％ more max mana and mana regen\n-Lose HP by 20%"
+		"ko"	"-최대 마나, 마나 재생량 +20％\n-최대 체력 20% 감소"
 	}
 	"Mystical Overcharge Desc"
 	{
