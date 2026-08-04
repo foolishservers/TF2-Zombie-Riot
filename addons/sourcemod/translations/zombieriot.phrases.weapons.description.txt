@@ -2104,8 +2104,8 @@
 	
 	"Mage Fragility Desc"
 	{
-		"en"	"-Gain 20％ more max mana and mana regen\n-Lose HP by 20%"
-		"ko"	"-최대 마나, 마나 재생량 +20％\n-최대 체력 20% 감소"
+		"en"	"-Gain 20％ more max mana and mana regen\n-Lose HP by 20％"
+		"ko"	"-최대 마나, 마나 재생량 +20％\n-최대 체력 20％ 감소"
 	}
 	"Mystical Overcharge Desc"
 	{

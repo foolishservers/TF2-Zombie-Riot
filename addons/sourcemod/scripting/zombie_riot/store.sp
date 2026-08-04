@@ -5886,7 +5886,7 @@ void Store_ApplyAttribs(int client)
 	i_SoftShoes[client] = 0;
 
 	SkillTree_ApplyAttribs(client, map);
-	Attributes_ApplyHealthModifier(client, map);
+	Attributes_ApplyHealthModifier(map);
 	Rogue_ApplyAttribs(client, map);
 	Waves_ApplyAttribs(client, map);
 	FullMoonDoubleHp(client, map);

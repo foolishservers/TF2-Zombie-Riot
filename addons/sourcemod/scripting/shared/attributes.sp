@@ -771,17 +771,20 @@ float WeaponDamageAttributeMultipliers(int weapon, int Flags = MULTIDMG_NONE, in
 	return DamageBonusLogic;
 }
 
-void Attributes_ApplyHealthModifier(int client, StringMap map)
+void Attributes_ApplyHealthModifier(StringMap map)
 {
-	float multi = Attributes_Get(client, Attrib_MaxHealthMulti, 1.0);
-	if (multi <= 0.0) // little safe guard.
+	float multi = 1.0;
+	if(map.GetValue("5005", multi))
 	{
-		map.SetValue("26", 1.0);
-	}
-	else if (multi != 1.0)
-	{
-		float value;
-		map.GetValue("26", value);
-		map.SetValue("26", value * multi);
+		if (multi <= 0.0) // little safe guard.
+		{
+			map.SetValue("26", 1.0);
+		}
+		else if (multi != 1.0)
+		{
+			float value = 0.0;
+			map.GetValue("26", value);
+			map.SetValue("26", value * multi);
+		}
 	}
 }
