@@ -4,7 +4,7 @@
 #define SOUND_KILLINGORDER_FIRE      "Weapon_ManMelter.Single"
 #define SOUND_KILLINGORDER_FIRE_CRIT "Weapon_ManMelter.SingleCrit"
 
-void KillingOrder_Precache()
+public void KillingOrder_Precache()
 {
 	PrecacheScriptSound(SOUND_KILLINGORDER_FIRE);
 	PrecacheScriptSound(SOUND_KILLINGORDER_FIRE_CRIT);

@@ -65,11 +65,10 @@ static bool   ReviveRaid[MAXPLAYERS + 1];
 
 static int TracerIndex;
 
-void KitSurvivalist_MapStart()
+public void KitSurvivalist_MapStart()
 {
 	TracerIndex = PrecacheModel("materials/sprites/spotlight.vmt");
 	PrecacheSound("weapons/grenade_launcher_shoot.wav");
-	PrecacheSound("items/medcharge4.wav");
 	
 	ZeroFloat(UpdateHudAt);
 	ZeroFloat(ReservedHealth);
@@ -79,30 +78,24 @@ void KitSurvivalist_MapStart()
 	Zero(ReviveRaid);
 }
 
-void KitSurvivalist_Enable(int client, int weapon)
+public void KitSurvivalist_Enable(int client, int weapon)
 {
-	switch (i_CustomWeaponEquipLogic[weapon])
+	WeaponLevel[client] = RoundFloat(Attributes_Get(weapon, 868, 0.0));
+	if(WeaponLevel[client] < 0)
 	{
-		case WEAPON_KIT_SURVIVALIST:
-		{
-			WeaponLevel[client] = RoundFloat(Attributes_Get(weapon, 868, 0.0));
-			if(WeaponLevel[client] < 0)
-			{
-				WeaponLevel[client] = 0;
-			}
-			
-			if (WeaponTimer[client] != null)
-			{
-				delete WeaponTimer[client];
-				WeaponTimer[client] = null;
-			}
-			
-			DataPack pack;
-			WeaponTimer[client] = CreateDataTimer(0.1, KitSurvivalist_Timer, pack, TIMER_REPEAT);
-			pack.WriteCell(GetClientUserId(client));
-			pack.WriteCell(EntIndexToEntRef(weapon));
-		}
+		WeaponLevel[client] = 0;
 	}
+	
+	if (WeaponTimer[client] != null)
+	{
+		delete WeaponTimer[client];
+		WeaponTimer[client] = null;
+	}
+	
+	DataPack pack;
+	WeaponTimer[client] = CreateDataTimer(0.1, KitSurvivalist_Timer, pack, TIMER_REPEAT);
+	pack.WriteCell(GetClientUserId(client));
+	pack.WriteCell(EntIndexToEntRef(weapon));
 }
 
 bool KitSurvivalist_IsEnabled(int client)

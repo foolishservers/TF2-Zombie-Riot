@@ -6928,7 +6928,6 @@ int Store_GiveItem(int client, int index, bool &use=false, bool &found=false, bo
 		VehicleFullAPC_WeaponEnable(client, entity);
 		Enable_ExploARWeapon(client, entity);
 		Gunsaw_Enable(client, entity);
-		KitSurvivalist_Enable(client, entity);
 
 		//give all revelant things back
 		WeaponSpawn_Reapply(client, entity, StoreWeapon[entity]);
