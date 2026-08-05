@@ -78,6 +78,7 @@ enum
 	Attrib_IsSniperRifle = 5003,
 	Attrib_ExplosiveHeadshot = 5004,
 	Attrib_MaxHealthMulti = 5005,
+	Attrib_DamageBonusFullCharge = 5006,
 };
 
 StringMap WeaponAttributes[MAXENTITIES + 1];
@@ -416,6 +417,15 @@ void Attributes_OnHit(int client, int victim, int weapon, float &damage, int& da
 			{
 				if(IgniteFor[victim] > 0)
 					damage *= value;
+			}
+			
+			value = Attributes_Get(weapon, Attrib_DamageBonusFullCharge, 1.0);
+			if(value != 1.0 && IsValidEntity(weapon) && HasEntProp(weapon, Prop_Send, "m_flChargedDamage"))
+			{
+				if(GetEntPropFloat(weapon, Prop_Send, "m_flChargedDamage") >= 150.0)
+				{
+					damage *= value;
+				}
 			}
 #endif
 			value = Attributes_Get(weapon, 149, 0.0);	// bleeding duration
