@@ -655,7 +655,7 @@ static int NPCOnly[MAXPLAYERS];
 static int NPCCash[MAXPLAYERS];
 //static int NPCTarget[MAXPLAYERS];
 static bool InLoadoutMenu[MAXPLAYERS];
-//static KeyValues StoreBalanceLog;
+static KeyValues StoreBalanceLog;
 static ArrayList StoreTags;
 static ArrayList ChoosenTags[MAXPLAYERS];
 static bool UsingChoosenTags[MAXPLAYERS];
@@ -1162,7 +1162,7 @@ void Store_ConfigSetup()
 		delete StoreItems;
 	}
 	
-//	delete StoreBalanceLog;
+	delete StoreBalanceLog;
 	StoreItems = new ArrayList(sizeof(Item));
 
 	VScript_SetupStoreTable();
@@ -1193,9 +1193,9 @@ void Store_ConfigSetup()
 
 	delete kv;
 
-//	BuildPath(Path_SM, buffer, sizeof(buffer), CONFIG_CFG, "weapons_usagelog");
-//	StoreBalanceLog = new KeyValues("UsageLog");
-//	StoreBalanceLog.ImportFromFile(buffer);
+	BuildPath(Path_SM, buffer, sizeof(buffer), CONFIG_CFG, "weapons_usagelog");
+	StoreBalanceLog = new KeyValues("UsageLog");
+	StoreBalanceLog.ImportFromFile(buffer);
 
 	AutoSaveTimer = CreateTimer(10.0, AutoSaveTime, 1);
 
@@ -1819,12 +1819,12 @@ void Store_Reset()
 		CashSpentGivePostSetup[c] = 0;
 		CashSpentGivePostSetupWarning[c] = false;
 	}
-//	if(StoreBalanceLog)
-//	{
-//		char buffer[PLATFORM_MAX_PATH];
-//		BuildPath(Path_SM, buffer, sizeof(buffer), CONFIG_CFG, "weapons_usagelog");
-//		StoreBalanceLog.ExportToFile(buffer);
-//	}
+	if(StoreBalanceLog)
+	{
+		char buffer[PLATFORM_MAX_PATH];
+		BuildPath(Path_SM, buffer, sizeof(buffer), CONFIG_CFG, "weapons_usagelog");
+		StoreBalanceLog.ExportToFile(buffer);
+	}
 }
 
 /*bool Store_HasAnyItem(int client)
@@ -2002,8 +2002,8 @@ void Store_BuyNamedItem(int client, const char name[64], bool free)
 					if(!item.BoughtBefore[client])
 					{
 						item.BoughtBefore[client] = true;
-					//	StoreBalanceLog.Rewind();
-					//	StoreBalanceLog.SetNum(item.Name, StoreBalanceLog.GetNum(item.Name) + 1);
+						StoreBalanceLog.Rewind();
+						StoreBalanceLog.SetNum(item.Name, StoreBalanceLog.GetNum(item.Name) + 1);
 					}
 					StoreItems.SetArray(a, item);
 					return;
@@ -5231,8 +5231,8 @@ int Store_TryToBuyItem(int client, int index, bool autoLoadout)
 			if(!item.BoughtBefore[client])
 			{
 				item.BoughtBefore[client] = true;
-			//	StoreBalanceLog.Rewind();
-			//	StoreBalanceLog.SetNum(item.Name, StoreBalanceLog.GetNum(item.Name) + 1);
+				StoreBalanceLog.Rewind();
+				StoreBalanceLog.SetNum(item.Name, StoreBalanceLog.GetNum(item.Name) + 1);
 				
 				ClientCommand(client, "playgamesound \"mvm/mvm_bought_upgrade.wav\"");
 			}
@@ -5284,8 +5284,8 @@ int Store_TryToBuyItem(int client, int index, bool autoLoadout)
 			if(!item.BoughtBefore[client])
 			{
 				item.BoughtBefore[client] = true;
-			//	StoreBalanceLog.Rewind();
-			//	StoreBalanceLog.SetNum(item.Name, StoreBalanceLog.GetNum(item.Name) + 1);
+				StoreBalanceLog.Rewind();
+				StoreBalanceLog.SetNum(item.Name, StoreBalanceLog.GetNum(item.Name) + 1);
 			}
 			
 			if (!autoLoadout && AutoLoadouts_IsClientUsing(client))
@@ -5342,8 +5342,8 @@ int Store_TryToBuyItem(int client, int index, bool autoLoadout)
 		if(!item.BoughtBefore[client])
 		{
 			item.BoughtBefore[client] = true;
-		//	StoreBalanceLog.Rewind();
-		//	StoreBalanceLog.SetNum(item.Name, StoreBalanceLog.GetNum(item.Name) + 1);
+			StoreBalanceLog.Rewind();
+			StoreBalanceLog.SetNum(item.Name, StoreBalanceLog.GetNum(item.Name) + 1);
 		}
 		
 		item.AutoBought[client] = autoLoadout;
