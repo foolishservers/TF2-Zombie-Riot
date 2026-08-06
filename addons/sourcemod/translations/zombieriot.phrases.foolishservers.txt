@@ -1059,7 +1059,7 @@
 	"Survivalist Kit Pap 1 Desc"
 	{
 		"en"		"New melee alt-fire ability - Reserved Health:\nAttacking with melee will reserve health and consume via M2\nImproved stats."
-		"ko"		"근접 무기 우클릭 능력 해금 - 체력 회복:\n적을 근접 무기로 타격 시, 체력을 모으고 우클릭으로 소모하여 회복할 수 있음.\n전반적인 능력치 증가"
+		"ko"		"근접 무기 우클릭 능력 해금 - 체력 비축:\n적을 근접 무기로 타격 시, 체력을 모으고 우클릭으로 소모하여 회복할 수 있음.\n전반적인 능력치 증가"
 	}
 	"Survivalist Kit Pap 2 Desc"
 	{
@@ -1083,8 +1083,8 @@
 	}
 	"Survivalist Kit Pap 6 Desc"
 	{
-		"en"		"Improved stats."
-		"ko"		"전반적인 능력치 증가"
+		"en"		"Improved stats.\nReduce grenade and knife ability cooltime."
+		"ko"		"전반적인 능력치 증가\n유탄 발사와 체력 비축분 소모 쿨타임 감소"
 	}
 	"Survivalist Kit Pap 7 Desc"
 	{
