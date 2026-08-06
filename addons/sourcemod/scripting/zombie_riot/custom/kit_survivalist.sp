@@ -138,6 +138,7 @@ static Action KitSurvivalist_Timer(Handle timer, DataPack pack)
 		return Plugin_Stop;
 	}
 	
+	b_IsCannibal[client] = true;
 	KitSurvivalist_UpdateHud(client);
 	
 	return Plugin_Continue;
@@ -218,7 +219,8 @@ public void KitSurvivalist_Primary_M2(int client, int weapon, bool crit, int slo
 	BasicTraceLogic Trace;
 	Trace.Client = client;
 	Trace.DoForwardTraceRay(3000.0, KitSurvivalist_Grenade_TraceFilter);
-	Offset_Vector({ 60.9, 13.1, -15.1 }, Trace.Angles, Trace.StartPoint);
+	
+	CalcCorrectWeaponShootPosition({ 60.9, 13.1, -15.1 }, Trace.StartPoint, Trace.Angles);
 	
 	TE_SetupBeamPoints(Trace.StartPoint, Trace.EndPoint, TracerIndex, 0, 0, 0, 0.2, 5.0, 5.0, 0, 1.0, { 111, 79, 40, 255 }, 3);
 	TE_SendToAll(0.0);
