@@ -467,7 +467,7 @@ static void Vincent_NPCTalkMessage(int entity, const char[] message, bool transl
 {
 	char buffer[256];
 	VFormat(buffer, sizeof(buffer), message, 4);
-	PrintNPCMessageWithPrefixes(entity, "rare", buffer);
+	PrintNPCMessageWithPrefixes(entity, "rare", buffer, translated);
 }
 
 static void Vincent_NPCTalkMessageAbout(int entity, const char[] message, int client, any ...)
@@ -1986,10 +1986,9 @@ static void Vincent_Weapon_Lines(Vincent npc, int client)
 		return;
 
 	bool valid = true;
-	char Text_Lines[255];
-
-	Text_Lines = "";
-
+	// char Text_Lines[255];
+	// Text_Lines = "";
+	
 	if(Store_HasNamedItem(client, "Expidonsan Research Card") && !npc.Anger)
 	{
 		if(valid)
