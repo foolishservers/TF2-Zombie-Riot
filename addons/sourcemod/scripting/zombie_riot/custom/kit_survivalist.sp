@@ -374,7 +374,7 @@ static bool KitSurvivalist_Grenade_TraceFilter(int entity, int contentsMask, any
 		return false;
 	
 	// Ignore client
-	if(0 < entity <= MaxClients)
+	if(0 < entity && entity <= MaxClients)
 		return false;
 	
 	if(!b_NpcHasDied[entity])
