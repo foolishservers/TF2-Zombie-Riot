@@ -1565,7 +1565,17 @@
 	"Vincent_Talk_Expidonsan_Research_Card"
 	{
 		"en"		"{rare}Your {unique}Expidonsan Research Card{rare} reminds you of something, the voice you hear sounds familiar..."
-		"ko"		"{rare}어디선가 익숙한 목소리가 들립니다. 당신의 {unique}엑스피돈사 연구 카드{rare}가 누군가를 떠오르게 하는군요."
+		"ko"		"{unique}엑스피돈사 연구 카드{rare}를 보자 누군가가 떠오릅니다. 어디선가 들어본 듯한 목소리가 들려옵니다..."
+	}
+	"Vincent_Talk_Scorched_Expidonsan_Research_Card"
+	{
+		"en"		"{rare}Your {unique}Scorched Expidonsan Research Card{rare} reminds you of something. You... have you been here before?"
+		"ko"		"{unique}불타버린 엑스피돈사 연구 카드{rare}를 보자 무언가가 떠오릅니다. 당신... 전에 이 곳에 온 적이 있었나요?"
+	}
+	"Vincent_Talk_Scorched_Expidonsan_Research_Card_2"
+	{
+		"en"		"The two Research Cards react to a sound coming from somewhere. Looking at the one bearing the Expidonsa insignia, you think you know who the voice belongs to..."
+		"ko"		"2개의 연구 카드가 어디선가 들려오는 소리에 반응합니다. 엑스피돈사의 문양이 박혀있는 카드를 보니, 이 목소리의 주인이 누군지 알 것 같습니다..."
 	}
 	
 	// Wave1

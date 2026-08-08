@@ -79,10 +79,19 @@ methodmap Talker < CClotBody
 			
 			for (int client = 1; client <= MaxClients; client++)
 			{
-				if (!IsClientInGame(client) || IsFakeClient(client) || !b_DoNotHideName[client])
+				if (!IsClientInGame(client) || IsFakeClient(client))
 					continue;
 				
-				CPrintToChat(client, "%T", "Vincent_Talk_Expidonsan_Research_Card", client);
+				if (Store_HasNamedItem(client, "Scorched_Expidonsan_Research_Card"))
+				{
+					CPrintToChat(client, "%T", "Vincent_Talk_Scorched_Expidonsan_Research_Card", client);
+					if (b_DoNotHideName[client])
+						CPrintToChat(client, "%T", "Vincent_Talk_Scorched_Expidonsan_Research_Card_2", client);
+				}
+				else if (b_DoNotHideName[client])
+				{
+					CPrintToChat(client, "%T", "Vincent_Talk_Expidonsan_Research_Card", client);
+				}
 			}
 		}
 		npc.m_iTalkWaveAt = WaveAmAt;
