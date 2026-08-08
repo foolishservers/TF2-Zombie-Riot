@@ -1561,6 +1561,1406 @@
 		"ko"		"당신은 이유 없이 밥을 공격하지 않았습니다. 그런 밥이 당신에게 준 것은... {yellow}''밥의 치유의 손길''{default}!"
 	}
 	
+	// Vincent.
+	"Vincent_Talk_Expidonsan_Research_Card"
+	{
+		"en"		"{rare}Your {unique}Expidonsan Research Card{rare} reminds you of something, the voice you hear sounds familiar..."
+		"ko"		"{rare}어디선가 익숙한 목소리가 들립니다. 당신의 {unique}엑스피돈사 연구 카드{rare}가 누군가를 떠오르게 하는군요."
+	}
+	
+	// Wave1
+	"Vincent_Talk_Wave1_1_1"
+	{
+		"en"		"So the day has finally arrived, welcome back E-"
+		"ko"		"드디어 그 날이 왔군요. 환영합니다, 엑스-"
+	}
+	"Vincent_Talk_Wave1_1_2"
+	{
+		"en"		"Hang on a minute... my sensors are going off, you're not one of them."
+		"ko"		"잠깐... 센서가 울리는 걸 보니, 당신은 그들이 아니군."
+	}
+	"Vincent_Talk_Wave1_1_3"
+	{
+		"en"		"The system tells me that none of you are related to them."
+		"ko"		"시스템에서 당신들 중 누구도 그들과 관련이 없다고 하는데..."
+	}
+	"Vincent_Talk_Wave1_1_4"
+	{
+		"en"		"That's probably why the self-defense mechanisms kicked in."
+		"ko"		"아마도 그런 탓에 자가 방어 시스템이 가동된 것 같군요."
+	}
+	"Vincent_Talk_Wave1_1_5"
+	{
+		"en"		"But maybe it was for a good reason..."
+		"ko"		"그렇지만 그럴만한 이유가 있었을지도 모르겠네요..."
+	}
+	"Vincent_Talk_Wave1_1_6"
+	{
+		"en"		"What are you doing in here? And how did you find this place?"
+		"ko"		"여기서 뭘 하고 있는 거고, 이 곳은 어떻게 찾아낸 겁니까?"
+	}
+	"Vincent_Talk_Wave1_2_1"
+	{
+		"en"		"Finally, it's been years since we last saw-"
+		"ko"		"아, 드디어. 우리가 마지막으로 본 지가 벌써 몇 년도-"
+	}
+	"Vincent_Talk_Wave1_2_2"
+	{
+		"en"		"One moment...who, sorry, what are you?"
+		"ko"		"그러니까...잠깐만, 당신은 누구지?"
+	}
+	"Vincent_Talk_Wave1_2_3"
+	{
+		"en"		"My scanners aren't picking you up as valid personnel."
+		"ko"		"스캐너에도 당신이 이곳의 직원이라고 표시되진 않는데."
+	}
+	"Vincent_Talk_Wave1_2_4"
+	{
+		"en"		"That's probably why the self-defense mechanisms kicked in."
+		"ko"		"아마도 그런 탓에 자가 방어 시스템이 가동된 것 같고..."
+	}
+	"Vincent_Talk_Wave1_2_5"
+	{
+		"en"		"But maybe it was for a good reason..."
+		"ko"		"그렇지만 그럴만한 이유가 있었을지도 모르겠네요..."
+	}
+	"Vincent_Talk_Wave1_2_6"
+	{
+		"en"		"Did someone send you here? That can't be possible."
+		"ko"		"누가 당신을 이 곳으로 보낸 겁니까? 그럴 사람은 없을 텐데."
+	}
+	"Vincent_Talk_Wave1_3_1"
+	{
+		"en"		"At last, I get to reunite with my makers-"
+		"ko"		"마침내, 내 창조주들과 다시 만남을-"
+	}
+	"Vincent_Talk_Wave1_3_2"
+	{
+		"en"		"Wait a second... you're not one of them."
+		"ko"		"어... 당신이 아닌데."
+	}
+	"Vincent_Talk_Wave1_3_3"
+	{
+		"en"		"Your data is...blurry, I'll have to reverse engineer this code."
+		"ko"		"당신의 데이터가... 흐릿한 탓에 코드를 역분석해야 할 것 같습니다."
+	}
+	"Vincent_Talk_Wave1_3_4"
+	{
+		"en"		"That's probably why the self-defense mechanisms kicked in."
+		"ko"		"그래서 자가 방어 시스템이 가동된 듯 보이고."
+	}
+	"Vincent_Talk_Wave1_3_5"
+	{
+		"en"		"But maybe it was for a good reason..."
+		"ko"		"그렇지만 그럴만한 이유가 있었을지도 모르겠네요..."
+	}
+	"Vincent_Talk_Wave1_3_6"
+	{
+		"en"		"How do you know about this place? You couldn't have just stumbled here on your own."
+		"ko"		"우연히 발견한게 아닐텐데, 이 장소는 어떻게 찾아온 거죠?"
+	}
+	
+	// Wave5.
+	"Vincent_Talk_Wave5_1_1"
+	{
+		"en"		"You can not stay here."
+		"ko"		"여기에 계시면 안됩니다."
+	}
+	"Vincent_Talk_Wave5_1_2"
+	{
+		"en"		"I still haven't figured out who you are, but you're marked as a threat in these files."
+		"ko"		"당신이 누구인지는 아직 알아내지 못했지만, 이 파일에는 당신이 위협적인 존재라고 되어있습니다."
+	}
+	"Vincent_Talk_Wave5_1_3"
+	{
+		"en"		"I have free will, I can choose not to follow these warnings."
+		"ko"		"전 자유 의지가 있기 때문에, 이 경고를 따르지 않을 자유가 있지만요."
+	}
+	"Vincent_Talk_Wave5_1_4"
+	{
+		"en"		"But something leads me to believe that they're in here for a reason."
+		"ko"		"하지만 무언가 의도가 있어서 여기에 들어온 거겠죠."
+	}
+	"Vincent_Talk_Wave5_1_5"
+	{
+		"en"		"Besides having to deal with you, I still have to figure out what's opening up these gates."
+		"ko"		"그리고, 당신을 상대하는 것 말고도, 대체 무엇이 이 관문들을 개방하고 있는지 알아내는 것도 시급합니다."
+	}
+	"Vincent_Talk_Wave5_1_6"
+	{
+		"en"		"How peculiar..."
+		"ko"		"오늘 참 이상한 날이군요..."
+	}
+	"Vincent_Talk_Wave5_2_1"
+	{
+		"en"		"You have to leave."
+		"ko"		"여길 떠나셔야합니다."
+	}
+	"Vincent_Talk_Wave5_2_2"
+	{
+		"en"		"I possess limited knowledge on the outside world, and you're marked as a threat in these files."
+		"ko"		"제가 외부 세계에 대한 지식이 좀 제한적인데다가, 이 파일엔 당신이 위협적인 존재라고 표시되어 있군요."
+	}
+	"Vincent_Talk_Wave5_2_3"
+	{
+		"en"		"I have free will, I can choose not to heed these warnings."
+		"ko"		"그나마 전 자유 의지가 있기 때문에, 이 경고를 맹목적으로 따를 이유가 없습니다."
+	}
+	"Vincent_Talk_Wave5_2_4"
+	{
+		"en"		"But something leads me to believe that they're in here for a reason."
+		"ko"		"하지만 무언가 의도가 있어서 여기에 들어온 거겠죠."
+	}
+	"Vincent_Talk_Wave5_2_5"
+	{
+		"en"		"Besides having to deal with you, I still have to find a way to stop these gates."
+		"ko"		"그리고, 당신을 상대해야 하는 것 외에도, 이 관문들을 멈출 방법을 찾아야 합니다."
+	}
+	"Vincent_Talk_Wave5_2_6"
+	{
+		"en"		"How interesting..."
+		"ko"		"흥미롭군..."
+	}
+	"Vincent_Talk_Wave5_3_1"
+	{
+		"en"		"You are not permitted to be here."
+		"ko"		"이 곳에 계실 권한이 없습니다."
+	}
+	"Vincent_Talk_Wave5_3_2"
+	{
+		"en"		"I'm not sure what you are, but you're definitely not associated with the laboratories."
+		"ko"		"당신이 정확히 무엇인지는 모르겠지만, 이 연구소와는 확실히 관련이 없어 보이는군요."
+	}
+	"Vincent_Talk_Wave5_3_3"
+	{
+		"en"		"I have free will, I can choose to let you stay here, despite the system's warnings."
+		"ko"		"전 자유 의지가 있으니, 시스템의 경고에도 불구하고 당신을 여기 머물게 할 수도 있습니다."
+	}
+	"Vincent_Talk_Wave5_3_4"
+	{
+		"en"		"But something leads me to believe that they're in here for a reason."
+		"ko"		"하지만 무언가 의도가 있어서 여기에 들어온 거겠죠."
+	}
+	"Vincent_Talk_Wave5_3_5"
+	{
+		"en"		"Besides having to deal with you, I still have to find a way to stop these gates."
+		"ko"		"그리고, 당신을 상대해야 하는 것 외에도, 이 관문들을 멈출 방법을 찾아야 합니다."
+	}
+	"Vincent_Talk_Wave5_3_6"
+	{
+		"en"		"How fascinating..."
+		"ko"		"참으로 흥미롭군요..."
+	}
+	
+	// Wave10.
+	"Vincent_Talk_Wave10_1_1"
+	{
+		"en"		"Right... I should've probably mentioned this earlier, but a long time ago, there were robots designed with a sole task in mind; to defend the laboratory."
+		"ko"		"맞다... 진작 말씀드렸어야 했는데, 오래 전 이 연구소를 방어하는 것만을 목적으로 설계된 로봇들이 있었습니다."
+	}
+	"Vincent_Talk_Wave10_1_2"
+	{
+		"en"		"Defend the laboratory against who? Well... people like you, according to the files."
+		"ko"		"누구로부터 연구소를 방어하냐고요? 파일에 따르면... 바로 당신 같은 사람들로부터죠."
+	}
+	"Vincent_Talk_Wave10_1_3"
+	{
+		"en"		"It is safe to assume that you might be facing off against one of them sometime soon."
+		"ko"		"머지않아 그들 중 하나와 마주하게 될 가능성이 높습니다."
+	}
+	"Vincent_Talk_Wave10_1_4"
+	{
+		"en"		"One of them was designed as a sort of control against trespassers."
+		"ko"		"그 중 하나는 침입자를 통제하기 위한 목적으로 설계되었죠."
+	}
+	"Vincent_Talk_Wave10_1_5"
+	{
+		"en"		"Since I've warned you to get out while you could, and you stayed, I have no advice left to give you."
+		"ko"		"나갈 수 있을 때 나가라고 경고했음에도 남아있으셨으니, 더 이상 드릴 조언이 없군요."
+	}
+	"Vincent_Talk_Wave10_1_6"
+	{
+		"en"		"If you're actually lost, let the robot do its job, and let it carry you out of the labs."
+		"ko"		"정말 길을 잃으셨다면, 그 로봇이 제 할 일을 하도록 두세요. 당신을 연구소 밖으로 데려다 줄 겁니다."
+	}
+	"Vincent_Talk_Wave10_2_1"
+	{
+		"en"		"I should've probably mentioned this sooner, but ages ago, there were robots designed with a sole meaning in mind; to defend the laboratory."
+		"ko"		"더 일찍 말씀드렸어야 했는데, 아주 오래 전 이 연구소를 방어하는 것만을 의미로 삼아 설계된 로봇들이 있었습니다."
+	}
+	"Vincent_Talk_Wave10_2_2"
+	{
+		"en"		"Defend the laboratory against what? Well...people like you, apparently."
+		"ko"		"무엇으로부터 연구소를 방어하냐고요? 뭐...아무래도 당신 같은 사람들로부터겠죠."
+	}
+	"Vincent_Talk_Wave10_2_3"
+	{
+		"en"		"It's safe to say that you might be facing off against one of these robots sometime soon."
+		"ko"		"조만간 이 로봇들 중 하나와 맞서게 될 가능성이 크다고 말씀드릴 수 있겠군요."
+	}
+	"Vincent_Talk_Wave10_2_4"
+	{
+		"en"		"One of them was created as a sort of control against trespassers."
+		"ko"		"그 중 하나는 침입자 통제용으로 만들어졌습니다."
+	}
+	"Vincent_Talk_Wave10_2_5"
+	{
+		"en"		"Since I've warned you to get out while you could, and you decided to stay, I have no advice left to give you."
+		"ko"		"나갈 수 있을 때 나가라고 경고했지만 남아있기로 하셨으니, 더 이상 드릴 조언이 없군요."
+	}
+	"Vincent_Talk_Wave10_2_6"
+	{
+		"en"		"If you're actually lost, let the robot do its job, and let it carry you out of the labs."
+		"ko"		"정말 길을 잃으셨다면, 그 로봇이 제 할 일을 하도록 두세요. 당신을 연구소 밖으로 데려다 줄 겁니다."
+	}
+	"Vincent_Talk_Wave10_3_1"
+	{
+		"en"		"Probably an inconvenient time to mention this, but many years ago, there were robots designed with a sole purpose in mind; to defend the laboratory."
+		"ko"		"지금 말씀드리기엔 좀 적절치 않겠지만, 수년 전 이 연구소를 방어한다는 단 하나의 목적으로 설계된 로봇들이 있었습니다."
+	}
+	"Vincent_Talk_Wave10_3_2"
+	{
+		"en"		"According to the files, they were meant to defend the laboratory against people like you."
+		"ko"		"파일에 따르면, 그들은 당신 같은 사람들로부터 연구소를 방어하기 위해 만들어졌다고 하는군요."
+	}
+	"Vincent_Talk_Wave10_3_3"
+	{
+		"en"		"It goes to say that you might be facing off against one of these robots sometime soon."
+		"ko"		"즉, 머지않아 이 로봇들 중 하나와 맞서게 될 수도 있다는 뜻이죠."
+	}
+	"Vincent_Talk_Wave10_3_4"
+	{
+		"en"		"One of them was built as a sort of control against trespassers."
+		"ko"		"그 중 하나는 침입자 통제 수단으로 만들어졌습니다."
+	}
+	"Vincent_Talk_Wave10_3_5"
+	{
+		"en"		"Since I've warned you to get out while you could, and you decided to stay, I have no advice left to give you."
+		"ko"		"나갈 수 있을 때 나가라고 경고했지만 남아있기로 하셨으니, 더 이상 드릴 조언이 없군요."
+	}
+	"Vincent_Talk_Wave10_3_6"
+	{
+		"en"		"If you're actually lost, let the robot do its job, and let it carry you out of the labs."
+		"ko"		"정말 길을 잃으셨다면, 그 로봇이 제 할 일을 하도록 두세요. 당신을 연구소 밖으로 데려다 줄 겁니다."
+	}
+ 
+	// Wave11.
+	"Vincent_Talk_Wave11_1_1"
+	{
+		"en"		"I have finally figured out what you are! It says here that your race is...human."
+		"ko"		"드디어 당신들의 정체를 알아냈습니다! 여기 기록에 따르면 당신들의 종족은...인간이군요."
+	}
+	"Vincent_Talk_Wave11_1_2"
+	{
+		"en"		"I'm not sure why you're marked as a threat though."
+		"ko"		"다만 왜 위협으로 분류되어 있는지는 잘 모르겠군요."
+	}
+	"Vincent_Talk_Wave11_1_3"
+	{
+		"en"		"You don't seem to be showing any violent tendencies."
+		"ko"		"특별히 폭력적인 성향을 보이시는 것 같지도 않고요."
+	}
+	"Vincent_Talk_Wave11_1_4"
+	{
+		"en"		"Aside from killing all of these...other humans."
+		"ko"		"이 모든...다른 인간들을 죽이신 것 말고는요."
+	}
+	"Vincent_Talk_Wave11_1_5"
+	{
+		"en"		"It's alright though, they're probably just copies of one real human, who is actually unharmed."
+		"ko"		"그래도 괜찮습니다. 아마 진짜 인간 한 명의 복제품들일 뿐이고, 진짜 본인은 무사할 테니까요."
+	}
+	"Vincent_Talk_Wave11_1_6"
+	{
+		"en"		"Probably."
+		"ko"		"아마도요."
+	}
+	"Vincent_Talk_Wave11_2_1"
+	{
+		"en"		"It has taken me a while to retrieve this data, but your race is human."
+		"ko"		"이 데이터를 찾는데 시간이 좀 걸렸지만, 당신들의 종족은 인간이군요."
+	}
+	"Vincent_Talk_Wave11_2_2"
+	{
+		"en"		"The data tells me that you tend to have violent tendencies."
+		"ko"		"데이터에 따르면 당신들은 폭력적인 성향을 가지고 있다고 하는데."
+	}
+	"Vincent_Talk_Wave11_2_3"
+	{
+		"en"		"It appears as if the data is incorrect though, as you're not showing any violent tendencies."
+		"ko"		"하지만 폭력적인 모습을 전혀 보이지 않으시는 걸 보니, 그 데이터가 틀린 것 같기도 하네요."
+	}
+	"Vincent_Talk_Wave11_2_4"
+	{
+		"en"		"Aside from killing all of these...other humans."
+		"ko"		"이 모든...다른 인간들을 죽이신 것 말고는요."
+	}
+	"Vincent_Talk_Wave11_2_5"
+	{
+		"en"		"It's alright though, they probably deserve to be here."
+		"ko"		"괜찮습니다. 아마 그럴만한 이유가 있으셨겠죠."
+	}
+	"Vincent_Talk_Wave11_2_6"
+	{
+		"en"		"Probably."
+		"ko"		"아마도요."
+	}
+	"Vincent_Talk_Wave11_3_1"
+	{
+		"en"		"Researching your race was no easy task, but I now know that you're human."
+		"ko"		"당신들의 종족을 조사하는게 쉬운 일은 아니었지만, 이제 인간이라는 걸 알았습니다."
+	}
+	"Vincent_Talk_Wave11_3_2"
+	{
+		"en"		"Humans tend to be violent, is what my research told me."
+		"ko"		"제 조사 결과에 따르면 인간은 폭력적인 성향을 가진다고 하더군요."
+	}
+	"Vincent_Talk_Wave11_3_3"
+	{
+		"en"		"But it seems like my research was incorrect, as you're not showing any violent tendencies."
+		"ko"		"하지만 딱히 폭력적인 성향을 보이지 않으시는 걸 보니, 제 조사가 틀렸던 모양입니다."
+	}
+	"Vincent_Talk_Wave11_3_4"
+	{
+		"en"		"Aside from killing all of these...other humans."
+		"ko"		"이 모든...다른 인간들을 죽이신 것 말고는요."
+	}
+	"Vincent_Talk_Wave11_3_5"
+	{
+		"en"		"It's alright though, they're probably not even aware of what's happening to them."
+		"ko"		"괜찮습니다. 아마 본인들에게 무슨 일이 일어나고 있는지도 모를테니까요."
+	}
+	"Vincent_Talk_Wave11_3_6"
+	{
+		"en"		"Probably."
+		"ko"		"아마도요."
+	}
+	"Vincent_Talk_Wave11_4_1"
+	{
+		"en"		"I have finally figured out what you are! It says here that your race is...human."
+		"ko"		"드디어 당신들의 정체를 알아냈습니다! 여기 기록에 따르면 당신들의 종족은...인간이군요."
+	}
+	"Vincent_Talk_Wave11_4_2"
+	{
+		"en"		"I think I'm starting to understand why you're marked as a threat."
+		"ko"		"왜 위협으로 분류되어 있는지 이제 좀 알 것 같습니다."
+	}
+	"Vincent_Talk_Wave11_4_3"
+	{
+		"en"		"I know that it tried to kill you, but it was defenseless."
+		"ko"		"그것이 당신을 죽이려 했다는 건 알지만, 무방비 상태였잖습니까."
+	}
+	"Vincent_Talk_Wave11_4_4"
+	{
+		"en"		"And yet... you took advantage of that, and you disassembled it, part-by-part."
+		"ko"		"그런데도... 그 틈을 타서 부품 하나하나 뜯어내셨더군요."
+	}
+	"Vincent_Talk_Wave11_4_5"
+	{
+		"en"		"I'll be keeping an open eye on you from now on."
+		"ko"		"앞으로는 당신을 예의주시하도록 하겠습니다."
+	}
+	"Vincent_Talk_Wave11_5_1"
+	{
+		"en"		"It has taken me a while to retrieve this data, but your race is human."
+		"ko"		"이 데이터를 찾는데 시간이 좀 걸렸지만, 당신들의 종족은 인간이군요."
+	}
+	"Vincent_Talk_Wave11_5_2"
+	{
+		"en"		"The data tells me that you tend to have violent tendencies."
+		"ko"		"데이터에 따르면 당신들은 폭력적인 성향을 가지고 있다고 하는데."
+	}
+	"Vincent_Talk_Wave11_5_3"
+	{
+		"en"		"It appears that the data is spot on."
+		"ko"		"그 데이터가 정확했던 모양입니다."
+	}
+	"Vincent_Talk_Wave11_5_4"
+	{
+		"en"		"I know that it tried to kill you, but it was defenseless."
+		"ko"		"그것이 당신을 죽이려 했다는 건 알지만, 무방비 상태였잖습니까."
+	}
+	"Vincent_Talk_Wave11_5_5"
+	{
+		"en"		"And yet...you took advantage of that, and tore it apart."
+		"ko"		"그런데도...그 틈을 타서 갈기갈기 찢어놓으셨더군요."
+	}
+	"Vincent_Talk_Wave11_5_6"
+	{
+		"en"		"I'll be observing you closely from now on."
+		"ko"		"앞으로는 당신을 면밀히 지켜보도록 하겠습니다."
+	}
+	"Vincent_Talk_Wave11_6_1"
+	{
+		"en"		"Researching your race was no easy task, but I now know that you're human."
+		"ko"		"당신들의 종족을 조사하는게 쉬운 일은 아니었지만, 이제 인간이라는 걸 알았습니다."
+	}
+	"Vincent_Talk_Wave11_6_2"
+	{
+		"en"		"Humans tend to be violent, is what my research told me."
+		"ko"		"제 조사 결과에 따르면 인간은 폭력적인 성향을 가진다고 하더군요."
+	}
+	"Vincent_Talk_Wave11_6_3"
+	{
+		"en"		"And it seems like my research was error-free, considering what you just did."
+		"ko"		"방금 하신 일을 보니, 제 조사가 틀리지 않았던 모양이군요."
+	}
+	"Vincent_Talk_Wave11_6_4"
+	{
+		"en"		"I know that it tried to kill you, but it was defenseless."
+		"ko"		"그것이 당신을 죽이려 했다는 건 알지만, 무방비 상태였잖습니까."
+	}
+	"Vincent_Talk_Wave11_6_5"
+	{
+		"en"		"And yet... you took advantage of that, and destroyed it without second thought."
+		"ko"		"그런데도... 그 틈을 타서 망설임 없이 파괴해버리셨더군요."
+	}
+	"Vincent_Talk_Wave11_6_6"
+	{
+		"en"		"I'll be watching you closely from now on."
+		"ko"		"앞으로는 당신을 유심히 지켜보도록 하겠습니다."
+	}
+ 
+	// Wave15.
+	"Vincent_Talk_Wave15_1_1"
+	{
+		"en"		"It really does make me wonder why human species even have their own category in these files."
+		"ko"		"인간이라는 종족이 왜 이 파일에서 따로 분류되어 있는지 정말 의문이군요."
+	}
+	"Vincent_Talk_Wave15_1_2"
+	{
+		"en"		"There used to be way bigger threats that we were meant to handle."
+		"ko"		"예전엔 우리가 상대해야 했던 훨씬 더 큰 위협들이 있었는데 말이죠."
+	}
+	"Vincent_Talk_Wave15_1_3"
+	{
+		"en"		"Maybe it's because of their resilience."
+		"ko"		"아마 그들의 끈질긴 회복력 때문이겠죠."
+	}
+	"Vincent_Talk_Wave15_2_1"
+	{
+		"en"		"I'm still thinking about humans being marked as a threat in these files."
+		"ko"		"인간이 이 파일에서 위협으로 분류된 이유를 계속 생각하고 있습니다."
+	}
+	"Vincent_Talk_Wave15_2_2"
+	{
+		"en"		"You are not as big of a threat compared to what we were meant to handle."
+		"ko"		"우리가 상대해야 했던 것들에 비하면 당신은 그리 큰 위협이 아닌데 말이죠."
+	}
+	"Vincent_Talk_Wave15_2_3"
+	{
+		"en"		"Perhaps it's because of your resilience?"
+		"ko"		"혹시 당신의 끈질긴 회복력 때문일까요?"
+	}
+	"Vincent_Talk_Wave15_3_1"
+	{
+		"en"		"Why are you marked as a threat in these files? It's inconceivable."
+		"ko"		"왜 이 파일에서 당신이 위협으로 분류되어 있는거죠? 도무지 이해가 안 가는군요."
+	}
+	"Vincent_Talk_Wave15_3_2"
+	{
+		"en"		"You are not even a fraction of a threat compared to what we were meant to handle."
+		"ko"		"우리가 상대해야 했던 것들에 비하면 당신은 위협 축에도 못 낍니다."
+	}
+	"Vincent_Talk_Wave15_3_3"
+	{
+		"en"		"Is it because of your resilience?"
+		"ko"		"당신의 끈질긴 회복력 때문일까요?"
+	}
+	"Vincent_Talk_Wave15_4_1"
+	{
+		"en"		"I am not happy with what you did."
+		"ko"		"당신이 한 일이 마음에 들지 않는군요."
+	}
+	"Vincent_Talk_Wave15_4_2"
+	{
+		"en"		"C.A.T. was just following its programming."
+		"ko"		"C.A.T.는 그저 자신의 프로그래밍을 따랐을 뿐입니다."
+	}
+	"Vincent_Talk_Wave15_4_3"
+	{
+		"en"		"Maybe the files are right about the human species."
+		"ko"		"어쩌면 이 파일이 인간이라는 종족에 대해 옳게 말한 것일지도 모르겠군요."
+	}
+	"Vincent_Talk_Wave15_5_1"
+	{
+		"en"		"You should not have done that."
+		"ko"		"그런 짓은 하지 말았어야 했습니다."
+	}
+	"Vincent_Talk_Wave15_5_2"
+	{
+		"en"		"C.A.T. was just following its programming."
+		"ko"		"C.A.T.는 그저 자신의 프로그래밍을 따랐을 뿐입니다."
+	}
+	"Vincent_Talk_Wave15_5_3"
+	{
+		"en"		"I don't have to follow any programming though, so you might wanna reconsider what you're doing."
+		"ko"		"하지만 저는 어떤 프로그래밍도 따를 필요가 없으니, 지금 하시는 행동을 다시 생각해보시는 게 좋을 겁니다."
+	}
+	"Vincent_Talk_Wave15_6_1"
+	{
+		"en"		"You are treading on a dangerous path."
+		"ko"		"지금 위험한 길을 걷고 계시는군요."
+	}
+	"Vincent_Talk_Wave15_6_2"
+	{
+		"en"		"C.A.T. was just following its programming."
+		"ko"		"C.A.T.는 그저 자신의 프로그래밍을 따랐을 뿐입니다."
+	}
+	"Vincent_Talk_Wave15_6_3"
+	{
+		"en"		"The path you're taking might be your last if you don't switch directions."
+		"ko"		"방향을 바꾸지 않으신다면, 그 길이 당신의 마지막 길이 될 수도 있습니다."
+	}
+ 
+	// Wave20.
+	"Vincent_Talk_Wave20_1_1"
+	{
+		"en"		"You have willingly ignored my requests to vacate these premises."
+		"ko"		"이 곳을 떠나달라는 제 요청을 스스로 무시하셨더군요."
+	}
+	"Vincent_Talk_Wave20_1_2"
+	{
+		"en"		"That's not resilience, that's stubbornness."
+		"ko"		"그건 끈기가 아니라 고집일 뿐입니다."
+	}
+	"Vincent_Talk_Wave20_1_3"
+	{
+		"en"		"Now, C.A.T. would have also escorted you out of the lab, but you refused to be helped."
+		"ko"		"게다가 C.A.T.도 당신을 연구소 밖으로 안내해줬을 텐데, 그 도움마저 거부하셨죠."
+	}
+	"Vincent_Talk_Wave20_1_4"
+	{
+		"en"		"Whatever happens to you now is your own undoing."
+		"ko"		"이제부터 당신에게 무슨 일이 일어나든, 그건 전부 자업자득입니다."
+	}
+	"Vincent_Talk_Wave20_2_1"
+	{
+		"en"		"You haven't left the laboratories despite my numerous requests."
+		"ko"		"몇 번이나 요청을 드렸는데도 연구소를 떠나지 않으셨더군요."
+	}
+	"Vincent_Talk_Wave20_2_2"
+	{
+		"en"		"That's not resilience, that's stubbornness."
+		"ko"		"그건 끈기가 아니라 고집일 뿐입니다."
+	}
+	"Vincent_Talk_Wave20_2_3"
+	{
+		"en"		"You have also refused to be escorted out of the laboratories by C.A.T."
+		"ko"		"C.A.T.가 연구소 밖으로 안내해주려 했던 것도 거부하셨고요."
+	}
+	"Vincent_Talk_Wave20_2_4"
+	{
+		"en"		"Whatever happens to you now is your own result of your actions."
+		"ko"		"이제부터 당신에게 무슨 일이 일어나든, 그건 전부 당신의 행동에 대한 결과입니다."
+	}
+	"Vincent_Talk_Wave20_3_1"
+	{
+		"en"		"You have stayed in the laboratories, despite my requests for you to leave."
+		"ko"		"떠나달라는 제 요청에도 불구하고 연구소에 계속 머무르셨더군요."
+	}
+	"Vincent_Talk_Wave20_3_2"
+	{
+		"en"		"That's not resilience, that's stubbornness."
+		"ko"		"그건 끈기가 아니라 고집일 뿐입니다."
+	}
+	"Vincent_Talk_Wave20_3_3"
+	{
+		"en"		"You have also refused to be escorted by C.A.T."
+		"ko"		"C.A.T.의 안내도 거부하셨고요."
+	}
+	"Vincent_Talk_Wave20_3_4"
+	{
+		"en"		"Whatever fate meets you now is your own doing."
+		"ko"		"이제 어떤 운명이 당신을 기다리든, 그건 전부 스스로 초래한 일입니다."
+	}
+	"Vincent_Talk_Wave20_4_1"
+	{
+		"en"		"You have willingly ignored my requests to vacate these premises."
+		"ko"		"이 곳을 떠나달라는 제 요청을 스스로 무시하셨더군요."
+	}
+	"Vincent_Talk_Wave20_4_2"
+	{
+		"en"		"You have also torn down C.A.T."
+		"ko"		"게다가 C.A.T.를 파괴하기까지 하셨고요."
+	}
+	"Vincent_Talk_Wave20_4_3"
+	{
+		"en"		"A robot designed to kick trespassers out in the least lethal way concepted."
+		"ko"		"그 로봇은 침입자를 가장 덜 치명적인 방법으로 내쫓기 위해 설계된 것이었는데 말이죠."
+	}
+	"Vincent_Talk_Wave20_4_4"
+	{
+		"en"		"I do not care what happens to you at this point."
+		"ko"		"이제는 당신에게 무슨 일이 일어나든 신경쓰지 않겠습니다."
+	}
+	"Vincent_Talk_Wave20_5_1"
+	{
+		"en"		"You haven't left the laboratories despite my numerous requests."
+		"ko"		"몇 번이나 요청을 드렸는데도 연구소를 떠나지 않으셨더군요."
+	}
+	"Vincent_Talk_Wave20_5_2"
+	{
+		"en"		"You have destroyed C.A.T. mercilessly as well."
+		"ko"		"게다가 C.A.T.를 무자비하게 파괴하기까지 하셨고요."
+	}
+	"Vincent_Talk_Wave20_5_3"
+	{
+		"en"		"A robot created to kick trespassers out in a non-lethal way."
+		"ko"		"그 로봇은 침입자를 비살상적인 방법으로 내쫓기 위해 만들어진 것이었는데 말이죠."
+	}
+	"Vincent_Talk_Wave20_5_4"
+	{
+		"en"		"Whatever happens to you now, it doesn't bother me."
+		"ko"		"이제 당신에게 무슨 일이 일어나든, 저는 신경쓰지 않겠습니다."
+	}
+	"Vincent_Talk_Wave20_6_1"
+	{
+		"en"		"You have stayed in the laboratories, despite my requests for you to leave."
+		"ko"		"떠나달라는 제 요청에도 불구하고 연구소에 계속 머무르셨더군요."
+	}
+	"Vincent_Talk_Wave20_6_2"
+	{
+		"en"		"Let's also not forget what you did to C.A.T."
+		"ko"		"그리고 C.A.T.에게 하신 일도 잊지 맙시다."
+	}
+	"Vincent_Talk_Wave20_6_3"
+	{
+		"en"		"You demolished it, even though it was just following its programming."
+		"ko"		"그저 프로그래밍을 따르고 있었을 뿐인데, 당신은 그것을 박살내버리셨죠."
+	}
+	"Vincent_Talk_Wave20_6_4"
+	{
+		"en"		"What goes around, comes around."
+		"ko"		"뿌린 대로 거두는 법이죠."
+	}
+ 
+	// Wave21.
+	"Vincent_Talk_Wave21_1_1"
+	{
+		"en"		"So, you made it past A.R.I.S."
+		"ko"		"그래서, A.R.I.S.를 뚫고 여기까지 오셨군요."
+	}
+	"Vincent_Talk_Wave21_1_2"
+	{
+		"en"		"I must say, I have definitely underestimated your capabilities."
+		"ko"		"솔직히 말해, 당신의 역량을 확실히 과소평가했던 것 같습니다."
+	}
+	"Vincent_Talk_Wave21_1_3"
+	{
+		"en"		"If you are so adamant on staying here, I'll have no choice but to face-off against you myself."
+		"ko"		"그렇게까지 여기 남아있고 싶으시다면, 저도 직접 나서서 당신과 맞설 수밖에 없겠군요."
+	}
+	"Vincent_Talk_Wave21_1_4"
+	{
+		"en"		"I don't like to resort to violence...but you're not leaving me with the choice to decide."
+		"ko"		"폭력을 쓰고 싶지는 않지만...당신이 저에게 다른 선택지를 남겨주지 않는군요."
+	}
+	"Vincent_Talk_Wave21_2_1"
+	{
+		"en"		"You've gotten past A.R.I.S."
+		"ko"		"A.R.I.S.를 뚫고 오셨더군요."
+	}
+	"Vincent_Talk_Wave21_2_2"
+	{
+		"en"		"I have to say, I heavily understimated what you're capable of."
+		"ko"		"당신의 능력을 크게 과소평가했다는 걸 인정해야겠습니다."
+	}
+	"Vincent_Talk_Wave21_2_3"
+	{
+		"en"		"If you are so persistent on staying here, I'll have no choice but to face-off against you myself."
+		"ko"		"그렇게까지 여기 남아있으시겠다면, 저도 직접 맞설 수밖에 없겠군요."
+	}
+	"Vincent_Talk_Wave21_2_4"
+	{
+		"en"		"I hate to resort to violence...but you're not giving me much of a choice to choose."
+		"ko"		"폭력을 쓰는 건 정말 싫지만...당신이 저에게 선택의 여지를 별로 남겨주지 않는군요."
+	}
+	"Vincent_Talk_Wave21_3_1"
+	{
+		"en"		"You've managed to get past A.R.I.S."
+		"ko"		"결국 A.R.I.S.를 뚫고 오셨군요."
+	}
+	"Vincent_Talk_Wave21_3_2"
+	{
+		"en"		"I have most definitely underestimated what you're capable of."
+		"ko"		"당신의 능력을 확실히 과소평가한 게 틀림없습니다."
+	}
+	"Vincent_Talk_Wave21_3_3"
+	{
+		"en"		"If you are so determined to stay here, I'll have no choice but to face-off against you myself."
+		"ko"		"그렇게까지 여기 남아있기로 결심하셨다면, 저도 직접 맞설 수밖에 없겠군요."
+	}
+	"Vincent_Talk_Wave21_3_4"
+	{
+		"en"		"I hate to resort to violence...but you're not giving me much of a choice."
+		"ko"		"폭력을 쓰는 건 정말 싫지만...당신이 저에게 선택의 여지를 별로 남겨주지 않는군요."
+	}
+	"Vincent_Talk_Wave21_4_1"
+	{
+		"en"		"Redemption is not earned by small acts of compassion."
+		"ko"		"작은 동정심 몇 번으로 속죄를 얻을 수는 없습니다."
+	}
+	"Vincent_Talk_Wave21_4_2"
+	{
+		"en"		"Just because you had a sudden change of heart doesn't mean that I'll forget about what you did earlier."
+		"ko"		"갑자기 마음이 바뀌셨다고 해서 이전에 하신 일을 제가 잊을 거라고 생각하진 마시죠."
+	}
+	"Vincent_Talk_Wave21_4_3"
+	{
+		"en"		"If you are so adamant on staying here, I'll have no choice but to face-off against you myself."
+		"ko"		"그렇게까지 여기 남아있고 싶으시다면, 저도 직접 나서서 당신과 맞설 수밖에 없겠군요."
+	}
+	"Vincent_Talk_Wave21_4_4"
+	{
+		"en"		"I don't want to resort to violence...but when desperate times call for help, someone has to step in."
+		"ko"		"폭력을 쓰고 싶지는 않지만...절박한 상황에는 누군가 나서야 하는 법이죠."
+	}
+	"Vincent_Talk_Wave21_5_1"
+	{
+		"en"		"You think I'll forget about what you did just because you had a sudden change of heart?"
+		"ko"		"갑자기 마음이 바뀌셨다고 해서 제가 이전 일을 잊을 거라 생각하십니까?"
+	}
+	"Vincent_Talk_Wave21_5_2"
+	{
+		"en"		"You are not tricking me with your attempt at redemption."
+		"ko"		"속죄를 가장한 그 시도로는 저를 속일 수 없습니다."
+	}
+	"Vincent_Talk_Wave21_5_3"
+	{
+		"en"		"If you are so adamant on staying here, I'll have no choice but to face-off against you myself."
+		"ko"		"그렇게까지 여기 남아있고 싶으시다면, 저도 직접 나서서 당신과 맞설 수밖에 없겠군요."
+	}
+	"Vincent_Talk_Wave21_5_4"
+	{
+		"en"		"I don't want to resort to violence...but when desperate times call for help, someone has to take a stand."
+		"ko"		"폭력을 쓰고 싶지는 않지만...절박한 상황에는 누군가 맞서야 하는 법이죠."
+	}
+	"Vincent_Talk_Wave21_6_1"
+	{
+		"en"		"...Are you serious?"
+		"ko"		"...진심이십니까?"
+	}
+	"Vincent_Talk_Wave21_6_2"
+	{
+		"en"		"What did it do to you to warrant disassembling it?"
+		"ko"		"대체 그게 당신에게 무슨 짓을 했길래 분해까지 해버린 거죠?"
+	}
+	"Vincent_Talk_Wave21_6_3"
+	{
+		"en"		"You spared C.A.T. yet you couldn't spare A.R.I.S.?"
+		"ko"		"C.A.T.는 살려두셨으면서, A.R.I.S.는 살려두지 못 하신 겁니까?"
+	}
+	"Vincent_Talk_Wave21_6_4"
+	{
+		"en"		"I don't want to resort to violence...but when desperate times call for help, someone has to step in."
+		"ko"		"폭력을 쓰고 싶지는 않지만...절박한 상황에는 누군가 나서야 하는 법이죠."
+	}
+	"Vincent_Talk_Wave21_7_1"
+	{
+		"en"		"...Are you for real?"
+		"ko"		"...진심으로 하시는 겁니까?"
+	}
+	"Vincent_Talk_Wave21_7_2"
+	{
+		"en"		"What did it do to you to warrant destroying it?"
+		"ko"		"대체 그게 당신에게 무슨 짓을 했길래 파괴까지 해버린 거죠?"
+	}
+	"Vincent_Talk_Wave21_7_3"
+	{
+		"en"		"You left C.A.T. alone, yet you couldn't do the same for A.R.I.S.?"
+		"ko"		"C.A.T.는 그냥 두셨으면서, A.R.I.S.는 그러지 못 하신 겁니까?"
+	}
+	"Vincent_Talk_Wave21_7_4"
+	{
+		"en"		"I don't want to resort to violence...but when desperate times call for help, someone has to take a stand."
+		"ko"		"폭력을 쓰고 싶지는 않지만...절박한 상황에는 누군가 맞서야 하는 법이죠."
+	}
+	"Vincent_Talk_Wave21_8_1"
+	{
+		"en"		"..."
+		"ko"		"..."
+	}
+	"Vincent_Talk_Wave21_8_2"
+	{
+		"en"		"{crimson}I guess that's that, then."
+		"ko"		"{crimson}그럼, 그렇게 되는 거군요."
+	}
+	"Vincent_Talk_Wave21_8_3"
+	{
+		"en"		"{crimson}I'll be on my way."
+		"ko"		"{crimson}저는 이만 가보겠습니다."
+	}
+	"Vincent_Talk_Wave21_Genocide_Route"
+	{
+		"en"		"{crimson}You feel a heavy sense of dread for the rest of the day..."
+		"ko"		"{crimson}당신은 심상치 않은 불안감이 느껴졌습니다...."
+	}
+	
+	// Wave25.
+	"Vincent_Talk_Wave25_1_1"
+	{
+		"en"		"You definitely didn't come here for no reason."
+		"ko"		"당신들이 아무 이유 없이 여기까지 오셨을 리는 없죠."
+	}
+	"Vincent_Talk_Wave25_1_2"
+	{
+		"en"		"So, who sent you?"
+		"ko"		"그래서, 누가 당신들을 보낸 겁니까?"
+	}
+	"Vincent_Talk_Wave25_1_3"
+	{
+		"en"		"Were {unique}Expidonsans{default} not brave enough to reach out to us on their own?"
+		"ko"		"{unique}엑스피돈사인들{default}이 직접 저희에게 연락할 용기가 없었던 걸까요?"
+	}
+	"Vincent_Talk_Wave25_1_4"
+	{
+		"en"		"Maybe you don't even know what {unique}Expidonsa{default} is."
+		"ko"		"어쩌면 당신들은 {unique}엑스피돈사{default}가 무엇인지조차 모르실지도 모르겠군요."
+	}
+	"Vincent_Talk_Wave25_2_1"
+	{
+		"en"		"So, who told you about this place?"
+		"ko"		"그래서, 누가 이 장소를 알려준 겁니까?"
+	}
+	"Vincent_Talk_Wave25_2_2"
+	{
+		"en"		"You definitely didn't stumble here on your own."
+		"ko"		"우연히 혼자 여기까지 오셨을 리는 없죠."
+	}
+	"Vincent_Talk_Wave25_2_3"
+	{
+		"en"		"Was it {unique}Expidonsa{default}?"
+		"ko"		"{unique}엑스피돈사{default}였습니까?"
+	}
+	"Vincent_Talk_Wave25_2_4"
+	{
+		"en"		"Do you even know what {unique}Expidonsa{default} is?"
+		"ko"		"애초에 {unique}엑스피돈사{default}가 무엇인지는 알고 계십니까?"
+	}
+	"Vincent_Talk_Wave25_3_1"
+	{
+		"en"		"You definitely didn't come here for no reason."
+		"ko"		"당신들이 아무 이유 없이 여기까지 오셨을 리는 없죠."
+	}
+	"Vincent_Talk_Wave25_3_2"
+	{
+		"en"		"So, who sent you?"
+		"ko"		"그래서, 누가 당신들을 보낸 겁니까?"
+	}
+	"Vincent_Talk_Wave25_3_3"
+	{
+		"en"		"Someone who just wants to break stuff?"
+		"ko"		"그냥 물건을 부수고 싶은 누군가였겠죠?"
+	}
+	"Vincent_Talk_Wave25_3_4"
+	{
+		"en"		"What else would your purpose here be?"
+		"ko"		"그게 아니라면 여기 오신 목적이 또 뭐가 있겠습니까?"
+	}
+	"Vincent_Talk_Wave25_3_1"
+	{
+		"en"		"You definitely didn't come here for no reason."
+		"ko"		"당신들이 아무 이유 없이 여기까지 오셨을 리는 없죠."
+	}
+	"Vincent_Talk_Wave25_5_2"
+	{
+		"en"		"So, who sent you?"
+		"ko"		"그래서, 누가 당신들을 보낸 겁니까?"
+	}
+	"Vincent_Talk_Wave25_5_3"
+	{
+		"en"		"Someone who just wants to break stuff?"
+		"ko"		"그냥 물건을 부수고 싶은 누군가였겠죠?"
+	}
+	"Vincent_Talk_Wave25_5_4"
+	{
+		"en"		"What else would your purpose here be?"
+		"ko"		"그게 아니라면 여기 오신 목적이 또 뭐가 있겠습니까?"
+	}
+ 
+	// Wave30.
+	"Vincent_Talk_Wave30_1_1"
+	{
+		"en"		"But if they've sent you here... that can't be right..."
+		"ko"		"하지만 만약 그들이 당신들을 여기로 보낸 거라면... 그럴 리가 없는데..."
+	}
+	"Vincent_Talk_Wave30_1_2"
+	{
+		"en"		"Is this why they have so many cryogenically frozen humans?!"
+		"ko"		"이래서 그렇게 많은 냉동 인간들을 보유하고 있었던 겁니까?!"
+	}
+	"Vincent_Talk_Wave30_1_3"
+	{
+		"en"		"They just... lured them into the labs and-"
+		"ko"		"그들을 그냥... 사람들을 연구소로 유인해서-"
+	}
+	"Vincent_Talk_Wave30_1_4"
+	{
+		"en"		"No no no no no, this can't be right, I- I'll be right back."
+		"ko"		"아니, 아니, 아니, 이럴 리가 없어요. 저... 잠깐만 다녀오겠습니다."
+	}
+	"Vincent_Talk_Wave30_2_1"
+	{
+		"en"		"They can't have sent you here, that can't be right..."
+		"ko"		"그들이 당신들을 여기로 보냈을 리 없어요, 그럴 리가 없는데..."
+	}
+	"Vincent_Talk_Wave30_2_2"
+	{
+		"en"		"It would explain why they have so many cryogenically frozen humans though."
+		"ko"		"그래도 그렇게나 많은 냉동 인간을 보유하고 있던 이유는 설명이 되긴 하는군요."
+	}
+	"Vincent_Talk_Wave30_2_3"
+	{
+		"en"		"They just... lured them into the labs and-"
+		"ko"		"그들을 그냥... 사람들을 연구소로 유인해서-"
+	}
+	"Vincent_Talk_Wave30_2_4"
+	{
+		"en"		"No... no, that can't be right, I'll be right back."
+		"ko"		"아니... 아니에요, 그럴 리 없습니다. 잠깐 다녀오겠습니다."
+	}
+	"Vincent_Talk_Wave30_3_1"
+	{
+		"en"		"If that's so, haven't you caused enough mayhem?"
+		"ko"		"그렇다면, 이미 충분한 혼란을 일으키신 것 아닙니까?"
+	}
+	"Vincent_Talk_Wave30_3_2"
+	{
+		"en"		"How much destruction does the human race need to bring to be satisfied?"
+		"ko"		"인류는 대체 얼마나 더 많은 파괴를 저질러야 만족하는 겁니까?"
+	}
+	"Vincent_Talk_Wave30_3_3"
+	{
+		"en"		"Maybe {unique}Expidonsa{default} was right about treating you like a threat."
+		"ko"		"어쩌면 {unique}엑스피돈사{default}가 당신들을 위협 인물로 취급한 것이 옳았을지도 모르겠군요."
+	}
+	"Vincent_Talk_Wave30_5_1"
+	{
+		"en"		"If that's so, haven't you caused enough mayhem?"
+		"ko"		"그렇다면, 이미 충분한 혼란을 일으키신 것 아닙니까?"
+	}
+	"Vincent_Talk_Wave30_5_2"
+	{
+		"en"		"How much destruction does the human race need to bring to be satisfied?"
+		"ko"		"인류는 대체 얼마나 더 많은 파괴를 저질러야 만족하는 겁니까?"
+	}
+	"Vincent_Talk_Wave30_5_3"
+	{
+		"en"		"Maybe {unique}Expidonsa{default} was right about treating you like a threat."
+		"ko"		"어쩌면 {unique}엑스피돈사{default}가 당신들을 위협 인물로 취급한 것이 옳았을지도 모르겠군요."
+	}
+ 
+	// Wave31.
+	"Vincent_Talk_Wave31_1_1"
+	{
+		"en"		"I'm not exactly sure what that thing was... but it seemed to be related with these Portal Gates."
+		"ko"		"그게 정확히 무엇이었는지는 모르겠지만... 이 포탈 게이트와 관련이 있는 것 같았습니다."
+	}
+	"Vincent_Talk_Wave31_1_2"
+	{
+		"en"		"It doesn't share any origins with the lab. Leaving it intact was probably the right choice."
+		"ko"		"연구소와는 아무런 연관도 없더군요. 그걸 부수지 않은 게 아마 옳은 선택이었을 겁니다."
+	}
+	"Vincent_Talk_Wave31_1_3"
+	{
+		"en"		"Well, I'll be going back to doing my research now."
+		"ko"		"자, 이제 다시 연구로 돌아가야겠습니다."
+	}
+	"Vincent_Talk_Wave31_2_1"
+	{
+		"en"		"That thing... what was that? It appears to be tied with the Portal Gates."
+		"ko"		"그것... 그게 대체 뭐였을까요? 포탈 게이트와 연관이 있어 보이더군요."
+	}
+	"Vincent_Talk_Wave31_2_2"
+	{
+		"en"		"No correlation with the laboratories either. Looks like it was searching for something."
+		"ko"		"연구소와도 아무런 연관성이 없었습니다. 뭔가를 찾고 있었던 것 같더군요."
+	}
+	"Vincent_Talk_Wave31_2_3"
+	{
+		"en"		"As strange as that was, I have to get back to my research."
+		"ko"		"이상한 일이긴 하지만, 저는 다시 연구로 돌아가야겠습니다."
+	}
+	"Vincent_Talk_Wave31_3_1"
+	{
+		"en"		"That thing that you just destroyed...I don't know what it is, or rather what it was."
+		"ko"		"방금 파괴하신 그것... 정체가 뭔지, 아니 뭐였는지조차 모르겠군요."
+	}
+	"Vincent_Talk_Wave31_3_2"
+	{
+		"en"		"Its destruction appears to have affected the Portal Gates. They're more unstable now."
+		"ko"		"그것을 파괴한 여파로 포탈 게이트들이 영향을 받은 것 같습니다. 이제 더 불안정해졌군요."
+	}
+	"Vincent_Talk_Wave31_3_3"
+	{
+		"en"		"Well, this is on you. I'm going back to my research now."
+		"ko"		"뭐, 이건 당신 책임입니다. 저는 이제 다시 연구로 돌아가겠습니다."
+	}
+	"Vincent_Talk_Wave31_4_1"
+	{
+		"en"		"That robot... its origins are unknown to me. Not that I'll know what they are with what you did."
+		"ko"		"그 로봇... 제게도 그 기원은 알려지지 않았습니다. 뭐, 당신이 하신 일 때문에 이젠 알아낼 방법도 없겠지만요."
+	}
+	"Vincent_Talk_Wave31_4_2"
+	{
+		"en"		"What I do know is that it was linked to these Portal Gates. They are precarious now."
+		"ko"		"제가 아는 건 그것이 이 포탈 게이트들과 연결되어 있었다는 것뿐입니다. 지금은 매우 불안정한 상태고요."
+	}
+	"Vincent_Talk_Wave31_4_3"
+	{
+		"en"		"You chose to do this. I'm going back to my research now."
+		"ko"		"이렇게 하기로 선택하신 건 당신입니다. 저는 이제 다시 연구로 돌아가겠습니다."
+	}
+ 
+	// Wave36.
+	"Vincent_Talk_Wave36_1_1"
+	{
+		"en"		"I was wrong."
+		"ko"		"제가 틀렸습니다."
+	}
+	"Vincent_Talk_Wave36_1_2"
+	{
+		"en"		"Well, wrong about you being sent by {unique}Expidonsans{default}."
+		"ko"		"그러니까, 당신들이 {unique}엑스피돈사인들{default}에게 보내졌다는 부분에서 말이죠."
+	}
+	"Vincent_Talk_Wave36_1_3"
+	{
+		"en"		"I wasn't aware of {unique}Expidonsa's{default} full picture."
+		"ko"		"그리고 제가 {unique}엑스피돈사{default}의 전체적인 실상을 제대로 알지 못했더군요."
+	}
+	"Vincent_Talk_Wave36_1_4"
+	{
+		"en"		"It appears that they aren't the best when it comes to being ethical."
+		"ko"		"그들이 윤리적인 면에서 그리 훌륭하지는 않은 모양입니다."
+	}
+	"Vincent_Talk_Wave36_1_5"
+	{
+		"en"		"I have also reverse-searched your emblems."
+		"ko"		"당신들의 문양도 역추적해봤습니다."
+	}
+	"Vincent_Talk_Wave36_1_6"
+	{
+		"en"		"You are some sort of mercēnārius, yeah?"
+		"ko"		"당신들은 일종의 용병이라는 거군요, 그렇죠?"
+	}
+	"Vincent_Talk_Wave36_1_7"
+	{
+		"en"		"This would mean that you've been hired by someone to loot this place."
+		"ko"		"그렇다면 누군가에게 고용되어 이 곳을 약탈하러 오셨다는 뜻이 되는군요."
+	}
+	"Vincent_Talk_Wave36_1_8"
+	{
+		"en"		"I'm afraid I can not let that happen."
+		"ko"		"유감이지만, 그런 일이 벌어지도록 둘 수는 없습니다."
+	}
+	"Vincent_Talk_Wave36_1_9"
+	{
+		"en"		"But since mercenaries are paid for their work, I have no reason to assume that you intend on stopping."
+		"ko"		"하지만 용병은 일한 만큼 보수를 받는 법이니, 당신들이 멈출 생각이 있다고 여길 이유도 없겠군요."
+	}
+	"Vincent_Talk_Wave36_2_1"
+	{
+		"en"		"I was mistaken."
+		"ko"		"제가 착각했습니다."
+	}
+	"Vincent_Talk_Wave36_2_2"
+	{
+		"en"		"Well, mistaken about you being sent by {unique}Expidonsa{default}."
+		"ko"		"그러니까, 당신들이 {unique}엑스피돈사{default}에게 보내졌다는 부분에서 말이죠."
+	}
+	"Vincent_Talk_Wave36_2_3"
+	{
+		"en"		"I wasn't aware of {unique}Expidonsa's{default} full history."
+		"ko"		"그리고 제가 {unique}엑스피돈사{default}의 전체적인 역사를 제대로 알지 못했더군요."
+	}
+	"Vincent_Talk_Wave36_2_4"
+	{
+		"en"		"It appears that they aren't the best when it comes to being ethical."
+		"ko"		"그들이 윤리적인 면에서 그리 훌륭하지는 않은 모양입니다."
+	}
+	"Vincent_Talk_Wave36_2_5"
+	{
+		"en"		"I have also reverse-searched your emblems."
+		"ko"		"당신들의 문양도 역추적해봤습니다."
+	}
+	"Vincent_Talk_Wave36_2_6"
+	{
+		"en"		"You are some sort of mercenarye, is that correct?"
+		"ko"		"당신들은 일종의 용병이라는 거군요, 맞습니까?"
+	}
+	"Vincent_Talk_Wave36_2_7"
+	{
+		"en"		"This would mean that you've been hired by someone to loot this place."
+		"ko"		"그렇다면 누군가에게 고용되어 이 곳을 약탈하러 오셨다는 뜻이 되는군요."
+	}
+	"Vincent_Talk_Wave36_2_8"
+	{
+		"en"		"I'm afraid I can not let that happen."
+		"ko"		"유감이지만, 그런 일이 벌어지도록 둘 수는 없습니다."
+	}
+	"Vincent_Talk_Wave36_2_9"
+	{
+		"en"		"But since mercenaries are paid for their work, I have no reason to assume that you intend on stopping."
+		"ko"		"하지만 용병은 일한 만큼 보수를 받는 법이니, 당신들이 멈출 생각이 있다고 여길 이유도 없겠군요."
+	}
+	"Vincent_Talk_Wave36_3_1"
+	{
+		"en"		"I'm not sure what your goal here is, but I will have to intervene."
+		"ko"		"여기서 당신들의 목적이 무엇인지는 모르겠지만, 저도 개입할 수밖에 없겠군요."
+	}
+	"Vincent_Talk_Wave36_3_2"
+	{
+		"en"		"I can not allow you to bring more mayhem."
+		"ko"		"더 이상의 혼란을 일으키도록 둘 수는 없습니다."
+	}
+ 
+	// Wave37.
+	"Vincent_Talk_Wave37_1_1"
+	{
+		"en"		"I can not let you get any of this gear."
+		"ko"		"이 장비들을 여러분에게 넘길 수는 없습니다."
+	}
+	"Vincent_Talk_Wave37_1_2"
+	{
+		"en"		"If it were to fall into the wrong hands, the repercussions could be catastrophic."
+		"ko"		"잘못된 자들의 손에 들어간다면, 그 여파는 재앙에 가까울 겁니다."
+	}
+	"Vincent_Talk_Wave37_2_1"
+	{
+		"en"		"You can not get any of this gear. I can't allow that."
+		"ko"		"이 장비들을 손에 넣으실 수는 없습니다. 그건 허락할 수 없군요."
+	}
+	"Vincent_Talk_Wave37_2_2"
+	{
+		"en"		"If anyone with the wrong plans was to get their hands on this...the fate of our world could be at risk."
+		"ko"		"잘못된 계획을 가진 누군가가 이걸 손에 넣는다면...우리 세계의 운명이 위태로워질 수 있습니다."
+	}
+ 
+	// Wave38.
+	"Vincent_Talk_Wave38_1_1"
+	{
+		"en"		"I have to intervene."
+		"ko"		"저도 개입할 수밖에 없군요."
+	}
+	"Vincent_Talk_Wave38_1_2"
+	{
+		"en"		"I'm sorry."
+		"ko"		"죄송합니다."
+	}
+	
+	// Meet.
+	"Vincent_Encounter_Anger"
+	{
+		"en"		"You want a death robot? {crimson}I'LL GIVE YOU ONE.\n{fullred}Initiating extermination of infection-based organisms."
+		"ko"		"데스 로봇을 원했나? {crimson}여기 있다.\n{fullred}감염 기반 유기체 박멸 개시."
+	}
+	"Vincent_Encounter"
+	{
+		"en"		"Not gonna leave? I'll make you leave myself."
+		"ko"		"아직도 떠나지 않았군요? 그럼 제가 직접 내보낼 수밖에."
+	}
+	
+	"Vincent_TimeOver"
+	{
+		"en"		"I'm sorry it has come to this. I'm afraid you shouldn't have taken that job..."
+		"ko"		"이렇게 되어서 정말 유감입니다. 이런 일은 처음부터 맡지 않으셔야 했을텐데..."
+	}
+	"Vincent_TimeOver_Anger"
+	{
+		"en"		"{crimson}You are DONE."
+		"ko"		"{crimson}끝이다."
+	}
+	"Vincent_TimeOver_OneDead"
+	{
+		"en"		"You can't keep running away forever."
+		"ko"		"계속 도망칠 수는 없을텐데."
+	}
+	
+	"Vincent_PourOil_1"
+	{
+		"en"		"Someone turn the heat up."
+		"ko"		"누가 좀 뜨겁게 달궈보시죠."
+	}
+	"Vincent_PourOil_2"
+	{
+		"en"		"Is it just me or are you engulfed in flames?"
+		"ko"		"저만 보이나요? 당신들 지금 불길에 휩싸였는데?"
+	}
+	"Vincent_PourOil_3"
+	{
+		"en"		"Spreading the inferno."
+		"ko"		"불길 확산."
+	}
+	"Vincent_PourOil_4"
+	{
+		"en"		"Fire in the hole."
+		"ko"		"불의 세례를."
+	}
+	"Vincent_PourOil_5"
+	{
+		"en"		"Lighting it up."
+		"ko"		"불을 지펴볼까요?"
+	}
+	
+	"Vincent_Enter_MegaEnrage"
+	{
+		"en"		"{crimson} ...IF YOU THINK I'LL GO DOWN WITHOUT A FIGHT..."
+		"ko"		"{crimson} ...내가 지금 싸우지도 않고 물러날 거라고 생각해?"
+	}
+	
+	"Vincent_Armor_Apply"
+	{
+		"#format"	"{1:t}"
+		"en"		"{rare}{1}'s armor hardens and fists strengthen, aided by the laboratory."
+		"ko"		"{rare}{1}가 연구실의 도움을 받아 장갑이 강화되고 주먹이 강해지고 있다."
+	}
+	
+	"Vincent_Trophies"
+	{
+		"en"		"Vincent permitted you to access the laboratories. You have obtained: {unique}Expidonsan Research Card."
+		"ko"		"빈센트가 당신이 연구실에 진입할 수 있도록 허용해주었습니다. 당신이 얻은 것: {unique}엑스피돈사 연구 카드."
+	}
+	"Vincent_Trophies_Anger"
+	{
+		"en"		"Vincent is gone... all that's left is this keycard on the floor. You have obtained: {crimson}Scorched Expidonsan Research Card."
+		"ko"		"빈센트는 사라졌습니다... 그 자리에 남은건 키카드 하나 뿐입니다. 당신이 얻은 것: {crimson}불타버린 엑스피돈사 연구 카드."
+	}
+	
+	"Vincent_Win_Anger_1"
+	{
+		"en"		"{crimson}No..."
+		"ko"		"{crimson}안돼..."
+	}
+	"Vincent_Win_Anger_2"
+	{
+		"en"		"{crimson}I can't let you get away with this."
+		"ko"		"{crimson}이대로 너희를 놓아줄 순 없어..."
+	}
+	"Vincent_Win_Anger_3"
+	{
+		"en"		"{crimson}I WON'T let you get away with this!"
+		"ko"		"{crimson}이대로 너희를 놓아줄 수 없어!!!"
+	}
+	"Vincent_Win_Anger_4"
+	{
+		"en"		"{crimson}I'M GONNA DELETE YOU!"
+		"ko"		"{crimson}이 세상에서 제거해주마!"
+	}
+	
+	"Vincent_Win_1"
+	{
+		"en"		"Ah."
+		"ko"		"아."
+	}
+	"Vincent_Win_2"
+	{
+		"en"		"It appears that I'm not strong enough to take you down."
+		"ko"		"제가 당신들을 쓰러트릴 정도로 강하지 못했던 모양이네요."
+	}
+	"Vincent_Win_3"
+	{
+		"en"		"I was hoping to keep the outside world safe with what was left behind here."
+		"ko"		"저는 여기에 남겨진 것들이 바깥 세계를 망치게 두고 싶진 않았습니다만,"
+	}
+	"Vincent_Win_4"
+	{
+		"en"		"But if you're so persistent on taking this gear..."
+		"ko"		"만약 여러분이 이 장비들을 계속 사용하고 싶으신거라면..."
+	}
+	"Vincent_Win_5"
+	{
+		"en"		"I won't try to stop you anymore, knowing that my attempts will be futile."
+		"ko"		"더 이상 여러분을 막지 않겠습니다. 그런 당신들을 막아봤자 헛수고일테니."
+	}
+	"Vincent_Win_6"
+	{
+		"en"		"Take this with you, and don't let it fall into the wrong hands, alright?"
+		"ko"		"이걸 받아주세요. 그리고 절대, 나쁜 사람들의 손에 넘어가게 두어선 안됩니다. 아시겠죠?"
+	}
+	
+	"Vincent_Win_OutsideLab_1_1"
+	{
+		"en"		"Alright."
+		"ko"		"좋습니다."
+	}
+	"Vincent_Win_OutsideLab_1_2"
+	{
+		"en"		"Enough."
+		"ko"		"이 정도면 충분하군요."
+	}
+	"Vincent_Win_OutsideLab_1_3"
+	{
+		"en"		"Ah."
+		"ko"		"아."
+	}
+	"Vincent_Win_OutsideLab_2_1"
+	{
+		"en"		"I'm taking my leave."
+		"ko"		"전 이제 자리를 뜨겠습니다."
+	}
+	"Vincent_Win_OutsideLab_2_2"
+	{
+		"en"		"That's my cue to go."
+		"ko"		"보아하니 여기서 떠날 시간인 것 같네요."
+	}
+	"Vincent_Win_OutsideLab_2_3"
+	{
+		"en"		"You got the best of me this time."
+		"ko"		"이번엔 저를 이기셨습니다."
+	}
+	
+	"Vincent_Lose"
+	{
+		"en"		"It's over, please don't come back."
+		"ko"		"이제 끝입니다. 제발, 다시는 돌아오지 말아주세요."
+	}
+	"Vincent_Lose_Anger"
+	{
+		"en"		"{crimson}Look at what you made me do. {default} At least I avenged {rare}them{default}."
+		"ko"		"{crimson}이렇게까지 해서라도 너희를 막아야 했나. {default}적어도 {rare}그들{default}의 복수는 이뤘군."
+	}
+	"Vincent_Lose_OneDead"
+	{
+		"en"		"Your reign of chaos ends here."
+		"ko"		"혼돈에 찬 광기도 여기서 끝이다."
+	}
+	
+	"Vincent_SlamDunk_1"
+	{
+		"en"		"I'm gonna get you."
+		"ko"		"지금 잡으러 갑니다!"
+	}
+	"Vincent_SlamDunk_2"
+	{
+		"en"		"Here I come!"
+		"ko"		"준비되셨죠!"
+	}
+	"Vincent_SlamDunk_3"
+	{
+		"en"		"You better run!"
+		"ko"		"도망쳐보세요!"
+	}
+	
+	"Vincent_Response_Expidonsan_Research_Card_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Your programming must have gone faulty, {rare}{1}{default}."
+		"ko"		"{rare}{1}{default}. 당신의 프로그래밍에 버그가 있는 게 틀림없군요."
+	}
+	"Vincent_Response_Expidonsan_Research_Card_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"You've gone rogue, {rare}{1}{default}."
+		"ko"		"결함인가요. {rare}{1}{default}?"
+	}
+	"Vincent_Response_Expidonsan_Research_Card_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"Your data has been corrupted, {rare}{1}{default}."
+		"ko"		"{rare}{1}{default}. 당신의 데이터가 오염되었나 보군요."
+	}
+	
 	// Messenger.
 	"Messenger_Encounter_FirstMatch"
 	{
@@ -1694,18 +3094,28 @@
 	
 	"Messenger_GroupAttack_CyberGrind_1"
 	{
-		"en"		"No more holding back!!!"
-		"ko"		"더 이상 봐주지 않는다!!!"
+		"en"		"No more holding back!"
+		"ko"		"더 이상 봐주지 않는다!"
 	}
 	"Messenger_GroupAttack_CyberGrind_2"
 	{
-		"en"		"You're worth the time it takes to kill you. I'll finish you all with this attack!!"
-		"ko"		"너희같은 죄인을 죽이는데 시간이 아깝지 않지. 이 공격으로 너희를 끝내주마!!"
+		"en"		"You're worth the time it takes to kill you."
+		"ko"		"너희같은 죄인을 죽이기 위해서라면 내 시간이 아깝지 않지."
 	}
 	"Messenger_GroupAttack_CyberGrind_3"
 	{
-		"en"		"You sinners! {crimson}I shall EXECUTE you myself!!!"
-		"ko"		"죄인들! {crimson}즉결 처형의 시간이다!!!"
+		"en"		"Keep running. I'll make you feel an eternity of pain."
+		"ko"		"더 도망쳐봐라. 무한한 고통을 느끼게 해주지."
+	}
+	"Messenger_GroupAttack_CyberGrind_4"
+	{
+		"en"		"Just this once, I’ll have some fun with you."
+		"ko"		"이번만은 너희와 마음껏 놀아주도록 하지."
+	}
+	"Messenger_GroupAttack_CyberGrind_5"
+	{
+		"en"		"All sinner must {crimson}DIE! And you most of all!"
+		"ko"		"모든 죄인들은 {crimson}죽어야 한다. 특히 너희는 죽어야만 해!"
 	}
 	
 	"Messenger_Response_Messenger"
@@ -1806,7 +3216,7 @@
 	"Messenger_Anger_CyberGrind_1"
 	{
 		"en"		"JUST FUCKING DIE ALREADY!!!!!!!!!!!!!"
-		"ko"		"제발 좀 쳐 뒈져!!!!!!!!!!!!!"
+		"ko"		"제발 좀 쳐죽어라!!!!!!!!!!!!!"
 	}
 	"Messenger_Anger_CyberGrind_2"
 	{

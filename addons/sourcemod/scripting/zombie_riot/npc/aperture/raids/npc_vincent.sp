@@ -388,7 +388,7 @@ methodmap Vincent < CClotBody
 			npc.m_flSpeed = 320.0;
 			if(npc.Anger)
 			{
-				NPCTalkMessage(npc.index, "You want a death robot? {crimson}I'LL GIVE YOU ONE.\n{fullred}Initiating extermination of infection-based organisms.");
+				Vincent_NPCTalkMessage(npc.index, "Vincent_Encounter_Anger", true);
 				npc.m_iWearable5 = npc.EquipItem("head", "models/workshop/player/items/heavy/tw_heavybot_armor/tw_heavybot_armor.mdl", _, skin);
 				RaidModeScaling *= 1.1;
 				Format(c_NpcName[npc.index], sizeof(c_NpcName[]), "V.I.N.C.E.N.T.");
@@ -409,7 +409,7 @@ methodmap Vincent < CClotBody
 			}
 			else
 			{
-				NPCTalkMessage(npc.index, "Not gonna leave? I'll make you leave myself.");
+				Vincent_NPCTalkMessage(npc.index, "Vincent_Encounter", true);
 				Format(c_NpcName[npc.index], sizeof(c_NpcName[]), "Vincent");
 				EmitSoundToAll("mvm/giant_heavy/giant_heavy_entrance.wav", _, _, _, _, 1.0, 100);	
 				EmitSoundToAll("mvm/giant_heavy/giant_heavy_entrance.wav", _, _, _, _, 1.0, 100);	
@@ -458,14 +458,23 @@ methodmap Vincent < CClotBody
 		SetVariantColor(view_as<int>({200, 200, 50, 200}));
 		AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
 		
-
+		
 		return npc;
 	}
 }
 
-static void NPCTalkMessage(int entity, const char[] message)
+static void Vincent_NPCTalkMessage(int entity, const char[] message, bool translated = false, any ...)
 {
-	PrintNPCMessageWithPrefixes(entity, "rare", message);
+	char buffer[256];
+	VFormat(buffer, sizeof(buffer), message, 4);
+	PrintNPCMessageWithPrefixes(entity, "rare", buffer);
+}
+
+static void Vincent_NPCTalkMessageAbout(int entity, const char[] message, int client, any ...)
+{
+	char buffer[256];
+	VFormat(buffer, sizeof(buffer), message, 4);
+	NPC_TalkMessageFormat(entity, "rare", "%t", _, _, buffer, client);
 }
 
 public void Vincent_ClotThink(int iNPC)
@@ -506,23 +515,23 @@ public void Vincent_ClotThink(int iNPC)
 			{
 				if(!Aperture_IsBossDead(APERTURE_BOSS_CAT) && !Aperture_IsBossDead(APERTURE_BOSS_ARIS))
 				{
-					NPCTalkMessage(npc.index, "I'm sorry it has come to this. I'm afraid you shouldn't have taken that job...");
+					Vincent_NPCTalkMessage(npc.index, "Vincent_TimeOver", true);
 				}
 				else if(Aperture_IsBossDead(APERTURE_BOSS_CAT) && Aperture_IsBossDead(APERTURE_BOSS_ARIS))
 				{
-					NPCTalkMessage(npc.index, "{crimson}You are DONE.");
+					Vincent_NPCTalkMessage(npc.index, "Vincent_TimeOver_Anger", true);
 				}
 				else if(Aperture_IsBossDead(APERTURE_BOSS_CAT) || Aperture_IsBossDead(APERTURE_BOSS_ARIS))
 				{
-					NPCTalkMessage(npc.index, "You can't keep running away forever.");
+					Vincent_NPCTalkMessage(npc.index, "Vincent_TimeOver_OneDead", true);
 				}
 			}
 			else
 			{
 				if (npc.Anger)
-					NPCTalkMessage(npc.index, "{crimson}You are DONE.");
+					Vincent_NPCTalkMessage(npc.index, "Vincent_TimeOver_Anger", true);
 				else
-					NPCTalkMessage(npc.index, "You can't keep running away forever.");
+					Vincent_NPCTalkMessage(npc.index, "Vincent_TimeOver_OneDead", true);
 			}
 		}
 	}
@@ -565,10 +574,8 @@ public void Vincent_ClotThink(int iNPC)
 					RemoveSpecificBuff(npc.index, "Intangible");
 					f_CheckIfStuckPlayerDelay[npc.index] = 0.0;
 					b_ThisEntityIgnoredBeingCarried[npc.index] = false; 
-
 				}
 			}
-				
 		}
 	}
 	if (npc.m_flLeakingOilUntil >= gameTime && npc.m_flNextOilLeak < gameTime)
@@ -612,19 +619,7 @@ public void Vincent_ClotThink(int iNPC)
 		Vincent_PourOilAbility(npc, 30.0, delay);
 		if(!npc.Anger)
 		{
-			switch(GetRandomInt(0,4))
-			{
-				case 0:
-					NPCTalkMessage(npc.index, "Someone turn the heat up.");
-				case 1:
-					NPCTalkMessage(npc.index, "Is it just me or are you engulfed in flames?");
-				case 2:
-					NPCTalkMessage(npc.index, "Spreading the inferno.");
-				case 3:
-					NPCTalkMessage(npc.index, "Fire in the hole.");
-				case 4:
-					NPCTalkMessage(npc.index, "Lighting it up.");
-			}
+			Vincent_NPCTalkMessage(npc.index, "Vincent_PourOil_%d", true, GetRandomInt(1, 5));
 		}
 	}
 	
@@ -819,7 +814,7 @@ public Action Vincent_OnTakeDamage(int victim, int &attacker, int &inflictor, fl
 				ApplyStatusEffect(victim, victim, "Infinite Will", 30.0);
 				npc.m_flMegaEnrage = GetGameTime() + 30.0;
 				damage = 0.0;
-				NPCTalkMessage(npc.index, "{crimson} ...IF YOU THINK I'LL GO DOWN WITHOUT A FIGHT...");
+				Vincent_NPCTalkMessage(npc.index, "Vincent_Enter_MegaEnrage", true);
 				EmitSoundToAll("mvm/mvm_tank_horn.wav",_, SNDCHAN_STATIC, 80, _, 0.65, 90);
 				EmitSoundToAll("mvm/mvm_tank_horn.wav",_, SNDCHAN_STATIC, 80, _, 0.65, 90);
 				ApplyStatusEffect(npc.index, npc.index, "Dimensional Turbulence", 30.0);
@@ -850,7 +845,6 @@ public Action Vincent_OnTakeDamage(int victim, int &attacker, int &inflictor, fl
 			if(npc.Anger)
 				ApplyStatusEffect(npc.index, npc.index, "Extreme Anxiety", DurationHave);
 
-
 			int NpcSpawn = NPC_CreateByName("npc_vincent_beacon", -1, pos, ang, GetTeam(npc.index));
 
 			Vincent npcBeacon = view_as<Vincent>(NpcSpawn);
@@ -859,9 +853,10 @@ public Action Vincent_OnTakeDamage(int victim, int &attacker, int &inflictor, fl
 			SetVariantString("2.0");
 			AcceptEntityInput(npcBeacon.m_iWearable1, "SetModelScale");
 			
-			CPrintToChatAll("{rare}%t'가 연구실의 도움을 받아 장갑이 강화되고 주먹이 강해지고 있다.", c_NpcName[npc.index]);
-		}	
+			CPrintToChatAll("%t", "Vincent_Armor_Apply", c_NpcName[npc.index]);
+		}
 	}
+	
 	if(attacker <= 0)
 		return Plugin_Continue;
 		
@@ -870,6 +865,7 @@ public Action Vincent_OnTakeDamage(int victim, int &attacker, int &inflictor, fl
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
 	}
+	
 	Vincent_Weapon_Lines(npc, attacker);
 	i_SaidLineAlready[npc.index] = 0;
 
@@ -921,12 +917,12 @@ static void Vincent_GrantItem(int entity)
 			if(!npc.Anger)
 			{
 				Items_GiveNamedItem(client, "Expidonsan Research Card");
-				CPrintToChat(client,"{default}빈센트가 당신이 연구실에 진입할 수 있도록 허용해주었습니다. 당신이 얻은 것: {unique}엑스피돈산 연구 카드.");
+				CPrintToChat(client, "%T", "Vincent_Trophies", client);
 			}
-			if(npc.Anger)
+			else
 			{
-				Items_GiveNamedItem(client, "Expidonsan Research Card");
-				CPrintToChat(client,"{default}빈센트는 사라졌습니다...그 자리에 남은건 키카드 하나 뿐입니다. 당신이 얻은 것: {crimson}엑스피돈산 연구 카드.");
+				Items_GiveNamedItem(client, "Scorched Expidonsan Research Card");
+				CPrintToChat(client, "%T", "Vincent_Trophies_Anger", client);
 			}
 		}
 	}
@@ -973,19 +969,19 @@ static bool Vincent_LoseConditions(int iNPC)
 					{
 						//yapping
 						npc.m_flTalkRepeat = GetGameTime() + 3.0;
-						NPCTalkMessage(npc.index, "{crimson}No...");
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_1", true);
 					}
 					case 1:
 					{
 						//yapping
 						npc.m_flTalkRepeat = GetGameTime() + 3.0;
-						NPCTalkMessage(npc.index, "{crimson}I can't let you get away with this.");
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_2", true);
 					}
 					case 2:
 					{
 						//yapping
 						npc.m_flTalkRepeat = GetGameTime() + 3.0;
-						NPCTalkMessage(npc.index, "{crimson}I WON'T let you get away with this!");
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_3", true);
 					}
 					case 3:
 					{
@@ -997,7 +993,7 @@ static bool Vincent_LoseConditions(int iNPC)
 						spawnRing_Vectors(Loc, 0.1, 0.0, 0.0, 25.0, "materials/sprites/laserbeam.vmt", 255, 0, 20, 255, 1, 1.5, 8.0, 1.5, 1, 150.0*2.0);
 						spawnRing_Vectors(Loc, 0.1, 0.0, 0.0, 45.0, "materials/sprites/laserbeam.vmt", 255, 0, 20, 255, 1, 1.5, 8.0, 1.5, 1, 150.0*2.0);
 						spawnRing_Vectors(Loc, 0.1, 0.0, 0.0, 65.0, "materials/sprites/laserbeam.vmt", 255, 0, 20, 255, 1, 1.5, 8.0, 1.5, 1, 150.0*2.0);
-						NPCTalkMessage(npc.index, "{crimson}I'M GONNA DELETE YOU!");
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_4", true);
 						Format(c_NpcName[npc.index], sizeof(c_NpcName[]), "Old forgotten expidonsan robot");
 					}
 					case 4:
@@ -1034,32 +1030,32 @@ static bool Vincent_LoseConditions(int iNPC)
 					case 0:
 					{
 						npc.m_flTalkRepeat = GetGameTime() + 3.0;
-						NPCTalkMessage(npc.index, "Ah.");
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_1", true);
 					}
 					case 1:
 					{
 						npc.m_flTalkRepeat = GetGameTime() + 3.0;
-						NPCTalkMessage(npc.index, "It appears that I'm not strong enough to take you down.");
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_2", true);
 					}
 					case 2:
 					{
 						npc.m_flTalkRepeat = GetGameTime() + 3.0;
-						NPCTalkMessage(npc.index, "I was hoping to keep the outside world safe with what was left behind here.");
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_3", true);
 					}
 					case 3:
 					{
 						npc.m_flTalkRepeat = GetGameTime() + 3.0;
-						NPCTalkMessage(npc.index, "But if you're so persistent on taking this gear...");
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_4", true);
 					}
 					case 4:
 					{
 						npc.m_flTalkRepeat = GetGameTime() + 3.0;
-						NPCTalkMessage(npc.index, "I won't try to stop you anymore, knowing that my attempts will be futile.");
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_5", true);
 					}
 					case 5:
 					{
 						npc.m_flTalkRepeat = GetGameTime() + 3.0;
-						NPCTalkMessage(npc.index, "Take this with you, and don't let it fall into the wrong hands, alright?");
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_6", true);
 					}
 					case 6:
 					{
@@ -1132,30 +1128,8 @@ static bool Vincent_LoseConditions(int iNPC)
 				{
 					case 0:
 					{
-						char first[64], second[64];
-						switch (GetURandomInt() % 3)
-						{
-							case 0:
-								first = "좋습니다.";
-							case 1:
-								first = "이 정도면 되겠군.";
-							case 2:
-								first = "흠.";
-						}
-						
-						switch (GetURandomInt() % 3)
-						{
-							case 0:
-								second = "전 이제 자리를 뜨겠습니다.";
-							case 1:
-								second = "보아하니 여기서 떠날 시간인 것 같네요.";
-							case 2:
-								second = "이번엔 저를 이기셨군요.";
-						}
-						
-						char message[255];
-						FormatEx(message, sizeof(message), "%s %s", first, second);
-						NPCTalkMessage(npc.index, message);
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_OutsideLab_1_%d", true, GetRandomInt(1, 3));
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_OutsideLab_2_%d", true, GetRandomInt(1, 3));
 						
 						npc.m_flTalkRepeat = GetGameTime() + 1.7;
 					}
@@ -1200,15 +1174,15 @@ static bool Vincent_LoseConditions(int iNPC)
 		//won normally
 		if(!Aperture_IsBossDead(APERTURE_BOSS_CAT) && !Aperture_IsBossDead(APERTURE_BOSS_ARIS))
 		{
-			NPCTalkMessage(npc.index, "It's over, please don't come back.");
+			Vincent_NPCTalkMessage(npc.index, "Vincent_Lose", true);
 		}
 		else if(Aperture_IsBossDead(APERTURE_BOSS_CAT) && Aperture_IsBossDead(APERTURE_BOSS_ARIS))
 		{
-			NPCTalkMessage(npc.index, "{crimson}Look at what you made me do. {default} At least I avenged {rare}them{default}.");
+			Vincent_NPCTalkMessage(npc.index, "Vincent_Lose_Anger", true);
 		}
 		else if(Aperture_IsBossDead(APERTURE_BOSS_CAT) || Aperture_IsBossDead(APERTURE_BOSS_ARIS))
 		{
-			NPCTalkMessage(npc.index, "Your reign of chaos ends here.");
+			Vincent_NPCTalkMessage(npc.index, "Vincent_Lose_OneDead", true);
 		}
 		return true;
 	}
@@ -1727,15 +1701,7 @@ bool Vincent_SlamThrow(int iNPC, int target)
 		
 		if(!npc.Anger && !npc.m_bTimeUpMode)
 		{
-			switch(GetRandomInt(0,2))
-			{
-				case 0:
-					NPCTalkMessage(npc.index, "I'm gonna get you.");
-				case 1:
-					NPCTalkMessage(npc.index, "Here I come!");
-				case 2:
-					NPCTalkMessage(npc.index, "You better run!");
-			}
+			Vincent_NPCTalkMessage(npc.index, "Vincent_SlamDunk_%d", true, GetRandomInt(1, 3));
 		}
 		if(IsValidEntity(npc.m_iWearable4))
 			RemoveEntity(npc.m_iWearable4);
@@ -2026,24 +1992,9 @@ static void Vincent_Weapon_Lines(Vincent npc, int client)
 
 	if(Store_HasNamedItem(client, "Expidonsan Research Card") && !npc.Anger)
 	{
-		switch(GetRandomInt(0,2))
-		{
-			case 0:
-			{
-				Format(Text_Lines, sizeof(Text_Lines), "Your programming must have gone faulty, {rare}%N{default}.",client);
-			}
-			case 1:
-			{
-				Format(Text_Lines, sizeof(Text_Lines), "You've gone rogue, {rare}%N{default}.",client);
-			}
-			case 2:
-			{
-				Format(Text_Lines, sizeof(Text_Lines), "Your data has been corrupted, {rare}%N{default}.",client);
-			}
-		}
 		if(valid)
 		{
-			NPCTalkMessage(npc.index, Text_Lines);
+			Vincent_NPCTalkMessageAbout(npc.index, "Vincent_Response_Expidonsan_Research_Card_%d", client, GetRandomInt(1, 3));
 			fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(10.0, 15.0);
 			b_said_player_weaponline[client] = true;
 		}

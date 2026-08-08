@@ -3674,6 +3674,16 @@
 		"en"		"You beat Vincent, it's unknown how exactly you did it however...\nTrophy!\nWhen using, turns you into a robot!"
 		"ko"		"어떻게 했는지는 몰라도, 당신은 빈센트를 격파하는데 성공했습니다...\n트로피!\n착용 시, 당신을 로봇으로 만듭니다!"
 	}
+	"Scorched Expidonsan Research Card"
+	{
+		"en"		"Scorched Expidonsan Research Card"
+		"ko"		"불타버린 엑스피돈사 연구 카드"
+	}
+	"Scorched Expidonsan Research Card Desc"
+	{
+		"en"		"A card left behind by an old, forgotten robot of Expidonsa. The only word discernible among the scorch marks is 'Almagest.'\nTrophy!"
+		"ko"		"오래되고 잊혀진 엑스피돈사 로봇이 남기고 간 카드입니다.\n그을린 흔적에서 알아볼 수 있는 글자는 '알마게스트'밖에 없군요.\n트로피!"
+	}
 	"Twirl's Hairpins"
 	{
 		"en"		"Twirl's Hairpins"
