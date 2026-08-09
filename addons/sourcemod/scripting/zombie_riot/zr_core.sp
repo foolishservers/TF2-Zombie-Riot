@@ -4002,7 +4002,6 @@ void WeaponUpdateDo()
 void LoadNPCTalkTranslations()
 {
 	LoadTranslations("zombieriot.phrases.expidonsatalk");
-	LoadTranslations("zombieriot.phrases.blitzkriegtalk");
 	LoadTranslations("zombieriot.phrases.ruinatalk");
 }
 

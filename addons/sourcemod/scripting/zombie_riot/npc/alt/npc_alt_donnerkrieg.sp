@@ -15,6 +15,7 @@ static const char g_MeleeAttackSounds[][] = {
 //static j1
 
 static bool b_enraged=false;
+static bool b_hyper=false;
 
 void Donnerkrieg_OnMapStart_NPC()
 {
@@ -134,6 +135,9 @@ methodmap Donnerkrieg < CClotBody
 		{
 			fl_AlreadyStrippedMusic[client_clear] = 0.0; //reset to 0
 		}
+		
+		b_hyper = StrContains(data, "hyper") != -1;
+		
 		bool final = StrContains(data, "raid_ally") != -1;
 		
 		if(final)
@@ -164,6 +168,7 @@ methodmap Donnerkrieg < CClotBody
 		g_b_donner_died=false;
 
 		b_enraged=false;
+		
 		//IDLE
 		npc.m_flSpeed = 300.0;
 		
@@ -347,8 +352,17 @@ static void Internal_ClotThink(int iNPC)
 				{
 					if(IsValidClient(client) && GetClientTeam(client) == 2 && TeutonType[client] != TEUTON_WAITING && PlayerPoints[client] > 500)
 					{
-						Items_GiveNamedItem(client, "Blitzkrieg's Army");
-						CPrintToChat(client, "%T", "Blitzkrieg_Trophies", client);
+						if(b_hyper)
+						{
+							Items_GiveNamedItem(client, "Blitzkrieg's Hyper Charged Core");
+							CPrintToChat(client, "%T", "Blitzkrieg_Hyper_Trophies", client);
+						}
+						else
+						{
+							Items_GiveNamedItem(client, "Blitzkrieg's Army");
+							CPrintToChat(client, "%T", "Blitzkrieg_Trophies", client);
+						}
+						CPrintToChat(client, "%T", "Blitzkrieg_Trophies_2", client);
 					}
 				}
 			}

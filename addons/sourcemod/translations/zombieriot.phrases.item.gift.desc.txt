@@ -3741,6 +3741,16 @@
 		"en"		"You managed to kill off the machine, the impostor.."
 		"ko"		"당신은 이 따라쟁이 기계를 처치하는데에 성공했습니다.."
 	}
+	"Blitzkrieg's Hyper Charged Core"
+	{
+		"en"		"Blitzkrieg's Hyper Charged Core"
+		"ko"		"블리츠크리그의 과충전된 코어"
+	}
+	"Blitzkrieg's Hyper Charged Core Desc"
+	{
+		"en"		"A core created through a joint effort between Ruina and Expidonsa, designed to contain the power of the Moon.\nAnyhow, it seems the Moon's madness has driven the machine out of control.\nWhat could thier intentions have been in creating something like this?"
+		"ko"		"루이나와 엑스피돈사의 합작으로 만들어진 달의 힘을 담을 수 있는 코어입니다.\n아무래도 달의 광기가 기계를 통제 불능으로 만든 거 같군요.\n이런 것을 만든 그들의 의도는 뭐였을까요?"
+	}
 	"Corrupted Barney's Chainsaw"
 	{
 		"en"		"Corrupted Barney's Chainsaw"
@@ -3780,6 +3790,16 @@
 	{
 		"en"		"WIP."
 		"ko"		"제작 중!"
+	}
+	"Flesh and Bones of the Corrupted God"
+	{
+		"en"		"Flesh and Bones of the Corrupted God"
+		"ko"		"잠식된 신의 살과 뼈"
+	}
+	"Flesh and Bones of the Corrupted God Desc"
+	{
+		"en"		"This grotesque body part was never a part of his original body.\nIt was made by the sea. You risked your lives to tear the sea away from him.\nNow that he is free, where could he have gone?"
+		"ko"		"이 기괴한 부위는 그의 원래 몸이 아니었습니다.\n바다가 만든 것이죠. 당신은 목숨을 걸고 그에게서 바다를 떼어냈습니다.\n해방된 그는 어디로 갔을까요?"
 	}
 	"Xeno Virus Vial"
 	{

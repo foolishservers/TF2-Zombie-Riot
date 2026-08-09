@@ -158,6 +158,12 @@ methodmap GodAlaxios < CClotBody
 		public get()							{ return fl_GrappleCooldown[this.index]; }
 		public set(float TempValueForProperty) 	{ fl_GrappleCooldown[this.index] = TempValueForProperty; }
 	}
+	property bool m_bGiveFinalItem
+	{
+		public get()							{ return b_FUCKYOU[this.index]; }
+		public set(bool TempValueForProperty) 	{ b_FUCKYOU[this.index] = TempValueForProperty; }
+	}
+	
 	public void PlayHurtSound()
 	{
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
@@ -369,8 +375,20 @@ methodmap GodAlaxios < CClotBody
 		
 		if(final)
 		{
-			b_NpcUnableToDie[npc.index] = true;
-			i_RaidGrantExtra[npc.index] = 6;
+			if(i_RaidGrantExtra[npc.index] != ALAXIOS_SEA_INFECTED)
+			{
+				b_NpcUnableToDie[npc.index] = true;
+				i_RaidGrantExtra[npc.index] = 6;
+			}
+			else
+			{
+				// Only used on sea corrupted alaxios.
+				npc.m_bGiveFinalItem = true;
+			}
+		}
+		else
+		{
+			npc.m_bGiveFinalItem = false;
 		}
 
 		if(i_RaidGrantExtra[npc.index] >= 5)
@@ -1422,6 +1440,18 @@ public void GodAlaxios_NPCDeath(int entity)
 		{
 			RaidBossGodAlaxios_NPCTalkMessage(npc.index, "God_Alaxios_Sea_Death_1", true);
 			CPrintToChatAll("%t", "God_Alaxios_Sea_Death_2");
+			
+			if(npc.m_bGiveFinalItem)
+			{
+				for(int client = 1; client <= MaxClients; client++)
+				{
+					if(IsValidClient(client) && GetClientTeam(client) == 2 && TeutonType[client] != TEUTON_WAITING && PlayerPoints[client] > 500)
+					{
+						Items_GiveNamedItem(client, "Flesh and Bones of the Corrupted God");
+						CPrintToChat(client, "%T", "God_Alaxios_Sea_Trophies", client);
+					}
+				}
+			}
 		}
 	}
 	else

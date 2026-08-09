@@ -1366,7 +1366,7 @@ static void Spawn_Allies(Blitzkrieg npc)
 		RaidBossBlitzkrieg_NPCTalkMessage(npc.index, "Blitzkrieg_Spawn_Minion_Final");
 		maxhealth= (heck/5);	//mid squishy
 
-		spawn_index = NPC_CreateByName("npc_alt_donnerkrieg", npc.index, pos, ang, GetTeam(npc.index), "raid_ally");
+		spawn_index = NPC_CreateByName("npc_alt_donnerkrieg", npc.index, pos, ang, GetTeam(npc.index), b_buffed_blitz ? "raid_ally;hyper" : "raid_ally");
 		NpcAddedToZombiesLeftCurrently(spawn_index, true);
 		if(spawn_index > MaxClients)
 		{
