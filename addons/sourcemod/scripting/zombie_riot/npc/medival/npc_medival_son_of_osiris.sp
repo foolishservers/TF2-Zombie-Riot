@@ -568,6 +568,11 @@ void SonOfOsiris_Lightning_Strike(int entity, int target, float damage, bool all
 	Zero(b_EntityHitByLightning); //delete this logic.
 }
 
+void SonOfOsiris_Lightning_Strike_Reset()
+{
+	Zero(b_EntityHitByLightning);
+}
+
 int SonOfOsiris_GetClosestTargetNotAffectedByLightning(int traceentity , float EntityLocation[3], bool ally = false)
 {
 	float TargetDistance = 0.0; 

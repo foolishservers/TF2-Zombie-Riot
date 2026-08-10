@@ -216,8 +216,8 @@ public void Weapon_SniperRifle_DMR_R(int client, int weapon, bool crit, int slot
 	SniperRifle_DMR_AIMBOT[client] = EntIndexToEntRef(target);
 	SniperRifle_AIMBOTTime[client] = GameTime + 2.0;	
 	TF2_AddCondition(client, TFCond_HalloweenCritCandy, 2.0, client);
-	SDKUnhook(client, SDKHook_PreThink, Weapon_SniperRifle_DMR_M1_PreThink);
-	SDKHook(client, SDKHook_PreThink, Weapon_SniperRifle_DMR_M1_PreThink);
+	//SDKUnhook(client, SDKHook_PreThink, Weapon_SniperRifle_DMR_M1_PreThink);
+	//SDKHook(client, SDKHook_PreThink, Weapon_SniperRifle_DMR_M1_PreThink);
 }
 
 static void Weapon_SniperRifle_DMR_M1_PreThink(int client)
@@ -291,8 +291,8 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 		AimSpreadDegrading=1.0*(AimSpreadDegrading/2.24);
 		if(AimSpreadDegrading<0.0)
 			AimSpreadDegrading=0.0;
-		if(AimSpreadDegrading>4.0)
-			AimSpreadDegrading=4.0;
+		if(AimSpreadDegrading>3.0)
+			AimSpreadDegrading=3.0;
 		accurate*=AimSpreadDegrading;
 	}
 	if(!client_Is_Zoom_Active(client))
@@ -363,7 +363,7 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 				}
 			}
 			if(SniperRifle_RestTime[client] < GameTime || SniperRifle_AIMBOTTime[client]!=0.0)
-				accurate *= Attributes_Get(weapon, 304, 1.0);
+				accurate *= Attributes_Get(weapon, Attrib_DamageBonusFullCharge, 1.0);
 			CalculateBulletDamageForce(vecRight, 1.0, vecUp);
 			CalcCorrectCWeaponDMG(target, client, client, accurate,
 			DMG_BULLET, weapon, vecUp,
