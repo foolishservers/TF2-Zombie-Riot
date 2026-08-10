@@ -3791,6 +3791,16 @@
 		"en"		"WIP."
 		"ko"		"제작 중!"
 	}
+	"Bob's Trust"
+	{
+		"en"		"Bob's Trust"
+		"ko"		"밥의 신뢰"
+	}
+	"Bob's Trust Desc"
+	{
+		"en"		"The Sea infection has been beaten, but so have you."
+		"ko"		"바다의 잠식을 물리쳤습니다. 당신 몸 속까지 말이죠."
+	}
 	"Flesh and Bones of the Corrupted God"
 	{
 		"en"		"Flesh and Bones of the Corrupted God"

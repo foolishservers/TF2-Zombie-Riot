@@ -1916,7 +1916,7 @@
 	"God_Alaxios_Sea_Summon_4"
 	{
 		"en"		"{lightblue}God Alaxios is never alone, infected or not..."
-		"ko"		"{lightblue}갓 알락시오스는 혼자가 아닙니다... 잠식된 자든 무엇이든간에."
+		"ko"		"{lightblue}갓 알락시오스에겐 늘 같이 싸울 전우가 있었습니다. 잠식된 후에도 말이죠..."
 	}
 	"God_Alaxios_Summon_1"
 	{
@@ -2019,13 +2019,19 @@
 	// Bob the First.
 	"Bob_The_First_Sea_Encounter_Chaos_Intrusion"
 	{
-		"en"		"The chaos is everywhere, we're too late, join me, dont attack.\nProve me your innocence."
-		"ko"		"혼돈이 사방에 있네. 우린 너무 늦었어. 공격을 멈추고, 나와 함께 해라.\n너희의 결백을 증명해보도록."
+		"en"		"The chaos is everywhere, we're too late, join me, dont attack. Prove me your innocence."
+		"ko"		"혼돈이 사방에 있네. 우린 너무 늦었어. 공격을 멈추고, 나와 함께 해라. 너희의 결백을 증명해보도록."
 	}
 	"Bob_The_First_Sea_Fight_Chaos_Intrusion"
 	{
 		"en"		"Nevermind then, you're one of the affected."
 		"ko"		"이런. 너희도 이미 혼돈에 잠식당했군."
+	}
+	
+	"Bob_The_First_Sea_Fight"
+	{
+		"en"		"Stella and Karlas were right. All Firsts, converge on this location."
+		"ko"		"스텔라와 카를라스가 옳았군. 선봉대는 이 곳으로 집결하라."
 	}
 	
 	"Bob_The_First_Sea_Encounter_1"
@@ -2041,7 +2047,54 @@
 	"Bob_The_First_Sea_Encounter_3"
 	{
 		"en"		"I know enough about infections and its weaknesses to fend you off."
-		"ko"		"나는 지금의 감염 사태과 그들의 약점에 대해 충분히 알고 있다. 그러니 내가 널 막겠다."
+		"ko"		"나는 지금의 잠식 사태과 그들의 약점에 대해 충분히 알고 있다. 그러니 내가 너희를 막겠다."
+	}
+	"Bob_The_First_Sea_Give_A_Chance"
+	{
+		"en"		"If you haven't been infected, you wouldn't attack me. Prove your innocence."
+		"ko"		"너희가 잠식되지 않았다면, 나를 공격하지는 않겠지. 너희의 결백을 증명해보도록."
+	}
+	
+	"Bob_The_First_Sea_Encounter_Xeno"
+	{
+		"en"		"Have you encountered Alaxios? It seems a horde of Dwellers was attacking this place to escape them."
+		"ko"		"알락시오스를 만났나? 그들을 피해 드웰러 무리가 여기를 공격하고 있었나 보군."
+	}
+	"Bob_The_First_Sea_Encounter_Xeno_1"
+	{
+		"en"		"This place has gone beyond what you can handle. If you stay out of it, we'll take care of things."
+		"ko"		"이 곳은 너희가 감당할 수 있는 선을 넘어섰다. 가만히 있는다면 우리가 처리하도록 하지."
+	}
+	
+	"Bob_The_First_Sea_Fight_Xeno"
+	{
+		"en"		"You are impossible to reason with. Even if you don't deal with this place yourselves, it will soon be engulfed in flames."
+		"ko"		"말이 안 통하는군. 너희가 직접 처리하지 않아도 이 곳은 곧 불바다가 될텐데."
+	}
+	"Bob_The_First_Sea_Coolwin_Xeno_1"
+	{
+		"en"		"Good. I was already having quite a headache after entering the restricted area."
+		"ko"		"좋아. 안 그래도 통제 구역에 들어가서 꽤나 골치아팠던 참이다."
+	}
+	"Bob_The_First_Sea_Coolwin_Xeno_2"
+	{
+		"en"		"According to {gold}him{default}, I heard this place is the {green}Xeno{default} Laboratory..."
+		"ko"		"{gold}그{default}의 말에 따르면, 이 곳이 {green}제노{default} 연구소라고 들었는데..."
+	}
+	"Bob_The_First_Sea_Coolwin_Xeno_3"
+	{
+		"en"		"But I was told you've already been here before. You haven't?"
+		"ko"		"하지만 이 연구소는 이미 너희가 간 적 있다고 들었다. 아니라고?"
+	}
+	"Bob_The_First_Sea_Coolwin_Xeno_4"
+	{
+		"en"		"Then that means there could still be Xenos here... Wait... Don't you hear something?"
+		"ko"		"그럼 이 곳엔 아직 제노가... 잠깐... 무슨 소리가 들리지 않나?"
+	}
+	"Bob_The_First_Sea_Coolwin_Xeno_5"
+	{
+		"en"		"Something's coming! Get ready for battle!"
+		"ko"		"무언가 오고 있다! 전투 준비!"
 	}
 	
 	"Bob_The_First_Real_Name"
@@ -2072,6 +2125,12 @@
 		"ko"		"나를 한계까지 오게 만드는 군..."
 	}
 	
+	"Bob_The_First_Sea_Pistol_Phase_Xeno"
+	{
+		"en"		"You must have been consumed by the sea as well. There is no longer any other choice but to kill you."
+		"ko"		"너희도 바다에 잠식된 게 틀림없군. 치유는 더 이상 선택 사항이 아니다. 죽일 수밖에."
+	}
+	
 	"Bob_The_First_Sea_LastMann_1"
 	{
 		"en"		"One infected left."
@@ -2086,6 +2145,11 @@
 	{
 		"en"		"Last. Infected. Left."
 		"ko"		"너가. 마지막. 남은. 감염원이다."
+	}
+	"Bob_The_First_Sea_LastMann_Xeno"
+	{
+		"en"		"Enough of this pointless resistance."
+		"ko"		"무의미한 저항은 이제 그만하도록."
 	}
 	
 	"Bob_The_First_Sea_TimeOver_1"
@@ -2103,6 +2167,11 @@
 		"en"		"Nobody wins."
 		"ko"		"그 누구의 승리도 아니로군."
 	}
+	"Bob_The_First_Sea_TimeOver_Xeno"
+	{
+		"en"		"A shame. Still, I should let you know that you did a good thing."
+		"ko"		"유감이군. 그래도 너희는 좋은 일을 했다고 알려두지."
+	}
 	
 	"Bob_The_First_Sea_Lose_His_Temper"
 	{
@@ -2117,18 +2186,18 @@
 	}
 	"Bob_The_First_Sea_Win_Xeno_2"
 	{
-		"en"		"What do you think will happen..?"
-		"ko"		"앞으로 무슨 일이 일어날 거라 생각하지?"
+		"en"		"What are you going to do now? Ruina's bombardment is about to hit this place."
+		"ko"		"앞으로는 어떡할 거지? 이 곳은 루이나의 폭격이 몰아칠 것이다."
 	}
 	"Bob_The_First_Sea_Win_Xeno_3"
 	{
-		"en"		"Wait... no... you were fighting it..! No this.. This cannot be!"
-		"ko"		"잠깐... 안돼... 너희는 그것과 싸우고 있었잖아..! 이건.. 일어나면 안되는 일이야!"
+		"en"		"Wait... They must have been fighting the Dweller. There's no way they could have made it back this quickly!"
+		"ko"		"잠깐... 그들은 분명 드웰러랑 싸우고 있었을텐데? 이렇게나 빨리 돌아올 수는 없어!"
 	}
 	"Bob_The_First_Sea_Win_Xeno_4"
 	{
-		"en"		"I'm too hurt, I can't, I have to run... I can't...."
-		"ko"		"지금 상태로는.. 상대할 수.. 없어.. 도망쳐야 해... 난 그걸 막을 수 없어..."
+		"en"		"We can't stop them in our current state... We have to run..."
+		"ko"		"지금 상태로는 그들을 막을 수 없어... 도망쳐야 해..."
 	}
 	"Bob_The_First_Sea_Win_Xeno_5"
 	{
@@ -2171,23 +2240,32 @@
 		"en"		"I will remove what does not belong to you..."
 		"ko"		"그건 너희의 것이 아니니 내가 제거해주겠다."
 	}
+	"Bob_The_First_Sea_Coolwin"
+	{
+		"en"		"I guess you weren't infected, I'm sorry."
+		"ko"		"난 너희가 이미 잠식되었다고 생각했네. 사과하지."
+	}
+	"Bob_The_First_Sea_Coolwin_Chaos_Intrusion"
+	{
+		"en"		"Good. We must defeat the chaos together. There is no time to waste."
+		"ko"		"좋아. 함께 혼돈을 물리쳐야 한다. 더 이상 지체할 틈이 없다."
+	}
 	
 	"Bob_The_First_Sea_Anger_Xeno_1"
 	{
 		"en"		"You're in the wrong place in the wrong time!"
-		"ko"		"너희는 지금 여기에 있어서는 안돼!"
+		"ko"		"너희는 지금 여기에 있으면 안돼!"
 	}
 	"Bob_The_First_Sea_Anger_Xeno_2"
 	{
 		"en"		"This is not how it goes!"
-		"ko"		"무언가 잘못 돌아가고 있단 말이다!"
+		"ko"		"이 일은 그렇게 되어서는 안돼!"
 	}
 	"Bob_The_First_Sea_Anger_Xeno_3"
 	{
 		"en"		"Stop trying to change fate!"
-		"ko"		"운명을 바꾸려하지 마라!"
+		"ko"		"운명을 바꾸려 들지 마라!"
 	}
-	
 	"Bob_The_First_Sea_Anger_1"
 	{
 		"en"		"Enough of this!"
@@ -2214,16 +2292,26 @@
 		"en"		"Deep sea threat cleaned, finally at peace..."
 		"ko"		"심해의 위협은 사라졌다. 드디어 평화가 찾아오겠군..."
 	}
+	"Bob_The_First_Sea_Lose_Xeno"
+	{
+		"en"		"It seems the sea has consumed you without you even realizing it. You have my condolences."
+		"ko"		"너희도 모르게 바다에 잠식되었나보군. 유감을 표하지."
+	}
 	
 	"Bob_The_First_Sea_Trophies"
 	{
-		"en"		"Bob has cured you of the sea, you gained: {yellow}''Bob's Curing Hand''{default}!"
-		"ko"		"밥이 당신에게 깃든 심해의 감염원을 전부 제거해주었습니다. 당신이 얻은 것은... {yellow}''밥의 치유의 손길''{default}!"
+		"en"		"Bob cured every trace of the sea that had corrupted you. You gained: {yellow}''Bob's Curing Hand''{default}!"
+		"ko"		"밥이 당신을 잠식한 바다의 흔적을 전부 제거해주었습니다. 당신이 얻은 것은... {yellow}''밥의 치유의 손길''{default}!"
+	}
+	"Bob_The_First_Sea_Trophies_Xeno"
+	{
+		"en"		"Even while fleeing, Bob cured every trace of the sea that had corrupted you. You gained... {yellow}''Bob's Curing Hand''{default}."
+		"ko"		"밥은 도망치면서도 당신을 잠식한 바다의 흔적을 전부 제거해주었습니다. 당신이 얻은 것은... {yellow}''밥의 치유의 손길''{default}."
 	}
 	"Bob_The_First_Sea_Trophies_Coolwin"
 	{
-		"en"		"You didn't attack bob for no reason and thus he gives you: {yellow}''Bob's Curing Hand''{default}!"
-		"ko"		"당신은 이유 없이 밥을 공격하지 않았습니다. 그런 밥이 당신에게 준 것은... {yellow}''밥의 치유의 손길''{default}!"
+		"en"		"You did not attack Bob without reason. You have earned {yellow}''Bob's Trust''{default}!"
+		"ko"		"당신은 이유 없이 밥을 공격하지 않았습니다. {yellow}''밥의 신뢰''{default}를 얻었습니다!"
 	}
 	
 	// Vincent.
