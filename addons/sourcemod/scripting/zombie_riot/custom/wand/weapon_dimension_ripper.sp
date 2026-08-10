@@ -418,9 +418,9 @@ public void Weapon_Dimension_Summon_Xeno_PAP(int client, int weapon, bool &resul
 	switch(GetRandomInt(1, 5))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_xeno_medic_main" ,weapon, 1.4, 1.4, "peejar_impact_cloud_gas");
+			Dimension_Summon_Npc(client, "npc_xeno_medic_main" ,weapon, 1.3, 1.4, "peejar_impact_cloud_gas");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_xeno_early_infected" ,weapon, 1.3, 1.3, "peejar_impact_cloud_gas");
+			Dimension_Summon_Npc(client, "npc_xeno_early_infected" ,weapon, 1.4, 1.3, "peejar_impact_cloud_gas");
 		case 3:
 			Dimension_Summon_Npc(client, "npc_xeno_spy_trickstabber" ,weapon, 1.3, 1.2, "peejar_impact_cloud_gas");
 		case 4:
@@ -560,7 +560,7 @@ public void Weapon_Dimension_Summon_Expidonsa_PAP(int client, int weapon, bool &
 		case 4:
 			Dimension_Summon_Npc(client, "npc_soldine" ,weapon, 1.5, 1.4, "eyeboss_death_vortex");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_guardus" ,weapon, 1.5, 1.3, "eyeboss_death_vortex");
+			Dimension_Summon_Npc(client, "npc_haltera" ,weapon, 1.4, 1.3, "eyeboss_death_vortex");
 		case 6:
 			Dimension_Summon_Npc(client, "npc_vaus_shaldus" ,weapon, 1.2, 1.3, "eyeboss_death_vortex");
 		default: //This should not happen
@@ -600,7 +600,7 @@ public void Weapon_Dimension_Summon_Interitus_PAP(int client, int weapon, bool &
 		case 1:
 			Dimension_Summon_Npc(client, "npc_perro" ,weapon, 1.5, 1.3, "teleported_blue");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_irritated_person" ,weapon, 2.5, 1.5, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_irritated_person" ,weapon, 2.2, 1.5, "teleported_blue");
 		case 3:
 			Dimension_Summon_Npc(client, "npc_enforcer" ,weapon, 1.0, 2.0, "teleported_blue");
 		case 4:
@@ -805,7 +805,7 @@ public void Weapon_Dimension_Summon_Aperture(int client, int weapon, bool &resul
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_aperture_combatant_v2" ,weapon, 1.3, 1.2, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_combatant_v2" ,weapon, 1.2, 1.2, "teleported_blue");
 		case 2:
 			Dimension_Summon_Npc(client, "npc_aperture_halter" ,weapon, 1.65, 1.2, "teleported_blue");
 		case 3:
@@ -828,7 +828,7 @@ public void Weapon_Dimension_Summon_Aperture_PAP(int client, int weapon, bool &r
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_aperture_combatant_perfected" ,weapon, 1.4, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_combatant_perfected" ,weapon, 1.2, 1.0, "teleported_blue");
 		case 2:
 			Dimension_Summon_Npc(client, "npc_aperture_huntsman_perfected" ,weapon, 1.2, 1.6, "teleported_blue");
 		case 3:
@@ -836,9 +836,9 @@ public void Weapon_Dimension_Summon_Aperture_PAP(int client, int weapon, bool &r
 		case 4:
 			Dimension_Summon_Npc(client, "npc_aperture_sniper_perfected" ,weapon, 1.0, 2.0, "teleported_blue");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_aperture_fueler" ,weapon, 1.75, 1.5, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_fueler" ,weapon, 1.6, 1.4, "teleported_blue");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_aperture_suppressor" ,weapon, 1.75, 1.65, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_suppressor" ,weapon, 1.6, 1.4, "teleported_blue");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
