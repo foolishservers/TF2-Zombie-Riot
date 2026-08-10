@@ -6,6 +6,7 @@ static float Ms_Weapon_Energy[MAXPLAYERS];
 static float Ms_Weapon_Energy_Max[MAXPLAYERS];
 static Handle MSwordTimer[MAXPLAYERS];
 static float MSwordHUDDelay[MAXPLAYERS];
+static float MSword_DoubleTapR[MAXPLAYERS];
 static int i_Current_Pap[MAXPLAYERS];
 
 static bool Task_I[MAXPLAYERS];
@@ -14,10 +15,10 @@ static bool Task_III[MAXPLAYERS];
 static bool Task_IV[MAXPLAYERS];
 static bool Task_V[MAXPLAYERS];
 
-/*public void Market_Gardener_Attack(int client, int weapon, bool crit)
+bool MSword_IsASmith(int client)
 {
-	return;
-}*/
+	return view_as<bool>(MSwordTimer[client]);
+}
 
 public void MSword_OnMapStart()
 {
@@ -27,11 +28,12 @@ public void MSword_OnMapStart()
 	PrecacheSoundCustom("baka_zr/blacksmith_tick_quad_friend.mp3");
 	PrecacheSoundCustom("baka_zr/blacksmith_tick_five_friend.mp3");
 	
-	Zero(Ms_Weapon_Energy);
-	Zero(Ms_Weapon_Energy_Max);
 	Zero(Ms_HitEntities);
-	Zero(MSwordHUDDelay);
 	Zero(i_Current_Pap);
+	ZeroFloat(MSwordHUDDelay);
+	ZeroFloat(MSword_DoubleTapR);
+	ZeroFloat(Ms_Weapon_Energy);
+	ZeroFloat(Ms_Weapon_Energy_Max);
 	
 	Zero(Task_I);
 	Zero(Task_II);
@@ -144,6 +146,61 @@ static Action Timer_MSword(Handle timer, DataPack pack)
 		}
 	}
 	return Plugin_Continue;
+}
+
+public void MSword_Reload(int client, int weapon, bool crit, int slot)
+{
+	float Ability_CD = Ability_Check_Cooldown(client, 1);
+	if(Ability_CD <= 0.0)
+		Ability_CD = 0.0;
+	else
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		SetGlobalTransTarget(client);
+		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);
+		return;
+	}
+
+	bool MSToTheSky;
+	static float angles[3];
+	GetClientEyeAngles(client, angles);
+	if(angles[0] < -70.0)
+		MSToTheSky=true;
+	if(b_InteractWithReload[client])
+	{ 
+		bool R_AbilityBlock=false;
+		int building = EntRefToEntIndex(i2_MountedInfoAndBuilding[1][client]);
+		if(building != -1 && Building_Collect_Cooldown[building][client]<=0.0
+		&& IsInteractionBuilding(building))
+		{
+			if(MSToTheSky)
+			{
+				if(MSword_DoubleTapR[client] < GetGameTime())
+				{
+					MSword_DoubleTapR[client] = GetGameTime() + 0.2;
+					R_AbilityBlock=true;
+				}
+			}
+		}
+		if(R_AbilityBlock)return;
+	}
+	if(MSToTheSky)
+	{
+		Blacksmith_BuildingUsed_Internal(weapon, -1, client, client, true);
+		Ability_Apply_Cooldown(client, 3, 10.0, weapon);
+		return;
+	}
+	Blacksmith_BuildingUsed_Internal(weapon, -1, client, client, false);
+	switch(i_Current_Pap[client])
+	{
+		case 2: Ability_CD=90.0;
+		case 3: Ability_CD=60.0;
+		case 4: Ability_CD=70.0;
+		case 5: Ability_CD=60.0;
+		default:Ability_CD=90.0;
+	}
+	Ability_Apply_Cooldown(client, 3, Ability_CD, weapon);
 }
 
 public void MSword_Attack(int client, int weapon, bool &result, int slot)

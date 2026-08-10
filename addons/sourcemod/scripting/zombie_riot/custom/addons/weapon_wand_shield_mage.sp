@@ -5,8 +5,10 @@ static Handle ShieldMageTimer[MAXPLAYERS] = {null, ...};
 static int ShieldMageID[MAXPLAYERS];
 static int SwordMageID[MAXPLAYERS];
 static int SwordLaserID[MAXPLAYERS];
+static int ArmorWearableID[MAXPLAYERS];
 static float ShieldMage_HudTime[MAXPLAYERS];
 static float ShieldMage_CrystalShieldTime[MAXPLAYERS];
+int Armor_WearableModelIndex;
 
 static const char SwordHit_Sound[][] = {
 	"weapons/samurai/tf_katana_slice_01.wav",
@@ -18,11 +20,15 @@ public void Wand_ShieldMage_MapStart()
 {
 	PrecacheSoundArray(SwordHit_Sound);
 	PrecacheSound("weapons/bison_main_shot.wav");
+	PrecacheSound("items/powerup_pickup_reflect.wav");
+	PrecacheSound("items/powerup_pickup_resistance.wav");
 	PrecacheModel("models/zombie_riot/weapons/ruina_models_2_5.mdl");
 	PrecacheModel("models/props_moonbase/moon_gravel_crystal_blue.mdl");
+	Armor_WearableModelIndex = PrecacheModel("models/effects/resist_shield/resist_shield.mdl", true);
 	//ZeroFloat(ChargeUpFire);
 	Zero(ShieldMageID);
 	Zero(SwordMageID);
+	Zero(ArmorWearableID);
 	ZeroFloat(ShieldMage_HudTime);
 	ZeroFloat(ShieldMage_CrystalShieldTime);
 }
@@ -31,7 +37,11 @@ public void Wand_ShieldMage_Deploy(int client, int weapon)
 {
 	ShieldMageID[client]=EntIndexToEntRef(weapon);
 	b_FUCKYOU[weapon]=false;
+	b_FUCKYOU_move_anim[weapon]=false;
 	int SwordMage = EntRefToEntIndex(SwordMageID[client]);
+	if(IsValidEntity(SwordMage))
+		RemoveEntity(SwordMage);
+	SwordMage = EntRefToEntIndex(ArmorWearableID[client]);
 	if(IsValidEntity(SwordMage))
 		RemoveEntity(SwordMage);
 	if(ShieldMageTimer[client] != null)
@@ -64,7 +74,11 @@ public void Wand_ShieldMage_Holster(int client, int weapon)
 	SwordMage = EntRefToEntIndex(SwordMageID[client]);
 	if(IsValidEntity(SwordMage))
 		RemoveEntity(SwordMage);
-	DeleteAllSkulls(client);
+	SwordMage = EntRefToEntIndex(ArmorWearableID[client]);
+	if(IsValidEntity(SwordMage))
+		RemoveEntity(SwordMage);
+	if(Skulls_ArrayStack[client] != null)
+		DeleteAllSkulls(client);
 	SDKUnhook(client, SDKHook_PreThink, Wand_ShieldMage_M2_PreThink);
 }
 
@@ -92,10 +106,54 @@ public void Wand_ShieldMage_M2(int client, int weapon, bool crit, int slot)
 	}
 	if(ShieldMage_CrystalShieldTime[client] && ShieldMage_CrystalShieldTime[client] > GetGameTime())
 		return;
+	EmitSoundToAll("items/powerup_pickup_resistance.wav", client, SNDCHAN_STATIC, BOSS_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 90, .soundtime = GetGameTime() - 0.219);
 	b_FUCKYOU[weapon]=true;
+	b_FUCKYOU_move_anim[weapon]=true;
 	Rogue_OnAbilityUse(client, weapon);
 	Current_Mana[client] -= mana_cost;
+	if(Skulls_ArrayStack[client] != null)
+		DeleteAllSkulls(client);
 	SpawnCrystalShield(client);
+	SpawnShieldModel(client);
+	SDKhooks_SetManaRegenDelayTime(client, 3.0);
+	ShieldMage_CrystalShieldTime[client] = GetGameTime() + 10.0;
+	SDKUnhook(client, SDKHook_PreThink, Wand_ShieldMage_M2_PreThink);
+	SDKHook(client, SDKHook_PreThink, Wand_ShieldMage_M2_PreThink);
+}
+
+public void Wand_ShieldMage_M2_Defender(int client, int weapon, bool crit, int slot)
+{
+	if(!IsValidClient(client) || !IsPlayerAlive(client) || !IsValidEntity(weapon))
+		return;
+	float Ability_CD = Ability_Check_Cooldown(client, slot);
+	if(Ability_CD > 0.0 && !CvarInfiniteCash.BoolValue)
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		SetGlobalTransTarget(client);
+		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);
+		return;
+	}
+	int mana_cost = RoundToCeil(Attributes_Get(weapon, 733, 1.0))*2;
+	if(mana_cost > Current_Mana[client])
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		SetGlobalTransTarget(client);
+		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Not Enough Mana", mana_cost);
+		return;
+	}
+	if(ShieldMage_CrystalShieldTime[client] && ShieldMage_CrystalShieldTime[client] > GetGameTime())
+		return;
+	EmitSoundToAll("items/powerup_pickup_resistance.wav", client, SNDCHAN_STATIC, BOSS_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 90, .soundtime = GetGameTime() - 0.219);
+	b_FUCKYOU[weapon]=true;
+	b_FUCKYOU_move_anim[weapon]=true;
+	Rogue_OnAbilityUse(client, weapon);
+	Current_Mana[client] -= mana_cost;
+	if(Skulls_ArrayStack[client] != null)
+		DeleteAllSkulls(client);
+	SpawnCrystalShield(client);
+	SpawnShieldModel(client);
 	SDKhooks_SetManaRegenDelayTime(client, 3.0);
 	ShieldMage_CrystalShieldTime[client] = GetGameTime() + 10.0;
 	SDKUnhook(client, SDKHook_PreThink, Wand_ShieldMage_M2_PreThink);
@@ -104,27 +162,39 @@ public void Wand_ShieldMage_M2(int client, int weapon, bool crit, int slot)
 
 static void Wand_ShieldMage_M2_PreThink(int client)
 {
+	if(!IsValidClient(client) || !IsPlayerAlive(client))
+	{
+		if(Skulls_ArrayStack[client] != null)
+			DeleteAllSkulls(client);
+		int Wearable = EntRefToEntIndex(ArmorWearableID[client]);
+		if(IsValidEntity(Wearable))
+			RemoveEntity(Wearable);
+		SDKUnhook(client, SDKHook_PreThink, Wand_ShieldMage_M2_PreThink);
+	}
 	int ShieldMage = EntRefToEntIndex(ShieldMageID[client]);
 	if(IsValidEntity(ShieldMage))
 	{
 		if(GetClientButtons(client) & IN_ATTACK2)
 		{
-			int mana_cost = RoundToCeil(Attributes_Get(ShieldMage, 733, 1.0)*0.25);
+			int mana_cost = 2;
 			if(mana_cost <= Current_Mana[client] && ShieldMage_CrystalShieldTime[client] > GetGameTime())
 			{
-				Skulls_OrbitAngle[client] += 2.0;
-				if(Skulls_OrbitAngle[client] > 360.0)
-					Skulls_OrbitAngle[client] = 0.0;
-				if(SkullFloatDelay[client] < GetGameTime())
+				if(!Skulls_PlayerHasNoSkulls(client))
 				{
-					Skulls_UpdateFollowerPositions(client);
-					for(int a; a < Skulls_ArrayStack[client].Length; a++)
+					Skulls_OrbitAngle[client] += 2.0;
+					if(Skulls_OrbitAngle[client] > 360.0)
+						Skulls_OrbitAngle[client] = 0.0;
+					if(SkullFloatDelay[client] < GetGameTime())
 					{
-						int ent = EntRefToEntIndex(Skulls_ArrayStack[client].Get(a));
-						if(IsValidEdict(ent))
-							Skull_MoveToTargetPosition(ent, client);
+						Skulls_UpdateFollowerPositions(client);
+						for(int a; a < Skulls_ArrayStack[client].Length; a++)
+						{
+							int ent = EntRefToEntIndex(Skulls_ArrayStack[client].Get(a));
+							if(IsValidEdict(ent))
+								Skull_MoveToTargetPosition(ent, client);
+						}
+						SkullFloatDelay[client] = GetGameTime() + 0.05;
 					}
-					SkullFloatDelay[client] = GetGameTime() + 0.05;
 				}
 				Current_Mana[client] -= mana_cost;
 				SDKhooks_SetManaRegenDelayTime(client, 3.0);
@@ -144,15 +214,11 @@ static void Wand_ShieldMage_M2_PreThink(int client)
 	}
 	b_FUCKYOU[ShieldMage]=false;
 	ShieldMage_CrystalShieldTime[client]=0.0;
-	for(int a; a < Skulls_ArrayStack[client].Length; a++)
-	{
-		int ent = EntRefToEntIndex(Skulls_ArrayStack[client].Get(a));
-		if(IsValidEdict(ent))
-		{
-			Skulls_ArrayStack[client].Erase(a);
-			RemoveEntity(ent);
-		}
-	}
+	if(Skulls_ArrayStack[client] != null)
+		DeleteAllSkulls(client);
+	ShieldMage = EntRefToEntIndex(ArmorWearableID[client]);
+	if(IsValidEntity(ShieldMage))
+		RemoveEntity(ShieldMage);
 	SDKUnhook(client, SDKHook_PreThink, Wand_ShieldMage_M2_PreThink);
 }
 
@@ -281,8 +347,8 @@ static Action Management_ShieldMage(Handle timer, DataPack pack)
 				int Wearable = view_as<CClotBody>(Model).m_iWearable1;
 				if(IsValidEntity(Wearable))
 					RemoveEntity(Wearable);
+				RemoveEntity(Model);
 			}
-			RemoveEntity(weapon);
 		}
 		weapon = EntRefToEntIndex(SwordMageID[client]);
 		if(IsValidEntity(weapon))
@@ -473,6 +539,51 @@ static void Wand_ShieldMage_M1_PreThink(int client)
 	}
 }
 
+public void Wand_ShieldMage_PlayerTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, int equipped_weapon, float damagePosition[3], int zr_custom_damage)
+{
+	if(CheckInHud())
+		return;
+	
+	if(!IsValidEntity(attacker) || GetTeam(attacker) == TFTeam_Red)
+		return;
+	
+	if(!IsValidClient(victim))
+		return;
+	if(damagetype & DMG_TRUEDAMAGE)
+		return;
+	
+	if(b_FUCKYOU[equipped_weapon])
+	{
+		if(!Skulls_PlayerHasNoSkulls(victim))
+		{
+			int mana_cost = RoundToCeil(damage-(damage*0.7));
+			if(b_FUCKYOU_move_anim[equipped_weapon] &&
+			ShieldMage_CrystalShieldTime[victim] && ShieldMage_CrystalShieldTime[victim] > GetGameTime() + 9.2)
+			{
+				damage*=0.5;
+				b_FUCKYOU_move_anim[equipped_weapon]=false;
+			}
+			damage*=0.7;
+			Current_Mana[victim] -= mana_cost;
+		
+			for(int a; a < Skulls_ArrayStack[victim].Length; a++)
+			{
+				int ent = EntRefToEntIndex(Skulls_ArrayStack[victim].Get(a));
+				if(IsValidEdict(ent))
+				{
+					int Beam = ConnectWithBeam(ent, victim, 66, 135, 245, 3.0, 0.1, 0.0, LASERBEAM);
+					CreateTimer(0.25, Timer_RemoveEntity, EntIndexToEntRef(Beam), TIMER_FLAG_NO_MAPCHANGE);
+				}
+			}
+			if(fl_NextHurtSound[equipped_weapon] <= GetGameTime())
+			{
+				EmitSoundToAll("items/powerup_pickup_reflect.wav", victim, SNDCHAN_STATIC, BOSS_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 90, .soundtime = GetGameTime() - 0.123);
+				fl_NextHurtSound[equipped_weapon] = GetGameTime() + 0.5;
+			}
+		}
+	}
+}
+
 static void NoClipSwordFunction(int entity, int target)
 {
 	int owner = EntRefToEntIndex(i_WandOwner[entity]);
@@ -525,6 +636,38 @@ static Action OwerTransmitEnvLaser(int entity, int client)
 		}
 	}
 	return Plugin_Stop;
+}
+
+static int SpawnShieldModel(int client)
+{
+	int wearable = CreateEntityByName("tf_wearable");
+	if(wearable > MaxClients)
+	{
+		int team = GetClientTeam(client);
+		SetEntProp(wearable, Prop_Send, "m_nModelIndex", Armor_WearableModelIndex);
+
+		SetTeam(wearable, team);
+		SetEntProp(wearable, Prop_Send, "m_nSkin", team-2);
+		SetEntProp(wearable, Prop_Send, "m_usSolidFlags", 4);
+		SetEntityCollisionGroup(wearable, 11);
+		SetEntProp(wearable, Prop_Send, "m_bValidatedAttachedEntity", 1);
+		
+		DispatchSpawn(wearable);
+		SetVariantString("!activator");
+		ActivateEntity(wearable);
+
+		ArmorWearableID[client] = EntIndexToEntRef(wearable);
+		SDKCall_EquipWearable(client, wearable);
+
+		SetEntProp(wearable, Prop_Send, "m_fEffects", 0);
+		SetVariantString("!activator");
+		AcceptEntityInput(wearable, "SetParent", client);
+
+		SetEntityRenderMode(wearable, RENDER_TRANSCOLOR);
+		SetEntityRenderColor(wearable, 125, 125, 0, 200);
+		return wearable;
+	}
+	return -1;
 }
 
 static void SpawnCrystalShield(int client, int Spawn = 3)
@@ -601,7 +744,7 @@ static void SpawnCrystalShield(int client, int Spawn = 3)
 				SetEntityGravity(Drone, 0.0);
 				MakeObjectIntangeable(Drone);
 				MakeObjectIntangeable(prop);
-				SetEntityRenderColor(Drone, 255, 120, 50, 255);
+				SetEntityRenderColor(Drone, 125, 125, 0, 255);
 				SetEntityRenderFx(Drone, RENDERFX_GLOWSHELL);
 				if(Skulls_ArrayStack[client] == null)
 					Skulls_ArrayStack[client] = new ArrayList();
