@@ -144,7 +144,7 @@ public void Weapon_SniperRifle_DMR_Holster(int client, int weapon)
 		Attributes_Set(weapon, 107, 1.0);
 		TF2_AddCondition(client, TFCond_SpeedBuffAlly, 0.00001);
 	}
-	SDKUnhook(client, SDKHook_PreThink, Weapon_SniperRifle_DMR_M1_PreThink);
+	//SDKUnhook(client, SDKHook_PreThink, Weapon_SniperRifle_DMR_M1_PreThink);
 }
 
 public void Weapon_SniperRifle_DMR_Deploy(int client, int weapon)
@@ -220,7 +220,7 @@ public void Weapon_SniperRifle_DMR_R(int client, int weapon, bool crit, int slot
 	//SDKHook(client, SDKHook_PreThink, Weapon_SniperRifle_DMR_M1_PreThink);
 }
 
-static void Weapon_SniperRifle_DMR_M1_PreThink(int client)
+/*static void Weapon_SniperRifle_DMR_M1_PreThink(int client)
 {
 	if(SniperRifle_AIMBOTTime[client] > GetGameTime())
 	{
@@ -234,7 +234,7 @@ static void Weapon_SniperRifle_DMR_M1_PreThink(int client)
 	if(TF2_IsPlayerInCondition(client, TFCond_HalloweenCritCandy))
 		TF2_RemoveCondition(client, TFCond_HalloweenCritCandy);
 	SDKUnhook(client, SDKHook_PreThink, Weapon_SniperRifle_DMR_M1_PreThink);
-}
+}*/
 
 public void Weapon_SniperRifle_DMR_M2(int client, int weapon, bool crit, int slot)
 {
