@@ -117,6 +117,8 @@ bool Blacksmith_Any_IsASmith()
 	{
 		if(Blacksmith_IsASmith(i))
 			return true;
+		if(MSword_IsASmith(i))
+			return true;
 	}
 	return false;
 }
@@ -135,6 +137,10 @@ void Blacksmith_Enable(int client, int weapon)
 
 		i_AdditionalSupportBuildings[client] = SupportBuildings[SmithLevel[client]];
 		Weapon_OnBuyUpdateBuilding(client);
+	}
+	if(i_CustomWeaponEquipLogic[weapon] == WEAPON_MINECRAFT_SWORD)
+	{
+		SmithLevel[client] = RoundFloat(Attributes_Get(weapon, 868, 0.0)) + 1;
 	}
 
 	if(Tinkers)
@@ -411,7 +417,8 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 	if(owner == -1 || SmithLevel[owner] < 0)
 	{
 		ClientCommand(client, "playgamesound items/medshotno1.wav");
-		DestroyBuildingDo(entity);
+		if(IsValidEntity(entity))
+			DestroyBuildingDo(entity);
 		SPrintToChat(client, "%t", "The Blacksmith Failed!");
 		return;
 	}
@@ -420,7 +427,8 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 	if(!account)
 	{
 		ClientCommand(client, "playgamesound items/medshotno1.wav");
-		ApplyBuildingCollectCooldown(entity, client, 3.0);
+		if(IsValidEntity(entity))
+			ApplyBuildingCollectCooldown(entity, client, 3.0);
 		return;
 	}
 
@@ -459,8 +467,8 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 			ClientCommand(client, "playgamesound items/medshotno1.wav");
 			SetDefaultHudPosition(client);
 			ShowSyncHudText(client, SyncHud_Notifaction, "%t", "Blacksmith No Attribs");
-
-			ApplyBuildingCollectCooldown(entity, client, 2.0);
+			if(IsValidEntity(entity))
+				ApplyBuildingCollectCooldown(entity, client, 2.0);
 			return;
 		}
 
@@ -719,8 +727,8 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 			SetDefaultHudPosition(client);
 			SetGlobalTransTarget(client);
 			ShowSyncHudText(client, SyncHud_Notifaction, "%t", "Blacksmith Underleveled");
-
-			ApplyBuildingCollectCooldown(entity, client, 2.0);
+			if(IsValidEntity(entity))
+				ApplyBuildingCollectCooldown(entity, client, 2.0);
 			return;
 		}
 		if(!BlockNormal)
@@ -963,8 +971,8 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 				SetDefaultHudPosition(client);
 				SetGlobalTransTarget(client);
 				ShowSyncHudText(client, SyncHud_Notifaction, "%t", "Blacksmith Underleveled");
-
-				ApplyBuildingCollectCooldown(entity, client, 2.0);
+				if(IsValidEntity(entity))
+					ApplyBuildingCollectCooldown(entity, client, 2.0);
 				return;
 			}
 		}
@@ -1019,8 +1027,8 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 	float cooldown = Cooldowns[SmithLevel[owner]];
 	if(client != owner && Store_HasWeaponKit(client))
 		cooldown *= 0.5;
-	
-	ApplyBuildingCollectCooldown(entity, client, cooldown);
+	if(IsValidEntity(entity))
+		ApplyBuildingCollectCooldown(entity, client, cooldown);
 
 	if(!Rogue_Mode() && owner != client)
 	{
@@ -1261,7 +1269,7 @@ void Blacksmith_PrintAttribValue(int client, int attrib, float value, float luck
 		case Attrib_ExplosiveHeadshot:
 			Format(buffer, sizeof(buffer), "%s 폭발성 헤드샷 피해량", buffer);
 			
-		case 304:
+		case Attrib_DamageBonusFullCharge:
 			Format(buffer, sizeof(buffer), "%s 완전 충전 시 피해량", buffer);
 			
 		case 390:
@@ -2261,7 +2269,7 @@ static void Tinker_SR_KillerFocus(int rarity, TinkerEnum tinker)
 static void Tinker_SR_SuperCoolingChamber(int rarity, TinkerEnum tinker)
 {
 	strcopy(tinker.Name, sizeof(tinker.Name), "초냉각 약실");
-	tinker.Attrib[0] = 304;
+	tinker.Attrib[0] = Attrib_DamageBonusFullCharge;
 	tinker.Attrib[1] = 6;
 	tinker.Attrib[2] = 41;
 	float FullChargeDMGLuck = (0.5 * (tinker.Luck[0]));

@@ -24,7 +24,8 @@ public void SemiAutoWeapon(int client, int buttons)
 							float Fire_rate = f_SemiAutoStats_FireRate[entity];
 							
 							Fire_rate *= Attributes_Get(entity, 6, 1.0);
-							Fire_rate *= Attributes_Get(entity, 5, 1.0);
+							if(Attributes_Get(entity, Attrib_IsSniperRifle, 0.0)==2.0)
+								Fire_rate *= Attributes_Get(entity, 5, 1.0);
 		
 							
 							SetEntPropFloat(client, Prop_Send, "m_flNextAttack", GetGameTime() + Fire_rate);

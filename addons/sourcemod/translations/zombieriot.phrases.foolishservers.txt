@@ -846,6 +846,12 @@
 		"ko"		"공성전"
 	}
 	
+	"Protethia"
+	{
+		"en"		"Protethia"
+		"ko"		"프로테시아"
+	}
+	
 	//무기 설명
 	"Chaos Infected Launcher desc"
 	{
@@ -921,23 +927,23 @@
 	}
 	"Minecraft Sword Pap 2"
 	{
-		"en"	"Forged from iron. Increased damage, increased attack speed"
-		"ko"	"철로 만들었습니다. 피해량 증가, 공속 증가"
+		"en"	"Forged from iron. Increased damage, increased attack speed\nR: Apply an Anvil effect; if used while looking at the sky, removes the Anvil effect"
+		"ko"	"철로 만들었습니다. 피해량 증가, 공속 증가\nR키: 모루 효과 부여, 하늘보고 사용할 경우, 모루 효과 삭제"
 	}
 	"Minecraft Sword Pap 3"
 	{
-		"en"	"Increased damage, greatly increased attack speed, -50％ cooldown on Sweeping Edge ability\nSome tinkering effects applied."
-		"ko"	"피해량 증가, 공속 대폭 증가, 휩쓸기 능력 재사용 대기시간 -50％\n전용 모루 효과 일부 적용"
+		"en"	"Increased damage, greatly increased attack speed, -50％ cooldown on Sweeping Edge ability\nSome tinkering effects applied.\nR: Maximum enhancement of the Anvil effect and cooldown reduction"
+		"ko"	"피해량 증가, 공속 대폭 증가, 휩쓸기 능력 재사용 대기시간 -50％\n전용 모루 효과 일부 적용\nR키 모루 효과 최대 강화및 쿨다운 감소"
 	}
 	"Minecraft Sword Pap 4"
 	{
-		"en"	"Diamond! Increased damage, attack speed, increased area damage."
-		"ko"	"다이아몬드! 피해량, 공속증가, 휩쓸기 충전 속도 +25％"
+		"en"	"Diamond! Increased damage, attack speed, increased area damage.\nR: Anvil effect buff and cooldown reduction"
+		"ko"	"다이아몬드! 피해량, 공속증가, 휩쓸기 충전 속도 +25％\nR키 모루 효과 강화및 쿨다운 감소"
 	}
 	"Minecraft Sword Pap 5"
 	{
-		"en"	"Netherite! Damage increased, attack range and area damage increased."
-		"ko"	"네더라이트! 피해량 증가, 휩쓸기 범위 +17％, 점프 공격 피해량 +10％"
+		"en"	"Netherite! Damage increased, attack range and area damage increased.\nR: Maximum enhancement of the Anvil effect and cooldown reduction"
+		"ko"	"네더라이트! 피해량 증가, 휩쓸기 범위 +17％, 점프 공격 피해량 +10％\nR키 모루 효과 최대 강화및 쿨다운 감소"
 	}
 	"Minecraft Sword Advancement"
 	{
@@ -1190,6 +1196,12 @@
 	{
 		"en"		"Pressing R increases the barracks training and research speed\nWhen hitting an marked enemy with another ranged weapon\nThis weapon's R cooldown is reduced"
 		"ko"		"R 키 사용 시, 배럭의 훈련 및 연구 속도가 증가합니다,\n다른 원거리 무기로 표적 상태인 대상 적중 시,\n이 무기의 R 키 쿨 다운이 감소합니다"
+	}
+	
+	"Protethia Desc"
+	{
+		"en"		"WIP"
+		"ko"		"WIP"
 	}
 	
 	//추가 장비 이름
