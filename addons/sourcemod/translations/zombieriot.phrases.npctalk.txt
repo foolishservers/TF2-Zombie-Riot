@@ -2340,7 +2340,7 @@
 	"Vincent_Talk_Wave1_1_2"
 	{
 		"en"		"Hang on a minute... my sensors are going off, you're not one of them."
-		"ko"		"잠깐... 센서가 울리는 걸 보니, 당신은 그들이 아니군."
+		"ko"		"잠깐... 센서가 울리는 걸 보니, 당신은 그들이 아니군요."
 	}
 	"Vincent_Talk_Wave1_1_3"
 	{
@@ -2350,7 +2350,7 @@
 	"Vincent_Talk_Wave1_1_4"
 	{
 		"en"		"That's probably why the self-defense mechanisms kicked in."
-		"ko"		"아마도 그런 탓에 자가 방어 시스템이 가동된 것 같군요."
+		"ko"		"그래서 그런지 자가 방어 시스템이 가동된 것 같군요."
 	}
 	"Vincent_Talk_Wave1_1_5"
 	{
@@ -2369,8 +2369,8 @@
 	}
 	"Vincent_Talk_Wave1_2_2"
 	{
-		"en"		"One moment...who, sorry, what are you?"
-		"ko"		"그러니까...잠깐만, 당신은 누구지?"
+		"en"		"One moment... who, sorry, what are you?"
+		"ko"		"그러니까... 잠깐만, 당신은 누구죠?"
 	}
 	"Vincent_Talk_Wave1_2_3"
 	{
@@ -2482,7 +2482,7 @@
 	"Vincent_Talk_Wave5_2_6"
 	{
 		"en"		"How interesting..."
-		"ko"		"흥미롭군..."
+		"ko"		"그래도 간만에 흥미로운 일이네요..."
 	}
 	"Vincent_Talk_Wave5_3_1"
 	{
@@ -2507,12 +2507,12 @@
 	"Vincent_Talk_Wave5_3_5"
 	{
 		"en"		"Besides having to deal with you, I still have to find a way to stop these gates."
-		"ko"		"그리고, 당신을 상대해야 하는 것 외에도, 이 관문들을 멈출 방법을 찾아야 합니다."
+		"ko"		"그리고, 저는 당신을 상대해야 하는 것 외에도 이 관문들을 멈출 방법을 찾아야 합니다."
 	}
 	"Vincent_Talk_Wave5_3_6"
 	{
 		"en"		"How fascinating..."
-		"ko"		"참으로 흥미롭군요..."
+		"ko"		"그래도 참으로 흥미롭군요..."
 	}
 	
 	// Wave10.
@@ -3543,7 +3543,7 @@
 	"Vincent_PourOil_1"
 	{
 		"en"		"Someone turn the heat up."
-		"ko"		"누가 좀 뜨겁게 달궈보시죠."
+		"ko"		"좀 뜨겁게 달궈보시죠."
 	}
 	"Vincent_PourOil_2"
 	{
@@ -3670,7 +3670,7 @@
 	"Vincent_Win_OutsideLab_2_3"
 	{
 		"en"		"You got the best of me this time."
-		"ko"		"이번엔 저를 이기셨습니다."
+		"ko"		"이번엔 저를 이기셨군요."
 	}
 	
 	"Vincent_Lose"

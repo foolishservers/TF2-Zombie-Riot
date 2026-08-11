@@ -82,7 +82,7 @@ methodmap Talker < CClotBody
 				if (!IsClientInGame(client) || IsFakeClient(client))
 					continue;
 				
-				if (Store_HasNamedItem(client, "Scorched_Expidonsan_Research_Card"))
+				if (Store_HasNamedItem(client, "Scorched Expidonsan Research Card"))
 				{
 					CPrintToChat(client, "%T", "Vincent_Talk_Scorched_Expidonsan_Research_Card", client);
 					if (b_DoNotHideName[client])
@@ -205,13 +205,15 @@ public void Talker_ClotThink(int iNPC)
 		{
 			NpcTalker_Wave38Talk(npc);
 		}
-		
 	}
+	
 	if(i_TalkDelayCheck != -1)
 	{
 		i_TalkDelayCheck++;
 	}
 }
+
+
 
 stock void NpcTalker_Wave1Talk(Talker npc)
 {
@@ -232,9 +234,12 @@ stock void NpcTalker_Wave1Talk(Talker npc)
 	int talk = npc.m_iRandomTalkNumber;
 	if (0 < talk && talk < 4)
 	{
-		VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave1_%d_%d", true, talk, i_TalkDelayCheck);
 		if (i_TalkDelayCheck == 6)
+		{
 			i_TalkDelayCheck = -1;
+			return;
+		}
+		VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave1_%d_%d", true, talk, i_TalkDelayCheck + 1);
 	}
 }
 
@@ -259,9 +264,12 @@ stock void NpcTalker_Wave5Talk(Talker npc)
 	int talk = npc.m_iRandomTalkNumber;
 	if (0 < talk && talk < 4)
 	{
-		VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave5_%d_%d", true, talk, i_TalkDelayCheck);
 		if (i_TalkDelayCheck == 6)
+		{
 			i_TalkDelayCheck = -1;
+			return;
+		}
+		VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave5_%d_%d", true, talk, i_TalkDelayCheck + 1);
 	}
 }
 
@@ -286,9 +294,12 @@ stock void NpcTalker_Wave10Talk(Talker npc)
 	int talk = npc.m_iRandomTalkNumber;
 	if (0 < talk && talk < 4)
 	{
-		VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave10_%d_%d", true, talk, i_TalkDelayCheck);
 		if (i_TalkDelayCheck == 6)
+		{
 			i_TalkDelayCheck = -1;
+			return;
+		}
+		VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave10_%d_%d", true, talk, i_TalkDelayCheck + 1);
 	}
 }
 
@@ -312,22 +323,31 @@ stock void NpcTalker_Wave11Talk(Talker npc)
 		// C.A.T Alive
 		case 1, 2, 3:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave11_%d_%d", true, npc.m_iRandomTalkNumber, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 6)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave11_%d_%d", true, npc.m_iRandomTalkNumber, i_TalkDelayCheck + 1);
 		}
 		// C.A.T. Dead
 		case 4:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave11_4_%d", true, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 5)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave11_4_%d", true, i_TalkDelayCheck + 1);
 		}
 		case 5, 6:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave11_%d_%d", true, npc.m_iRandomTalkNumber, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 6)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave11_%d_%d", true, npc.m_iRandomTalkNumber, i_TalkDelayCheck + 1);
 		}
 	}
 }
@@ -352,16 +372,22 @@ stock void NpcTalker_Wave15Talk(Talker npc)
 	{
 		case 1, 2, 3:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave15_%d_%d", true, talk, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 3)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave15_%d_%d", true, talk, i_TalkDelayCheck + 1);
 		}
 		//C.A.T. Dead
 		case 4, 5, 6:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave15_%d_%d", true, talk, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 3)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave15_%d_%d", true, talk, i_TalkDelayCheck + 1);
 		}
 	}
 }
@@ -386,16 +412,22 @@ stock void NpcTalker_Wave20Talk(Talker npc)
 	{
 		case 1, 2, 3:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave20_%d_%d", true, talk, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 4)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave20_%d_%d", true, talk, i_TalkDelayCheck + 1);
 		}
 		//C.A.T. Dead
 		case 4, 5, 6:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave20_%d_%d", true, talk, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 4)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave20_%d_%d", true, talk, i_TalkDelayCheck + 1);
 		}
 	}
 }
@@ -432,34 +464,43 @@ stock void NpcTalker_Wave21Talk(Talker npc)
 		//Canon Route
 		case 1, 2, 3:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave21_%d_%d", true, talk, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 4)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave21_%d_%d", true, talk, i_TalkDelayCheck + 1);
 		}
 		//C.A.T. Dead, A.R.I.S Alive
 		case 4, 5:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave21_%d_%d", true, talk, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 4)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave21_%d_%d", true, talk, i_TalkDelayCheck + 1);
 		}
 		//C.A.T. Alive, A.R.I.S Dead
 		case 6, 7:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave21_%d_%d", true, talk, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 4)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave21_%d_%d", true, talk, i_TalkDelayCheck + 1);
 		}
 		//Locked in Genocide
 		case 8:
 		{
 			switch(i_TalkDelayCheck)
 			{
-				case 1, 2, 3:
+				case 0, 1, 2:
 				{
-					VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave21_8_%d", true, i_TalkDelayCheck);
+					VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave21_8_%d", true, i_TalkDelayCheck + 1);
 				}
-				case 4:
+				case 3:
 				{
 					CPrintToChatAll("%t", "Vincent_Talk_Wave21_Genocide_Route");
 					i_TalkDelayCheck = -1;
@@ -501,30 +542,39 @@ stock void NpcTalker_Wave25Talk(Talker npc)
 		//Canon Route
 		case 1, 2:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave25_%d_%d", true, talk, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 4)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave25_%d_%d", true, talk, i_TalkDelayCheck + 1);
 		}
 		//C.A.T. Dead, A.R.I.S Alive
 		case 3:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave25_%d_%d", true, talk, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 4)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave25_%d_%d", true, talk, i_TalkDelayCheck + 1);
 		}
 		//C.A.T. Alive, A.R.I.S Dead
 		case 5:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave25_%d_%d", true, talk, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 4)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave25_%d_%d", true, talk, i_TalkDelayCheck + 1);
 		}
 		//Locked in Genocide
 		case 7:
 		{
 			switch(i_TalkDelayCheck)
 			{
-				case 1:
+				case 0:
 				{
 					i_TalkDelayCheck = -1;
 				}
@@ -565,30 +615,39 @@ stock void NpcTalker_Wave30Talk(Talker npc)
 		//Canon Route
 		case 1, 2:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave30_%d_%d", true, talk, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 4)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave30_%d_%d", true, talk, i_TalkDelayCheck + 1);
 		}
 		//C.A.T. Dead, A.R.I.S Alive
 		case 3:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave30_%d_%d", true, talk, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 3)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave30_%d_%d", true, talk, i_TalkDelayCheck + 1);
 		}
 		//C.A.T. Alive, A.R.I.S Dead
 		case 5:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave30_%d_%d", true, talk, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 3)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave30_%d_%d", true, talk, i_TalkDelayCheck + 1);
 		}
 		//Locked in Genocide
 		case 7:
 		{
 			switch(i_TalkDelayCheck)
 			{
-				case 1:
+				case 0:
 				{
 					i_TalkDelayCheck = -1;
 				}
@@ -635,23 +694,29 @@ stock void NpcTalker_Wave31Talk(Talker npc)
 		//C.A.T. Alive, A.R.I.S Alive, C.H.I.M.E.R.A. Alive
 		case 1, 2:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave31_%d_%d", true, talk, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 3)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave31_%d_%d", true, talk, i_TalkDelayCheck + 1);
 		}
 		//C.A.T. Alive, A.R.I.S Alive, C.H.I.M.E.R.A. Dead
 		case 3, 4:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave31_%d_%d", true, talk, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 3)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave31_%d_%d", true, talk, i_TalkDelayCheck + 1);
 		}
 		//One of them Dead
 		case 5:
 		{
 			switch(i_TalkDelayCheck)
 			{
-				case 1:
+				case 0:
 				{
 					i_TalkDelayCheck = -1;
 				}
@@ -662,7 +727,7 @@ stock void NpcTalker_Wave31Talk(Talker npc)
 		{
 			switch(i_TalkDelayCheck)
 			{
-				case 1:
+				case 0:
 				{
 					i_TalkDelayCheck = -1;
 				}
@@ -700,23 +765,29 @@ stock void NpcTalker_Wave36Talk(Talker npc)
 		//Canon Route
 		case 1, 2:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave36_%d_%d", true, npc.m_iRandomTalkNumber, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 9)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave36_%d_%d", true, npc.m_iRandomTalkNumber, i_TalkDelayCheck + 1);
 		}
 		//One of them(C.A.T or A.R.I.S) Dead
 		case 3, 5:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave36_3_%d", true, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 2)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave36_3_%d", true, i_TalkDelayCheck + 1);
 		}
 		//Locked in Genocide
 		case 7:
 		{
 			switch(i_TalkDelayCheck)
 			{
-				case 1:
+				case 0:
 				{
 					i_TalkDelayCheck = -1;
 				}
@@ -754,16 +825,19 @@ stock void NpcTalker_Wave37Talk(Talker npc)
 		//Canon Route
 		case 1, 2:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave37_%d_%d", true, npc.m_iRandomTalkNumber, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 2)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave37_%d_%d", true, npc.m_iRandomTalkNumber, i_TalkDelayCheck + 1);
 		}
 		//C.A.T. Dead, A.R.I.S Alive
 		case 3:
 		{
 			switch(i_TalkDelayCheck)
 			{
-				case 1:
+				case 0:
 				{
 					i_TalkDelayCheck = -1;
 				}
@@ -774,7 +848,7 @@ stock void NpcTalker_Wave37Talk(Talker npc)
 		{
 			switch(i_TalkDelayCheck)
 			{
-				case 1:
+				case 0:
 				{
 					i_TalkDelayCheck = -1;
 				}
@@ -785,7 +859,7 @@ stock void NpcTalker_Wave37Talk(Talker npc)
 		{
 			switch(i_TalkDelayCheck)
 			{
-				case 1:
+				case 0:
 				{
 					i_TalkDelayCheck = -1;
 				}
@@ -825,16 +899,19 @@ stock void NpcTalker_Wave38Talk(Talker npc)
 		//Canon Route
 		case 1:
 		{
-			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave38_1_%d", true, npc.m_iRandomTalkNumber, i_TalkDelayCheck);
 			if (i_TalkDelayCheck == 2)
+			{
 				i_TalkDelayCheck = -1;
+				return;
+			}
+			VincentTalker_NPCTalkMessage(npc.index, "Vincent_Talk_Wave38_1_%d", true, npc.m_iRandomTalkNumber, i_TalkDelayCheck + 1);
 		}
 		//C.A.T. Dead, A.R.I.S Alive
 		case 3:
 		{
 			switch(i_TalkDelayCheck)
 			{
-				case 1:
+				case 0:
 				{
 					i_TalkDelayCheck = -1;
 				}
@@ -845,7 +922,7 @@ stock void NpcTalker_Wave38Talk(Talker npc)
 		{
 			switch(i_TalkDelayCheck)
 			{
-				case 1:
+				case 0:
 				{
 					i_TalkDelayCheck = -1;
 				}
@@ -856,7 +933,7 @@ stock void NpcTalker_Wave38Talk(Talker npc)
 		{
 			switch(i_TalkDelayCheck)
 			{
-				case 1:
+				case 0:
 				{
 					i_TalkDelayCheck = -1;
 				}
