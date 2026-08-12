@@ -96,7 +96,7 @@ methodmap ZSNightmare < CClotBody
 	{
 		ZSNightmare npc = view_as<ZSNightmare>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "15000", ally, false));
 		
-		i_NpcWeight[npc.index] = 1;
+		i_NpcWeight[npc.index] = 4;
 		
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
@@ -267,6 +267,7 @@ public void ZSNightmare_ClotThink(int iNPC)
 public void ZSNightmare_NPCDeath(int entity)
 {
 	ZSNightmare npc = view_as<ZSNightmare>(entity);
+	SpawnMoney(npc.index, true);
 	if(!npc.m_bGib)
 	{
 		npc.PlayDeathSound();	

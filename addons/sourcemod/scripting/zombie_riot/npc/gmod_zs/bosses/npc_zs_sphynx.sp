@@ -110,7 +110,7 @@ methodmap ZSSphynx < CClotBody
 	{
 		ZSSphynx npc = view_as<ZSSphynx>(CClotBody(vecPos, vecAng, "models/antlion_guard.mdl", "1.0", "1000", ally));
 		
-		i_NpcWeight[npc.index] = 1;
+		i_NpcWeight[npc.index] = 4;
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
 		int iActivity = npc.LookupActivity("ACT_RUN");
@@ -339,6 +339,7 @@ public Action ZSSphynx_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 public void ZSSphynx_NPCDeath(int entity)
 {
 	ZSSphynx npc = view_as<ZSSphynx>(entity);
+	SpawnMoney(npc.index, true);
 	if(!npc.m_bGib)
 	{
 		npc.PlayDeathSound();	

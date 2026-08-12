@@ -253,10 +253,10 @@ static void Internal_ClotThink(int iNPC)
 						if(target > 0) 
 						{
 							
-							float damage = 500.0;
+							float damage = 250.0;
 							if(iRuinaWave()>20)	//the shit slapper will become the most feard thing on the planet
 							{
-								damage=500.0;
+								damage=250.0;
 							}
 							SDKHooks_TakeDamage(target, npc.index, npc.index, damage*scale, DMG_CLUB, -1, _, vecHit);
 							i_ammo_count[npc.index]++;
