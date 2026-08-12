@@ -650,7 +650,7 @@ public void CommanderKit_Unequip(int client)
 		h_Barrack_Timer[client] = null;
 	}
 	Barrack_HUDDelay[client] = 0.0;
-    PrintHintText(client, "");
+	PrintHintText(client, "");
 }
 public int Barracks_GetInfo(int client, int choice)
 {
