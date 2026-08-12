@@ -321,11 +321,11 @@ public void Nest_ClotThink(int iNPC)
 	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.05;
 	
 
-	if(i_AttacksTillMegahit[iNPC] >= 255)
+	if(i_AttacksTillMegahit[iNPC] >= 510)
 	{
-		if(i_AttacksTillMegahit[iNPC] <= 600)
+		if(i_AttacksTillMegahit[iNPC] <= 700)
 		{
-			i_AttacksTillMegahit[iNPC] = 601;
+			i_AttacksTillMegahit[iNPC] = 701;
 			SetEntityRenderColor(npc.m_iWearable1, 255, 255, 255, 255);
 			SetEntityRenderMode(npc.m_iWearable1, RENDER_NORMAL);
 		}
@@ -390,17 +390,14 @@ public void Nest_ClotThink(int iNPC)
 				int spawn_index = NPC_CreateByName(EnemyToSpawn, -1, AproxRandomSpaceToWalkTo, {0.0,0.0,0.0}, GetTeam(npc.index));
 				if(spawn_index > MaxClients)
 				{
-					b_StaticNPC[spawn_index] = b_StaticNPC[iNPC];
-					if(b_StaticNPC[spawn_index])
-						AddNpcToAliveList(spawn_index, 1);
-						b_HideHealth[npc.index] = false;
+					AddNpcToAliveList(spawn_index, 1);
+					b_HideHealth[npc.index] = false;
 					
 					npc.PlayMeleeMissSound();
 					npc.PlayMeleeMissSound();
 					if(GetTeam(iNPC) != TFTeam_Red)
 					{
-						if(!b_StaticNPC[spawn_index])
-							NpcAddedToZombiesLeftCurrently(spawn_index, true);
+						NpcAddedToZombiesLeftCurrently(spawn_index, true);
 					}
 					else
 					{

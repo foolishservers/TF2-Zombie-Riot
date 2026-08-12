@@ -212,93 +212,26 @@ methodmap FleshCreeper < CClotBody
 
 		npc.StopPathing();
 
-		if(!zr_disablerandomvillagerspawn.BoolValue)
+		int Decicion = TeleportDiversioToRandLocation(npc.index, true, 1500.0, 1000.0, .NeedLOSPlayer = true);
+		switch(Decicion)
 		{
-			int AreasCollected = 0;
-			float CurrentPoints = 0.0;
-			float f3_AreasCollected[3];
-
-			for( int loop = 1; loop <= 500; loop++ ) 
+			case 2:
 			{
-				CNavArea RandomArea = PickRandomArea();	
-					
-				if(RandomArea == NULL_AREA) 
-					break; //No nav?
-
-				int NavAttribs = RandomArea.GetAttributes();
-				if(NavAttribs & NAV_MESH_AVOID)
+				Decicion = TeleportDiversioToRandLocation(npc.index, true, 1500.0, 500.0, .NeedLOSPlayer = true);
+				if(Decicion == 2)
 				{
-					continue;
-				}
-
-				float vecGoal[3]; RandomArea.GetCenter(vecGoal);
-				vecGoal[2] += 1.0;
-
-				if(IsPointHazard(vecGoal)) //Retry.
-					continue;
-
-				static float hullcheckmaxs_Player_Again[3];
-				static float hullcheckmins_Player_Again[3];
-
-				hullcheckmaxs_Player_Again = view_as<float>( { 24.0, 24.0, 82.0 } );
-				hullcheckmins_Player_Again = view_as<float>( { -24.0, -24.0, 0.0 } );	
-				
-				if(IsPointHazard(vecGoal)) //Retry.
-					continue;
-				
-				vecGoal[2] += 18.0;
-				if(IsPointHazard(vecGoal)) //Retry.
-					continue;
-				
-				vecGoal[2] -= 18.0;
-				vecGoal[2] -= 18.0;
-				vecGoal[2] -= 18.0;
-				if(IsPointHazard(vecGoal)) //Retry.
-					continue;
-				vecGoal[2] += 18.0;
-				vecGoal[2] += 18.0;
-				if(IsSpaceOccupiedIgnorePlayers(vecGoal, hullcheckmins_Player_Again, hullcheckmaxs_Player_Again, npc.index) || IsSpaceOccupiedOnlyPlayers(vecGoal, hullcheckmins_Player_Again, hullcheckmaxs_Player_Again, npc.index))
-				{
-					continue;
-				}
-				float Accumulated_Points;
-				for(int client_check=1; client_check<=MaxClients; client_check++)
-				{
-					if(IsClientInGame(client_check) && IsPlayerAlive(client_check) && GetClientTeam(client_check)==2 && TeutonType[client_check] == TEUTON_NONE && dieingstate[client_check] == 0)
-					{		
-						float f3_PositionTemp[3];
-						GetEntPropVector(client_check, Prop_Data, "m_vecAbsOrigin", f3_PositionTemp);
-						float distance = GetVectorDistance( f3_PositionTemp, vecGoal, true); 
-						//leave it all squared for optimsation sake!
-						float inverting_score_calc;
-
-						inverting_score_calc = ( distance / 100000000.0);
-
-						if(ally == TFTeam_Red)
-						{
-							inverting_score_calc -= 1;
-
-							inverting_score_calc *= -1.0;					
-						}
-
-						Accumulated_Points += inverting_score_calc;
-					}
-				}
-				if(Accumulated_Points > CurrentPoints)
-				{
-					vecGoal[2] -= 20.0;
-					f3_AreasCollected = vecGoal;
-					CurrentPoints = Accumulated_Points;
-				}
-				AreasCollected += 1;
-				if(AreasCollected >= MAXTRIESVILLAGER)
-				{
-					if(vecGoal[0])
+					Decicion = TeleportDiversioToRandLocation(npc.index, true, 1500.0, 250.0, .NeedLOSPlayer = true);
+					if(Decicion == 2)
 					{
-						TeleportEntity(npc.index, f3_AreasCollected, NULL_VECTOR, NULL_VECTOR);
+						Decicion = TeleportDiversioToRandLocation(npc.index, true, 1500.0, 0.0, .NeedLOSPlayer = true);
+						if(Decicion == 2)
+							TeleportDiversioToRandLocation(npc.index, true, 1500.0, 0.0);
 					}
-					break;
 				}
+			}
+			case 3:
+			{
+				//todo code on what to do if random teleport is disabled
 			}
 		}
 		return npc;
@@ -342,7 +275,7 @@ public void FleshCreeper_ClotThink(int iNPC)
 	{
 		Behavior = 1;
 	}
-	else if(IsValidEntity(buildingentity) && i_AttacksTillMegahit[buildingentity] >= 255) //We already have 1
+	else if(IsValidEntity(buildingentity) && i_AttacksTillMegahit[buildingentity] >= 510) //We already have 1
 	{
 		int healthbuilding = GetEntProp(buildingentity, Prop_Data, "m_iHealth");
 		int Maxhealthbuilding = GetEntProp(buildingentity, Prop_Data, "m_iMaxHealth");
@@ -480,7 +413,7 @@ public void FleshCreeper_ClotThink(int iNPC)
 				int Entity_I_See;
 			
 				Entity_I_See = Can_I_See_Ally(npc.index, buildingentity);
-				if(i_AttacksTillMegahit[buildingentity] < 255)
+				if(i_AttacksTillMegahit[buildingentity] < 510)
 				{
 					if(flDistanceToTarget < (125.0* 125.0) && IsValidAlly(npc.index, Entity_I_See))
 					{
@@ -623,16 +556,11 @@ public void FleshCreeper_ClotThink(int iNPC)
 				if(spawn_index > MaxClients)
 				{
 					NpcStats_CopyStats(npc.index, spawn_index);
-					b_StaticNPC[spawn_index] = b_StaticNPC[iNPC];
-					if(b_StaticNPC[spawn_index])
-						AddNpcToAliveList(spawn_index, 1);
+					AddNpcToAliveList(spawn_index, 1);
 					
 					i_BuildingRef[iNPC] = EntIndexToEntRef(spawn_index);
 					if(GetTeam(iNPC) != TFTeam_Red)
-					{
-						if(!b_StaticNPC[spawn_index])
-							NpcAddedToZombiesLeftCurrently(spawn_index, true);
-					}
+						NpcAddedToZombiesLeftCurrently(spawn_index, true);
 					i_AttacksTillMegahit[spawn_index] = 10;
 					SetEntityRenderMode(spawn_index, RENDER_TRANSCOLOR);
 					SetEntityRenderColor(spawn_index, 255, 255, 255, 0);
@@ -863,7 +791,7 @@ public Action FleshCreeper_OnTakeDamage(int victim, int &attacker, int &inflicto
 public void FleshCreeper_NPCDeath(int entity)
 {
 	FleshCreeper npc = view_as<FleshCreeper>(entity);
-	SpawnMoney(npc.index, true);
+	//SpawnMoney(npc.index, true);
 	if(!npc.m_bGib)
 	{
 		npc.PlayDeathSound();	

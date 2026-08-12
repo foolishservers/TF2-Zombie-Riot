@@ -333,8 +333,8 @@ methodmap ZsUnspeakable < CClotBody
 			{
 				MusicEnum music;
 				strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/void_wave/unspeakable_raid.mp3");
-				music.Time = 175;
-				music.Volume = 1.35;
+				music.Time = 188;
+				music.Volume = 1.0;
 				music.Custom = true;
 				strcopy(music.Name, sizeof(music.Name), "Lilith - The Textorcist OST");
 				strcopy(music.Artist, sizeof(music.Artist), "Trihard 7");

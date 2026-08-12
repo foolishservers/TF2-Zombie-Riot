@@ -168,7 +168,7 @@ methodmap DasNaggenvatcher < CClotBody
 			SizeChar = "1.0";
 		}
 		DasNaggenvatcher npc = view_as<DasNaggenvatcher>(CClotBody(vecPos, vecAng, "models/player/spy.mdl", SizeChar, "7000000", ally, false, true));
-		i_NpcWeight[npc.index] = 3;
+		i_NpcWeight[npc.index] = 4;
 		
 		SetEntityRenderMode(npc.index, RENDER_NONE);
 
@@ -616,19 +616,19 @@ public void DasNaggenvatcher_ClotThink(int iNPC)
 			{
 				case 0:
 				{
-					CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: 너 혼자서는 아무것도 하지 못 한다!");
+					CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 너 혼자서는 아무것도 하지 못 한다!");
 				}
 				case 1:
 				{
-					CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: 영광스러운 합일에 동참하라.");
+					CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 영광스러운 합일에 동참하라.");
 				}
 				case 2:
 				{
-					CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: 지금 항복할텐가?!");
+					CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 지금 항복할텐가?!");
 				}
 				case 3:
 				{
-					CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: 너가 그래도 니 동료들보단 나은것 같군");
+					CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 너가 그래도 니 동료들보단 나은것 같군");
 				}
 			}
 		}
@@ -688,19 +688,19 @@ public void DasNaggenvatcher_ClotThink(int iNPC)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{crimson}다스 고르통보호기 메딕{crimson}: 정말 한심하기 짝이없군 고작 이따위 결과를 보려고 우리가 온것이 아닌데");
+				CPrintToChatAll("{crimson}캡틴 퀘츠{crimson}: 정말 한심하기 짝이없군 고작 이따위 결과를 보려고 우리가 온것이 아닌데");
 			}
 			case 1:
 			{
-				CPrintToChatAll("{crimson}다스 고르통보호기 메딕{crimson}: 너네 그냥 집에 가라. 너희 같은 것들은 우리와 함께 할 수 없다.");
+				CPrintToChatAll("{crimson}캡틴 퀘츠{crimson}: 너네 그냥 집에 가라. 너희 같은 것들은 우리와 함께 할 수 없다.");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{crimson}다스 고르통보호기 메딕{crimson}: 고작 이따위 것들을 상대하려고 우리가 시간낭비를 했단 말인가?");
+				CPrintToChatAll("{crimson}캡틴 퀘츠{crimson}: 고작 이따위 것들을 상대하려고 우리가 시간낭비를 했단 말인가?");
 			}
 			case 3:
 			{
-				CPrintToChatAll("{crimson}다스 고르통보호기 메딕{crimson}: 우리가 이딴 약골들에게 쩔쩔맸단 말인가...");
+				CPrintToChatAll("{crimson}캡틴 퀘츠{crimson}: 우리가 이딴 약골들에게 쩔쩔맸단 말인가...");
 			}
 		}
 		
@@ -739,32 +739,32 @@ public void DasNaggenvatcher_ClotThink(int iNPC)
 		else if(gameTime + 16.0 > g_dasnaggenvatcher_die && i_SaidLineAlready[npc.index] < 6)
 		{
 			i_SaidLineAlready[npc.index] = 6;
-			CPrintToChatAll("{crimson}다스 고르통보호기 메딕?{default}: 다만, 아직 마지막 테스트가 필요하다.{crimson} 이 테스트가 끝나면 너희도 우리와 하나가 되리라.");
+			CPrintToChatAll("{crimson}캡틴 퀘츠?{default}: 다만, 아직 마지막 테스트가 필요하다.{crimson} 이 테스트가 끝나면 너희도 우리와 하나가 되리라.");
 		}
 		else if(gameTime + 20.0 > g_dasnaggenvatcher_die && i_SaidLineAlready[npc.index] < 5)
 		{
 			i_SaidLineAlready[npc.index] = 5;
-			CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: 우리의 결속은 자라나고 우리는 영생을 누리리라.");
+			CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 우리의 결속은 자라나고 우리는 영생을 누리리라.");
 		}
 		else if(gameTime + 24.0 > g_dasnaggenvatcher_die && i_SaidLineAlready[npc.index] < 4)
 		{
 			i_SaidLineAlready[npc.index] = 4;
-			CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: 우리가 집어삼킨 세계마다 새로운 형제가 일어나 하나가 되리라.");
+			CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 우리가 집어삼킨 세계마다 새로운 형제가 일어나 하나가 되리라.");
 		}
 		else if(gameTime + 28.0 > g_dasnaggenvatcher_die && i_SaidLineAlready[npc.index] < 3)
 		{
 			i_SaidLineAlready[npc.index] = 3;
-			CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: 역시 너희도 우리와 하나가 되어야만 한다.");
+			CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 역시 너희도 우리와 하나가 되어야만 한다.");
 		}
 		else if(gameTime + 32.0 > g_dasnaggenvatcher_die && i_SaidLineAlready[npc.index] < 2)
 		{
 			i_SaidLineAlready[npc.index] = 2;
-			CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: 그리고 너희는 우리의 기대에 정확히 부합했다.");
+			CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 그리고 너희는 우리의 기대에 정확히 부합했다.");
 		}
 		else if(gameTime + 36.0 > g_dasnaggenvatcher_die && i_SaidLineAlready[npc.index] < 1)
 		{
 			i_SaidLineAlready[npc.index] = 1;
-			CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: 너희를 오랜 시간 동안 지켜보고 있었다.");
+			CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 너희를 오랜 시간 동안 지켜보고 있었다.");
 		}
 	}
 }
@@ -973,19 +973,19 @@ void DasNaggenvatcherSayWords(int entity)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: 우리가 이룩한 모든 것을 적이 파괴하려 한다.");
+				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 우리가 이룩한 모든 것을 적이 파괴하려 한다.");
 			}
 			case 1:
 			{
-				CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: 좋아, 친구들. 우리가 가진 모든걸 쏟아부어라! 우리는 여기서 더이상 낭비할 시간이 없다!");
+				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 좋아, 친구들. 우리가 가진 모든걸 쏟아부어라! 우리는 여기서 더이상 낭비할 시간이 없다!");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: 우리는 하나가 되어 결코 패배하지 않을 것이다!");
+				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 우리는 하나가 되어 결코 패배하지 않을 것이다!");
 			}
 			case 3:
 			{
-				CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: 너희도 우리와 하나가 될것이다.");
+				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 너희도 우리와 하나가 될것이다.");
 			}
 		}
 	}
@@ -998,19 +998,19 @@ void DasNaggenvatcherSayWordsAngry(int entity)
 		{
 			case 0:
 			{
-				CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: {default}영광스러운 합일에 동참하라.");
+				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: {default}영광스러운 합일에 동참하라.");
 			}
 			case 1:
 			{
-				CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: {default}내 기대를 실망시키지 않는군, 역시 너희는 우리와 함께할 자격이 있다.");
+				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: {default}내 기대를 실망시키지 않는군, 역시 너희는 우리와 함께할 자격이 있다.");
 			}
 			case 2:
 			{
-				CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: {default}너희도 우리와 하나가 될것이다.");
+				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: {default}너희도 우리와 하나가 될것이다.");
 			}
 			case 3:
 			{
-				CPrintToChatAll("{crimson}다스 고르통보호기 메딕{default}: {default}우리의 약한 친구들은 도태 되었지만 강한 친구들은 아직 살아있다. 그것이 바로 너희가 될것이다.");
+				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: {default}우리의 약한 친구들은 도태 되었지만 강한 친구들은 아직 살아있다. 그것이 바로 너희가 될것이다.");
 			}
 		}
 	}

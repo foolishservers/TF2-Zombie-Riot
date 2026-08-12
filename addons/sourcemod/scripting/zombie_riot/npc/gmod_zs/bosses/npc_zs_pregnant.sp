@@ -305,6 +305,7 @@ public Action Pregnant_Revert_Poison_Zombie_Resistance_Enable(Handle timer, int 
 void Pregnant_NPCDeath(int entityy)
 {
 	Pregnant npc = view_as<Pregnant>(entityy);
+	SpawnMoney(npc.index, true);
 	if(!npc.m_bGib)
 		npc.PlayDeathSound();
 
