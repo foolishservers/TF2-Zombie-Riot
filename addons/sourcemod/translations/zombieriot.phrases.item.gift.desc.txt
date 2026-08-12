@@ -3798,8 +3798,8 @@
 	}
 	"Bob's Trust Desc"
 	{
-		"en"		"The Sea infection has been beaten, but so have you."
-		"ko"		"바다의 잠식을 물리쳤습니다. 당신 몸 속까지 말이죠."
+		"en"		"Bob has been watching you from the very beginning.\nYou have proven worthy of his trust."
+		"ko"		"밥은 처음부터 여러분을 지켜봤습니다.\n그의 신뢰를 저버리지 않았군요."
 	}
 	"Flesh and Bones of the Corrupted God"
 	{
@@ -3808,8 +3808,8 @@
 	}
 	"Flesh and Bones of the Corrupted God Desc"
 	{
-		"en"		"This grotesque body part was never a part of his original body.\nIt was made by the sea. You risked your lives to tear the sea away from him.\nNow that he is free, where could he have gone?"
-		"ko"		"이 기괴한 부위는 그의 원래 몸이 아니었습니다.\n바다가 만든 것이죠. 당신은 목숨을 걸고 그에게서 바다를 떼어냈습니다.\n해방된 그는 어디로 갔을까요?"
+		"en"		"This aberrant body was never a part of his original body.\nIt was made by the sea. You risked your lives to tear the sea away from him.\nNow that he is free, where could he have gone?"
+		"ko"		"이 이형의 신체는 그의 원래 몸이 아니었습니다.\n바다가 만든 것이죠. 당신은 목숨을 걸고 그에게서 바다를 떼어냈습니다.\n해방된 그는 어디로 갔을까요?"
 	}
 	"Xeno Virus Vial"
 	{
