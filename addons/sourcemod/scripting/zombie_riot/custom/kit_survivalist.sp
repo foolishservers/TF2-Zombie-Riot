@@ -243,35 +243,70 @@ public void KitSurvivalist_Melee_M2(int client, int weapon, bool crit, int slot)
 		return;
 	}
 	
-	int health = GetEntProp(client, Prop_Send, "m_iHealth");
-	int maxHealth = SDKCall_GetMaxHealth(client);
-	
-	float missing = float(maxHealth - health);
-	if (missing <= 0.0)
+	float healing = ReservedHealth[client];
+	if (healing <= 0.0)
 	{
 		ClientCommand(client, "playgamesound items/medshotno1.wav");
 		return;
 	}
 	
-	float healing = ReservedHealth[client];
-	if (healing > missing)
-		healing = missing;
+	// Use different logic when dieing state.
+	if (dieingstate[client] > 0)
+	{
+		// 400 when full pap.
+		int health = GetClientHealth(client);
+		int maxHealth = Rogue_Rift_VialityThing() ? 300 : 200;
+		maxHealth += ((WeaponLevel[client] + 1) * 25);
+		
+		float missing = float(maxHealth - health);
+		if (missing <= 0)
+		{
+			ClientCommand(client, "playgamesound items/medshotno1.wav");
+			return;
+		}
+		
+		if (healing > missing)
+			healing = missing;
+		
+		ReservedHealth[client] -= healing;
+		if (ReservedHealth[client] < 0.0)
+			ReservedHealth[client] = 0.0;
+		
+		KitSurvivalist_ReviveSelf(client, healing, 1.0);
+	}
+	else
+	{
+		int health = GetClientHealth(client);
+		int maxHealth = SDKCall_GetMaxHealth(client);
+		
+		float missing = float(maxHealth - health);
+		if (missing <= 0.0)
+		{
+			ClientCommand(client, "playgamesound items/medshotno1.wav");
+			return;
+		}
+		
+		if (healing > missing)
+			healing = missing;
+		
+		ReservedHealth[client] -= healing;
+		if (ReservedHealth[client] < 0.0)
+			ReservedHealth[client] = 0.0;
+		
+		HealEntityGlobal(client, client, healing, 1.0, LastMann ? 1.0 : 0.5, _);
+	}
 	
-	ReservedHealth[client] -= healing;
-	if (ReservedHealth[client] < 0.0)
-		ReservedHealth[client] = 0.0;
-	
-	HealEntityGlobal(client, client, healing, 1.0, 0.5, _);
 	ClientCommand(client, "playgamesound items/smallmedkit1.wav");
 	
-	MakePlayerGiveResponseVoice(client, 1); //haha!
-	
-	float cooltime = 30.0;
+	float cooltime = 17.5;
 	if (LastMann) {
-		cooltime = 25.0;
+		cooltime = 10.0;
 	}
 	else if (WeaponLevel[client] > 5) {
-		cooltime = 27.5;
+		cooltime = 12.5;
+	}
+	else if (WeaponLevel[client] > 3) {
+		cooltime = 15.0;
 	}
 	Rogue_OnAbilityUse(client, weapon);
 	Ability_Apply_Cooldown(client, slot, cooltime);
@@ -287,6 +322,49 @@ public void KitSurvivalist_OnDealDamage_Melee(int victim, int &attacker, int &in
 	
 	KitSurvivalist_GiveReservedHealth(attacker);
 	KitSurvivalist_UpdateHud(attacker, true);
+}
+
+public void KitSurvivalist_OnKill_Melee(int victim, int attacker, int weapon)
+{
+	// Doesn't do anything if you are not downed.
+	if (dieingstate[attacker] <= 0)
+		return;
+	
+	int health = 0;
+	switch (WeaponLevel[attacker])
+	{
+		case 1, 2:
+		{
+			health = 25;
+		}
+		case 3:
+		{
+			health = 50;
+		}
+		case 4:
+		{
+			health = 65;
+		}
+	}
+	
+	if (WeaponLevel[attacker] > 4)
+		health = 80;
+	
+	if (health < 1)
+		return;
+	
+	dieingstate[attacker] -= health;
+	
+	if(dieingstate[attacker] <= 0)
+	{
+		float pos[3], ang[3];
+		GetEntPropVector(attacker, Prop_Data, "m_vecOrigin", pos);
+		GetEntPropVector(attacker, Prop_Data, "m_angRotation", ang);
+		
+		FullyReviveClient(attacker, attacker, _, false);
+		
+		TeleportEntity(attacker, pos, ang);
+	}
 }
 
 public void KitSurvivalist_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, int equipped_weapon, float damagePosition[3], int zr_custom_damage)
@@ -355,9 +433,6 @@ static void KitSurvivalist_GiveReservedHealth(int client)
 	if (WeaponLevel[client] > 6)
 		health = 75.0;
 	
-	if (LastMann)
-		health *= 1.5;
-	
 	ReservedHealth[client] += health;
 	if (ReservedHealth[client] > limit)
 		ReservedHealth[client] = limit;
@@ -424,6 +499,45 @@ static void KitSurvivalist_RefillHealth(int client)
 	
 	ClientCommand(client, "playgamesound items/smallmedkit1.wav");
 	
+	MakePlayerGiveResponseVoice(client, 3);
+	
 	HealEntityGlobal(client, client, ReservedHealth[client], _, 4.0, HEAL_SELFHEAL);
 	ReservedHealth[client] = 0.0;
+}
+
+static void KitSurvivalist_ReviveSelf(int client, float flHealth, float flDuration)
+{
+	float healTotalDuration = flDuration / 0.1;
+	DataPack pack;
+	CreateDataTimer(0.1, KitSurvivalist_ReviveTimer, pack, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
+	pack.WriteCell(GetClientUserId(client));
+	pack.WriteFloat(flHealth / healTotalDuration);
+	pack.WriteCell(RoundToNearest(healTotalDuration));
+}
+
+static Action KitSurvivalist_ReviveTimer(Handle timer, DataPack pack) {
+	pack.Reset();
+	int client = GetClientOfUserId(pack.ReadCell());
+	if (!client || !IsPlayerAlive(client) || TeutonType[client] != TEUTON_NONE || dieingstate[client] <= 0) {
+		return Plugin_Stop;
+	}
+	
+	int HealthToGive = RoundFloat(pack.ReadFloat());
+	SetEntityHealth(client, GetClientHealth(client) + HealthToGive);
+	dieingstate[client] -= HealthToGive;
+	
+	if(dieingstate[client] < 1)
+	{
+		dieingstate[client] = 1;
+	}
+	
+	int current = pack.ReadCell();
+	if (current <= 1) {
+		return Plugin_Stop;
+	}
+	
+	pack.Position--;
+	pack.WriteCell(current - 1, false);
+	
+	return Plugin_Continue;
 }

@@ -1091,7 +1091,7 @@
 	"Survivalist Kit Pap 1 Desc"
 	{
 		"en"		"New melee alt-fire ability - Reserved Health:\nAttacking with melee will reserve health and consume via M2\nImproved stats."
-		"ko"		"근접 무기 우클릭 능력 해금 - 체력 비축:\n적을 근접 무기로 타격 시, 체력을 모으고 우클릭으로 소모하여 회복할 수 있음.\n전반적인 능력치 증가"
+		"ko"		"근접 무기 우클릭 능력 해금 - 체력 비축:\n적을 근접 무기로 타격 시, 체력을 모으고 우클릭으로 소모하여 회복할 수 있음.\n다운된 상태에서 적 처치 시, 소생 게이지가 차오르고, 다 채울 경우 부활함\n전반적인 능력치 증가"
 	}
 	"Survivalist Kit Pap 2 Desc"
 	{
@@ -1105,8 +1105,8 @@
 	}
 	"Survivalist Kit Pap 4 Desc"
 	{
-		"en"		"Improved stats."
-		"ko"		"전반적인 능력치 증가"
+		"en"		"Improved stats.\nReduce knife ability cooltime"
+		"ko"		"전반적인 능력치 증가\n체력 비축분 소모 쿨타임 감소"
 	}
 	"Survivalist Kit Pap 5 Desc"
 	{
@@ -1123,6 +1123,7 @@
 		"en"		"Improved stats."
 		"ko"		"전반적인 능력치 증가"
 	}
+	
 	"Dim Desc"
 	{
 		"en"		"Forbidden weapon known to mankind. \nBuild up charges by hitting enemies with projectiles \nM2 to summon your ally npcs \n Enhancing this weapon in different route will summon different set of npcs!"
