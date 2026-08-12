@@ -108,13 +108,9 @@ int RandomPickup_SpawnPickup(float VectorGoal[3])
 		SetEntityCollisionGroup(prop, 27);
 		SDKHook(prop, SDKHook_Touch, RandomPickup_TouchPickup);
 		i_WandIdNumber[prop] = 999;
-		float RandomPickupTime = DELAY_BETWEEN_PICKUPS; 
-		int MaxPickups = MAX_PICKUPS_ALLOWED; 
-		if(ZR_Get_Modifier() == KITERS_DREAM)
-		{
-			MaxPickups *= 2;
-		}
+		
 		CreateTimer(PICKUPS_TIME_LAST, Timer_RemoveEntity, EntIndexToEntRef(prop), TIMER_FLAG_NO_MAPCHANGE);
+		
 		return prop;
 	}
 	return -1;
