@@ -3541,31 +3541,32 @@ bool PlayerIsInNpcBattle(int client, float ExtradelayTime = 0.0)
 
 void ForcePlayerWin(bool fakeout = false)
 {
-	bool PlayNormalMusic = false;
+	bool PlayNormalMusic = true;
 	for(int client = 1; client <= MaxClients; client++)
 	{
 		if(!b_IsPlayerABot[client] && IsClientInGame(client) && !IsFakeClient(client))
 		{
-			Music_Stop_All(client);
 			SetMusicTimer(client, GetTime() + 33);
-			SendConVarValue(client, sv_cheats, "1");
-			Convars_FixClientsideIssues(client);
+			Music_Stop_All(client);
+			
 			if(MusicWin.PlayMusic(client))
 				PlayNormalMusic = false;
+			
+			SendConVarValue(client, sv_cheats, "1");
+			Convars_FixClientsideIssues(client);
 		}
 	}
+	
 	if(!fakeout)
 		ResetReplications();
-
+	
 	cvarTimeScale.SetFloat(0.1);
 	CreateTimer(0.5, SetTimeBack);
 	if(PlayNormalMusic)
 		EmitCustomToAll("#zombiesurvival/music_win_1.mp3", _, SNDCHAN_STATIC, SNDLEVEL_NONE, _, 2.0);
-
-
+	
 	if(!fakeout)
 	{
-		
 		// Send info through a forward
 		ArrayList playerList = new ArrayList();
 		for (int client = 1; client <= MaxClients; client++)
