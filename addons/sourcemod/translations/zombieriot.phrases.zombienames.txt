@@ -8468,4 +8468,30 @@
 		"en"	"Elemental damage gauge full.\nPheromones leaking from your body are attracting nearby infected."
 		"ko"	"원소 피해 게이지가 꽉 차면, 당신의 몸에서 흘러나오는 페로몬으로 인해서\n주변의 감염체들이 몰려옵니다."
 	}
+	
+	"W.F. Suppressor"
+	{
+		"en"	"W.F. Suppressor"
+		"ko"	"W.F. 제압병"
+	}
+	"W.F. Grenadier"
+	{
+		"en"	"W.F. Grenadier"
+		"ko"	"W.F. 투척병"
+	}
+	"W.F. Marksman"
+	{
+		"en"	"W.F. Marksman"
+		"ko"	"W.F. 명사수"
+	}
+	"W.F. Expert Fighter"
+	{
+		"en"	"W.F. Expert Fighter"
+		"ko"	"W.F. 격투가"
+	}
+	"W.F. Rocketeer"
+	{
+		"en"	"W.F. Rocketeer"
+		"ko"	"W.F. 로켓사수"
+	}
 }
