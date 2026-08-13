@@ -2599,7 +2599,7 @@
 	"Vincent_Talk_Wave10_3_5"
 	{
 		"en"		"Since I've warned you to get out while you could, and you decided to stay, I have no advice left to give you."
-		"ko"		"나갈 수 있을 때 나가라고 경고했지만 남아있기로 하셨으니, 더 이상 드릴 조언이 없군요."
+		"ko"		"전 나갈 수 있을 때 나가라고 경고했지만 남아있기로 하셨으니, 더 이상 드릴 조언이 없군요."
 	}
 	"Vincent_Talk_Wave10_3_6"
 	{
@@ -3147,12 +3147,12 @@
 	"Vincent_Talk_Wave21_8_2"
 	{
 		"en"		"{crimson}I guess that's that, then."
-		"ko"		"{crimson}그럼, 그렇게 되는 거군요."
+		"ko"		"{crimson}그래. 그렇게 나오겠다 이거지."
 	}
 	"Vincent_Talk_Wave21_8_3"
 	{
 		"en"		"{crimson}I'll be on my way."
-		"ko"		"{crimson}저는 이만 가보겠습니다."
+		"ko"		"{crimson}나중에 두고보자고."
 	}
 	"Vincent_Talk_Wave21_Genocide_Route"
 	{
