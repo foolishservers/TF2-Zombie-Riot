@@ -2539,12 +2539,12 @@
 	"Vincent_Talk_Wave10_1_5"
 	{
 		"en"		"Since I've warned you to get out while you could, and you stayed, I have no advice left to give you."
-		"ko"		"나갈 수 있을 때 나가라고 경고했음에도 남아있으셨으니, 더 이상 드릴 조언이 없군요."
+		"ko"		"나갈 수 있을 때 나가라고 경고했음에도 남아있으셨으니, 저는 여기서 더 이상 드릴 조언이 없군요."
 	}
 	"Vincent_Talk_Wave10_1_6"
 	{
 		"en"		"If you're actually lost, let the robot do its job, and let it carry you out of the labs."
-		"ko"		"정말 길을 잃으셨다면, 그 로봇이 제 할 일을 하도록 두세요. 당신을 연구소 밖으로 데려다 줄 겁니다."
+		"ko"		"정말 길을 잃으셨다면, 그 로봇을 만났을 때 제 할 일을 하도록 두세요. 당신을 연구소 밖으로 데려다 줄 겁니다."
 	}
 	"Vincent_Talk_Wave10_2_1"
 	{
@@ -2569,12 +2569,12 @@
 	"Vincent_Talk_Wave10_2_5"
 	{
 		"en"		"Since I've warned you to get out while you could, and you decided to stay, I have no advice left to give you."
-		"ko"		"나갈 수 있을 때 나가라고 경고했지만 남아있기로 하셨으니, 더 이상 드릴 조언이 없군요."
+		"ko"		"나갈 수 있을 때 나가라고 경고했지만 남아있기로 하셨으니, 저는 더 이상 드릴 조언이 없군요."
 	}
 	"Vincent_Talk_Wave10_2_6"
 	{
 		"en"		"If you're actually lost, let the robot do its job, and let it carry you out of the labs."
-		"ko"		"정말 길을 잃으셨다면, 그 로봇이 제 할 일을 하도록 두세요. 당신을 연구소 밖으로 데려다 줄 겁니다."
+		"ko"		"정말 길을 잃으셨다면, 그 로봇을 만났을 때 제 할 일을 하도록 두세요. 당신을 연구소 밖으로 데려다 줄 겁니다."
 	}
 	"Vincent_Talk_Wave10_3_1"
 	{
@@ -2604,7 +2604,7 @@
 	"Vincent_Talk_Wave10_3_6"
 	{
 		"en"		"If you're actually lost, let the robot do its job, and let it carry you out of the labs."
-		"ko"		"정말 길을 잃으셨다면, 그 로봇이 제 할 일을 하도록 두세요. 당신을 연구소 밖으로 데려다 줄 겁니다."
+		"ko"		"정말 길을 잃으셨다면, 그 로봇을 만났을 때 제 할 일을 하도록 두세요. 당신을 연구소 밖으로 데려다 줄 겁니다."
 	}
  
 	// Wave11.
@@ -2626,7 +2626,7 @@
 	"Vincent_Talk_Wave11_1_4"
 	{
 		"en"		"Aside from killing all of these...other humans."
-		"ko"		"이 모든...다른 인간들을 죽이신 것 말고는요."
+		"ko"		"여기 있던... 다른 인간들을 모두 죽이신 것 말고는요."
 	}
 	"Vincent_Talk_Wave11_1_5"
 	{
@@ -2656,7 +2656,7 @@
 	"Vincent_Talk_Wave11_2_4"
 	{
 		"en"		"Aside from killing all of these...other humans."
-		"ko"		"이 모든...다른 인간들을 죽이신 것 말고는요."
+		"ko"		"여기 있던... 다른 인간들을 모두 죽이신 것 말고는요."
 	}
 	"Vincent_Talk_Wave11_2_5"
 	{
@@ -2686,7 +2686,7 @@
 	"Vincent_Talk_Wave11_3_4"
 	{
 		"en"		"Aside from killing all of these...other humans."
-		"ko"		"이 모든...다른 인간들을 죽이신 것 말고는요."
+		"ko"		"여기 있던... 다른 인간들을 모두 죽이신 것 말고는요."
 	}
 	"Vincent_Talk_Wave11_3_5"
 	{
@@ -2985,7 +2985,7 @@
 	"Vincent_Talk_Wave20_6_2"
 	{
 		"en"		"Let's also not forget what you did to C.A.T."
-		"ko"		"그리고 C.A.T.에게 하신 일도 잊지 맙시다."
+		"ko"		"그리고 C.A.T.에게 했던 짓도 잊을 순 없죠."
 	}
 	"Vincent_Talk_Wave20_6_3"
 	{
