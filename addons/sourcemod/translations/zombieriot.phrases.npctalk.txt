@@ -2318,7 +2318,7 @@
 	"Vincent_Talk_Expidonsan_Research_Card"
 	{
 		"en"		"{rare}Your {unique}Expidonsan Research Card{rare} reminds you of something, the voice you hear sounds familiar..."
-		"ko"		"{unique}엑스피돈사 연구 카드{rare}를 보자 누군가가 떠오릅니다. 어디선가 들어본 듯한 목소리가 들려옵니다..."
+		"ko"		"{unique}엑스피돈사 연구 카드{rare}를 보자 어디선가 들려오는 낯익은 목소리의 주인이 누구인지 기억나는군요..."
 	}
 	"Vincent_Talk_Scorched_Expidonsan_Research_Card"
 	{
@@ -2360,7 +2360,7 @@
 	"Vincent_Talk_Wave1_1_6"
 	{
 		"en"		"What are you doing in here? And how did you find this place?"
-		"ko"		"여기서 뭘 하고 있는 거고, 이 곳은 어떻게 찾아낸 겁니까?"
+		"ko"		"아무튼. 여기서 뭘 하고 있는 거고, 이 곳은 어떻게 찾아낸 겁니까?"
 	}
 	"Vincent_Talk_Wave1_2_1"
 	{
@@ -2390,7 +2390,7 @@
 	"Vincent_Talk_Wave1_2_6"
 	{
 		"en"		"Did someone send you here? That can't be possible."
-		"ko"		"누가 당신을 이 곳으로 보낸 겁니까? 그럴 사람은 없을 텐데."
+		"ko"		"아무튼, 누가 당신을 이 곳으로 보낸 겁니까? 그럴 사람은 없을 텐데."
 	}
 	"Vincent_Talk_Wave1_3_1"
 	{
@@ -2420,7 +2420,7 @@
 	"Vincent_Talk_Wave1_3_6"
 	{
 		"en"		"How do you know about this place? You couldn't have just stumbled here on your own."
-		"ko"		"우연히 발견한게 아닐텐데, 이 장소는 어떻게 찾아온 거죠?"
+		"ko"		"아무튼, 이 곳을 우연히 발견한게 아닐텐데 여기는 어떻게 찾아온 거죠?"
 	}
 	
 	// Wave5.
@@ -2442,12 +2442,12 @@
 	"Vincent_Talk_Wave5_1_4"
 	{
 		"en"		"But something leads me to believe that they're in here for a reason."
-		"ko"		"하지만 무언가 의도가 있어서 여기에 들어온 거겠죠."
+		"ko"		"그래도 여러분에게 무슨 꿍꿍이가 있어서 여기에 들어온 거라고 생각하는 건 사실입니다."
 	}
 	"Vincent_Talk_Wave5_1_5"
 	{
 		"en"		"Besides having to deal with you, I still have to figure out what's opening up these gates."
-		"ko"		"그리고, 당신을 상대하는 것 말고도, 대체 무엇이 이 관문들을 개방하고 있는지 알아내는 것도 시급합니다."
+		"ko"		"아, 그리고 저는 당신을 상대하는 것 말고도 대체 무엇이 이 관문들을 개방하고 있는지 알아내는 것도 시급합니다."
 	}
 	"Vincent_Talk_Wave5_1_6"
 	{
@@ -2472,17 +2472,17 @@
 	"Vincent_Talk_Wave5_2_4"
 	{
 		"en"		"But something leads me to believe that they're in here for a reason."
-		"ko"		"하지만 무언가 의도가 있어서 여기에 들어온 거겠죠."
+		"ko"		"그래도 무언가 의도가 있어서 여러분이 여기에 들어온 거겠죠."
 	}
 	"Vincent_Talk_Wave5_2_5"
 	{
 		"en"		"Besides having to deal with you, I still have to find a way to stop these gates."
-		"ko"		"그리고, 당신을 상대해야 하는 것 외에도, 이 관문들을 멈출 방법을 찾아야 합니다."
+		"ko"		"아, 그리고 저는 당신을 상대해야 하는 것 외에도, 이 관문들을 멈출 방법을 찾아야 합니다."
 	}
 	"Vincent_Talk_Wave5_2_6"
 	{
 		"en"		"How interesting..."
-		"ko"		"그래도 간만에 흥미로운 일이네요..."
+		"ko"		"정말. 간만에 흥미로운 일이 생겼네요..."
 	}
 	"Vincent_Talk_Wave5_3_1"
 	{
@@ -2502,17 +2502,17 @@
 	"Vincent_Talk_Wave5_3_4"
 	{
 		"en"		"But something leads me to believe that they're in here for a reason."
-		"ko"		"하지만 무언가 의도가 있어서 여기에 들어온 거겠죠."
+		"ko"		"그래도 여러분이 어떤 의도를 가지고 들어온 거라고 생각이 들 수밖에 없는 건 사실입니다."
 	}
 	"Vincent_Talk_Wave5_3_5"
 	{
 		"en"		"Besides having to deal with you, I still have to find a way to stop these gates."
-		"ko"		"그리고, 저는 당신을 상대해야 하는 것 외에도 이 관문들을 멈출 방법을 찾아야 합니다."
+		"ko"		"아, 그리고 저는 당신을 상대해야 하는 것 외에도 이 관문들을 멈출 방법을 찾아야 합니다."
 	}
 	"Vincent_Talk_Wave5_3_6"
 	{
 		"en"		"How fascinating..."
-		"ko"		"그래도 참으로 흥미롭군요..."
+		"ko"		"일이 연달아 터지다니.. 참 흥미로운 날입니다..."
 	}
 	
 	// Wave10.
