@@ -82,7 +82,7 @@ methodmap Talker < CClotBody
 				if (!IsClientInGame(client) || IsFakeClient(client))
 					continue;
 				
-				if (Store_HasNamedItem(client, "Scorched Expidonsan Research Card"))
+				if (Items_HasNamedItem(client, "Scorched Expidonsan Research Card"))
 				{
 					CPrintToChat(client, "%T", "Vincent_Talk_Scorched_Expidonsan_Research_Card", client);
 					if (b_DoNotHideName[client])
