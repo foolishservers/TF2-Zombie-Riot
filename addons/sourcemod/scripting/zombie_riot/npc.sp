@@ -1354,6 +1354,17 @@ void NPC_ConfigSetup()
 	
 	Dimension_Ripper_Base_OnMapStart_NPC();
 	
+	Whiteflower_CombineSmg_OnMapStart_NPC();
+	WFCombineRevolver_OnMapStart_NPC();
+	WFCombineGrenadier_OnMapStart_NPC();
+	Whiteflower_CombineBazooka_OnMapStart_NPC();
+	Whiteflower_ExpertFighter_OnMapStart_NPC();
+	Whiteflower_CombinePretorianGuard_OnMapStart_NPC();
+	CombineSupremeOverlord_OnMapStart_NPC();
+	Anti_Chaos_Robot_OnMapStart_NPC();
+	
+	RaidbossTraitorPrescott_OnMapStart_NPC();
+	
 	VScript_CacheNPCs();
 }
 
@@ -2175,6 +2186,8 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/ally/almina_barracks/npc_barrack_inquisitor.sp"
 #include "npc/ally/almina_barracks/npc_barrack_lighthouse_guardian.sp"
 
+//#include "npc/ally/void_barracks/npc_barrack_void_expander.sp"
+
 #include "npc/ally/npc_nearl_sword.sp"
 #include "npc/ally/npc_ritualist.sp"
 
@@ -2971,4 +2984,19 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 // Dimension ripper
 #include "npc/ally/dimension_ripper/npc_dimension_ripper_base.sp"
 
-// #include "npc/foolish/npc_get_it_on_heavy.sp"
+// Whiteflower survivors
+#include "npc/wf_survivors/npc_wf_combine_smg.sp"
+#include "npc/wf_survivors/npc_wf_combine_grenadier.sp"
+#include "npc/wf_survivors/npc_wf_combine_revolver.sp"
+#include "npc/wf_survivors/npc_wf_combine_bazooka.sp"
+#include "npc/wf_survivors/npc_wf_combine_expert_fighter.sp"
+#include "npc/wf_survivors/npc_wf_combine_pretorian_guard.sp"
+#include "npc/wf_survivors/npc_combine_supreme_overlord.sp"
+#include "npc/wf_survivors/npc_anti_chaos_robot.sp"
+
+//#include "npc/wf_survivors/npc_wf_combine_selected_few.sp"
+//#include "npc/wf_survivors/npc_wf_tank.sp"
+
+//#include "npc/raidmode_bosses/wf_survivors/npc_wf_verteidiger.sp"
+
+#include "npc/raidmode_bosses/wf_survivors/npc_traitor_prescott.sp"

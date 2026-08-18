@@ -8504,6 +8504,16 @@
 		"en"	"W.F. Supreme Overlord"
 		"ko"	"W.F. 최고 대군주"
 	}
+	"Anti Chaos Robot"
+	{
+		"en"	"Anti Chaos Robot"
+		"ko"	"혼돈 섬멸 로봇"
+	}
+	"Captured Anti Chaos Robot"
+	{
+		"en"	"Captured Anti Chaos Robot"
+		"ko"	"노획된 혼돈 섬멸 로봇"
+	}
 	
 	"Traitor Prescott"
 	{
