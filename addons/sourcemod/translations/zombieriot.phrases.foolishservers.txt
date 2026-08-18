@@ -2051,4 +2051,58 @@
 		"en"		"Hollow Point Bullets"
 		"ko"		"할로우 포인트 탄환"
 	}
+	
+	// Wave Vote.
+	"Vote Cooldown"
+	{
+		"en"		"Cooldown"
+		"ko"		"쿨다운"
+	}
+	
+	"Silvester & Waldch"
+	{
+		"en"		"Silvester & Waldch"
+		"ko"		"실베스터 & 왈츠"
+	}
+	"Zombie Survival"
+	{
+		"en"		"Zombie Survival"
+		"ko"		"좀비 서바이벌"
+	}
+	"Stella & Karlas"
+	{
+		"en"		"Stella & Karlas"
+		"ko"		"스텔라 & 카를라스"
+	}
+	"Laboratories"
+	{
+		"en"		"Laboratories"
+		"ko"		"어느 한 연구소"
+	}
+	"Interitus Group"
+	{
+		"en"		"Interitus Group"
+		"ko"		"인테리투스 그룹"
+	}
+	"THE CYBER GRIND"
+	{
+		"en"		"THE CYBER GRIND"
+		"ko"		"사이버 그라인드"
+	}
+	"Combine Army [Omega]"
+	{
+		"en"		"Combine Army [Omega]"
+		"ko"		"콤바인 군대 [오메가]"
+	}
+	
+	"Sea Monster Annihilation ⚠"
+	{
+		"en"		"Sea Monster Annihilation ⚠"
+		"ko"		"바다 괴물 절멸 작전 ⚠"
+	}
+	"Xeno Investigation ⚠"
+	{
+		"en"		"Xeno Investigation ⚠"
+		"ko"		"제노 감염 조사 ⚠"
+	}
 }

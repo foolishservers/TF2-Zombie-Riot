@@ -593,25 +593,49 @@ bool Waves_CallVote(int client, int force = 0)
 				//There must be atleast 4 selections for the cooldown to work.
 				if(length >= 4 && vote.Level > 0 && LastWaveWas[0] && StrEqual(vote.Config, LastWaveWas))
 				{
-					Format(vote.Name, sizeof(vote.Name), "%s (Cooldown)", vote.Name);
-					if(AprilFoolsIconOverride() == STEAM_HAPPY)
-						Format(vote.Name, sizeof(vote.Name), "Steam Happy (Cooldown)");
+					if (AprilFoolsIconOverride() == STEAM_HAPPY)
+					{
+						Format(vote.Name, sizeof(vote.Name), "%t (%t)", "Steam Happy", "Vote Cooldown");
+					}
+					else if (TranslationPhraseExists(vote.Name))
+					{
+						Format(vote.Name, sizeof(vote.Name), "%t (%t)", vote.Name, "Vote Cooldown");
+					}
+					else
+					{
+						Format(vote.Name, sizeof(vote.Name), "%s (%t)", vote.Name, "Vote Cooldown");
+					}
 					menu.AddItem(vote.Config, vote.Name, ITEMDRAW_DISABLED);
 				}
 				// Unlocks (atleast one player needs it)
 				else if(vote.Unlock1[0] && (!Items_HasNamedItem(client, vote.Unlock1) || (vote.Unlock2[0] && !Items_HasNamedItem(client, vote.Unlock2))))
 				{
-					Format(vote.Name, sizeof(vote.Name), "%s (%s)", vote.Name, vote.Append);
-					if(AprilFoolsIconOverride() == STEAM_HAPPY)
-						Format(vote.Name, sizeof(vote.Name), "Steam Happy (%s)", vote.Append);
+					if (AprilFoolsIconOverride() == STEAM_HAPPY)
+					{
+						Format(vote.Name, sizeof(vote.Name), "%t (%t)", "Steam Happy", "Vote Cooldown");
+					}
+					else
+					{
+						int show = 0;
+						if (TranslationPhraseExists(vote.Name))
+							show |= (1 << 0);
 						
+						if (TranslationPhraseExists(vote.Append))
+							show |= (1 << 1);
+						
+						char voteName[64];
+						FormatEx(voteName, sizeof(voteName), "%s %s", (show & 1) ? "%t" : "%s", (show & 2) ? "(%t)" : "(%s)");
+						
+						Format(vote.Name, sizeof(vote.Name), voteName, vote.Name, vote.Append);
+					}
+					
 					menu.AddItem(vote.Config, vote.Name, (Items_HasNamedItem(0, vote.Unlock1) && (!vote.Unlock2[0] || Items_HasNamedItem(0, vote.Unlock2))) ? ITEMDRAW_DEFAULT : ITEMDRAW_DISABLED);
 				}
 				else
 				{
 					if(levels)
-						Format(vote.Name, sizeof(vote.Name), "%s (Lv %d)", vote.Name, vote.Level);
-
+						Format(vote.Name, sizeof(vote.Name), TranslationPhraseExists(vote.Name) ? "%t (Lv %d)" : "%s (Lv %d)", vote.Name, vote.Level);
+					
 					int MenuDo = ITEMDRAW_DISABLED;
 					if(!vote.Level || i == 0)
 						MenuDo = ITEMDRAW_DEFAULT;
@@ -625,11 +649,11 @@ bool Waves_CallVote(int client, int force = 0)
 		{
 			if(levels)
 			{
-				Format(vote.Name, sizeof(vote.Name), "Standard (Lv %d)", WaveLevel);
+				Format(vote.Name, sizeof(vote.Name), "%t (Lv %d)", "Standard", WaveLevel);
 			}
 			else
 			{
-				strcopy(vote.Name, sizeof(vote.Name), "Standard");
+				Format(vote.Name, sizeof(vote.Name), "%t", "Standard");
 			}
 			
 			menu.AddItem(NULL_STRING, vote.Name);
@@ -650,7 +674,7 @@ bool Waves_CallVote(int client, int force = 0)
 					
 					level = WaveLevel + RoundFloat(level * multi);
 
-					Format(vote.Name, sizeof(vote.Name), "%s (Lv %d)", vote.Name, level);
+					Format(vote.Name, sizeof(vote.Name), TranslationPhraseExists(vote.Name) ? "%t (Lv %d)" : "%s (Lv %d)", vote.Name, level);
 				}
 				int MenuDo = ITEMDRAW_DISABLED;
 				if(Level[client] >= 1)
