@@ -4026,6 +4026,30 @@
 		"ko"		"드디어.. 나의 승리다! 이 머저리 새기들..."
 	}
 	
+	// Last Overlord.
+	"LastOverlord_Encounter"
+	{
+		"en"		"All these overlords wish to take my place... You are one of them too, arent you..."
+		"ko"		"이 대군주들은 내 자리를 차지하기 위해 찾아온 자들이지... 너희들도 그들과 별반 다른 건 없어 보이는군..."
+	}
+	
+	"LastOverlord_Win"
+	{
+		"en"		"G-Guess i didnt make the cut, huh... Make sure that W.F. Wont get this... End him and {black}Shadowing Darkness."
+		"ko"		"아... 아무래도 난 틀린것 같군... 절대로 배풍등이 목적을 이루게 해서는 안 돼 ... 그 놈을 끝내고 {black}응달{default}을 막아야 해."
+	}
+	"LastOverlord_Lose"
+	{
+		"en"		"I'll head back... if you let me."
+		"ko"		"난 돌아간다... 너희가 날 놓아준다면."
+	}
+	
+	"LastOverlord_Win"
+	{
+		"en"		"You defeated the final overlord and thus he bestows you... {red}''His final wish''{default}."
+		"ko"		"최후의 오버로드를 쓰러뜨렸습니다. 그리고 그는 여러분에게... {red}''자신의 마지막 소원''{default}을 남깁니다."
+	}
+	
 	// Bladedance.
 	"Bladedance_Encounter"
 	{
@@ -4046,7 +4070,7 @@
 	"Bladedance_BuffAlly_3"
 	{
 		"en"		"Wish you could lose at the casino I once owned!"
-		"ko"		"네놈들이 내 카지노에서 거하게 망하길 빈다!"
+		"ko"		"네놈들이 내가 갖고 있었던 카지노에서 거하게 망하길 빈다!"
 	}
 	
 	"Bladedance_Anger"
@@ -4058,7 +4082,7 @@
 	"Bladedance_Win"
 	{
 		"en"		"You and Bob the first.. you both misunderstand who the enemy is.. its {white}Whiteflower{default} you fools! He betrayed {crimson}Guln{default} aswell!"
-		"ko"		"너희랑 밥.. 1세는 진짜 적이 누군지 모른다.. {white}배풍등{default}이 {crimson}굴른{default}을 배신했단 말이다, 이 멍청이들아!"
+		"ko"		"너희랑 밥 1세는 누가 진짜 적인지 모르고 있어.. {white}배풍등{default}이 {crimson}굴른{default}을 배신했단 말이다, 이 멍청이들아!"
 	}
 	"Bladedance_Escape"
 	{
@@ -4075,7 +4099,7 @@
 	"Whiteflower_TimeOver"
 	{
 		"en"		"Out of time, you're completely surrounded.\nYou now belong to me.\nSubmit.\nHelp me kill Bob, and we will rule it all."
-		"ko"		"시간 초과다. 이제 너희는 완전히 포위되었다.\n이제 너흰 내 거야.\n이제 얌전히 나를 따라라.\n내가 밥을 죽이는걸 도와주면, 우리 모두 세상을 지배할 수 있다."
+		"ko"		"시간 초과, 너희는 완전히 포위당했다.\n그러니 이제 얌전히 나를 따라라.\n내가 밥을 죽이는걸 도와주면, 우리는 세상을 지배할 수 있다."
 	}
 	
 	"Whiteflower_Lose"
