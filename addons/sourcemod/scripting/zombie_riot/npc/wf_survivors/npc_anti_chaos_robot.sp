@@ -170,19 +170,16 @@ methodmap Anti_Chaos_Robot < CClotBody {
 		
 		npc.m_iWearable1 = npc.EquipItem("head", "models/workshop/player/items/demo/hwn2022_nightbane_brim/hwn2022_nightbane_brim.mdl");
 		
-		npc.m_iWearable2 = npc.EquipItem("weapon_bone", "models/workshop/player/items/demo/sbox2014_demo_samurai_armour/sbox2014_demo_samurai_armour.mdl");
+		npc.m_iWearable2 = npc.EquipItem("weapon_bone", "models/workshop/player/items/demo/sf14_deadking_pauldrons/sf14_deadking_pauldrons.mdl");
 		
-		npc.m_iWearable3 = npc.EquipItem("weapon_bone", "models/workshop/player/items/demo/sf14_deadking_pauldrons/sf14_deadking_pauldrons.mdl");
+		npc.m_iWearable3 = npc.EquipItem("weapon_bone", "models/weapons/c_models/c_shogun_katana/c_shogun_katana.mdl");
 		
-		npc.m_iWearable4 = npc.EquipItem("weapon_bone", "models/weapons/c_models/c_shogun_katana/c_shogun_katana.mdl");
-		
-		npc.m_iWearable5 = npc.EquipItem("head", "models/workshop/player/items/soldier/bak_caped_crusader/bak_caped_crusader.mdl");
+		npc.m_iWearable4 = npc.EquipItem("head", "models/workshop/player/items/soldier/bak_caped_crusader/bak_caped_crusader.mdl");
 		
 		SetEntityRenderColor(npc.m_iWearable1, 175, 100, 100, 255);
-		SetEntityRenderColor(npc.m_iWearable2, 200, 150, 100, 255);
-		SetEntityRenderColor(npc.m_iWearable3, 200, 50, 50, 255);
-		SetEntityRenderColor(npc.m_iWearable4, 150, 150, 150, 255);
-		SetEntityRenderColor(npc.m_iWearable5, 200, 150, 100, 255);
+		SetEntityRenderColor(npc.m_iWearable2, 200, 50, 50, 255);
+		SetEntityRenderColor(npc.m_iWearable3, 150, 150, 150, 255);
+		SetEntityRenderColor(npc.m_iWearable4, 200, 150, 100, 255);
 		
 		return npc;
 	}
@@ -226,17 +223,13 @@ static void Anti_Chaos_Robot_ClotThink(int entity)
 	
 	float vecSelfPos[3];
 	GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", vecSelfPos);
-	FallenWarrior_ApplyDebuffInLocation(vecSelfPos, GetTeam(npc.index));
+	
+	float range = 250.0;
+	ApplyHeavyPresenceDebuffInLocation(vecSelfPos, GetTeam(npc.index), range);
 	
 	if (npc.m_iState == 0)
 	{
-		float Range = GULN_DEBUFF_RANGE;
-		if (GetTeam(npc.index) == 2)
-		{
-			Range *= 0.5;
-		}
-		
-		spawnRing_Vectors(vecSelfPos, Range * 2.0, 0.0, 0.0, 15.0, "materials/sprites/laserbeam.vmt", 125, 50, 50, 200, 1, /*duration*/ 0.11, 20.0, 5.0, 1);	
+		spawnRing_Vectors(vecSelfPos, range * 2.0, 0.0, 0.0, 15.0, "materials/sprites/laserbeam.vmt", 125, 50, 50, 200, 1, /*duration*/ 0.11, 20.0, 5.0, 1);	
 	}
 	
 	if (npc.m_flGetClosestTargetTime < gameTime)
@@ -283,8 +276,8 @@ static Action Anti_Chaos_Robot_OnTakeDamage(int victim, int &attacker, int &infl
 		npc.PlayAngrySound();
 		
 		npc.m_bLostHalfHealth = true;
-		SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", 2);
-		IgniteTargetEffect(npc.m_iWearable4);
+		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 2);
+		IgniteTargetEffect(npc.m_iWearable3);
 	}
 	
 	if (attacker <= 0)
@@ -315,8 +308,6 @@ static void Anti_Chaos_Robot_NPCDeath(int entity)
 		RemoveEntity(npc.m_iWearable3);
 	if(IsValidEntity(npc.m_iWearable4))
 		RemoveEntity(npc.m_iWearable4);
-	if(IsValidEntity(npc.m_iWearable5))
-		RemoveEntity(npc.m_iWearable5);
 }
 
 static void Anti_Chaos_Robot_AttackThink(Anti_Chaos_Robot npc, float gameTime, int target, float distance)
@@ -384,6 +375,35 @@ static void Anti_Chaos_Robot_AttackThink(Anti_Chaos_Robot npc, float gameTime, i
 				npc.m_flAttackHappens = gameTime + 0.35;
 				npc.m_flDoingAnimation = gameTime + 0.35;
 				npc.m_flNextMeleeAttack = gameTime + 0.75;
+			}
+		}
+	}
+}
+
+void ApplyHeavyPresenceDebuffInLocation(float pos[3], int team, float range)
+{
+	float targetPos[3];
+	for (int target = 1; target <= MaxClients; target++)
+	{
+		if(IsClientInGame(target) && IsPlayerAlive(target) && GetTeam(target) != team)
+		{
+			GetClientAbsOrigin(target, targetPos);
+			if (GetVectorDistance(pos, targetPos, true) <= (range * range))
+			{
+				ApplyStatusEffect(target, target, "Heavy Presence", 1.0);
+			}
+		}
+	}
+	
+	for (int entitycount_again; entitycount_again < i_MaxcountNpcTotal; entitycount_again++)
+	{
+		int target = EntRefToEntIndexFast(i_ObjectsNpcsTotal[entitycount_again]);
+		if (IsValidEntity(target) && !b_NpcHasDied[target] && GetTeam(target) != team)
+		{
+			GetEntPropVector(target, Prop_Data, "m_vecAbsOrigin", targetPos);
+			if (GetVectorDistance(pos, targetPos, true) <= (range * range))
+			{
+				ApplyStatusEffect(target, target, "Heavy Presence", 1.0);
 			}
 		}
 	}
