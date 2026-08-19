@@ -2089,11 +2089,6 @@
 		"en"		"THE CYBER GRIND"
 		"ko"		"사이버 그라인드"
 	}
-	"Combine Army [Omega]"
-	{
-		"en"		"Combine Army [Omega]"
-		"ko"		"콤바인 군대 [오메가]"
-	}
 	
 	"Sea Monster Annihilation ⚠"
 	{
@@ -2104,5 +2099,11 @@
 	{
 		"en"		"Xeno Investigation ⚠"
 		"ko"		"제노 감염 조사 ⚠"
+	}
+	
+	"Combine Army [Omega]"
+	{
+		"en"		"Combine Army [Omega]"
+		"ko"		"콤바인 군대 [오메가]"
 	}
 }

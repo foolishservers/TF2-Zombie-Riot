@@ -8514,7 +8514,22 @@
 		"en"	"Captured Anti Chaos Robot"
 		"ko"	"노획된 혼돈 섬멸 로봇"
 	}
+	"W.F. Warden"
+	{
+		"en"	"W.F. Warden"
+		"ko"	"W.F. 교도소장"
+	}
 	
+	"Knight of the Curtain"
+	{
+		"en"	"Knight of the Curtain"
+		"ko"	"장막의 기사"
+	}
+	"Servant of the Curtain"
+	{
+		"en"	"Servant of the Curtain"
+		"ko"	"장막의 하수인"
+	}
 	"Traitor Prescott"
 	{
 		"en"	"Prescott The Traitor"
