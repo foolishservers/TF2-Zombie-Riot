@@ -27,7 +27,8 @@ void Natives_PluginLoad()
 	CreateNative("ZR_GetSpecialMode", Native_GetSpecialMode);
 	CreateNative("ZR_SetXpAndLevel", Native_ZR_SetXpAndLevel);
 	CreateNative("ZR_GetXp", Native_ZR_GetXp);
-
+	CreateNative("ZR_GetCyberGrindDifficulty", Native_ZR_GetCyberGrindDifficulty);
+	
 	OnDifficultySet = new GlobalForward("ZR_OnDifficultySet", ET_Ignore, Param_Cell, Param_String, Param_Cell);
 	OnClientLoaded = new GlobalForward("ZR_OnClientLoaded", ET_Ignore, Param_Cell);
 	OnClientWorldmodel = new GlobalForward("ZR_OnClientWorldmodel", ET_Event, Param_Cell, Param_Cell, Param_CellByRef, Param_CellByRef, Param_CellByRef, Param_CellByRef, Param_CellByRef);
@@ -289,4 +290,12 @@ public any Native_ZR_SetXpAndLevel(Handle plugin, int numParams)
 	//Reset!
 	GiveXP(client, XPSet, false, true);
 	return 0;
+}
+
+public any Native_ZR_GetCyberGrindDifficulty(Handle plugin, int numParams)
+{
+	if (!StrEqual(WhatDifficultySetting_Internal, "THE CYBER GRIND"))
+		return 0;
+	
+	return CyberGrind_InternalDifficulty;
 }

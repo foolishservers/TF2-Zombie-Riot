@@ -37,6 +37,16 @@ enum ZRGiftRarity
 	Mythic
 }
 
+enum ZRCyberGrindDifficulty {
+	CyberGrind_Invalid = 0,
+	CyberGrind_Normal,
+	CyberGrind_Hard,
+	CyberGrind_Expert,
+	CyberGrind_EX_Hard,
+	CyberGrind_Fast,
+	CyberGrind_EX_Fast
+}
+
 /**
  * Applies effects as if an NPC died
  * Old native from early zombie riot subplugins
@@ -133,6 +143,13 @@ native void ZR_SetXpAndLevel(int client, int Xp);
  * @return
  */
 native int ZR_GetXp(int client);
+
+/**
+ * Returns the current difficulty of cyber grind waveset
+ * 
+ * @return		The current difficulty of cyber grind waveset
+ */
+native ZRCyberGrindDifficulty ZR_GetCyberGrindDifficulty();
 
 /**
  * Called when a difficulty is selected
@@ -242,7 +259,7 @@ forward Action ZR_OnWinTeam(TFTeam Team);
  * 
  * @noreturn
  */
-forward void ZR_OnWinInfo(ArrayList playerList, const char[] waveset, const char[] modifier, int time, int wave, ArrayList RogueItemNames)
+forward void ZR_OnWinInfo(ArrayList playerList, const char[] waveset, const char[] modifier, int time, int wave, ArrayList RogueItemNames);
 
 /**
  * Whenever any client gets XP, this is spammed! Be Warned!
