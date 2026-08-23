@@ -4226,4 +4226,109 @@
 		"en"		"Back to the Void gate I go."
 		"ko"		"다시 공허 관문으로 돌아가야겠군."
 	}
+	
+	// Knight of the Curtain.
+	"KnightOfTheCurtain_Encounter_Text"
+	{
+		"en"		""
+		"ko"		"장막의 기사가 전장에 침입합니다."
+	}
+	
+	"KnightOfTheCurtain_Encounter_1"
+	{
+		"en"		""
+		"ko"		"바깥 공기를 마셔보는 게 얼마만인지. 정복의 시작으로는 너희가 좋겠군."
+	}
+	"KnightOfTheCurtain_Encounter_2"
+	{
+		"en"		""
+		"ko"		"{darkgray}움브랄의 지배자{default}가 죽고 나서 눈치 볼 일 없어서 좋군. 준비는 됐나?"
+	}
+	
+	"KnightOfTheCurtain_Win_Anger"
+	{
+		"en"		""
+		"ko"		"역겨운 놈들."
+	}
+	"KnightOfTheCurtain_Win"
+	{
+		"en"		""
+		"ko"		"싱거운 놈들."
+	}
+	
+	"KnightOfTheCurtain_GroupAttack_1"
+	{
+		"en"		""
+		"ko"		"공허의 힘으로."
+	}
+	"KnightOfTheCurtain_GroupAttack_2"
+	{
+		"en"		""
+		"ko"		"혼돈의 힘으로."
+	}
+	"KnightOfTheCurtain_GroupAttack_3"
+	{
+		"en"		""
+		"ko"		"장막의 힘으로."
+	}
+	
+	"KnightOfTheCurtain_Summon_Servant_1"
+	{
+		"en"		""
+		"ko"		"가라! 나의 하수인이여!"
+	}
+	"KnightOfTheCurtain_Summon_Servant_2"
+	{
+		"en"		""
+		"ko"		"나의 명을 듣는 자는 고개를 들어라!"
+	}
+	"KnightOfTheCurtain_Summon_Servant_3"
+	{
+		"en"		""
+		"ko"		"저들을 죽여라!"
+	}
+	
+	"KnightOfTheCurtain_Anger_1"
+	{
+		"en"		""
+		"ko"		"지겹군."
+	}
+	"KnightOfTheCurtain_Anger_2"
+	{
+		"en"		""
+		"ko"		"슬슬 죽을 때가 되지 않았나?"
+	}
+	
+	"KnightOfTheCurtain_LastMann_1"
+	{
+		"en"		""
+		"ko"		"너 혼자서 나와 내 하수인을 상대하겠다고? 꿈 깨시지 그래?"
+	}
+	"KnightOfTheCurtain_LastMann_2"
+	{
+		"en"		""
+		"ko"		"너 혼자 남았다. 포기하지 그래?"
+	}
+	
+	"KnightOfTheCurtain_TimeOver_1"
+	{
+		"en"		""
+		"ko"		"시간 초과다. 패배를 받아들이도록."
+	}
+	"KnightOfTheCurtain_TimeOver_2"
+	{
+		"en"		""
+		"ko"		"하수인에게 너무 시간을 빼앗긴 거 아닌가? 장막이 열려있는 한 그들은 무한하지."
+	}
+	
+	"KnightOfTheCurtain_Death_1"
+	{
+		"en"		""
+		"ko"		"이런 놈들한테 이 몸이 패배했다고?"
+	}
+	"KnightOfTheCurtain_Death_2"
+	{
+		"en"		""
+		"ko"		"지옥에나 가라."
+	}
 }

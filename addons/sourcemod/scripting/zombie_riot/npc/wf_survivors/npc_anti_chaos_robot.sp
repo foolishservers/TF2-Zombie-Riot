@@ -2,47 +2,41 @@
 #pragma newdecls required
 
 static const char g_DeathSounds[][] = {
-	"vo/mvm/norm/demoman_mvm_paincrticialdeath01.mp3",
-	"vo/mvm/norm/demoman_mvm_paincrticialdeath02.mp3",
-	"vo/mvm/norm/demoman_mvm_paincrticialdeath03.mp3",
+	"misc/outer_space_transition_01.wav",
 };
 
 static const char g_HurtSounds[][] = {
-	"vo/mvm/norm/demoman_mvm_painsharp01.mp3",
-	"vo/mvm/norm/demoman_mvm_painsharp02.mp3",
-	"vo/mvm/norm/demoman_mvm_painsharp03.mp3",
-	"vo/mvm/norm/demoman_mvm_painsharp04.mp3",
-	"vo/mvm/norm/demoman_mvm_painsharp05.mp3",
-	"vo/mvm/norm/demoman_mvm_painsharp06.mp3",
-	"vo/mvm/norm/demoman_mvm_painsharp07.mp3",
+	"npc/metropolice/pain1.wav",
+	"npc/metropolice/pain2.wav",
+	"npc/metropolice/pain3.wav",
+	"npc/metropolice/pain4.wav",
 };
 
 static const char g_IdleAlertedSounds[][] = {
-	"vo/mvm/norm/demoman_mvm_battlecry01.mp3",
-	"vo/mvm/norm/demoman_mvm_battlecry02.mp3",
-	"vo/mvm/norm/demoman_mvm_battlecry03.mp3",
-	"vo/mvm/norm/demoman_mvm_battlecry04.mp3",
-	"vo/mvm/norm/demoman_mvm_battlecry05.mp3",
-	"vo/mvm/norm/demoman_mvm_battlecry06.mp3",
-	"vo/mvm/norm/demoman_mvm_battlecry07.mp3",
+	"npc/metropolice/vo/pickupthecan2.wav",
+	"npc/metropolice/vo/sociocide.wav",
+	"npc/metropolice/vo/watchit.wav",
+	"npc/metropolice/vo/xray.wav",
+	"npc/metropolice/vo/youknockeditover.wav",
 };
 
 static const char g_AngrySounds[][] = {
-	"vo/mvm/mght/taunts/demoman_mvm_m_taunts01.mp3",
-	"vo/mvm/mght/taunts/demoman_mvm_m_taunts02.mp3",
-	"vo/mvm/mght/taunts/demoman_mvm_m_taunts04.mp3",
-	"vo/mvm/mght/taunts/demoman_mvm_m_taunts05.mp3",
-	"vo/mvm/mght/taunts/demoman_mvm_m_taunts06.mp3",
-	"vo/mvm/mght/taunts/demoman_mvm_m_taunts07.mp3",
-	"vo/mvm/mght/taunts/demoman_mvm_m_taunts08.mp3",
-	"vo/mvm/mght/taunts/demoman_mvm_m_taunts09.mp3",
-	"vo/mvm/mght/taunts/demoman_mvm_m_taunts10.mp3",
-	"vo/mvm/mght/taunts/demoman_mvm_m_taunts11.mp3",
-	"vo/mvm/mght/taunts/demoman_mvm_m_taunts12.mp3",
-	"vo/mvm/mght/taunts/demoman_mvm_m_taunts13.mp3",
-	"vo/mvm/mght/taunts/demoman_mvm_m_taunts14.mp3",
-	"vo/mvm/mght/taunts/demoman_mvm_m_taunts15.mp3",
-	"vo/mvm/mght/taunts/demoman_mvm_m_taunts16.mp3",
+	"npc/metropolice/vo/affirmative.wav",
+	"npc/metropolice/vo/affirmative2.wav",
+	"npc/metropolice/vo/canalblock.wav",
+	"npc/metropolice/vo/chuckle.wav",
+	"npc/metropolice/vo/citizen.wav",
+	"npc/metropolice/vo/code7.wav",
+	"npc/metropolice/vo/code100.wav",
+	"npc/metropolice/vo/copy.wav",
+	"npc/metropolice/vo/breakhiscover.wav",
+	"npc/metropolice/vo/help.wav",
+	"npc/metropolice/vo/hesgone148.wav",
+	"npc/metropolice/vo/hesrunning.wav",
+	"npc/metropolice/vo/infection.wav",
+	"npc/metropolice/vo/king.wav",
+	"npc/metropolice/vo/needanyhelpwiththisone.wav",
+	"npc/metropolice/vo/pickupthecan1.wav",
 };
 
 static const char g_MeleeAttackSounds[][] = {
@@ -97,7 +91,7 @@ methodmap Anti_Chaos_Robot < CClotBody {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
 		
-		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_STATIC, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 	}
 	
@@ -108,27 +102,27 @@ methodmap Anti_Chaos_Robot < CClotBody {
 			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
 		
-		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_STATIC, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
 	
 	public void PlayDeathSound() 
 	{
-		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_STATIC, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
 	
 	public void PlayAngrySound() 
 	{
-		EmitSoundToAll(g_AngrySounds[GetRandomInt(0, sizeof(g_AngrySounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_AngrySounds[GetRandomInt(0, sizeof(g_AngrySounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 80);
 	}
 	
 	public void PlayMeleeSound()
 	{
-		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_STATIC, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
 	
 	public void PlayMeleeHitSound() 
 	{
-		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
 	
 	public Anti_Chaos_Robot(float vecPos[3], float vecAng[3], int ally, const char[] data)
@@ -145,6 +139,8 @@ methodmap Anti_Chaos_Robot < CClotBody {
 		npc.m_iBleedType = BLEEDTYPE_METAL;
 		npc.m_iStepNoiseType = STEPSOUND_GIANT;
 		npc.m_iNpcStepVariation = STEPTYPE_PANZER;
+		
+		npc.m_flMeleeArmor = 1.25;
 		
 		npc.m_iState = 0;
 		if(StrContains(data, "bossrush") != -1)
@@ -371,10 +367,10 @@ static void Anti_Chaos_Robot_AttackThink(Anti_Chaos_Robot npc, float gameTime, i
 				npc.m_iTarget = Enemy_I_See;
 				npc.PlayMeleeSound();
 				npc.AddGesture("ACT_MP_ATTACK_STAND_ITEM1");
-						
+				
 				npc.m_flAttackHappens = gameTime + 0.35;
 				npc.m_flDoingAnimation = gameTime + 0.35;
-				npc.m_flNextMeleeAttack = gameTime + 0.75;
+				npc.m_flNextMeleeAttack = gameTime + (npc.m_bLostHalfHealth ? 0.75 : 1.25);
 			}
 		}
 	}

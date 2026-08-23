@@ -1362,7 +1362,9 @@ void NPC_ConfigSetup()
 	Whiteflower_CombinePretorianGuard_OnMapStart_NPC();
 	CombineSupremeOverlord_OnMapStart_NPC();
 	Anti_Chaos_Robot_OnMapStart_NPC();
+	CombineWarden_OnMapStart_NPC();
 	
+	RaidbossKnightOfTheCurtain_OnMapStart_NPC();
 	RaidbossTraitorPrescott_OnMapStart_NPC();
 	
 	VScript_CacheNPCs();
@@ -2993,10 +2995,12 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/wf_survivors/npc_wf_combine_pretorian_guard.sp"
 #include "npc/wf_survivors/npc_combine_supreme_overlord.sp"
 #include "npc/wf_survivors/npc_anti_chaos_robot.sp"
+#include "npc/wf_survivors/npc_combine_warden.sp"
 
 //#include "npc/wf_survivors/npc_wf_combine_selected_few.sp"
 //#include "npc/wf_survivors/npc_wf_tank.sp"
 
 //#include "npc/raidmode_bosses/wf_survivors/npc_wf_verteidiger.sp"
 
+#include "npc/raidmode_bosses/wf_survivors/npc_knight_of_the_curtain.sp"
 #include "npc/raidmode_bosses/wf_survivors/npc_traitor_prescott.sp"
