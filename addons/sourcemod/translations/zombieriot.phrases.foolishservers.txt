@@ -16,6 +16,11 @@
 		"en" "True Fusion Warrior"
 		"ko" "트루 퓨전 워리어"
 	}
+	"Puke Pus"
+	{
+		"en" "Puke Pus"
+		"ko" "푸크 퍼스"
+	}
 	
 	//등장 알람
 	"True Fusion Warrior Spawn"

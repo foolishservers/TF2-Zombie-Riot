@@ -150,7 +150,7 @@ static Action Timer_MSword(Handle timer, DataPack pack)
 
 public void MSword_Reload(int client, int weapon, bool crit, int slot)
 {
-	float Ability_CD = Ability_Check_Cooldown(client, 1);
+	float Ability_CD = Ability_Check_Cooldown(client, slot);
 	if(Ability_CD <= 0.0)
 		Ability_CD = 0.0;
 	else
@@ -188,7 +188,7 @@ public void MSword_Reload(int client, int weapon, bool crit, int slot)
 	if(MSToTheSky)
 	{
 		Blacksmith_BuildingUsed_Internal(weapon, -1, client, client, true);
-		Ability_Apply_Cooldown(client, 3, 10.0, weapon);
+		Ability_Apply_Cooldown(client, slot, 10.0, weapon);
 		return;
 	}
 	Blacksmith_BuildingUsed_Internal(weapon, -1, client, client, false);
@@ -200,7 +200,7 @@ public void MSword_Reload(int client, int weapon, bool crit, int slot)
 		case 5: Ability_CD=60.0;
 		default:Ability_CD=90.0;
 	}
-	Ability_Apply_Cooldown(client, 3, Ability_CD, weapon);
+	Ability_Apply_Cooldown(client, slot, Ability_CD, weapon);
 }
 
 public void MSword_Attack(int client, int weapon, bool &result, int slot)

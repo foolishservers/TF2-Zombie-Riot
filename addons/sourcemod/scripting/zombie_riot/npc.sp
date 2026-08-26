@@ -1255,10 +1255,10 @@ void NPC_ConfigSetup()
 	GoreBlaster_OnMapStart_NPC();
 	Bastardzine_OnMapStart_NPC();
 	FastHeadcrab_OnMapStart_NPC();
-	VileBloatedZombie_OnMapStart_NPC();
 	FleshCreeper_OnMapStart_NPC();
 	Nest_OnMapStart_NPC();
 	ZSZmain_OnMapStart_NPC();
+	ZS_Pukepus_OnMapStart_NPC();
 	ZombieSummonRandom_OnMapStart_NPC();
 	PoyoSummonRandom_OnMapStart_NPC();
 	Amplification_Precache();
@@ -2913,7 +2913,6 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/30/npc_zs_gore_blaster.sp"
 #include "npc/gmod_zs/30/npc_zs_elder_ghoul.sp"
 #include "npc/gmod_zs/30/npc_zs_fast_headcrab.sp"
-#include "npc/gmod_zs/30/npc_zs_vile_bloated_zombie.sp"
 #include "npc/gmod_zs/30/npc_zs_headcrabzombie.sp"
 #include "npc/gmod_zs/30/npc_zs_fastheadcrab_zombie.sp"
 #include "npc/gmod_zs/30/npc_zs_poisonheadcrab_zombie.sp"
@@ -2951,6 +2950,7 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/60/npc_zs_manhattan_parrot.sp"
 #include "npc/gmod_zs/bandit/npc_zs_combine_soldier_elite.sp"
 #include "npc/gmod_zs/npc_zs_zmain.sp"
+#include "npc/gmod_zs/npc_zs_pukepus.sp"
 #include "npc/gmod_zs/special/npc_zs_flesh_creeper.sp"
 #include "npc/gmod_zs/special/npc_zs_nest.sp"
 #include "npc/gmod_zs/special/npc_random_zombie.sp"

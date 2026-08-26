@@ -253,12 +253,13 @@ static Action zs_spitter_StartTouch(int entity, int target)
         float DamageDeal = 40.0;
         if(ShouldNpcDealBonusDamage(target))
             DamageDeal *= 0.5;
+		else
+			Elemental_AddPheromoneDamage(target, owner, 15);
         SDKHooks_TakeDamage(target, owner, inflictor, DamageDeal, DMG_BULLET|DMG_PREVENT_PHYSICS_FORCE, -1);    //acts like a kinetic rocket    
         if(target <= MaxClients && !IsInvuln(target))
             if(!HasSpecificBuff(target, "Fluid Movement"))
                 TF2_StunPlayer(target, 2.0, 0.5, TF_STUNFLAG_SLOWDOWN);
         ApplyStatusEffect(owner, target, "Cellular Breakdown", NpcStats_VestanCallToArms(owner) ? 7.5 : 5.0);
-		Elemental_AddPheromoneDamage(target, owner, 15);
     }
     int particle = EntRefToEntIndex(i_WandParticle[entity]);
     if(IsValidEntity(particle))
