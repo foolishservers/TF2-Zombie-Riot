@@ -1879,6 +1879,7 @@
 	"Precision Potion"
 	{
 		"en"		"Precision Potion"
+		"ko"		"정밀 포션"
 	}
 	"The Bombinomicon"
 	{
@@ -3892,6 +3893,14 @@
 	{
 		"en"		"Supply Drop"
 		"ko"		"물품 드롭"
+	}
+	"Supply Drop Wave Hasn't Started"
+	{
+		"en"		"This ability can only be used during active waves."
+	}
+	"Supply Drop Wave Limit Reached"
+	{
+		"en"		"Supply Drop limit for this wave has been reached."
 	}
 	"Cripple MOAB"
 	{

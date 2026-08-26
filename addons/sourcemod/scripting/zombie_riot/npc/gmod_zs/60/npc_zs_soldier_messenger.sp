@@ -427,7 +427,7 @@ public Action InfectedMessenger_OnTakeDamage(int victim, int &attacker, int &inf
 			npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
 			npc.PlaySummonSound();
 			CPrintToChatAll("{crimson}감염된 전령병{default}: 이곳에 당장 암살부대를 보내 지금 당장!!!");
-			InfectedMessengerSpawnEnemy(npc.index,"npc_zs_ninja_zombie_spy",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
+			InfectedMessengerSpawnEnemy(npc.index,"npc_zs_ninja_zombie_spy",65, RoundToCeil(12.0 * MultiGlobalEnemy));
 			InfectedMessengerSpawnEnemy(npc.index,"npc_zs_sniper",6000, RoundToCeil(8.0 * MultiGlobalEnemy));
 		}
 		else if(Ratio <= 0.20 && npc.g_TimesSummoned < 3)
@@ -436,7 +436,7 @@ public Action InfectedMessenger_OnTakeDamage(int victim, int &attacker, int &inf
 			npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
 			npc.PlaySummonSound();
 			CPrintToChatAll("{crimson}감염된 전령병{default}: 아직도 놈들이 살아있다!!! 이곳에 당장 공습을 때려!!!!");
-			InfectedMessengerSpawnEnemy(npc.index,"npc_zs_manhattan_parrot",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
+			InfectedMessengerSpawnEnemy(npc.index,"npc_zs_manhattan_parrot",30000, RoundToCeil(12.0 * MultiGlobalEnemy));
 			InfectedMessengerSpawnEnemy(npc.index,"npc_zs_kamikaze_demo",6000, RoundToCeil(8.0 * MultiGlobalEnemy));
 		}
 	}
