@@ -33,6 +33,15 @@ public void Ghoul_OnMapStart_NPC()
 	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+	
+	strcopy(data.Name, sizeof(data.Name), "Elder Ghoul");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_elder_ghoul");
+	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_elder_ghoul");
+	data.IconCustom = true;
+	data.Flags = 0;
+	data.Category = Type_GmodZS;
+	data.Func = ClotSummon_ALT;
+	NPC_Add(data);
 }
 
 static void ClotPrecache()
@@ -48,9 +57,13 @@ static void ClotPrecache()
 	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 }
 
+static any ClotSummon_ALT(int client, float vecPos[3], float vecAng[3], int team)
+{
+	return Ghoul(vecPos, vecAng, team, true);
+}
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
-	return Ghoul(vecPos, vecAng, team);
+	return Ghoul(vecPos, vecAng, team, false);
 }
 
 methodmap Ghoul < CClotBody
@@ -84,7 +97,7 @@ methodmap Ghoul < CClotBody
 		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	
-	public Ghoul(float vecPos[3], float vecAng[3], int ally)
+	public Ghoul(float vecPos[3], float vecAng[3], int ally, bool Alt)
 	{
 		Ghoul npc = view_as<Ghoul>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "800", ally, false));
 		
@@ -94,6 +107,7 @@ methodmap Ghoul < CClotBody
 		
 		int iActivity = npc.LookupActivity("ACT_HL2MP_WALK_ZOMBIE_01");
 		if(iActivity > 0) npc.StartActivity(iActivity);
+		
 
 		npc.m_flNextMeleeAttack = 0.0;
 		
@@ -105,8 +119,14 @@ methodmap Ghoul < CClotBody
 		func_NPCDeath[npc.index] = Ghoul_NPCDeath;
 		func_NPCThink[npc.index] = Ghoul_ClotThink;
 		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;
-
 		npc.StartPathing();
+		
+		npc.m_bFUCKYOU = Alt;
+		if(Alt)
+		{
+			SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
+			SetEntityRenderColor(npc.index, 200, 160, 50, 255);
+		}
 		
 		return npc;
 	}
@@ -176,18 +196,18 @@ static void Ghoul_ClotThink(int iNPC)
 				{
 					Handle swingTrace;
 					npc.FaceTowards(vecTarget, 20000.0);
-					if (npc.DoSwingTrace(swingTrace, closest))
+					if(npc.DoSwingTrace(swingTrace, closest))
 					{
 						int target = TR_GetEntityIndex(swingTrace);	
 						float vecHit[3];
 						TR_GetEndPosition(vecHit, swingTrace);
-						if (target > 0) 
+						if(target > 0) 
 						{
-							float damageAmount = ShouldNpcDealBonusDamage(target) ? 100.0 : 80.0;
+							float damageAmount = (ShouldNpcDealBonusDamage(target) ? 100.0 : (npc.m_bFUCKYOU ? 120 : 80));
 							SDKHooks_TakeDamage(target, npc.index, npc.index, damageAmount, DMG_CLUB, -1, _, vecHit);
-							if (!i_IsABuilding[target])
+							if(!ShouldNpcDealBonusDamage(target))
 							{
-								Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 30 : 10);
+								Elemental_AddPheromoneDamage(target, npc.index, (npc.m_bFUCKYOU ? 45 : 30));
 								int flagsStun = 0;
 								if(!HasSpecificBuff(target, "Fluid Movement"))
 											flagsStun |= TF_STUNFLAG_SLOWDOWN;

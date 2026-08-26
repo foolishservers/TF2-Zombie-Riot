@@ -1251,7 +1251,6 @@ void NPC_ConfigSetup()
 	ZSFastZombie_OnMapStart_NPC();
 	Skeleton_OnMapStart_NPC();
 	ShadowWalker_OnMapStart_NPC();
-	ElderGhoul_OnMapStart_NPC();
 	GoreBlaster_OnMapStart_NPC();
 	Bastardzine_OnMapStart_NPC();
 	FastHeadcrab_OnMapStart_NPC();
@@ -2911,7 +2910,6 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/15/npc_zs_poisonheadcrab.sp"
 #include "npc/gmod_zs/15/npc_zs_poisonzombie.sp"
 #include "npc/gmod_zs/30/npc_zs_gore_blaster.sp"
-#include "npc/gmod_zs/30/npc_zs_elder_ghoul.sp"
 #include "npc/gmod_zs/30/npc_zs_fast_headcrab.sp"
 #include "npc/gmod_zs/30/npc_zs_headcrabzombie.sp"
 #include "npc/gmod_zs/30/npc_zs_fastheadcrab_zombie.sp"
