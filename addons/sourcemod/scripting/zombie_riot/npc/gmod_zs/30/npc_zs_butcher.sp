@@ -1,10 +1,6 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-static const char g_DeathSounds[][] = {
-	"npc/zombie_poison/pz_die2.wav",
-};
-
 static const char g_HurtSounds[][] = {
 	"npc/zombie_poison/pz_warn1.wav",
 	"npc/zombie_poison/pz_warn2.wav",
@@ -28,15 +24,10 @@ static const char g_MeleeHitSounds[][] = {
 	"weapons/cleaver_hit_07.wav",
 };
 
-void Butcher_OnMapStart_NPC()
+static const char g_DeathSounds[] = "npc/zombie_poison/pz_die2.wav";
+
+public void Butcher_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeAttackSounds)); i++) { PrecacheSound(g_MeleeAttackSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds)); i++) { PrecacheSound(g_MeleeHitSounds[i]); }
-	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "The Butcher");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_butcher");
@@ -44,15 +35,28 @@ void Butcher_OnMapStart_NPC()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
 
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSound(g_DeathSounds);
+	PrecacheSound("player/flow.wav");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
+}
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int ally)
 {
 	return Butcher(vecPos, vecAng, ally);
 }
+
 methodmap Butcher < CClotBody
 {
 	public void PlayIdleAlertSound() 
@@ -69,18 +73,13 @@ methodmap Butcher < CClotBody
 	{
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(137, 143));
-		
 	}
-	
 	public void PlayDeathSound() 
 	{
-		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(122, 128));
+		EmitSoundToAll(g_DeathSounds, this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(122, 128));
 	}
-	
 	public void PlayMeleeSound()
 	{
 		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
@@ -88,9 +87,7 @@ methodmap Butcher < CClotBody
 	public void PlayMeleeHitSound() 
 	{
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-
 	}
-	
 	
 	public Butcher(float vecPos[3], float vecAng[3], int ally)
 	{
@@ -116,10 +113,10 @@ methodmap Butcher < CClotBody
 		
 		//IDLE
 		npc.m_iState = 0;
+		npc.m_iOverlordComboAttack = 0;
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.StartPathing();
 		npc.m_flSpeed = 300.0;
-				
 		int skin = 1;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
 
@@ -133,7 +130,7 @@ methodmap Butcher < CClotBody
 	}
 }
 
-public void Butcher_ClotThink(int iNPC)
+static void Butcher_ClotThink(int iNPC)
 {
 	Butcher npc = view_as<Butcher>(iNPC);
 
@@ -193,7 +190,7 @@ public void Butcher_ClotThink(int iNPC)
 	npc.PlayIdleAlertSound();
 }
 
-public Action Butcher_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action Butcher_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	Butcher npc = view_as<Butcher>(victim);
 		
@@ -209,27 +206,17 @@ public Action Butcher_OnTakeDamage(int victim, int &attacker, int &inflictor, fl
 	return Plugin_Changed;
 }
 
-public void Butcher_NPCDeath(int entity)
+static void Butcher_NPCDeath(int entity)
 {
 	Butcher npc = view_as<Butcher>(entity);
 	if(!npc.m_bGib)
-	{
 		npc.PlayDeathSound();	
-	}
-		
 	
-	if(IsValidEntity(npc.m_iWearable4))
-		RemoveEntity(npc.m_iWearable4);
-	if(IsValidEntity(npc.m_iWearable3))
-		RemoveEntity(npc.m_iWearable3);
-	if(IsValidEntity(npc.m_iWearable2))
-		RemoveEntity(npc.m_iWearable2);
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
-
 }
 
-void ButcherSelfDefense(Butcher npc, float gameTime, int target, float distance)
+static void ButcherSelfDefense(Butcher npc, float gameTime, int target, float distance)
 {
 	if(npc.m_flAttackHappens)
 	{
@@ -242,46 +229,26 @@ void ButcherSelfDefense(Butcher npc, float gameTime, int target, float distance)
 			npc.FaceTowards(VecEnemy, 15000.0);
 			if(npc.DoSwingTrace(swingTrace, npc.m_iTarget)) //Big range, but dont ignore buildings if somehow this doesnt count as a raid to be sure.
 			{
-				npc.m_iOverlordComboAttack++;	
+				if(npc.m_iOverlordComboAttack<9)
+					npc.m_iOverlordComboAttack++;	
+				else if(npc.m_iOverlordComboAttack>9)
+					npc.m_iOverlordComboAttack=9;	
 				target = TR_GetEntityIndex(swingTrace);	
 				
 				float vecHit[3];
 				TR_GetEndPosition(vecHit, swingTrace);
-				if(npc.m_iOverlordComboAttack >= 1)
+				switch(npc.m_iOverlordComboAttack)
 				{
-					f_AttackSpeedNpcIncrease[npc.index] = 0.90;
-				}
-				if(npc.m_iOverlordComboAttack >= 2)
-				{
-					f_AttackSpeedNpcIncrease[npc.index] = 0.80;
-				}
-				if(npc.m_iOverlordComboAttack >= 3)
-				{
-					f_AttackSpeedNpcIncrease[npc.index] = 0.70;
-				}
-				if(npc.m_iOverlordComboAttack >= 4)
-				{
-					f_AttackSpeedNpcIncrease[npc.index] = 0.60;
-				}
-				if(npc.m_iOverlordComboAttack >= 5)
-				{
-					f_AttackSpeedNpcIncrease[npc.index] = 0.50;
-				}
-				if(npc.m_iOverlordComboAttack >= 6)
-				{
-					f_AttackSpeedNpcIncrease[npc.index] = 0.40;
-				}
-				if(npc.m_iOverlordComboAttack >= 7)
-				{
-					f_AttackSpeedNpcIncrease[npc.index] = 0.30;
-				}
-				if(npc.m_iOverlordComboAttack >= 8)
-				{
-					f_AttackSpeedNpcIncrease[npc.index] = 0.20;
-				}
-				if(npc.m_iOverlordComboAttack >= 9)
-				{
-					f_AttackSpeedNpcIncrease[npc.index] = 0.10;
+					case 1:f_AttackSpeedNpcIncrease[npc.index] = 0.90;
+					case 2:f_AttackSpeedNpcIncrease[npc.index] = 0.80;
+					case 3:f_AttackSpeedNpcIncrease[npc.index] = 0.70;
+					case 4:f_AttackSpeedNpcIncrease[npc.index] = 0.60;
+					case 5:f_AttackSpeedNpcIncrease[npc.index] = 0.50;
+					case 6:f_AttackSpeedNpcIncrease[npc.index] = 0.40;
+					case 7:f_AttackSpeedNpcIncrease[npc.index] = 0.30;
+					case 8:f_AttackSpeedNpcIncrease[npc.index] = 0.20;
+					case 9:f_AttackSpeedNpcIncrease[npc.index] = 0.10;
+					default:f_AttackSpeedNpcIncrease[npc.index] = 1.0;
 				}
 				
 				if(IsValidEnemy(npc.index, target))
@@ -305,15 +272,12 @@ void ButcherSelfDefense(Butcher npc, float gameTime, int target, float distance)
 		if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED))
 		{
 			int Enemy_I_See;
-								
 			Enemy_I_See = Can_I_See_Enemy(npc.index, npc.m_iTarget);
-					
 			if(IsValidEnemy(npc.index, Enemy_I_See))
 			{
 				npc.m_iTarget = Enemy_I_See;
 				npc.PlayMeleeSound();
 				npc.AddGesture("ACT_HL2MP_GESTURE_RANGE_ATTACK_MELEE");
-						
 				npc.m_flAttackHappens = gameTime + 0.25;
 				npc.m_flDoingAnimation = gameTime + 0.25;
 				npc.m_flNextMeleeAttack = gameTime + 1.2;

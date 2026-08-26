@@ -272,12 +272,16 @@ static void BloatedZombie_NPCDeath(int entity)
 {
 	BloatedZombie npc = view_as<BloatedZombie>(entity);
 	if(!npc.m_bGib)
-	{
-		npc.PlayDeathSound();	
-	}
+		npc.PlayDeathSound();
 	float vecMe[3]; WorldSpaceCenter(npc.index, vecMe);
 	Explode_Logic_Custom(40.0, npc.index, npc.index, -1, vecMe, 200.0, 1.0, _, true, 15, _, _, BloatedZombie_ExplodePost);
-	ParticleEffectAt(vecMe, "asplode_hoodoo", 2.0);
+	DataPack pack_boom = new DataPack();
+	pack_boom.WriteFloat(vecMe[0]);
+	pack_boom.WriteFloat(vecMe[1]);
+	pack_boom.WriteFloat(vecMe[2]);
+	pack_boom.WriteCell(1);
+	RequestFrame(MakeExplosionFrameLater, pack_boom);
+	//ParticleEffectAt(vecMe, "asplode_hoodoo", 2.0);
 	//TE_Particle("asplode_hoodoo", vecMe, NULL_VECTOR, NULL_VECTOR, _, _, _, _, _, _, _, _, _, _, 0.0);
 }
 

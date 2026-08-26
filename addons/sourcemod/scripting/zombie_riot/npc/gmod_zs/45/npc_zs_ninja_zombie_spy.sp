@@ -263,7 +263,7 @@ static void NinjaSpy_ClotThink(int iNPC)
 	
 	if(IsValidEnemy(npc.index, npc.m_iTarget))
 	{
-		npc.m_flSpeed = HasSpecificBuff(npc.index, "Detected") ? 200.0 : 400.0;
+		npc.m_flSpeed = HasSpecificBuff(npc.index, "Revealed") ? 200.0 : 400.0;
 		int AntiCheeseReply = 0;
 		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget);
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);

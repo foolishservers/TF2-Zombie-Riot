@@ -38,6 +38,7 @@ static const char g_MeleeHitSounds[][] = {
 	"npc/fast_zombie/claw_strike2.wav",
 	"npc/fast_zombie/claw_strike3.wav",
 };
+
 static const char g_MeleeAttackSounds[][] = {
 	"npc/zombie/zo_attack1.wav",
 	"npc/zombie/zo_attack2.wav",
@@ -50,15 +51,6 @@ static const char g_MeleeMissSounds[][] = {
 
 public void ZSZombie_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleSounds));		i++) { PrecacheSound(g_IdleSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds));	i++) { PrecacheSound(g_MeleeHitSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeAttackSounds));	i++) { PrecacheSound(g_MeleeAttackSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
-
-	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "ZS Zombie");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_zombie");
@@ -66,8 +58,22 @@ public void ZSZombie_OnMapStart_NPC()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeMissSounds);
+	PrecacheSound("player/flow.wav");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
@@ -136,7 +142,7 @@ methodmap ZSZombie < CClotBody
 	}
 }
 
-public void ZSZombie_ClotThink(int iNPC)
+static void ZSZombie_ClotThink(int iNPC)
 {
 	ZSZombie npc = view_as<ZSZombie>(iNPC);
 	
@@ -144,13 +150,11 @@ public void ZSZombie_ClotThink(int iNPC)
 	SetVariantInt(1);
 	AcceptEntityInput(iNPC, "SetBodyGroup");
 	
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
-	{
+	float GameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > GameTime)
 		return;
-	}
 	
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
-	
+	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 	
 	if(npc.m_blPlayHurtAnimation)
@@ -162,18 +166,14 @@ public void ZSZombie_ClotThink(int iNPC)
 		
 	}
 	
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
-	{
+	if(npc.m_flNextThinkTime > GameTime)
 		return;
-	}
+	npc.m_flNextThinkTime = GameTime + 0.1;
 	
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
-
-	
-	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	if(npc.m_flGetClosestTargetTime < GameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
+		npc.m_flGetClosestTargetTime = GameTime + GetRandomRetargetTime();
 		npc.StartPathing();
 	}
 	
@@ -199,18 +199,18 @@ public void ZSZombie_ClotThink(int iNPC)
 		if(flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED || npc.m_flAttackHappenswillhappen)
 		{
 			
-			if(npc.m_flNextMeleeAttack < GetGameTime(npc.index))
+			if(npc.m_flNextMeleeAttack < GameTime)
 			{
 				if (!npc.m_flAttackHappenswillhappen)
 				{
 					npc.AddGesture("ACT_GMOD_GESTURE_RANGE_ZOMBIE");
 					npc.PlayMeleeSound();
-					npc.m_flAttackHappens = GetGameTime(npc.index)+0.7;
-					npc.m_flAttackHappens_bullshit = GetGameTime(npc.index)+0.83;
+					npc.m_flAttackHappens = GameTime+0.7;
+					npc.m_flAttackHappens_bullshit = GameTime+0.83;
 					npc.m_flAttackHappenswillhappen = true;
 				}
 
-				if (npc.m_flAttackHappens < GetGameTime(npc.index) && npc.m_flAttackHappens_bullshit >= GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
+				if (npc.m_flAttackHappens < GameTime && npc.m_flAttackHappens_bullshit >= GameTime && npc.m_flAttackHappenswillhappen)
 				{
 					Handle swingTrace;
 					npc.FaceTowards(vecTarget, 20000.0);
@@ -236,13 +236,13 @@ public void ZSZombie_ClotThink(int iNPC)
 						}
 					}
 					delete swingTrace;
-					npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.74;
+					npc.m_flNextMeleeAttack = GameTime + 0.74;
 					npc.m_flAttackHappenswillhappen = false;
 				}
-				else if (npc.m_flAttackHappens_bullshit < GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
+				else if (npc.m_flAttackHappens_bullshit < GameTime && npc.m_flAttackHappenswillhappen)
 				{
 					npc.m_flAttackHappenswillhappen = false;
-					npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.74;
+					npc.m_flNextMeleeAttack = GameTime + 0.74;
 				}
 			}
 			
@@ -258,12 +258,10 @@ public void ZSZombie_ClotThink(int iNPC)
 	npc.PlayIdleSound();
 }
 
-public Action ZSZombie_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action ZSZombie_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
-	//Valid attackers only.
 	if(attacker <= 0)
 		return Plugin_Continue;
-
 	ZSZombie npc = view_as<ZSZombie>(victim);
 	if(!NpcStats_IsEnemySilenced(victim))
 	{
@@ -286,7 +284,7 @@ public Action ZSZombie_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 	
 	return Plugin_Changed;
 }
-public Action ZSZombie_Revert_Zombie_Resistance(Handle timer, int ref)
+static Action ZSZombie_Revert_Zombie_Resistance(Handle timer, int ref)
 {
 	int zombie = EntRefToEntIndex(ref);
 	if(IsValidEntity(zombie))
@@ -299,7 +297,7 @@ public Action ZSZombie_Revert_Zombie_Resistance(Handle timer, int ref)
 	return Plugin_Handled;
 }
 
-public Action ZSZombie_Revert_Zombie_Resistance_Enable(Handle timer, int ref)
+static Action ZSZombie_Revert_Zombie_Resistance_Enable(Handle timer, int ref)
 {
 	int zombie = EntRefToEntIndex(ref);
 	if(IsValidEntity(zombie))
@@ -310,11 +308,9 @@ public Action ZSZombie_Revert_Zombie_Resistance_Enable(Handle timer, int ref)
 	return Plugin_Handled;
 }
 
-public void ZSZombie_NPCDeath(int entity)
+static void ZSZombie_NPCDeath(int entity)
 {
 	ZSZombie npc = view_as<ZSZombie>(entity);
 	if(!npc.m_bGib)
-	{
 		npc.PlayDeathSound();	
-	}
 }

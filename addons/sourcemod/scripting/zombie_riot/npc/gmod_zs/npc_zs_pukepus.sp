@@ -152,7 +152,7 @@ static void ZS_Pukepus_ClotThink(int iNPC)
 		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget);
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-		switch(ZS_Pukepus_AttackLogic(npc, GameTime, flDistanceToTarget, VecSelfNpc, vecTarget))
+		switch(ZS_Pukepus_AttackLogic(npc, GameTime, flDistanceToTarget, vecTarget))
 		{
 			case 0:
 			{
@@ -208,7 +208,7 @@ static void ZS_Pukepus_ClotThink(int iNPC)
 	npc.PlayIdleSound();
 }
 
-static int ZS_Pukepus_AttackLogic(ZS_Pukepus npc, float GameTime, float Distance, float VecSelfNpc[3], float vecTarget[3])
+static int ZS_Pukepus_AttackLogic(ZS_Pukepus npc, float GameTime, float Distance, float vecTarget[3])
 {
 	if(GameTime > npc.m_flNextRangedAttack)
 	{
