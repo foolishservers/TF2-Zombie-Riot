@@ -154,7 +154,7 @@ methodmap ZSSphynx < CClotBody
 		npc.m_iState = 0;
 		npc.m_iActionResult = 0;
 		npc.m_flNextMeleeAttack = 0.0;
-		npc.m_flNextBuffTime = GetGameTime(npc.index) + 2.5;
+		npc.m_flNextBuffTime = GetGameTime(npc.index) + 10.0;
 		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
@@ -424,13 +424,15 @@ static void ZSSphynxSelfDefense(ZSSphynx npc, float gameTime, int target, float 
 				float damageDealt = 300.0;
 				
 				if(ShouldNpcDealBonusDamage(targetHit))
-					damageDealt *= 1.5;
+					damageDealt *= 15.0;
 				
 				float DamageDoExtra = MultiGlobalHealth;
 				if (DamageDoExtra != 1.0)
 					DamageDoExtra *= 1.5;
 				
 				damageDealt *= DamageDoExtra;
+				
+				// CPrintToChatAll("%.1f, %.1f, %.1f", damageDealt, DamageDoExtra, MultiGlobalHealth);
 				
 				KillFeed_SetKillIcon(npc.index, "warrior_spirit");
 				
