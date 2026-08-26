@@ -61,9 +61,9 @@ static void Barracks_Reset()
 	Zero(ShotgunHeal);
 	Zero(ShotgunHeal_Targets);
 	Zero(BarracksBuffMode);
-	Zero(Barrack_HUDDelay);
+	ZeroFloat(Barrack_HUDDelay);
 	Zero(ResourceGen);
-	Zero(ReDash);
+	ZeroFloat(ReDash);
 	Zero(WeaponSMGID);
 	Zero(WeaponReconstructiveShotgunID);
 	Zero(WeaponBarracksItalianID);
