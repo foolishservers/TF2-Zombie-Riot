@@ -3666,7 +3666,7 @@
 	{
 		"en"	"Xeno Very Early Infected"
 		"it"	"Xeno infetto precocemente"
-		"ko"	"제노 초기 감염자"
+		"ko"	"제노 극초기 감염자"
 	}
 	"Xeno Patient Few"
 	{
@@ -3678,7 +3678,7 @@
 	{
 		"en"	"Xeno Very Patient Few"
 		"it"	"Pochi pazienti Xeno"
-		"ko"	"제노 소수 환자"
+		"ko"	"제노 극소수 환자"
 	}
 	"Xeno Ouroboros Ekas"
 	{
@@ -8530,6 +8530,11 @@
 	{
 		"en"	"W.F. Warden"
 		"ko"	"W.F. 교도소장"
+	}
+	"W.F. Bolt Smasher"
+	{
+		"en"	"W.F. Bolt Smasher"
+		"ko"	"W.F. 볼트 스매셔"
 	}
 	
 	"Knight of the Curtain"

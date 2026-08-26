@@ -1161,6 +1161,7 @@ void ZR_MapStart()
 	ResetMapStartExploARWeapon();
 	Gunsaw_MapStart();
 	IndexFather_MapStart();
+	SupplyDrop_MapStart();
 	
 	Zombies_Currently_Still_Ongoing = 0;
 	// An info_populator entity is required for a lot of MvM-related stuff (preserved entity)
@@ -3781,7 +3782,7 @@ void SetCustomFog(int fogType, int color1[4], int color2[4], float start, float 
 		else if (count == 1)
 		{
 			// We only found 1 env_fog_controller, this has to be the map's
-			MapFogEntity = mapFog;
+			MapFogEntity = EntIndexToEntRef(mapFog);
 		}
 		else
 		{
@@ -3810,7 +3811,7 @@ void SetCustomFog(int fogType, int color1[4], int color2[4], float start, float 
 				lastController = controller;
 			}
 			
-			MapFogEntity = lastController;
+			MapFogEntity = EntIndexToEntRef(lastController);
 		}
 	}
 	
