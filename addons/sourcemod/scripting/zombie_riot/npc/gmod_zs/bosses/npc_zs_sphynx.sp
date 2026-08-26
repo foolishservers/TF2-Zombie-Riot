@@ -64,10 +64,11 @@ static void ClotPrecache()
 	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
 }
 
-static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
+static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
 {
-	return ZSSphynx(vecPos, vecAng, team);
+	return ZSSphynx(vecPos, vecAng, team, data);
 }
+
 methodmap ZSSphynx < CClotBody
 {
 	public void PlayIdleAlertSound() 
@@ -75,38 +76,71 @@ methodmap ZSSphynx < CClotBody
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
 		
-		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(8.0, 16.0);
+		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 90);
 		
+		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(8.0, 16.0);
 	}
 	
 	public void PlayDeathSound() 
 	{
-		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 90);
 	}
 
 	public void PlayHurtSound() 
 	{
-		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 90);
 	}
 
 	public void PlayMeleeHitSound() 
 	{
-		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 90);
 	}
 
 	public void PlayMeleeAttackSound() 
 	{
-		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_STATIC, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 90);
 	}
 
 	public void PlayMeleeMissSound() 
 	{
-		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 90);
 	}
 	
+	public void PlayBuffSound()
+	{
+		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", this.index, SNDCHAN_STATIC, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 70);
+	}
 	
-	public ZSSphynx(float vecPos[3], float vecAng[3], int ally)
+	public void PlayHealSound()
+	{
+		EmitSoundToAll("items/medshot4.wav", this.index, SNDCHAN_STATIC, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 110);
+	}
+	
+	property float m_flNextBuffTime
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][0]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][0] = TempValueForProperty; }
+	}
+	
+	property float m_flNextAllyCheckTime
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][1]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][1] = TempValueForProperty; }
+	}
+	
+	property int m_iActionResult
+	{
+		public get()			{ return this.m_iOverlordComboAttack; }
+		public set(int value) 	{ this.m_iOverlordComboAttack = value; }
+	}
+	
+	property bool m_bDropMoney
+	{
+		public get()			{ return this.m_bFUCKYOU; }
+		public set(bool value) 	{ this.m_bFUCKYOU = value; }
+	}
+	
+	public ZSSphynx(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
 		ZSSphynx npc = view_as<ZSSphynx>(CClotBody(vecPos, vecAng, "models/antlion_guard.mdl", "1.0", "1000", ally));
 		
@@ -114,14 +148,25 @@ methodmap ZSSphynx < CClotBody
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
 		int iActivity = npc.LookupActivity("ACT_RUN");
-		if(iActivity > 0) npc.StartActivity(iActivity);
+		if(iActivity > 0)
+			npc.StartActivity(iActivity);
 		
+		npc.m_iState = 0;
+		npc.m_iActionResult = 0;
 		npc.m_flNextMeleeAttack = 0.0;
+		npc.m_flNextBuffTime = GetGameTime(npc.index) + 2.5;
 		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
-
+		
+		npc.m_bDropMoney = true;
+		
+		if(StrContains(data, "nomoney") != -1)
+		{
+			npc.m_bDropMoney = false;
+		}
+		
 		SetEntityRenderColor(npc.index, 255, 0, 0, 255);
 		func_NPCDeath[npc.index] = view_as<Function>(ZSSphynx_NPCDeath);
 		func_NPCOnTakeDamage[npc.index] = view_as<Function>(ZSSphynx_OnTakeDamage);
@@ -129,8 +174,10 @@ methodmap ZSSphynx < CClotBody
 		
 		npc.StartPathing();
 		npc.m_flSpeed = 330.0;
+		
 		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);	
 		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);	
+		
 		for(int client_check=1; client_check<=MaxClients; client_check++)
 		{
 			if(IsClientInGame(client_check) && !IsFakeClient(client_check))
@@ -138,7 +185,7 @@ methodmap ZSSphynx < CClotBody
 				ShowGameText(client_check, "voice_player", 1, "%t", "Sphynx Spawned");
 			}
 		}
-
+		
 		npc.m_bDissapearOnDeath = false;
 		
 		if(!IsValidEntity(RaidBossActive))
@@ -148,7 +195,6 @@ methodmap ZSSphynx < CClotBody
 			RaidModeScaling = 0.0;
 			RaidAllowsBuildings = true;
 		}
-		
 		
 		return npc;
 	}
@@ -165,169 +211,155 @@ public void ZSSphynx_ExplodePost(int attacker, int victim, float damage, int wea
 public void ZSSphynx_ClotThink(int iNPC)
 {
 	ZSSphynx npc = view_as<ZSSphynx>(iNPC);
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
+	
+	float gameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > gameTime)
 	{
 		return;
 	}
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
+	
+	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 	
-	float VecSelfNpcabs[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", VecSelfNpcabs);
-	ZSSphynx_ApplyBuffInLocation_Optimized(VecSelfNpcabs, GetTeam(npc.index), npc.index);
-
 	if(npc.m_blPlayHurtAnimation)
 	{
-		npc.AddGesture("ACT_BIG_FLINCH", false);
+		//npc.AddGesture("ACT_BIG_FLINCH", false);
 		npc.m_blPlayHurtAnimation = false;
 		npc.PlayHurtSound();
 	}
-
-	if(npc.m_flDoingAnimation)
-	{
-		float vecMe[3]; WorldSpaceCenter(npc.index, vecMe);
-		Explode_Logic_Custom(1.0, -1, npc.index, -1, vecMe, 175.0, 150.0, 150.0, true, 14, false);
-	}
-
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
-	{
-		return;
-	}
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
-
-	if(npc.m_iTargetAlly && !IsValidAlly(npc.index, npc.m_iTargetAlly))
-		npc.m_iTargetAlly = 0;
 	
-	if(!npc.m_iTargetAlly || npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	if(npc.m_flDoingAnimation < gameTime)
 	{
-		npc.m_iTargetAlly = GetClosestAlly(npc.index);
-		if(npc.m_iTargetAlly < 1)
+		switch (npc.m_iActionResult)
 		{
-			npc.m_iTargetAlly = GetClosestTarget(npc.index);
-		}
-		
-		if(npc.m_iTargetAlly > 0)
-		{
-			float vecTarget[3]; WorldSpaceCenter(npc.m_iTargetAlly, vecTarget );
-			float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
-			float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
+			// Melee.
+			case 1:
+			{
+				ExpidonsaGroupHeal(npc.index, 350.0, 15, 1000.0, 1.0, false, Expidonsa_DontHealSameIndex);
+				
+				float vecMe[3];
+				GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", vecMe);
+				spawnRing_Vectors(vecMe, 1.0, 0.0, 0.0, 10.0, "materials/sprites/laserbeam.vmt", 125, 0, 0, 200, 1, 0.3, 5.0, 8.0, 3, 700.0);	
+				
+				npc.PlayHealSound();
+				
+				//WorldSpaceCenter(npc.index, vecMe);
+				//Explode_Logic_Custom(1.0, -1, npc.index, -1, vecMe, 175.0, 150.0, 150.0, true, 14, false);
+				
+				npc.StartPathing();
+				npc.m_iActionResult = 0;
+			}
 			
-			if(flDistanceToTarget > (0.0*0.0))
+			// Special Buff.
+			case 2:
 			{
 				npc.StartPathing();
-				if(flDistanceToTarget < npc.GetLeadRadius()) 
-				{
-					float vPredictedPos[3]; PredictSubjectPosition(npc, npc.m_iTargetAlly,_,_,vPredictedPos );
-					npc.SetGoalVector(vPredictedPos);
-				}
-				else 
-				{
-					npc.SetGoalEntity(npc.m_iTargetAlly);
-				}
-			}
-			else
-			{
-				npc.StopPathing();
+				npc.m_iActionResult = 0;
 			}
 		}
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + 0.5;
-	}
-	if(npc.m_flDoingAnimation < GetGameTime(npc.index))
-	{
-		npc.m_flDoingAnimation = GetGameTime(npc.index) + 0.25;
-		ExpidonsaGroupHeal(npc.index, 40.0, 500, 9999.0, 1.0, false,Expidonsa_DontHealSameIndex);		
-		ChaosSupporter npc1 = view_as<ChaosSupporter>(npc.index);
-		float ProjectileLoc[3];
-		GetEntPropVector(npc1.index, Prop_Data, "m_vecAbsOrigin", ProjectileLoc);
-		spawnRing_Vectors(ProjectileLoc, 1.0, 0.0, 0.0, 10.0, "materials/sprites/laserbeam.vmt", 0, 125, 0, 200, 1, 0.3, 5.0, 8.0, 3, 40.0 * 2.0);	
-		npc1.PlayHealSound();
 	}
 	
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
+	if(npc.m_flNextThinkTime > gameTime)
 	{
 		return;
 	}
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
-
-	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	
+	npc.m_flNextThinkTime = gameTime + 0.1;
+	
+	if(!npc.Anger && npc.m_flNextAllyCheckTime < gameTime)
+	{
+		if(!IsValidAlly(npc.index, GetClosestAlly(npc.index)))
+		{
+			npc.Anger = true;
+		}
+		else
+		{
+			npc.m_flNextAllyCheckTime = gameTime + 4.0;
+		}
+	}
+	
+	if(npc.m_flGetClosestTargetTime < gameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
+		npc.m_flGetClosestTargetTime = gameTime + 1.0;
 	}
 	
 	if(IsValidEnemy(npc.index, npc.m_iTarget))
 	{
-		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget );
-	
-		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
-		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
+		float vecTarget[3]; 
+		float vecMe[3];
+		
+		WorldSpaceCenter(npc.m_iTarget, vecTarget);
+		WorldSpaceCenter(npc.index, vecMe);
+		
+		float flDistanceToTarget = GetVectorDistance(vecTarget, vecMe, true);
 		if(flDistanceToTarget < npc.GetLeadRadius()) 
 		{
 			float vPredictedPos[3];
 			PredictSubjectPosition(npc, npc.m_iTarget,_,_, vPredictedPos);
 			npc.SetGoalVector(vPredictedPos);
 		}
-		else 
+		else
 		{
 			npc.SetGoalEntity(npc.m_iTarget);
 		}
-		ZSSphynxSelfDefense(npc,GetGameTime(npc.index), npc.m_iTarget, flDistanceToTarget); 
+		
+		ZSSphynxSelfDefense(npc, gameTime, npc.m_iTarget, flDistanceToTarget); 
 	}
 	else
 	{
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_iTarget = GetClosestTarget(npc.index);
 	}
+	
 	npc.PlayIdleAlertSound();
 }
-#define ZSSphynx_RANGE 350.0
 
-void ZSSphynx_ApplyBuffInLocation_Optimized(float BannerPos[3], int Team, int iMe = 0)
+#define ZSSPHYNX_RANGE 350.0
+#define ZSSPHYNX_RANGE_SQ 122500.0
+void ZSSphynx_ApplyBuffInLocation_Optimized(int me, float myPos[3], int team, int ignoreEntity = 0, float duration = 10.0)
 {
-    // 거리 제곱값을 미리 상수로 계산 (루프 밖에서 1번만)
-    float rangeSq = ZSSphynx_RANGE * ZSSphynx_RANGE; 
-    float targPos[3];
-
-    // 1. 플레이어 루프
-    for(int ally=1; ally<=MaxClients; ally++)
-    {
-        if(IsClientInGame(ally) && IsPlayerAlive(ally) && GetTeam(ally) == Team)
-        {
-            GetClientAbsOrigin(ally, targPos);
-            // 단순 X, Y 거리 필터링 (선택 사항)
-            if (FloatAbs(BannerPos[0] - targPos[0]) > ZSSphynx_RANGE) continue; 
-            
-            if (GetVectorDistance(BannerPos, targPos, true) <= rangeSq)
-            {
-                ApplyStatusEffect(ally, ally, "Godly Motivation", 1.0);
-            }
-        }
-    }
-
-    // 2. NPC 루프 (초기화 및 활성 카운트 적용)
-    for(int i = 0; i < i_MaxcountNpcTotal; i++) // 0으로 명확히 초기화
-    {
-        int ally = EntRefToEntIndexFast(i_ObjectsNpcsTotal[i]);
-        
-        // 유효성 검사를 먼저 수행하여 무거운 연산을 피함
-        if (ally != -1 && IsValidEntity(ally) && !b_NpcHasDied[ally] && GetTeam(ally) == Team && iMe != ally)
-        {
-            GetEntPropVector(ally, Prop_Data, "m_vecAbsOrigin", targPos);
-            if (GetVectorDistance(BannerPos, targPos, true) <= rangeSq)
-            {
-                ApplyStatusEffect(ally, ally, "Godly Motivation", 1.0);
-            }
-        }
-    }
+	float targetPos[3];
+	
+	// 1. 플레이어 루프
+	for(int ally = 1; ally <= MaxClients; ally++)
+	{
+		if(IsClientInGame(ally) && IsPlayerAlive(ally) && GetTeam(ally) == team)
+		{
+			GetClientAbsOrigin(ally, targetPos);
+			
+			// 단순 X, Y 거리 필터링 (선택 사항)
+			if (GetVectorDistance(myPos, targetPos, true) <= ZSSPHYNX_RANGE_SQ)
+			{
+				ApplyStatusEffect(me, ally, "Godly Motivation", duration);
+			}
+		}
+	}
+	
+	for(int i = 0; i < i_MaxcountNpcTotal; i++)
+	{
+		int ally = EntRefToEntIndexFast(i_ObjectsNpcsTotal[i]);
+		
+		if (ally != -1 && IsValidEntity(ally) && !b_NpcHasDied[ally] && GetTeam(ally) == team && ignoreEntity != ally)
+		{
+			GetEntPropVector(ally, Prop_Data, "m_vecAbsOrigin", targetPos);
+			
+			if (GetVectorDistance(myPos, targetPos, true) <= ZSSPHYNX_RANGE_SQ)
+			{
+				ApplyStatusEffect(me, ally, "Godly Motivation", duration);
+			}
+		}
+	}
 }
 
-public Action ZSSphynx_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action ZSSphynx_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	ZSSphynx npc = view_as<ZSSphynx>(victim);
-		
+	
 	if(attacker <= 0)
 		return Plugin_Continue;
-		
-	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
+	
+	if(npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 	{
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
@@ -336,16 +368,21 @@ public Action ZSSphynx_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 	return Plugin_Changed;
 }
 
-public void ZSSphynx_NPCDeath(int entity)
+static void ZSSphynx_NPCDeath(int entity)
 {
 	ZSSphynx npc = view_as<ZSSphynx>(entity);
-	SpawnMoney(npc.index, true);
+	
+	if(npc.m_bDropMoney)
+		SpawnMoney(npc.index, true);
+	
 	if(!npc.m_bGib)
 	{
-		npc.PlayDeathSound();	
+		npc.PlayDeathSound();
 	}
 }
-public Action Timer_RemoveEntityZSSphynx(Handle timer, any entid)
+
+/*
+static Action Timer_RemoveEntityZSSphynx(Handle timer, any entid)
 {
 	int entity = EntRefToEntIndex(entid);
 	if(IsValidEntity(entity) && entity>MaxClients)
@@ -358,61 +395,138 @@ public Action Timer_RemoveEntityZSSphynx(Handle timer, any entid)
 	}
 	return Plugin_Handled;
 }
+*/
 
-void ZSSphynxSelfDefense(ZSSphynx npc, float gameTime, int target, float distance)
+static void ZSSphynxSelfDefense(ZSSphynx npc, float gameTime, int target, float distance)
 {
-	if(npc.m_flAttackHappens)
+	if(npc.m_flAttackHappens && npc.m_flAttackHappens < gameTime)
 	{
-		if(npc.m_flAttackHappens < gameTime)
+		npc.m_flAttackHappens = 0.0;
+		
+		float vecEnemy[3];
+		WorldSpaceCenter(npc.m_iTarget, vecEnemy);
+		npc.FaceTowards(vecEnemy, 15000.0);
+		
+		static float vecMax[3] = {150.0, 150.0, 150.0};
+		static float vecMin[3] = {-150.0 ,-150.0, -150.0};
+		
+		// Big range, but dont ignore buildings if somehow this doesnt count as a raid to be sure.
+		Handle swingTrace;
+		if(npc.DoSwingTrace(swingTrace, npc.m_iTarget, vecMax, vecMin))
 		{
-			npc.m_flAttackHappens = 0.0;
-
-			Handle swingTrace;
-			float VecEnemy[3]; WorldSpaceCenter(npc.m_iTarget, VecEnemy);
-			npc.FaceTowards(VecEnemy, 15000.0);
-			static float MaxVec[3] = {0.0 ,0.0, 0.0};
-			static float MinVec[3] = {-0.0 ,-0.0, -0.0};
-
-			if(npc.DoSwingTrace(swingTrace, npc.m_iTarget, MaxVec, MinVec)) //Big range, but dont ignore buildings if somehow this doesnt count as a raid to be sure.
+			int targetHit = TR_GetEntityIndex(swingTrace);
+			
+			float vecHit[3];
+			TR_GetEndPosition(vecHit, swingTrace);
+			
+			if(IsValidEnemy(npc.index, targetHit))
 			{
-				target = TR_GetEntityIndex(swingTrace);
-
-				float vecHit[3];
-				TR_GetEndPosition(vecHit, swingTrace);
-
-				if(IsValidEnemy(npc.index, target))
-				{
-					float damageDealt = 10.0;
-					if(ShouldNpcDealBonusDamage(target))
-						damageDealt *= 1.0;
-
-					SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_CLUB, -1, _, vecHit);
-
-					// Hit sound
-					npc.PlayMeleeHitSound();
-				} 
+				float damageDealt = 300.0;
+				
+				if(ShouldNpcDealBonusDamage(targetHit))
+					damageDealt *= 1.5;
+				
+				float DamageDoExtra = MultiGlobalHealth;
+				if (DamageDoExtra != 1.0)
+					DamageDoExtra *= 1.5;
+				
+				damageDealt *= DamageDoExtra;
+				
+				KillFeed_SetKillIcon(npc.index, "warrior_spirit");
+				
+				SDKHooks_TakeDamage(targetHit, npc.index, npc.index, damageDealt, DMG_CLUB, -1, _, vecHit);
+				
+				if (targetHit <= MaxClients)
+					Custom_Knockback(npc.index, targetHit, 600.0);
+				
+				CreateEarthquake(vecHit, 1.0, 128.0, 16.0, 255.0);
+				
+				// Hit sound
+				npc.PlayMeleeHitSound();
 			}
-			delete swingTrace;
 		}
+		
+		delete swingTrace;
 	}
-
-	if(gameTime > npc.m_flNextMeleeAttack)
+	
+	if(gameTime < npc.m_flDoingAnimation)
 	{
-		if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED))
+		npc.m_iState = -1;
+	}
+	else if(gameTime > npc.m_flNextBuffTime)
+	{
+		npc.m_iState = 2;
+	}
+	else if(gameTime > npc.m_flNextMeleeAttack && distance < GIANT_ENEMY_MELEE_RANGE_FLOAT_SQUARED)
+	{
+		npc.m_iState = 1;
+	}
+	else
+	{
+		npc.m_iState = 0;
+	}
+	
+	switch(npc.m_iState)
+	{
+		case -1:
 		{
-			int Enemy_I_See;
-
-			Enemy_I_See = Can_I_See_Enemy(npc.index, npc.m_iTarget);
-
+			return;
+		}
+		case 0:
+		{
+			if (!npc.m_bPathing)
+				npc.StartPathing();
+			
+			npc.SetActivity("ACT_RUN");
+		}
+		case 1:
+		{
+			int Enemy_I_See = Can_I_See_Enemy(npc.index, target);
 			if(IsValidEnemy(npc.index, Enemy_I_See))
 			{
 				npc.m_iTarget = Enemy_I_See;
-				npc.AddGesture("ACT_MELEE_ATTACK1");
-
-				npc.m_flAttackHappens = gameTime + 0.25;
-				npc.m_flDoingAnimation = gameTime + 0.25;
-				npc.m_flNextMeleeAttack = gameTime + 1.5;
+				
+				if(npc.Anger)
+				{
+					npc.AddGesture("ACT_MELEE_ATTACK1", .SetGestureSpeed = 1.5);
+					
+					npc.m_flAttackHappens = gameTime + 0.2345;
+					npc.m_flDoingAnimation = gameTime + 1.072;
+					npc.m_flNextMeleeAttack = gameTime + 1.34;
+				}
+				else
+				{
+					npc.AddGesture("ACT_MELEE_ATTACK1");
+					
+					npc.m_flAttackHappens = gameTime + 0.35;
+					npc.m_flDoingAnimation = gameTime + 1.6;
+					npc.m_flNextMeleeAttack = gameTime + 2.0;
+				}
+				
+				npc.m_iActionResult = 1;
+				
+				npc.StopPathing();
 			}
+		}
+		case 2:
+		{
+			npc.AddGesture("ACT_ANTLIONGUARD_BARK");
+			
+			npc.m_flDoingAnimation = gameTime + 2.5;
+			npc.m_flNextBuffTime = gameTime + 12.5;
+			npc.m_iActionResult = 2;
+			
+			npc.PlayBuffSound();
+			
+			float vecMe[3];
+			GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", vecMe);
+			ZSSphynx_ApplyBuffInLocation_Optimized(npc.index, vecMe, GetTeam(npc.index), npc.Anger ? 0 : npc.index);
+			
+			spawnRing_Vectors(vecMe, 0.0, 0.0, 0.0, 0.0, "materials/sprites/laserbeam.vmt", 125, 50, 50, 200, 1, 3.0, 20.0, 10.0, 1, ZSSPHYNX_RANGE * 2.0);
+			spawnRing_Vectors(vecMe, 0.0, 0.0, 0.0, 0.0, "materials/sprites/laserbeam.vmt", 125, 50, 50, 200, 1, 2.0, 20.0, 10.0, 1, ZSSPHYNX_RANGE * 2.5);
+			spawnRing_Vectors(vecMe, 0.0, 0.0, 0.0, 0.0, "materials/sprites/laserbeam.vmt", 125, 50, 50, 200, 1, 1.0, 20.0, 10.0, 1, ZSSPHYNX_RANGE * 3.0);
+			
+			npc.StopPathing();
 		}
 	}
 }
