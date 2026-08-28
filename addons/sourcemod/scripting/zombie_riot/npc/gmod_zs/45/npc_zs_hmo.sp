@@ -15,46 +15,37 @@ static const char g_HurtSounds[][] = {
 	"vo/pyro_painsharp05.mp3",
 };
 
-static const char g_IdleSounds[][] = {
-	"vo/pyro_jeers01.mp3",	
-	"vo/pyro_jeers02.mp3",	
-};
-
 static const char g_IdleAlertedSounds[][] = {
 	"vo/taunts/pyro_taunts01.mp3",
 	"vo/taunts/pyro_taunts02.mp3",
 	"vo/taunts/pyro_taunts03.mp3",
 };
-static const char g_RangedAttackSounds[][] = {
-	"weapons/dragons_fury_shoot.wav",
-};
 
-static const char g_RangedReloadSound[][] = {
-	"weapons/dragons_fury_pressure_build.wav",
-};
+static const char g_RangedAttackSounds[] = "weapons/dragons_fury_shoot.wav";
+static const char g_RangedReloadSound[] = "weapons/dragons_fury_pressure_build.wav";
 
-void Headcrabmilloperator_OnMapStart_NPC()
+public void Headcrabmilloperator_OnMapStart_NPC()
 {
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Headcrab Mill Operator");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_hmo");
+	strcopy(data.Icon, sizeof(data.Icon), "scout_stun");
+	data.IconCustom = false;
+	data.Flags = 0;
 	data.Category = Type_GmodZS;
-	data.Func = ClotSummon;
 	data.Precache = ClotPrecache;
-	strcopy(data.Icon, sizeof(data.Icon), "scout_stun"); 						//leaderboard_class_(insert the name)
-	data.IconCustom = false;												//download needed?
-	data.Flags = 0;						//example: MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;, forces these flags.	
+	data.Func = ClotSummon;
 	NPC_Add(data);
 }
+
 static float fl_npc_basespeed;
 static void ClotPrecache()
 {
 	PrecacheSoundArray(g_DeathSounds);
 	PrecacheSoundArray(g_HurtSounds);
-	PrecacheSoundArray(g_IdleSounds);
 	PrecacheSoundArray(g_IdleAlertedSounds);
-	PrecacheSoundArray(g_RangedAttackSounds);
-	PrecacheSoundArray(g_RangedReloadSound);
+	PrecacheSound(g_RangedAttackSounds);
+	PrecacheSound(g_RangedReloadSound);
 	PrecacheModel("models/player/pyro.mdl");
 }
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
@@ -64,55 +55,27 @@ static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 
 methodmap Headcrabmilloperator < CClotBody
 {
-	
-	public void PlayIdleSound() {
-		if(this.m_flNextIdleSound > GetGameTime(this.index))
-			return;
-		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, RUINA_NPC_PITCH);
-		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(24.0, 48.0);
-		
-
-	}
-	
 	public void PlayIdleAlertSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, RUINA_NPC_PITCH);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
-		
-		
 	}
-	
 	public void PlayHurtSound() {
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, RUINA_NPC_PITCH);
-		
-		
-		
 	}
-	
 	public void PlayDeathSound() {
-	
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, RUINA_NPC_PITCH);
-		
-		
 	}
 	public void PlayRangedSound() {
-		EmitSoundToAll(g_RangedAttackSounds[GetRandomInt(0, sizeof(g_RangedAttackSounds) - 1)], this.index, _, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, RUINA_NPC_PITCH);
-		
-
+		EmitSoundToAll(g_RangedAttackSounds, this.index, _, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, RUINA_NPC_PITCH);
 	}
 	public void PlayRangedReloadSound() {
-		EmitSoundToAll(g_RangedReloadSound[GetRandomInt(0, sizeof(g_RangedReloadSound) - 1)], this.index, _, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, RUINA_NPC_PITCH);
-		
-
+		EmitSoundToAll(g_RangedReloadSound, this.index, _, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, RUINA_NPC_PITCH);
 	}
-	
 	
 	public Headcrabmilloperator(float vecPos[3], float vecAng[3], int ally)
 	{
@@ -191,19 +154,13 @@ methodmap Headcrabmilloperator < CClotBody
 static void ClotThink(int iNPC)
 {
 	Headcrabmilloperator npc = view_as<Headcrabmilloperator>(iNPC);
-	
 	float GameTime = GetGameTime(npc.index);
 	if(npc.m_flNextDelayTime > GameTime)
-	{
 		return;
-	}
-	
-	
 	
 	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
-	
 	npc.Update();
-			
+	
 	if(npc.m_blPlayHurtAnimation)
 	{
 		npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
@@ -212,14 +169,10 @@ static void ClotThink(int iNPC)
 	}
 	
 	if(npc.m_flNextThinkTime > GameTime)
-	{
 		return;
-	}
-	
 	npc.m_flNextThinkTime = GameTime + 0.1;
 
 	Ruina_Add_Battery(npc.index, 1.5);
-
 	
 	if(npc.m_flGetClosestTargetTime < GameTime)
 	{
@@ -250,7 +203,6 @@ static void ClotThink(int iNPC)
 
 	if(IsValidEnemy(npc.index, PrimaryThreatIndex))
 	{
-			
 		int Anchor_Id=-1;
 		Ruina_Independant_Long_Range_Npc_Logic(npc.index, PrimaryThreatIndex, GameTime, Anchor_Id); //handles movement
 
@@ -284,14 +236,12 @@ static void ClotThink(int iNPC)
 				else
 				{
 					npc.StartPathing();
-					
 					npc.m_bAllowBackWalking=false;
 				}
 			}
 			else
 			{
 				npc.StartPathing();
-				
 				npc.m_bAllowBackWalking=false;
 			}
 		}
@@ -312,7 +262,6 @@ static void ClotThink(int iNPC)
 	else
 	{
 		npc.StopPathing();
-		
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_iTarget = GetClosestTarget(npc.index);
 	}
@@ -322,20 +271,14 @@ static void ClotThink(int iNPC)
 static Action OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	Headcrabmilloperator npc = view_as<Headcrabmilloperator>(victim);
-		
 	if(attacker <= 0)
 		return Plugin_Continue;
-
-	Ruina_NPC_OnTakeDamage_Override(npc.index, attacker, inflictor, damage, damagetype, weapon, damageForce, damagePosition, damagecustom);
 		
-	//Ruina_Add_Battery(npc.index, damage);	//turn damage taken into energy
-	
 	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 	{
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
 	}
-	
 	return Plugin_Changed;
 }
 
@@ -343,12 +286,9 @@ static void NPC_Death(int entity)
 {
 	Headcrabmilloperator npc = view_as<Headcrabmilloperator>(entity);
 	if(!npc.m_bGib)
-	{
 		npc.PlayDeathSound();	
-	}
 
 	Ruina_NPCDeath_Override(entity);
-		
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
 	if(IsValidEntity(npc.m_iWearable2))
@@ -360,6 +300,7 @@ static void NPC_Death(int entity)
 	if(IsValidEntity(npc.m_iWearable5))
 		RemoveEntity(npc.m_iWearable5);
 }
+
 static void Headcrabmilloperator_Spawn_Minnions(Headcrabmilloperator npc)
 {
 	int maxhealth = ReturnEntityMaxHealth(npc.index);
@@ -381,8 +322,8 @@ static void Headcrabmilloperator_Spawn_Minnions(Headcrabmilloperator npc)
 		float WorldSpaceVec[3]; WorldSpaceCenter(spawn_index, WorldSpaceVec);
 		ParticleEffectAt(WorldSpaceVec, "teleported_blue", 0.5);
 	}
-
 }
+
 static void Headcrabmilloperator_Spawn_Self(Headcrabmilloperator npc)
 {
 	int maxhealth = ReturnEntityMaxHealth(npc.index);
@@ -407,6 +348,7 @@ static void Headcrabmilloperator_Spawn_Self(Headcrabmilloperator npc)
 		ParticleEffectAt(WorldSpaceVec, "teleported_red", 0.5);
 	}
 }
+
 static void Headcrabmilloperator_SelfDefense(Headcrabmilloperator npc, float gameTime, int Anchor_Id)	//ty artvin
 {
 	int GetClosestEnemyToAttack;

@@ -161,7 +161,6 @@ static void BloatedZombie_ClotThink(int iNPC)
 		if(!npc.m_flAttackHappenswillhappen)
 			npc.AddGesture("ACT_FLINCH", false);
 		npc.PlayHurtSound();
-		
 	}
 	
 	if(npc.m_flNextThinkTime > GameTime)
@@ -178,14 +177,11 @@ static void BloatedZombie_ClotThink(int iNPC)
 	}
 	
 	int closest = npc.m_iTarget;
-	
 	if(IsValidEnemy(npc.index, closest))
 	{
 		float vecTarget[3]; WorldSpaceCenter(closest, vecTarget);
-			
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-				
 		if(flDistanceToTarget < npc.GetLeadRadius())
 		{
 			float vPredictedPos[3]; PredictSubjectPosition(npc, closest,_,_, vPredictedPos);
@@ -198,7 +194,6 @@ static void BloatedZombie_ClotThink(int iNPC)
 		
 		if(flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED || npc.m_flAttackHappenswillhappen)
 		{
-			
 			if(npc.m_flNextMeleeAttack < GameTime)
 			{
 				if (!npc.m_flAttackHappenswillhappen)
@@ -255,13 +250,11 @@ static void BloatedZombie_ClotThink(int iNPC)
 					npc.m_flNextMeleeAttack = GameTime + (npc.m_bFUCKYOU ? 1.2 : 1.4);
 				}
 			}
-			
 		}
 	}
 	else
 	{
 		npc.StopPathing();
-		
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_iTarget = GetClosestTarget(npc.index);
 	}
@@ -281,8 +274,6 @@ static void BloatedZombie_NPCDeath(int entity)
 	pack_boom.WriteFloat(vecMe[2]);
 	pack_boom.WriteCell(1);
 	RequestFrame(MakeExplosionFrameLater, pack_boom);
-	//ParticleEffectAt(vecMe, "asplode_hoodoo", 2.0);
-	//TE_Particle("asplode_hoodoo", vecMe, NULL_VECTOR, NULL_VECTOR, _, _, _, _, _, _, _, _, _, _, 0.0);
 }
 
 static void BloatedZombie_ExplodePost(int attacker, int victim, float damage, int weapon)

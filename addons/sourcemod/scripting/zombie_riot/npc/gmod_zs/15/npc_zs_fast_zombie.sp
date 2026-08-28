@@ -43,6 +43,15 @@ public void ZSFastZombie_OnMapStart_NPC()
 	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+	
+	strcopy(data.Name, sizeof(data.Name), "Fast Zombie");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_fastheadcrab_zombie");
+	strcopy(data.Icon, sizeof(data.Icon), "norm_fast_zombie_forti");
+	data.IconCustom = true;
+	data.Flags = 0;
+	data.Category = Type_GmodZS;
+	data.Func = ClotSummon_ALT;
+	NPC_Add(data);
 }
 
 static void ClotPrecache()
@@ -60,9 +69,13 @@ static void ClotPrecache()
 	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 }
 
+static any ClotSummon_ALT(int client, float vecPos[3], float vecAng[3], int team)
+{
+	return ZSFastZombie(vecPos, vecAng, team, true);
+}
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
-	return ZSFastZombie(vecPos, vecAng, team);
+	return ZSFastZombie(vecPos, vecAng, team, false);
 }
 
 methodmap ZSFastZombie < CClotBody
@@ -108,9 +121,9 @@ methodmap ZSFastZombie < CClotBody
 		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	
-	public ZSFastZombie(float vecPos[3], float vecAng[3], int ally)
+	public ZSFastZombie(float vecPos[3], float vecAng[3], int ally, bool Alt)
 	{
-		ZSFastZombie npc = view_as<ZSFastZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "700", ally, false));
+		ZSFastZombie npc = view_as<ZSFastZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", (Alt ? "3200" : "700"), ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -139,6 +152,14 @@ methodmap ZSFastZombie < CClotBody
 		npc.StartPathing();
 
 		f_MaxAnimationSpeed[npc.index] = 1.5;
+		
+		npc.m_bFUCKYOU = Alt;
+		if(Alt)
+		{
+			npc.m_iWearable1 = npc.EquipItem("weapon_bone", "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
+			SetVariantString("1.0");
+			AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
+		}
 		
 		return npc;
 	}
@@ -244,9 +265,9 @@ static void ZSFastZombie_ZSFastZombieThink(int iNPC)
 					if(target > 0) 
 					{
 						if(!ShouldNpcDealBonusDamage(target))
-							SDKHooks_TakeDamage(target, npc.index, npc.index, 30.0, DMG_CLUB, -1, _, vecHit);
+							SDKHooks_TakeDamage(target, npc.index, npc.index, (npc.m_bFUCKYOU ? 60.0 : 30.0), DMG_CLUB, -1, _, vecHit);
 						else
-							SDKHooks_TakeDamage(target, npc.index, npc.index, 50.0, DMG_CLUB, -1, _, vecHit);
+							SDKHooks_TakeDamage(target, npc.index, npc.index, (npc.m_bFUCKYOU ? 100.0 : 50.0), DMG_CLUB, -1, _, vecHit);
 						
 						npc.PlayMeleeSound();
 						npc.PlayMeleeHitSound();
@@ -311,11 +332,33 @@ static void ZSFastZombie_NPCDeath(int entity)
 {
 	ZSFastZombie npc = view_as<ZSFastZombie>(entity);
 	if(!npc.m_bGib)
-	{
 		npc.PlayDeathSound();	
+	if(npc.m_bFUCKYOU)
+	{
+		if(IsValidEntity(npc.m_iWearable1))
+			RemoveEntity(npc.m_iWearable1);
+		if(!NpcStats_IsEnemySilenced(entity))
+		{
+			int maxhealth = ReturnEntityMaxHealth(npc.index);
+			float startPosition[3];
+			GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", startPosition);
+			maxhealth /= 2;
+			for(int i; i<1; i++)
+			{
+				float pos[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos);
+				float ang[3]; GetEntPropVector(npc.index, Prop_Data, "m_angRotation", ang);
+				
+				int spawn_index = NPC_CreateByName("npc_zs_fast_headcrab", -1, pos, ang, GetTeam(npc.index));
+				if(spawn_index > MaxClients)
+				{
+					NpcStats_CopyStats(npc.index, spawn_index);
+					NpcAddedToZombiesLeftCurrently(spawn_index, true);
+					SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
+					SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
+				}
+			}
+		}
 	}
-	
-//	AcceptEntityInput(npc.index, "KillHierarchy");
 }
 
 

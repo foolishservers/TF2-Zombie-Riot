@@ -58,7 +58,6 @@ public void InfectedEngineer_OnMapStart_NPC()
 	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
-
 }
 
 static void ClotPrecache()
@@ -70,7 +69,7 @@ static void ClotPrecache()
 	PrecacheSoundArray(g_MeleeHitSounds);
 	PrecacheSoundArray(g_MeleeMissSounds);
 	PrecacheSound(g_MeleeAttackSounds);
-	PrecacheModel("models/player/Engineer.mdl");
+	PrecacheModel("models/player/engineer.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
@@ -98,7 +97,7 @@ methodmap InfectedEngineer < CClotBody
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 	}
-	public void PlayDeathSound() 
+	public void PlayDeathSound() {
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 	}
 	public void PlayMeleeSound() {
@@ -224,7 +223,7 @@ static void InfectedEngineer_ClotThink(int iNPC)
 					npc.m_flAttackHappens_bullshit = GameTime+0.54;
 					npc.m_flAttackHappenswillhappen = true;
 				}
-					
+				
 				if(npc.m_flAttackHappens < GameTime && npc.m_flAttackHappens_bullshit >= GameTime && npc.m_flAttackHappenswillhappen)
 				{
 					Handle swingTrace;

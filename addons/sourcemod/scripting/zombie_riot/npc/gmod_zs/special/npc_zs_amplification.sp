@@ -1,21 +1,6 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-static const char g_DeathSounds[][] =
-{
-	"npc/fast_zombie/wake1.wav",
-};
-
-static const char g_HurtSounds[][] =
-{
-	"npc/fast_zombie/leap1.wav"
-};
-
-static const char g_leap_scream[][] =
-{
-	"npc/fast_zombie/fz_scream1.wav"
-};
-
 static const char g_IdleSounds[][] =
 {
 	"npc/fast_zombie/idle1.wav",
@@ -36,12 +21,12 @@ static const char g_MeleeHitSounds[][] =
 	"npc/fast_zombie/claw_strike3.wav"
 };
 
-static const char g_MeleeAttackSounds[][] =
-{
-	"npc/fast_zombie/fz_frenzy1.wav"
-};
+static const char g_DeathSounds[] = "npc/fast_zombie/wake1.wav";
+static const char g_HurtSounds[] = "npc/fast_zombie/leap1.wav";
+static const char g_leap_scream[] = "npc/fast_zombie/fz_scream1.wav";
+static const char g_MeleeAttackSounds[] = "npc/fast_zombie/fz_frenzy1.wav";
 
-void Amplification_Precache()
+public void Amplification_Precache()
 {
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Plaguebearer");
@@ -50,10 +35,22 @@ void Amplification_Precache()
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_NORMAL|MVM_CLASS_FLAG_MINIBOSS;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
-	
+}
+
+static void ClotPrecache()
+{
 	Zombie_Shared_PheromonePrecache();
+	PrecacheSoundArray(g_IdleSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSound(g_DeathSounds);
+	PrecacheSound(g_HurtSounds);
+	PrecacheSound(g_leap_scream);
+	PrecacheSound(g_MeleeAttackSounds);
+	PrecacheModel("models/zombie/fast.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
@@ -67,7 +64,6 @@ methodmap Amplification < CSeaBody
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		if(this.Anger)
 		{
 			EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 80);
@@ -76,20 +72,19 @@ methodmap Amplification < CSeaBody
 		{
 			EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 80);
 		}
-		
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 	}
 	public void PlayHurtSound()
 	{
-		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_HurtSounds, this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 80);
 	}
 	public void PlayDeathSound() 
 	{
-		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_DeathSounds, this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 80);
 	}
 	public void PlayMeleeSound()
  	{
-		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_MeleeAttackSounds, this.index, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 80);
 	}
 	public void PlayMeleeHitSound()
 	{
@@ -97,7 +92,7 @@ methodmap Amplification < CSeaBody
 	}
 	public void PlayAngerSound()
 	{
-		EmitSoundToAll(g_leap_scream[GetRandomInt(0, sizeof(g_leap_scream) - 1)], this.index, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 80);	
+		EmitSoundToAll(g_leap_scream, this.index, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 80);	
 	}
 	
 	public Amplification(float vecPos[3], float vecAng[3], int ally, const char[] data)
@@ -135,7 +130,7 @@ methodmap Amplification < CSeaBody
 	}
 }
 
-public void Amplification_ClotThink(int iNPC)
+static void Amplification_ClotThink(int iNPC)
 {
 	Amplification npc = view_as<Amplification>(iNPC);
 	
@@ -145,14 +140,11 @@ public void Amplification_ClotThink(int iNPC)
 	float gameTime = GetGameTime(npc.index);
 	if(npc.m_flNextDelayTime > gameTime)
 		return;
-	
 	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
-
 	if(npc.m_blPlayHurtAnimation)
 	{
 		npc.m_blPlayHurtAnimation = false;
-
 		if(npc.Anger)
 		{
 			npc.PlayHurtSound();
@@ -164,13 +156,11 @@ public void Amplification_ClotThink(int iNPC)
 				npc.AddGesture("ACT_FASTZOMBIE_FRENZY");
 				npc.SetActivity("ACT_RUN");
 				npc.PlayAngerSound();
-
 				npc.Anger = true;
 				npc.m_flSpeed = 1250.0;	// 5.0 x 250
 				npc.m_iTarget = 0;
 				npc.m_flNextThinkTime = gameTime + 1.5;
 				npc.StopPathing();
-
 				fl_GetClosestTargetTimeTouch[npc.index] = FAR_FUTURE;	// No.
 			}
 		}
@@ -178,18 +168,14 @@ public void Amplification_ClotThink(int iNPC)
 	
 	if(npc.m_flNextThinkTime > gameTime)
 		return;
-	
 	npc.m_flNextThinkTime = gameTime + 0.1;
-
 	if(npc.m_iTarget && !IsValidEnemy(npc.index, npc.m_iTarget))
 		npc.m_iTarget = 0;
-	
 	float vecMe[3]; WorldSpaceCenter(npc.index, vecMe);
 	if(!npc.m_iTarget || npc.m_flGetClosestTargetTime < gameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
 		npc.m_flGetClosestTargetTime = gameTime + 0.5;
-
 		if(npc.Anger)
 		{
 			KillFeed_SetKillIcon(npc.index, "saw_kill");
@@ -197,12 +183,10 @@ public void Amplification_ClotThink(int iNPC)
 			Explode_Logic_Custom(5.0, -1, npc.index, -1, vecMe, 400.0, _, _, true, _, false, _, Amplification_ExplodePost);
 		}
 	}
-	
 	if(npc.m_iTarget > 0)
 	{
-		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget );
-		float distance = npc.Anger ? GetVectorDistance(vecTarget, vecMe, true) : FAR_FUTURE;		
-		
+		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget);
+		float distance = npc.Anger ? GetVectorDistance(vecTarget, vecMe, true) : FAR_FUTURE;
 		if(distance < npc.GetLeadRadius())
 		{
 			float vPredictedPos[3]; PredictSubjectPosition(npc, npc.m_iTarget,_,_, vPredictedPos);
@@ -212,15 +196,12 @@ public void Amplification_ClotThink(int iNPC)
 		{
 			npc.SetGoalEntity(npc.m_iTarget);
 		}
-
 		npc.StartPathing();
-		
 		if(npc.m_flAttackHappens)
 		{
 			if(npc.m_flAttackHappens < gameTime)
 			{
 				npc.m_flAttackHappens = 0.0;
-				
 				Handle swingTrace;
 				npc.FaceTowards(vecTarget, 15000.0);
 				if(npc.DoSwingTrace(swingTrace, npc.m_iTarget, _, _, _, _))
@@ -244,7 +225,6 @@ public void Amplification_ClotThink(int iNPC)
 						// 500 x 0.1 x 0.15 x 0.5
 					}
 				}
-
 				delete swingTrace;
 			}
 		}
@@ -262,7 +242,6 @@ public void Amplification_ClotThink(int iNPC)
 				
 				npc.m_flAttackHappens = gameTime + 0.55;
 
-				//npc.m_flDoingAnimation = gameTime + 1.2;
 				npc.m_flNextMeleeAttack = gameTime + 1.5;
 				npc.m_flHeadshotCooldown = gameTime + 1.1;
 			}
@@ -276,7 +255,7 @@ public void Amplification_ClotThink(int iNPC)
 	npc.PlayIdleSound();
 }
 
-public void Amplification_ExplodePost(int attacker, int victim, float damage, int weapon)
+static void Amplification_ExplodePost(int attacker, int victim, float damage, int weapon)
 {
 	float vic_vec[3]; WorldSpaceCenter(victim, vic_vec);
 	ParticleEffectAt(vic_vec, "water_bulletsplash01", 1.5);
@@ -285,11 +264,10 @@ public void Amplification_ExplodePost(int attacker, int victim, float damage, in
 	// 500 x 0.2 x 0.15
 }
 
-public Action Amplification_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action Amplification_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	if(attacker < 1)
 		return Plugin_Continue;
-		
 	Amplification npc = view_as<Amplification>(victim);
 	if(npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 	{
@@ -299,7 +277,7 @@ public Action Amplification_OnTakeDamage(int victim, int &attacker, int &inflict
 	return Plugin_Changed;
 }
 
-void Amplification_NPCDeath(int entity)
+static void Amplification_NPCDeath(int entity)
 {
 	Amplification npc = view_as<Amplification>(entity);
 	if(!npc.m_bGib)

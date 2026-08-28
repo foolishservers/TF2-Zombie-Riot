@@ -50,6 +50,33 @@ public void ZSPoisonZombie_OnMapStart_NPC()
 	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+	
+	strcopy(data.Name, sizeof(data.Name), "Poison Zombie");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_poisonheadcrab_zombie");
+	strcopy(data.Icon, sizeof(data.Icon), "norm_poison_zombie_forti");
+	data.IconCustom = true;
+	data.Flags = 0;
+	data.Category = Type_GmodZS;
+	data.Func = ClotSummon_ALT;
+	NPC_Add(data);
+	
+	strcopy(data.Name, sizeof(data.Name), "Fortified Giant Poison Zombie");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_poisonzombie_fortified_giant");
+	strcopy(data.Icon, sizeof(data.Icon), "norm_poison_zombie");
+	data.IconCustom = true;
+	data.Flags = MVM_CLASS_FLAG_MINIBOSS;
+	data.Category = Type_GmodZS;
+	data.Func = ClotSummon_Giant;
+	NPC_Add(data);
+	
+	strcopy(data.Name, sizeof(data.Name), "Vile Poison Zombie");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_vile_poisonheadcrab_zombie");
+	strcopy(data.Icon, sizeof(data.Icon), "norm_poison_zombie_forti");
+	data.IconCustom = true;
+	data.Flags = 0;
+	data.Category = Type_GmodZS;
+	data.Func = ClotSummon_Vile;
+	NPC_Add(data);
 }
 
 static void ClotPrecache()
@@ -62,12 +89,40 @@ static void ClotPrecache()
 	PrecacheSoundArray(g_MeleeHitSounds);
 	PrecacheSoundArray(g_MeleeAttackSounds);
 	PrecacheSoundArray(g_MeleeMissSounds);
+	PrecacheSound("npc/assassin/ball_zap1.wav");
 	PrecacheModel("models/zombie/poison.mdl");
 }
 
+static any ClotSummon_Vile(int client, float vecPos[3], float vecAng[3], int team)
+{
+	return ZSPoisonZombie(vecPos, vecAng, team, 3);
+}
+static any ClotSummon_Giant(int client, float vecPos[3], float vecAng[3], int team)
+{
+	return ZSPoisonZombie(vecPos, vecAng, team, 2);
+}
+static any ClotSummon_ALT(int client, float vecPos[3], float vecAng[3], int team)
+{
+	return ZSPoisonZombie(vecPos, vecAng, team, 1);
+}
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
-	return ZSPoisonZombie(vecPos, vecAng, team);
+	return ZSPoisonZombie(vecPos, vecAng, team, 0);
+}
+
+static char[] GetPoisonZombieHealth(int SelectInt)
+{
+	int health = 2400;
+	switch(SelectInt)
+	{
+		case 1:health = 10800;
+		case 2:health = 15000;
+		case 3:health = 40000;
+		default:health = 2400;
+	}
+	char buffer[16];
+	IntToString(health, buffer, sizeof(buffer));
+	return buffer;
 }
 
 methodmap ZSPoisonZombie < CClotBody
@@ -75,51 +130,44 @@ methodmap ZSPoisonZombie < CClotBody
 	public void PlayIdleSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _, (this.m_iOverlordComboAttack>=2 ? 80 : 100));
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(3.0, 6.0);
 	}
-	
 	public void PlayIdleAlertSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _, (this.m_iOverlordComboAttack>=2 ? 80 : 100));
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(3.0, 6.0);
 	}
-	
 	public void PlayHurtSound() {
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _, (this.m_iOverlordComboAttack>=2 ? 80 : 100));
 	}
-	
 	public void PlayDeathSound() {
-		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _, (this.m_iOverlordComboAttack>=2 ? 80 : 100));
 	}
-	
 	public void PlayMeleeSound() {
-		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _, (this.m_iOverlordComboAttack>=2 ? 80 : 100));
 	}
 	public void PlayMeleeHitSound() {
-		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _, (this.m_iOverlordComboAttack>=2 ? 80 : 100));
 	}
-
 	public void PlayMeleeMissSound() {
-		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _, (this.m_iOverlordComboAttack>=2 ? 80 : 100));
 	}
 	
-	public ZSPoisonZombie(float vecPos[3], float vecAng[3], int ally)
+	public ZSPoisonZombie(float vecPos[3], float vecAng[3], int ally, int Alt)
 	{
-		ZSPoisonZombie npc = view_as<ZSPoisonZombie>(CClotBody(vecPos, vecAng, "models/zombie/poison.mdl", "1.15", "2400", ally));
+		ZSPoisonZombie npc = view_as<ZSPoisonZombie>(CClotBody(vecPos, vecAng, "models/zombie/poison.mdl", (Alt==2 ? "1.75" : "1.15"), GetPoisonZombieHealth(Alt), ally, _, (Alt==2 ? true : false)));
 		
-		i_NpcWeight[npc.index] = 2;
+		i_NpcWeight[npc.index] = (Alt==2 ? 4 : 2);
 		
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
 		int iActivity = npc.LookupActivity("ACT_WALK");
 		if(iActivity > 0) npc.StartActivity(iActivity);
-		
-		
 		
 		func_NPCDeath[npc.index] = ZSPoisonZombie_NPCDeath;
 		func_NPCOnTakeDamage[npc.index] = ZSPoisonZombie_OnTakeDamage;
@@ -132,26 +180,34 @@ methodmap ZSPoisonZombie < CClotBody
 		
 		//IDLE
 		npc.m_flAttackHappenswillhappen = false;
-		npc.m_flSpeed = 260.0;
+		switch(Alt)
+		{
+			case 1:npc.m_flSpeed = 260.0;
+			case 2:npc.m_flSpeed = 231.0;
+			case 3:
+			{
+				npc.m_flSpeed = 300.0;
+				SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
+				SetEntityRenderColor(npc.index, 150, 255, 150, 255);
+			}
+			default:npc.m_flSpeed = 260.0;
+		}
+		npc.m_iOverlordComboAttack = Alt;
 		npc.StartPathing();
 		
 		return npc;
 	}
-	
-	
 }
 
 static void ZSPoisonZombie_ClotThink(int iNPC)
 {
 	ZSPoisonZombie npc = view_as<ZSPoisonZombie>(iNPC);
-	SetVariantInt(0);
+	SetVariantInt(((npc.m_iOverlordComboAttack==1||npc.m_iOverlordComboAttack==3) ? 1 : 0));
 	AcceptEntityInput(iNPC, "SetBodyGroup");
 	float GameTime = GetGameTime(npc.index);
 	if(npc.m_flNextDelayTime > GameTime)
 		return;
-	
 	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
-	
 	npc.Update();
 	
 	if(npc.m_blPlayHurtAnimation)
@@ -164,7 +220,6 @@ static void ZSPoisonZombie_ClotThink(int iNPC)
 	
 	if(npc.m_flNextThinkTime > GameTime)
 		return;
-	
 	npc.m_flNextThinkTime = GameTime + 0.1;
 
 	if(npc.m_flGetClosestTargetTime < GameTime)
@@ -172,47 +227,29 @@ static void ZSPoisonZombie_ClotThink(int iNPC)
 		npc.m_iTarget = GetClosestTarget(npc.index);
 		npc.m_flGetClosestTargetTime = GameTime + GetRandomRetargetTime();
 	}
-	
 	int PrimaryThreatIndex = npc.m_iTarget;
 	
 	if(IsValidEnemy(npc.index, PrimaryThreatIndex))
 	{
-			float vecTarget[3]; WorldSpaceCenter(PrimaryThreatIndex, vecTarget);
+		float vecTarget[3]; WorldSpaceCenter(PrimaryThreatIndex, vecTarget);
+		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
+		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
 		
-			float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
-			float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-			
-			//Predict their pos.
-			if(flDistanceToTarget < npc.GetLeadRadius()) {
-				
-				float vPredictedPos[3]; PredictSubjectPosition(npc, PrimaryThreatIndex,_,_, vPredictedPos);
-				
-			/*	int color[4];
-				color[0] = 255;
-				color[1] = 255;
-				color[2] = 0;
-				color[3] = 255;
-			
-				int xd = PrecacheModel("materials/sprites/laserbeam.vmt");
-			
-				TE_SetupBeamPoints(vPredictedPos, vecTarget, xd, xd, 0, 0, 0.25, 0.5, 0.5, 5, 5.0, color, 30);
-				TE_SendToAllInRange(vecTarget, RangeType_Visibility);*/
-				
-				npc.SetGoalVector(vPredictedPos);
-			} else {
-				npc.SetGoalEntity(PrimaryThreatIndex);
-			}
-			
-			//Target close enough to hit
-			if(flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED || npc.m_flAttackHappenswillhappen)
+		if(flDistanceToTarget < npc.GetLeadRadius())
+		{
+			float vPredictedPos[3]; PredictSubjectPosition(npc, PrimaryThreatIndex,_,_, vPredictedPos);
+			npc.SetGoalVector(vPredictedPos);
+		}
+		else
+		{
+			npc.SetGoalEntity(PrimaryThreatIndex);
+		}
+		
+		if(flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED || npc.m_flAttackHappenswillhappen)
+		{
+			if(npc.m_flNextMeleeAttack < GameTime)
 			{
-				//Look at target so we hit.
-			//	npc.FaceTowards(vecTarget, 20000.0);
-				
-				//Can we attack right now?
-				if(npc.m_flNextMeleeAttack < GameTime)
-				{
-					//Play attack ani
+				//Play attack ani
 				if (!npc.m_flAttackHappenswillhappen)
 				{
 					npc.AddGesture("ACT_MELEE_ATTACK1");
@@ -221,65 +258,73 @@ static void ZSPoisonZombie_ClotThink(int iNPC)
 					npc.m_flAttackHappens_bullshit = GameTime+1.0;
 					npc.m_flAttackHappenswillhappen = true;
 				}
-						
 				if (npc.m_flAttackHappens < GameTime && npc.m_flAttackHappens_bullshit >= GameTime && npc.m_flAttackHappenswillhappen)
 				{
-						Handle swingTrace;
-						npc.FaceTowards(vecTarget, 20000.0);
-						if(npc.DoSwingTrace(swingTrace, PrimaryThreatIndex))
-							{
-								int target = TR_GetEntityIndex(swingTrace);	
-								
-								float vecHit[3];
-								TR_GetEndPosition(vecHit, swingTrace);
-								
-								if(target > 0) 
-								{
-									if(!ShouldNpcDealBonusDamage(target))
-									{
-										SDKHooks_TakeDamage(target, npc.index, npc.index, 160.0, DMG_CLUB, -1, _, vecHit);
-										Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 50 : 10);
-									}
-									else
-									{
-										SDKHooks_TakeDamage(target, npc.index, npc.index, 240.0, DMG_CLUB, -1, _, vecHit);
-									}
-									// Hit particle
-									
-									
-									// Hit sound
-									npc.PlayMeleeHitSound();
-									
-									//Did we kill them?
-									int iHealthPost = GetEntProp(target, Prop_Data, "m_iHealth");
-									if(iHealthPost <= 0) 
-									{
-										//Yup, time to celebrate
-										npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST");
-									}
-								} 
-							}
-						delete swingTrace;
-						npc.m_flNextMeleeAttack = GameTime + 0.6;
-						npc.m_flAttackHappenswillhappen = false;
-					}
-					else if (npc.m_flAttackHappens_bullshit < GameTime && npc.m_flAttackHappenswillhappen)
+					Handle swingTrace;
+					npc.FaceTowards(vecTarget, 20000.0);
+					if(npc.DoSwingTrace(swingTrace, PrimaryThreatIndex,_,_,_,(npc.m_iOverlordComboAttack==2 ? 1 : 0)))
 					{
-						npc.m_flAttackHappenswillhappen = false;
-						npc.m_flNextMeleeAttack = GameTime + 0.6;
+						int target = TR_GetEntityIndex(swingTrace);
+						float vecHit[3];
+						TR_GetEndPosition(vecHit, swingTrace);
+						
+						if(target > 0) 
+						{
+							float fDamage = 160.0;
+							if(!ShouldNpcDealBonusDamage(target))
+							{
+								switch(npc.m_iOverlordComboAttack)
+								{
+									case 1:fDamage=380.0;
+									case 2:fDamage=380.0;
+									case 3:fDamage=400.0;
+									default:fDamage=160.0;
+								}
+								SDKHooks_TakeDamage(target, npc.index, npc.index, fDamage, DMG_CLUB, -1, _, vecHit);
+								Elemental_AddPheromoneDamage(target, npc.index, npc.m_iOverlordComboAttack==2 ? 500 : 50);
+								if(npc.m_iOverlordComboAttack==2 && IsValidClient(target) && Armor_Charge[target] > 0)
+								{
+									Armor_Charge[target]=0;
+									f_Armor_BreakSoundDelay[target] = GameTime + 5.0;	
+									EmitSoundToClient(target, "npc/assassin/ball_zap1.wav", target, SNDCHAN_STATIC, 60, _, 1.0, GetRandomInt(95,105));
+								}
+							}
+							else
+							{
+								switch(npc.m_iOverlordComboAttack)
+								{
+									case 1:fDamage=720.0;
+									case 2:fDamage=720.0;
+									case 3:fDamage=1000.0;
+									default:fDamage=240.0;
+								}
+								SDKHooks_TakeDamage(target, npc.index, npc.index, fDamage, DMG_CLUB, -1, _, vecHit);
+							}
+							npc.PlayMeleeHitSound();
+							int iHealthPost = GetEntProp(target, Prop_Data, "m_iHealth");
+							if(iHealthPost <= 0) 
+								npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST");
+						} 
 					}
+					delete swingTrace;
+					npc.m_flNextMeleeAttack = GameTime + (npc.m_iOverlordComboAttack>=2 ? 1.0 : 0.6);
+					npc.m_flAttackHappenswillhappen = false;
+				}
+				else if (npc.m_flAttackHappens_bullshit < GameTime && npc.m_flAttackHappenswillhappen)
+				{
+					npc.m_flAttackHappenswillhappen = false;
+					npc.m_flNextMeleeAttack = GameTime + (npc.m_iOverlordComboAttack>=2 ? 1.0 : 0.6);
 				}
 			}
-			else
-			{
-				npc.StartPathing();
-				
-			}
+		}
+		else
+		{
+			npc.StartPathing();
+		}
 	}
 	else
 	{
 		npc.StopPathing();
-		
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_iTarget = GetClosestTarget(npc.index);
 	}
@@ -288,12 +333,11 @@ static void ZSPoisonZombie_ClotThink(int iNPC)
 
 static Action ZSPoisonZombie_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
-	//Valid attackers only.
 	if(attacker <= 0)
 		return Plugin_Continue;
-		
+	
 	ZSPoisonZombie npc = view_as<ZSPoisonZombie>(victim);
-	if(!NpcStats_IsEnemySilenced(victim))
+	if(npc.m_iOverlordComboAttack<2 && !NpcStats_IsEnemySilenced(victim))
 	{
 		if(!npc.bXenoInfectedSpecialHurt)
 		{
@@ -320,17 +364,11 @@ static Action ZSPoisonZombie_OnTakeDamage(int victim, int &attacker, int &inflic
 		fl_TotalArmor[npc.index] = TrueArmor;
 	}
 	
-	/*
-	if(attacker > MaxClients && !IsValidEnemy(npc.index, attacker))
-		return Plugin_Continue;
-	*/
-	
-	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
+	if(npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 	{
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
 	}
-	
 	return Plugin_Changed;
 }
 
@@ -360,5 +398,26 @@ static void ZSPoisonZombie_NPCDeath(int entity)
 {
 	ZSPoisonZombie npc = view_as<ZSPoisonZombie>(entity);
 	if(!npc.m_bGib)
-		npc.PlayDeathSound();	
+		npc.PlayDeathSound();
+	if(npc.m_iOverlordComboAttack==1 && !NpcStats_IsEnemySilenced(entity))
+	{
+		int maxhealth = ReturnEntityMaxHealth(npc.index);
+		float startPosition[3];
+		GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", startPosition);
+		maxhealth /= 2;
+		for(int i; i<1; i++)
+		{
+			float pos[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos);
+			float ang[3]; GetEntPropVector(npc.index, Prop_Data, "m_angRotation", ang);
+			
+			int spawn_index = NPC_CreateByName("npc_zs_poisonheadcrab", -1, pos, ang, GetTeam(npc.index));
+			if(spawn_index > MaxClients)
+			{
+				NpcStats_CopyStats(npc.index, spawn_index);
+				NpcAddedToZombiesLeftCurrently(spawn_index, true);
+				SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
+				SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
+			}
+		}
+	}
 }

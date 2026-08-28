@@ -39,7 +39,7 @@ static const char g_MeleeAttackSounds[][] =
 	"weapons/boxing_gloves_swing4.wav"
 };
 
-void InfectedHeavy_Precache()
+public void InfectedHeavy_Precache()
 {
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Infected Heavy");
@@ -48,8 +48,19 @@ void InfectedHeavy_Precache()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheModel("models/player/heavy.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
@@ -63,7 +74,6 @@ methodmap InfectedHeavy < CClotBody
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 	}
@@ -120,7 +130,7 @@ methodmap InfectedHeavy < CClotBody
 	}
 }
 
-public void InfectedHeavy_ClotThink(int iNPC)
+static void InfectedHeavy_ClotThink(int iNPC)
 {
 	InfectedHeavy npc = view_as<InfectedHeavy>(iNPC);
 
@@ -212,11 +222,10 @@ public void InfectedHeavy_ClotThink(int iNPC)
 	{
 		npc.StopPathing();
 	}
-
 	npc.PlayIdleSound();
 }
 
-void InfectedHeavy_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static void InfectedHeavy_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	if(attacker > 0)
 	{
@@ -260,7 +269,7 @@ void InfectedHeavy_OnTakeDamage(int victim, int &attacker, int &inflictor, float
 	}
 }
 
-void InfectedHeavy_NPCDeath(int entity)
+static void InfectedHeavy_NPCDeath(int entity)
 {
 	InfectedHeavy npc = view_as<InfectedHeavy>(entity);
 	if(!npc.m_bGib)

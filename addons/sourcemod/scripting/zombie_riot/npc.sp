@@ -1244,7 +1244,6 @@ void NPC_ConfigSetup()
 	Ghoul_OnMapStart_NPC();
 	ZSPoisonZombie_OnMapStart_NPC();
 	ZSPoisonHeadcrab_MapStart();
-	ZSFortifiedGiantPoisonZombie_OnMapStart_NPC();
 	Butcher_OnMapStart_NPC();
 	ZSThe_Shit_Slapper_OnMapStart_NPC();
 	BloatedZombie_OnMapStart_NPC();
@@ -1258,16 +1257,11 @@ void NPC_ConfigSetup()
 	Nest_OnMapStart_NPC();
 	ZSZmain_OnMapStart_NPC();
 	ZS_Pukepus_OnMapStart_NPC();
-	ZombieSummonRandom_OnMapStart_NPC();
 	PoyoSummonRandom_OnMapStart_NPC();
 	Amplification_Precache();
 	Pregnant_Precache();
-	ZSHeadcrabZombie_OnMapStart_NPC();
-	ZSFastheadcrabZombie_OnMapStart_NPC();
-	ZSPoisonheadcrabZombie_OnMapStart_NPC();
 	ZsSpitter_Precache();
 	Zsrunner_Precache();
-	ZSsoldierOnMapStart();
 	ZsSpy_OnMapStart_NPC();
 	ZSscout_OnMapStart_NPC();
 	InfectedHeavy_Precache();
@@ -1291,8 +1285,7 @@ void NPC_ConfigSetup()
 	InfectedFatSpy_Precache();
 	InfectedCleaner_OnMapStart_NPC();
 	InfectedFireFighter_OnMapStart_NPC();
-	ZSCombineElite_OnMapStart_NPC();
-	ZSVILEPoisonheadcrabZombie_OnMapStart_NPC();
+//	ZSCombineElite_OnMapStart_NPC();
 	StrangPyro_OnMapStart_NPC();
 	InfectedMessengerOnMapStart();
 	InfectedHazardous_OnMapStart_NPC();
@@ -1310,7 +1303,6 @@ void NPC_ConfigSetup()
 	ZSMainPoisonZombie_OnMapStart_NPC();
 	ZSSoldierGiant_OnMapStart_NPC();
 	ZSSoldierMinion_OnMapStart_NPC();
-	Angryheadcrab_MapStart();
 	Headcrabmilloperator_OnMapStart_NPC();
 	ManhattanParrot_OnMapStart_NPC();
 	InfectedTomislavMain_OnMapStart_NPC();
@@ -2911,13 +2903,9 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/15/npc_zs_poisonzombie.sp"
 #include "npc/gmod_zs/30/npc_zs_gore_blaster.sp"
 #include "npc/gmod_zs/30/npc_zs_fast_headcrab.sp"
-#include "npc/gmod_zs/30/npc_zs_headcrabzombie.sp"
-#include "npc/gmod_zs/30/npc_zs_fastheadcrab_zombie.sp"
-#include "npc/gmod_zs/30/npc_zs_poisonheadcrab_zombie.sp"
 #include "npc/gmod_zs/30/npc_zs_runner.sp"
 #include "npc/gmod_zs/30/npc_zs_spitter.sp"
 #include "npc/gmod_zs/45/npc_zs_zombie_scout.sp"
-#include "npc/gmod_zs/45/npc_zs_zombie_soldier_pickaxe.sp"
 #include "npc/gmod_zs/45/npc_zs_zombie_spy.sp"
 #include "npc/gmod_zs/45/npc_zs_zombie_heavy.sp"
 #include "npc/gmod_zs/45/npc_zs_zombie_soldier.sp"
@@ -2928,7 +2916,6 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/45/npc_zs_zombie_engineer.sp"
 #include "npc/gmod_zs/45/npc_zs_medic_healer.sp"
 #include "npc/gmod_zs/45/npc_zs_huntsman.sp"
-#include "npc/gmod_zs/45/npc_angryheadcrab.sp"
 #include "npc/gmod_zs/45/npc_zs_hmo.sp"
 #include "npc/gmod_zs/45/npc_infected_tomislav_main.sp"
 #include "npc/gmod_zs/60/npc_zs_eradicator.sp"
@@ -2936,7 +2923,6 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/60/npc_zs_medic_main.sp"
 #include "npc/gmod_zs/60/npc_zs_zombie_fatscout.sp"
 #include "npc/gmod_zs/60/npc_zs_cleaner.sp"
-#include "npc/gmod_zs/60/npc_zs_vile_poisonheadcrab_zombie.sp"
 #include "npc/gmod_zs/60/npc_zs_stranger.sp"
 #include "npc/gmod_zs/60/npc_zs_soldier_messenger.sp"
 #include "npc/gmod_zs/60/npc_zs_ihbc.sp"
@@ -2946,16 +2932,14 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/60/npc_zs_sam.sp"
 #include "npc/gmod_zs/60/npc_zs_mlsm.sp"
 #include "npc/gmod_zs/60/npc_zs_manhattan_parrot.sp"
-#include "npc/gmod_zs/bandit/npc_zs_combine_soldier_elite.sp"
+//#include "npc/gmod_zs/bandit/npc_zs_combine_soldier_elite.sp"
 #include "npc/gmod_zs/npc_zs_zmain.sp"
 #include "npc/gmod_zs/npc_zs_pukepus.sp"
 #include "npc/gmod_zs/special/npc_zs_flesh_creeper.sp"
 #include "npc/gmod_zs/special/npc_zs_nest.sp"
-#include "npc/gmod_zs/special/npc_random_zombie.sp"
 #include "npc/gmod_zs/special/npc_random_poyo.sp"
 #include "npc/gmod_zs/special/npc_zs_amplification.sp"
 #include "npc/gmod_zs/special/npc_zs_howler.sp"
-#include "npc/gmod_zs/special/npc_zs_poisonzombie_fortified_giant.sp"
 #include "npc/gmod_zs/special/npc_zs_the_shit_slapper.sp"
 #include "npc/gmod_zs/special/npc_zs_butcher.sp"
 #include "npc/gmod_zs/special/npc_zs_bastardzine.sp"

@@ -99,7 +99,7 @@ methodmap Ghoul < CClotBody
 	
 	public Ghoul(float vecPos[3], float vecAng[3], int ally, bool Alt)
 	{
-		Ghoul npc = view_as<Ghoul>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "800", ally, false));
+		Ghoul npc = view_as<Ghoul>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", (Alt ? "3200" : "800"), ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
@@ -203,7 +203,7 @@ static void Ghoul_ClotThink(int iNPC)
 						TR_GetEndPosition(vecHit, swingTrace);
 						if(target > 0) 
 						{
-							float damageAmount = (ShouldNpcDealBonusDamage(target) ? 100.0 : (npc.m_bFUCKYOU ? 120 : 80));
+							float damageAmount = (ShouldNpcDealBonusDamage(target) ? 100.0 : (npc.m_bFUCKYOU ? 120.0 : 80.0));
 							SDKHooks_TakeDamage(target, npc.index, npc.index, damageAmount, DMG_CLUB, -1, _, vecHit);
 							if(!ShouldNpcDealBonusDamage(target))
 							{

@@ -31,12 +31,9 @@ static const char g_MeleeHitSounds[][] =
 	"weapons/cbar_hitbod3.wav"
 };
 
-static const char g_MeleeAttackSounds[][] =
-{
-	"weapons/machete_swing.wav"
-};
+static const char g_MeleeAttackSounds[] = "weapons/machete_swing.wav";
 
-void InfectedSniperjarate_Precache()
+public void InfectedSniperjarate_Precache()
 {
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Infected Jarate Sniper");
@@ -45,8 +42,19 @@ void InfectedSniperjarate_Precache()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSound(g_MeleeAttackSounds);
+	PrecacheModel("models/player/sniper.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
@@ -74,7 +82,7 @@ methodmap InfectedSniperjarate < CClotBody
 	}
 	public void PlayMeleeSound()
  	{
-		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _);
+		EmitSoundToAll(g_MeleeAttackSounds, this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _);
 	}
 	public void PlayMeleeHitSound()
 	{
@@ -119,7 +127,7 @@ methodmap InfectedSniperjarate < CClotBody
 	}
 }
 
-public void InfectedSniperjarate_ClotThink(int iNPC)
+static void InfectedSniperjarate_ClotThink(int iNPC)
 {
 	InfectedSniperjarate npc = view_as<InfectedSniperjarate>(iNPC);
 
@@ -226,7 +234,7 @@ public void InfectedSniperjarate_ClotThink(int iNPC)
 	npc.PlayIdleSound();
 }
 
-void InfectedSniperjarate_NPCDeath(int entity)
+static void InfectedSniperjarate_NPCDeath(int entity)
 {
 	InfectedSniperjarate npc = view_as<InfectedSniperjarate>(entity);
 	if(!npc.m_bGib)

@@ -3,6 +3,7 @@
 
 bool g_infected_messenger_died;
 float g_infected_messenger_die;
+
 static const char g_DeathSounds[][] =
 {
 	"vo/soldier_paincrticialdeath01.mp3",
@@ -48,9 +49,8 @@ static char g_SummonSounds[][] = {
 	"weapons/buff_banner_horn_red.wav",
 };
 
-void InfectedMessengerOnMapStart()
-{	
-	
+public void InfectedMessengerOnMapStart()
+{
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Infected Messenger Soldier");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_soldier_messenger");
@@ -58,8 +58,20 @@ void InfectedMessengerOnMapStart()
 	data.IconCustom = false;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSoundArray(g_SummonSounds);
+	PrecacheModel("models/player/soldier.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int ally)
@@ -73,7 +85,6 @@ methodmap InfectedMessenger < CClotBody
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 	}
@@ -367,17 +378,16 @@ static void ClotThink(int iNPC)
 			CPrintToChatAll("{green}감염된 전령병{default}: 쿨럭...쿨럭....");
 		}
 	}
-
     npc.PlayIdleSound();
 }
 
 public Action InfectedMessenger_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	InfectedMessenger npc = view_as<InfectedMessenger>(victim);
-		
+
 	if(attacker <= 0)
 		return Plugin_Continue;
-		
+
 	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 	{
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
@@ -385,7 +395,7 @@ public Action InfectedMessenger_OnTakeDamage(int victim, int &attacker, int &inf
 	}
 	if(g_infected_messenger_died)
 		return Plugin_Continue;
-	
+
 	float maxhealth = float(ReturnEntityMaxHealth(npc.index));
 	float health = float(GetEntProp(npc.index, Prop_Data, "m_iHealth"));
 	float Ratio = health / maxhealth;
@@ -442,6 +452,7 @@ public Action InfectedMessenger_OnTakeDamage(int victim, int &attacker, int &inf
 	}
 	return Plugin_Changed;
 }
+
 static void Spawn_Chaos(InfectedMessenger npc)
 {
 	float pos[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos);
@@ -481,7 +492,7 @@ static void Spawn_Chaos(InfectedMessenger npc)
 	}
 }
 
-void InfectedMessengerSpawnEnemy(int infectedmessenger, char[] plugin_name, int health = 0, int count, bool is_a_boss = false)
+static void InfectedMessengerSpawnEnemy(int infectedmessenger, char[] plugin_name, int health = 0, int count, bool is_a_boss = false)
 {
 	if(GetTeam(infectedmessenger) == TFTeam_Red)
 	{
@@ -551,6 +562,7 @@ void InfectedMessengerSpawnEnemy(int infectedmessenger, char[] plugin_name, int 
 
 	Zombies_Currently_Still_Ongoing += count;
 }
+
 static void ClotDeath(int entity)
 {
 	InfectedMessenger npc = view_as<InfectedMessenger>(entity);

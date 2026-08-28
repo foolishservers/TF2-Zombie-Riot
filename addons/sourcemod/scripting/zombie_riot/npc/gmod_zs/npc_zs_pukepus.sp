@@ -100,7 +100,7 @@ methodmap ZS_Pukepus < CClotBody
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
 		
-		func_NPCDeath[npc.index] = ZSPoisonZombie_NPCDeath;
+		func_NPCDeath[npc.index] = ZS_Pukepus_NPCDeath;
 		func_NPCThink[npc.index] = ZS_Pukepus_ClotThink;
 		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;
 		
@@ -301,4 +301,11 @@ static void PukepusProjectile_StartTouch(int entity, int target)
 			RemoveEntity(particle);
 	}
 	RemoveEntity(entity);
+}
+
+static void ZS_Pukepus_NPCDeath(int entity)
+{
+	ZS_Pukepus npc = view_as<ZS_Pukepus>(entity);
+	if(!npc.m_bGib)
+		npc.PlayDeathSound();
 }

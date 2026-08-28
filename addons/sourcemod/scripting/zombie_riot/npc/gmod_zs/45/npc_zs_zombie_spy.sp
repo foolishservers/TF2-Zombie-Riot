@@ -316,14 +316,11 @@ static Action ZsSpy_OnTakeDamage(int victim, int &attacker, int &inflictor, floa
 			return Plugin_Changed;
 		}
 	}
-
 	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 	{
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
 	}
-
-	
 	return Plugin_Changed;
 }
 

@@ -48,7 +48,6 @@ public void ShadowWalker_OnMapStart_NPC()
 static void ClotPrecache()
 {
 	PrecacheSoundArray(g_DeathSounds);
-	PrecacheSoundArray(g_HurtSounds);
 	PrecacheSoundArray(g_IdleSounds);
 	PrecacheSoundArray(g_MeleeAttackSounds);
 	PrecacheSoundArray(g_MeleeHitSounds);

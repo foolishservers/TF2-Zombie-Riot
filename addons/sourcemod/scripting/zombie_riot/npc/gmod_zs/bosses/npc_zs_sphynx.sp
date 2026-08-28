@@ -382,9 +382,9 @@ void ZSSphynxSelfDefense(ZSSphynx npc, float gameTime, int target, float distanc
 
 				if(IsValidEnemy(npc.index, target))
 				{
-					float damageDealt = 10.0;
+					float damageDealt = 300.0;
 					if(ShouldNpcDealBonusDamage(target))
-						damageDealt *= 1.0;
+						damageDealt *= 15.0;
 
 					SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_CLUB, -1, _, vecHit);
 
