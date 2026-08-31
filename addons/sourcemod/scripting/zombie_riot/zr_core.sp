@@ -3576,6 +3576,7 @@ void ForcePlayerWin(bool fakeout = false)
 			if (!b_IsPlayerABot[client] && IsClientInGame(client) && !IsFakeClient(client) && GetTeam(client) == 2)
 				playerList.Push(client);
 		}
+		
 		ArrayList RogueitemNames = new ArrayList(64);
 		if(ZR_GetSpecialMode() == Mode_Rogue1 || 
 		ZR_GetSpecialMode() == Mode_Rogue2 ||
@@ -3597,7 +3598,6 @@ void ForcePlayerWin(bool fakeout = false)
 					}
 				}
 			}
-
 		}
 		
 		char waveset[64], modifier[64];
@@ -3605,7 +3605,7 @@ void ForcePlayerWin(bool fakeout = false)
 		strcopy(modifier, sizeof(modifier), WhatModifierSetting);
 		int TimeTookToBeat = GetTime() - TimeWhenStartedWaveset;
 		Native_ZR_OnWinInfo(playerList, waveset, modifier, TimeTookToBeat, CurrentRound[0], RogueitemNames);
-
+		
 		delete playerList;
 		delete RogueitemNames;
 

@@ -3701,8 +3701,18 @@ methodmap CClotBody < CBaseCombatCharacter
 				}
 				if (this.m_iPose_MoveYaw != -1) 
 				{
-					//too lazy to code this :D
-					this.SetPoseParameter(this.m_iPose_MoveYaw, 0.0);
+					// too lazy to code this :D -> Huh?
+					// this.SetPoseParameter(this.m_iPose_MoveYaw, 0.0);
+					// MoveYaw is necessary for hl2 and mvm bot.
+					
+					float flYaw = RadToDeg(
+						ArcTangent2(
+							GetVectorDotProduct(vecMotion, vecRight),
+							GetVectorDotProduct(vecMotion, vecFwd)
+						)
+					);
+					
+					this.SetPoseParameter(this.m_iPose_MoveYaw, flYaw);
 				}
 			}	
 			this.GetBaseNPC().flRunSpeed = this.GetRunSpeed();

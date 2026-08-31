@@ -136,6 +136,44 @@ methodmap CombinePretorianGuard < CClotBody {
 		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, _, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	
+	public void Update()
+	{
+		// 1) CClotBody의 기존 처리(애니메이션 블렌딩, 회피 박스, 경로 진행 등)는 그대로 실행
+		view_as<CClotBody>(this).Update();
+		
+		// 2) 우리 전용 근거리 추적 레이어
+		this.CustomFollowUpdate();
+	}
+	
+	public void CustomFollowUpdate()
+	{
+		// 추격 상태(state 0)일 때만 개입. 정지 조준(1,2)이나 근접공격(3) 중엔
+		// base 경로 시스템이 이미 멈춰있으므로 건드리지 않는다.
+		if (this.m_iState != 0)
+			return;
+		
+		int target = this.m_iTarget;
+		if (!IsValidEnemy(this.index, target))
+			return;
+		
+		// 시야가 확보된 상태에서만 직선 조향한다. LOS가 없으면(벽 뒤 등)
+		// Approach()는 장애물을 무시하고 직진하므로 base 나브메시 경로에 맡긴다.
+		if (!this.m_bCanSeeCurrentTarget)
+			return;
+		
+		float myPos[3], targetPos[3];
+		WorldSpaceCenter(this.index, myPos);
+		WorldSpaceCenter(target, targetPos);
+		
+		// 근거리(약 700유닛 이내)에서만 매 프레임 직접 조향.
+		// 그 밖에는 base의 나브메시 경로(SetGoalVector/SetGoalEntity)가 담당.
+		float distSq = GetVectorDistance(myPos, targetPos, true);
+		if (distSq > (700.0 * 700.0))
+			return;
+		
+		this.Approach(targetPos);
+	}
+	
 	public bool IsTargetInFiringCone(int target, float maxAngle = 20.0)
 	{
 		float vecMe[3], vecTarget[3], vecToTarget[3];
@@ -155,81 +193,180 @@ methodmap CombinePretorianGuard < CClotBody {
 		return (FloatAbs(flDiff) <= maxAngle);
 	}
 	
-	public int DoRangeAttack(int target) {
+	public void DoRangeAttack(int target) {
 		float gameTime = GetGameTime(this.index);
 		if (this.m_flAttackHappenswillhappen || this.m_flNextRangedAttack > gameTime)
-			return 0;
+			return;
 		
-		int seenTarget = Can_I_See_Enemy(this.index, target);
-		if (!IsValidEnemy(this.index, seenTarget)) {
-			// Start to chase it.
-			return 1;
+		float vecTarget[3];
+		WorldSpaceCenter(target, vecTarget);
+		//this.FaceTowards(vecTarget, 10000.0);
+		
+		float vecSpread = 0.1;
+		//float eyePitch[3];
+		//GetEntPropVector(this.index, Prop_Data, "m_angRotation", eyePitch);
+		
+		float x, y;
+		x = GetRandomFloat( -0.15, 0.15 ) + GetRandomFloat( -0.15, 0.15 );
+		y = GetRandomFloat( -0.15, 0.15 ) + GetRandomFloat( -0.15, 0.15 );
+		
+		float vecDirShooting[3], vecRight[3], vecUp[3];
+		vecTarget[2] += 15.0;
+		
+		float vecMe[3];
+		WorldSpaceCenter(this.index, vecMe);
+		
+		MakeVectorFromPoints(vecMe, vecTarget, vecDirShooting);
+		GetVectorAngles(vecDirShooting, vecDirShooting);
+		//vecDirShooting[1] = eyePitch[1];
+		GetAngleVectors(vecDirShooting, vecDirShooting, vecRight, vecUp);
+		
+		float vecEnd[3];
+		vecEnd[0] = vecMe[0] + vecDirShooting[0] * 9000; 
+		vecEnd[1] = vecMe[1] + vecDirShooting[1] * 9000;
+		vecEnd[2] = vecMe[2] + vecDirShooting[2] * 9000;
+		
+		this.m_flNextRangedAttack = gameTime + 0.35;
+		this.m_iAttacksTillReload -= 1;
+		
+		this.AddGesture("ACT_GESTURE_RANGE_ATTACK_AR2");
+		
+		float vecDir[3];
+		vecDir[0] = vecDirShooting[0] + x * vecSpread * vecRight[0] + y * vecSpread * vecUp[0]; 
+		vecDir[1] = vecDirShooting[1] + x * vecSpread * vecRight[1] + y * vecSpread * vecUp[1]; 
+		vecDir[2] = vecDirShooting[2] + x * vecSpread * vecRight[2] + y * vecSpread * vecUp[2]; 
+		NormalizeVector(vecDir, vecDir);
+		
+		int targetHurt = FireBullet(this.index, this.m_iWearable1, vecMe, vecDir, 50.0, 9000.0, DMG_BULLET, "bullet_tracer01_red");
+		if (IsValidEnemy(this.index, targetHurt))
+		{
+			ApplyStatusEffect(this.index, targetHurt, "Silenced", 2.0);
 		}
-		else {
-			float vecTarget[3];
-			WorldSpaceCenter(seenTarget, vecTarget);
-			//this.FaceTowards(vecTarget, 10000.0);
-			
-			float vecSpread = 0.1;
-			//float eyePitch[3];
-			//GetEntPropVector(this.index, Prop_Data, "m_angRotation", eyePitch);
-			
-			float x, y;
-			x = GetRandomFloat( -0.15, 0.15 ) + GetRandomFloat( -0.15, 0.15 );
-			y = GetRandomFloat( -0.15, 0.15 ) + GetRandomFloat( -0.15, 0.15 );
-			
-			float vecDirShooting[3], vecRight[3], vecUp[3];
-			vecTarget[2] += 15.0;
-			
-			float vecMe[3];
-			WorldSpaceCenter(this.index, vecMe);
-			
-			MakeVectorFromPoints(vecMe, vecTarget, vecDirShooting);
-			GetVectorAngles(vecDirShooting, vecDirShooting);
-			//vecDirShooting[1] = eyePitch[1];
-			GetAngleVectors(vecDirShooting, vecDirShooting, vecRight, vecUp);
-			
-			float vecEnd[3];
-			vecEnd[0] = vecMe[0] + vecDirShooting[0] * 9000; 
-			vecEnd[1] = vecMe[1] + vecDirShooting[1] * 9000;
-			vecEnd[2] = vecMe[2] + vecDirShooting[2] * 9000;
-			
-			this.m_flNextRangedAttack = gameTime + 0.35;
-			this.m_iAttacksTillReload -= 1;
-			
-			this.AddGesture("ACT_GESTURE_RANGE_ATTACK_AR2");
-			
-			float vecDir[3];
-			vecDir[0] = vecDirShooting[0] + x * vecSpread * vecRight[0] + y * vecSpread * vecUp[0]; 
-			vecDir[1] = vecDirShooting[1] + x * vecSpread * vecRight[1] + y * vecSpread * vecUp[1]; 
-			vecDir[2] = vecDirShooting[2] + x * vecSpread * vecRight[2] + y * vecSpread * vecUp[2]; 
-			NormalizeVector(vecDir, vecDir);
-			
-			seenTarget = FireBullet(this.index, this.m_iWearable1, vecMe, vecDir, 50.0, 9000.0, DMG_BULLET, "bullet_tracer01_red");
-			if (IsValidEnemy(this.index, seenTarget))
-			{
-				ApplyStatusEffect(this.index, seenTarget, "Silenced", 2.0);
-			}
-			
-			this.PlayRangedSound();
-			
-			if (this.m_iAttacksTillReload == 0)
-			{
-				this.AddGesture("ACT_RELOAD_AR2");
-				this.m_flReloadDelay = gameTime + 2.2;
-				this.m_iAttacksTillReload = 10;
-				this.PlayRangedReloadSound();
-				
-				return 2;
-			}
-			
-			return 1;
+		
+		this.PlayRangedSound();
+		
+		if (this.m_iAttacksTillReload == 0)
+		{
+			this.AddGesture("ACT_RELOAD_AR2");
+			this.m_flReloadDelay = gameTime + 2.2;
+			this.m_iAttacksTillReload = 10;
+			this.PlayRangedReloadSound();
 		}
 	}
+
+	property float m_flEyeYaw
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][0]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][0] = TempValueForProperty; }
+	}
 	
-	property bool m_bStopMoving {
-		public get()							{ return b_FUCKYOU[this.index]; }
-		public set(bool TempValueForProperty) 	{ b_FUCKYOU[this.index] = TempValueForProperty; }
+	property float m_flEyePitch
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][1]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][1] = TempValueForProperty; }
+	}
+	
+	property float m_flCurrentFeetYaw
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][2]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][2] = TempValueForProperty; }
+	}
+	
+	property float m_flGoalFeetYaw
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][3]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][3] = TempValueForProperty; }
+	}
+	
+	property float m_flLastAimTurnTime
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][4]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][4] = TempValueForProperty; }
+	}
+	
+	property bool m_bCanSeeCurrentTarget
+	{
+		public get()							{ return this.m_fbGunout; }
+		public set(bool TempValueForProperty) 	{ this.m_fbGunout = TempValueForProperty; }
+	}
+	
+	public void ComputePoseParam_AimPitch()
+	{
+		int m_iAimPitch = this.LookupPoseParameter("aim_pitch");
+		if (m_iAimPitch < 0)
+			return;
+		
+		float flAimPitch = this.GetPoseParameter(m_iAimPitch);
+		
+		// Fuck. this pose param is inverted.
+		float flGoalPitch = clamp(-this.m_flEyePitch, -56.0, 89.0);
+		
+		flAimPitch = ApproachAngle(flGoalPitch, flAimPitch, 10.0);
+		
+		// Set the aim pitch and save.
+		this.SetPoseParameter(m_iAimPitch, flAimPitch);
+	}
+	
+	public void ComputePoseParam_AimYaw()
+	{
+		ILocomotion loco = this.GetLocomotionInterface();
+		
+		// Keep the torso twist inside what the aim_yaw pose parameter actually supports.
+		// (the final clamp below is -44.9..44.9, so stay a hair inside that)
+		#define MAX_TORSO_YAW 44.0
+		
+		bool bMoving = loco.GetGroundSpeed() > 0.01;
+		
+		// Initialize the feet on the very first tick - nothing to interpolate from yet.
+		if (this.m_flLastAimTurnTime <= 0.0)
+		{
+			this.m_flGoalFeetYaw	= this.m_flEyeYaw;
+			this.m_flCurrentFeetYaw = this.m_flEyeYaw;
+			this.m_flLastAimTurnTime = GetGameTime();
+		}
+		else if (bMoving) {
+			// The feet match the eye direction when moving - the move yaw takes care of the rest.
+			this.m_flGoalFeetYaw = this.m_flEyeYaw;
+		}
+		else {
+			// Continuously chase the eye direction with the feet, but never let the
+			// torso twist further than the pose parameter allows. Because this is
+			// recalculated every tick (instead of only when the 45 threshold is first
+			// crossed), the body smoothly follows a moving/tracked target rather than
+			// snap-turning in fixed 45 degree jumps.
+			float flYawDelta = AngleNormalizeWithMod(this.m_flEyeYaw - this.m_flCurrentFeetYaw);
+			if (FloatAbs(flYawDelta) > MAX_TORSO_YAW)
+			{
+				float flSide = (flYawDelta > 0.0) ? 1.0 : -1.0;
+				this.m_flGoalFeetYaw = AngleNormalizeWithMod(this.m_flEyeYaw - (MAX_TORSO_YAW * flSide));
+			}
+		}
+		
+		// Fix up the feet yaw.
+		this.m_flGoalFeetYaw = AngleNormalizeWithMod(this.m_flGoalFeetYaw);
+		if (this.m_flGoalFeetYaw != this.m_flCurrentFeetYaw)
+		{
+			float temp = this.m_flCurrentFeetYaw;
+			ConvergeYawAngles(this.m_flGoalFeetYaw, 720.0, GetGameFrameTime(), temp);
+			this.m_flCurrentFeetYaw = temp;
+			this.m_flLastAimTurnTime = GetGameTime();
+		}
+		
+		// Find the aim(torso) yaw base on the eye and feet yaws.
+		float flAimYaw = this.m_flEyeYaw - this.m_flCurrentFeetYaw;
+		flAimYaw = clamp(AngleNormalizeWithMod(flAimYaw), -44.9, 44.9);
+		
+		int m_iAimYaw = this.LookupPoseParameter("aim_yaw");
+		if (m_iAimYaw < 0)
+			return;
+		
+		// Set the aim yaw and save.
+		this.SetPoseParameter(m_iAimYaw, -flAimYaw);
+		
+		float angle[3];
+		GetEntPropVector(this.index, Prop_Data, "m_angRotation", angle);
+		angle[1] = this.m_flCurrentFeetYaw;
+		TeleportEntity(this.index, NULL_VECTOR, angle, NULL_VECTOR);
 	}
 	
 	public CombinePretorianGuard(float vecPos[3], float vecAng[3], int ally) {
@@ -244,6 +381,9 @@ methodmap CombinePretorianGuard < CClotBody {
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;
 		npc.m_iNpcStepVariation = STEPTYPE_COMBINE;
 		
+		// 기본은 엔진 회전 사용, 조준 진입 시에만 true로 전환
+		npc.m_bAllowBackWalking = false;
+		
 		int activity = npc.LookupActivity("ACT_RUN_AIM_AR2_STIMULATED");
 		if (activity > 0)
 			npc.StartActivity(activity);
@@ -252,15 +392,18 @@ methodmap CombinePretorianGuard < CClotBody {
 		func_NPCDeath[npc.index] = CombinePretorianGuard_NPCDeath;
 		func_NPCThink[npc.index] = CombinePretorianGuard_ClotThink;
 		
-		npc.m_fbGunout = false;
+		npc.m_bCanSeeCurrentTarget = false;
 		npc.m_iAttacksTillReload = 20;
 		npc.m_bmovedelay = false;
 		
 		npc.m_flSpeed = 250.0;
 		npc.m_flNextRangedAttack = 0.0;
 		npc.m_flAttackHappenswillhappen = false;
+		npc.m_iChanged_WalkCycle = 1;
 		
 		npc.m_iState = 0;
+		npc.m_flEyeYaw = 0.0;
+		npc.m_flEyePitch = 0.0;
 		
 		KillFeed_SetKillIcon(npc.index, "sniperrifle");
 		
@@ -308,51 +451,292 @@ static void CombinePretorianGuard_ClotThink(int iNPC)
 	int target = npc.m_iTarget;
 	if (IsValidEnemy(npc.index, target))
 	{
-		float vecTarget[3];
+		float vecMe[3], vecTarget[3];
+		WorldSpaceCenter(npc.index, vecMe);
 		WorldSpaceCenter(target, vecTarget);
-		switch (CombinePretorianGuard_Action(npc, target))
+		
+		if (npc.m_flAttackHappenswillhappen)
 		{
+			if (npc.m_flAttackHappens < gameTime && npc.m_flAttackHappens_bullshit >= gameTime)
+			{
+				npc.FaceTowards(vecTarget, 15000.0);
+				
+				Handle swingTrace;
+				if(npc.DoSwingTrace(swingTrace, target))
+				{
+					int targetHit = TR_GetEntityIndex(swingTrace);	
+					
+					float vecHit[3];
+					TR_GetEndPosition(vecHit, swingTrace);
+					
+					if(targetHit > 0)
+					{
+						SDKHooks_TakeDamage(targetHit, npc.index, npc.index, 300.0, DMG_CLUB, -1, _, vecHit);
+						ApplyStatusEffect(npc.index, targetHit, "Cudgelled", 3.0);
+						Custom_Knockback(npc.index, targetHit, 450.0);
+						
+						if(targetHit <= MaxClients)
+							Client_Shake(targetHit, 0, 25.0, 25.0, 0.5);
+						
+						npc.PlayMeleeHitSound();
+					} 
+				}
+				
+				delete swingTrace;
+				
+				npc.m_flNextMeleeAttack = gameTime + 3.0;
+				npc.m_flAttackHappenswillhappen = false;
+			}
+			else if (npc.m_flAttackHappens_bullshit < gameTime && npc.m_flAttackHappenswillhappen)
+			{
+				npc.m_flAttackHappenswillhappen = false;
+				npc.m_flNextMeleeAttack = gameTime + 3.0;
+			}
+		}
+		
+		// ===== 시야 확인 (완화된 판정: 예전처럼 IsValidEnemy 기반) =====
+		int seenTarget = Can_I_See_Enemy(npc.index, target);
+		bool canSeeTarget = IsValidEnemy(npc.index, seenTarget);
+		
+		// 시야를 가로막은 게 "다른 유효한 적"이면, 억지로 원래 타겟(플레이어 등)을 보려다
+		// 멈춰버리지 않도록 그 적으로 타겟을 전환한다. (근접공격 진행 중이면 스윙 대상은 유지)
+		if (canSeeTarget && seenTarget != target)
+		{
+			target = seenTarget;
+			npc.m_iTarget = seenTarget;
+			canSeeTarget = true; // 이제 target == seenTarget 이므로 확실히 보임
+		}
+		else
+		{
+			canSeeTarget = (seenTarget == target);
+		}
+		
+		npc.m_bCanSeeCurrentTarget = canSeeTarget;
+		
+		WorldSpaceCenter(target, vecTarget);
+		float flDistanceToTarget = GetVectorDistance(vecTarget, vecMe, true);
+		
+		bool inEngageRange = (flDistanceToTarget < 360000.0);
+		bool weaponReady   = (npc.m_flReloadDelay < gameTime && npc.m_flNextRangedAttack < gameTime);
+		
+		if (flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED && npc.m_flNextMeleeAttack < gameTime)
+		{
+			npc.m_iState = 3;
+		}
+		else if (inEngageRange)
+		{
+			if (!weaponReady)
+			{
+				// 재장전/쿨다운 중이면 LOS와 상관없이 무조건 제자리 조준 (이동 금지)
+				npc.m_iState = 1;
+			}
+			else if (canSeeTarget)
+			{
+				npc.m_iState = 2;
+			}
+			else
+			{
+				// 사격 준비는 됐는데 완전히 안 보임(벽 등) -> 재배치 위해 이동
+				npc.m_iState = 0;
+			}
+		}
+		else
+		{
+			npc.m_iState = 0;
+		}
+		
+		if (flDistanceToTarget < npc.GetLeadRadius()) 
+		{
+			float vecPredictedPos[3]; 
+			PredictSubjectPosition(npc, target, _, _, vecPredictedPos);
+			npc.SetGoalVector(vecPredictedPos);
+		}
+		else
+		{
+			npc.SetGoalEntity(target);
+		}
+		
+		// ===== 조준 모드(state 1/2) 여부에 따라 회전 방식 전환 =====
+		bool wantAimMode = (npc.m_iState == 1 || npc.m_iState == 2);
+		
+		if (wantAimMode)
+		{
+			if (!npc.m_bAllowBackWalking)
+			{
+				npc.m_bAllowBackWalking = true;
+				npc.m_flLastAimTurnTime = 0.0; // 조준 모드 진입 시 발 각도 스냅
+			}
+			
+			float vecAng[3], vecDir[3];
+			SubtractVectors(vecMe, vecTarget, vecDir); 
+			NormalizeVector(vecDir, vecDir);
+			GetVectorAngles(vecDir, vecAng);
+			
+			npc.m_flEyePitch = AngleNormalizeWithMod(vecAng[0]);
+			npc.m_flEyeYaw   = AngleNormalizeWithMod(vecAng[1] + 180.0);
+			
+			npc.ComputePoseParam_AimPitch();
+			npc.ComputePoseParam_AimYaw();
+		}
+		else
+		{
+			if (npc.m_bAllowBackWalking)
+				npc.m_bAllowBackWalking = false;
+			
+			int m_iAimPitch = npc.LookupPoseParameter("aim_pitch");
+			if (m_iAimPitch > -1)
+			{
+				npc.SetPoseParameter(m_iAimPitch, 0.0);
+			}
+			
+			int m_iAimYaw = npc.LookupPoseParameter("aim_yaw");
+			if (m_iAimYaw > -1)
+			{
+				npc.SetPoseParameter(m_iAimYaw, 0.0);
+			}
+		}
+		
+		switch (npc.m_iState)
+		{
+			case -1:
+			{
+				return;
+			}
 			case 0:
 			{
-				npc.SetActivity("ACT_IDLE_ANGRY_AR2");
-				
-				npc.m_bAllowBackWalking = false;
-				
-				npc.m_flSpeed = 0.0;
-				npc.StopPathing();
-			}
-			case 1: {
-				npc.SetActivity("ACT_RUN_AIM_AR2_STIMULATED");
-				
-				npc.m_bAllowBackWalking = false;
-				
-				float vecMe[3];
-				WorldSpaceCenter(npc.index, vecMe);
-				if(GetVectorDistance(vecMe, vecTarget, true) > npc.GetLeadRadius())
+				if(!npc.m_bPathing)
+					npc.StartPathing();
+					
+				if(npc.m_iChanged_WalkCycle != 1)
 				{
-					npc.SetGoalEntity(target);
+					npc.m_bisWalking = true;
+					npc.m_iChanged_WalkCycle = 1;
+					npc.SetActivity("ACT_RUN_AIM_AR2_STIMULATED");
+					npc.m_flSpeed = 250.0;
+					npc.StartPathing();
+				}
+			}
+			case 1:
+			{
+				// 재장전 중 또는 사격 간격: 제자리에서 계속 정조준
+				if(npc.m_bPathing)
+					npc.StopPathing();
+					
+				if(npc.m_iChanged_WalkCycle != 2) 	
+				{
+					npc.m_bisWalking = false;
+					npc.m_iChanged_WalkCycle = 2;
+					npc.SetActivity("ACT_IDLE_ANGRY_AR2");
+					npc.m_flSpeed = 0.0;
+					npc.StopPathing();
+				}
+			}
+			case 2:
+			{
+				if (npc.IsTargetInFiringCone(target))
+				{
+					if(npc.m_bPathing)
+						npc.StopPathing();
+						
+					if(npc.m_iChanged_WalkCycle != 2) 	
+					{
+						npc.m_bisWalking = false;
+						npc.m_iChanged_WalkCycle = 2;
+						npc.SetActivity("ACT_IDLE_ANGRY_AR2");
+						npc.m_flSpeed = 0.0;
+						npc.StopPathing();
+					}
+					
+					float vecSpread = 0.1;
+					float x, y;
+					x = GetRandomFloat( -0.15, 0.15 ) + GetRandomFloat( -0.15, 0.15 );
+					y = GetRandomFloat( -0.15, 0.15 ) + GetRandomFloat( -0.15, 0.15 );
+					
+					float vecDirShooting[3], vecRight[3], vecUp[3];
+					vecTarget[2] += 15.0;
+					
+					MakeVectorFromPoints(vecMe, vecTarget, vecDirShooting);
+					GetVectorAngles(vecDirShooting, vecDirShooting);
+					GetAngleVectors(vecDirShooting, vecDirShooting, vecRight, vecUp);
+					
+					npc.m_flNextRangedAttack = gameTime + 0.35;
+					npc.m_iAttacksTillReload -= 1;
+					
+					npc.AddGesture("ACT_GESTURE_RANGE_ATTACK_AR2");
+					
+					float vecDirFire[3];
+					vecDirFire[0] = vecDirShooting[0] + x * vecSpread * vecRight[0] + y * vecSpread * vecUp[0]; 
+					vecDirFire[1] = vecDirShooting[1] + x * vecSpread * vecRight[1] + y * vecSpread * vecUp[1]; 
+					vecDirFire[2] = vecDirShooting[2] + x * vecSpread * vecRight[2] + y * vecSpread * vecUp[2]; 
+					NormalizeVector(vecDirFire, vecDirFire);
+					
+					int hitEnt = FireBullet(npc.index, npc.m_iWearable1, vecMe, vecDirFire, 50.0, 9000.0, DMG_BULLET, "bullet_tracer01_red");
+					if (IsValidEnemy(npc.index, hitEnt))
+					{
+						ApplyStatusEffect(npc.index, hitEnt, "Silenced", 2.0);
+					}
+					
+					npc.PlayRangedSound();
+					
+					if (npc.m_iAttacksTillReload == 0)
+					{
+						npc.AddGesture("ACT_RELOAD_AR2");
+						npc.m_flReloadDelay = gameTime + 2.2;
+						npc.m_iAttacksTillReload = 10;
+						npc.PlayRangedReloadSound();
+						
+						if(npc.m_bPathing)
+							npc.StopPathing();
+						
+						// 발이 아직 target 쪽으로 안 돌아온 짧은 순간: 조준 유지한 채 제자리 대기
+						// (ConvergeYawAngles 회전속도가 빨라서 몇 틱 내에 해소됨. 여기서 멈추는 건 일시적)
+						if(npc.m_iChanged_WalkCycle != 2) 	
+						{
+							npc.m_bisWalking = false;
+							npc.m_iChanged_WalkCycle = 2;
+							npc.SetActivity("ACT_IDLE_ANGRY_AR2");
+							npc.m_flSpeed = 0.0;
+							npc.StopPathing();
+						}
+					}
 				}
 				else
 				{
-					PredictSubjectPosition(npc, target, _, _, vecTarget);
-					npc.SetGoalVector(vecTarget);
+					if(!npc.m_bPathing)
+						npc.StartPathing();
+					
+					if(npc.m_iChanged_WalkCycle != 1)
+					{
+						npc.m_bisWalking = true;
+						npc.m_iChanged_WalkCycle = 1;
+						npc.SetActivity("ACT_RUN_AIM_AR2_STIMULATED");
+						npc.m_flSpeed = 250.0;
+						npc.StartPathing();
+					}
+				}
+			}
+			case 3:
+			{
+				if (!npc.m_flAttackHappenswillhappen)
+				{
+					npc.AddGestureViaSequence("MeleeAttack01");
+					npc.PlayMeleeSound();
+					npc.m_flAttackHappens = gameTime + 0.4;
+					npc.m_flAttackHappens_bullshit = gameTime + 0.54;
+					npc.m_flAttackHappenswillhappen = true;
 				}
 				
-				npc.m_flSpeed = 250.0;
-				npc.StartPathing();
-			}
-			case 2: {
-				npc.SetActivity("ACT_RUN_AIM_AR2_STIMULATED");
-				
-				npc.m_bAllowBackWalking = true; // Walk backwards against our target
-				
-				npc.GetLocomotion().FaceTowards(vecTarget);
-				
-				BackoffFromOwnPositionAndAwayFromEnemy(npc, target, _, vecTarget);
-				npc.SetGoalVector(vecTarget, true);
-				
-				npc.m_flSpeed = 250.0;
-				npc.StartPathing();
+				if(!npc.m_bPathing)
+					npc.StartPathing();
+					
+				if(npc.m_iChanged_WalkCycle != 1)
+				{
+					npc.m_bisWalking = true;
+					npc.m_iChanged_WalkCycle = 1;
+					npc.SetActivity("ACT_RUN_AIM_AR2_STIMULATED");
+					npc.m_flSpeed = 250.0;
+					npc.StartPathing();
+				}
 			}
 		}
 	}
@@ -360,169 +744,11 @@ static void CombinePretorianGuard_ClotThink(int iNPC)
 	{
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_iTarget = GetClosestTarget(npc.index);
+		npc.m_bCanSeeCurrentTarget = false;
+		
+		if (npc.m_bAllowBackWalking)
+			npc.m_bAllowBackWalking = false;
 	}
-}
-
-static int CombinePretorianGuard_Action(CombinePretorianGuard npc, int target)
-{
-	npc.PlayIdleAlertSound();
-	
-	float gameTime = GetGameTime(npc.index);
-	
-	float vecAng[3], vecDir[3], vecMe[3], vecTarget[3];
-	WorldSpaceCenter(npc.index, vecMe);
-	WorldSpaceCenter(target, vecTarget);
-	
-	//if (npc.m_iState > 0)
-	//	npc.ProcessMoveYaw();
-	
-	//npc.FaceTowards(vecTarget, _, npc.m_iState == 2);
-	
-	SubtractVectors(vecMe, vecTarget, vecDir); 
-	NormalizeVector(vecDir, vecDir);
-	GetVectorAngles(vecDir, vecAng);
-	
-	int pose_pitch = npc.LookupPoseParameter("aim_pitch");
-	if (pose_pitch > -1)
-	{
-		float flPitch = npc.GetPoseParameter(pose_pitch);
-		// Fuck. this pose param is inverted.
-		vecAng[0] = -AngleNormalizeWithMod(vecAng[0]);
-		vecAng[0] = clamp(vecAng[0], -56.0, 89.0);
-		npc.SetPoseParameter(pose_pitch, ApproachAngle(vecAng[0], flPitch, 1.0));	
-	}
-	
-	int pose_yaw = npc.LookupPoseParameter("aim_yaw");
-	if (pose_yaw > -1)
-	{
-		float flYaw = npc.GetPoseParameter(pose_yaw);
-		// Yeah. this one tho.
-		vecAng[1] = clamp(AngleNormalizeWithMod(UTIL_AngleDiff(AngleNormalizeWithMod(vecAng[1]), AngleNormalizeWithMod(vecAng[1] + 180.0))), -29.7, 29.7);
-		// vecAng[1] = AngleNormalizeWithMod(vecAng[1]);
-		// vecAng[1] = clamp(vecAng[1], -60.0, 60.0);
-		npc.SetPoseParameter(pose_yaw, ApproachAngle(vecAng[1], flYaw, 1.0));
-	}
-	
-	if (npc.m_flAttackHappenswillhappen)
-	{
-		if (npc.m_flAttackHappens < gameTime && npc.m_flAttackHappens_bullshit >= gameTime)
-		{
-			npc.FaceTowards(vecTarget, 15000.0);
-			
-			Handle swingTrace;
-			if(npc.DoSwingTrace(swingTrace, target))
-			{
-				int targetHit = TR_GetEntityIndex(swingTrace);	
-				
-				float vecHit[3];
-				TR_GetEndPosition(vecHit, swingTrace);
-				
-				if(targetHit > 0)
-				{
-					SDKHooks_TakeDamage(targetHit, npc.index, npc.index, 300.0, DMG_CLUB, -1, _, vecHit);
-					ApplyStatusEffect(npc.index, targetHit, "Cudgelled", 3.0);
-					
-					Custom_Knockback(npc.index, targetHit, 250.0);
-					
-					npc.PlayMeleeHitSound();
-					
-					//Did we kill them?
-					int iHealthPost = GetEntProp(targetHit, Prop_Data, "m_iHealth");
-					if(iHealthPost <= 0) 
-					{
-						//Yup, time to celebrate
-						npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST");
-					}
-				} 
-			}
-			
-			delete swingTrace;
-			
-			npc.m_flNextMeleeAttack = gameTime + 3.0;
-			npc.m_flAttackHappenswillhappen = false;
-		}
-		else if (npc.m_flAttackHappens_bullshit < gameTime && npc.m_flAttackHappenswillhappen)
-		{
-			npc.m_flAttackHappenswillhappen = false;
-			npc.m_flNextMeleeAttack = gameTime + 3.0;
-		}
-	}
-	
-	float flDistanceToTarget = GetVectorDistance(vecTarget, vecMe, true);
-	if (npc.m_flReloadDelay >= gameTime)
-	{
-		// Doesn't do anything while reloading.
-		npc.m_iState = -1;
-	}
-	else if (flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED)
-	{
-		npc.m_iState = 1;
-	}
-	/*
-	else if (flDistanceToTarget < 160000.0)
-	{
-		npc.m_iState = 2;
-	}
-	*/
-	else if (flDistanceToTarget < 360000.0)
-	{
-		npc.m_iState = 3;
-	}
-	else
-	{
-		npc.m_iState = 0;
-	}
-	
-	switch (npc.m_iState)
-	{
-		case 3:
-		{
-			npc.GetBaseNPC().flMaxYawRate = 2000.0;
-			npc.GetLocomotion().FaceTowards(vecTarget);
-			
-			if (!npc.IsTargetInFiringCone(target, 20.0))
-				return 0;
-			
-			npc.DoRangeAttack(target);
-			return 0;
-		}
-		/*
-		case 2:
-		{
-			npc.GetBaseNPC().flMaxYawRate = 500.0;
-			npc.GetLocomotion().FaceTowards(vecTarget);
-			
-			if (!npc.IsTargetInFiringCone(target, 20.0))
-				return 2;
-			
-			if (npc.DoRangeAttack(target) == 2)
-			{
-				return 0;
-			}
-			else
-			{
-				return 2;
-			}
-		}
-		*/
-		case 1:
-		{
-			if (!npc.m_flAttackHappenswillhappen && npc.m_flNextMeleeAttack < gameTime)
-			{
-				npc.AddGestureViaSequence("MeleeAttack01");
-				npc.PlayMeleeSound();
-				npc.m_flAttackHappens = gameTime + 0.4;
-				npc.m_flAttackHappens_bullshit = gameTime + 0.54;
-				npc.m_flAttackHappenswillhappen = true;
-			}
-		}
-		case -1:
-		{
-			return 0;
-		}
-	}
-	
-	return 1;
 }
 
 /*
@@ -725,6 +951,32 @@ static void CombinePretorianGuard_NPCDeath(int entity)
 	
 	if (IsValidEntity(npc.m_iWearable2))
 		RemoveEntity(npc.m_iWearable2);
+}
+
+void ConvergeYawAngles( float flGoalYaw, float flYawRate, float flDeltaTime, float &flCurrentYaw )
+{
+	// Find the yaw delta.
+	float flDeltaYaw = flGoalYaw - flCurrentYaw;
+	float flDeltaYawAbs = FloatAbs( flDeltaYaw );
+	flDeltaYaw = AngleNormalize( flDeltaYaw );
+
+	// Always do at least a bit of the turn (1%).
+	float flScale = 1.0;
+	flScale = flDeltaYawAbs / 60.0;
+	flScale = clamp( flScale, 0.01, 1.0 );
+
+	float flYaw = flYawRate * flDeltaTime * flScale;
+	if ( flDeltaYawAbs < flYaw )
+	{
+		flCurrentYaw = flGoalYaw;
+	}
+	else
+	{
+		float flSide = ( flDeltaYaw < 0.0 ) ? -1.0 : 1.0;
+		flCurrentYaw += ( flYaw * flSide );
+	}
+
+	flCurrentYaw = AngleNormalize( flCurrentYaw );
 }
 
 stock float AngleNormalizeWithMod(float angle)

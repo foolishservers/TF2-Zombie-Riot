@@ -1341,6 +1341,15 @@ void NPC_ConfigSetup()
 	
 	Dimension_Ripper_Base_OnMapStart_NPC();
 	
+	AltExtra_Base_MapStart();
+	AltExtra_Mecha_Loader_MapStart();
+	AltExtra_Mecha_Duelist_MapStart();
+	AltExtra_Mecha_HeavyParticleRifle_MapStart();
+	AltExtra_Mecha_AirStriker_OnMapStart();
+	KommandantStahlherz_OnMapStart();
+	AltExtra_Mecha_Dimension_Ripper_OnMapStart();
+	AltExtra_Mecha_Base_Destroyer_MapStart();
+	
 	Whiteflower_CombineSmg_OnMapStart_NPC();
 	WFCombineRevolver_OnMapStart_NPC();
 	WFCombineGrenadier_OnMapStart_NPC();
@@ -1349,7 +1358,7 @@ void NPC_ConfigSetup()
 	Whiteflower_CombinePretorianGuard_OnMapStart_NPC();
 	CombineSupremeOverlord_OnMapStart_NPC();
 	Anti_Chaos_Robot_OnMapStart_NPC();
-	CombineWarden_OnMapStart_NPC();
+	WhiteFlower_BoltSmasher_OnMapStart_NPC();
 	
 	RaidbossKnightOfTheCurtain_OnMapStart_NPC();
 	RaidbossTraitorPrescott_OnMapStart_NPC();
@@ -2959,6 +2968,19 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 // Dimension ripper
 #include "npc/ally/dimension_ripper/npc_dimension_ripper_base.sp"
 
+// Alt Extra
+#include "npc/alt_extra/npc_alt_extra_base.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_loader.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_duelist.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_heavy_particle_rifle.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_airstriker.sp"
+#include "npc/alt_extra/npc_alt_extra_kommandant_stahlherz.sp"
+//#include "npc/alt_extra/npc_alt_extra_mecha_fuel_rusher.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_dimension_ripper.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_base_destroyer.sp"
+//#include "npc/alt_extra/npc_alt_extra_mecha_conqueror.sp"
+//#include "npc/alt_extra/npc_alt_extra_intruso.sp"
+
 // Whiteflower survivors
 #include "npc/wf_survivors/npc_wf_combine_smg.sp"
 #include "npc/wf_survivors/npc_wf_combine_grenadier.sp"
@@ -2968,12 +2990,7 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/wf_survivors/npc_wf_combine_pretorian_guard.sp"
 #include "npc/wf_survivors/npc_combine_supreme_overlord.sp"
 #include "npc/wf_survivors/npc_anti_chaos_robot.sp"
-#include "npc/wf_survivors/npc_combine_warden.sp"
-
-//#include "npc/wf_survivors/npc_wf_combine_selected_few.sp"
-//#include "npc/wf_survivors/npc_wf_tank.sp"
-
-//#include "npc/raidmode_bosses/wf_survivors/npc_wf_verteidiger.sp"
+#include "npc/wf_survivors/npc_boltsmasher.sp"
 
 #include "npc/raidmode_bosses/wf_survivors/npc_knight_of_the_curtain.sp"
 #include "npc/raidmode_bosses/wf_survivors/npc_traitor_prescott.sp"

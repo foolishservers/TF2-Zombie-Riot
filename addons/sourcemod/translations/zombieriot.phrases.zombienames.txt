@@ -8481,6 +8481,97 @@
 		"ko"	"원소 피해 게이지가 꽉 차면, 당신의 몸에서 흘러나오는 페로몬으로 인해서\n주변의 감염체들이 몰려옵니다."
 	}
 	
+	"Mecha Loader"
+	{
+		"en"	"Mecha Loader"
+		"ko"	"메카 로더"
+	}
+	"Mecha Loader Desc"
+	{
+		"en"	"-"
+		"ko"	"배럭으로 뽑을 땐 행복하셨죠?\n-이 적은 죽을 때 주변에 폭발 피해를 줍니다.\n-당연히 죽을 때 산산조각납니다."
+	}
+	"Mecha Duelist"
+	{
+		"en"	"Mecha Duelist"
+		"ko"	"강철 결전자"
+	}
+	"Mecha Duelist Desc"
+	{
+		"en"	"-"
+		"ko"	"이레이서스에 이런저런 조치를 하면 이런 결과를 얻을 수 있죠.\n-2개의 목숨을 가지고 있습니다. 저항은 목숨을 잃으면 사라집니다.\n-목숨을 잃었을 때 공격 속도가 2배로 빨라집니다."
+	}
+	"Mecha Heavy Particle Rifle"
+	{
+		"en"	"Mecha Heavy Particle Emitter"
+		"ko"	"중입자 방출자"
+	}
+	"Mecha Heavy Particle Rifle Desc"
+	{
+		"en"	"-"
+		"ko"	"비용을 위해 엑스피돈사인들의 뇌를 적출해 기계에 이식했습니다.\n-발사할 수록 피해량과 공격 속도가 증가하는 중입자 소총을 가지고 있습니다.\n-이 적은 사거리가 기므로 주의하십시오."
+	}
+	"Mecha Airstriker"
+	{
+		"en"	"Mecha Airstriker"
+		"ko"	"기계 공중 폭격수"
+	}
+	"Mecha Airstriker Desc"
+	{
+		"en"	"-"
+		"ko"	"솔딘에서 불필요한 털을 제거해서 무게를 줄였습니다.\n-좀 더 자주 로켓 점프를 합니다.\n-폭발 펀치는 제거되었으니 안심하세요."
+	}
+	"Kommandant Stahlherz"
+	{
+		"en"	"Kommandant Stahlherz"
+		"ko"	"슈탈헤르츠 사령관"
+	}
+	"Kommandant Stahlherz Desc"
+	{
+		"en"	"-"
+		"ko"	"아이젠하르트 원수는 기계가 되어서도 본분을 다하고 있습니다.\n-주변의 아군이 죽으면 최대 체력의 10분의 1을 회복합니다.\n-또한 공격력이 12.5％ 증가합니다. (최대 300％까지)\n-목숨을 잃으면, 저항을 잃고 피해량과 이동 속도가 증가합니다."
+	}
+	"Mecha Dimension Ripper"
+	{
+		"en"	"Mecha Dimension Ripper"
+		"ko"	"차원 균열 생성자"
+	}
+	"Mecha Dimension Ripper Desc"
+	{
+		"en"	"-"
+		"ko"	"이런. 차원 찢개가 블리츠크리그의 손에 넘어가버렸군요.\n-주기적으로 본인 소속의 무작위 아군을 소환합니다.\n-근접 공격이 불가능할 때는 유도 투사체를 발사합니다."
+	}
+	"Mecha Base Destroyer Buff"
+	{
+		"en"	"Mecha Base Destroyer - War Cry"
+		"ko"	"기지 파괴자 - 전투 함성"
+	}
+	"Mecha Base Destroyer Buff Desc"
+	{
+		"en"	"-"
+		"ko"	"이 기계들은 기지를 효율적으로 파괴하기 위해 고안되었습니다.\n-주변의 아군에게 전투 함성 버프를 부여합니다.\n-4발을 다 발사하면 전부 재장전할 때까지 공격하지 않습니다."
+	}
+	"Mecha Base Destroyer Backup"
+	{
+		"en"	"Mecha Base Destroyer - Defensive Backup"
+		"ko"	"기지 파괴자 - 수비 지원"
+	}
+	"Mecha Base Destroyer Backup Desc"
+	{
+		"en"	"-"
+		"ko"	"이 기계들은 기지를 효율적으로 파괴하기 위해 고안되었습니다.\n-주변의 아군에게 수비 지원 버프를 부여합니다.\n-4발을 다 발사하면 전부 재장전할 때까지 공격하지 않습니다."
+	}
+	"Mecha Base Destroyer Conch"
+	{
+		"en"	"Mecha Base Destroyer - Ancient Melody"
+		"ko"	"기지 파괴자 - 고대의 멜로디"
+	}
+	"Mecha Base Destroyer Conch Desc"
+	{
+		"en"	"-"
+		"ko"	"이 기계들은 기지를 효율적으로 파괴하기 위해 고안되었습니다.\n-주변의 아군에게 고대의 멜로디 버프를 부여합니다.\n-4발을 다 발사하면 전부 재장전할 때까지 공격하지 않습니다."
+	}
+	
 	"W.F. Suppressor"
 	{
 		"en"	"W.F. Suppressor"
