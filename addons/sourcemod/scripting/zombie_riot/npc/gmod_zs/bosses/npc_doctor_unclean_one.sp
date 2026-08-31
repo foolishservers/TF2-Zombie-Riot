@@ -146,6 +146,11 @@ methodmap DasNaggenvatcher < CClotBody
 		public get()		{ return this.m_iMedkitAnnoyance; }
 		public set(int value) 	{ this.m_iMedkitAnnoyance = value; }
 	}
+	property int m_iMaxHP
+	{
+		public get()							{ return i_AttacksTillMegahit[this.index]; }
+		public set(int TempValueForProperty) 	{ i_AttacksTillMegahit[this.index] = TempValueForProperty; }
+	}
 	property float m_flNPCTalkDelay
 	{
 		public get()							{ return fl_NextChargeSpecialAttack[this.index]; }
@@ -190,6 +195,7 @@ methodmap DasNaggenvatcher < CClotBody
 		i_ClosestAllyCDTarget[npc.index] = 0.0;
 		npc.g_TimesSummoned = 0;
 		WaveStart_SubWaveStart(GetGameTime() + 1000.0);
+		npc.m_iMaxHP = 10000000;
 		
 		i_SaidLineAlready[npc.index]=0;
 		npc.m_bFUCKYOU=false;
@@ -199,25 +205,54 @@ methodmap DasNaggenvatcher < CClotBody
 		RaidBossActive = EntIndexToEntRef(npc.index);
 		RaidAllowsBuildings = true;
 		npc.Anger = false;
+		RaidModeScaling = float(Waves_GetRoundScale()+1);
 		
-		if(StrContains(data, "final_item") != -1)
+		static char countext[3][216];
+		int count = ExplodeString(data, ";", countext, sizeof(countext), sizeof(countext[]));
+		for(int i = 0; i < count; i++)
 		{
-			npc.m_bGib = true;
-			i_RaidGrantExtra[npc.index] = 1557;
+			if(i>=count)break;
+			else if(StrContains(countext[i], "final_item") != -1)
+			{
+				ReplaceString(countext[i], sizeof(countext[]), "final_item", "");
+				npc.m_bGib = true;
+				i_RaidGrantExtra[npc.index] = 1557;
+			}
+			else if(StrContains(countext[i], "maxhp") != -1)
+			{
+				ReplaceString(countext[i], sizeof(countext[]), "maxhp", "");
+				npc.m_iMaxHP = StringToInt(countext[i]);
+			}
+			else if(StrContains(countext[i], "sc") != -1)
+			{
+				ReplaceString(countext[i], sizeof(countext[]), "sc", "");
+				RaidModeScaling = StringToFloat(countext[i]);
+			}
 		}
-		char buffers[3][64];
-		ExplodeString(data, ";", buffers, sizeof(buffers), sizeof(buffers[]));
-		if(buffers[0][0] == 's' && buffers[0][1] == 'c')
+		
+		bool ScaleWithHpMore = Waves_GetRoundScale() == 0;
+		float multiBoss;
+		if(ScaleWithHpMore)
+			multiBoss = MultiGlobalHighHealthBoss;
+		if(!ScaleWithHpMore)
+			multiBoss = MultiGlobalHealthBoss;
+		if(!ScaleWithHpMore && Waves_GetRoundScale() > 0)
 		{
-			//remove SC
-			ReplaceString(buffers[0], 64, "sc", "");
-			float value = StringToFloat(buffers[0]);
-			RaidModeScaling = value;
+			multiBoss *= MultiGlobalEnemyBoss;
+			int count = RoundToNearest(float(Waves_GetRoundScale()) * MultiGlobalEnemyBoss);
+			if(count < 1)
+				count = 1;
+			if(count > 250)
+				count = 250;
+			float decrease = count / float(Waves_GetRoundScale());
+			if(decrease > 1.0)
+			{
+				multiBoss /= decrease;
+			}
 		}
-		else
-		{	
-			RaidModeScaling = float(Waves_GetRoundScale()+1);
-		}
+		int Tempomary_Health = RoundToNearest(float(npc.m_iMaxHP) * multiBoss);
+		npc.m_iMaxHP=Tempomary_Health;
+		
 		if(RaidModeScaling < 35)
 		{
 			RaidModeScaling *= 0.25; //abit low, inreacing
@@ -303,10 +338,20 @@ static void DasNaggenvatcher_Wait(int iNPC)
 			{
 				npc.m_bGib = true;
 				float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
-				NPC_CreateByName("npc_zs_unspeakable", npc.index, VecSelfNpc, {0.0,0.0,0.0}, npc.m_iMyTrueTeam, "sc40;final_item");
-				
+				int spawn_index = NPC_CreateByName("npc_zs_unspeakable", npc.index, VecSelfNpc, {0.0,0.0,0.0}, npc.m_iMyTrueTeam, "sc40;final_item");
+				if(spawn_index > MaxClients)
+				{
+					NpcAddedToZombiesLeftCurrently(spawn_index, true);
+					SetEntProp(spawn_index, Prop_Data, "m_iHealth", npc.m_iMaxHP);
+					SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", npc.m_iMaxHP);
+					fl_Extra_MeleeArmor[spawn_index] = fl_Extra_MeleeArmor[npc.index];
+					fl_Extra_RangedArmor[spawn_index] = fl_Extra_RangedArmor[npc.index];
+					fl_Extra_Speed[spawn_index] = fl_Extra_Speed[npc.index];
+					fl_Extra_Damage[spawn_index] = fl_Extra_Damage[npc.index];
+					IncreaseEntityDamageTakenBy(spawn_index, 0.000001, 9.5);
+				}
 				Waves_ClearWaves();
-				CurrentRound[Rounds_Default] = 665;
+				CurrentRound[Rounds_Default] = 59;
 				CurrentWave[Rounds_Default] = -1;
 				Waves_Progress();
 			}
