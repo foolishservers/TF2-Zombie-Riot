@@ -1,7 +1,7 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-#tryinclude <SteamWorks>
+#tryinclude <steamworks>
 
 #define STEAMWORKS_LIBRARY	"SteamWorks"
 

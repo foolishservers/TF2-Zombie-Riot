@@ -1120,6 +1120,30 @@ void StatusEffects_BlackOak()
 	data.Slot						= 0;
 	data.SlotPriority				= 0;
 	StatusEffect_AddGlobal(data);
+	
+	strcopy(data.BuffName, sizeof(data.BuffName), "Extra Damage Indicator");
+	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "⚔");
+	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
+	data.DamageTakenMulti 			= -1.0;
+	data.DamageDealMulti			= -1.0;
+	data.AttackspeedBuff			= -1.0;
+	data.MovementspeedModif			= -1.0;
+	data.Positive 					= true;
+	data.ShouldScaleWithPlayerCount = false;
+	data.ElementalLogic				= true;
+	data.Slot						= 0;
+	data.SlotPriority				= 0;
+	data.HudDisplay_Func			= ExtraDamage_Indicator_Hud_Func;
+	StatusEffect_AddGlobal(data);
+}
+
+void ExtraDamage_Indicator_Hud_Func(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int SizeOfChar, char[] HudToDisplay)
+{
+	float ratio = fl_Extra_Damage[victim] * 100.0;
+	if (ratio < 0.0)
+		ratio = 0.0;
+	
+	Format(HudToDisplay, SizeOfChar, "[⚔ %.0f％]", ratio);
 }
 #endif
 
