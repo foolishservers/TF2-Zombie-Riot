@@ -1,7 +1,6 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-
 static const char g_DeathSounds[][] = {
 	"vo/pyro_paincrticialdeath01.mp3",
 	"vo/pyro_paincrticialdeath02.mp3",
@@ -16,15 +15,10 @@ static const char g_HurtSounds[][] = {
 	"vo/pyro_painsharp05.mp3",
 };
 
-static const char g_IdleAlertedSounds[][] = {
-	"vo/pyro_helpme01.mp3",
-};
-
 static const char g_SuperJumpSound[][] = {
 	"npc/zombie_poison/pz_warn1.wav",
 	"npc/zombie_poison/pz_warn2.wav",
 };
-
 
 static const char g_MeleeHitSounds[][] = {
 	"weapons/stunstick/spark1.wav",
@@ -32,62 +26,61 @@ static const char g_MeleeHitSounds[][] = {
 	"weapons/stunstick/spark3.wav",
 };
 
-void Zsvulture_OnMapStart_NPC()
+static const char g_IdleAlertedSounds[] = "vo/pyro_helpme01.mp3";
+
+public void Zsvulture_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds)); i++) { PrecacheSound(g_MeleeHitSounds[i]); }
-	for (int i = 0; i < (sizeof(g_SuperJumpSound)); i++) { PrecacheSound(g_SuperJumpSound[i]); }
-	PrecacheModel("models/player/medic.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Major Vulture");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_major_vulture");
 	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_major_vulture");
 	data.IconCustom = true;
-	data.Flags = 0;
-	data.Category = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
+	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
+	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
 
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_SuperJumpSound);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSound(g_IdleAlertedSounds);
+	PrecacheModel("models/player/pyro.mdl");
+}
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
 	return Zsvulture(vecPos, vecAng, team);
 }
+
 methodmap Zsvulture < CClotBody
 {
 	public void PlayIdleAlertSound() 
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
-		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_IdleAlertedSounds, this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
-		
 	}
-	
 	public void PlayHurtSound() 
 	{
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		
 	}
 	public void PlaySuperJumpSound()
 	{
 		EmitSoundToAll(g_SuperJumpSound[GetRandomInt(0, sizeof(g_SuperJumpSound) - 1)], this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 	}	
-	
 	public void PlayDeathSound() 
 	{
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 	}
-	
 	public void PlayMeleeHitSound() 
 	{
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
@@ -95,23 +88,21 @@ methodmap Zsvulture < CClotBody
 	
 	property float m_flPulveriserAttackDelay
 	{
-		public get()							{ return fl_AbilityOrAttack[this.index][1]; }
-		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][1] = TempValueForProperty; }
+		public get()							{ return fl_AbilityOrAttack[this.index][0]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][0] = TempValueForProperty; }
 	}
 	
 	public Zsvulture(float vecPos[3], float vecAng[3], int ally)
 	{
 		Zsvulture npc = view_as<Zsvulture>(CClotBody(vecPos, vecAng, "models/player/pyro.mdl", "1.15", "50000", ally));
 		
-		i_NpcWeight[npc.index] = 1;
+		i_NpcWeight[npc.index] = 4;
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
 		int iActivity = npc.LookupActivity("ACT_MP_RUN_SECONDARY");
 		if(iActivity > 0) npc.StartActivity(iActivity);
 		SetVariantInt(2);
 		AcceptEntityInput(npc.index, "SetBodyGroup");	
-		
-		npc.m_flNextMeleeAttack = 0.0;
 		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
@@ -121,10 +112,16 @@ methodmap Zsvulture < CClotBody
 		func_NPCOnTakeDamage[npc.index] = view_as<Function>(Zsvulture_OnTakeDamage);
 		func_NPCThink[npc.index] = view_as<Function>(Zsvulture_ClotThink);
 		
-		npc.StartPathing();
+		npc.m_flNextMeleeAttack = 0.0;
+		npc.m_flNextRangedAttack = 0.0;
 		npc.m_flSpeed = 400.0;
 		npc.m_flMeleeArmor = 0.2;
 		npc.m_flRangedArmor = 1.5;
+		fl_ruina_battery_max[npc.index]=50.0;
+		fl_ruina_battery[npc.index]=0.0;
+		ApplyStatusEffect(npc.index, npc.index, "Battery_TM Charge", 999.0);
+		npc.Anger = false;
+		npc.StartPathing();
 		
 		if(!IsValidEntity(RaidBossActive))
 		{
@@ -134,7 +131,7 @@ methodmap Zsvulture < CClotBody
 			RaidAllowsBuildings = true;
 		}
 		
-		CPrintToChatAll("{green}벌쳐 소령{default}: 좋아, 다 덤벼.");
+		PrintNPCMessageWithPrefixes(npc.index, "green", "MajorVulture_Encounter", true);
 		
 		int skin = 5;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
@@ -159,11 +156,11 @@ methodmap Zsvulture < CClotBody
 public void Zsvulture_ClotThink(int iNPC)
 {
 	Zsvulture npc = view_as<Zsvulture>(iNPC);
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
-	{
+	
+	float GameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > GameTime)
 		return;
-	}
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
+	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 	
 	if(npc.m_bAllowBackWalking)
@@ -182,32 +179,47 @@ public void Zsvulture_ClotThink(int iNPC)
 		npc.PlayHurtSound();
 	}
 	
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
-	{
+	if(npc.m_flNextThinkTime > GameTime)
 		return;
-	}
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
+	npc.m_flNextThinkTime = GameTime + 0.1;
 
-	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	if(npc.m_flGetClosestTargetTime < GameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
+		npc.m_flGetClosestTargetTime = GameTime + GetRandomRetargetTime();
+	}
+	
+	float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
+	if(!npc.Anger && npc.m_flNextRangedAttack < GameTime)
+	{
+		if(IsValidEntity(npc.m_iWearable6))
+			RemoveEntity(npc.m_iWearable6);
+		fl_ruina_battery[npc.index]+=2.0;
+		if(fl_ruina_battery[npc.index]>=fl_ruina_battery_max[npc.index])
+		{
+			int particle_power = ParticleEffectAt(VecSelfNpc, "teleporter_blue_wisps_level3", 999.0);
+			if(IsValidEntity(particle_power))
+			{
+				SetParent(npc.index, particle_power);
+				npc.m_iWearable6 = particle_power;
+			}
+			fl_ruina_battery[npc.index]=fl_ruina_battery_max[npc.index];
+			npc.Anger=true;
+		}
+		npc.m_flNextRangedAttack = 1.0 + GameTime;
 	}
 	
 	if(IsValidEnemy(npc.index, npc.m_iTarget))
 	{
-		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget );
-	
-		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
+		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
 		int SetGoalVectorIndex = 0;
-		SetGoalVectorIndex = ZsvultureSelfDefense(npc,GetGameTime(npc.index), npc.m_iTarget, flDistanceToTarget); 
+		SetGoalVectorIndex = ZsvultureSelfDefense(npc,GameTime, npc.m_iTarget, flDistanceToTarget); 
 		switch(SetGoalVectorIndex)
 		{
 			case 0:
 			{
 				npc.m_bAllowBackWalking = false;
-				//Get the normal prediction code.
 				if(flDistanceToTarget < npc.GetLeadRadius()) 
 				{
 					float vPredictedPos[3];
@@ -216,7 +228,7 @@ public void Zsvulture_ClotThink(int iNPC)
 				}
 				else 
 				{		
-					if(npc.m_flJumpCooldown < GetGameTime(npc.index))
+					if(npc.m_flJumpCooldown < GameTime)
 					{
 						if(flDistanceToTarget > (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 4.0) && flDistanceToTarget < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 10.0))
 						{
@@ -225,7 +237,7 @@ public void Zsvulture_ClotThink(int iNPC)
 								npc.FaceTowards(vecTarget, 15000.0);
 								PluginBot_Jump(npc.index, vecTarget);
 								npc.PlayIdleAlertSound();
-								npc.m_flJumpCooldown = GetGameTime(npc.index) + 7.5;
+								npc.m_flJumpCooldown = GameTime + 7.5;
 								npc.PlaySuperJumpSound();
 							}
 						}
@@ -250,27 +262,38 @@ public void Zsvulture_ClotThink(int iNPC)
 	npc.PlayIdleAlertSound();
 }
 
-
-int ZsvultureSelfDefense(Zsvulture npc, float gameTime, int target, float distance)
+static int ZsvultureSelfDefense(Zsvulture npc, float gameTime, int target, float distance)
 {
 	if(gameTime > npc.m_flNextMeleeAttack)
 	{
 		if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 3.5))
 		{
 			int Enemy_I_See = Can_I_See_Enemy(npc.index, npc.m_iTarget);
-					
 			if(IsValidEnemy(npc.index, Enemy_I_See))
 			{
 				npc.m_iTarget = Enemy_I_See;
 				npc.PlayMeleeHitSound();
 				float vecTarget[3]; WorldSpaceCenter(target, vecTarget);
 				int projectile = npc.FireParticleRocket(vecTarget, 30.0, 1000.0, 150.0, "superrare_burning1", true);
-				int particle = EntRefToEntIndex(i_WandParticle[projectile]);
-				CreateTimer(0.5, Timer_RemoveEntity, EntIndexToEntRef(projectile), TIMER_FLAG_NO_MAPCHANGE);
-				CreateTimer(0.5, Timer_RemoveEntity, EntIndexToEntRef(particle), TIMER_FLAG_NO_MAPCHANGE);
-				npc.m_flNextMeleeAttack = gameTime + 0.2;
-				
-				WandProjectile_ApplyFunctionToEntity(projectile, Zsvulture_Rocket_Particle_StartTouch);		
+				if(IsValidEntity(projectile))
+				{
+					CreateTimer(0.5, Timer_RemoveEntity, EntIndexToEntRef(projectile), TIMER_FLAG_NO_MAPCHANGE);
+					if(npc.Anger)
+					{
+						b_Anger[projectile]=true;
+						fl_ruina_battery[npc.index]-=2.0;
+						if(fl_ruina_battery[npc.index]<=0.0)
+						{
+							fl_ruina_battery[npc.index]=0.0;
+							npc.Anger=false;
+						}
+					}
+					WandProjectile_ApplyFunctionToEntity(projectile, Zsvulture_Rocket_Particle_StartTouch);
+					npc.m_flNextMeleeAttack = gameTime + 0.2;
+					int particle = EntRefToEntIndex(i_WandParticle[projectile]);
+					if(IsValidEntity(particle))
+						CreateTimer(0.5, Timer_RemoveEntity, EntIndexToEntRef(particle), TIMER_FLAG_NO_MAPCHANGE);
+				}
 			}
 			if(distance > (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 3.5))
 			{
@@ -323,31 +346,29 @@ int ZsvultureSelfDefense(Zsvulture npc, float gameTime, int target, float distan
 	return 0;
 }
 
-public Action Zsvulture_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action Zsvulture_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	Zsvulture npc = view_as<Zsvulture>(victim);
-		
+	
 	if(attacker <= 0)
 		return Plugin_Continue;
-		
+	
 	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 	{
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
 	}
-	
 	return Plugin_Changed;
 }
 
-public void Zsvulture_NPCDeath(int entity)
+static void Zsvulture_NPCDeath(int entity)
 {
 	Zsvulture npc = view_as<Zsvulture>(entity);
 	if(!npc.m_bGib)
 	{
 		npc.PlayDeathSound();	
 	}
-	CPrintToChatAll("{green}벌쳐 소령{default}: 여기가 끝이군.");
-		
+	PrintNPCMessageWithPrefixes(npc.index, "green", "MajorVulture_Death", true);
 	if(IsValidEntity(npc.m_iWearable7))
 		RemoveEntity(npc.m_iWearable7);
 	if(IsValidEntity(npc.m_iWearable6))
@@ -364,17 +385,13 @@ public void Zsvulture_NPCDeath(int entity)
 		RemoveEntity(npc.m_iWearable1);
 }
 
-
-
-public void Zsvulture_Rocket_Particle_StartTouch(int entity, int target)
+static void Zsvulture_Rocket_Particle_StartTouch(int entity, int target)
 {
-	if(target > 0 && target < MAXENTITIES)	//did we hit something???
+	if(target > 0 && target < MAXENTITIES)
 	{
 		int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
 		if(!IsValidEntity(owner))
-		{
 			owner = 0;
-		}
 		
 		int inflictor = h_ArrowInflictorRef[entity];
 		if(inflictor != -1)
@@ -382,21 +399,20 @@ public void Zsvulture_Rocket_Particle_StartTouch(int entity, int target)
 
 		if(inflictor == -1)
 			inflictor = owner;
-			
+		
 		float ProjectileLoc[3];
 		GetEntPropVector(entity, Prop_Data, "m_vecAbsOrigin", ProjectileLoc);
 		float DamageDeal = fl_rocket_particle_dmg[entity];
 		if(ShouldNpcDealBonusDamage(target))
 			DamageDeal *= 10.5;
-
-
-		SDKHooks_TakeDamage(target, owner, inflictor, DamageDeal, DMG_BULLET|DMG_PREVENT_PHYSICS_FORCE, -1);	//acts like a kinetic rocket
+		if(b_Anger[entity])
+			AP_TakeDamage(target, owner, inflictor, DamageDeal, DMG_TRUEDAMAGE|DMG_PREVENT_PHYSICS_FORCE);
+		else
+			SDKHooks_TakeDamage(target, owner, inflictor, DamageDeal, DMG_BULLET|DMG_PREVENT_PHYSICS_FORCE, -1);
 		NPC_Ignite(target, owner,12.0, -1, 8.0);
 		int particle = EntRefToEntIndex(i_WandParticle[entity]);
 		if(IsValidEntity(particle))
-		{
 			RemoveEntity(particle);
-		}
 	}
 	else
 	{

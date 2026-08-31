@@ -54,6 +54,7 @@ static void ClotPrecache_AltBoss()
 }
 
 static bool SamePoyoDisallow[11];
+static bool SameZombieDisallow[10];
 
 static any ClotSummon_Boss(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
 {
@@ -61,7 +62,7 @@ static any ClotSummon_Boss(int client, float vecPos[3], float vecAng[3], int tea
 }
 static any ClotSummon_AltBoss(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
 {
-	return PoyoSummonRandom(vecPos, vecAng, team, data, true)
+	return PoyoSummonRandom(vecPos, vecAng, team, data, true);
 }
 
 methodmap PoyoSummonRandom < CClotBody
@@ -215,7 +216,7 @@ static void ZombieSummonRaidboss(int ZombieSummonbase)
 	SameZombieDisallow[0] = true;
 	while(SameZombieDisallow[NumberRand])
 	{
-		NumberRand = GetRandomInt(1,10);
+		NumberRand = GetRandomInt(1,9);
 	}
 	SameZombieDisallow[NumberRand] = true;
 	switch(NumberRand)

@@ -1298,11 +1298,7 @@ void NPC_ConfigSetup()
 	StoneAgeMaker_OnMapStart_NPC();
 	MassShootingLover_OnMapStart_NPC();
 	ZSZombine_OnMapStart_NPC();
-	ZSMainHeadcrab_OnMapStart_NPC();
-	ZSMainHeadcrabZombie_OnMapStart_NPC();
 	ZSMainPoisonZombie_OnMapStart_NPC();
-	ZSSoldierGiant_OnMapStart_NPC();
-	ZSSoldierMinion_OnMapStart_NPC();
 	Headcrabmilloperator_OnMapStart_NPC();
 	ManhattanParrot_OnMapStart_NPC();
 	InfectedTomislavMain_OnMapStart_NPC();
@@ -2933,7 +2929,6 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/60/npc_zs_mlsm.sp"
 #include "npc/gmod_zs/60/npc_zs_manhattan_parrot.sp"
 //#include "npc/gmod_zs/bandit/npc_zs_combine_soldier_elite.sp"
-#include "npc/gmod_zs/npc_zs_zmain.sp"
 #include "npc/gmod_zs/npc_zs_pukepus.sp"
 #include "npc/gmod_zs/special/npc_zs_flesh_creeper.sp"
 #include "npc/gmod_zs/special/npc_zs_nest.sp"
@@ -2947,11 +2942,8 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/special/npc_zs_red_marrow.sp"
 #include "npc/gmod_zs/special/npc_zs_bonemesh.sp"
 #include "npc/gmod_zs/special/npc_zs_zombine.sp"
-#include "npc/gmod_zs/special/npc_zs_zmain_headcrab.sp"
 #include "npc/gmod_zs/special/npc_zs_zmain_headcrabzombie.sp"
 #include "npc/gmod_zs/special/npc_zs_zmain_poisonzombie.sp"
-#include "npc/gmod_zs/special/npc_zs_soldier_giant_grave.sp"
-#include "npc/gmod_zs/special/npc_zs_soldier_minion_grave.sp"
 #include "npc/gmod_zs/bosses/npc_zs_nightmare.sp"
 #include "npc/gmod_zs/bosses/npc_zs_sphynx.sp"
 #include "npc/gmod_zs/bosses/npc_zs_pregnant.sp"
@@ -2959,7 +2951,6 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/bosses/npc_zs_soldier_barrager.sp"
 #include "npc/gmod_zs/bosses/npc_zs_unspeakable.sp"
 #include "npc/gmod_zs/bosses/npc_doctor_unclean_one.sp"
-//#include "npc/gmod_zs/npc_zs_pukepus.sp"
 #include "npc/gmod_zs/npc_zs_ally_medic.sp"
 #include "npc/gmod_zs/npc_zs_ally_soldier.sp"
 #include "npc/gmod_zs/npc_zs_ally_heavy.sp"

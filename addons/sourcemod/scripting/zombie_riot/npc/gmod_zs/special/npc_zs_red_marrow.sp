@@ -26,30 +26,16 @@ static const char g_MeleeHitSounds[][] = {
 	"npc/fast_zombie/claw_strike2.wav",
 	"npc/fast_zombie/claw_strike3.wav",
 };
-static const char g_MeleeAttackSounds[][] = {
-	"npc/fast_zombie/wake1.wav",
-};
 
 static const char g_MeleeMissSounds[][] = {
 	"npc/fast_zombie/claw_miss1.wav",
 	"npc/fast_zombie/claw_miss2.wav",
 };
-float g_flRedMarrowAccumulatedDamage[2048]; 
 
-// [추가] 50% 체력 기믹이 단 한 번만 발동하도록 체크하는 전역 배열 플래그
-bool g_bRedMarrowTriggered50[2048]; 
+static const char g_MeleeAttackSounds[] = "npc/fast_zombie/wake1.wav";
 
 public void RedMarrow_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleSounds));		i++) { PrecacheSound(g_IdleSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds));	i++) { PrecacheSound(g_MeleeHitSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeAttackSounds));	i++) { PrecacheSound(g_MeleeAttackSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
-
-	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Red Marrow");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_red_marrow");
@@ -57,8 +43,21 @@ public void RedMarrow_OnMapStart_NPC()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeMissSounds);
+	PrecacheSound(g_MeleeAttackSounds);
+	PrecacheSound("player/flow.wav");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
@@ -74,22 +73,17 @@ methodmap RedMarrow < CClotBody
 		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(115, 125));
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(3.0, 6.0);
 	}
-	
 	public void PlayHurtSound() {
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(70, 75));
 	}
 	public void PlayDeathSound() {
-	
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(122, 128));
-		
 	}
 	public void PlayMeleeSound() {
-		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(115, 140));
+		EmitSoundToAll(g_MeleeAttackSounds, this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(115, 140));
 	}
 	public void PlayMeleeHitSound() {
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
@@ -108,11 +102,6 @@ methodmap RedMarrow < CClotBody
 		
 		int iActivity = npc.LookupActivity("ACT_HL2MP_RUN_ZOMBIE");
 		if(iActivity > 0) npc.StartActivity(iActivity);
-		if(npc.index > 0 && npc.index < 2048)
-        {
-            g_flRedMarrowAccumulatedDamage[npc.index] = 0.0;
-            g_bRedMarrowTriggered50[npc.index] = false; // [변경] 생성 시 플래그 초기화
-        }
 
 		npc.m_flNextMeleeAttack = 0.0;
 		
@@ -125,11 +114,7 @@ methodmap RedMarrow < CClotBody
 		func_NPCThink[npc.index] = RedMarrow_ClotThink;
 		func_NPCOnTakeDamage[npc.index] = RedMarrow_OnTakeDamage;
 		
-		float wave = float(Waves_GetRoundScale()+1); //Wave scaling
-		
-		wave *= 0.133333;
-
-		npc.m_flWaveScale = wave;
+		npc.m_flWaveScale = float(Waves_GetRoundScale()+1)* 0.133333;
 		
 		SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
 		SetEntityRenderColor(npc.index, 255, 0, 0, 255);
@@ -137,28 +122,26 @@ methodmap RedMarrow < CClotBody
         npc.m_flMeleeArmor = 0.77;
 		npc.m_flRangedArmor = 0.7;
 		npc.Anger = false;
-
+		npc.m_bFUCKYOU = false;
 		npc.StartPathing();
 		
 		return npc;
 	}
 }
 
-public void RedMarrow_ClotThink(int iNPC)
+static void RedMarrow_ClotThink(int iNPC)
 {
 	RedMarrow npc = view_as<RedMarrow>(iNPC);
 	
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
-	{
+	float GameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > GameTime)
 		return;
-	}
 	
 	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
 	SetVariantInt(64);
 	AcceptEntityInput(iNPC, "SetBodyGroup");
 	
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
-	
+	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 	
 	if(npc.m_blPlayHurtAnimation)
@@ -170,30 +153,22 @@ public void RedMarrow_ClotThink(int iNPC)
 		
 	}
 	
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
-	{
+	if(npc.m_flNextThinkTime > GameTime)
 		return;
-	}
-	
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
-
-	
-	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	npc.m_flNextThinkTime = GameTime + 0.1;
+	if(npc.m_flGetClosestTargetTime < GameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
+		npc.m_flGetClosestTargetTime = GameTime + GetRandomRetargetTime();
 		npc.StartPathing();
 	}
 	
 	int closest = npc.m_iTarget;
-	
 	if(IsValidEnemy(npc.index, closest))
 	{
 		float vecTarget[3]; WorldSpaceCenter(closest, vecTarget);
-			
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-				
 		if(flDistanceToTarget < npc.GetLeadRadius())
 		{
 			float vPredictedPos[3]; PredictSubjectPosition(npc, closest,_,_, vPredictedPos);
@@ -206,19 +181,18 @@ public void RedMarrow_ClotThink(int iNPC)
 		
 		if(flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED || npc.m_flAttackHappenswillhappen)
 		{
-			
-			if(npc.m_flNextMeleeAttack < GetGameTime(npc.index))
+			if(npc.m_flNextMeleeAttack < GameTime)
 			{
 				if (!npc.m_flAttackHappenswillhappen)
 				{
 					npc.AddGesture("ACT_GMOD_GESTURE_RANGE_ZOMBIE");
 					npc.PlayMeleeSound();
-					npc.m_flAttackHappens = GetGameTime(npc.index)+0.7;
-					npc.m_flAttackHappens_bullshit = GetGameTime(npc.index)+0.83;
+					npc.m_flAttackHappens = GameTime+0.7;
+					npc.m_flAttackHappens_bullshit = GameTime+0.83;
 					npc.m_flAttackHappenswillhappen = true;
 				}
 
-				if (npc.m_flAttackHappens < GetGameTime(npc.index) && npc.m_flAttackHappens_bullshit >= GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
+				if (npc.m_flAttackHappens < GameTime && npc.m_flAttackHappens_bullshit >= GameTime && npc.m_flAttackHappenswillhappen)
 				{
 					Handle swingTrace;
 					npc.FaceTowards(vecTarget, 20000.0);
@@ -229,13 +203,10 @@ public void RedMarrow_ClotThink(int iNPC)
 						TR_GetEndPosition(vecHit, swingTrace);
 						if(target > 0) 
 						{
-							{
-								if(!ShouldNpcDealBonusDamage(target))
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 80.0 * npc.m_flWaveScale, DMG_CLUB, -1, _, vecHit);
-								else
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 120.0 * npc.m_flWaveScale, DMG_CLUB, -1, _, vecHit);					
-							}
-							
+							if(!ShouldNpcDealBonusDamage(target))
+								SDKHooks_TakeDamage(target, npc.index, npc.index, 80.0 * npc.m_flWaveScale, DMG_CLUB, -1, _, vecHit);
+							else
+								SDKHooks_TakeDamage(target, npc.index, npc.index, 120.0 * npc.m_flWaveScale, DMG_CLUB, -1, _, vecHit);					
 							npc.PlayMeleeHitSound();
 						}
 						else
@@ -244,13 +215,13 @@ public void RedMarrow_ClotThink(int iNPC)
 						}
 					}
 					delete swingTrace;
-					npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.74;
+					npc.m_flNextMeleeAttack = GameTime + 0.74;
 					npc.m_flAttackHappenswillhappen = false;
 				}
-				else if (npc.m_flAttackHappens_bullshit < GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
+				else if (npc.m_flAttackHappens_bullshit < GameTime && npc.m_flAttackHappenswillhappen)
 				{
 					npc.m_flAttackHappenswillhappen = false;
-					npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.74;
+					npc.m_flNextMeleeAttack = GameTime + 0.74;
 				}
 			}
 			
@@ -259,31 +230,27 @@ public void RedMarrow_ClotThink(int iNPC)
 	else
 	{
 		npc.StopPathing();
-		
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_iTarget = GetClosestTarget(npc.index);
 	}
 	npc.PlayIdleSound();
 }
 
-public Action RedMarrow_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action RedMarrow_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
     if(attacker <= 0 || victim <= 0 || !IsValidEntity(victim))
         return Plugin_Continue;
-
     RedMarrow npc = view_as<RedMarrow>(victim);
     
-    int maxHealth = GetEntProp(victim, Prop_Data, "m_iMaxHealth");
+    int maxHealth = ReturnEntityMaxHealth(victim);
     int currentHealth = GetEntProp(victim, Prop_Data, "m_iHealth");
     
     float expectedHealth = float(currentHealth) - damage;
     float health50Percent = float(maxHealth) * 0.5;
 
-    // [변경] npc.bTriggered50 대신 새로 만든 전역 배열 플래그 사용
-    if (!g_bRedMarrowTriggered50[victim] && expectedHealth <= health50Percent)
+    if(!npc.m_bFUCKYOU && expectedHealth <= health50Percent)
     {
-        g_bRedMarrowTriggered50[victim] = true; // 단 한번만 실행되도록 플래그 변경
-
+		npc.m_bFUCKYOU = true;
         if(!NpcStats_IsEnemySilenced(victim))
         {
             npc.bXenoInfectedSpecialHurt = true;
@@ -295,12 +262,7 @@ public Action RedMarrow_OnTakeDamage(int victim, int &attacker, int &inflictor, 
         }
     }
 
-    if((float(maxHealth) * 0.05) >= expectedHealth && !npc.Anger)
-    {
-        npc.Anger = true;
-    }
-
-    if (npc.m_flHeadshotCooldown < GetGameTime())
+    if(npc.m_flHeadshotCooldown < GetGameTime())
     {
         npc.m_flHeadshotCooldown = GetGameTime() + DEFAULT_HURTDELAY;
         npc.m_blPlayHurtAnimation = true;
@@ -309,7 +271,7 @@ public Action RedMarrow_OnTakeDamage(int victim, int &attacker, int &inflictor, 
     return Plugin_Continue;
 }
 
-public Action RedMarrow_Revert_Resistance_Enable(Handle timer, int ref)
+static Action RedMarrow_Revert_Resistance_Enable(Handle timer, int ref)
 {
 	int zombie = EntRefToEntIndex(ref);
 	if(IsValidEntity(zombie))
@@ -319,16 +281,10 @@ public Action RedMarrow_Revert_Resistance_Enable(Handle timer, int ref)
 	}
 	return Plugin_Handled;
 }
-public void RedMarrow_NPCDeath(int entity)
+
+static void RedMarrow_NPCDeath(int entity)
 {
 	RedMarrow npc = view_as<RedMarrow>(entity);
 	if(!npc.m_bGib)
-	{
 		npc.PlayDeathSound();	
-	}
-	if(entity > 0 && entity < 2048) 
-	{
-		g_flRedMarrowAccumulatedDamage[entity] = 0.0;
-		g_bRedMarrowTriggered50[entity] = false; // [변경] 사망 시 플래그 초기화
-	}
 }

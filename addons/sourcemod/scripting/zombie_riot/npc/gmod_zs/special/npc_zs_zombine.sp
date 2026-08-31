@@ -1,9 +1,5 @@
 #pragma semicolon 1
 #pragma newdecls required
- 
-static char g_DeathSounds[][] = {
-	"npc/zombine/zombine_die1.wav",
-};
 
 static char g_HurtSounds[][] = {
 	"npc/zombine/zombine_pain1.wav",
@@ -26,25 +22,12 @@ static char g_IdleSounds[][] = {
 	"npc/zombine/zombine_alert7.wav",
 };
 
-static char g_IdleAlertedSounds[][] = {
-	"npc/zombine/zombine_idle1.wav",
-	"npc/zombine/zombine_idle2.wav",
-	"npc/zombine/zombine_idle3.wav",
-	"npc/zombine/zombine_idle4.wav",
-	"npc/zombine/zombine_alert1.wav",
-	"npc/zombine/zombine_alert2.wav",
-	"npc/zombine/zombine_alert3.wav",
-	"npc/zombine/zombine_alert4.wav",
-	"npc/zombine/zombine_alert5.wav",
-	"npc/zombine/zombine_alert6.wav",
-	"npc/zombine/zombine_alert7.wav",
-};
-
 static char g_MeleeHitSounds[][] = {
 	"npc/fast_zombie/claw_strike1.wav",
 	"npc/fast_zombie/claw_strike2.wav",
 	"npc/fast_zombie/claw_strike3.wav",
 };
+
 static char g_MeleeAttackSounds[][] = {
 	"npc/zombine/zombine_charge1.wav",
 	"npc/zombine/zombine_charge2.wav",
@@ -54,38 +37,32 @@ static char g_MeleeMissSounds[][] = {
 	"npc/fast_zombie/claw_miss1.wav",
 	"npc/fast_zombie/claw_miss2.wav",
 };
-static const char g_HurtArmorSounds[][] = {
-	")physics/metal/metal_box_impact_bullet1.wav",
-	")physics/metal/metal_box_impact_bullet2.wav",
-	")physics/metal/metal_box_impact_bullet3.wav",
-};
+
+static char g_DeathSounds[] = "npc/zombine/zombine_die1.wav";
 
 public void ZSZombine_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds));	i++) { PrecacheSound(g_MeleeHitSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
-	for (int i = 0; i < (sizeof(g_HurtArmorSounds)); i++) { PrecacheSound(g_HurtArmorSounds[i]); }
-
-//	g_iPathLaserModelIndex = PrecacheModel("materials/sprites/laserbeam.vmt");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Zombine");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_zombine");
 	strcopy(data.Icon, sizeof(data.Icon), "");
 	data.IconCustom = false;
 	data.Flags = 0;
-	data.Category = Type_Mutation;
-	data.Func = ClotSummon;
+	data.Category = Type_GmodZS;
 	data.Precache = ClotPrecache;
+	data.Func = ClotSummon;
 	NPC_Add(data);
 }
+
 static void ClotPrecache()
 {
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSoundArray(g_MeleeMissSounds);
+	PrecacheSound(g_DeathSounds);
 	PrecacheModel("models/zombie/zombie_soldier.mdl");
-	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSoundCustom(g_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSoundCustom(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleSounds));		i++) { PrecacheSoundCustom(g_IdleSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSoundCustom(g_IdleAlertedSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeAttackSounds));	i++) { PrecacheSoundCustom(g_MeleeAttackSounds[i]);	}
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
@@ -100,46 +77,25 @@ methodmap ZSZombine < CClotBody
 			return;
 		EmitCustomToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(3.0, 6.0);
-		
 	}
-	
 	public void PlayHurtSound() {
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitCustomToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
 	}
-	
 	public void PlayDeathSound() {
-	
-		EmitCustomToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
+		EmitCustomToAll(g_DeathSounds, this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
-	
 	public void PlayMeleeSound() {
 		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	public void PlayMeleeHitSound() {
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
 	}
-
 	public void PlayMeleeMissSound() {
 		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
-	public void PlayHurtArmorSound() 
-	{
-		if(this.m_flNextHurtSound > GetGameTime(this.index))
-			return;
-			
-		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		EmitSoundToAll(g_HurtArmorSounds[GetRandomInt(0, sizeof(g_HurtArmorSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-
-	}
-	
 	
 	public ZSZombine(float vecPos[3], float vecAng[3], int ally)
 	{
@@ -172,36 +128,30 @@ methodmap ZSZombine < CClotBody
 		
 		return npc;
 	}
-	
 }
-
 
 public void ZSZombine_ClotThink(int iNPC)
 {
 	ZSZombine npc = view_as<ZSZombine>(iNPC);
 	
 	float gameTime = GetGameTime(npc.index);
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
-	{
+	if(npc.m_flNextDelayTime > gameTime)
 		return;
-	}
+	
 	if(npc.m_flAbilityOrAttack0 < gameTime)
 	{
 		npc.m_flAbilityOrAttack0 = gameTime + 0.5;
 		int target = GetClosestAlly(npc.index, (250.0 * 250.0), _);
 		if(target && !b_thisNpcIsARaid[target])
 		{
-				
 			GrantEntityArmor(target, true, 0.5, 0.5, 0);
-			ChaosSupporter npc1 = view_as<ChaosSupporter>(npc.index);
 			float ProjectileLoc[3];
-			GetEntPropVector(npc1.index, Prop_Data, "m_vecAbsOrigin", ProjectileLoc);
+			GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", ProjectileLoc);
 			spawnRing_Vectors(ProjectileLoc, 1.0, 0.0, 0.0, 10.0, "materials/sprites/laserbeam.vmt", 150, 150, 0, 200, 1, 0.3, 5.0, 8.0, 3, 40.0 * 2.0);	
 		}
 	}
 	
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
-	
+	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 	
 	if(npc.m_blPlayHurtAnimation)
@@ -210,66 +160,51 @@ public void ZSZombine_ClotThink(int iNPC)
 		if(!npc.m_flAttackHappenswillhappen)
 			npc.AddGesture("ACT_GESTURE_FLINCH_HEAD", false);
 		npc.PlayHurtSound();
-		
 	}
 	
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
-	{
+	if(npc.m_flNextThinkTime > gameTime)
 		return;
-	}
 	
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
+	npc.m_flNextThinkTime = gameTime + 0.1;
 
-	
-	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	if(npc.m_flGetClosestTargetTime < gameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
+		npc.m_flGetClosestTargetTime = gameTime + GetRandomRetargetTime();
 		npc.StartPathing();
-		//PluginBot_NormalJump(npc.index);
 	}
 	
 	int closest = npc.m_iTarget;
-	
 	if(IsValidEnemy(npc.index, closest))
 	{
 		float vecTarget[3]; WorldSpaceCenter(closest, vecTarget);
-			
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-				
-		//Predict their pos.
+		
 		if(flDistanceToTarget < npc.GetLeadRadius())
 		{
 			float vPredictedPos[3]; PredictSubjectPosition(npc, closest,_,_, vPredictedPos);
-	//		PrintToChatAll("cutoff");
 			npc.SetGoalVector(vPredictedPos);
 		}
 		else
 		{
 			npc.SetGoalEntity(closest);
 		}
-		
-		//Target close enough to hit
-		
 		if(flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED || npc.m_flAttackHappenswillhappen)
 		{
-			//Look at target so we hit.
-		//	npc.FaceTowards(vecTarget, 20000.0);
-			
-			if(npc.m_flNextMeleeAttack < GetGameTime(npc.index))
+			if(npc.m_flNextMeleeAttack < gameTime)
 			{
 				//Play attack ani
 				if (!npc.m_flAttackHappenswillhappen)
 				{
 					npc.AddGesture("ACT_ZOMBINE_ATTACK_FAST");
 					npc.PlayMeleeSound();
-					npc.m_flAttackHappens = GetGameTime(npc.index)+0.3;
-					npc.m_flAttackHappens_bullshit = GetGameTime(npc.index)+0.43;
+					npc.m_flAttackHappens = gameTime+0.3;
+					npc.m_flAttackHappens_bullshit = gameTime+0.43;
 					npc.m_flAttackHappenswillhappen = true;
 				}
 				//Can we attack right now?
-				if (npc.m_flAttackHappens < GetGameTime(npc.index) && npc.m_flAttackHappens_bullshit >= GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
+				if (npc.m_flAttackHappens < gameTime && npc.m_flAttackHappens_bullshit >= gameTime && npc.m_flAttackHappenswillhappen)
 				{
 					Handle swingTrace;
 					npc.FaceTowards(vecTarget, 20000.0);
@@ -283,11 +218,8 @@ public void ZSZombine_ClotThink(int iNPC)
 							float damageDealt = 50.0;
 							if(ShouldNpcDealBonusDamage(target))
 								damageDealt *= 5.5;
-
-
 							SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_CLUB, -1, _, vecHit);
-								
-							// Hit sound
+							
 							npc.PlayMeleeHitSound();
 						}
 						else
@@ -296,45 +228,40 @@ public void ZSZombine_ClotThink(int iNPC)
 						}
 					}
 					delete swingTrace;
-					npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.8;
+					npc.m_flNextMeleeAttack = gameTime + 0.8;
 					npc.m_flAttackHappenswillhappen = false;
 				}
-				else if (npc.m_flAttackHappens_bullshit < GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
+				else if (npc.m_flAttackHappens_bullshit < gameTime && npc.m_flAttackHappenswillhappen)
 				{
 					npc.m_flAttackHappenswillhappen = false;
-					npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.8;
+					npc.m_flNextMeleeAttack = gameTime + 0.8;
 				}
 			}
-			
 		}
 	}
 	else
 	{
 		npc.StopPathing();
-		
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_iTarget = GetClosestTarget(npc.index);
 	}
 	npc.PlayIdleSound();
 }
 
-public void ZSZombine_NPCDeath(int entity)
+static void ZSZombine_NPCDeath(int entity)
 {
 	ZSZombine npc = view_as<ZSZombine>(entity);
 	if(!npc.m_bGib)
-	{
 		npc.PlayDeathSound();	
-	}
 }
 
-
-public Action ZSZombine_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action ZSZombine_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	ZSZombine npc = view_as<ZSZombine>(victim);
-		
+	
 	if(attacker <= 0)
 		return Plugin_Continue;
-		
+	
 	if(npc.m_flArmorCount > 0.0)
 	{
 		
@@ -347,8 +274,5 @@ public Action ZSZombine_OnTakeDamage(int victim, int &attacker, int &inflictor, 
 			npc.m_blPlayHurtAnimation = true;
 		}		
 	}
-
-
-	
 	return Plugin_Changed;
 }

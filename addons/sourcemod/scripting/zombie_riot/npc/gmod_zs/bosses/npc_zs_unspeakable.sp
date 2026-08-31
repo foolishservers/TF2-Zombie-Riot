@@ -57,14 +57,6 @@ static const char g_Jump_sound[] = "misc/halloween/spell_blast_jump.wav";
 
 static int i_LaserEntityIndex[MAXENTITIES]={-1, ...};
 
-//static int NpcID;
-
-//다른 코드에서 해당 NPC가 있는지 감지할때 쓰는거라 쓰이지않는 다면 지우기
-/*int ZsUnspeakableNpcID()
-{
-	return NpcID;
-}*/
-
 void ZsUnspeakable_OnMapStart_NPC()
 {
 	NPCData data;
@@ -74,9 +66,8 @@ void ZsUnspeakable_OnMapStart_NPC()
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
 	data.Category = Type_Raid;
-	data.Func = ClotSummon;
 	data.Precache = ClotPrecache;
-	//NpcID = NPC_Add(data);
+	data.Func = ClotSummon;
 	NPC_Add(data);
 	Zero(i_LaserEntityIndex);
 }
@@ -98,34 +89,27 @@ static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, co
 {
 	return ZsUnspeakable(vecPos, vecAng, team, data);
 }
+
 methodmap ZsUnspeakable < CClotBody
 {
 	public void PlayIdleAlertSound() 
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 80);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
-		
 	}
-	
 	public void PlayHurtSound() 
 	{
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 80);
-		
 	}
-	
 	public void PlayDeathSound() 
 	{
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 80);
 	}
-	
 	public void PlayMeleeSound()
 	{
 		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_AUTO, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
@@ -147,6 +131,7 @@ methodmap ZsUnspeakable < CClotBody
 	{
 		EmitSoundToAll(g_Jump_sound, this.index, SNDCHAN_STATIC, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, GetRandomInt(80, 85));
 	}
+	
 	property float m_flZsUnspeakableQuake
 	{
 		public get()							{ return fl_AbilityOrAttack[this.index][0]; }
@@ -162,11 +147,6 @@ methodmap ZsUnspeakable < CClotBody
 		public get()							{ return fl_NextRangedAttack[this.index]; }
 		public set(float TempValueForProperty) 	{ fl_NextRangedAttack[this.index] = TempValueForProperty; }
 	}
-	property int m_iPlayerScaledStart
-	{
-		public get()							{ return i_MedkitAnnoyance[this.index]; }
-		public set(int TempValueForProperty) 	{ i_MedkitAnnoyance[this.index] = TempValueForProperty; }
-	}
 	property float m_flVoidMatterAbosorbInternalCD
 	{
 		public get()							{ return fl_AbilityOrAttack[this.index][1]; }
@@ -177,7 +157,6 @@ methodmap ZsUnspeakable < CClotBody
 		public get()							{ return fl_AbilityOrAttack[this.index][2]; }
 		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][2] = TempValueForProperty; }
 	}
-	
 	property float m_flVoidPillarAttack
 	{
 		public get()							{ return fl_AbilityOrAttack[this.index][3]; }
@@ -203,11 +182,6 @@ methodmap ZsUnspeakable < CClotBody
 		public get()							{ return fl_AbilityOrAttack[this.index][8]; }
 		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][8] = TempValueForProperty; }
 	}
-	property float m_flSpreadDelay
-	{
-		public get()							{ return fl_AbilityOrAttack[this.index][6]; }
-		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][6] = TempValueForProperty; }
-	}
 	property float m_flMaxDeath
 	{
 		public get()							{ return fl_AbilityOrAttack[this.index][9]; }
@@ -228,73 +202,31 @@ methodmap ZsUnspeakable < CClotBody
 		public get()							{ return fl_NextDelayTime[this.index]; }
 		public set(float TempValueForProperty) 	{ fl_NextDelayTime[this.index] = TempValueForProperty; }
 	}
+	property float m_flNPCTalkDelay
+	{
+		public get()							{ return fl_NextChargeSpecialAttack[this.index]; }
+		public set(float TempValueForProperty) 	{ fl_NextChargeSpecialAttack[this.index] = TempValueForProperty; }
+	}
+	property float m_flValueLater
+	{
+		public get()							{ return fl_AngerDelay[this.index]; }
+		public set(float TempValueForProperty) 	{ fl_AngerDelay[this.index] = TempValueForProperty; }
+	}
 	
 	public ZsUnspeakable(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
-		int WaveSetting = 1;
-		char SizeChar[5];
-		SizeChar = "1.35";
-		if(StrContains(data, "first") != -1)
-		{
-			WaveSetting = 1;
-			SizeChar = "1.35";
-		}
-		else if(StrContains(data, "second") != -1)
-		{
-			WaveSetting = 2;
-			SizeChar = "1.39";
-		}
-		else if(StrContains(data, "third") != -1)
-		{
-			WaveSetting = 3;
-			SizeChar = "1.45";
-		}
-		else if(StrContains(data, "forth") != -1)
-		{
-			//outside of wave stuff.
-			WaveSetting = 4;
-			SizeChar = "1.5";
-		}
-		else if(StrContains(data, "shadowbattle") != -1)
-		{
-			//outside of wave stuff.
-			WaveSetting = 6;
-			SizeChar = "1.5";
-		}
-		else if(StrContains(data, "shadowcutscene") != -1)
-		{
-			//outside of wave stuff.z
-			WaveSetting = 7;
-			SizeChar = "1.5";
-		}
-		else if(StrContains(data, "final_item") != -1)
-		{
-			WaveSetting = 5;
-			SizeChar = "1.5";
-		}
-
-
-		ZsUnspeakable npc = view_as<ZsUnspeakable>(CClotBody(vecPos, vecAng, "models/player/pyro.mdl", SizeChar, "25000", ally, false, true));
+		ZsUnspeakable npc = view_as<ZsUnspeakable>(CClotBody(vecPos, vecAng, "models/player/pyro.mdl", "1.5", "25000", ally, false, true));
 		
-		i_RaidGrantExtra[npc.index] = WaveSetting;
-		if(WaveSetting == 6 || WaveSetting == 7)
-		{
-			npc.m_bDissapearOnDeath = true;
-		}
-		if(WaveSetting == 5 || WaveSetting == 7)
-		{
-			//lazy identifier lol
-			if(WaveSetting == 7)
-			{
-				b_ThisEntityIgnoredByOtherNpcsAggro[npc.index] = true;
-			}
-			b_NpcUnableToDie[npc.index] = true;
-		}
+		npc.m_iBleedType = BLEEDTYPE_NORMAL;
+		npc.m_iStepNoiseType = STEPSOUND_GIANT;	
+		npc.m_iNpcStepVariation = STEPTYPE_TANK;
 		
-		RemoveAllDamageAddition();
-		npc.m_flDeathAnimation = 0.0;
+		func_NPCDeath[npc.index] = view_as<Function>(ZsUnspeakable_NPCDeath);
+		func_NPCOnTakeDamage[npc.index] = view_as<Function>(ZsUnspeakable_OnTakeDamage);
+		func_NPCThink[npc.index] = view_as<Function>(ZsUnspeakable_ClotThink);
+		func_NPCFuncWin[npc.index] = view_as<Function>(ZsUnspeakableWin);
+		
 		i_NpcWeight[npc.index] = 4;
-		npc.g_TimesSummoned = 1;
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
 		int iActivity = npc.LookupActivity("ACT_MP_RUN_MELEE");
@@ -303,12 +235,9 @@ methodmap ZsUnspeakable < CClotBody
 		AcceptEntityInput(npc.index, "SetBodyGroup");	
 		
 		npc.m_iChanged_WalkCycle = -1;
-
 		npc.m_flNextMeleeAttack = 0.0;
-		
-		npc.m_iBleedType = BLEEDTYPE_NORMAL;
-		npc.m_iStepNoiseType = STEPSOUND_GIANT;	
-		npc.m_iNpcStepVariation = STEPTYPE_TANK;
+		npc.m_flDeathAnimation = 0.0;
+		npc.g_TimesSummoned = 1;
 		npc.m_flZsUnspeakableQuake = 0.0;
 		npc.m_flVoidMatterAbosorbCooldown = GetGameTime() + 15.0;
 		npc.m_flVoidMatterAbosorb = 0.0;
@@ -318,28 +247,71 @@ methodmap ZsUnspeakable < CClotBody
 		AlreadySaidWin = false;
 		AlreadySaidLastmann = false;
 		WaveStart_SubWaveStart(GetGameTime() + 1000.0);
-
-		func_NPCDeath[npc.index] = view_as<Function>(ZsUnspeakable_NPCDeath);
-		func_NPCOnTakeDamage[npc.index] = view_as<Function>(ZsUnspeakable_OnTakeDamage);
-		func_NPCThink[npc.index] = view_as<Function>(ZsUnspeakable_ClotThink);
-		func_NPCFuncWin[npc.index] = view_as<Function>(ZsUnspeakableWin);
+		RemoveAllDamageAddition();
 		
 		int skin = 1;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
+		
+		i_RaidGrantExtra[npc.index] = 0;
+		if(StrContains(data, "final_item") != -1)
+			i_RaidGrantExtra[npc.index] = 1557;
 
-		if(i_RaidGrantExtra[npc.index] != 6 && i_RaidGrantExtra[npc.index] != 7)
+		RaidModeTime = GetGameTime(npc.index) + 200.0;
+		RaidBossActive = EntIndexToEntRef(npc.index);
+		RaidAllowsBuildings = true;
+		float value;
+		char buffers[3][64];
+		ExplodeString(data, ";", buffers, sizeof(buffers), sizeof(buffers[]));
+		//the very first and 2nd char are SC for scaling
+		if(buffers[0][0] == 's' && buffers[0][1] == 'c')
 		{
-			//if(!cutscene)
-			{
-				MusicEnum music;
-				strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/void_wave/unspeakable_raid.mp3");
-				music.Time = 188;
-				music.Volume = 1.0;
-				music.Custom = true;
-				strcopy(music.Name, sizeof(music.Name), "Lilith - The Textorcist OST");
-				strcopy(music.Artist, sizeof(music.Artist), "Trihard 7");
-				Music_SetRaidMusic(music);
-			}
+			//remove SC
+			ReplaceString(buffers[0], 64, "sc", "");
+			value = StringToFloat(buffers[0]);
+			RaidModeScaling = value;
+		}
+		else
+		{	
+			RaidModeScaling = float(Waves_GetRoundScale()+1);
+			value = float(Waves_GetRoundScale()+1);
+		}
+
+		if(RaidModeScaling < 35)
+		{
+			RaidModeScaling *= 0.25; //abit low, inreacing
+		}
+		else
+		{
+			RaidModeScaling *= 0.5;
+		}
+		float amount_of_people = ZRStocks_PlayerScalingDynamic();
+		if(amount_of_people > 12.0)
+		{
+			amount_of_people = 12.0;
+		}
+		amount_of_people *= 0.12;
+		
+		if(amount_of_people < 1.0)
+			amount_of_people = 1.0;
+
+		RaidModeScaling *= amount_of_people;
+		
+		if(value > 25.0 && value < 35.0)
+			RaidModeScaling *= 0.85;
+		else if(value > 35.0)
+			RaidModeTime = GetGameTime(npc.index) + 220.0;
+		npc.m_flValueLater = value;
+
+		if(i_RaidGrantExtra[npc.index] != 1557)
+		{
+			MusicEnum music;
+			strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/void_wave/unspeakable_raid.mp3");
+			music.Time = 188;
+			music.Volume = 1.0;
+			music.Custom = true;
+			strcopy(music.Name, sizeof(music.Name), "Lilith - The Textorcist OST");
+			strcopy(music.Artist, sizeof(music.Artist), "Trihard 7");
+			Music_SetRaidMusic(music);
 			
 			for(int client_check=1; client_check<=MaxClients; client_check++)
 			{
@@ -350,237 +322,64 @@ methodmap ZsUnspeakable < CClotBody
 					ShowGameText(client_check, "item_armor", 1, "%t", "Run while you can.");
 				}
 			}
-			RaidModeTime = GetGameTime(npc.index) + 200.0;
-			RaidBossActive = EntIndexToEntRef(npc.index);
-			RaidAllowsBuildings = true;
-			float value;
-			char buffers[3][64];
-			ExplodeString(data, ";", buffers, sizeof(buffers), sizeof(buffers[]));
-			//the very first and 2nd char are SC for scaling
-			if(buffers[0][0] == 's' && buffers[0][1] == 'c')
-			{
-				//remove SC
-				ReplaceString(buffers[0], 64, "sc", "");
-				value = StringToFloat(buffers[0]);
-				RaidModeScaling = value;
-			}
-			else
-			{	
-				RaidModeScaling = float(Waves_GetRoundScale()+1);
-				value = float(Waves_GetRoundScale()+1);
-			}
-
-			if(RaidModeScaling < 35)
-			{
-				RaidModeScaling *= 0.25; //abit low, inreacing
-			}
-			else
-			{
-				RaidModeScaling *= 0.5;
-			}
-			float amount_of_people = ZRStocks_PlayerScalingDynamic();
-			//npc.m_iPlayerScaledStart = CountPlayersOnRed();
-			if(amount_of_people > 12.0)
-			{
-				amount_of_people = 12.0;
-			}
-			amount_of_people *= 0.12;
+			EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0, 80);	
+			EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0, 80);	
 			
-			if(amount_of_people < 1.0)
-				amount_of_people = 1.0;
-
-			RaidModeScaling *= amount_of_people; //More then 9 and he raidboss gets some troubles, bufffffffff
-			
-			if(value > 25.0 && value < 35.0)
-			{
-				RaidModeScaling *= 0.85;
-			}
-			else if(value > 35.0)
-			{
-				RaidModeTime = GetGameTime(npc.index) + 220.0;
-			//	RaidModeScaling *= 0.85;
-			}
-			
-			int color[4] = { 150, 255, 150, 255 };
-			SetCustomFog(FogType_NPC, color, color, 400.0, 1000.0, 0.3);
-		}
-		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0, 80);	
-		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0, 80);	
-		
-		if(i_RaidGrantExtra[npc.index] >= 4)
-		{
 			switch(GetRandomInt(0,2))
 			{
-				case 0:
-				{
-					CPrintToChatAll("{crimson}불결한 존재{default}: 이것이 마지막 테스트다. 운명에 순응하고 우리와 하나가 되어라.");
-				}
-				case 1:
-				{
-					CPrintToChatAll("{crimson}불결한 존재{default}: 이것이 마지막 테스트다. 영광스러운 합일에 동참하라.");
-				}
-				case 2:
-				{
-					CPrintToChatAll("{crimson}불결한 존재{default}: 이것이 마지막 테스트다. 끝까지 발악해보거라 어자피 우리와 하나가 될것이니.");
-				}
+				case 0: PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_Encounter_1", true);
+				case 1: PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_Encounter_2", true);
+				case 2: PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_Encounter_3", true);
 			}
 		}
+		else
+		{
+			SpawnTimer(10.0);
+			RaidModeTime = GetGameTime(npc.index) + 10.0;
+			npc.m_flNPCTalkDelay = GetGameTime(npc.index) + 10.0;
+			RaidTimerAlert = false;
+			func_NPCThink[npc.index] = ZsUnspeakable_Wait;
+		}
+		int color[4] = { 150, 255, 150, 255 };
+		SetCustomFog(FogType_NPC, color, color, 400.0, 1000.0, 0.3);
 		
 		b_thisNpcIsARaid[npc.index] = true;
 		npc.m_flMeleeArmor = 1.5;	
 		npc.m_bAlliesSummoned = false;
 		skin = 5;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
-		switch(WaveSetting)
-		{
-			case 1:
-			{
-				npc.m_iWearable1 = npc.EquipItem("head", "models/workshop_partner/player/items/scout/ai_body/ai_body.mdl");
-				npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/player/items/pyro/sf14_hw2014_robot_legg/sf14_hw2014_robot_legg.mdl");
-				npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/player/items/pyro/sf14_hw2014_robot_arm/sf14_hw2014_robot_arm.mdl");
-				npc.m_iWearable4 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_back_scratcher/c_back_scratcher.mdl");
-				npc.m_iWearable5 = npc.EquipItem("head", "models/workshop/player/items/pyro/hw2013_maniacs_manacles/hw2013_maniacs_manacles.mdl");
-				npc.m_iWearable6 = npc.EquipItem("head", "models/workshop/player/items/pyro/hw2013_the_haha_hairdo/hw2013_the_haha_hairdo.mdl");
-				npc.m_iWearable7 = npc.EquipItem("head", "models/workshop/player/items/all_class/hwn2019_binoculus/hwn2019_binoculus_pyro.mdl");
-				npc.m_iWearable8 = npc.EquipItem("head", "models/workshop/player/items/pyro/hwn2019_pyro_lantern/hwn2019_pyro_lantern.mdl");
-				SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", 1);
-				SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 1);
-				SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable5, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable6, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable7, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable8, Prop_Send, "m_nSkin", skin);
-				SetEntityRenderColor(npc.m_iWearable1, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable2, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable3, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable4, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable5, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable6, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable7, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable8, 150, 255, 150, 255);
-				SetEntProp(npc.index, Prop_Send, "m_nSkin", 1);
-				SetVariantString("1.0");
-				AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable2, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable3, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable4, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable5, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable6, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable7, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable8, "SetModelScale");
-			}
-			case 2:
-			{
-				npc.m_iWearable1 = npc.EquipItem("head", "models/workshop_partner/player/items/scout/ai_body/ai_body.mdl");
-				npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/player/items/pyro/sf14_hw2014_robot_legg/sf14_hw2014_robot_legg.mdl");
-				npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/player/items/pyro/sf14_hw2014_robot_arm/sf14_hw2014_robot_arm.mdl");
-				npc.m_iWearable4 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_back_scratcher/c_back_scratcher.mdl");
-				npc.m_iWearable5 = npc.EquipItem("head", "models/workshop/player/items/pyro/hw2013_maniacs_manacles/hw2013_maniacs_manacles.mdl");
-				npc.m_iWearable6 = npc.EquipItem("head", "models/workshop/player/items/pyro/hw2013_the_haha_hairdo/hw2013_the_haha_hairdo.mdl");
-				npc.m_iWearable7 = npc.EquipItem("head", "models/workshop/player/items/all_class/hwn2019_binoculus/hwn2019_binoculus_pyro.mdl");
-				npc.m_iWearable8 = npc.EquipItem("head", "models/workshop/player/items/pyro/hwn2019_pyro_lantern/hwn2019_pyro_lantern.mdl");
-				SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", 1);
-				SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 1);
-				SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable5, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable6, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable7, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable8, Prop_Send, "m_nSkin", skin);
-				SetEntityRenderColor(npc.m_iWearable1, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable2, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable3, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable4, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable5, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable6, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable7, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable8, 150, 255, 150, 255);
-				SetEntProp(npc.index, Prop_Send, "m_nSkin", 1);
-				SetVariantString("1.0");
-				AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable2, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable3, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable4, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable5, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable6, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable7, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable8, "SetModelScale");
-			}
-			case 3:
-			{
-				npc.m_iWearable1 = npc.EquipItem("head", "models/workshop_partner/player/items/scout/ai_body/ai_body.mdl");
-				npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/player/items/pyro/sf14_hw2014_robot_legg/sf14_hw2014_robot_legg.mdl");
-				npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/player/items/pyro/sf14_hw2014_robot_arm/sf14_hw2014_robot_arm.mdl");
-				npc.m_iWearable4 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_back_scratcher/c_back_scratcher.mdl");
-				npc.m_iWearable5 = npc.EquipItem("head", "models/workshop/player/items/pyro/hw2013_maniacs_manacles/hw2013_maniacs_manacles.mdl");
-				npc.m_iWearable6 = npc.EquipItem("head", "models/workshop/player/items/pyro/hw2013_the_haha_hairdo/hw2013_the_haha_hairdo.mdl");
-				npc.m_iWearable7 = npc.EquipItem("head", "models/workshop/player/items/all_class/hwn2019_binoculus/hwn2019_binoculus_pyro.mdl");
-				npc.m_iWearable8 = npc.EquipItem("head", "models/workshop/player/items/pyro/hwn2019_pyro_lantern/hwn2019_pyro_lantern.mdl");
-				SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", 1);
-				SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 1);
-				SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable5, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable6, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable7, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable8, Prop_Send, "m_nSkin", skin);
-				SetVariantString("1.0");
-				AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable2, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable3, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable4, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable5, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable6, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable7, "SetModelScale");
-				AcceptEntityInput(npc.m_iWearable8, "SetModelScale");
-				SetEntityRenderColor(npc.m_iWearable1, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable2, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable3, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable4, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable5, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable6, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable7, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable8, 150, 255, 150, 255);
-				SetEntProp(npc.index, Prop_Send, "m_nSkin", 1);
-			}
-			case 4,5,6,7:
-			{	
-				npc.m_iWearable1 = npc.EquipItem("head", "models/workshop_partner/player/items/scout/ai_body/ai_body.mdl");
-				npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/player/items/pyro/sf14_hw2014_robot_legg/sf14_hw2014_robot_legg.mdl");
-				npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/player/items/pyro/sf14_hw2014_robot_arm/sf14_hw2014_robot_arm.mdl");
-				npc.m_iWearable4 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_back_scratcher/c_back_scratcher.mdl");
-				npc.m_iWearable5 = npc.EquipItem("head", "models/workshop/player/items/pyro/hw2013_maniacs_manacles/hw2013_maniacs_manacles.mdl");
-				npc.m_iWearable6 = npc.EquipItem("head", "models/workshop/player/items/pyro/hw2013_the_haha_hairdo/hw2013_the_haha_hairdo.mdl");
-				npc.m_iWearable7 = npc.EquipItem("head", "models/workshop/player/items/all_class/hwn2019_binoculus/hwn2019_binoculus_pyro.mdl");
-				npc.m_iWearable8 = npc.EquipItem("head", "models/workshop/player/items/pyro/hwn2019_pyro_lantern/hwn2019_pyro_lantern.mdl");
-				SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", 1);
-				SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 1);
-				SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable5, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable6, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable7, Prop_Send, "m_nSkin", skin);
-				SetEntProp(npc.m_iWearable8, Prop_Send, "m_nSkin", skin);
-				SetEntityRenderColor(npc.m_iWearable1, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable2, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable3, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable4, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable5, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable6, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable7, 150, 255, 150, 255);
-				SetEntityRenderColor(npc.m_iWearable8, 150, 255, 150, 255);
-				SetEntProp(npc.index, Prop_Send, "m_nSkin", 1);
-				SetVariantString("1.0");
-			}
-		}
+		npc.m_iWearable1 = npc.EquipItem("head", "models/workshop_partner/player/items/scout/ai_body/ai_body.mdl");
+		npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/player/items/pyro/sf14_hw2014_robot_legg/sf14_hw2014_robot_legg.mdl");
+		npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/player/items/pyro/sf14_hw2014_robot_arm/sf14_hw2014_robot_arm.mdl");
+		npc.m_iWearable4 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_back_scratcher/c_back_scratcher.mdl");
+		npc.m_iWearable5 = npc.EquipItem("head", "models/workshop/player/items/pyro/hw2013_maniacs_manacles/hw2013_maniacs_manacles.mdl");
+		npc.m_iWearable6 = npc.EquipItem("head", "models/workshop/player/items/pyro/hw2013_the_haha_hairdo/hw2013_the_haha_hairdo.mdl");
+		npc.m_iWearable7 = npc.EquipItem("head", "models/workshop/player/items/all_class/hwn2019_binoculus/hwn2019_binoculus_pyro.mdl");
+		npc.m_iWearable8 = npc.EquipItem("head", "models/workshop/player/items/pyro/hwn2019_pyro_lantern/hwn2019_pyro_lantern.mdl");
+		SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", skin);
+		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", 1);
+		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 1);
+		SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", skin);
+		SetEntProp(npc.m_iWearable5, Prop_Send, "m_nSkin", skin);
+		SetEntProp(npc.m_iWearable6, Prop_Send, "m_nSkin", skin);
+		SetEntProp(npc.m_iWearable7, Prop_Send, "m_nSkin", skin);
+		SetEntProp(npc.m_iWearable8, Prop_Send, "m_nSkin", skin);
+		SetEntityRenderColor(npc.m_iWearable1, 150, 255, 150, 255);
+		SetEntityRenderColor(npc.m_iWearable2, 150, 255, 150, 255);
+		SetEntityRenderColor(npc.m_iWearable3, 150, 255, 150, 255);
+		SetEntityRenderColor(npc.m_iWearable4, 150, 255, 150, 255);
+		SetEntityRenderColor(npc.m_iWearable5, 150, 255, 150, 255);
+		SetEntityRenderColor(npc.m_iWearable6, 150, 255, 150, 255);
+		SetEntityRenderColor(npc.m_iWearable7, 150, 255, 150, 255);
+		SetEntityRenderColor(npc.m_iWearable8, 150, 255, 150, 255);
+		SetEntProp(npc.index, Prop_Send, "m_nSkin", 1);
+		SetVariantString("1.0");
 		
-		SetEntityRenderColor(npc.index,		 150, 255, 150, 255);
+		SetEntityRenderColor(npc.index, 150, 255, 150, 255);
 		if(b_ThisEntityIgnoredByOtherNpcsAggro[npc.index])
 		{
 			RaidModeTime = FAR_FUTURE;
 			//its in phase 2.
-			i_RaidGrantExtra[npc.index] = 10;
 			npc.m_flDeathAnimation = GetGameTime(npc.index) + 45.0;
 			//emergency slay if it bricks somehow.
 			RequestFrames(KillNpc,3000, EntIndexToEntRef(npc.index));
@@ -591,15 +390,70 @@ methodmap ZsUnspeakable < CClotBody
 
 #define ZSUNSPEAKABLE_SAFE_RANGE 1000.0
 
-public void ZsUnspeakable_ClotThink(int iNPC)
+static void ZsUnspeakable_Wait(int iNPC)
+{
+	ZsUnspeakable npc = view_as<ZsUnspeakable>(iNPC);
+	float gameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > gameTime)
+		return;
+	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
+	npc.Update();
+	
+	if(npc.m_flNextThinkTime > gameTime)
+		return;
+	npc.m_flNextThinkTime = gameTime + 0.1;
+	
+	b_NpcIsInvulnerable[npc.index] = true;
+	
+	if(npc.m_flNPCTalkDelay < gameTime)
+	{
+		if(npc.m_flValueLater > 35.0)
+			RaidModeTime = gameTime + 220.0;
+		else
+			RaidModeTime = gameTime + 200.0;
+		WaveStart_SubWaveStart(GetGameTime() + 1000.0);
+		
+		MusicEnum music;
+		strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/void_wave/unspeakable_raid.mp3");
+		music.Time = 188;
+		music.Volume = 1.0;
+		music.Custom = true;
+		strcopy(music.Name, sizeof(music.Name), "Lilith - The Textorcist OST");
+		strcopy(music.Artist, sizeof(music.Artist), "Trihard 7");
+		Music_SetRaidMusic(music);
+		
+		for(int client_check=1; client_check<=MaxClients; client_check++)
+		{
+			if(IsClientInGame(client_check) && !IsFakeClient(client_check))
+			{
+				LookAtTarget(client_check, npc.index);
+				SetGlobalTransTarget(client_check);
+				ShowGameText(client_check, "item_armor", 1, "%t", "Run while you can.");
+			}
+		}
+		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0, 80);	
+		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0, 80);	
+		
+		switch(GetRandomInt(0,2))
+		{
+			case 0: PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_Encounter_1", true);
+			case 1: PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_Encounter_2", true);
+			case 2: PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_Encounter_3", true);
+		}
+		
+		RaidTimerAlert = true;
+		b_NpcIsInvulnerable[npc.index] = false;
+		func_NPCThink[npc.index] = ZsUnspeakable_ClotThink;
+	}
+}
+
+static void ZsUnspeakable_ClotThink(int iNPC)
 {
 	ZsUnspeakable npc = view_as<ZsUnspeakable>(iNPC);
 	float TotalArmor = 1.0;
 	float gameTime = GetGameTime(iNPC);
-	if(npc.m_flResistanceBuffs > GetGameTime())
-	{
+	if(npc.m_flResistanceBuffs > gameTime)
 		TotalArmor *= 0.25;
-	}
 	
 	if(npc.Anger)
 		TotalArmor *= 0.95;
@@ -609,12 +463,12 @@ public void ZsUnspeakable_ClotThink(int iNPC)
 	if(npc.m_flDeathAnimation)
 	{
 		npc.Update();
-		ZsUnspeakable_DeathAnimationKahml(npc, GetGameTime());
+		ZsUnspeakable_DeathAnimationKahml(npc, gameTime);
 		return;
 	}
-	if(npc.m_flZsUnspeakableQuake < GetGameTime())
+	if(npc.m_flZsUnspeakableQuake < gameTime)
 	{
-		npc.m_flZsUnspeakableQuake = GetGameTime() + 1.0;
+		npc.m_flZsUnspeakableQuake = gameTime + 1.0;
 		float ProjectileLoc[3];
 		GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", ProjectileLoc);
 		CreateEarthquake(ProjectileLoc, 1.0, 250.0, 5.0, 5.0);
@@ -631,27 +485,18 @@ public void ZsUnspeakable_ClotThink(int iNPC)
 		RaidModeTime += 10.0;
 		switch(GetRandomInt(0,2))
 		{
-			case 0:
-			{
-				CPrintToChatAll("{crimson}불결한 존재{default}: 이것이, 너희의 운명이 도달할 최후의 순간이다.");
-			}
-			case 1:
-			{
-				CPrintToChatAll("{crimson} 감염이 당신의 동료를 전부 집어삼키고 말았습니다... 가능하면 도주하세요.");
-			}
-			case 2:
-			{
-				CPrintToChatAll("{crimson}불결한 존재{default}: 발악해보아라. 이것이 너희의 마지막이 될것이니.");
-			}
+			case 0: PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_LastMann_1", true);
+			case 1: PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_LastMann_2", true);
+			case 2: PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_LastMann_3", true);
 		}
 	}
-	if(!npc.m_flMaxDeath && RaidModeTime < GetGameTime())
+	if(!npc.m_flMaxDeath && RaidModeTime < gameTime)
 	{
 		npc.m_flMaxDeath = 1.0;
 	//	ForcePlayerLoss();
 	//	RaidBossActive = INVALID_ENT_REFERENCE;
 	//	func_NPCThink[npc.index] = INVALID_FUNCTION;
-		CPrintToChatAll("{crimson}불결한 존재{crimson}: 오랫동안 기다려온 순간이 마침내 도래하였다.");
+		PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_TimeOver", true);
 		SetEntPropFloat(npc.index, Prop_Send, "m_flModelScale", 1.85);
 		RaidModeScaling *= 5.0;
 		fl_Extra_Speed[npc.index] *= 1.2;
@@ -664,11 +509,9 @@ public void ZsUnspeakable_ClotThink(int iNPC)
 		return;
 	}
 
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
-	{
+	if(npc.m_flNextDelayTime > gameTime)
 		return;
-	}
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
+	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 	
 	if(npc.m_flNextThinkTime > gameTime)
@@ -686,41 +529,27 @@ public void ZsUnspeakable_ClotThink(int iNPC)
 		npc.PlayHurtSound();
 	}
 
-	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	if(npc.m_flGetClosestTargetTime < gameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
+		npc.m_flGetClosestTargetTime = gameTime + GetRandomRetargetTime();
 	}
 	npc.PlayIdleAlertSound();
 
-	if(ZsUnspeakable_MatterAbsorber(npc, GetGameTime(npc.index)))
-	{
+	if(ZsUnspeakable_MatterAbsorber(npc, gameTime))
 		return;
-	}
 	if(ZsUnspeakable_TeleToAnyAffectedOnVoid(npc))
 	{
 		switch(GetRandomInt(0,3))
 		{
-			case 0:
-			{
-				CPrintToChatAll("{crimson}불결한 존재{default}: 도망치지마라!");
-			}
-			case 1:
-			{
-				CPrintToChatAll("{crimson}불결한 존재{default}: 왜 영광스러운 합일을 거부하려 드는가.");
-			}
-			case 2:
-			{
-				CPrintToChatAll("{crimson}불결한 존재{default}: 정해진 운명에 순응하라.");
-			}
-			case 3:
-			{
-				CPrintToChatAll("{crimson}불결한 존재{default}: 그래봤자 무한한 고통을 느끼게 될 뿐이다.");
-			}
+			case 0: PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_Teleport_1", true);
+			case 1: PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_Teleport_2", true);
+			case 2: PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_Teleport_3", true);
+			case 3: PrintNPCMessageWithPrefixes(npc.index, "crimson", "Messenger_GroupAttack_4", true);
 		}
 	}
 
-	if(npc.m_flDoingAnimation < GetGameTime(npc.index))
+	if(npc.m_flDoingAnimation < gameTime)
 	{
 		if(npc.m_iChanged_WalkCycle != 1)
 		{
@@ -751,7 +580,7 @@ public void ZsUnspeakable_ClotThink(int iNPC)
 		{
 			npc.SetGoalEntity(npc.m_iTarget);
 		}
-		if(npc.m_fPoYoJumpCD < GetGameTime(npc.index))
+		if(npc.m_fPoYoJumpCD < gameTime)
 		{
 			if(npc.IsOnGround() && flDistanceToTarget > GIANT_ENEMY_MELEE_RANGE_FLOAT_SQUARED && flDistanceToTarget < GIANT_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 10.0)
 			{
@@ -766,14 +595,14 @@ public void ZsUnspeakable_ClotThink(int iNPC)
 				Particle_2 = ParticleEffectAt_Parent(flPos, "rockettrail", npc.index, "foot_R", {0.0,0.0,0.0});
 				CreateTimer(1.0, Timer_RemoveEntity, EntIndexToEntRef(Particle_1), TIMER_FLAG_NO_MAPCHANGE);
 				CreateTimer(1.0, Timer_RemoveEntity, EntIndexToEntRef(Particle_2), TIMER_FLAG_NO_MAPCHANGE);
-				npc.m_fPoYoJumpCD = GetGameTime(npc.index) + (npc.m_bAlliesSummoned ? 3.0 : 6.0);
-				npc.m_fPoYoJumpUtill = GetGameTime(npc.index) + 0.0;
+				npc.m_fPoYoJumpCD = gameTime + (npc.m_bAlliesSummoned ? 3.0 : 6.0);
+				npc.m_fPoYoJumpUtill = gameTime + 0.0;
 			}
 		}
 		
-		if(npc.m_fPoYoJumpUtill && npc.m_fPoYoJumpUtill < GetGameTime(npc.index))
+		if(npc.m_fPoYoJumpUtill && npc.m_fPoYoJumpUtill < gameTime)
 			npc.m_bAllowBackWalking = false;
-		ZsUnspeakableSelfDefense(npc,GetGameTime(npc.index), npc.m_iTarget, flDistanceToTarget); 
+		ZsUnspeakableSelfDefense(npc,gameTime, npc.m_iTarget, flDistanceToTarget); 
 	}
 	else
 	{
@@ -782,7 +611,7 @@ public void ZsUnspeakable_ClotThink(int iNPC)
 	}
 }
 
-public Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	ZsUnspeakable npc = view_as<ZsUnspeakable>(victim);
 		
@@ -797,20 +626,17 @@ public Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflict
 	if((ReturnEntityMaxHealth(npc.index)/4) >= GetEntProp(npc.index, Prop_Data, "m_iHealth") && !npc.Anger) 
 	{
 		npc.Anger = true;
-		if(i_RaidGrantExtra[npc.index] >= 4)
+		SensalGiveShield(npc.index, CountPlayersOnRed(1) * 24);
+		if(!npc.m_bAlliesSummoned)
 		{
-			SensalGiveShield(npc.index, CountPlayersOnRed(1) * 24);
-			if(!npc.m_bAlliesSummoned)
-			{
-				npc.m_bAlliesSummoned = true;
-				Spawn_Zombie(npc);
-			}
-			
-			RaidModeTime += 30.0;
-			ApplyStatusEffect(victim, victim, "Unstoppable Force", 8.0);
-			CPrintToChatAll("{crimson}불결한 존재{default}: 너희는 그 무엇 하나 바꿀 수 없으리라.");
-			RaidModeScaling *= 1.1;
+			npc.m_bAlliesSummoned = true;
+			Spawn_Zombie(npc);
 		}
+		
+		RaidModeTime += 30.0;
+		ApplyStatusEffect(victim, victim, "Unstoppable Force", 8.0);
+		PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_Phase2", true);
+		RaidModeScaling *= 1.1;
 	}
 	if(npc.g_TimesSummoned < 3)
 	{
@@ -821,10 +647,7 @@ public Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflict
 
 		if((health / 10) < nextLoss)
 		{
-			if(i_RaidGrantExtra[npc.index] >= 4)
-			{
-				SensalGiveShield(npc.index, CountPlayersOnRed(1) * 24);
-			}
+			SensalGiveShield(npc.index, CountPlayersOnRed(1) * 24);
 			npc.g_TimesSummoned++;
 			ApplyStatusEffect(npc.index, npc.index, "Defensive Backup", 5.0);
 			npc.m_flResistanceBuffs = GetGameTime() + 2.0;
@@ -833,14 +656,8 @@ public Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflict
 			ProjectileLoc[2] += 5.0;
 			switch(GetRandomInt(1,2))
 			{
-				case 1:
-				{
-					CPrintToChatAll("{crimson}불결한 존재{default}: 자, 발악하라");
-				}
-				case 2:
-				{
-					CPrintToChatAll("{crimson}불결한 존재{default}: 귀찮게하는군.");
-				}
+				case 1: PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_Phase3_1", true);
+				case 2: PrintNPCMessageWithPrefixes(npc.index, "crimson", "ZsPoYo_Phase3_2", true);
 			}
 		}
 	}
@@ -851,7 +668,6 @@ public Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflict
 		{
 			RaidModeTime = FAR_FUTURE;
 			//its in phase 2.
-			i_RaidGrantExtra[npc.index] = 10;
 			npc.m_flDeathAnimation = GetGameTime(npc.index) + 45.0;
 			//emergency slay if it bricks somehow.
 			RequestFrames(KillNpc,3000, EntIndexToEntRef(npc.index));
@@ -870,35 +686,38 @@ static void Spawn_Zombie(ZsUnspeakable npc)
     
     int bossMaxHealth = ReturnEntityMaxHealth(npc.index);
     
-    if(i_RaidGrantExtra[npc.index] >= 4)
-    {
-        CPrintToChatAll("{crimson} 저것이 끔찍한 감염체들을 소환했다.");
+	for(int Player=1; Player<=MaxClients; Player++)
+	{
+		if(!IsValidClient(Player))
+			continue;
+		SetGlobalTransTarget(Player);
+		CPrintToChat(Player, "%t", "ZsPoYo_SpawnZombie");
+	}
 
-        // 소환할 좀비들의 체력 비율 (20%, 20%, 10%)
-        float ratios[] = {0.2, 0.2, 0.1};
+	// 소환할 좀비들의 체력 비율 (20%, 20%, 10%)
+	float ratios[] = {0.2, 0.2, 0.1};
 
-        for(int i = 0; i < 3; i++)
-        {
-            int spawn_index = NPC_CreateByName("npc_random_poyo", npc.index, pos, ang, GetTeam(npc.index));
-            
-            if(spawn_index > MaxClients)
-            {
-                // 체력 계산 및 20만 제한(Clamp)
-                int finalHealth = RoundToFloor(bossMaxHealth * ratios[i]);
-                if(finalHealth > 200000) finalHealth = 200000; 
+	for(int i = 0; i < 3; i++)
+	{
+		int spawn_index = NPC_CreateByName("npc_random_poyo", npc.index, pos, ang, GetTeam(npc.index));
+		
+		if(spawn_index > MaxClients)
+		{
+			// 체력 계산 및 20만 제한(Clamp)
+			int finalHealth = RoundToFloor(bossMaxHealth * ratios[i]);
+			if(finalHealth > 200000) finalHealth = 200000; 
 
-                NpcAddedToZombiesLeftCurrently(spawn_index, true);
-                NpcStats_CopyStats(npc.index, spawn_index);
-                b_thisNpcIsABoss[spawn_index] = true;
+			NpcAddedToZombiesLeftCurrently(spawn_index, true);
+			NpcStats_CopyStats(npc.index, spawn_index);
+			b_thisNpcIsABoss[spawn_index] = true;
 
-                SetEntProp(spawn_index, Prop_Data, "m_iHealth", finalHealth);
-                SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", finalHealth);
-            }
-        }
-    }
+			SetEntProp(spawn_index, Prop_Data, "m_iHealth", finalHealth);
+			SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", finalHealth);
+		}
+	}
 }
 
-float ZsUnspeakable_Absorber(int entity, int victim, float damage, int weapon)
+static float ZsUnspeakable_Absorber(int entity, int victim, float damage, int weapon)
 {
 	ApplyStatusEffect(entity, victim, "Teslar Shock", 5.0);
 	ApplyStatusEffect(entity, victim, "Heavy Presence", 1.0);
@@ -907,7 +726,8 @@ float ZsUnspeakable_Absorber(int entity, int victim, float damage, int weapon)
 	Elemental_AddPheromoneDamage(victim, entity, RoundToNearest(damageDealt * 0.5), true, true);
 	return 0.0;
 }
-bool ZsUnspeakable_TeleToAnyAffectedOnVoid(ZsUnspeakable npc)
+
+static bool ZsUnspeakable_TeleToAnyAffectedOnVoid(ZsUnspeakable npc)
 {
 	float GameTime = GetGameTime(npc.index);
     // 1. 쿨다운 확인
@@ -1010,7 +830,7 @@ bool ZsUnspeakable_TeleToAnyAffectedOnVoid(ZsUnspeakable npc)
 
 #define ZS_MATTER_ASBORBER_RANGE 500.0
 
-bool ZsUnspeakable_MatterAbsorber(ZsUnspeakable npc, float gameTime)
+static bool ZsUnspeakable_MatterAbsorber(ZsUnspeakable npc, float gameTime)
 {
 	if(npc.m_flVoidMatterAbosorb)
 	{
@@ -1024,8 +844,7 @@ bool ZsUnspeakable_MatterAbsorber(ZsUnspeakable npc, float gameTime)
 		
 		float HpScalingDecrease = NpcDoHealthRegenScaling(npc.index);
 		flMaxhealth *= HpScalingDecrease;
-		if(i_RaidGrantExtra[npc.index] >= 4)
-			flMaxhealth *= 1.25;
+		flMaxhealth *= 1.25;
 
 		float ProjectileLoc[3];
 		GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", ProjectileLoc);
@@ -1048,9 +867,7 @@ bool ZsUnspeakable_MatterAbsorber(ZsUnspeakable npc, float gameTime)
 		GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos);
 		float cpos[3];
 		float velocity[3];
-		float ScaleVectorDoMulti = -300.0;
-		if(i_RaidGrantExtra[npc.index] >= 2)
-			ScaleVectorDoMulti = -400.0;
+		float ScaleVectorDoMulti = -400.0;
 
 		for(int EnemyLoop; EnemyLoop < MAXENTITIES; EnemyLoop ++)
 		{
@@ -1173,9 +990,7 @@ bool ZsUnspeakable_MatterAbsorber(ZsUnspeakable npc, float gameTime)
 		npc.m_flVoidMatterAbosorb = gameTime + 4.5;
 		npc.m_flDoingAnimation = gameTime + 5.0;
 		npc.m_flVoidMatterAbosorbInternalCD = gameTime + 2.0;
-		npc.m_flVoidMatterAbosorbCooldown = gameTime + 35.0;
-		if(i_RaidGrantExtra[npc.index] >= 4)
-			npc.m_flVoidMatterAbosorbCooldown = gameTime + 28.0;
+		npc.m_flVoidMatterAbosorbCooldown = gameTime + 28.0;
 
 		return true;
 	}
@@ -1183,18 +998,12 @@ bool ZsUnspeakable_MatterAbsorber(ZsUnspeakable npc, float gameTime)
 	return false;
 }
 
-public void ZsUnspeakable_NPCDeath(int entity)
+static void ZsUnspeakable_NPCDeath(int entity)
 {
 	ZsUnspeakable npc = view_as<ZsUnspeakable>(entity);
 	if(!npc.m_bGib)
-	{
 		npc.PlayDeathSound();	
-	}
-
-	if(i_RaidGrantExtra[npc.index] != 6 && i_RaidGrantExtra[npc.index] != 7)
-	{
-		ClearCustomFog(FogType_NPC);
-	}
+	ClearCustomFog(FogType_NPC);
 	for(int EnemyLoop; EnemyLoop < MAXENTITIES; EnemyLoop ++)
 	{
 		if(IsValidEntity(i_LaserEntityIndex[EnemyLoop]))
@@ -1220,7 +1029,7 @@ public void ZsUnspeakable_NPCDeath(int entity)
 		RemoveEntity(npc.m_iWearable1);
 }
 
-void ZsUnspeakableSelfDefense(ZsUnspeakable npc, float gameTime, int target, float distance)
+static void ZsUnspeakableSelfDefense(ZsUnspeakable npc, float gameTime, int target, float distance)
 {
 	if(npc.m_flAttackHappens)
 	{
@@ -1322,13 +1131,11 @@ void ZsUnspeakableSelfDefense(ZsUnspeakable npc, float gameTime, int target, flo
 		}
 	}
 
-	if(npc.m_flDoingAnimation < gameTime && gameTime > npc.m_flVoidPillarAttack && i_RaidGrantExtra[npc.index] >= 2)
+	if(npc.m_flDoingAnimation < gameTime && gameTime > npc.m_flVoidPillarAttack)
 	{
-		
 		int Enemy_I_See;
-							
 		Enemy_I_See = Can_I_See_Enemy(npc.index, npc.m_iTarget);
-				
+		
 		if(IsValidEnemy(npc.index, Enemy_I_See))
 		{
 			
@@ -1383,13 +1190,8 @@ void ZsUnspeakableSelfDefense(ZsUnspeakable npc, float gameTime, int target, flo
 					TE_SetupBeamPoints(PosLoc, ProjectileLoc, Shared_BEAM_Laser, 0, 0, 0, 0.35, ClampBeamWidth(diameter * 0.3), ClampBeamWidth(diameter * 0.3), 0, 5.0, colorLayer1, 3);
 					TE_SendToAll(0.0);
 
-					float QuakeSize = 1.2;
-					float ReactionTime = 1.1;
-					if(i_RaidGrantExtra[npc.index] >= 4)
-					{
-						QuakeSize = 1.5;
-						ReactionTime = 0.9;
-					}
+					float QuakeSize = 1.5;
+					float ReactionTime = 0.9;
 					Silvester_Damaging_Pillars_Ability(npc.index,
 					damageDealt,				 	//damage
 					0, 	//how many
@@ -1405,47 +1207,52 @@ void ZsUnspeakableSelfDefense(ZsUnspeakable npc, float gameTime, int target, flo
 	}
 }
 
-
-public void ZsUnspeakableWin(int entity)
+static void ZsUnspeakableWin(int entity)
 {
-	i_RaidGrantExtra[entity] = RAIDITEM_INDEX_WIN_COND;
 	func_NPCThink[entity] = INVALID_FUNCTION;
 	if(AlreadySaidWin)
 		return;
 
 	AlreadySaidWin = true;
-	//b_NpcHasDied[client]
 	switch(GetRandomInt(0,4))
 	{
 		case 0:
 		{
-			CPrintToChatAll("{crimson}당신은 이 싸움에서 희망의 빛줄기를 보지 못 했습니다.");
+			for(int Player=1; Player<=MaxClients; Player++)
+			{
+				if(!IsValidClient(Player))
+					continue;
+				SetGlobalTransTarget(Player);
+				CPrintToChat(Player, "%t", "ZsPoYo_Death_1");
+			}
 		}
 		case 1:
 		{
-			CPrintToChatAll("{crimson}당신은 감염에 저항조차 못 했습니다... 당신은 이제 한낱 감염체로 전락하고 말았습니다.");
+			for(int Player=1; Player<=MaxClients; Player++)
+			{
+				if(!IsValidClient(Player))
+					continue;
+				SetGlobalTransTarget(Player);
+				CPrintToChat(Player, "%t", "ZsPoYo_Death_2");
+			}
 		}
 		case 2:
 		{
-			CPrintToChatAll("{crimson}예상했던대로, 당신은 실패했습니다. 이제 이곳에 희망이란 없습니다...");
+			for(int Player=1; Player<=MaxClients; Player++)
+			{
+				if(!IsValidClient(Player))
+					continue;
+				SetGlobalTransTarget(Player);
+				CPrintToChat(Player, "%t", "ZsPoYo_Death_3");
+			}
 		}
-		case 3:
-		{
-			CPrintToChatAll("{crimson}불결한 존재{default}: 우리의 결속은 자라나고 우리는 영생을 누리리라.");
-		}
-		case 4:
-		{
-			CPrintToChatAll("{crimson}불결한 존재{default}: 계획대로 착착 진행되면 참 기분 좋지");
-		}
-		case 5:
-		{
-			CPrintToChatAll("{crimson}불결한 존재{default}: 그 누구도 우리의 권위에 도전할 순 없다. 우리의 힘은 끝이 없다.");
-		}
+		case 3: PrintNPCMessageWithPrefixes(entity, "crimson", "ZsPoYo_Death_4", true);
+		case 4: PrintNPCMessageWithPrefixes(entity, "crimson", "ZsPoYo_Death_5", true);
+		case 5: PrintNPCMessageWithPrefixes(entity, "crimson", "ZsPoYo_Death_6", true);
 	}
 }
 
-
-void ZsUnspeakable_DeathAnimationKahml(ZsUnspeakable npc, float gameTime)
+static void ZsUnspeakable_DeathAnimationKahml(ZsUnspeakable npc, float gameTime)
 {
 	if(!b_ThisEntityIgnoredByOtherNpcsAggro[npc.index])
 	{
@@ -1466,16 +1273,14 @@ void ZsUnspeakable_DeathAnimationKahml(ZsUnspeakable npc, float gameTime)
 		
 		npc.m_flSpeed = 0.0;
 		if(IsValidEntity(npc.m_iWearable4))
-		{
 			AcceptEntityInput(npc.m_iWearable4, "Disable");
-		}
 	}
 	if(npc.m_flDeathAnimationCD < gameTime)
 	{
 		float ProjLoc[3];
 		GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", ProjLoc);
-		spawnRing_Vectors(ProjLoc, 1.0, 0.0, 0.0, 5.0, "materials/sprites/laserbeam.vmt", 125, 50, 125, 200, 1, 2.0, 5.0, 8.0, 3, ZS_MATTER_ASBORBER_RANGE * 2.0);	
-		spawnRing_Vectors(ProjLoc, 1.0, 0.0, 0.0, 25.0, "materials/sprites/laserbeam.vmt", 125, 50, 125, 200, 1, 2.0, 5.0, 8.0, 3, ZS_MATTER_ASBORBER_RANGE * 2.0);	
+		spawnRing_Vectors(ProjLoc, 1.0, 0.0, 0.0, 5.0, LASERBEAM, 125, 50, 125, 200, 1, 2.0, 5.0, 8.0, 3, ZS_MATTER_ASBORBER_RANGE * 2.0);	
+		spawnRing_Vectors(ProjLoc, 1.0, 0.0, 0.0, 25.0, LASERBEAM, 125, 50, 125, 200, 1, 2.0, 5.0, 8.0, 3, ZS_MATTER_ASBORBER_RANGE * 2.0);	
 		if(IsValidEntity(npc.m_iTarget))
 		{
 			float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget);
@@ -1486,8 +1291,6 @@ void ZsUnspeakable_DeathAnimationKahml(ZsUnspeakable npc, float gameTime)
 			npc.m_flDeathAnimationCD = gameTime + 3.5;
 
 		if(!b_ThisEntityIgnoredByOtherNpcsAggro[npc.index])
-		{
 			return;
-		}
 	}
 }

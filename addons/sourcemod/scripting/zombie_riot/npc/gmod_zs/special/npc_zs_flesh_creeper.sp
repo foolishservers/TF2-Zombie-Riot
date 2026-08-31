@@ -13,20 +13,6 @@ static const char g_HurtSounds[][] = {
 	"npc/barnacle/barnacle_pull4.wav",
 };
 
-static const char g_IdleSounds[][] = {
-	"npc/barnacle/barnacle_pull1.wav",
-	"npc/barnacle/barnacle_pull2.wav",
-	"npc/barnacle/barnacle_pull3.wav",
-	"npc/barnacle/barnacle_pull4.wav",
-};
-
-static const char g_IdleAlertedSounds[][] = {
-	"npc/barnacle/barnacle_pull1.wav",
-	"npc/barnacle/barnacle_pull2.wav",
-	"npc/barnacle/barnacle_pull3.wav",
-	"npc/barnacle/barnacle_pull4.wav",
-};
-
 static const char g_MeleeHitSounds[][] = {
 	"physics/body/body_medium_impact_hard1.wav",
 	"physics/body/body_medium_impact_hard2.wav",
@@ -50,18 +36,8 @@ static const char g_MeleeMissSounds[][] = {
 
 static int NPCId;
 
-void FleshCreeper_OnMapStart_NPC()
+public void FleshCreeper_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleSounds));		i++) { PrecacheSound(g_IdleSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds));	i++) { PrecacheSound(g_MeleeHitSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeAttackSounds));	i++) { PrecacheSound(g_MeleeAttackSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeMissSounds));	i++) { PrecacheSound(g_MeleeMissSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_DefaultMeleeMissSounds));   i++) { PrecacheSound(g_DefaultMeleeMissSounds[i]);   }
-
-	PrecacheModel("models/zombie_riot/gmod_zs/flesh_creeper/flesh_creeper.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Flesh Creeper");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_flesh_creeper");
@@ -69,12 +45,23 @@ void FleshCreeper_OnMapStart_NPC()
 	data.IconCustom = false;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPCId = NPC_Add(data);
-	PrecacheSound(FleshCreeper_SPAWN_SOUND);
 }
 
-int FleshCreeper_ID()
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSoundArray(g_MeleeMissSounds);
+	PrecacheSound(FleshCreeper_SPAWN_SOUND);
+	PrecacheModel("models/zombie_riot/gmod_zs/flesh_creeper/flesh_creeper.mdl");
+}
+
+stock int FleshCreeper_ID()
 {
 	return NPCId;
 }
@@ -84,62 +71,34 @@ static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 	return FleshCreeper(vecPos, vecAng, team);
 }
 
-// #define MAXTRIESVILLAGER 25
-
 static bool b_WantTobuild[MAXENTITIES];
 static bool b_AlreadyReparing[MAXENTITIES];
 static float f_RandomTolerance[MAXENTITIES];
 static int i_BuildingRef[MAXENTITIES];
 
-
 methodmap FleshCreeper < CClotBody
 {
-	public void PlayIdleSound() {
-		if(this.m_flNextIdleSound > GetGameTime(this.index))
-			return;
-		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 85);
-		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(24.0, 48.0);
-	}
-	
 	public void PlayIdleAlertSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
-		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 85);
+		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 85);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 	}
-	
 	public void PlayHurtSound() {
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, GetRandomInt(110, 120));
-		
-		
-		
 	}
-	
 	public void PlayDeathSound() {
-	
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 100);
-		
-		
 	}
-	
 	public void PlayMeleeSound() {
 		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, _, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, GetRandomInt(90, 100));
-		
-
 	}
-	
 	public void PlayMeleeHitSound() {
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, _, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 100);
-		
-
 	}
-
 	public void PlayMeleeMissSound() {
 		EmitSoundToAll(g_DefaultMeleeMissSounds[GetRandomInt(0, sizeof(g_DefaultMeleeMissSounds) - 1)], this.index, _, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, GetRandomInt(90, 100));	
 	}
@@ -238,17 +197,15 @@ methodmap FleshCreeper < CClotBody
 	}
 }
 
-public void FleshCreeper_ClotThink(int iNPC)
+static void FleshCreeper_ClotThink(int iNPC)
 {
 	FleshCreeper npc = view_as<FleshCreeper>(iNPC);
 	
-
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
-	{
+	float GameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > GameTime)
 		return;
-	}
 	
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
+	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();	
 	
 	if(npc.m_blPlayHurtAnimation)
@@ -258,11 +215,9 @@ public void FleshCreeper_ClotThink(int iNPC)
 		npc.PlayHurtSound();
 	}
 
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
-	{
+	if(npc.m_flNextThinkTime > GameTime)
 		return;
-	}
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.05;
+	npc.m_flNextThinkTime = GameTime + 0.05;
 
 	//Top logic should be ignored.
 	
@@ -453,7 +408,7 @@ public void FleshCreeper_ClotThink(int iNPC)
 			{
 				npc.m_bisWalking = true;
 
-				FleshCreeperSelfDefense(npc,GetGameTime(npc.index)); //This is for self defense, incase an enemy is too close. This isnt the FleshCreepers main thing.
+				FleshCreeperSelfDefense(npc,GameTime); //This is for self defense, incase an enemy is too close. This isnt the FleshCreepers main thing.
 				
 				if(IsValidEnemy(npc.index,npc.m_iTarget))
 				{
@@ -550,7 +505,7 @@ public void FleshCreeper_ClotThink(int iNPC)
 				//Retry.
 
 				//Timeout
-				npc.m_flNextMeleeAttack = GetGameTime(npc.index) + GetRandomFloat(10.0, 20.0);
+				npc.m_flNextMeleeAttack = GameTime + GetRandomFloat(10.0, 20.0);
 
 				int spawn_index = NPC_CreateByName("npc_zs_nest", -1, AproxRandomSpaceToWalkTo, {0.0,0.0,0.0}, GetTeam(npc.index));
 				if(spawn_index > MaxClients)
@@ -676,13 +631,13 @@ public void FleshCreeper_ClotThink(int iNPC)
 		}
 	}
 
-	FleshCreeperSelfDefense(npc,GetGameTime(npc.index)); //This is for self defense, incase an enemy is too close. This isnt the FleshCreepers main thing.
+	FleshCreeperSelfDefense(npc,GameTime); //This is for self defense, incase an enemy is too close. This isnt the FleshCreepers main thing.
 
 	npc.PlayIdleAlertSound();
 }
 
 
-void FleshCreeperSelfDefense(FleshCreeper npc, float gameTime)
+static void FleshCreeperSelfDefense(FleshCreeper npc, float gameTime)
 {
 	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
 	{
@@ -769,31 +724,23 @@ void FleshCreeperSelfDefense(FleshCreeper npc, float gameTime)
 	}
 }
 
-public Action FleshCreeper_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action FleshCreeper_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	//Valid attackers only.
 	if(attacker <= 0)
 		return Plugin_Continue;
-		
 	FleshCreeper npc = view_as<FleshCreeper>(victim);
-	
-	
 	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 	{
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
 	}
-	
-	
 	return Plugin_Changed;
 }
 
-public void FleshCreeper_NPCDeath(int entity)
+static void FleshCreeper_NPCDeath(int entity)
 {
 	FleshCreeper npc = view_as<FleshCreeper>(entity);
-	//SpawnMoney(npc.index, true);
 	if(!npc.m_bGib)
-	{
 		npc.PlayDeathSound();	
-	}
 }

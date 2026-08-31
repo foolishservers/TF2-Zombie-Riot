@@ -12,12 +12,6 @@ static char g_HurtSounds[][] = {
 	"npc/zombie_poison/pz_pain3.wav",
 };
 
-static char g_IdleSounds[][] = {
-	"npc/zombie_poison/pz_idle2.wav",
-	"npc/zombie_poison/pz_idle3.wav",
-	"npc/zombie_poison/pz_idle4.wav",
-};
-
 static char g_IdleAlertedSounds[][] = {
 	"npc/zombie_poison/pz_alert1.wav",
 	"npc/zombie_poison/pz_alert2.wav",
@@ -84,7 +78,6 @@ static void ClotPrecache()
 	Zombie_Shared_PheromonePrecache();
 	PrecacheSoundArray(g_DeathSounds);
 	PrecacheSoundArray(g_HurtSounds);
-	PrecacheSoundArray(g_IdleSounds);
 	PrecacheSoundArray(g_IdleAlertedSounds);
 	PrecacheSoundArray(g_MeleeHitSounds);
 	PrecacheSoundArray(g_MeleeAttackSounds);
@@ -127,12 +120,6 @@ static char[] GetPoisonZombieHealth(int SelectInt)
 
 methodmap ZSPoisonZombie < CClotBody
 {
-	public void PlayIdleSound() {
-		if(this.m_flNextIdleSound > GetGameTime(this.index))
-			return;
-		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _, (this.m_iOverlordComboAttack>=2 ? 80 : 100));
-		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(3.0, 6.0);
-	}
 	public void PlayIdleAlertSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;

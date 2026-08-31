@@ -18,11 +18,6 @@ static char g_IdleSounds[][] = {
 	"npc/zombie_poison/pz_idle4.wav",
 };
 
-static char g_IdleAlertedSounds[][] = {
-	"npc/zombie_poison/pz_alert1.wav",
-	"npc/zombie_poison/pz_alert2.wav",
-};
-
 static char g_MeleeHitSounds[][] = {
 	"npc/fast_zombie/claw_strike1.wav",
 	"npc/fast_zombie/claw_strike2.wav",
@@ -38,29 +33,31 @@ static char g_MeleeMissSounds[][] = {
 	"npc/fast_zombie/claw_miss2.wav",
 };
 
-//static float fl_KamikazeInitiate;
 public void ZSMainPoisonZombie_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleSounds));		i++) { PrecacheSound(g_IdleSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds));	i++) { PrecacheSound(g_MeleeHitSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeAttackSounds));	i++) { PrecacheSound(g_MeleeAttackSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
-
-	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie/poison.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Z-Main Poison Zombie");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_zmain_poisonzombie");
 	strcopy(data.Icon, sizeof(data.Icon), "norm_poison_zombie");
 	data.IconCustom = true;
 	data.Flags = 0;
-	data.Category = Type_Mutation;
+	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
-//	fl_KamikazeInitiate = 0.0;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	Zombie_Shared_PheromonePrecache();
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSoundArray(g_MeleeMissSounds);
+	PrecacheSound("npc/assassin/ball_zap1.wav");
+	PrecacheModel("models/zombie/poison.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
@@ -73,51 +70,27 @@ methodmap ZSMainPoisonZombie < CClotBody
 	public void PlayIdleSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
-		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _, (this.m_iOverlordComboAttack>=2 ? 80 : 100));
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(3.0, 6.0);
-		
-
 	}
-	
-	public void PlayIdleAlertSound() {
-		if(this.m_flNextIdleSound > GetGameTime(this.index))
-			return;
-		
-		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(3.0, 6.0);
-		
-	}
-	
 	public void PlayHurtSound() {
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
-		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
+		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _, (this.m_iOverlordComboAttack>=2 ? 80 : 100));
 	}
-	
 	public void PlayDeathSound() {
-		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
+		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _, (this.m_iOverlordComboAttack>=2 ? 80 : 100));
 	}
-	
 	public void PlayMeleeSound() {
-		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
+		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _, (this.m_iOverlordComboAttack>=2 ? 80 : 100));
 	}
 	public void PlayMeleeHitSound() {
-		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
+		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _, (this.m_iOverlordComboAttack>=2 ? 80 : 100));
 	}
-
 	public void PlayMeleeMissSound() {
-		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
+		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _, (this.m_iOverlordComboAttack>=2 ? 80 : 100));
 	}
-	
 	
 	property float m_flJumpCooldownZmain
 	{
@@ -129,12 +102,32 @@ methodmap ZSMainPoisonZombie < CClotBody
 		public get()							{ return fl_AbilityOrAttack[this.index][1]; }
 		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][1] = TempValueForProperty; }
 	}
+	property float m_flHitAndRun
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][2]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][2] = TempValueForProperty; }
+	}
+	property float m_flBhop
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][3]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][3] = TempValueForProperty; }
+	}
+	property float m_flSideStep
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][4]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][4] = TempValueForProperty; }
+	}
+	property float m_flIgnorebuildings
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][5]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][5] = TempValueForProperty; }
+	}
 	
 	public ZSMainPoisonZombie(float vecPos[3], float vecAng[3], int ally)
 	{
 		ZSMainPoisonZombie npc = view_as<ZSMainPoisonZombie>(CClotBody(vecPos, vecAng, "models/zombie/poison.mdl", "1.15", "5000", ally, false));
 		
-		i_NpcWeight[npc.index] = 1;
+		i_NpcWeight[npc.index] = 2;
 		
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
@@ -142,120 +135,191 @@ methodmap ZSMainPoisonZombie < CClotBody
 		if(iActivity > 0) npc.StartActivity(iActivity);
 		KillFeed_SetKillIcon(npc.index, "infection_heavy");
 		
-
-		npc.m_flNextMeleeAttack = 0.0;
-		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
 		
-		//IDLE
-		npc.m_flSpeed = 330.0;
-
-		float wave = float(Waves_GetRoundScale()+1); //Wave scaling
-		
-		wave *= 0.133333;
-
-		npc.m_flWaveScale = wave;
-
-		/*
-		if(ally == TFTeam_Blue)
-		{
-			if(fl_KamikazeInitiate < GetGameTime())
-			{
-				//This is a kamikaze that was newly initiated!
-				//add new kamikazies whenever possible.
-				//this needs to happen every tick!
-				DoGlobalMultiScaling();
-				RequestFrame(SpawnZmainsAFew, 0);
-			
-				if(!TeleportDiversioToRandLocation(npc.index,_,1750.0, 1250.0))
-				{
-					//incase their random spawn code fails, they'll spawn here.
-					int Spawner_entity = GetRandomActiveSpawner();
-					if(IsValidEntity(Spawner_entity))
-					{
-						float pos[3];
-						float ang[3];
-						GetEntPropVector(Spawner_entity, Prop_Data, "m_vecOrigin", pos);
-						GetEntPropVector(Spawner_entity, Prop_Data, "m_angRotation", ang);
-						TeleportEntity(npc.index, pos, ang, NULL_VECTOR);
-					}
-				}
-			}
-			fl_KamikazeInitiate = GetGameTime() + 15.0;	
-		}
-*/
 		func_NPCDeath[npc.index] = ZSMainPoisonZombie_NPCDeath;
 		func_NPCThink[npc.index] = ZSMainPoisonZombie_ClotThink;
-		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;
+		func_NPCOnTakeDamage[npc.index] = ZSMainPoisonZombie_OnTakeDamage;
+
+		npc.m_flWaveScale = float(Waves_GetRoundScale()+1)* 0.133333;
+
+		npc.m_flNextMeleeAttack = 0.0;
+		npc.m_iChanged_WalkCycle = -1;
 		b_AvoidBuildingsAtAllCosts[npc.index] = true;
-		
-		npc.StartPathing();
+		npc.Anger = false;
+		npc.m_bFUCKYOU = false;
+		npc.m_iOverlordComboAttack = 0;
+		npc.m_flJumpCooldownZmain = 0.0;
+		npc.m_flTryIgnorebuildings = 0.0;
+		npc.m_flHitAndRun = 0.0;
+		npc.m_flBhop = 1.0 + GetGameTime(npc.index);
+		npc.m_flSideStep = 30.0 + GetGameTime(npc.index);
+		npc.m_flIgnorebuildings = 0.0;
 		f_MaxAnimationSpeed[npc.index] = 1.5;
+		npc.m_flSpeed = 330.0;
+		npc.StartPathing();
 		
 		return npc;
 	}
 	
 }
 
-
-public void ZSMainPoisonZombie_ClotThink(int iNPC)
+static void ZSMainPoisonZombie_ClotThink(int iNPC)
 {
 	ZSMainPoisonZombie npc = view_as<ZSMainPoisonZombie>(iNPC);
 	
-//	PrintToChatAll("%.f",GetEntPropFloat(view_as<int>(iNPC), Prop_Data, "m_speed"));
-	
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
-	{
+	float GameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > GameTime)
 		return;
-	}
 	
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
-	
+	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 	
 	if(npc.m_blPlayHurtAnimation)
 	{
 		npc.m_blPlayHurtAnimation = false;
 		if(!npc.m_flAttackHappenswillhappen)
-			npc.AddGesture("ACT_GESTURE_FLINCH_HEAD", false);
+			npc.AddGesture("ACT_FLINCH", false);
 		npc.PlayHurtSound();
-		
 	}
 	
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
-	{
+	if(npc.m_flNextThinkTime > GameTime)
 		return;
-	}
-	
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
-	
-	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	npc.m_flNextThinkTime = GameTime + 0.1;
+
+	if(npc.m_flGetClosestTargetTime < GameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
+		npc.m_flGetClosestTargetTime = GameTime + GetRandomRetargetTime();
 	}
-
-	// fldistancelimit isnt working for using vector distance, and checking for can see and only buildings	
-	int IsAbuildingNearMe = GetClosestTarget(npc.index,false,200.0,_,_,_, _,true, _,true,true,0.0, .ExtraValidityFunction = Zmain_TryJumpOverBuildings);
 
 	if(IsValidEnemy(npc.index, npc.m_iTarget))
 	{
-		if(i_IsABuilding[npc.m_iTarget] && npc.m_flTryIgnorebuildings > GetGameTime(npc.index))
-		{
-			npc.m_iTarget = GetClosestTarget(npc.index, .IgnoreBuildings = true);
-		}
-		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget );
-	
+		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget);
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-		ZSMainPoisonZombie_AnnoyingZmainwalkLogic(npc,GetGameTime(npc.index), flDistanceToTarget, IsAbuildingNearMe); 
-		ZSMainPoisonZombie_SelfDefense(npc,GetGameTime(npc.index), npc.m_iTarget, flDistanceToTarget); 
-		if(i_IsABuilding[npc.m_iTarget])
+		ZSMainPoisonZombie_SelfDefense(npc, GameTime, vecTarget, flDistanceToTarget);
+		ZSZmain npcGetInfo = view_as<ZSZmain>(npc.index);
+		switch(ZSZmain_AnnoyingLogic(npcGetInfo, GameTime, vecTarget, flDistanceToTarget))
 		{
-			npc.m_iTarget = GetClosestTarget(npc.index, .IgnoreBuildings = true);
-			npc.m_flTryIgnorebuildings = GetGameTime(npc.index) + 1.0;
+			case 0:
+			{
+				if(npc.m_iChanged_WalkCycle != 0)
+				{
+					npc.m_bPathing = false;
+					npc.m_bisWalking = false;
+					npc.m_bAllowBackWalking = false;
+					npc.m_iChanged_WalkCycle = 0;
+					npc.m_flSpeed = 0.0;
+					npc.StopPathing();
+				}
+			}
+			case 1:
+			{
+				if(npc.m_iChanged_WalkCycle != 1)
+				{
+					npc.m_bPathing = true;
+					npc.m_bisWalking = true;
+					npc.m_bAllowBackWalking = false;
+					npc.m_iChanged_WalkCycle = 1;
+					npc.m_flSpeed = 330.0;
+					npc.StartPathing();
+				}
+				if(flDistanceToTarget < npc.GetLeadRadius()) 
+				{
+					float vPredictedPos[3];
+					b_TryToAvoidTraverse[npc.index] = false;
+					PredictSubjectPosition(npc, npc.m_iTarget,_,_, vPredictedPos);
+					vPredictedPos = GetBehindTarget(npc.m_iTarget, 30.0 ,vPredictedPos);
+					int AntiCheeseReply = DiversionAntiCheese(npc.m_iTarget, npc.index, vPredictedPos);
+					b_TryToAvoidTraverse[npc.index] = true;
+					if(AntiCheeseReply == 0)
+						npc.SetGoalVector(vPredictedPos, true);
+					else if(AntiCheeseReply == 1)
+					{
+						if(flDistanceToTarget < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 2.5))
+						{
+							npc.m_bAllowBackWalking = true;
+							float vBackoffPos[3];
+							BackoffFromOwnPositionAndAwayFromEnemy(npc, npc.m_iTarget,_,vBackoffPos);
+							npc.SetGoalVector(vBackoffPos, true);
+						}
+						else
+						{
+							npc.SetGoalEntity(npc.m_iTarget);
+						}
+					}
+				}
+				else 
+				{
+					DiversionCalmDownCheese(npc.index);
+					if(!npc.m_bPathing)
+						npc.StartPathing();
+
+					npc.SetGoalEntity(npc.m_iTarget);
+				}
+			}
+			case 2:
+			{
+				if(npc.m_iChanged_WalkCycle != 2)
+				{
+					npc.m_bPathing = true;
+					npc.m_bisWalking = true;
+					npc.m_bAllowBackWalking = false;
+					npc.m_iChanged_WalkCycle = 2;
+					npc.m_flSpeed = 330.0;
+					npc.StartPathing();
+				}
+				if(flDistanceToTarget < npc.GetLeadRadius()) 
+				{
+					float vPredictedPos[3];
+					PredictSubjectPosition(npc, npc.m_iTarget,_,_, vPredictedPos);
+					npc.SetGoalVector(vPredictedPos);
+				}
+				else 
+				{
+					npc.SetGoalEntity(npc.m_iTarget);
+				}
+			}
+			case 3:
+			{
+				if(npc.m_iChanged_WalkCycle != 3)
+				{
+					npc.m_bPathing = true;
+					npc.m_bisWalking = true;
+					npc.m_bAllowBackWalking = false;
+					npc.m_iChanged_WalkCycle = 3;
+					npc.m_flSpeed = 250.0;
+					npc.StartPathing();
+				}
+				if(flDistanceToTarget < npc.GetLeadRadius()) 
+				{
+					float vPredictedPos[3];
+					PredictSubjectPosition(npc, npc.m_iTarget,_,_, vPredictedPos);
+					npc.SetGoalVector(vPredictedPos);
+				}
+				else 
+				{
+					npc.SetGoalEntity(npc.m_iTarget);
+				}
+			}
+			case 4:
+			{
+				if(npc.m_iChanged_WalkCycle != 4)
+				{
+					npc.m_bPathing = true;
+					npc.m_bisWalking = true;
+					npc.m_bAllowBackWalking = true;
+					npc.m_iChanged_WalkCycle = 4;
+					npc.m_flSpeed = 250.0;
+					npc.StartPathing();
+				}
+				float vBackoffPos[3];
+				BackoffFromOwnPositionAndAwayFromEnemy(npc, npc.m_iTarget,_,vBackoffPos);
+				npc.SetGoalVector(vBackoffPos, true);
+			}
 		}
 	}
 	else
@@ -266,116 +330,52 @@ public void ZSMainPoisonZombie_ClotThink(int iNPC)
 	npc.PlayIdleSound();
 }
 
-void ZSMainPoisonZombie_AnnoyingZmainwalkLogic(ZSMainPoisonZombie npc, float gameTime, float distance, int IsAbuildingNearMe)
+static void ZSMainPoisonZombie_SelfDefense(ZSMainPoisonZombie npc, float gameTime, float VecEnemy[3], float distance)
 {
-	if(npc.m_flTryIgnorebuildings > gameTime || IsValidEntity(IsAbuildingNearMe))
-	{
-		if(!npc.m_flAttackHappens && npc.m_flJumpCooldownZmain < gameTime)
-		{
-			if (npc.IsOnGround())
-			{
-				npc.m_flJumpCooldownZmain = gameTime + 2.0;
-				npc.GetLocomotionInterface().Jump();
-				float vel[3];
-				npc.GetVelocity(vel);
-				vel[2] = 400.0;
-				npc.SetVelocity(vel);
-			}	
-		}
-	}
-	npc.m_bAllowBackWalking = false;
-	if(distance > (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 10.0))
-	{
-		if(distance < npc.GetLeadRadius()) 
-		{
-			float vPredictedPos[3];
-			PredictSubjectPosition(npc, npc.m_iTarget,_,_, vPredictedPos);
-			npc.SetGoalVector(vPredictedPos);
-		}
-		else 
-		{
-			npc.SetGoalEntity(npc.m_iTarget);
-		}
-		//Just walk.
-		return;
-	}
-	
-	if(distance > (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 0.5))
-	{
-		//relatively close, what do ?
-		//Randomly jump
-		if(!npc.m_flAttackHappens && npc.m_flJumpCooldownZmain < gameTime)
-		{
-			if (npc.IsOnGround())
-			{
-				npc.m_flJumpCooldownZmain = gameTime + 2.0;
-				npc.GetLocomotionInterface().Jump();
-				float vel[3];
-				npc.GetVelocity(vel);
-				vel[2] = 400.0;
-				npc.SetVelocity(vel);
-			}	
-		}
-		
-		npc.m_bAllowBackWalking = true;
-		float vBackoffPos[3];
-		BackoffFromOwnPositionAndAwayFromEnemy(npc, npc.m_iTarget,_,vBackoffPos, 1);
-		npc.SetGoalVector(vBackoffPos, true); //update more often, we need it
-		return;
-	}
-
-	//relatively close, what do ?
-	//Randomly jump
-	if(!npc.m_flAttackHappens && npc.m_flJumpCooldownZmain < gameTime)
-	{
-		if (npc.IsOnGround())
-		{
-			npc.m_flJumpCooldownZmain = gameTime + 2.0;
-			npc.GetLocomotionInterface().Jump();
-			float vel[3];
-			npc.GetVelocity(vel);
-			vel[2] = 400.0;
-			npc.SetVelocity(vel);
-		}	
-	}
-	float vBackoffPos[3];
-	BackoffFromOwnPositionAndAwayFromEnemy(npc, npc.m_iTarget,_,vBackoffPos, 2);
-	npc.SetGoalVector(vBackoffPos, true); //update more often, we need it
-	npc.m_bAllowBackWalking = true;
-}
-
-void ZSMainPoisonZombie_SelfDefense(ZSMainPoisonZombie npc, float gameTime, int target, float distance)
-{
-	float VecEnemy[3]; WorldSpaceCenter(npc.m_iTarget, VecEnemy);
-	npc.FaceTowards(VecEnemy, 500.0);
+	npc.FaceTowards(VecEnemy, (500.0 * npc.GetDebuffPercentage() * f_NpcTurnPenalty[npc.index]), true);
 	if(npc.m_flAttackHappens)
 	{
 		if(npc.m_flAttackHappens < gameTime)
 		{
 			npc.m_flAttackHappens = 0.0;
-			
 			Handle swingTrace;
 			WorldSpaceCenter(npc.m_iTarget, VecEnemy);
 			npc.FaceTowards(VecEnemy, 15000.0);
-			if(npc.DoSwingTrace(swingTrace, npc.m_iTarget)) //Big range, but dont ignore buildings if somehow this doesnt count as a raid to be sure.
+			if(npc.DoSwingTrace(swingTrace, npc.m_iTarget, _, _, _, 1))
 			{
-				target = TR_GetEntityIndex(swingTrace);	
-				
+				int target = TR_GetEntityIndex(swingTrace);
 				float vecHit[3];
 				TR_GetEndPosition(vecHit, swingTrace);
-				
 				if(IsValidEnemy(npc.index, target))
 				{
 					float damageDealt = 160.0;
 					if(ShouldNpcDealBonusDamage(target))
 						damageDealt *= 5.5;
-
-					SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt * npc.m_flWaveScale, DMG_CLUB, -1, _, vecHit);
-					Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 50 : 10);
-
-					// Hit sound
+					else
+						Elemental_AddPheromoneDamage(target, npc.index, 50);
+					SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_CLUB, -1, _, vecHit);
 					npc.PlayMeleeHitSound();
-				} 
+				}
+				if(!ShouldNpcDealBonusDamage(target))
+				{
+					fl_AbilityOrAttack[npc.index][2] = gameTime + 1.0;
+					npc.Anger = true;
+					float vecBuffer[3], vecForward[3], vecPos[3];
+					GetAbsOrigin(npc.index, vecPos);
+					GetEntPropVector(npc.index, Prop_Send, "m_angRotation", VecEnemy);
+					VecEnemy[0] = 23.5+GetRandomFloat(-5.0, 5.0);
+					if(GetRandomInt(1, 4) >=3)
+						VecEnemy[1] += 30.0;
+					else
+						VecEnemy[1] -= 30.0;
+					GetAngleVectors(VecEnemy, vecForward, NULL_VECTOR, NULL_VECTOR);
+					NormalizeVector(vecForward, vecForward);
+					ScaleVector(vecForward, -200.5);
+					AddVectors(vecPos, vecForward, vecBuffer);
+					PluginBot_Jump(npc.index, vecBuffer);
+					if(fl_AbilityOrAttack[npc.index][3] < gameTime)
+						npc.m_iOverlordComboAttack+=5;
+				}
 			}
 			delete swingTrace;
 		}
@@ -383,18 +383,16 @@ void ZSMainPoisonZombie_SelfDefense(ZSMainPoisonZombie npc, float gameTime, int 
 
 	if(gameTime > npc.m_flNextMeleeAttack)
 	{
-		if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED))
+		if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED*1.1))
 		{
 			int Enemy_I_See;
-								
 			Enemy_I_See = Can_I_See_Enemy(npc.index, npc.m_iTarget);
-					
 			if(IsValidEnemy(npc.index, Enemy_I_See))
 			{
 				npc.m_iTarget = Enemy_I_See;
 				npc.PlayMeleeSound();
 				npc.AddGesture("ACT_MELEE_ATTACK1");
-						
+				
 				npc.m_flAttackHappens = gameTime + 0.71;
 				npc.m_flDoingAnimation = gameTime + 0.71;
 				npc.m_flNextMeleeAttack = gameTime + 1.2;
@@ -403,7 +401,7 @@ void ZSMainPoisonZombie_SelfDefense(ZSMainPoisonZombie npc, float gameTime, int 
 	}
 }
 
-public Action ZSMainPoisonZombie_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action ZSMainPoisonZombie_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	//Valid attackers only.
 	if(attacker <= 0)
@@ -437,11 +435,6 @@ public Action ZSMainPoisonZombie_OnTakeDamage(int victim, int &attacker, int &in
 		fl_TotalArmor[npc.index] = TrueArmor;
 	}
 	
-	/*
-	if(attacker > MaxClients && !IsValidEnemy(npc.index, attacker))
-		return Plugin_Continue;
-	*/
-	
 	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 	{
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
@@ -451,7 +444,7 @@ public Action ZSMainPoisonZombie_OnTakeDamage(int victim, int &attacker, int &in
 	return Plugin_Changed;
 }
 
-public Action ZSMainPoisonZombie_Revert_Poison_Zombie_Resistance(Handle timer, int ref)
+static Action ZSMainPoisonZombie_Revert_Poison_Zombie_Resistance(Handle timer, int ref)
 {
 	int zombie = EntRefToEntIndex(ref);
 	if(IsValidEntity(zombie))
@@ -462,7 +455,7 @@ public Action ZSMainPoisonZombie_Revert_Poison_Zombie_Resistance(Handle timer, i
 	return Plugin_Handled;
 }
 
-public Action ZSMainPoisonZombie_Revert_Poison_Zombie_Resistance_Enable(Handle timer, int ref)
+static Action ZSMainPoisonZombie_Revert_Poison_Zombie_Resistance_Enable(Handle timer, int ref)
 {
 	int zombie = EntRefToEntIndex(ref);
 	if(IsValidEntity(zombie))
@@ -473,11 +466,9 @@ public Action ZSMainPoisonZombie_Revert_Poison_Zombie_Resistance_Enable(Handle t
 	return Plugin_Handled;
 }
 
-public void ZSMainPoisonZombie_NPCDeath(int entity)
+static void ZSMainPoisonZombie_NPCDeath(int entity)
 {
 	ZSMainPoisonZombie npc = view_as<ZSMainPoisonZombie>(entity);
 	if(!npc.m_bGib)
-	{
-		npc.PlayDeathSound();	
-	}
+		npc.PlayDeathSound();
 }

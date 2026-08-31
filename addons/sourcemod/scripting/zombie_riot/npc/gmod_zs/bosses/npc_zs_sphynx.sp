@@ -39,9 +39,8 @@ static char g_MeleeMissSounds[][] = {
 	"npc/antlion_guard/foot_light2.wav",
 };
 
-void ZSSphynx_OnMapStart_NPC()
+public void ZSSphynx_OnMapStart_NPC()
 {
-	PrecacheModel("models/antlion_guard.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Sphynx");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_sphynx");
@@ -49,19 +48,20 @@ void ZSSphynx_OnMapStart_NPC()
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
 	data.Category = Type_GmodZS;
-	data.Func = ClotSummon;
 	data.Precache = ClotPrecache;
+	data.Func = ClotSummon;
 	NPC_Add(data);
 }
 
 static void ClotPrecache()
 {
-	for (int i = 0; i < (sizeof(g_DeathSounds));	i++) { PrecacheSound(g_DeathSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds)); i++) { PrecacheSound(g_MeleeHitSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeAttackSounds));	i++) { PrecacheSound(g_MeleeAttackSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSoundArray(g_MeleeMissSounds);
+	PrecacheModel("models/antlion_guard.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
@@ -75,42 +75,33 @@ methodmap ZSSphynx < CClotBody
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 90);
-		
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(8.0, 16.0);
 	}
-	
 	public void PlayDeathSound() 
 	{
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 90);
 	}
-
 	public void PlayHurtSound() 
 	{
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 90);
 	}
-
 	public void PlayMeleeHitSound() 
 	{
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 90);
 	}
-
 	public void PlayMeleeAttackSound() 
 	{
 		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_STATIC, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 90);
 	}
-
 	public void PlayMeleeMissSound() 
 	{
 		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 90);
 	}
-	
 	public void PlayBuffSound()
 	{
 		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", this.index, SNDCHAN_STATIC, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 70);
 	}
-	
 	public void PlayHealSound()
 	{
 		EmitSoundToAll("items/medshot4.wav", this.index, SNDCHAN_STATIC, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 110);
@@ -121,19 +112,16 @@ methodmap ZSSphynx < CClotBody
 		public get()							{ return fl_AbilityOrAttack[this.index][0]; }
 		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][0] = TempValueForProperty; }
 	}
-	
 	property float m_flNextAllyCheckTime
 	{
 		public get()							{ return fl_AbilityOrAttack[this.index][1]; }
 		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][1] = TempValueForProperty; }
 	}
-	
 	property int m_iActionResult
 	{
 		public get()			{ return this.m_iOverlordComboAttack; }
 		public set(int value) 	{ this.m_iOverlordComboAttack = value; }
 	}
-	
 	property bool m_bDropMoney
 	{
 		public get()			{ return this.m_bFUCKYOU; }
@@ -200,15 +188,7 @@ methodmap ZSSphynx < CClotBody
 	}
 }
 
-public void ZSSphynx_ExplodePost(int attacker, int victim, float damage, int weapon)
-{
-	Elemental_AddNervousDamage(victim, attacker, view_as<ZSSphynx>(attacker) ? 3 : 2);
-	// 140 x 0.05 x 0.15
-	// 160 x 0.05 x 0.15
-	// 140 x 0.1 x 0.15
-}
-
-public void ZSSphynx_ClotThink(int iNPC)
+static void ZSSphynx_ClotThink(int iNPC)
 {
 	ZSSphynx npc = view_as<ZSSphynx>(iNPC);
 	
@@ -317,7 +297,7 @@ public void ZSSphynx_ClotThink(int iNPC)
 
 #define ZSSPHYNX_RANGE 350.0
 #define ZSSPHYNX_RANGE_SQ 122500.0
-void ZSSphynx_ApplyBuffInLocation_Optimized(int me, float myPos[3], int team, int ignoreEntity = 0, float duration = 10.0)
+static void ZSSphynx_ApplyBuffInLocation_Optimized(int me, float myPos[3], int team, int ignoreEntity = 0, float duration = 10.0)
 {
 	float targetPos[3];
 	
@@ -381,22 +361,6 @@ static void ZSSphynx_NPCDeath(int entity)
 	}
 }
 
-/*
-static Action Timer_RemoveEntityZSSphynx(Handle timer, any entid)
-{
-	int entity = EntRefToEntIndex(entid);
-	if(IsValidEntity(entity) && entity>MaxClients)
-	{
-		float pos[3];
-		GetEntPropVector(entity, Prop_Send, "m_vecOrigin", pos);
-		TE_Particle("env_sawblood", pos, NULL_VECTOR, NULL_VECTOR, entity, _, _, _, _, _, _, _, _, _, 0.0);
-		//TeleportEntity(entity, OFF_THE_MAP, NULL_VECTOR, NULL_VECTOR); // send it away first in case it feels like dying dramatically
-		RemoveEntity(entity);
-	}
-	return Plugin_Handled;
-}
-*/
-
 static void ZSSphynxSelfDefense(ZSSphynx npc, float gameTime, int target, float distance)
 {
 	if(npc.m_flAttackHappens && npc.m_flAttackHappens < gameTime)
@@ -438,7 +402,7 @@ static void ZSSphynxSelfDefense(ZSSphynx npc, float gameTime, int target, float 
 				
 				SDKHooks_TakeDamage(targetHit, npc.index, npc.index, damageDealt, DMG_CLUB, -1, _, vecHit);
 				
-				if (targetHit <= MaxClients)
+				if(targetHit <= MaxClients)
 					Custom_Knockback(npc.index, targetHit, 600.0);
 				
 				CreateEarthquake(vecHit, 1.0, 128.0, 16.0, 255.0);

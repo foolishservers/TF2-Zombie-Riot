@@ -173,6 +173,9 @@ methodmap SoldierMinion < CClotBody
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable2, "SetModelScale");
 		
+		if(!StrContains(WhatDifficultySetting_Internal, "Zombie Survival"))
+			SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", 1);
+		
 		return npc;
 	}
 	

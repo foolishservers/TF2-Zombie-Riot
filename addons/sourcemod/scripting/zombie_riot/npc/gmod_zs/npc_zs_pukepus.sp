@@ -45,7 +45,7 @@ static void ClotPrecache()
 	PrecacheSoundArray(g_IdleSounds);
 	PrecacheSoundArray(g_IdleAlertedSounds);
 	PrecacheSoundArray(g_RangeAttackSounds);
-	PrecacheModel("models/zombie/poison.mdl");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
@@ -87,7 +87,7 @@ methodmap ZS_Pukepus < CClotBody
 	
 	public ZS_Pukepus(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZS_Pukepus npc = view_as<ZS_Pukepus>(CClotBody(vecPos, vecAng, "models/zombie/poison.mdl", "1.0", "225", ally, false));
+		ZS_Pukepus npc = view_as<ZS_Pukepus>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.0", "5800", ally, false));
 		
 		i_NpcWeight[npc.index] = 4;
 		
@@ -107,6 +107,8 @@ methodmap ZS_Pukepus < CClotBody
 		npc.m_flMeleeArmor = 1.0;
 		npc.m_flRangedArmor = 0.5;
 		
+		SetVariantInt(65536);
+		AcceptEntityInput(npc.index, "SetBodyGroup");
 		npc.m_iChanged_WalkCycle = -1;
 		npc.m_flNextRangedAttack = 0.0;
 		npc.m_flSpeed = 110.0;
@@ -121,8 +123,6 @@ methodmap ZS_Pukepus < CClotBody
 static void ZS_Pukepus_ClotThink(int iNPC)
 {
 	ZS_Pukepus npc = view_as<ZS_Pukepus>(iNPC);
-	SetVariantInt(1);
-	AcceptEntityInput(iNPC, "SetBodyGroup");
 	float GameTime = GetGameTime(npc.index);
 	if(npc.m_flNextDelayTime > GameTime)
 		return;
@@ -223,7 +223,7 @@ static int ZS_Pukepus_AttackLogic(ZS_Pukepus npc, float GameTime, float Distance
 				vecDest[0] += GetRandomFloat(-50.0, 50.0);
 				vecDest[1] += GetRandomFloat(-50.0, 50.0);
 				vecDest[2] += GetRandomFloat(-50.0, 50.0);
-				int Projectile = npc.FireParticleRocket(vecTarget, 35.0, 1000.0, 0.0, "blood_impact_green_01", true, .bonusdmg=1.5);
+				int Projectile = npc.FireParticleRocket(vecTarget, 35.0, 1000.0, 0.0, "blood_impact_green_01", true, .bonusdmg=3.0);
 				if(IsValidEntity(Projectile))
 				{
 					SetEntityGravity(Projectile, 1.0);

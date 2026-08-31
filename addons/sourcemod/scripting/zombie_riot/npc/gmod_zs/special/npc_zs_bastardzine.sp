@@ -62,6 +62,7 @@ public void Bastardzine_OnMapStart_NPC()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS|MVM_CLASS_FLAG_MINIBOSS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }

@@ -105,6 +105,7 @@ methodmap ZSPoisonHeadcrab < CSeaBody
 		func_NPCOnTakeDamage[npc.index] = ZSPoisonHeadcrab_OnTakeDamage;
 		func_NPCThink[npc.index] = ZSPoisonHeadcrab_ClotThink;
 		
+		npc.m_bFUCKYOU = false;
 		npc.m_flSpeed = 250.0;	// 1.9 x 250
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_flNextMeleeAttack = 0.0;

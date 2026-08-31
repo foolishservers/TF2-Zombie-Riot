@@ -244,7 +244,7 @@ static void StrangPyro_NPCDeath(int entity)
 		RemoveEntity(npc.m_iWearable4);
 }
 
-static Action Timer_RemoveEntityStrangerPyro(Handle timer, any entid)
+/*static Action Timer_RemoveEntityStrangerPyro(Handle timer, any entid)
 {
 	int entity = EntRefToEntIndex(entid);
 	if(IsValidEntity(entity) && entity>MaxClients)
@@ -254,7 +254,7 @@ static Action Timer_RemoveEntityStrangerPyro(Handle timer, any entid)
 		RemoveEntity(entity);
 	}
 	return Plugin_Handled;
-}
+}*/
 
 static void StrangerPyroSelfDefense(StrangPyro npc, float gameTime, int target, float distance)
 {
