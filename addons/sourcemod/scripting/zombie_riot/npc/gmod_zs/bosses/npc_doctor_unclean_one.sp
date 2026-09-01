@@ -239,11 +239,14 @@ methodmap DasNaggenvatcher < CClotBody
 		if(!ScaleWithHpMore && Waves_GetRoundScale() > 0)
 		{
 			multiBoss *= MultiGlobalEnemyBoss;
-			int count = RoundToNearest(float(Waves_GetRoundScale()) * MultiGlobalEnemyBoss);
+			count = RoundToNearest(float(Waves_GetRoundScale()) * MultiGlobalEnemyBoss);
+			
 			if(count < 1)
 				count = 1;
+			
 			if(count > 250)
 				count = 250;
+			
 			float decrease = count / float(Waves_GetRoundScale());
 			if(decrease > 1.0)
 			{
@@ -312,7 +315,7 @@ methodmap DasNaggenvatcher < CClotBody
 
 static void DasNaggenvatcher_Wait(int iNPC)
 {
-	DasNaggenvatcher npc = view_as<ZsUnspeakable>(iNPC);
+	DasNaggenvatcher npc = view_as<DasNaggenvatcher>(iNPC);
 	float gameTime = GetGameTime(npc.index);
 	if(npc.m_flNextDelayTime > gameTime)
 		return;
