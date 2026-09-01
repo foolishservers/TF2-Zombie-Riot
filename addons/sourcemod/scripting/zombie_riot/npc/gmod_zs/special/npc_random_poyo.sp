@@ -86,7 +86,12 @@ methodmap PoyoSummonRandom < CClotBody
 
 		i_RaidGrantExtra[npc.index] = StringToInt(data);
 		if(i_RaidGrantExtra[npc.index] <= 40)
-			Zero(SamePoyoDisallow);
+		{
+			if(Alt)
+				Zero(SameZombieDisallow);
+			else
+				Zero(SamePoyoDisallow);
+		}
 
 		if(TeleportDiversioToRandLocation(npc.index,true,1500.0, 700.0) == 2)
 			TeleportDiversioToRandLocation(npc.index, true);

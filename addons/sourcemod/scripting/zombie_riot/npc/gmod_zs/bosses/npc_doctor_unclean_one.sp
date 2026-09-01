@@ -353,10 +353,6 @@ static void DasNaggenvatcher_Wait(int iNPC)
 					fl_Extra_Damage[spawn_index] = fl_Extra_Damage[npc.index];
 					IncreaseEntityDamageTakenBy(spawn_index, 0.000001, 9.5);
 				}
-				Waves_ClearWaves();
-				CurrentRound[Rounds_Default] = 59;
-				CurrentWave[Rounds_Default] = -1;
-				Waves_Progress();
 			}
 			RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
 			npc.m_bDissapearOnDeath = true;
