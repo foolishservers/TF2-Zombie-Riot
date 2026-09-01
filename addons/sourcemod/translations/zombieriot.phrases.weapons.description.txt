@@ -599,12 +599,12 @@
 	"Elite Sniper Pap 1"
 	{
 		"en"		"-Increased damage\n-Consumes less ammo\n-Applies the Maimed debuff on hits with at least 70％ charge\n-Maimed enemies move slower"
-		"ko"		"-피해량 증가\n-탄약 소모량 감소\n-70％ 이상 충전 후 적중 시 신체 장애 디버프 부여\n해당 디버프를 가진 적은 이동 속도가 감소함"
+		"ko"		"-피해량 증가\n-탄약 소모량 감소\n-조준 상태에서 70％ 이상 충전하여 적중시 '신체 장애' 디버프 부여\n-신체 장애는 대상의 이동 속도를 둔화시킴"
 	}
 	"Elite Sniper Pap 2"
 	{
 		"en"		"-Increased damage\n-Consumes less ammo\n-Calls in supply drops that deploy ammo pickups over teammates."
-		"ko"		"-피해량 증가\n-탄약 소모량 감소\n-아군이 얻을 수 있는 탄약 보급을 아군 위치에 호출함."
+		"ko"		"-피해량 증가\n-탄약 소모량 감소\n-아군의 위로 탄약 상자를 전달하는 보급품 투하를 호출할 수 있습니다."
 	}
 	"Elite Sniper Pap 3"
 	{
@@ -618,12 +618,12 @@
 	"Elite Sniper Pap 4"
 	{
 		"en"		"-Increased damage\n-Consumes less ammo\n-Also applies the Crippled debuff on hits with at least 70％ charge\n-Crippled enemies take more damage"
-		"ko"		"-피해량 증가\n-탄약 소모량 감소\n-70％ 이상 충전 후 적중 시 신체 장애 및 신경 쇠약 디버프 부여\n신경 쇠악 디버프를 가진 적은 받는 피해가 증가함"
+		"ko"		"-피해량 증가\n-탄약 소모량 감소\n-조준 상태에서 70％ 이상 충전하여 적중시 '신경 쇠약' 디버프 부여\n-신체 장애는 대상이 받는 피해량을 증가시킴"
 	}
 	"Elite Sniper Pap 5"
 	{
 		"en"		"-Increased damage and attack speed\n-Consumes less ammo\n-Adds one extra supply drop that gives a global powerup\n-All Elite Snipers' bouncing bullets now prioritize high health targets"
-		"ko"		"-피해량 및 공격 속도 증가\n-탄약 소모량 감소\n-탄약 보급 호출 시 글로벌 파워업 하나가 같이 호출됨\n-탄환 도탄 시, 현재 체력이 가장 많은 적을 최우선으로 추적"
+		"ko"		"-피해량, 공격 속도 증가\n-탄약 소모량 감소\n-글로벌 파워업을 제공하는 보급품 추가\n-모든 튕겨진 탄환이 현재 체력이 많은 적을 최우선으로 추적"
 	}
 	"Elite Sniper Pap 6"
 	{
@@ -1775,7 +1775,7 @@
 	"Accurate Marksman Desc"
 	{
 		"en"	"-Gain 10％ more accuracy\n-Gain 20％ faster projectile speed\n-Gain 25％ faster Sniper Rifle charge rate"
-		"ko"	"-집탄율 +10％\n-투사체 비행 속도 +20％\n-저격 소총 충전 속도 +25％"
+		"ko"	"-집탄율 +10％\n-투사체 비행 속도 +20％\n-저격소총 충전 속도 +25%"
 	}
 	
 	"Ammo Coat Desc"
@@ -1927,10 +1927,22 @@
 	
 	"Full Riot Gear Desc"
 	{
-		"en"	"-Increased Max Armor.\n-Gain +150HP\n-Extra Passive resistances if no armor is active."
+		"en"	"-Increased Max Armor.\n-Gain +200HP\n-Extra Passive resistances if no armor is active."
 		"fr"	"Armure reçu et armure maximalle améliorées. +150 santé.\nDonne une résistance passive qui s'améliore avec vos améliorations pour armure, si votre armure est brisée."
 		"it"	"Aumento della quantità di armatura per uso e tetto massimo. +150 HP\nFornisce una resistenza passiva in caso di rottura dell'armatura e aumenta con i potenziamenti dell'armatura."
 		"ko"	"-최대 아머 2배\n-최대 체력 +150\n-아머가 없으면 추가 저항력 증가(생존 개선에 따라 증가함)"
+	}
+	"E.G.O. Mimicry Shell"
+	{
+		"en"	"E.G.O. Mimicry Shell"
+	}
+	"E.G.O. Mimicry Shell Desc"
+	{
+		"en"	"-Increased Max Armor.\n-Gain +250HP\n-Extra Passive resistances if no armor is active.\nIncreases healing from all sources by 1.15x"
+	}
+	"Explain NT Buff"
+	{
+		"en"	"While fighting nothing there you gain 2x ego duration and take 12 flat less damage\nYou also obtain this while having ''E.G.O. Mimicry Shell''"
 	}
 	"Grigoris Special Antidote Desc"
 	{

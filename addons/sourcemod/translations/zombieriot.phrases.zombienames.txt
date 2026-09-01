@@ -8180,6 +8180,7 @@
 		"en"	"SIGMALLER"
 		"ko"	"시그마 전령병"
 	}
+	
 	"Ghoul"
 	{
 		"en"	"Ghoul"
@@ -8642,5 +8643,11 @@
 	{
 		"en"	"Prescott The Traitor"
 		"ko"	"배신자 '프레스콧'"
+	}
+	
+	"Nothing There"
+	{
+		"en"	"Nothing There"
+		"ko"	"아무 것도 없는"
 	}
 }
