@@ -1822,6 +1822,16 @@
 	}
 	
 	// Tinker attributes.
+	"Custom Anvil Menu Main"
+	{
+		"en"		"Enchant Archive"
+		"ko"		"마법부여 보관소"
+	}
+	"Custom Anvil Enchant Refresh"
+	{
+		"en"		"Refresh"
+		"ko"		"새로고침"
+	}
 	"TinkerAttrib_PhysicalDamage"
 	{
 		"en"		"Physical Damage"
@@ -1877,12 +1887,191 @@
 		"en"		"Charge Rate"
 		"ko"		"충전 속도"
 	}
+	"TinkerAttrib_BulletsPerShot"
+	{
+		"en"		"Bullets Per Shot"
+		"ko"		"발사되는 탄환 수"
+	}
+	"TinkerAttrib_MovementSpeed"
+	{
+		"en"		"Movement Speed"
+		"ko"		"이동 속도"
+	}
+	"TinkerAttrib_HealthRegen"
+	{
+		"en"		"Health Regen"
+		"ko"		"초당 체력 재생"
+	}
+	"TinkerAttrib_RepairRate"
+	{
+		"en"		"Repair Rate"
+		"ko"		"수리 효율"
+	}
+	"TinkerAttrib_ReloadSpeed"
+	{
+		"en"		"Reload Speed"
+		"ko"		"재장전 속도"
+	}
+	"TinkerAttrib_SweepingEdgeRange"
+	{
+		"en"		"Sweeping Edge Range"
+		"ko"		"휩쓸기 사거리"
+	}
+	"TinkerAttrib_BlastRadius"
+	{
+		"en"		"Blast Radius"
+		"ko"		"폭발 반경"
+	}
+	"TinkerAttrib_ProjectileRange"
+	{
+		"en"		"Projectile Range"
+		"ko"		"투사체 날아가는 거리"
+	}
+	"TinkerAttrib_ProjectileSpeed"
+	{
+		"en"		"Projectile Speed"
+		"ko"		"투사체 속도"
+	}
+	"TinkerAttrib_BulletSpread"
+	{
+		"en"		"Bullet Spread"
+		"ko"		"탄환 집탄도"
+	}
+	"TinkerAttrib_BleedDuration"
+	{
+		"en"		"Bleed Duration"
+		"ko"		"출혈 지속시간"
+	}
+	"TinkerAttrib_RangedResistance"
+	{
+		"en"		"Ranged Damage Resistance"
+		"ko"		"원거리 저항력"
+	}
+	"TinkerAttrib_MeleeResistance"
+	{
+		"en"		"Melee Damage Resistance"
+		"ko"		"근접 저항력"
+	}
+	"TinkerAttrib_KnockbackResistance"
+	{
+		"en"		"Knockback Resistance"
+		"ko"		"넉백 저항력"
+	}
+	"TinkerAttrib_SentryDamage"
+	{
+		"en"		"Sentry Damage"
+		"ko"		"센트리 피해량"
+	}
+	"TinkerAttrib_BuffDuration"
+	{
+		"en"		"Buff Duration"
+		"ko"		"버프 지속 시간"
+	}
+	"TinkerAttrib_JumpHeight"
+	{
+		"en"		"Jump Height"
+		"ko"		"점프 높이"
+	}
+	"TinkerAttrib_SentryFiringSpeed"
+	{
+		"en"		"Sentry Firing Speed"
+		"ko"		"센트리 공격 속도"
+	}
+	"TinkerAttrib_FireAspect"
+	{
+		"en"		"s Enemy is Burned"
+		"ko"		"초 동안 적이 불에 탐"
+	}
+	"TinkerAttrib_JumpCrit"
+	{
+		"en"		"Jump Critical Damage"
+		"ko"		"점프 치명타 피해량"
+	}
+	"TinkerAttrib_BaseDamage"
+	{
+		"en"		"Base Damage"
+		"ko"		"기본 피해량"
+	}
+	"TinkerAttrib_BaneofArthropods"
+	{
+		"en"		"s Enemy is Silence"
+		"ko"		"초 동안 적이 침묵 디버프가 적용됨"
+	}
+	"TinkerAttrib_Resistance"
+	{
+		"en"		"Damage Resistance"
+		"ko"		"모든 피해 저항력"
+	}
+	"TinkerAttrib_SweepingEdgeDamage"
+	{
+		"en"		"Sweeping Edge Damage"
+		"ko"		"휩쓸기 피해량"
+	}
+	"TinkerAttrib_MagicCost"
+	{
+		"en"		"Magic Shot Cost"
+		"ko"		"마나 소모량"
+	}
+	"TinkerAttrib_ExtraMeleeRange"
+	{
+		"en"		"Extra Melee Range"
+		"ko"		"근접 무기 사거리"
+	}
+	"TinkerAttrib_Overheal"
+	{
+		"en"		"More Medigun Overheal"
+		"ko"		"메디건 추가 과치료율"
+	}
+	"TinkerAttrib_TerrianResistance"
+	{
+		"en"		"Terrian Damage Resistance"
+		"ko"		"장판 피해 저항력"
+	}
+	"TinkerAttrib_ElementalResistance"
+	{
+		"en"		"Elemental Damage Resistance"
+		"ko"		"원소 피해 저항력"
+	}
+	"TinkerAttrib_SlowResistance"
+	{
+		"en"		"Slow Resistance"
+		"ko"		"둔화 저항력"
+	}
+	"TinkerAttrib_BuildingTerrianAbsorb"
+	{
+		"en"		"Building Terrian Absorb Chance"
+		"ko"		"구조물의 장판 흡수 확률"
+	}
+	"TinkerAttrib_WeaponArchetype"
+	{
+		"en"		"Weapon Archetype"
+		"ko"		"무기 유형"
+	}
+	"TinkerAttrib_MaxMana"
+	{
+		"en"		"Max Mana"
+		"ko"		"최대 마나"
+	}
+	"TinkerAttrib_ExplosiveHeadshot"
+	{
+		"en"		"Explosive Headshot Damage"
+		"ko"		"폭발성 헤드샷 피해량"
+	}
+	"TinkerAttrib_FullChargeDamage"
+	{
+		"en"		"Full Charge Damage Bonus"
+		"ko"		"완전 충전 시 피해량"
+	}
+	"TinkerAttrib_HeadshotDamage"
+	{
+		"en"		"Headshot Damage"
+		"ko"		"헤드샷 피해량"
+	}
 	"TinkerAttrib_"
 	{
 		"en"		""
 		"ko"		""
 	}
-	
 	
 	"Tinker_SharedGlassy"
 	{
