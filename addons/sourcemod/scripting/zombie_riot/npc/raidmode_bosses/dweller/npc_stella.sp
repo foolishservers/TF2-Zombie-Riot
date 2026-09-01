@@ -2223,7 +2223,14 @@ static void Internal_NPCDeath(int entity)
 					Karlas karl = view_as<Karlas>(npc.Ally);
 					karl.Anger = true;
 					NpcSpeechBubble(npc.Ally, ">>:(", 7, {255,9,9,255}, {0.0,0.0,120.0}, "");
-					RaidBossStella_NPCTalkMessage(npc, "Stella_Exhausted_%d", true, GetRandomInt(1, 3));
+					if (i_current_wave[npc.index] > 10)
+					{
+						RaidBossStella_NPCTalkMessage(npc, "Stella_Exhausted_%d", true, GetRandomInt(1, 3));
+					}
+					else
+					{
+						RaidBossStella_NPCTalkMessage(npc, "Stella_Exhausted_%d", true, GetRandomInt(1, 2));
+					}
 				}
 			}
 			else
