@@ -10,11 +10,126 @@ enum struct TinkerEnum
 	int Attrib[TINKER_LIMIT];
 	float Value[TINKER_LIMIT];
 	float Luck[TINKER_LIMIT];
-	char Name[64];
+	char Name[128];
 	int Rarity;
 	bool Addition[TINKER_LIMIT];
 	int CustomMode[TINKER_LIMIT];
 }
+
+static const char Enchant_Mage[][] =
+{
+	"1",
+	"2",
+	"3",
+	"4"
+};
+static const char Enchant_Mediguns[][] =
+{
+	"5",
+	"6",
+	"7",
+};
+static const char Enchant_Healings[][] =
+{
+	"8",
+	"9"
+};
+static const char Enchant_Wrench[][] =
+{
+	"10",
+	"11"
+};
+static const char Enchant_Melee[][] =
+{
+	"12",
+	"13",
+	"14",
+	"15"
+};
+static const char Enchant_Melee_InfiniteFire[][] =
+{
+	"13",
+	"16",
+	"17",
+	"18"
+};
+static const char Enchant_Melee_Fire[][] =
+{
+	"13",
+	"16",
+	"17",
+	"19",
+	"20",
+	"18",
+	"21"
+};
+static const char Enchant_Range_InfiniteFire[][] =
+{
+	"13",
+	"18",
+	"22"
+};
+static const char Enchant_Flamethrower[][] =
+{
+	"13",
+	"18",
+	"21"
+};
+static const char Enchant_Range[][] =
+{
+	"13",
+	"19",
+	"20",
+	"18",
+	"21",
+	"22"
+};
+static const char Enchant_Boomerang[][] =
+{
+	"13",
+	"18",
+	"16",
+	"17"
+};
+static const char Enchant_SigilBlade[][] =
+{
+	"1",
+	"2",
+	"4"
+};
+static const char Enchant_MinecraftSword[][] =
+{
+	"23",
+	"24",
+	"25",
+	"26",
+	"27",
+	"28",
+	"29"
+};
+static const char Enchant_SniperRifle[][] =
+{
+	"30",
+	"31",
+	"32",
+	"33",
+	"34",
+	"35"
+};
+static const char Enchant_DMR[][] =
+{
+	"30",
+	"31",
+	"19",
+	"20",
+	"34",
+	"35",
+	"21"
+};
+
+static bool EnchantRefresh[MAXENTITIES];
+static int SaveRarity[MAXENTITIES][TINKER_LIMIT];
+static char Enchant[MAXENTITIES][TINKER_LIMIT][64];
 
 static const int SupportBuildings[] = { 2, 2, 5, 9, 14, 14, 15 };
 static const int MetalGain[] = { 0, 5, 8, 11, 15, 20, 35 };
@@ -90,8 +205,17 @@ void Blacksmith_ExtraDesc(int client, int index)
 				Tinkers.GetArray(a, tinker);
 				if(tinker.AccountId == account && tinker.StoreIndex == index)
 				{
-					CPrintToChat(client, "{yellow}%s (Tier %d)", tinker.Name, tinker.Rarity + 1);
-
+					SetGlobalTransTarget(client);
+					char buffer[128];
+					FormatEx(buffer, sizeof(buffer), "%s", tinker.Name);
+					if(TranslationPhraseExists(buffer))
+						CPrintToChat(client, "{yellow}%t (Tier %d)", buffer, tinker.Rarity + 1);
+					else
+					{
+						CPrintToChat(client, "{yellow}%s (Tier %d)", buffer, tinker.Rarity + 1);
+						CPrintToChat(client, "{crimson}[Dev Warning] Translation not found");
+					}
+					
 					for(int b; b < sizeof(tinker.Attrib); b++)
 					{
 						if(!tinker.Attrib[b])
@@ -412,6 +536,646 @@ void Blacksmith_BuildingUsed(int entity, int client)
 
 	Anvil_Menu(client);
 }
+
+static void Blacksmith_BuildingUsed_Internal_Custom(int weapon, int entity, int client, int owner)
+{
+	if(owner == -1 || SmithLevel[owner] < 0)
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		if(IsValidEntity(entity))
+			DestroyBuildingDo(entity);
+		SPrintToChat(client, "%t", "The Blacksmith Failed!");
+		return;
+	}
+	int account = GetSteamAccountID(client, false);
+	if(!account)
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		if(IsValidEntity(entity))
+			ApplyBuildingCollectCooldown(entity, client, 3.0);
+		return;
+	}
+	if(Attributes_Get(weapon, Attrib_DisallowTinker, 0.0) != 0.0)
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		SetGlobalTransTarget(client);
+		ShowSyncHudText(client, SyncHud_Notifaction, "%t", "Blacksmith Underleveled");
+		if(IsValidEntity(entity))
+			ApplyBuildingCollectCooldown(entity, client, 2.0);
+		return;
+	}
+	if(dieingstate[client] == 0)
+	{	
+		CancelClientMenu(client);
+		SetStoreMenuLogic(client, false);
+		static char buffer[128];
+		static char EnchantName[128];
+		Menu menu = new Menu(UsedAnvil_MenuH);
+		AnyMenuOpen[client] = 1;
+
+		SetGlobalTransTarget(client);
+		menu.SetTitle("%t", "Custom Anvil Menu Main");
+		for(int RetryTillWin; RetryTillWin < 4; RetryTillWin++)
+		{
+			if(!EnchantRefresh[weapon])
+				Query_Enchantment_List(weapon, client, account, owner, RetryTillWin);
+			
+			int i_QueryEnchant = StringToInt(Enchant[weapon][RetryTillWin]);
+			FormatEx(buffer, sizeof(buffer), "%s", Query_GetTransList(i_QueryEnchant));
+			if(TranslationPhraseExists(buffer))
+			{
+				FormatEx(EnchantName, sizeof(EnchantName), "%s;%s", Enchant[weapon][RetryTillWin], SaveRarity[weapon][RetryTillWin]);
+				FormatEx(buffer, sizeof(buffer), "%t: Lv%i", buffer, SaveRarity[weapon][RetryTillWin]+1);
+				menu.AddItem(EnchantName, buffer);
+			}
+			else
+			{
+				menu.AddItem("-1", "Dev WTF", ITEMDRAW_DISABLED);
+			}
+			
+		}
+		EnchantRefresh[weapon]=true;
+		
+		FormatEx(buffer, sizeof(buffer), "%t", "Custom Anvil Enchant Refresh");
+		menu.AddItem("-1557;0", buffer);
+		
+		menu.ExitButton = true;
+		menu.Display(client, MENU_TIME_FOREVER);
+	}
+}
+
+static char[] Query_GetTransList(int SelectInt)
+{
+	char buffer[256];
+	switch(SelectInt)
+	{
+		case 1:FormatEx(buffer, sizeof(buffer), "Tinker_HasteMage");
+		case 2:FormatEx(buffer, sizeof(buffer), "Tinker_HeavyMage");
+		case 3:FormatEx(buffer, sizeof(buffer), "Tinker_ConcentratedMagic");
+		case 4:FormatEx(buffer, sizeof(buffer), "Tinker_TankMage");
+		case 5:FormatEx(buffer, sizeof(buffer), "Tinker_FastHeal");
+		case 6:FormatEx(buffer, sizeof(buffer), "Tinker_Overhealer");
+		case 7:FormatEx(buffer, sizeof(buffer), "Tinker_Uberer");
+		case 8:FormatEx(buffer, sizeof(buffer), "Tinker_SharedGlassy");
+		case 9:FormatEx(buffer, sizeof(buffer), "Tinker_BurstHeal");
+		case 10:FormatEx(buffer, sizeof(buffer), "Tinker_BuilderRepairMaster");
+		case 11:FormatEx(buffer, sizeof(buffer), "Tinker_BuilderLongSwing");
+		case 12:FormatEx(buffer, sizeof(buffer), "Tinker_SharedGlassy");
+		case 13:FormatEx(buffer, sizeof(buffer), "Tinker_MeleeRapidSwing");
+		case 14:FormatEx(buffer, sizeof(buffer), "Tinker_MeleeHeavySwing");
+		case 15:FormatEx(buffer, sizeof(buffer), "Tinker_MeleeLongSwing");
+		case 16:FormatEx(buffer, sizeof(buffer), "Tinker_SlowHeavyProj");
+		case 17:FormatEx(buffer, sizeof(buffer), "Tinker_FastProj");
+		case 18:FormatEx(buffer, sizeof(buffer), "Tinker_HeavyTrigger");
+		case 19:FormatEx(buffer, sizeof(buffer), "Tinker_IntensiveClip");
+		case 20:FormatEx(buffer, sizeof(buffer), "Tinker_ConcentratedClip");
+		case 21:FormatEx(buffer, sizeof(buffer), "Tinker_SmallerSmarterBullets");
+		case 22:FormatEx(buffer, sizeof(buffer), "Tinker_SprayAndPray");
+		
+		case 23:FormatEx(buffer, sizeof(buffer), "Tinker_MS_Sharpness");
+		case 24:FormatEx(buffer, sizeof(buffer), "Tinker_MS_Smite");
+		case 25:FormatEx(buffer, sizeof(buffer), "Tinker_MS_SweepingEdge");
+		case 26:FormatEx(buffer, sizeof(buffer), "Tinker_MS_QuickCharge");
+		case 27:FormatEx(buffer, sizeof(buffer), "Tinker_MS_BaneofArthropods");
+		case 28:FormatEx(buffer, sizeof(buffer), "Tinker_MS_FireAspect");
+		case 29:FormatEx(buffer, sizeof(buffer), "Tinker_MS_CurseOfGlassy");
+		
+		case 30:FormatEx(buffer, sizeof(buffer), "Tinker_SR_ExplosiveHeadshot");
+		case 31:FormatEx(buffer, sizeof(buffer), "Tinker_SR_KillerFocus");
+		case 32:FormatEx(buffer, sizeof(buffer), "Tinker_SR_SuperCoolingChamber");
+		case 33:FormatEx(buffer, sizeof(buffer), "Tinker_SR_DepletedUranium");
+		case 34:FormatEx(buffer, sizeof(buffer), "Tinker_SR_HighSpeedFeedMechanism");
+		case 35:FormatEx(buffer, sizeof(buffer), "Tinker_SR_HollowPointBullets");
+	}
+	return buffer;
+}
+
+static void Query_Enchantment_List(int weapon, int client, int account, int owner, int Count=0)
+{
+	char classname[64];
+	GetEntityClassname(weapon, classname, sizeof(classname));
+	int slot = TF2_GetClassnameSlot(classname, weapon);
+
+	TinkerEnum tinker;
+	int found = -1;
+	if(Tinkers)
+	{
+		int length = Tinkers.Length;
+		for(int a; a < length; a++)
+		{
+			Tinkers.GetArray(a, tinker);
+			if(tinker.AccountId == account && tinker.StoreIndex == StoreWeapon[weapon])
+			{
+				found = a;
+				break;
+			}
+		}
+	}
+
+	if(found == -1)
+	{
+		tinker.AccountId = account;
+		tinker.StoreIndex = StoreWeapon[weapon];
+	}
+	
+	Zero(tinker.Attrib);
+	Zero(tinker.CustomMode);
+	Zero(tinker.Addition);
+	tinker.Rarity = 0;
+
+	switch(SmithLevel[owner])
+	{
+		case 0, 1:
+		{
+			
+		}
+		case 2:
+		{
+			if((GetURandomInt() % 4) == 0)
+				tinker.Rarity = 1;
+		}
+		case 3:
+		{
+			int rand = GetURandomInt();
+			if((rand % 7) == 0)
+			{
+				tinker.Rarity = 2;
+			}
+			else if((rand % 3) == 0)
+			{
+				tinker.Rarity = 1;
+			}
+		}
+		case 4:
+		{
+			int rand = GetURandomInt();
+			if((rand % 5) == 0)
+			{
+				tinker.Rarity = 2;
+			}
+			else if((rand % 2) == 0)
+			{
+				tinker.Rarity = 1;
+			}
+		}
+		default:
+		{
+			if((GetURandomInt() % 3) == 0)
+			{
+				tinker.Rarity = 2;
+			}
+			else
+			{
+				tinker.Rarity = 1;
+			}
+		}
+	}
+
+	if(i_OverrideWeaponSlot[weapon] != -1)
+	{
+		slot = i_OverrideWeaponSlot[weapon];
+	}
+	switch(i_CustomWeaponEquipLogic[weapon])
+	{
+		case WEAPON_BOOMERANG:
+		{
+			SaveRarity[weapon][Count] = tinker.Rarity;
+			strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Boomerang[GetURandomInt() % sizeof(Enchant_Boomerang)]);
+			return;
+		}
+		case WEAPON_SIGIL_BLADE:
+		{
+			SaveRarity[weapon][Count] = tinker.Rarity;
+			strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_SigilBlade[GetURandomInt() % sizeof(Enchant_SigilBlade)]);
+			return;
+		}
+		case WEAPON_MINECRAFT_SWORD:
+		{
+			switch(SmithLevel[owner])
+			{
+				case 0:
+				{
+					tinker.Rarity = 0;
+				}
+				case 1:
+				{
+					if((GetURandomInt() % 4) == 0)
+						tinker.Rarity = 1;
+					else tinker.Rarity = 0;
+				}
+				case 2:
+				{
+					int rand = GetURandomInt();
+					if((rand % 7) == 0)
+					{
+						tinker.Rarity = 2;
+					}
+					else if((rand % 3) == 0)
+					{
+						tinker.Rarity = 1;
+					}
+					else tinker.Rarity = 0;
+				}
+				case 3:
+				{
+					int rand = GetURandomInt();
+					if((rand % 12) == 0)
+					{
+						tinker.Rarity = 3;
+					}
+					else if((rand % 7) == 0)
+					{
+						tinker.Rarity = 2;
+					}
+					else if((rand % 3) == 0)
+					{
+						tinker.Rarity = 1;
+					}
+					else tinker.Rarity = 0;
+				}
+				case 4:
+				{
+					int rand = GetURandomInt();
+					if((rand % 12) == 0)
+					{
+						tinker.Rarity = 4;
+					}
+					if((rand % 7) == 0)
+					{
+						tinker.Rarity = 3;
+					}
+					else if((rand % 5) == 0)
+					{
+						tinker.Rarity = 2;
+					}
+					else if((rand % 2) == 0)
+					{
+						tinker.Rarity = 1;
+					}
+					else tinker.Rarity = 0;
+				}
+				default:
+				{
+					int rand = GetURandomInt();
+					if((rand % 7) == 0)
+					{
+						tinker.Rarity = 4;
+					}
+					else if((rand % 5) == 0)
+					{
+						tinker.Rarity = 3;
+					}
+					else if((rand % 3) == 0)
+					{
+						tinker.Rarity = 2;
+					}
+					else if((rand % 2) == 0)
+					{
+						tinker.Rarity = 1;
+					}
+					else tinker.Rarity = 0;
+				}
+			}
+			SaveRarity[weapon][Count] = tinker.Rarity;
+			strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_MinecraftSword[GetURandomInt() % sizeof(Enchant_MinecraftSword)]);
+			return;
+		}
+		default:
+		{
+			int Attrib = RoundToCeil(Attributes_Get(weapon, Attrib_IsSniperRifle, 0.0));
+			if(Attrib==1)
+			{
+				SaveRarity[weapon][Count] = tinker.Rarity;
+				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_SniperRifle[GetURandomInt() % sizeof(Enchant_SniperRifle)]);
+				return;
+			}
+			else if(Attrib==2)
+			{
+				SaveRarity[weapon][Count] = tinker.Rarity;
+				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_DMR[GetURandomInt() % sizeof(Enchant_DMR)]);
+				return;
+			}
+		}
+	}
+	if(i_IsWandWeapon[weapon])
+	{
+		// Mage Weapon
+		SaveRarity[weapon][Count] = tinker.Rarity;
+		strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Mage[GetURandomInt() % sizeof(Enchant_Mage)]);
+		return;
+	}
+	else if(Attributes_Get(weapon, 8, 0.0) != 0.0)
+	{
+		//mediguns, they work uniqurely
+		if(StrEqual(classname, "tf_weapon_medigun"))
+		{
+			SaveRarity[weapon][Count] = tinker.Rarity;
+			strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Mediguns[GetURandomInt() % sizeof(Enchant_Mediguns)]);
+			return;
+		}
+		else
+		{
+			if(slot == TFWeaponSlot_Melee)
+			{
+				SaveRarity[weapon][Count] = tinker.Rarity;
+				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), "8");
+				return;
+			}
+			else
+			{
+				SaveRarity[weapon][Count] = tinker.Rarity;
+				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Healings[GetURandomInt() % sizeof(Enchant_Healings)]);
+				return;
+			}
+		}
+	}
+	else if(i_IsWrench[weapon] && slot != TFWeaponSlot_Melee)
+	{
+		SaveRarity[weapon][Count] = tinker.Rarity;
+		strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), "10");
+		return;
+	}
+	else if(slot == TFWeaponSlot_Melee)
+	{
+		if(i_IsWrench[weapon])
+		{
+			// Wrench Weapon
+			SaveRarity[weapon][Count] = tinker.Rarity;
+			strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Wrench[GetURandomInt() % sizeof(Enchant_Wrench)]);
+			return;
+		}
+		else
+		{
+			// Melee Weapon
+			SaveRarity[weapon][Count] = tinker.Rarity;
+			strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Melee[GetURandomInt() % sizeof(Enchant_Melee)]);
+			return;
+		}
+	}
+	else if(slot < TFWeaponSlot_Melee)
+	{
+		if(Attributes_Has(weapon, 101) || Attributes_Has(weapon, 102) || Attributes_Has(weapon, 103) || Attributes_Has(weapon, 104))
+		{
+			//infinite fire
+			if(Attributes_Has(weapon, 303))
+			{
+				SaveRarity[weapon][Count] = tinker.Rarity;
+				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Melee_InfiniteFire[GetURandomInt() % sizeof(Enchant_Melee_InfiniteFire)]);
+				return;
+			}
+			else
+			{
+				SaveRarity[weapon][Count] = tinker.Rarity;
+				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Melee_Fire[GetURandomInt() % sizeof(Enchant_Melee_Fire)]);
+				return;
+			}
+			// Projectile Weapon
+		}
+		else
+		{
+			//infinite fire
+			if(Attributes_Has(weapon, 303))
+			{
+				SaveRarity[weapon][Count] = tinker.Rarity;
+				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Range_InfiniteFire[GetURandomInt() % (sizeof(Enchant_Range_InfiniteFire)-((Attributes_Get(weapon, 45, 0.0) > 0.0) ? 0 : 1))]);
+				return;
+			}
+			else if(StrEqual(classname, "tf_weapon_flamethrower"))
+			{
+				//flamethrowers get different logic.
+				SaveRarity[weapon][Count] = tinker.Rarity;
+				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Flamethrower[GetURandomInt() % sizeof(Enchant_Flamethrower)]);
+				return;
+			}
+			else
+			{
+				SaveRarity[weapon][Count] = tinker.Rarity;
+				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Range[GetURandomInt() % (sizeof(Enchant_Range)-(Attributes_Get(weapon, 45, 0.0) > 0.1 ? 0 : 1))]);
+				return;
+			}
+			// Hitscan Weapon
+		}
+	}
+	else
+	{
+		SaveRarity[weapon][Count] = tinker.Rarity;
+		strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), "-1");
+	}
+	return;
+}
+
+static int UsedAnvil_MenuH(Menu menu, MenuAction action, int client, int choice)
+{
+	switch(action)
+	{
+		case MenuAction_End:
+		{
+			delete menu;
+			if(IsValidClient(client))
+				AnyMenuOpen[client] = 0;
+		}
+		case MenuAction_Select:
+		{
+			AnyMenuOpen[client] = 0;
+			ResetStoreMenuLogic(client);
+			static char buffer[128];
+			menu.GetItem(choice, buffer, sizeof(buffer));
+			static char countext[2][24];
+			ExplodeString(buffer, ";", countext, sizeof(countext), sizeof(countext[]));
+			int id = StringToInt(countext[0]);
+			int Count = StringToInt(countext[1]);
+			int weapon;
+			int anvil;
+			int owner;
+			
+			if(IsValidClient(client))
+			{
+				weapon = EntRefToEntIndex(ClickedWithWeapon[client]);
+				anvil = EntRefToEntIndex(AnvilClickedOn[client]);
+			}
+			else
+				return 0;
+
+			if(!IsValidEntity(weapon) || !IsValidEntity(anvil))
+				return 0;
+			else
+			{
+				owner = GetEntPropEnt(anvil, Prop_Send, "m_hOwnerEntity");
+			}
+			
+			
+			int account = GetSteamAccountID(client, false);
+			if(!account)
+			{
+				ClientCommand(client, "playgamesound items/medshotno1.wav");
+				if(IsValidEntity(anvil))
+					ApplyBuildingCollectCooldown(anvil, client, 3.0);
+				return 0;
+			}
+			
+			if(id==-1557)
+			{
+				ApplyBuildingCollectCooldown(anvil, client, 10.0);
+				EnchantRefresh[weapon]=false;
+				ClientCommand(client, "playgamesound ui/quest_decode.wav");
+				return 0;
+			}
+			
+			TinkerEnum tinker;
+			int found = -1;
+			if(Tinkers)
+			{
+				int length = Tinkers.Length;
+				for(int a; a < length; a++)
+				{
+					Tinkers.GetArray(a, tinker);
+					if(tinker.AccountId == account && tinker.StoreIndex == StoreWeapon[weapon])
+					{
+						found = a;
+						break;
+					}
+				}
+			}
+
+			if(found == -1)
+			{
+				tinker.AccountId = account;
+				tinker.StoreIndex = StoreWeapon[weapon];
+			}
+			for(int i; i < sizeof(tinker.Luck); i++)
+			{
+				tinker.Luck[i] = GetURandomFloat();
+			}
+			tinker.Rarity = SaveRarity[weapon][Count];
+			switch(id)
+			{
+				case 1:TinkerHastyMage(tinker.Rarity, tinker);
+				case 2:TinkerHeavyMage(tinker.Rarity, tinker);
+				case 3:TinkerConcentrationMage(tinker.Rarity, tinker);
+				case 4:TinkerTankMage(tinker.Rarity, tinker);
+				case 5:TinkerMedigun_FastHeal(tinker.Rarity, tinker);
+				case 6:TinkerMedigun_Overhealer(tinker.Rarity, tinker);
+				case 7:TinkerMedigun_Uberer(tinker.Rarity, tinker);
+				case 8:TinkerMedicWeapon_GlassyMedic(tinker.Rarity, tinker);
+				case 9:TinkerMedicWeapon_BurstHealMedic(tinker.Rarity, tinker);
+				case 10:TinkerBuilderRepairMaster(tinker.Rarity, tinker);
+				case 11:TinkerBuilderLongSwing(tinker.Rarity, tinker);
+				case 12:TinkerMeleeGlassy(tinker.Rarity, tinker);
+				case 13:TinkerMeleeRapidSwing(tinker.Rarity, tinker);
+				case 14:TinkerMeleeHeavySwing(tinker.Rarity, tinker);
+				case 15:TinkerMeleeLongSwing(tinker.Rarity, tinker);
+				case 16:TinkerRangedSlowHeavyProj(tinker.Rarity, tinker);
+				case 17:TinkerRangedFastProj(tinker.Rarity, tinker);
+				case 18:TinkerHeavyTrigger(tinker.Rarity, tinker);
+				case 19:TinkerIntensiveClip(tinker.Rarity, tinker);
+				case 20:TinkerConcentratedClip(tinker.Rarity, tinker);
+				case 21:TinkerSmallerSmarterBullets(tinker.Rarity, tinker);
+				case 22:TinkerSprayAndPray(tinker.Rarity, tinker);
+				
+				case 23:Tinker_MS_Sharpness(tinker.Rarity, tinker);
+				case 24:Tinker_MS_Smite(tinker.Rarity, tinker);
+				case 25:Tinker_MS_SweepingEdge(tinker.Rarity, tinker);
+				case 26:Tinker_MS_BaneofArthropods(tinker.Rarity, tinker);
+				case 27:Tinker_MS_FireAspect(tinker.Rarity, tinker);
+				case 28:Tinker_MS_QuickCharge(tinker.Rarity, tinker);
+				case 29:Tinker_MS_CurseofGlassy(tinker.Rarity, tinker);
+				
+				case 30:Tinker_SR_ExplosiveHeadshot(tinker.Rarity, tinker);
+				case 31:Tinker_SR_KillerFocus(tinker.Rarity, tinker);
+				case 32:Tinker_SR_SuperCoolingChamber(tinker.Rarity, tinker);
+				case 33:Tinker_SR_DepletedUranium(tinker.Rarity, tinker);
+				case 34:Tinker_SR_HighSpeedFeedMechanism(tinker.Rarity, tinker);
+				case 35:Tinker_SR_HollowPointBullets(tinker.Rarity, tinker);
+			}
+			
+			SetGlobalTransTarget(client);
+			FormatEx(buffer, sizeof(buffer), "%s", tinker.Name);
+			if(TranslationPhraseExists(buffer))
+				CPrintToChat(client, "{yellow}%t (Tier %d)", buffer, tinker.Rarity + 1);
+			else
+			{
+				CPrintToChat(client, "{yellow}%s (Tier %d)", buffer, tinker.Rarity + 1);
+				CPrintToChat(client, "{crimson}[Dev Warning] Translation not found");
+			}
+
+			for(int i; i < sizeof(tinker.Attrib); i++)
+			{
+				if(!tinker.Attrib[i])
+					break;
+				
+				Blacksmith_PrintAttribValue(client, tinker.Attrib[i], tinker.Value[i], tinker.Luck[i],  tinker.Addition[i], tinker.CustomMode[i]);
+			}
+
+			if(found == -1)
+			{
+				if(!Tinkers)
+					Tinkers = new ArrayList(sizeof(TinkerEnum));
+				
+				Tinkers.PushArray(tinker);
+			}
+			else
+			{
+				Tinkers.SetArray(found, tinker);
+			}
+
+			Building_GiveRewardsUse(client, owner, 25, true, 0.6, true);
+			Store_ApplyAttribs(client);
+			Store_GiveAll(client, GetClientHealth(client));	
+
+			switch(tinker.Rarity)
+			{
+				case -1:
+				{
+					ClientCommand(client, "playgamesound ui/quest_decode.wav");
+				}
+				case 0:
+				{
+					ClientCommand(client, "playgamesound ui/quest_status_tick_novice.wav");
+				}
+				case 1:
+				{
+					ClientCommand(client, "playgamesound ui/quest_status_tick_advanced.wav");
+				}
+				case 2:
+				{
+					ClientCommand(client, "playgamesound ui/quest_status_tick_expert.wav");
+				}
+			}
+
+			float cooldown = Cooldowns[SmithLevel[owner]];
+			if(client != owner && Store_HasWeaponKit(client))
+				cooldown *= 0.5;
+			if(IsValidEntity(anvil))
+				ApplyBuildingCollectCooldown(anvil, client, cooldown);
+
+			if(!Rogue_Mode() && owner != client)
+			{
+				switch(tinker.Rarity)
+				{
+					case 0:
+					{
+						ClientCommand(owner, "playgamesound ui/quest_status_tick_novice_friend.wav");
+					}
+					case 1:
+					{
+						ClientCommand(owner, "playgamesound ui/quest_status_tick_advanced_friend.wav");
+					}
+					default:
+					{
+						ClientCommand(owner, "playgamesound ui/quest_status_tick_expert_friend.wav");
+					}
+				}
+			}
+		}
+		case MenuAction_Cancel:
+		{
+			ResetStoreMenuLogic(client);
+		}
+	}
+	return 0;
+}
+
 void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int owner, bool reset)
 {
 	if(owner == -1 || SmithLevel[owner] < 0)
@@ -977,8 +1741,16 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 			}
 		}
 		
-		CPrintToChat(client, "{yellow}%s (Tier %d)", tinker.Name, tinker.Rarity + 1);
-
+		SetGlobalTransTarget(client);
+		char buffer[128];
+		FormatEx(buffer, sizeof(buffer), "%s", tinker.Name);
+		if(TranslationPhraseExists(buffer))
+			CPrintToChat(client, "{yellow}%t (Tier %d)", buffer, tinker.Rarity + 1);
+		else
+		{
+			CPrintToChat(client, "{yellow}%s (Tier %d)", buffer, tinker.Rarity + 1);
+			CPrintToChat(client, "{crimson}[Dev Warning] Translation not found");
+		}
 		for(int i; i < sizeof(tinker.Attrib); i++)
 		{
 			if(!tinker.Attrib[i])
@@ -1069,7 +1841,8 @@ void Blacksmith_PrintAttribValue(int client, int attrib, float value, float luck
 	}
 	bool inverse = AttribIsInverse(attrib);
 
-	char buffer[64];
+	char buffer[128];
+	char TranslationBuffer[128];
 	if(addition)
 	{
 		FormatEx(buffer, sizeof(buffer), "%d ", RoundToCeil(value));
@@ -1114,174 +1887,18 @@ void Blacksmith_PrintAttribValue(int client, int attrib, float value, float luck
 			Format(buffer, sizeof(buffer), "{crimson}+%s", buffer);
 		}
 	}
-
-	switch(attrib)
-	{
-		case 1:
-			Format(buffer, sizeof(buffer), "%s 물리 피해량", buffer);
-		
-		case 2:
-			Format(buffer, sizeof(buffer), "%s 기본 피해량", buffer);
-		
-		case 3, 4:
-		{
-			if(CustomMode==1)
-				Format(buffer, sizeof(buffer), "%s 휩쓸기 최대 적중수", buffer);
-			else
-				Format(buffer, sizeof(buffer), "%s 장탄수", buffer);
-		}
-		
-		case 5, 6:
-			Format(buffer, sizeof(buffer), "%s 공격 속도", buffer);
-		
-		case 8:
-			Format(buffer, sizeof(buffer), "%s 치유 속도", buffer);
-		
-		case 10, 9:
-			Format(buffer, sizeof(buffer), "%s 우버차지 충전 속도", buffer);
-		
-		case 16:
-			Format(buffer, sizeof(buffer), "%s 적중시 회복", buffer);
-		
-		case 26:
-			Format(buffer, sizeof(buffer), "%s 최대 체력", buffer);
-			
-		case 41:
-		{
-			if(CustomMode==1)
-				Format(buffer, sizeof(buffer), "%s 휩쓸기 충전속도", buffer);
-			else
-				Format(buffer, sizeof(buffer), "%s 충전 속도", buffer);
-		}
-		
-		case 45:
-			Format(buffer, sizeof(buffer), "%s 발사되는 탄환 수", buffer);
-		
-		case 54, 107:
-			Format(buffer, sizeof(buffer), "%s 이동 속도", buffer);
-		
-		case 57:
-			Format(buffer, sizeof(buffer), "%s 초당 체력 재생", buffer);
-		
-		case 95:
-			Format(buffer, sizeof(buffer), "%s 수리 효율", buffer);
-		
-		case 96, 97:
-			Format(buffer, sizeof(buffer), "%s 재장전 속도", buffer);
-		
-		case 99, 100:
-		{
-			if(CustomMode==1)
-				Format(buffer, sizeof(buffer), "%s 휩쓸기 사거리", buffer);
-			else
-				Format(buffer, sizeof(buffer), "% 폭발 반경", buffer);
-		}
-		
-		case 101, 102:
-			Format(buffer, sizeof(buffer), "%s 투사체 날아가는 거리", buffer);
-		
-		case 103, 104:
-			Format(buffer, sizeof(buffer), "%s 투사체 속도", buffer);
-
-		case 106:
-			Format(buffer, sizeof(buffer), "%s 탄환 집탄도", buffer);
-		
-		case 149:
-			Format(buffer, sizeof(buffer), "%s 출혈 지속시간", buffer);
-		
-		case 205:
-			Format(buffer, sizeof(buffer), "%s 원거리 저항력", buffer);
-		
-		case 206:
-			Format(buffer, sizeof(buffer), "%s 근접 저항력", buffer);
-		
-		case 252:
-			Format(buffer, sizeof(buffer), "%s 넉백 저항력", buffer);
-		
-		case 287:
-			Format(buffer, sizeof(buffer), "%s 센트리 피해량", buffer);
-		
-		case 319:
-			Format(buffer, sizeof(buffer), "%s 버프 지속 시간", buffer);
-		
-		case 326:
-			Format(buffer, sizeof(buffer), "%s 점프 높이", buffer);
-		
-		case 343:
-			Format(buffer, sizeof(buffer), "%s 센트리 공격 속도", buffer);
-			
-		case 397:
-		{
-			if(CustomMode==1)
-				Format(buffer, sizeof(buffer), "%s초 동안 적이 불에 탐", buffer);
-		}
-		
-		case 410:
-		{
-			if(CustomMode==1)
-				Format(buffer, sizeof(buffer), "%s 점프 치명타 피해량", buffer);
-			else
-				Format(buffer, sizeof(buffer), "%s 기본 피해량", buffer);
-		}
-		
-		case 411:
-		{
-			if(CustomMode==1)
-				Format(buffer, sizeof(buffer), "%s초 동안 적이 침묵 디버프가 적용됨.", buffer);
-		}
-		
-		case 412:
-			Format(buffer, sizeof(buffer), "%s 모든 피해 저항력", buffer);
-			
-		case 425:
-		{
-			if(CustomMode==1)
-				Format(buffer, sizeof(buffer), "%s 휩쓸기 피해량", buffer);
-		}
-
-		case 733:
-			Format(buffer, sizeof(buffer), "%s 마나 소모량", buffer);
-
-		case 4001:
-			Format(buffer, sizeof(buffer), "%s 근접 무기 사거리", buffer);
-
-		case 4002:
-			Format(buffer, sizeof(buffer), "%s 메디건 추가 과치료율", buffer);
-
-		case Attrib_TerrianRes:
-			Format(buffer, sizeof(buffer), "%s 장판 피해 저항력", buffer);
-
-		case Attrib_ElementalDef:
-			Format(buffer, sizeof(buffer), "%s 원소 피해 저항력", buffer);
-
-		case Attrib_SlowImmune:
-			Format(buffer, sizeof(buffer), "%s 둔화 저항력", buffer);
-
-		case Attrib_ObjTerrianAbsorb:
-			Format(buffer, sizeof(buffer), "%s 구조물의 장판 흡수 확률", buffer);
-
-		case Attrib_SetArchetype:
-			Format(buffer, sizeof(buffer), "%s 무기 유형", buffer);
-		
-		case 4019:
-			Format(buffer, sizeof(buffer), "%s 최대 마나", buffer);
-			
-		case Attrib_ExplosiveHeadshot:
-			Format(buffer, sizeof(buffer), "%s 폭발성 헤드샷 피해량", buffer);
-			
-		case Attrib_DamageBonusFullCharge:
-			Format(buffer, sizeof(buffer), "%s 완전 충전 시 피해량", buffer);
-			
-		case 390:
-			Format(buffer, sizeof(buffer), "%s 헤드샷 피해량", buffer);
-	}
+	SetGlobalTransTarget(client);
+	FormatEx(TranslationBuffer, sizeof(TranslationBuffer), "%s", Query_GetTinkerAttrib(attrib, CustomMode));
+	if(TranslationPhraseExists(TranslationBuffer))
+		Format(TranslationBuffer, sizeof(TranslationBuffer), "%t", TranslationBuffer);
+	Format(buffer, sizeof(buffer), "%s %s", buffer, TranslationBuffer);
 	
 	CPrintToChat(client, "%s {yellow}(%d％)", buffer, RoundToCeil(luck * 100.0));
 }
 
 static void TinkerMeleeGlassy(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "유리 대포");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SharedGlassy");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 205;
 	tinker.Attrib[2] = 206;
@@ -1315,7 +1932,7 @@ static void TinkerMeleeGlassy(int rarity, TinkerEnum tinker)
 
 static void TinkerMeleeRapidSwing(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "성급함");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MeleeRapidSwing");
 	tinker.Attrib[0] = 2; //damage
 	tinker.Attrib[1] = 6; //attackspeed
 	//less damage
@@ -1346,7 +1963,7 @@ static void TinkerMeleeRapidSwing(int rarity, TinkerEnum tinker)
 
 static void TinkerMeleeHeavySwing(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "묵직한 강타");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MeleeHeavySwing");
 	tinker.Attrib[0] = 2; //damage
 	tinker.Attrib[1] = 6; //attackspeed
 	//less damage
@@ -1377,7 +1994,7 @@ static void TinkerMeleeHeavySwing(int rarity, TinkerEnum tinker)
 
 static void TinkerMeleeLongSwing(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "늘~어나는 팔");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MeleeLongSwing");
 	tinker.Attrib[0] = 2; //damage
 	tinker.Attrib[1] = 6; //attackspeed
 	tinker.Attrib[2] = 4001; //ExtraMeleeRange
@@ -1411,7 +2028,7 @@ static void TinkerMeleeLongSwing(int rarity, TinkerEnum tinker)
 
 static void TinkerHastyMage(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "성급한 마법사");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_HasteMage");
 	tinker.Attrib[0] = 6;
 	tinker.Attrib[1] = 733;
 	float AttackspeedLuck = (0.1 * (tinker.Luck[1]));
@@ -1438,7 +2055,7 @@ static void TinkerHastyMage(int rarity, TinkerEnum tinker)
 }
 static void TinkerHeavyMage(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "강격의 마법사");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_HeavyMage");
 	tinker.Attrib[0] = 6;
 	tinker.Attrib[1] = 733;
 	tinker.Attrib[2] = 410;
@@ -1471,7 +2088,7 @@ static void TinkerHeavyMage(int rarity, TinkerEnum tinker)
 
 static void TinkerConcentrationMage(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "집중형 마법");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_ConcentratedMagic");
 	tinker.Attrib[0] = 103;
 	tinker.Attrib[1] = 410;
 	float ProjectileSpeed = (0.1 * (tinker.Luck[0]));
@@ -1500,7 +2117,7 @@ static void TinkerConcentrationMage(int rarity, TinkerEnum tinker)
 
 static void TinkerTankMage(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "튼튼한 마법사");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_TankMage");
 	tinker.Attrib[0] = 733;
 	tinker.Attrib[1] = 410;
 	tinker.Attrib[2] = 205;
@@ -1539,7 +2156,7 @@ static void TinkerTankMage(int rarity, TinkerEnum tinker)
 
 static void TinkerMedigun_FastHeal(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "치유 과충전");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_FastHeal");
 	tinker.Attrib[0] = 8; //more heal rate
 	tinker.Attrib[1] = 9; //Less uber rate
 	tinker.Attrib[2] = 4002; //Less Overheal
@@ -1571,7 +2188,7 @@ static void TinkerMedigun_FastHeal(int rarity, TinkerEnum tinker)
 }
 static void TinkerMedigun_Overhealer(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "오메가 과치료");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_Overhealer");
 	tinker.Attrib[0] = 8;
 	tinker.Attrib[1] = 4002; 
 	float LessHealRateLuck = (0.1 * (1.0 + (-1.0*(tinker.Luck[0]))));
@@ -1600,7 +2217,7 @@ static void TinkerMedigun_Overhealer(int rarity, TinkerEnum tinker)
 
 static void TinkerMedigun_Uberer(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "순수한 우버맨");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_Uberer");
 	tinker.Attrib[0] = 8;
 	tinker.Attrib[1] = 9;
 	float LessHealRate = (0.1 * (1.0 + (-1.0*(tinker.Luck[0]))));
@@ -1629,7 +2246,7 @@ static void TinkerMedigun_Uberer(int rarity, TinkerEnum tinker)
 
 static void TinkerMedicWeapon_GlassyMedic(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "유리 대포");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SharedGlassy");
 	tinker.Attrib[0] = 8; //more heal rate
 	tinker.Attrib[1] = 6; 
 	tinker.Attrib[2] = 205;
@@ -1668,7 +2285,7 @@ static void TinkerMedicWeapon_GlassyMedic(int rarity, TinkerEnum tinker)
 
 static void TinkerMedicWeapon_BurstHealMedic(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "폭발 치유");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_BurstHeal");
 	tinker.Attrib[0] = 8; //more heal rate
 	tinker.Attrib[1] = 6; 
 	tinker.Attrib[2] = 97; 
@@ -1702,7 +2319,7 @@ static void TinkerMedicWeapon_BurstHealMedic(int rarity, TinkerEnum tinker)
 
 static void TinkerBuilderLongSwing(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "구조물 개조자");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_BuilderLongSwing");
 	tinker.Attrib[0] = 6; //attackspeed
 	tinker.Attrib[1] = 264; //ExtraMeleeRange
 	tinker.Attrib[2] = 4001; //ExtraMeleeRange
@@ -1738,7 +2355,7 @@ static void TinkerBuilderLongSwing(int rarity, TinkerEnum tinker)
 
 static void TinkerBuilderRepairMaster(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "수리의 달인");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_BuilderRepairMaster");
 	tinker.Attrib[0] = 95; //RepairRate
 	tinker.Attrib[1] = 107; //movementspeed
 	
@@ -1769,7 +2386,7 @@ static void TinkerBuilderRepairMaster(int rarity, TinkerEnum tinker)
 
 static void TinkerRangedSlowHeavyProj(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "느리고 강한 에너지");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SlowHeavyProj");
 	tinker.Attrib[0] = 2; //damage
 	tinker.Attrib[1] = 103; //ProjectileSpeed
 	tinker.Attrib[2] = 6; //attackspeed
@@ -1803,7 +2420,7 @@ static void TinkerRangedSlowHeavyProj(int rarity, TinkerEnum tinker)
 
 static void TinkerRangedFastProj(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "급가속 탄환");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_FastProj");
 	tinker.Attrib[0] = 2; //damage
 	tinker.Attrib[1] = 103; //ProjectileSpeed
 	tinker.Attrib[2] = 6; //attackspeed
@@ -1838,7 +2455,7 @@ static void TinkerRangedFastProj(int rarity, TinkerEnum tinker)
 
 static void TinkerIntensiveClip(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "묵직한 탄환");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_IntensiveClip");
 	tinker.Attrib[0] = 6; //attackspeed
 	tinker.Attrib[1] = 4; //Clipsize
 	tinker.Attrib[2] = 97; //ReloadSpeed
@@ -1872,7 +2489,7 @@ static void TinkerIntensiveClip(int rarity, TinkerEnum tinker)
 
 static void TinkerConcentratedClip(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "집중형 탄환");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_ConcentratedClip");
 	tinker.Attrib[0] = 2; //Damage
 	tinker.Attrib[1] = 97; //ReloadSpeed
 	
@@ -1902,7 +2519,7 @@ static void TinkerConcentratedClip(int rarity, TinkerEnum tinker)
 
 static void TinkerHeavyTrigger(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "중량 방아쇠");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_HeavyTrigger");
 	tinker.Attrib[0] = 2; //Damage
 	tinker.Attrib[1] = 6; //attackspeed
 	tinker.Attrib[2] = 97; //Reload speed
@@ -1936,7 +2553,7 @@ static void TinkerHeavyTrigger(int rarity, TinkerEnum tinker)
 
 static void TinkerSprayAndPray(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "난사");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SprayAndPray");
 	tinker.Attrib[0] = 45; //BulletsPetShot
 	tinker.Attrib[1] = 2; //damage
 	
@@ -1965,7 +2582,7 @@ static void TinkerSprayAndPray(int rarity, TinkerEnum tinker)
 
 static void TinkerSmallerSmarterBullets(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "소형화 스마트 탄환");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SmallerSmarterBullets");
 	tinker.Attrib[0] = 2; //Less Damage
 	tinker.Attrib[1] = 6; //Faster Shooting
 	tinker.Attrib[2] = 97; //faster Reload
@@ -2012,15 +2629,18 @@ public void Anvil_Menu(int client)
 		
 		menu.SetTitle("%t", "Anvil Menu Main");
 
-		FormatEx(buffer, sizeof(buffer), "%t", "Re-Roll Weapon Stats");
-		menu.AddItem("-1", buffer);
+		/*FormatEx(buffer, sizeof(buffer), "%t", "Re-Roll Weapon Stats");
+		menu.AddItem("-1", buffer);*/
+		
+		FormatEx(buffer, sizeof(buffer), "%t", "Custom Anvil Menu Main");
+		menu.AddItem("-4", buffer);
 
 		FormatEx(buffer, sizeof(buffer), "%t", "Remove Weapon Stats");
 		menu.AddItem("-2", buffer);
 
 		FormatEx(buffer, sizeof(buffer), "%t", "Display Current Stats");
 		menu.AddItem("-3", buffer);
-									
+		
 		menu.ExitButton = true;
 		menu.Display(client, MENU_TIME_FOREVER);
 	}
@@ -2076,6 +2696,10 @@ public int Anvil_MenuH(Menu menu, MenuAction action, int client, int choice)
 				{
 					Blacksmith_ExtraDesc(client, StoreWeapon[weapon]);
 				}
+				case -4:
+				{
+					Blacksmith_BuildingUsed_Internal_Custom(weapon, anvil, client, owner);
+				}
 			}
 		}
 		case MenuAction_Cancel:
@@ -2088,7 +2712,7 @@ public int Anvil_MenuH(Menu menu, MenuAction action, int client, int choice)
 
 static void Tinker_MS_Sharpness(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "날카로움");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MS_Sharpness");
 	tinker.Attrib[0] = 2;
 	float DamageLuck = (0.1 * (tinker.Luck[0]));
 	
@@ -2104,7 +2728,7 @@ static void Tinker_MS_Sharpness(int rarity, TinkerEnum tinker)
 
 static void Tinker_MS_Smite(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "강타");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MS_Smite");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 410;
 	tinker.Attrib[2] = 41;
@@ -2126,7 +2750,7 @@ static void Tinker_MS_Smite(int rarity, TinkerEnum tinker)
 
 static void Tinker_MS_SweepingEdge(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "휩쓸기");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MS_SweepingEdge");
 	tinker.Attrib[0] = 99;
 	tinker.Attrib[1] = 4;
 	tinker.Attrib[2] = 425;
@@ -2150,7 +2774,7 @@ static void Tinker_MS_SweepingEdge(int rarity, TinkerEnum tinker)
 
 static void Tinker_MS_QuickCharge(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "빠른 충전");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MS_QuickCharge");
 	tinker.Attrib[0] = 41;
 	tinker.Attrib[1] = 6;
 	tinker.Attrib[2] = 425;
@@ -2172,7 +2796,7 @@ static void Tinker_MS_QuickCharge(int rarity, TinkerEnum tinker)
 
 static void Tinker_MS_BaneofArthropods(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "살충");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MS_BaneofArthropods");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 411;
 	tinker.Addition[1]=true;
@@ -2192,7 +2816,7 @@ static void Tinker_MS_BaneofArthropods(int rarity, TinkerEnum tinker)
 
 static void Tinker_MS_FireAspect(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "발화");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MS_FireAspect");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 397;
 	tinker.Addition[1]=true;
@@ -2212,7 +2836,7 @@ static void Tinker_MS_FireAspect(int rarity, TinkerEnum tinker)
 
 static void Tinker_MS_CurseofGlassy(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "유리 저주");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MS_CurseOfGlassy");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 425;
 	tinker.Attrib[2] = 205;
@@ -2235,7 +2859,7 @@ static void Tinker_MS_CurseofGlassy(int rarity, TinkerEnum tinker)
 
 static void Tinker_SR_ExplosiveHeadshot(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "폭발성 헤드샷");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SR_ExplosiveHeadshot");
 	tinker.Attrib[0] = Attrib_ExplosiveHeadshot;
 	tinker.Attrib[1] = 2;
 	tinker.Attrib[2] = 6;
@@ -2252,7 +2876,7 @@ static void Tinker_SR_ExplosiveHeadshot(int rarity, TinkerEnum tinker)
 }
 static void Tinker_SR_KillerFocus(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "살인적인 집중");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SR_KillerFocus");
 	tinker.Attrib[0] = 41;
 	tinker.Attrib[1] = 2;
 	float ChargeRate = (0.2 * (tinker.Luck[0]));
@@ -2268,7 +2892,7 @@ static void Tinker_SR_KillerFocus(int rarity, TinkerEnum tinker)
 
 static void Tinker_SR_SuperCoolingChamber(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "초냉각 약실");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SR_SuperCoolingChamber");
 	tinker.Attrib[0] = Attrib_DamageBonusFullCharge;
 	tinker.Attrib[1] = 6;
 	tinker.Attrib[2] = 41;
@@ -2286,7 +2910,7 @@ static void Tinker_SR_SuperCoolingChamber(int rarity, TinkerEnum tinker)
 
 static void Tinker_SR_DepletedUranium(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "U-238");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SR_DepletedUranium");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 6;
 	tinker.Attrib[2] = 41;
@@ -2303,7 +2927,7 @@ static void Tinker_SR_DepletedUranium(int rarity, TinkerEnum tinker)
 
 static void Tinker_SR_HighSpeedFeedMechanism(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "고속 급탄 메커니즘");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SR_HighSpeedFeedMechanism");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 6;
 	float DamageLuck = (0.325 * (1.0 + (-1.0*(tinker.Luck[0]))));
@@ -2319,7 +2943,7 @@ static void Tinker_SR_HighSpeedFeedMechanism(int rarity, TinkerEnum tinker)
 
 static void Tinker_SR_HollowPointBullets(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "할로우 포인트 탄환");
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SR_HollowPointBullets");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 390;
 	float DamageLuck = (0.25 * (tinker.Luck[0]));
@@ -2478,4 +3102,92 @@ public bool Blacksmith_BulletTrace(int entity, int contentsMask, any iExclude)
 	}
 	
 	return !(entity == iExclude);
+}
+
+static char[] Query_GetTinkerAttrib(int Attrib, int CustomMode)
+{
+	char buffer[256];
+	switch(Attrib)
+	{
+		case 1:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_PhysicalDamage");
+		case 2:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_BaseDamage");
+		case 3, 4:
+		{
+			if(CustomMode==1)
+				FormatEx(buffer, sizeof(buffer), "TinkerAttrib_SweepingEdge_MaxHit");
+			else
+				FormatEx(buffer, sizeof(buffer), "TinkerAttrib_ClipSize");
+		}
+		case 5, 6:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_FireRate");
+		case 8:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_HealingRate");
+		case 10, 9:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_UberChargeRate");
+		case 16:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_HealthOnHit");
+		case 26:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_MaxHealth");
+		case 41:
+		{
+			if(CustomMode==1)
+				FormatEx(buffer, sizeof(buffer), "TinkerAttrib_SweepingEdge_ChargeRate");
+			else
+				FormatEx(buffer, sizeof(buffer), "TinkerAttrib_ChargeRate");
+		}
+		case 45:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_BulletsPerShot");
+		case 54, 107:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_MovementSpeed");
+		case 57:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_HealthRegen");
+		case 95:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_RepairRate");
+		case 96, 97:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_ReloadSpeed");
+		case 99, 100:
+		{
+			if(CustomMode==1)
+				FormatEx(buffer, sizeof(buffer), "TinkerAttrib_SweepingEdgeRange");
+			else
+				FormatEx(buffer, sizeof(buffer), "TinkerAttrib_BlastRadius");
+		}
+		case 101, 102:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_ProjectileSpeed");
+		case 103, 104:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_ProjectileRange");
+		case 106:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_BulletSpread");
+		case 149:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_BleedDuration");
+		case 205:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_RangedResistance");
+		case 206:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_MeleeResistance");
+		case 252:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_KnockbackResistance");
+		case 287:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_SentryDamage");
+		case 319:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_BuffDuration");
+		case 326:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_JumpHeight");
+		case 343:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_SentryFiringSpeed");
+		case 397:
+		{
+			if(CustomMode==1)
+				FormatEx(buffer, sizeof(buffer), "TinkerAttrib_FireAspect");
+		}
+		case 410:
+		{
+			if(CustomMode==1)
+				FormatEx(buffer, sizeof(buffer), "TinkerAttrib_JumpCrit");
+			else
+				FormatEx(buffer, sizeof(buffer), "TinkerAttrib_BaseDamage");
+		}
+		case 411:
+		{
+			if(CustomMode==1)
+				FormatEx(buffer, sizeof(buffer), "TinkerAttrib_BaneofArthropods");
+		}
+		case 412:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_Resistance");
+		case 425:
+		{
+			if(CustomMode==1)
+				FormatEx(buffer, sizeof(buffer), "TinkerAttrib_SweepingEdgeDamage");
+		}
+		case 733:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_MagicCost");
+		case 4001:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_ExtraMeleeRange");
+		case 4002:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_Overheal");
+		case Attrib_TerrianRes:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_TerrianResistance");
+		case Attrib_ElementalDef:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_ElementalResistance");
+		case Attrib_SlowImmune:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_SlowResistance");
+		case Attrib_ObjTerrianAbsorb:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_BuildingTerrianAbsorb");
+		case Attrib_SetArchetype:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_WeaponArchetype");
+		case 4019:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_MaxMana");
+		case Attrib_ExplosiveHeadshot:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_ExplosiveHeadshot");
+		case Attrib_DamageBonusFullCharge:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_FullChargeDamage");
+		case 390:FormatEx(buffer, sizeof(buffer), "TinkerAttrib_HeadshotDamage");
+	}
+	return buffer;
 }
