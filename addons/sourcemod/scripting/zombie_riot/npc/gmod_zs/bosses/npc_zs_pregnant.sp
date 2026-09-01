@@ -33,7 +33,7 @@ static const char g_MeleeAttackSounds[][] =
 	"npc/zombie_poison/pz_warn2.wav"
 };
 
-void Pregnant_Precache()
+public void Pregnant_Precache()
 {
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Pregnant");
@@ -42,15 +42,26 @@ void Pregnant_Precache()
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_NORMAL|MVM_CLASS_FLAG_MINIBOSS;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 	
 	Zombie_Shared_PheromonePrecache();
 }
 
-static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
+static void ClotPrecache()
 {
-	return Pregnant(vecPos, vecAng, team);
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheModel("models/zombie/poison.mdl");
+}
+
+static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
+{
+	return Pregnant(vecPos, vecAng, team, data);
 }
 
 methodmap Pregnant < CClotBody
@@ -59,7 +70,6 @@ methodmap Pregnant < CClotBody
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, 80);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 	}
@@ -80,11 +90,21 @@ methodmap Pregnant < CClotBody
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME, _);	
 	}
 	
-	public Pregnant(float vecPos[3], float vecAng[3], int ally)
+	property float m_flHealingDelay
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][0]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][0] = TempValueForProperty; }
+	}
+	property float m_flSelfHealing
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][1]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][1] = TempValueForProperty; }
+	}
+	
+	public Pregnant(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
 		Pregnant npc = view_as<Pregnant>(CClotBody(vecPos, vecAng, "models/zombie/poison.mdl", "1.75", "35000", ally, false, true));
-		// 35000 x 1.0
-		
+
 		SetVariantInt(31);
 		AcceptEntityInput(npc.index, "SetBodyGroup");
 		KillFeed_SetKillIcon(npc.index, "warrior_spirit");
@@ -112,8 +132,22 @@ methodmap Pregnant < CClotBody
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_flNextMeleeAttack = 0.0;
 		npc.m_flAttackHappens = 0.0;
+		npc.m_flHealingDelay = 0.0;
+		npc.m_flSelfHealing = 500.0;
 		npc.m_iAttacksTillReload = 0;
 		npc.m_iAttacksTillMegahit = 0;
+		
+		static char countext[2][256];
+		int count = ExplodeString(data, ";", countext, sizeof(countext), sizeof(countext[]));
+		for(int i = 0; i < count; i++)
+		{
+			if(i>=count)break;
+			else if(StrContains(countext[i], "selfhealing") != -1)
+			{
+				ReplaceString(countext[i], sizeof(countext[]), "selfhealing", "");
+				npc.m_flSelfHealing = StringToFloat(countext[i]);
+			}
+		}
 		
 		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);	
 		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);	
@@ -124,12 +158,11 @@ methodmap Pregnant < CClotBody
 				ShowGameText(client_check, "voice_player", 1, "%t", "Pregnant Spawned");
 			}
 		}
-
 		return npc;
 	}
 }
 
-public void Pregnant_ClotThink(int iNPC)
+static void Pregnant_ClotThink(int iNPC)
 {
 	Pregnant npc = view_as<Pregnant>(iNPC);
 
@@ -142,29 +175,52 @@ public void Pregnant_ClotThink(int iNPC)
 
 	if(npc.m_blPlayHurtAnimation)
 	{
-		//npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
 		npc.PlayHurtSound();
 		npc.m_blPlayHurtAnimation = false;
 	}
 	
 	if(npc.m_flNextThinkTime > gameTime)
 		return;
-	
 	npc.m_flNextThinkTime = gameTime + 0.1;
 
-	if(npc.m_iTarget && !IsValidEnemy(npc.index, npc.m_iTarget))
-		npc.m_iTarget = 0;
-	
-	if(!npc.m_iTarget || npc.m_flGetClosestTargetTime < gameTime)
+	if(npc.m_flGetClosestTargetTime < gameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = gameTime + 1.0;
+		npc.m_flGetClosestTargetTime = gameTime + GetRandomRetargetTime();
+	}
+	npc.m_flGetClosestTargetTime = gameTime + 1.0;
+	
+	float VecSelfNpc[3], vecTarget[3];
+	int GetPoisonCrab;
+	WorldSpaceCenter(npc.index, VecSelfNpc);
+	
+	if(npc.m_flHealingDelay < gameTime)
+	{
+		for(int i; i < i_MaxcountNpcTotal; i++)
+		{
+			int entity = EntRefToEntIndex(i_ObjectsNpcsTotal[i]);
+			if(IsValidEntity(entity))
+			{
+				char npc_classname[60];
+				NPC_GetPluginById(i_NpcInternalId[entity], npc_classname, sizeof(npc_classname));
+				if(entity != INVALID_ENT_REFERENCE && StrEqual(npc_classname, "npc_zs_poisonheadcrab") && IsEntityAlive(entity))
+				{
+					WorldSpaceCenter(entity, vecTarget);
+					if(GetVectorDistance(vecTarget, VecSelfNpc, true) < (300.0 * 300.0))
+						GetPoisonCrab++;
+				}
+			}
+		}
+		if(GetPoisonCrab)
+		{
+			HealEntityGlobal(npc.index, npc.index, npc.m_flSelfHealing*float(GetPoisonCrab), 1.0);
+			npc.m_flHealingDelay = gameTime + 1.0;
+		}
 	}
 	
-	if(npc.m_iTarget > 0)
+	if(IsValidEnemy(npc.index, npc.m_iTarget))
 	{
-		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget );
-		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
+		WorldSpaceCenter(npc.m_iTarget, vecTarget);
 		float distance = GetVectorDistance(vecTarget, VecSelfNpc, true);	
 		
 		if(distance < npc.GetLeadRadius())
@@ -177,66 +233,84 @@ public void Pregnant_ClotThink(int iNPC)
 			npc.SetGoalEntity(npc.m_iTarget);
 		}
 
-		npc.StartPathing();
-		
 		if(npc.m_flAttackHappens)
 		{
 			if(npc.m_flAttackHappens < gameTime)
 			{
 				npc.m_flAttackHappens = 0.0;
-				
 				Handle swingTrace;
-				npc.FaceTowards(vecTarget, 15000.0);
-				if(npc.DoSwingTrace(swingTrace, npc.m_iTarget, _, _, _, _))
+				float VecEnemy[3]; WorldSpaceCenter(npc.m_iTarget, VecEnemy);
+				npc.FaceTowards(VecEnemy, 15000.0);
+				if(npc.DoSwingTrace(swingTrace, npc.m_iTarget, _, _, _, 1))
 				{
 					int target = TR_GetEntityIndex(swingTrace);
-					if(target > 0)
+					float vecHit[3];
+					TR_GetEndPosition(vecHit, swingTrace);
+					if(IsValidEnemy(npc.index, target))
 					{
+						float flDamage = 1000.0;
+						if(ShouldNpcDealBonusDamage(target))
+							flDamage *= 2.5;
+						else
+							Custom_Knockback(npc.index, target, 750.0);
+						SDKHooks_TakeDamage(target, npc.index, npc.index, flDamage, DMG_CLUB, -1, _, vecHit);
+						Elemental_AddPheromoneDamage(target, npc.index, 200);
 						npc.PlayMeleeHitSound();
-						SDKHooks_TakeDamage(target, npc.index, npc.index, ShouldNpcDealBonusDamage(target) ? 2500.0 : 1000.0, DMG_CLUB);
-						Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 200 : 100);
-						// 800 x 0.5
-
-						Custom_Knockback(npc.index, target, 750.0);
+					}
+					npc.m_iAttacksTillMegahit++;
+					if(npc.m_iAttacksTillMegahit > 2)
+					{
+						Pregnant_SpawnFractal(npc, ReturnEntityMaxHealth(npc.index), 4);
+						npc.m_iAttacksTillMegahit = 0;
 					}
 				}
-
 				delete swingTrace;
-
-				if(++npc.m_iAttacksTillMegahit > 2)
-				{
-					int health = ReturnEntityMaxHealth(npc.index) * 1 / 5;
-					Pregnant_SpawnFractal(npc, health, 4);
-					npc.m_iAttacksTillMegahit = 0;
-				}
 			}
 		}
 
-		if(distance < 22500.0 && npc.m_flNextMeleeAttack < gameTime)
+		if(gameTime > npc.m_flNextMeleeAttack)
 		{
-			int target = Can_I_See_Enemy(npc.index, npc.m_iTarget);
-			if(IsValidEnemy(npc.index, target))
+			if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED*1.1))
 			{
-				npc.m_iTarget = target;
-
-				npc.AddGesture("ACT_MELEE_ATTACK1");
-
-				npc.PlayMeleeSound();
-				
-				npc.m_flAttackHappens = gameTime + 0.75;
-				npc.m_flNextMeleeAttack = gameTime + 2.75;
+				int Enemy_I_See = Can_I_See_Enemy(npc.index, npc.m_iTarget);
+				if(IsValidEnemy(npc.index, Enemy_I_See))
+				{
+					npc.m_iTarget = Enemy_I_See;
+					npc.PlayMeleeSound();
+					npc.AddGesture("ACT_MELEE_ATTACK1");
+					
+					npc.m_flAttackHappens = gameTime + 0.75;
+					npc.m_flDoingAnimation = gameTime + 0.75;
+					npc.m_flNextMeleeAttack = gameTime + 2.75;
+				}
 			}
+		}
+		if(npc.m_iChanged_WalkCycle != 1)
+		{
+			npc.m_iChanged_WalkCycle = 1;
+			npc.m_bPathing = true;
+			npc.m_bisWalking = true;
+			npc.m_bAllowBackWalking = false;
+			npc.m_flSpeed = 320.0;
+			npc.StartPathing();
 		}
 	}
 	else
 	{
-		npc.StopPathing();
+		if(npc.m_iChanged_WalkCycle != 2)
+		{
+			npc.m_iChanged_WalkCycle = 2;
+			npc.m_bPathing = false;
+			npc.m_bisWalking = false;
+			npc.m_bAllowBackWalking = false;
+			npc.m_flSpeed = 0.0;
+			npc.StopPathing();
+		}
 	}
-
 	npc.PlayIdleSound();
 }
 
-void Pregnant_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static void Pregnant_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	Pregnant npc = view_as<Pregnant>(victim);
 	if(attacker > 0)
@@ -245,11 +319,10 @@ void Pregnant_OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 		{
 			npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 			npc.m_blPlayHurtAnimation = true;
-
-			if(++npc.m_iAttacksTillReload > 9)
+			npc.m_iAttacksTillReload++;
+			if(npc.m_iAttacksTillReload > 9)
 			{
-				int health = ReturnEntityMaxHealth(npc.index) * 1 / 5;
-				Pregnant_SpawnFractal(npc, health, 4);
+				Pregnant_SpawnFractal(npc, ReturnEntityMaxHealth(npc.index), 4);
 				npc.m_iAttacksTillReload = 0;
 			}
 		}
@@ -281,7 +354,8 @@ void Pregnant_OnTakeDamage(int victim, int &attacker, int &inflictor, float &dam
 		fl_TotalArmor[npc.index] = TrueArmor;
 	}
 }
-public Action Pregnant_Revert_Poison_Zombie_Resistance(Handle timer, int ref)
+
+static Action Pregnant_Revert_Poison_Zombie_Resistance(Handle timer, int ref)
 {
 	int zombie = EntRefToEntIndex(ref);
 	if(IsValidEntity(zombie))
@@ -292,7 +366,7 @@ public Action Pregnant_Revert_Poison_Zombie_Resistance(Handle timer, int ref)
 	return Plugin_Handled;
 }
 
-public Action Pregnant_Revert_Poison_Zombie_Resistance_Enable(Handle timer, int ref)
+static Action Pregnant_Revert_Poison_Zombie_Resistance_Enable(Handle timer, int ref)
 {
 	int zombie = EntRefToEntIndex(ref);
 	if(IsValidEntity(zombie))
@@ -302,7 +376,8 @@ public Action Pregnant_Revert_Poison_Zombie_Resistance_Enable(Handle timer, int 
 	}
 	return Plugin_Handled;
 }
-void Pregnant_NPCDeath(int entityy)
+
+static void Pregnant_NPCDeath(int entityy)
 {
 	Pregnant npc = view_as<Pregnant>(entityy);
 	SpawnMoney(npc.index, true);
@@ -313,21 +388,37 @@ void Pregnant_NPCDeath(int entityy)
 	for(int i; i < i_MaxcountNpcTotal; i++)
 	{
 		int entity = EntRefToEntIndexFast(i_ObjectsNpcsTotal[i]);
-		if(entity != INVALID_ENT_REFERENCE && i_NpcInternalId[entity] == ZSPoisonHeadcrab_ID() && IsEntityAlive(entity) && GetTeam(entity) == team)
+		if(entity != INVALID_ENT_REFERENCE && i_NpcInternalId[entity] == ZSPoisonHeadcrab_ID()
+		&& IsEntityAlive(entity) && GetTeam(entity) == team && b_FUCKYOU[entity])
 		{
 			RequestFrame(KillNpc, i_ObjectsNpcsTotal[i]);
 		}
 	}
+	if(IsValidEntity(npc.m_iWearable1))
+		RemoveEntity(npc.m_iWearable1);
+	if(IsValidEntity(npc.m_iWearable2))
+		RemoveEntity(npc.m_iWearable2);
+	if(IsValidEntity(npc.m_iWearable3))
+		RemoveEntity(npc.m_iWearable3);
+	if(IsValidEntity(npc.m_iWearable4))
+		RemoveEntity(npc.m_iWearable4);
+	if(IsValidEntity(npc.m_iWearable5))
+		RemoveEntity(npc.m_iWearable5);
+	if(IsValidEntity(npc.m_iWearable6))
+		RemoveEntity(npc.m_iWearable6);
+	if(IsValidEntity(npc.m_iWearable7))
+		RemoveEntity(npc.m_iWearable7);
 }
 
-void Pregnant_SpawnFractal(CClotBody npc, int health, int limit)
+static void Pregnant_SpawnFractal(Pregnant npc, int health, int limit)
 {
 	int team = GetTeam(npc.index);
 	int count;
 	for(int i; i < i_MaxcountNpcTotal; i++)
 	{
 		int entity = EntRefToEntIndexFast(i_ObjectsNpcsTotal[i]);
-		if(entity != INVALID_ENT_REFERENCE && i_NpcInternalId[entity] == ZSPoisonHeadcrab_ID() && IsEntityAlive(entity) && GetTeam(entity) == team)
+		if(entity != INVALID_ENT_REFERENCE && i_NpcInternalId[entity] == ZSPoisonHeadcrab_ID()
+		&& IsEntityAlive(entity) && GetTeam(entity) == team && b_FUCKYOU[entity])
 		{
 			if(++count == limit)
 				return;
@@ -342,7 +433,9 @@ void Pregnant_SpawnFractal(CClotBody npc, int health, int limit)
 	{
 		if(GetTeam(npc.index) != TFTeam_Red)
 			Zombies_Currently_Still_Ongoing++;
-		
+		if(health > RoundToCeil(float(health)*0.05))
+			SetEntProp(npc.index, Prop_Data, "m_iHealth", GetEntProp(npc.index, Prop_Data, "m_iHealth")-RoundToCeil(float(health)*0.05));
+		health *= (1 / 5);
 		SetEntProp(entity, Prop_Data, "m_iHealth", health);
 		SetEntProp(entity, Prop_Data, "m_iMaxHealth", health);
 
@@ -350,5 +443,6 @@ void Pregnant_SpawnFractal(CClotBody npc, int health, int limit)
 		fl_Extra_RangedArmor[entity] = fl_Extra_RangedArmor[npc.index];
 		fl_Extra_Speed[entity] = fl_Extra_Speed[npc.index];
 		fl_Extra_Damage[entity] = fl_Extra_Damage[npc.index];
+		b_FUCKYOU[entity]=true;
 	}
 }

@@ -24,7 +24,7 @@ static const char g_IdleAlertedSounds[][] =
 	"vo/taunts/heavy_taunts19.mp3"
 };
 
-void InfectedFatScout_Precache()
+public void InfectedFatScout_Precache()
 {
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Infected Fat Scout");
@@ -33,8 +33,17 @@ void InfectedFatScout_Precache()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheModel("models/player/heavy.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int ally, const char[] data)
@@ -48,7 +57,6 @@ methodmap InfectedFatScout < CClotBody
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 	}
@@ -136,11 +144,10 @@ static void InfectedFatScout_ClotThink(int iNPC)
 {
 	InfectedFatScout npc = view_as<InfectedFatScout>(iNPC);
 
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
-	{
+	float GameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > GameTime)
 		return;
-	}
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
+	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 
 	if(npc.m_blPlayHurtAnimation)
@@ -150,16 +157,14 @@ static void InfectedFatScout_ClotThink(int iNPC)
 		npc.PlayHurtSound();
 	}
 	
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
-	{
+	if(npc.m_flNextThinkTime > GameTime)
 		return;
-	}
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
+	npc.m_flNextThinkTime = GameTime + 0.1;
 
-	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	if(npc.m_flGetClosestTargetTime < GameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
+		npc.m_flGetClosestTargetTime = GameTime + GetRandomRetargetTime();
 	}
 	
 	if(IsValidEnemy(npc.index, npc.m_iTarget))
@@ -167,7 +172,7 @@ static void InfectedFatScout_ClotThink(int iNPC)
 		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget);
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-		switch(InfectedFatScoutSelfDefense(npc,GetGameTime(npc.index), npc.m_iTarget, flDistanceToTarget))
+		switch(InfectedFatScoutSelfDefense(npc,GameTime, npc.m_iTarget, flDistanceToTarget))
 		{
 			case 0:
 			{
@@ -214,6 +219,7 @@ static void InfectedFatScout_OnTakeDamage(int victim, int &attacker, int &inflic
 		npc.m_blPlayHurtAnimation = true;
 	}
 }
+
 static int InfectedFatScoutSelfDefense(InfectedFatScout npc, float gameTime, int target, float distance)
 {
 	if(gameTime > npc.m_flNextRangedAttack)
@@ -221,7 +227,6 @@ static int InfectedFatScoutSelfDefense(InfectedFatScout npc, float gameTime, int
 		if(distance < (GIANT_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 4.0))
 		{
 			int Enemy_I_See = Can_I_See_Enemy(npc.index, npc.m_iTarget);
-					
 			if(IsValidEnemy(npc.index, Enemy_I_See))
 			{
 				npc.AddGesture("ACT_MP_ATTACK_STAND_SECONDARY");
@@ -233,8 +238,7 @@ static int InfectedFatScoutSelfDefense(InfectedFatScout npc, float gameTime, int
 				{
 					if(!NpcStats_VestanCallToArms(npc.index))
 						npc.m_iAmmo--;
-					target = TR_GetEntityIndex(swingTrace);	
-					
+					target = TR_GetEntityIndex(swingTrace);
 					float vecHit[3];
 					TR_GetEndPosition(vecHit, swingTrace);
 					float origin[3], angles[3];
@@ -247,7 +251,6 @@ static int InfectedFatScoutSelfDefense(InfectedFatScout npc, float gameTime, int
 						float damageDealt = 40.0;
 						if(ShouldNpcDealBonusDamage(target))
 							damageDealt *= 8.0;
-
 						SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_BULLET, -1, _, vecHit);
 					}
 				}
@@ -255,16 +258,12 @@ static int InfectedFatScoutSelfDefense(InfectedFatScout npc, float gameTime, int
 			}
 			if(distance > (GIANT_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 5.0))
 			{
-				//target is too far, try to close in
 				return 0;
 			}
 			else if(distance < (GIANT_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 3.5))
 			{
 				if(Can_I_See_Enemy_Only(npc.index, target))
-				{
-					//target is too close, try to keep distance
 					return 1;
-				}
 			}
 			return 0;
 		}
@@ -272,16 +271,12 @@ static int InfectedFatScoutSelfDefense(InfectedFatScout npc, float gameTime, int
 		{
 			if(distance > (GIANT_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 5.0))
 			{
-				//target is too far, try to close in
 				return 0;
 			}
 			else if(distance < (GIANT_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 3.5))
 			{
 				if(Can_I_See_Enemy_Only(npc.index, target))
-				{
-					//target is too close, try to keep distance
 					return 1;
-				}
 			}
 		}
 	}
@@ -289,20 +284,17 @@ static int InfectedFatScoutSelfDefense(InfectedFatScout npc, float gameTime, int
 	{
 		if(distance > (GIANT_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 5.0))
 		{
-			//target is too far, try to close in
 			return 0;
 		}
 		else if(distance < (GIANT_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 3.5))
 		{
 			if(Can_I_See_Enemy_Only(npc.index, target))
-			{
-				//target is too close, try to keep distance
 				return 1;
-			}
 		}
 	}
 	return 0;
 }
+
 static void InfectedFatScout_NPCDeath(int entity)
 {
 	InfectedFatScout npc = view_as<InfectedFatScout>(entity);

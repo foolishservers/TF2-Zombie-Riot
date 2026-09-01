@@ -765,6 +765,7 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "custom/addons/weapon_mostima.sp"
 #include "custom/addons/weapon_minecraft_sword.sp"
 #include "custom/addons/weapon_mini_semi_gun.sp"
+#include "custom/addons/weapon_wand_shield_mage.sp"
 #include "custom/kit_soldine.sp"
 #include "custom/weapon_kritzkrieg.sp"
 #include "custom/wand/weapon_bubble_wand.sp"

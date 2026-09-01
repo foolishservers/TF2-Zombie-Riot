@@ -23,10 +23,6 @@ static char g_IdleSounds[][] = {
 	"vo/heavy_meleedare05.mp3",
 };
 
-static char g_IntroSound[][] = {
-	"vo/heavy_domination12.mp3",
-};
-
 static char g_MeleeHitSounds[][] = {
 	"npc/strider/strider_skewer1.wav",
 };
@@ -39,24 +35,12 @@ static char g_MeleeMissSounds[][] = {
 	"weapons/bat_draw_swoosh1.wav",
 	"weapons/bat_draw_swoosh2.wav",
 };
-static char g_Overheat[][] = {
-	"npc/strider/fire.wav",
-};
 
-static float fl_DefaultSpeed_Witch = 270.0;
+static char g_Overheat[] = "npc/strider/fire.wav";
+static char g_IntroSound[] = "vo/heavy_domination12.mp3";
 
 public void ZsMalfuncHeavy_OnMapStart_NPC()
 {
-	PrecacheSoundArray(g_DeathSounds);
-	PrecacheSoundArray(g_HurtSounds);
-	PrecacheSoundArray(g_IdleSounds);
-	PrecacheSoundArray(g_IntroSound);
-	PrecacheSoundArray(g_MeleeHitSounds);
-	PrecacheSoundArray(g_MeleeAttackSounds);
-	PrecacheSoundArray(g_MeleeMissSounds);
-	PrecacheSoundArray(g_Overheat);
-
-	PrecacheModel("models/bots/heavy/bot_heavy.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "OverHeater");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_malfunctioning_heavy");
@@ -64,8 +48,22 @@ public void ZsMalfuncHeavy_OnMapStart_NPC()
 	data.IconCustom = false;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSoundArray(g_MeleeMissSounds);
+	PrecacheSound(g_Overheat);
+	PrecacheSound(g_IntroSound);
+	PrecacheModel("models/bots/heavy/bot_heavy.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
@@ -73,33 +71,8 @@ static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, co
 	return ZsMalfuncHeavy(vecPos, vecAng, team, data);
 }
 
-static float fl_Overheat_CD[MAXENTITIES];
-static float fl_Overheat_Timer[MAXENTITIES];
-static bool b_Enraged[MAXENTITIES];
-static int i_HitAmounts[MAXENTITIES];
-
 methodmap ZsMalfuncHeavy < CClotBody
 {
-	property float f_Overheat_Timer
-	{
-		public get()							{ return fl_Overheat_Timer[this.index]; }
-		public set(float TempValueForProperty) 	{ fl_Overheat_Timer[this.index] = TempValueForProperty; }
-	}
-	property float f_Overheat_Cooldown
-	{
-		public get()							{ return fl_Overheat_CD[this.index]; }
-		public set(float TempValueForProperty) 	{ fl_Overheat_CD[this.index] = TempValueForProperty; }
-	}
-	property bool b_Enraged
-	{
-		public get()							{ return b_Enraged[this.index]; }
-		public set(bool TempValueForProperty) 	{ b_Enraged[this.index] = TempValueForProperty; }
-	}
-	property int i_Hit
-	{
-		public get()							{ return i_HitAmounts[this.index]; }
-		public set(int TempValueForProperty) 	{ i_HitAmounts[this.index] = TempValueForProperty; }
-	}
 	public void PlayIdleSound() {
 		int sound = GetRandomInt(0, sizeof(g_IdleSounds) - 1);
 		EmitSoundToAll(g_IdleSounds[sound], _, SNDCHAN_STATIC, _, _, BOSS_ZOMBIE_VOLUME);
@@ -108,15 +81,13 @@ methodmap ZsMalfuncHeavy < CClotBody
 	public void PlayIntro() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		EmitSoundToAll(g_IntroSound[GetRandomInt(0, sizeof(g_IntroSound) - 1)], _, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME-0.2, 90);
+		EmitSoundToAll(g_IntroSound, _, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME-0.2, 90);
 		this.m_flNextIdleSound = GetGameTime(this.index) + 8.0;
 	}
 	public void PlayHurtSound() {
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 90);
 	}
 	public void PlayDeathSound() {
@@ -132,7 +103,23 @@ methodmap ZsMalfuncHeavy < CClotBody
 		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 90);
 	}
 	public void PlayOverHeatSound() {
-		EmitSoundToAll(g_Overheat[GetRandomInt(0, sizeof(g_Overheat) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 90);
+		EmitSoundToAll(g_Overheat, this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 90);
+	}
+	
+	property float f_Overheat_Timer
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][0]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][0] = TempValueForProperty; }
+	}
+	property float f_Overheat_Cooldown
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][1]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][1] = TempValueForProperty; }
+	}
+	property float f_Overheat_Duration
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][2]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][2] = TempValueForProperty; }
 	}
 	
 	public ZsMalfuncHeavy(float vecPos[3], float vecAng[3], int ally, const char[] data)
@@ -171,18 +158,9 @@ methodmap ZsMalfuncHeavy < CClotBody
 		
 		switch(GetRandomInt(0,2))
 		{
-			case 0:
-			{
-				CPrintToChatAll("{green}오버히터{default}: 놈들을 응징할 시간이다.");
-			}
-			case 1:
-			{
-				CPrintToChatAll("{green}오버히터{default}: 절망 속으로 가라앉아라.");
-			}
-			case 2:
-			{
-				CPrintToChatAll("{green}오버히터{default}: 네놈을 삼켜주마.");
-			}
+			case 0:PrintNPCMessageWithPrefixes(npc.index, "green", "OverHeater_Encounter_1", true);
+			case 1:PrintNPCMessageWithPrefixes(npc.index, "green", "OverHeater_Encounter_2", true);
+			case 2:PrintNPCMessageWithPrefixes(npc.index, "green", "OverHeater_Encounter_3", true);
 		}
 
 		int skin = 5;
@@ -205,13 +183,15 @@ methodmap ZsMalfuncHeavy < CClotBody
 		func_NPCDeath[npc.index] = ZsMalfuncHeavy_NPCDeath;
 		func_NPCThink[npc.index] = ZsMalfuncHeavy_ClotThink;
 		func_NPCOnTakeDamage[npc.index] = ZsMalfuncHeavy_OnTakeDamage;
-		npc.m_flSpeed = fl_DefaultSpeed_Witch;
+		npc.m_flSpeed = 270.0;
 		npc.Anger = false;
-		npc.b_Enraged = false;
+		npc.f_Overheat_Duration = 10.0;
 		npc.f_Overheat_Cooldown = 0.0;
 		npc.f_Overheat_Timer = 0.0;
-		npc.i_Hit = 0;
-
+		npc.m_iOverlordComboAttack = 0;
+		fl_ruina_battery_max[npc.index]=10.0;
+		fl_ruina_battery[npc.index]=0.0;
+		ApplyStatusEffect(npc.index, npc.index, "Battery_TM Charge", 999.0);
 		npc.StartPathing();
 		npc.PlayIntro();
 		
@@ -224,11 +204,8 @@ public void ZsMalfuncHeavy_ClotThink(int iNPC)
 	ZsMalfuncHeavy npc = view_as<ZsMalfuncHeavy>(iNPC);
 
 	float gameTime = GetGameTime(npc.index);
-	
 	if(npc.m_flNextDelayTime > gameTime)
-	{
 		return;
-	}
 	
 	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	
@@ -243,42 +220,34 @@ public void ZsMalfuncHeavy_ClotThink(int iNPC)
 	}
 	
 	if(npc.m_flNextThinkTime > gameTime)
-	{
 		return;
-	}
 	
 	npc.m_flNextThinkTime = gameTime + 0.1;
 
-	//bool silence = NpcStats_IsEnemySilenced(npc.index);
-
 	if(!npc.Anger)
 	{
-		if(npc.i_Hit >= 5)
+		fl_ruina_battery_max[npc.index]=5.0;
+		fl_ruina_battery[npc.index]=float(npc.m_iOverlordComboAttack);
+		if(npc.m_iOverlordComboAttack >= 5)
 		{
 			switch(GetRandomInt(0,2))
 			{
-				case 0:
-				{
-					CPrintToChatAll("{green}오버히터{default}: 내 고통을 느껴라!");
-				}
-				case 1:
-				{
-					CPrintToChatAll("{green}오버히터{default}: 어리석음의 대가를 치러라.");
-				}
-				case 2:
-				{
-					CPrintToChatAll("{green}오버히터{default}: 한순간의 착오로 모든 걸 잃게 되리라.");
-				}
+				case 0:PrintNPCMessageWithPrefixes(npc.index, "green", "OverHeater_AbilityActivation_1", true);
+				case 1:PrintNPCMessageWithPrefixes(npc.index, "green", "OverHeater_AbilityActivation_2", true);
+				case 2:PrintNPCMessageWithPrefixes(npc.index, "green", "OverHeater_AbilityActivation_3", true);
 			}
 			npc.PlayIdleSound();
 			npc.Anger = true;
-			npc.i_Hit = 0;
-			npc.f_Overheat_Cooldown = gameTime + 10.0;
-			npc.m_flSpeed = npc.m_fbGunout ? fl_DefaultSpeed_Witch * 0.9: fl_DefaultSpeed_Witch * 0.8;
+			npc.m_iOverlordComboAttack = 0;
+			npc.f_Overheat_Cooldown = gameTime + npc.f_Overheat_Duration;
+			fl_ruina_battery_max[npc.index] = npc.f_Overheat_Duration;
+			fl_ruina_battery[npc.index] = npc.f_Overheat_Cooldown;
+			npc.m_flSpeed = (npc.m_fbGunout ? 243.0: 216.0);
 		}
 	}
 	else
 	{
+		fl_ruina_battery[npc.index]= npc.f_Overheat_Cooldown - gameTime;
 		if(npc.f_Overheat_Cooldown >= gameTime)
 		{
 			if(npc.f_Overheat_Timer <= gameTime)
@@ -299,19 +268,15 @@ public void ZsMalfuncHeavy_ClotThink(int iNPC)
 		{
 			switch(GetRandomInt(0,1))
 			{
-				case 0:
-				{
-					CPrintToChatAll("{green}오버히터{default}: 넌 아무것도 아니다!");
-				}
-				case 1:
-				{
-					CPrintToChatAll("{green}오버히터{default}: 버러지들 같으니.");
-				}
+				case 0:PrintNPCMessageWithPrefixes(npc.index, "green", "OverHeater_AbilityDisable_1", true);
+				case 1:PrintNPCMessageWithPrefixes(npc.index, "green", "OverHeater_AbilityDisable_2", true);
 			}
 			npc.Anger = false;
 			npc.f_Overheat_Cooldown = 0.0;
 			npc.f_Overheat_Timer = 0.0;
-			npc.m_flSpeed = fl_DefaultSpeed_Witch;
+			fl_ruina_battery_max[npc.index]=5.0;
+			fl_ruina_battery[npc.index]=float(npc.m_iOverlordComboAttack);
+			npc.m_flSpeed = 270.0;
 		}
 	}
 	
@@ -323,15 +288,12 @@ public void ZsMalfuncHeavy_ClotThink(int iNPC)
 	}
 	
 	int closest = npc.m_iTarget;
-	
 	if(IsValidEnemy(npc.index, closest))
 	{
 		float vecTarget[3]; WorldSpaceCenter(closest, vecTarget);
-			
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-				
-		//Predict their pos.
+		
 		if(flDistanceToTarget < npc.GetLeadRadius())
 		{
 			float vPredictedPos[3]; PredictSubjectPosition(npc, closest, _, _, vPredictedPos);
@@ -341,8 +303,6 @@ public void ZsMalfuncHeavy_ClotThink(int iNPC)
 		{
 			npc.SetGoalEntity(closest);
 		}
-		
-		//Target close enough to hit
 		ZsMalfuncHeavy_SelfDefense(npc, gameTime, npc.m_iTarget, flDistanceToTarget);
 	}
 	else
@@ -385,7 +345,7 @@ static void ZsMalfuncHeavy_SelfDefense(ZsMalfuncHeavy npc, float gameTime, int t
 						Explode_Logic_Custom(damage, npc.index, npc.index, -1, _, radius, _, _, true);
 						ParticleEffectAt(vicloc, "drg_cow_explosioncore_charged_blue", 0.5);
 						if(!npc.Anger)
-						npc.i_Hit++;
+						npc.m_iOverlordComboAttack++;
 						// Hit sound
 						npc.PlayMeleeHitSound();
 					}
@@ -426,19 +386,14 @@ static Action ZsMalfuncHeavy_OnTakeDamage(int victim, int &attacker, int &inflic
 	//Valid attackers only.
 	if(attacker <= 0)
 		return Plugin_Continue;
-
-	//ZsMalfuncHeavy npc = view_as<ZsMalfuncHeavy>(victim);
-	
 	float vecTarget[3]; WorldSpaceCenter(attacker, vecTarget );
 	float VecSelfNpc[3]; WorldSpaceCenter(victim, VecSelfNpc);
 	float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-
 	if(flDistanceToTarget < (300.0 * 300.0))
 	{
 		damage = 0.0;
 		return Plugin_Handled;
 	}
-
 	return Plugin_Continue;
 }
 
@@ -446,7 +401,7 @@ static void ZsMalfuncHeavy_NPCDeath(int entity)
 {
 	ZsMalfuncHeavy npc = view_as<ZsMalfuncHeavy>(entity);
 	
-	CPrintToChatAll("{green}오버히터{default}: 겨우 그까짓 힘으로 감히!");
+	PrintNPCMessageWithPrefixes(npc.index, "green", "OverHeater_Death", true);
 
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);

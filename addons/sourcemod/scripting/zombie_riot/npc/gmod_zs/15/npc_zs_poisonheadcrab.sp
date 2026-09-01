@@ -1,10 +1,6 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-static const char g_DeathSounds[][] = {
-	"npc/headcrab_poison/ph_pain3.wav"
-};
-
 static const char g_HurtSound[][] = {
 	"npc/headcrab_poison/ph_pain1.wav",
 	"npc/headcrab_poison/ph_pain2.wav"
@@ -27,17 +23,12 @@ static const char g_MeleeAttackSounds[][] = {
 	"npc/headcrab_poison/ph_scream3.wav"
 };
 
+static const char g_DeathSounds[] = "npc/headcrab_poison/ph_pain3.wav";
+
 static int NPCId;
-void ZSPoisonHeadcrab_MapStart()
+
+public void ZSPoisonHeadcrab_MapStart()
 {
-	PrecacheSoundArray(g_DeathSounds);
-	PrecacheSoundArray(g_MeleeAttackSounds);
-	PrecacheSoundArray(g_MeleeHitSounds);
-	PrecacheSoundArray(g_IdleSound);
-	PrecacheSoundArray(g_HurtSound);
-
-	PrecacheModel("models/headcrabblack.mdl");
-
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Poison Headcrab");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_poisonheadcrab");
@@ -45,11 +36,22 @@ void ZSPoisonHeadcrab_MapStart()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPCId = NPC_Add(data);
 }
 
-int ZSPoisonHeadcrab_ID()
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_IdleSound);
+	PrecacheSoundArray(g_HurtSound);
+	PrecacheSound(g_DeathSounds);
+	PrecacheModel("models/headcrabblack.mdl");
+}
+
+stock int ZSPoisonHeadcrab_ID()
 {
 	return NPCId;
 }
@@ -65,7 +67,6 @@ methodmap ZSPoisonHeadcrab < CSeaBody
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_IdleSound[GetRandomInt(0, sizeof(g_IdleSound) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME,_);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 	}
@@ -75,7 +76,7 @@ methodmap ZSPoisonHeadcrab < CSeaBody
 	}
 	public void PlayDeathSound() 
 	{
-		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME,_);
+		EmitSoundToAll(g_DeathSounds, this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME,_);
 	}
 	public void PlayMeleeSound()
  	{
@@ -104,6 +105,7 @@ methodmap ZSPoisonHeadcrab < CSeaBody
 		func_NPCOnTakeDamage[npc.index] = ZSPoisonHeadcrab_OnTakeDamage;
 		func_NPCThink[npc.index] = ZSPoisonHeadcrab_ClotThink;
 		
+		npc.m_bFUCKYOU = false;
 		npc.m_flSpeed = 250.0;	// 1.9 x 250
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_flNextMeleeAttack = 0.0;
@@ -115,7 +117,7 @@ methodmap ZSPoisonHeadcrab < CSeaBody
 	}
 }
 
-public void ZSPoisonHeadcrab_ClotThink(int iNPC)
+static void ZSPoisonHeadcrab_ClotThink(int iNPC)
 {
 	ZSPoisonHeadcrab npc = view_as<ZSPoisonHeadcrab>(iNPC);
 
@@ -273,7 +275,7 @@ public void ZSPoisonHeadcrab_ClotThink(int iNPC)
 	npc.PlayIdleSound();
 }
 
-public Action ZSPoisonHeadcrab_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action ZSPoisonHeadcrab_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	if(attacker < 1)
 		return Plugin_Continue;
@@ -287,7 +289,7 @@ public Action ZSPoisonHeadcrab_OnTakeDamage(int victim, int &attacker, int &infl
 	return Plugin_Changed;
 }
 
-void ZSPoisonHeadcrab_NPCDeath(int entity)
+static void ZSPoisonHeadcrab_NPCDeath(int entity)
 {
 	ZSPoisonHeadcrab npc = view_as<ZSPoisonHeadcrab>(entity);
 	if(!npc.m_bGib)
@@ -295,7 +297,7 @@ void ZSPoisonHeadcrab_NPCDeath(int entity)
 	
 }
 
-public Action ZSPoisonHeadcrab_RemoveOverlay(Handle helpmeimblind, int id)
+static Action ZSPoisonHeadcrab_RemoveOverlay(Handle helpmeimblind, int id)
 {
 	int client = GetClientOfUserId(id);
 	if (IsValidClient(client))

@@ -4331,4 +4331,313 @@
 		"en"		""
 		"ko"		"지옥에나 가라."
 	}
+	
+	// OverHeater.
+	"OverHeater_Encounter_1"
+	{
+		"en"		"It's time to punish."
+		"ko"		"놈들을 응징할 시간이다."
+	}
+	"OverHeater_Encounter_2"
+	{
+		"en"		"Sink into despair."
+		"ko"		"절망 속으로 가라앉아라."
+	}
+	"OverHeater_Encounter_3"
+	{
+		"en"		"네놈을 삼켜주마."
+		"ko"		"네놈을 삼켜주마."
+	}
+	
+	"OverHeater_AbilityActivation_1"
+	{
+		"en"		"Feel my Pain!"
+		"ko"		"내 고통을 느껴라!"
+	}
+	"OverHeater_AbilityActivation_2"
+	{
+		"en"		"Pay for foolishness."
+		"ko"		"어리석음의 대가를 치러라."
+	}
+	"OverHeater_AbilityActivation_3"
+	{
+		"en"		"A Single mistake will cause Lose Everything."
+		"ko"		"한순간의 착오로 모든 걸 잃게 되리라."
+	}
+	
+	"OverHeater_AbilityDisable_1"
+	{
+		"en"		"You're nothing!"
+		"ko"		"넌 아무것도 아니다!"
+	}
+	"OverHeater_AbilityDisable_2"
+	{
+		"en"		"bastards."
+		"ko"		"버러지들 같으니."
+	}
+	
+	"OverHeater_Death"
+	{
+		"en"		"겨우 그까짓 힘으로 감히!"
+		"ko"		"겨우 그까짓 힘으로 감히!"
+	}
+	
+	// MajorVulture.
+	"MajorVulture_Encounter"
+	{
+		"en"		"Alright, Bring it on."
+		"ko"		"좋아, 다 덤벼."
+	}
+	
+	"MajorVulture_Death"
+	{
+		"en"		"This is the End."
+		"ko"		"여기가 끝이군."
+	}
+	
+	// ColonelBarrage.
+	"ColonelBarrage_Encounter_1"
+	{
+		"en"		"Kaboom Baby!"
+		"ko"		"형님 나가신다!"
+	}
+	"ColonelBarrage_Encounter_2"
+	{
+		"en"		"It's go time!"
+		"ko"		"드디어 시작이군!"
+	}
+	"ColonelBarrage_Encounter_3"
+	{
+		"en"		"It's about to get heavy"
+		"ko"		"힘 좀 써 볼까!"
+	}
+	
+	"ColonelBarrage_Death"
+	{
+		"en"		"Damn, I was good."
+		"ko"		"젠장, 잘 싸웠는데."
+	}
+	
+	// CaptainQuetz.
+	"CaptainQuetz_LastMann_1"
+	{
+		"en"		"You can’t do anything!"
+		"ko"		"너 혼자서는 아무것도 하지 못 한다!"
+	}
+	"CaptainQuetz_LastMann_2"
+	{
+		"en"		"Join in the Convergence"
+		"ko"		"영광스러운 합일에 동참하라."
+	}
+	"CaptainQuetz_LastMann_3"
+	{
+		"en"		"Surrender now?!"
+		"ko"		"지금 항복할텐가?!"
+	}
+	"CaptainQuetz_LastMann_4"
+	{
+		"en"		"You seem better than your comrades"
+		"ko"		"너가 그래도 니 동료들보단 나은것 같군"
+	}
+	
+	"CaptainQuetz_Death_1"
+	{
+		"en"		"This is utterly pathetic. We didn’t come here just to see results like this"
+		"ko"		"정말 한심하기 짝이없군 고작 이따위 결과를 보려고 우리가 온것이 아닌데"
+	}
+	"CaptainQuetz_Death_2"
+	{
+		"en"		"Just go Home, you cannot join us"
+		"ko"		"너네 그냥 집에 가라. 너희 같은 것들은 우리와 함께 할 수 없다"
+	}
+	"CaptainQuetz_Death_3"
+	{
+		"en"		"We wasted our time dealing with such trivial things?"
+		"ko"		"고작 이따위 것들을 상대하려고 우리가 시간낭비를 했단 말인가?"
+	}
+	
+	"CaptainQuetz_BattleCry_1"
+	{
+		"en"		""
+		"ko"		"내 기대를 실망시키지 않는군, 역시 너희는 우리와 함께할 자격이 있다."
+	}
+	"CaptainQuetz_BattleCry_2"
+	{
+		"en"		""
+		"ko"		"너희도 우리와 하나가 될것이다."
+	}
+	"CaptainQuetz_BattleCry_3"
+	{
+		"en"		""
+		"ko"		"우리의 약한 친구들은 도태 되었지만 강한 친구들은 아직 살아있다. 그것이 바로 너희가 될것이다."
+	}
+	"CaptainQuetz_BattleCry_4"
+	{
+		"en"		""
+		"ko"		"우리가 이룩한 모든 것을 적이 파괴하려 한다."
+	}
+	"CaptainQuetz_BattleCry_5"
+	{
+		"en"		"We become one, will never be defeated!"
+		"ko"		"우리는 하나가 되어 결코 패배하지 않을 것이다!"
+	}
+	"CaptainQuetz_BattleCry_6"
+	{
+		"en"		""
+		"ko"		"너희도 우리와 하나가 될것이다."
+	}
+	
+	"CaptainQuetz_Propaganda_1"
+	{
+		"en"		""
+		"ko"		"너희를 오랜 시간 동안 지켜보고 있었다."
+	}
+	"CaptainQuetz_Propaganda_2"
+	{
+		"en"		""
+		"ko"		"그리고 너희는 우리의 기대에 정확히 부합했다."
+	}
+	"CaptainQuetz_Propaganda_3"
+	{
+		"en"		""
+		"ko"		"역시 너희도 우리와 하나가 되어야만 한다."
+	}
+	"CaptainQuetz_Propaganda_4"
+	{
+		"en"		""
+		"ko"		"우리가 집어삼킨 세계마다 새로운 형제가 일어나 하나가 되리라."
+	}
+	"CaptainQuetz_Propaganda_5"
+	{
+		"en"		""
+		"ko"		"우리의 결속은 자라나고 우리는 영생을 누리리라."
+	}
+	"CaptainQuetz_Propaganda_6"
+	{
+		"en"		""
+		"ko"		"다만, 아직 마지막 테스트가 필요하다. {crimson}이 테스트가 끝나면 너희도 우리와 하나가 되리라."
+	}
+	"CaptainQuetz_Propaganda_7"
+	{
+		"en"		""
+		"ko"		"아주 오랜 시간 동안... 지금이 오기만을 기다려왔다."
+	}
+	"CaptainQuetz_Propaganda_8"
+	{
+		"en"		""
+		"ko"		"이제 너희의 존재를..."
+	}
+	"CaptainQuetz_Propaganda_9"
+	{
+		"en"		""
+		"ko"		"증명할 시간이다!!!!"
+	}
+	
+	// ZsPoYo.
+	"ZsPoYo_Encounter_1"
+	{
+		"en"		""
+		"ko"		"이것이 마지막 테스트다. 운명에 순응하고 우리와 하나가 되어라."
+	}
+	"ZsPoYo_Encounter_2"
+	{
+		"en"		""
+		"ko"		"이것이 마지막 테스트다. 영광스러운 합일에 동참하라."
+	}
+	"ZsPoYo_Encounter_3"
+	{
+		"en"		""
+		"ko"		"이것이 마지막 테스트다. 끝까지 발악해보거라 어자피 우리와 하나가 될것이니."
+	}
+	
+	"ZsPoYo_LastMann_1"
+	{
+		"en"		""
+		"ko"		"이것이, 너희의 운명이 도달할 최후의 순간이다."
+	}
+	"ZsPoYo_LastMann_2"
+	{
+		"en"		""
+		"ko"		"감염이 당신의 동료를 전부 집어삼키고 말았습니다... 가능하면 도주하세요."
+	}
+	"ZsPoYo_LastMann_3"
+	{
+		"en"		""
+		"ko"		"발악해보아라. 이것이 너희의 마지막이 될것이니."
+	}
+	
+	"ZsPoYo_Teleport_1"
+	{
+		"en"		""
+		"ko"		"도망치지마라!"
+	}
+	"ZsPoYo_Teleport_2"
+	{
+		"en"		""
+		"ko"		"왜 영광스러운 합일을 거부하려 드는가."
+	}
+	"ZsPoYo_Teleport_3"
+	{
+		"en"		""
+		"ko"		"정해진 운명에 순응하라."
+	}
+	
+	"ZsPoYo_Phase2"
+	{
+		"en"		""
+		"ko"		"너희는 그 무엇 하나 바꿀 수 없으리라."
+	}
+	"ZsPoYo_Phase3_1"
+	{
+		"en"		""
+		"ko"		"자, 발악하라"
+	}
+	"ZsPoYo_Phase3_2"
+	{
+		"en"		""
+		"ko"		"귀찮게하는군."
+	}
+	
+	"ZsPoYo_SpawnZombie"
+	{
+		"en"		""
+		"ko"		"{crimson}저것이 끔찍한 감염체들을 소환했다."
+	}
+	
+
+	"ZsPoYo_TimeOver"
+	{
+		"en"		""
+		"ko"		"오랫동안 기다려온 순간이 마침내 도래하였다."
+	}
+	"ZsPoYo_Death_1"
+	{
+		"en"		""
+		"ko"		"{crimson}당신은 이 싸움에서 희망의 빛줄기를 보지 못 했습니다."
+	}
+	"ZsPoYo_Death_2"
+	{
+		"en"		""
+		"ko"		"{crimson}당신은 감염에 저항조차 못 했습니다... 당신은 이제 한낱 감염체로 전락하고 말았습니다."
+	}
+	"ZsPoYo_Death_3"
+	{
+		"en"		""
+		"ko"		"{crimson}예상했던대로, 당신은 실패했습니다. 이제 이곳에 희망이란 없습니다..."
+	}
+	"ZsPoYo_Death_4"
+	{
+		"en"		""
+		"ko"		"우리의 결속은 자라나고 우리는 영생을 누리리라."
+	}
+	"ZsPoYo_Death_5"
+	{
+		"en"		""
+		"ko"		"계획대로 착착 진행되면 참 기분 좋지"
+	}
+	"ZsPoYo_Death_6"
+	{
+		"en"		""
+		"ko"		"그 누구도 우리의 권위에 도전할 순 없다. 우리의 힘은 끝이 없다."
+	}
 }

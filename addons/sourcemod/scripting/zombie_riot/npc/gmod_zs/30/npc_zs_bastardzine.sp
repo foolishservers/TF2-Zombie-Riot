@@ -16,10 +16,6 @@ static char g_HurtSounds[][] = {
 	"npc/zombie/zombie_pain6.wav",
 };
 
-static char g_leap_prepare[][] = {
-	"npc/fast_zombie/leap1.wav",
-};
-
 static char g_leap_scream[][] = {
 	"npc/zombie/zombie_alert1.wav",
 	"npc/zombie/zombie_alert2.wav",
@@ -61,21 +57,10 @@ static char g_PlayMeleeJumpSound[][] = {
 	"npc/fast_zombie/claw_miss2.wav",
 };
 
+static char g_leap_prepare[] = "npc/fast_zombie/leap1.wav";
+
 public void Bastardzine_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleSounds));		i++) { PrecacheSound(g_IdleSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds));	i++) { PrecacheSound(g_MeleeHitSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeAttackSounds));	i++) { PrecacheSound(g_MeleeAttackSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
-	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
-	for (int i = 0; i < (sizeof(g_PlayMeleeJumpPrepare));   i++) { PrecacheSound(g_PlayMeleeJumpPrepare[i]);   }
-	for (int i = 0; i < (sizeof(g_PlayMeleeJumpSound));   i++) { PrecacheSound(g_PlayMeleeJumpSound[i]);   }
-	for (int i = 0; i < (sizeof(g_leap_scream));   i++) { PrecacheSound(g_leap_scream[i]);   }
-	for (int i = 0; i < (sizeof(g_leap_prepare));   i++) { PrecacheSound(g_leap_prepare[i]);   }
-	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Bastardzine");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_bastardzine");
@@ -83,92 +68,80 @@ public void Bastardzine_OnMapStart_NPC()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS|MVM_CLASS_FLAG_MINIBOSS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSoundArray(g_MeleeMissSounds);
+	PrecacheSoundArray(g_PlayMeleeJumpPrepare);
+	PrecacheSoundArray(g_PlayMeleeJumpSound);
+	PrecacheSoundArray(g_leap_scream);
+	PrecacheSound(g_leap_prepare);
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
+}
+
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
 	return Bastardzine(vecPos, vecAng, team);
 }
+
 methodmap Bastardzine < CClotBody
 {
 	public void PlayIdleSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(30.0, 60.0);
-		
 	}
-	
 	public void PlayIdleAlertSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, _, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(30.0, 60.0);
-		
 	}
-	
-	
 	public void PlayLeapPrepare() {
-		
-		EmitSoundToAll(g_leap_prepare[GetRandomInt(0, sizeof(g_leap_prepare) - 1)], this.index, _, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
+		EmitSoundToAll(g_leap_prepare, this.index, _, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
-	
 	public void PlayLeapDone() {
-		
 		EmitSoundToAll(g_leap_scream[GetRandomInt(0, sizeof(g_leap_scream) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
 	}
 	public void PlayMeleeJumpPrepare() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_PlayMeleeJumpPrepare[GetRandomInt(0, sizeof(g_PlayMeleeJumpPrepare) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-
 	}
-	
 	public void PlayMeleeJumpSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_PlayMeleeJumpSound[GetRandomInt(0, sizeof(g_PlayMeleeJumpSound) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
 	}
 	public void PlayHurtSound() {
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
 	}
-	
 	public void PlayDeathSound() {
-	
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
-
 	}
-	
 	public void PlayMeleeSound() {
 		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
-
 	public void PlayMeleeHitSound() {
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
-
 	public void PlayMeleeMissSound() {
 		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
-		
 	}
-	
-	
 	
 	public Bastardzine(float vecPos[3], float vecAng[3], int ally)
 	{
@@ -195,7 +168,6 @@ methodmap Bastardzine < CClotBody
 		func_NPCThink[npc.index] = Bastardzine_BastardzineThink;	
 		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;	
 		
-		
 		//IDLE
 		npc.m_flSpeed = 350.0;
 		npc.m_flGetClosestTargetTime = 0.0;
@@ -208,12 +180,9 @@ methodmap Bastardzine < CClotBody
 		
 		return npc;
 	}
-	
-	
 }
 
-
-public void Bastardzine_BastardzineThink(int iNPC)
+static void Bastardzine_BastardzineThink(int iNPC)
 {
 	Bastardzine npc = view_as<Bastardzine>(iNPC);
 	
@@ -222,26 +191,19 @@ public void Bastardzine_BastardzineThink(int iNPC)
 	AcceptEntityInput(iNPC, "SetBodyGroup");
 	SetEntProp(npc.m_iWearable1, Prop_Send, "m_nBody", 2);
 	
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
-	{
+	float GameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > GameTime)
 		return;
-	}
-	
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
-	
-	npc.Update();	
-	
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
-	{
+	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
+	npc.Update();
+	if(npc.m_flNextThinkTime > GameTime)
 		return;
-	}
-	
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
+	npc.m_flNextThinkTime = GameTime + 0.1;
 
-	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	if(npc.m_flGetClosestTargetTime < GameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
+		npc.m_flGetClosestTargetTime = GameTime + GetRandomRetargetTime();
 	}
 	
 	int PrimaryThreatIndex = npc.m_iTarget;
@@ -254,70 +216,58 @@ public void Bastardzine_BastardzineThink(int iNPC)
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);		
 		
-		if(npc.m_flJumpCooldown < GetGameTime(npc.index) && npc.m_flInJump < GetGameTime(npc.index) && flDistanceToTarget > NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED && flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 10.0)
+		if(npc.m_flJumpCooldown < GameTime && npc.m_flInJump < GameTime && flDistanceToTarget > NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED && flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 10.0)
 		{
 			int Enemy_I_See;
 			Enemy_I_See = Can_I_See_Enemy(npc.index, PrimaryThreatIndex);
 			//Target close enough to hit
 			if(IsValidEnemy(npc.index, Enemy_I_See) && Enemy_I_See == PrimaryThreatIndex)
 			{
-				npc.m_flInJump = GetGameTime(npc.index) + 0.65;
+				npc.m_flInJump = GameTime + 0.65;
 				
-				npc.m_flJumpCooldown = GetGameTime(npc.index) + 0.5;
+				npc.m_flJumpCooldown = GameTime + 0.5;
 				npc.PlayLeapPrepare();
 			}
-			
 		}
-		if(npc.m_flJumpCooldown < GetGameTime(npc.index) && npc.m_flInJump > GetGameTime(npc.index))
+		if(npc.m_flJumpCooldown < GameTime && npc.m_flInJump > GameTime)
 		{
 			PluginBot_Jump(npc.index, vecTarget);
 			npc.PlayLeapDone();
-			npc.m_flJumpCooldown = GetGameTime(npc.index) + 5.0;
-			
+			npc.m_flJumpCooldown = GameTime + 5.0;
 		}
-		if(npc.m_flInJump > GetGameTime(npc.index))
+		if(npc.m_flInJump > GameTime)
 		{
 			npc.StopPathing();
-			
 			npc.FaceTowards(vecTarget, 1000.0);
-			
 			return;
-			
 		}
-			
-			//Predict their pos.
+		
 		if(flDistanceToTarget < npc.GetLeadRadius()) {
 			
 			float vPredictedPos[3]; PredictSubjectPosition(npc, PrimaryThreatIndex,_,_, vPredictedPos);
-			
 			npc.SetGoalVector(vPredictedPos);
 		}
 		else 
 		{
 			npc.SetGoalEntity(PrimaryThreatIndex);
 		}
-		//Target close enough to hit
 		if(flDistanceToTarget < 10000)
 		{
-			//Look at target so we hit.
-		//	npc.FaceTowards(vecTarget, 1000.0);
-			
-			//Can we attack right now?
 			if(flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED || npc.m_flAttackHappenswillhappen)
 			{
 				
-				if(npc.m_flNextMeleeAttack < GetGameTime(npc.index))
+				if(npc.m_flNextMeleeAttack < GameTime)
 				{
-					if (!npc.m_flAttackHappenswillhappen)
+					if(!npc.m_flAttackHappenswillhappen)
 					{
 						npc.AddGesture("ACT_GMOD_GESTURE_RANGE_ZOMBIE_SPECIAL");
 						npc.PlayMeleeSound();
-						npc.m_flAttackHappens = GetGameTime(npc.index)+0.7;
-						npc.m_flAttackHappens_bullshit = GetGameTime(npc.index)+0.83;
+						npc.m_flAttackHappens = GameTime+0.7;
+						npc.m_flAttackHappens_bullshit = GameTime+0.83;
 						npc.m_flAttackHappenswillhappen = true;
 					}
 
-					if (npc.m_flAttackHappens < GetGameTime(npc.index) && npc.m_flAttackHappens_bullshit >= GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
+					if(npc.m_flAttackHappens < GameTime && npc.m_flAttackHappens_bullshit >= GameTime && npc.m_flAttackHappenswillhappen)
 					{
 						Handle swingTrace;
 						npc.FaceTowards(vecTarget, 30000.0);
@@ -328,13 +278,10 @@ public void Bastardzine_BastardzineThink(int iNPC)
 							TR_GetEndPosition(vecHit, swingTrace);
 							if(target > 0) 
 							{
-								{
-									if(!ShouldNpcDealBonusDamage(target))
-										SDKHooks_TakeDamage(target, npc.index, npc.index, 200.0, DMG_CLUB, -1, _, vecHit);
-									else
-										SDKHooks_TakeDamage(target, npc.index, npc.index, 120.0, DMG_CLUB, -1, _, vecHit);					
-								}
-								
+								if(!ShouldNpcDealBonusDamage(target))
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 200.0, DMG_CLUB, -1, _, vecHit);
+								else
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 120.0, DMG_CLUB, -1, _, vecHit);	
 								npc.PlayMeleeHitSound();
 							}
 							else
@@ -343,13 +290,13 @@ public void Bastardzine_BastardzineThink(int iNPC)
 							}
 						}
 						delete swingTrace;
-						npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.74;
+						npc.m_flNextMeleeAttack = GameTime + 0.74;
 						npc.m_flAttackHappenswillhappen = false;
 					}
-					else if (npc.m_flAttackHappens_bullshit < GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
+					else if(npc.m_flAttackHappens_bullshit < GameTime && npc.m_flAttackHappenswillhappen)
 					{
 						npc.m_flAttackHappenswillhappen = false;
-						npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.74;
+						npc.m_flNextMeleeAttack = GameTime + 0.74;
 					}
 				}
 				
@@ -358,31 +305,24 @@ public void Bastardzine_BastardzineThink(int iNPC)
 		else
 		{
 			npc.StartPathing();
-			
 		}
 	}
 	else
 	{
 		npc.StopPathing();
-		
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_iTarget = GetClosestTarget(npc.index);
 	}
 	npc.PlayIdleAlertSound();
 }
 
-public void Bastardzine_NPCDeath(int entity)
+static void Bastardzine_NPCDeath(int entity)
 {
 	Bastardzine npc = view_as<Bastardzine>(entity);
 	if(!npc.m_bGib)
-	{
 		npc.PlayDeathSound();	
-	}
-	
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
-	
-//	AcceptEntityInput(npc.index, "KillHierarchy");
 }
 
 

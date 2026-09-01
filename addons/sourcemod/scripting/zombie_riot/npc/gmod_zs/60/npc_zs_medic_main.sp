@@ -48,7 +48,7 @@ static const char g_FuckyouSounds[][] = {
 };
 
 
-void InfectedBattleMedic_OnMapStart_NPC()
+public void InfectedBattleMedic_OnMapStart_NPC()
 {
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Infected Battle Medic");
@@ -61,6 +61,7 @@ void InfectedBattleMedic_OnMapStart_NPC()
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
+
 static void ClotPrecache()
 {
 	PrecacheSoundArray(g_DeathSounds);
@@ -73,6 +74,7 @@ static void ClotPrecache()
 	PrecacheSound("player/flow.wav");
 	PrecacheModel(LASERBEAM);
 }
+
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
 	return InfectedBattleMedic(vecPos, vecAng, team);
@@ -80,7 +82,6 @@ static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 
 methodmap InfectedBattleMedic < CClotBody
 {
-	
 	public void PlayIdleAlertSound()
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
@@ -92,9 +93,7 @@ methodmap InfectedBattleMedic < CClotBody
 	{
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	public void PlayDeathSound()
@@ -126,8 +125,6 @@ methodmap InfectedBattleMedic < CClotBody
 		public get()							{ return fl_AbilityOrAttack[this.index][0]; }
 		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][0] = TempValueForProperty; }
 	}
-	
-	
 	
 	public InfectedBattleMedic(float vecPos[3], float vecAng[3], int ally)
 	{
@@ -210,18 +207,17 @@ methodmap InfectedBattleMedic < CClotBody
 			this.Healing = false;
 		}
 	}
-	
-	
 }
 
 static void InfectedBattleMedic_ClotThink(int iNPC)
 {
 	InfectedBattleMedic npc = view_as<InfectedBattleMedic>(iNPC);
 	
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
+	float GameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > GameTime)
 		return;
 	
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
+	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 
 	if(npc.m_blPlayHurtAnimation)
@@ -231,15 +227,15 @@ static void InfectedBattleMedic_ClotThink(int iNPC)
 		npc.PlayHurtSound();
 	}
 	
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
+	if(npc.m_flNextThinkTime > GameTime)
 		return;
 	
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
+	npc.m_flNextThinkTime = GameTime + 0.1;
 	
-	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	if(npc.m_flGetClosestTargetTime < GameTime)
 	{
 		npc.m_iTarget = (npc.m_bFUCKYOU ? GetClosestTarget(npc.index) : GetClosestAlly(npc.index));
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + (npc.m_bFUCKYOU ? GetRandomRetargetTime() : 5000.0);
+		npc.m_flGetClosestTargetTime = GameTime + (npc.m_bFUCKYOU ? GetRandomRetargetTime() : 5000.0);
 	}
 	if(IsValidAlly(npc.index, npc.m_iTarget) && Is_a_Medic[npc.m_iTarget])
 	{
@@ -295,7 +291,7 @@ static void InfectedBattleMedic_ClotThink(int iNPC)
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
 		
-		switch(InfectedBattleMedic_Work(npc, GetGameTime(npc.index), flDistanceToTarget))
+		switch(InfectedBattleMedic_Work(npc, GameTime, flDistanceToTarget))
 		{
 			case 0:
 			{

@@ -56,6 +56,20 @@ static char g_MeleeMissSounds[][] = {
 
 public void ZSThe_Shit_Slapper_OnMapStart_NPC()
 {
+	NPCData data;
+	strcopy(data.Name, sizeof(data.Name), "The Shit Slapper");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_the_shit_slapper");	//THE GREAT AND POWERFUL SHIT SLAPPER, I have zero clue on what kind of cocain I was back then, but I sure as hell want ti tight now
+	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_shit_slapper"); 		//leaderboard_class_(insert the name)
+	data.IconCustom = true;												//download needed?
+	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;			//example: MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;, forces these flags.
+	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
+	data.Func = ClotSummon;	
+	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
 	PrecacheSoundArray(g_DeathSounds);
 	PrecacheSoundArray(g_HurtSounds);
 	PrecacheSoundArray(g_IdleSounds);
@@ -63,22 +77,10 @@ public void ZSThe_Shit_Slapper_OnMapStart_NPC()
 	PrecacheSoundArray(g_MeleeHitSounds);
 	PrecacheSoundArray(g_MeleeAttackSounds);
 	PrecacheSoundArray(g_MeleeMissSounds);
-
-	PrecacheModel("models/zombie/classic_torso.mdl");
-
 	PrecacheSound("items/powerup_pickup_knockout_melee_hit.wav");
-
-	NPCData data;
-	strcopy(data.Name, sizeof(data.Name), "The Shit Slapper");
-	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_the_shit_slapper");	//THE GREAT AND POWERFUL SHIT SLAPPER, I have zero clue on what kind of cocain I was back then, but I sure as hell want ti tight now
-	data.Category = Type_GmodZS;
-	data.Func = ClotSummon;
-	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_shit_slapper"); 		//leaderboard_class_(insert the name)
-	data.IconCustom = true;													//download needed?
-	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;																//example: MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;, forces these flags.	
-	NPC_Add(data);
-
+	PrecacheModel("models/zombie/classic_torso.mdl");
 }
+
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
 	return ZSThe_Shit_Slapper(vecPos, vecAng, team);
@@ -86,52 +88,30 @@ static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 
 methodmap ZSThe_Shit_Slapper < CClotBody
 {
-	
 	public void PlayIdleSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
 		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(3.0, 6.0);
-		
-
 	}
-	
 	public void PlayHurtSound() {
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
-		
 	}
-	
 	public void PlayDeathSound() {
-	
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
-		
 	}
-	
 	public void PlayMeleeSound() {
 		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
-		
 	}
 	public void PlayMeleeHitSound() {
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
-		
 	}
-
 	public void PlayMeleeMissSound() {
 		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
-		
 	}
-	
-	
 	
 	public ZSThe_Shit_Slapper(float vecPos[3], float vecAng[3], int ally)
 	{
@@ -164,7 +144,6 @@ methodmap ZSThe_Shit_Slapper < CClotBody
 	
 }
 
-
 static void Internal_ClotThink(int iNPC)
 {
 	ZSThe_Shit_Slapper npc = view_as<ZSThe_Shit_Slapper>(iNPC);
@@ -172,19 +151,13 @@ static void Internal_ClotThink(int iNPC)
 	float GameTime = GetGameTime(npc.index);
 	
 	if(npc.m_flNextDelayTime > GameTime)
-	{
 		return;
-	}
 	
 	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
-	
 	npc.Update();
 	
 	if(npc.m_flNextThinkTime > GameTime)
-	{
 		return;
-	}
-	
 	npc.m_flNextThinkTime = GameTime + 0.1;
 
 	

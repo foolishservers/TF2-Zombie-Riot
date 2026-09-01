@@ -39,7 +39,7 @@ static const char g_MeleeAttackSounds[][] =
 	"weapons/boxing_gloves_swing4.wav"
 };
 
-void BreadMonster_Precache()
+public void BreadMonster_Precache()
 {
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Infected Bread Monster");
@@ -48,8 +48,19 @@ void BreadMonster_Precache()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheModel("models/player/heavy.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
@@ -133,7 +144,7 @@ methodmap BreadMonster < CClotBody
 	}
 }
 
-public void BreadMonster_ClotThink(int iNPC)
+static void BreadMonster_ClotThink(int iNPC)
 {
 	BreadMonster npc = view_as<BreadMonster>(iNPC);
 
@@ -180,7 +191,6 @@ public void BreadMonster_ClotThink(int iNPC)
 		{
 			npc.SetGoalEntity(npc.m_iTarget);
 		}
-
 		npc.StartPathing();
 		
 		if(npc.m_flAttackHappens)
@@ -188,7 +198,6 @@ public void BreadMonster_ClotThink(int iNPC)
 			if(npc.m_flAttackHappens < gameTime)
 			{
 				npc.m_flAttackHappens = 0.0;
-				
 				Handle swingTrace;
 				npc.FaceTowards(vecTarget, 15000.0);
 				if(npc.DoSwingTrace(swingTrace, npc.m_iTarget, _, _, _, _))
@@ -200,7 +209,6 @@ public void BreadMonster_ClotThink(int iNPC)
 						SDKHooks_TakeDamage(target, npc.index, npc.index, 200.0, DMG_CLUB);
 					}
 				}
-
 				delete swingTrace;
 			}
 		}
@@ -211,11 +219,8 @@ public void BreadMonster_ClotThink(int iNPC)
 			if(IsValidEnemy(npc.index, target))
 			{
 				npc.m_iTarget = target;
-
 				npc.AddGesture("ACT_MP_ATTACK_STAND_MELEE");
-
 				npc.PlayMeleeSound();
-				
 				npc.m_flAttackHappens = gameTime + 0.25;
 				npc.m_flNextMeleeAttack = gameTime + 0.45;
 			}
@@ -225,11 +230,10 @@ public void BreadMonster_ClotThink(int iNPC)
 	{
 		npc.StopPathing();
 	}
-
 	npc.PlayIdleSound();
 }
 
-void BreadMonster_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static void BreadMonster_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	if(attacker > 0)
 	{
@@ -250,16 +254,14 @@ void BreadMonster_OnTakeDamage(int victim, int &attacker, int &inflictor, float 
 		if(npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 		{
 			if (attacker <= MaxClients && attacker > 0 && TeutonType[attacker] != TEUTON_NONE)
-			{	
 				return;
-			}
 			npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 			npc.m_blPlayHurtAnimation = true;
 		}
 	}
 }
 
-public Action BreadMonster_Revert_Zombie_Resistance(Handle timer, int ref)
+static Action BreadMonster_Revert_Zombie_Resistance(Handle timer, int ref)
 {
 	int zombie = EntRefToEntIndex(ref);
 	if(IsValidEntity(zombie))
@@ -272,7 +274,7 @@ public Action BreadMonster_Revert_Zombie_Resistance(Handle timer, int ref)
 	return Plugin_Handled;
 }
 
-public Action BreadMonster_Revert_Zombie_Resistance_Enable(Handle timer, int ref)
+static Action BreadMonster_Revert_Zombie_Resistance_Enable(Handle timer, int ref)
 {
 	int zombie = EntRefToEntIndex(ref);
 	if(IsValidEntity(zombie))
@@ -283,7 +285,7 @@ public Action BreadMonster_Revert_Zombie_Resistance_Enable(Handle timer, int ref
 	return Plugin_Handled;
 }
 
-void BreadMonster_NPCDeath(int entity)
+static void BreadMonster_NPCDeath(int entity)
 {
 	BreadMonster npc = view_as<BreadMonster>(entity);
 	if(!npc.m_bGib)

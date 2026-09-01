@@ -22,14 +22,8 @@ static const char g_IdleAlertedSounds[][] = {
 	"vo/taunts/heavy_taunts19.mp3",
 };
 
-
-void InfectedTomislavMain_OnMapStart_NPC()
+public void InfectedTomislavMain_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
-	PrecacheModel("models/player/heavy.mdl");
-	PrecacheSound("weapons/tomislav_shoot.wav");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Infected Tomislav Main");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_infected_tomislav_main");
@@ -37,9 +31,19 @@ void InfectedTomislavMain_OnMapStart_NPC()
 	data.IconCustom = false;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSound("weapons/tomislav_shoot.wav");
+	PrecacheModel("models/player/heavy.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
@@ -58,28 +62,20 @@ methodmap InfectedTomislavMain < CClotBody
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
-		
 	}
-	
 	public void PlayHurtSound() 
 	{
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
 	}
-	
 	public void PlayDeathSound() 
 	{
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
-
 	public void PlayMinigunSound(bool Shooting) 
 	{
 		if(Shooting)
@@ -146,14 +142,13 @@ methodmap InfectedTomislavMain < CClotBody
 	}
 }
 
-public void InfectedTomislavMain_ClotThink(int iNPC)
+static void InfectedTomislavMain_ClotThink(int iNPC)
 {
 	InfectedTomislavMain npc = view_as<InfectedTomislavMain>(iNPC);
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
-	{
+	float GameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > GameTime)
 		return;
-	}
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
+	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 
 	if(npc.m_blPlayHurtAnimation)
@@ -163,22 +158,19 @@ public void InfectedTomislavMain_ClotThink(int iNPC)
 		npc.PlayHurtSound();
 	}
 	
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
-	{
+	if(npc.m_flNextThinkTime > GameTime)
 		return;
-	}
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
+	npc.m_flNextThinkTime = GameTime + 0.1;
 
-	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	if(npc.m_flGetClosestTargetTime < GameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
+		npc.m_flGetClosestTargetTime = GameTime + GetRandomRetargetTime();
 	}
 	
 	if(IsValidEnemy(npc.index, npc.m_iTarget))
 	{
-		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget );
-	
+		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget);
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
 		if(flDistanceToTarget < npc.GetLeadRadius()) 
@@ -202,30 +194,27 @@ public void InfectedTomislavMain_ClotThink(int iNPC)
 	npc.PlayIdleAlertSound();
 }
 
-public Action InfectedTomislavMain_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action InfectedTomislavMain_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	InfectedTomislavMain npc = view_as<InfectedTomislavMain>(victim);
 		
 	if(attacker <= 0)
 		return Plugin_Continue;
 		
-	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
+	if(npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 	{
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
 	}
-	
 	return Plugin_Changed;
 }
 
-public void InfectedTomislavMain_NPCDeath(int entity)
+static void InfectedTomislavMain_NPCDeath(int entity)
 {
 	InfectedTomislavMain npc = view_as<InfectedTomislavMain>(entity);
 	if(!npc.m_bGib)
-	{
-		npc.PlayDeathSound();	
-	}
-		
+		npc.PlayDeathSound();
+	
 	StopSound(npc.index, SNDCHAN_STATIC, "common/null.wav");
 	StopSound(npc.index, SNDCHAN_STATIC, "weapons/tomislav_shoot.wav");
 	StopSound(npc.index, SNDCHAN_STATIC, "common/null.wav");
@@ -239,15 +228,12 @@ public void InfectedTomislavMain_NPCDeath(int entity)
 		RemoveEntity(npc.m_iWearable2);
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
-
 }
 
-void InfectedTomislavMainSelfDefense(InfectedTomislavMain npc)
+static void InfectedTomislavMainSelfDefense(InfectedTomislavMain npc)
 {
 	int target;
 	target = npc.m_iTarget;
-	//some Ranged units will behave differently.
-	//not this one.
 	float vecTarget[3]; WorldSpaceCenter(target, vecTarget);
 	bool SpinSound = true;
 	float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
@@ -262,7 +248,7 @@ void InfectedTomislavMainSelfDefense(InfectedTomislavMain npc)
 			if(npc.DoSwingTrace(swingTrace, target, { 9999.0, 9999.0, 9999.0 }))
 			{
 				target = TR_GetEntityIndex(swingTrace);	
-					
+				
 				float vecHit[3];
 				TR_GetEndPosition(vecHit, swingTrace);
 				float origin[3], angles[3];
@@ -273,7 +259,6 @@ void InfectedTomislavMainSelfDefense(InfectedTomislavMain npc)
 					float damageDealt = 16.0;
 					if(ShouldNpcDealBonusDamage(target))
 						damageDealt *= 4.0;
-						
 					SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_BULLET, -1, _, vecHit);
 				}
 			}

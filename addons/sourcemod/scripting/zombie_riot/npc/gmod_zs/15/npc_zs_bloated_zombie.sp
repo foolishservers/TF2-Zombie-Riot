@@ -1,9 +1,7 @@
 #pragma semicolon 1
 #pragma newdecls required
  
-static const char g_DeathSounds[][] = {
-	"npc/ichthyosaur/water_growl5.wav",
-};
+static const char g_DeathSounds[] = "npc/ichthyosaur/water_growl5.wav";
 
 static const char g_HurtSounds[][] = {
 	"npc/zombie_poison/pz_idle2.wav",
@@ -34,15 +32,6 @@ static const char g_MeleeMissSounds[][] = {
 
 public void BloatedZombie_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleSounds));		i++) { PrecacheSound(g_IdleSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds));	i++) { PrecacheSound(g_MeleeHitSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeAttackSounds));	i++) { PrecacheSound(g_MeleeAttackSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
-
-	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Bloated Zombie");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_bloated_zombie");
@@ -50,24 +39,43 @@ public void BloatedZombie_OnMapStart_NPC()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
+	NPC_Add(data);
+	
+	strcopy(data.Name, sizeof(data.Name), "Vile Bloated Zombie");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_vile_bloated_zombie");
+	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_vile_bloated_zombie");
+	data.IconCustom = true;
+	data.Flags = 0;
+	data.Category = Type_GmodZS;
+	data.Func = ClotSummon_ALT;
 	NPC_Add(data);
 }
 
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSoundArray(g_MeleeMissSounds);
+	PrecacheSound(g_DeathSounds);
+	PrecacheSound("player/flow.wav");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
+}
+
+static any ClotSummon_ALT(int client, float vecPos[3], float vecAng[3], int team)
+{
+	return BloatedZombie(vecPos, vecAng, team, true);
+}
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
-	return BloatedZombie(vecPos, vecAng, team);
+	return BloatedZombie(vecPos, vecAng, team, false);
 }
 
 methodmap BloatedZombie < CClotBody
 {
-	property bool m_bElite
-	{
-		public get()
-		{
-			return this.m_iMedkitAnnoyance == 1;
-		}
-	}
 	public void PlayIdleSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
@@ -78,15 +86,11 @@ methodmap BloatedZombie < CClotBody
 	public void PlayHurtSound() {
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(75, 85));
 	}
 	public void PlayDeathSound() {
-	
-		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
+		EmitSoundToAll(g_DeathSounds, this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	public void PlayMeleeSound() {
 		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(145, 155));
@@ -101,7 +105,7 @@ methodmap BloatedZombie < CClotBody
 		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	
-	public BloatedZombie(float vecPos[3], float vecAng[3], int ally)
+	public BloatedZombie(float vecPos[3], float vecAng[3], int ally, bool Alt)
 	{
 		BloatedZombie npc = view_as<BloatedZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.25", "1600", ally, false));
 		
@@ -112,40 +116,43 @@ methodmap BloatedZombie < CClotBody
 		int iActivity = npc.LookupActivity("ACT_HL2MP_RUN_ZOMBIE");
 		if(iActivity > 0) npc.StartActivity(iActivity);
 		
-
 		npc.m_flNextMeleeAttack = 0.0;
 		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
 		
-		npc.m_flSpeed = 165.0;
 		func_NPCDeath[npc.index] = BloatedZombie_NPCDeath;
 		func_NPCThink[npc.index] = BloatedZombie_ClotThink;
 		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;
-
+		
+		npc.m_flMeleeArmor = 1.0;
+		npc.m_flRangedArmor = 1.0;
+		
+		npc.m_bFUCKYOU = Alt;
+		if(Alt)
+		{
+			SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
+			SetEntityRenderColor(npc.index, 150, 255, 150, 255);
+		}
+		npc.m_flSpeed = (Alt ? 200.0 : 165.0);
 		npc.StartPathing();
 		
 		return npc;
 	}
 }
 
-public void BloatedZombie_ClotThink(int iNPC)
+static void BloatedZombie_ClotThink(int iNPC)
 {
 	BloatedZombie npc = view_as<BloatedZombie>(iNPC);
 	
 	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
 	SetVariantInt(128);
 	AcceptEntityInput(iNPC, "SetBodyGroup");
-	
-	
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
-	{
+	float GameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > GameTime)
 		return;
-	}
-	
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
-	
+	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 	
 	if(npc.m_blPlayHurtAnimation)
@@ -154,33 +161,27 @@ public void BloatedZombie_ClotThink(int iNPC)
 		if(!npc.m_flAttackHappenswillhappen)
 			npc.AddGesture("ACT_FLINCH", false);
 		npc.PlayHurtSound();
-		
 	}
 	
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
-	{
+	if(npc.m_flNextThinkTime > GameTime)
 		return;
-	}
 	
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
+	npc.m_flNextThinkTime = GameTime + 0.1;
 
 	
-	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	if(npc.m_flGetClosestTargetTime < GameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
+		npc.m_flGetClosestTargetTime = GameTime + GetRandomRetargetTime();
 		npc.StartPathing();
 	}
 	
 	int closest = npc.m_iTarget;
-	
 	if(IsValidEnemy(npc.index, closest))
 	{
 		float vecTarget[3]; WorldSpaceCenter(closest, vecTarget);
-			
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-				
 		if(flDistanceToTarget < npc.GetLeadRadius())
 		{
 			float vPredictedPos[3]; PredictSubjectPosition(npc, closest,_,_, vPredictedPos);
@@ -193,19 +194,18 @@ public void BloatedZombie_ClotThink(int iNPC)
 		
 		if(flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED || npc.m_flAttackHappenswillhappen)
 		{
-			
-			if(npc.m_flNextMeleeAttack < GetGameTime(npc.index))
+			if(npc.m_flNextMeleeAttack < GameTime)
 			{
 				if (!npc.m_flAttackHappenswillhappen)
 				{
 					npc.AddGesture("ACT_GMOD_GESTURE_RANGE_ZOMBIE");
 					npc.PlayMeleeSound();
-					npc.m_flAttackHappens = GetGameTime(npc.index)+0.7;
-					npc.m_flAttackHappens_bullshit = GetGameTime(npc.index)+0.83;
+					npc.m_flAttackHappens = GameTime+0.7;
+					npc.m_flAttackHappens_bullshit = GameTime+0.83;
 					npc.m_flAttackHappenswillhappen = true;
 				}
 
-				if (npc.m_flAttackHappens < GetGameTime(npc.index) && npc.m_flAttackHappens_bullshit >= GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
+				if (npc.m_flAttackHappens < GameTime && npc.m_flAttackHappens_bullshit >= GameTime && npc.m_flAttackHappenswillhappen)
 				{
 					Handle swingTrace;
 					npc.FaceTowards(vecTarget, 20000.0);
@@ -216,13 +216,23 @@ public void BloatedZombie_ClotThink(int iNPC)
 						TR_GetEndPosition(vecHit, swingTrace);
 						if(target > 0) 
 						{
+							if(npc.m_bFUCKYOU)
+							{
+								if(!ShouldNpcDealBonusDamage(target))
+								{
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 350.0, DMG_CLUB, -1, _, vecHit);
+									Elemental_AddPheromoneDamage(target, npc.index, npc.index ? 10 : 10);
+								}
+								else
+									SDKHooks_TakeDamage(target, npc.index, npc.index, 1000.0, DMG_CLUB, -1, _, vecHit);
+							}
+							else
 							{
 								if(!ShouldNpcDealBonusDamage(target))
 									SDKHooks_TakeDamage(target, npc.index, npc.index, 80.0, DMG_CLUB, -1, _, vecHit);
 								else
 									SDKHooks_TakeDamage(target, npc.index, npc.index, 120.0, DMG_CLUB, -1, _, vecHit);
 							}
-							
 							npc.PlayMeleeHitSound();
 						}
 						else
@@ -231,41 +241,42 @@ public void BloatedZombie_ClotThink(int iNPC)
 						}
 					}
 					delete swingTrace;
-					npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 1.4;
+					npc.m_flNextMeleeAttack = GameTime + (npc.m_bFUCKYOU ? 1.2 : 1.4);
 					npc.m_flAttackHappenswillhappen = false;
 				}
 				else if (npc.m_flAttackHappens_bullshit < GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
 				{
 					npc.m_flAttackHappenswillhappen = false;
-					npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 1.4;
+					npc.m_flNextMeleeAttack = GameTime + (npc.m_bFUCKYOU ? 1.2 : 1.4);
 				}
 			}
-			
 		}
 	}
 	else
 	{
 		npc.StopPathing();
-		
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_iTarget = GetClosestTarget(npc.index);
 	}
 	npc.PlayIdleSound();
 }
 
-public void BloatedZombie_NPCDeath(int entity)
+static void BloatedZombie_NPCDeath(int entity)
 {
 	BloatedZombie npc = view_as<BloatedZombie>(entity);
 	if(!npc.m_bGib)
-	{
-		npc.PlayDeathSound();	
-	}
+		npc.PlayDeathSound();
 	float vecMe[3]; WorldSpaceCenter(npc.index, vecMe);
 	Explode_Logic_Custom(40.0, npc.index, npc.index, -1, vecMe, 200.0, 1.0, _, true, 15, _, _, BloatedZombie_ExplodePost);
-	//TE_Particle("asplode_hoodoo", vecMe, NULL_VECTOR, NULL_VECTOR, _, _, _, _, _, _, _, _, _, _, 0.0);
+	DataPack pack_boom = new DataPack();
+	pack_boom.WriteFloat(vecMe[0]);
+	pack_boom.WriteFloat(vecMe[1]);
+	pack_boom.WriteFloat(vecMe[2]);
+	pack_boom.WriteCell(1);
+	RequestFrame(MakeExplosionFrameLater, pack_boom);
 }
 
 static void BloatedZombie_ExplodePost(int attacker, int victim, float damage, int weapon)
 {
-	Elemental_AddPheromoneDamage(victim, attacker, view_as<BloatedZombie>(attacker).m_bElite ? 10 : 10);
+	Elemental_AddPheromoneDamage(victim, attacker, b_FUCKYOU[attacker] ? 15 : 10);
 }
