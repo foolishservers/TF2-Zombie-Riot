@@ -579,13 +579,13 @@ static void Blacksmith_BuildingUsed_Internal_Custom(int weapon, int entity, int 
 		for(int RetryTillWin; RetryTillWin < 4; RetryTillWin++)
 		{
 			if(!EnchantRefresh[weapon])
-				Query_Enchantment_List(weapon, client, account, owner, RetryTillWin);
+				Query_Enchantment_List(weapon, account, owner, RetryTillWin);
 			
 			int i_QueryEnchant = StringToInt(Enchant[weapon][RetryTillWin]);
 			FormatEx(buffer, sizeof(buffer), "%s", Query_GetTransList(i_QueryEnchant));
 			if(TranslationPhraseExists(buffer))
 			{
-				FormatEx(EnchantName, sizeof(EnchantName), "%s;%s", Enchant[weapon][RetryTillWin], SaveRarity[weapon][RetryTillWin]);
+				FormatEx(EnchantName, sizeof(EnchantName), "%s;%i", Enchant[weapon][RetryTillWin], RetryTillWin);
 				FormatEx(buffer, sizeof(buffer), "%t: Lv%i", buffer, SaveRarity[weapon][RetryTillWin]+1);
 				menu.AddItem(EnchantName, buffer);
 			}
@@ -651,7 +651,7 @@ static char[] Query_GetTransList(int SelectInt)
 	return buffer;
 }
 
-static void Query_Enchantment_List(int weapon, int client, int account, int owner, int Count=0)
+static void Query_Enchantment_List(int weapon, int account, int owner, int Count=0)
 {
 	char classname[64];
 	GetEntityClassname(weapon, classname, sizeof(classname));
@@ -1004,7 +1004,6 @@ static int UsedAnvil_MenuH(Menu menu, MenuAction action, int client, int choice)
 				owner = GetEntPropEnt(anvil, Prop_Send, "m_hOwnerEntity");
 			}
 			
-			
 			int account = GetSteamAccountID(client, false);
 			if(!account)
 			{
@@ -1016,7 +1015,7 @@ static int UsedAnvil_MenuH(Menu menu, MenuAction action, int client, int choice)
 			
 			if(id==-1557)
 			{
-				ApplyBuildingCollectCooldown(anvil, client, 10.0);
+				ApplyBuildingCollectCooldown(anvil, client, (owner == client ? 2.5 : 10.0));
 				EnchantRefresh[weapon]=false;
 				ClientCommand(client, "playgamesound ui/quest_decode.wav");
 				return 0;
@@ -1146,6 +1145,8 @@ static int UsedAnvil_MenuH(Menu menu, MenuAction action, int client, int choice)
 			float cooldown = Cooldowns[SmithLevel[owner]];
 			if(client != owner && Store_HasWeaponKit(client))
 				cooldown *= 0.5;
+			if(owner == client)
+				cooldown /= 4.0;
 			if(IsValidEntity(anvil))
 				ApplyBuildingCollectCooldown(anvil, client, cooldown);
 
@@ -1799,6 +1800,8 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 	float cooldown = Cooldowns[SmithLevel[owner]];
 	if(client != owner && Store_HasWeaponKit(client))
 		cooldown *= 0.5;
+	if(tinker.Rarity == -1)
+		cooldown /= 5.0;
 	if(IsValidEntity(entity))
 		ApplyBuildingCollectCooldown(entity, client, cooldown);
 
