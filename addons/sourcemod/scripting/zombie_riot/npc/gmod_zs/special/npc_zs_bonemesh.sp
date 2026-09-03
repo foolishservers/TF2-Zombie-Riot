@@ -188,7 +188,7 @@ static void Bonemesh_ClotThink(int iNPC)
 	if(npc.m_flNextRangedAttack < GameTime)
 	{
 		npc.m_flNextRangedAttack = GameTime + 0.25;
-		ExpidonsaGroupHeal(npc.index, 200.0, 99, 40.0, 1.0, false,Expidonsa_DontHealSameIndex);
+		ExpidonsaGroupHeal(npc.index, 200.0, 99, 200.0, 1.0, false,Expidonsa_DontHealSameIndex);
 	}
 	BonemeshSelfDefense(npc,GameTime); 
 }

@@ -703,9 +703,9 @@ static void Spawn_Zombie(ZsUnspeakable npc)
 		
 		if(spawn_index > MaxClients)
 		{
-			// 체력 계산 및 20만 제한(Clamp)
+			// 체력 계산 및 50만 제한(Clamp)
 			int finalHealth = RoundToFloor(bossMaxHealth * ratios[i]);
-			if(finalHealth > 200000) finalHealth = 200000; 
+			if(finalHealth > 500000) finalHealth = 500000; 
 
 			NpcAddedToZombiesLeftCurrently(spawn_index, true);
 			NpcStats_CopyStats(npc.index, spawn_index);

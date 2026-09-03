@@ -864,17 +864,15 @@ public void DasNaggenvatcher_OnTakeDamagePost(int victim, int attacker, int infl
 		npc.PlaySummonSound();
 		npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
 		RaidModeTime += 80.0;
+		PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_Support_1", true);
 		
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_soldier_pickaxe",40000, RoundToCeil(6.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_soldier",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_demoknight",25000, RoundToCeil(6.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_heavy",30000, RoundToCeil(4.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_engineer",20000, RoundToCeil(4.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_kamikaze_demo",3000, RoundToCeil(6.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_huntsman",20000, RoundToCeil(4.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_infected_tomislav_main",20000, RoundToCeil(4.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_sniper_jarate",20000, RoundToCeil(2.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_random_zombie", RoundToCeil(100000.0 * MultiGlobalHighHealthBoss), 1);
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_eradicator",70000, RoundToCeil(6.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_vile_poisonheadcrab_zombie",80000, RoundToCeil(6.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_fastheadcrab_zombie",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_vile_bloated_zombie",50000, RoundToCeil(6.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_gore_blaster",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_runner",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_random_zombie", RoundToCeil(100000.0 * MultiGlobalHighHealthBoss), 3);
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_nightmare", RoundToCeil(300000.0 * MultiGlobalHighHealthBoss), 1);
 	}
 	else if(Ratio <= 0.55 && npc.g_TimesSummoned < 2)
@@ -883,15 +881,14 @@ public void DasNaggenvatcher_OnTakeDamagePost(int victim, int attacker, int infl
 		npc.PlaySummonSound();
 		npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
 		RaidModeTime += 80.0;
+		PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_Support_2", true);
 		
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_eradicator",70000, RoundToCeil(6.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_vile_poisonheadcrab_zombie",80000, RoundToCeil(6.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_fastheadcrab_zombie",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_vile_bloated_zombie",50000, RoundToCeil(6.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_gore_blaster",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_runner",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_ninja_zombie_spy",65, RoundToCeil(24.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_sniper",6000, RoundToCeil(12.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_soldier_pickaxe",40000, RoundToCeil(6.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_demoknight",25000, RoundToCeil(6.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_random_zombie", RoundToCeil(100000.0 * MultiGlobalHighHealthBoss), 1);
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_pregnant", RoundToCeil(300000.0 * MultiGlobalHighHealthBoss), 1);
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_wandering_spirit", RoundToCeil(100000.0 * MultiGlobalHighHealthBoss), 1);
 	}
 	else if(Ratio <= 0.35 && npc.g_TimesSummoned < 3)
 	{
@@ -899,17 +896,14 @@ public void DasNaggenvatcher_OnTakeDamagePost(int victim, int attacker, int infl
 		npc.PlaySummonSound();
 		npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
 		RaidModeTime += 80.0;
+		PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_Support_3", true);
 		
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_ihbc",45000, RoundToCeil(5.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_firefighter",50000, RoundToCeil(5.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_breadmonster",50000, RoundToCeil(5.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_fatscout",60000, RoundToCeil(5.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_fatspy",50000, RoundToCeil(2.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_sniper",20000, RoundToCeil(2.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_cleaner",50000, RoundToCeil(2.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_ninja_zombie_spy",65, RoundToCeil(2.0 * MultiGlobalEnemy));
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_malfunctioning_heavy", RoundToCeil(300000.0 * MultiGlobalHighHealthBoss), 1);
-		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_sphynx", RoundToCeil(300000.0 * MultiGlobalHighHealthBoss), 1);
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_manhattan_parrot",30000, RoundToCeil(12.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_kamikaze_demo",6000, RoundToCeil(8.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_soldier",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_heavy",30000, RoundToCeil(4.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_engineer",20000, RoundToCeil(4.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_pregnant", RoundToCeil(300000.0 * MultiGlobalHighHealthBoss), 1);
 	}
 	else if(Ratio <= 0.20 && npc.g_TimesSummoned < 4)
 	{
@@ -917,15 +911,23 @@ public void DasNaggenvatcher_OnTakeDamagePost(int victim, int attacker, int infl
 		DasNaggenvatcherSayWords(npc.index);
 		npc.g_TimesSummoned = 4;
 		npc.PlaySummonSound();
-		RaidModeTime += 120.0;
+		RaidModeTime += 200.0;
 		
 		npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_ihbc",45000, RoundToCeil(5.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_firefighter",50000, RoundToCeil(5.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_breadmonster",50000, RoundToCeil(5.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_fatscout",60000, RoundToCeil(5.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_fatspy",50000, RoundToCeil(2.0 * MultiGlobalEnemy));
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_cleaner",50000, RoundToCeil(2.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_sniper",20000, RoundToCeil(2.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_mlsm",50000, RoundToCeil(3.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_sam",40000, RoundToCeil(3.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_medic_main",40000, RoundToCeil(6.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_major_vulture",RoundToCeil(300000.0 * MultiGlobalHighHealthBoss), 1);
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_soldier_barrager", RoundToCeil(300000.0 * MultiGlobalHighHealthBoss), 1, true);
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_malfunctioning_heavy", RoundToCeil(300000.0 * MultiGlobalHighHealthBoss), 1);
+		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_sphynx", RoundToCeil(300000.0 * MultiGlobalHighHealthBoss), 1);
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_flesh_creeper", RoundToCeil(300000.0 * MultiGlobalHighHealthBoss), 1, true);
 	}			
 }
