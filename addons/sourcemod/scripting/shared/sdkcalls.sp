@@ -579,7 +579,7 @@ stock void SDKCall_GetSmoothedVelocity(int entity, float vec[3])
 		SDKCall(SDKGetSmoothedVelocity, entity, vec);
 }
 
-stock void SDKCall_LookupBone(int entity, const char[] bone)
+stock int SDKCall_LookupBone(int entity, const char[] bone)
 {
 	if(SDKLookupBone)
 		return SDKCall(SDKLookupBone, entity, bone);
