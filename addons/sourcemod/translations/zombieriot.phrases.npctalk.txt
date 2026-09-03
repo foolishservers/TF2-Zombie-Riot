@@ -4422,54 +4422,72 @@
 	"CaptainQuetz_LastMann_1"
 	{
 		"en"		"You can’t do anything!"
-		"ko"		"너 혼자서는 아무것도 하지 못 한다!"
+		"ko"		"발악해보아라 이곳이 너희의 마지막이 될 것이니."
 	}
 	"CaptainQuetz_LastMann_2"
 	{
 		"en"		"Join in the Convergence"
-		"ko"		"영광스러운 합일에 동참하라."
+		"ko"		"예상했던 대로군."
 	}
 	"CaptainQuetz_LastMann_3"
 	{
 		"en"		"Surrender now?!"
-		"ko"		"지금 항복할텐가?!"
+		"ko"		"격퇴하라. 항복은 받아주지 마라."
 	}
 	"CaptainQuetz_LastMann_4"
 	{
 		"en"		"You seem better than your comrades"
-		"ko"		"너가 그래도 니 동료들보단 나은것 같군"
+		"ko"		"감히 누가 우리를 막겠는가."
 	}
 	
 	"CaptainQuetz_Death_1"
 	{
 		"en"		"This is utterly pathetic. We didn’t come here just to see results like this"
-		"ko"		"정말 한심하기 짝이없군 고작 이따위 결과를 보려고 우리가 온것이 아닌데"
+		"ko"		"정말 한심하기 짝이없군 고작 이런 것들에게 동족들이 조롱거리가 되었다니..."
 	}
 	"CaptainQuetz_Death_2"
 	{
 		"en"		"Just go Home, you cannot join us"
-		"ko"		"너네 그냥 집에 가라. 너희 같은 것들은 우리와 함께 할 수 없다"
+		"ko"		"고작 이따위 것들에게 수많은 동족들이 희생을 치뤘단 말인가??"
 	}
 	"CaptainQuetz_Death_3"
 	{
 		"en"		"We wasted our time dealing with such trivial things?"
-		"ko"		"고작 이따위 것들을 상대하려고 우리가 시간낭비를 했단 말인가?"
+		"ko"		"고작 이따위 것들을 상대하려고 우리가 모든 전력을 데리고 왔단 말인가??"
+	}
+	
+	"CaptainQuetz_Support_1"
+	{
+		"en"		""
+		"ko"		"동족들이여 마음껏 유린하라."
+	}
+	
+	"CaptainQuetz_Support_2"
+	{
+		"en"		""
+		"ko"		"알파 부대여 놈들을 숨을 수밖에 없게 만들어라!"
+	}
+	
+	"CaptainQuetz_Support_3"
+	{
+		"en"		""
+		"ko"		"브라보 부대여 놈들을 갈가리 찢어버려라!"
 	}
 	
 	"CaptainQuetz_BattleCry_1"
 	{
 		"en"		""
-		"ko"		"내 기대를 실망시키지 않는군, 역시 너희는 우리와 함께할 자격이 있다."
+		"ko"		"수많은 동족들이 궁극의 희생을 치뤘다."
 	}
 	"CaptainQuetz_BattleCry_2"
 	{
 		"en"		""
-		"ko"		"너희도 우리와 하나가 될것이다."
+		"ko"		"동족들이 무수히 쓰러진다 더는 안돼."
 	}
 	"CaptainQuetz_BattleCry_3"
 	{
 		"en"		""
-		"ko"		"우리의 약한 친구들은 도태 되었지만 강한 친구들은 아직 살아있다. 그것이 바로 너희가 될것이다."
+		"ko"		"희생된 자들을 잊지 마라."
 	}
 	"CaptainQuetz_BattleCry_4"
 	{
@@ -4484,70 +4502,70 @@
 	"CaptainQuetz_BattleCry_6"
 	{
 		"en"		""
-		"ko"		"너희도 우리와 하나가 될것이다."
+		"ko"		"우리는 반드시 살아남아야만 한다. 그래야만 한다. {crimson}반드시"
 	}
 	
 	"CaptainQuetz_Propaganda_1"
 	{
 		"en"		""
-		"ko"		"너희를 오랜 시간 동안 지켜보고 있었다."
+		"ko"		"난 동족들이 더 나은 삶을 영위하게 하기 위해 이들을 이끌어 왔다."
 	}
 	"CaptainQuetz_Propaganda_2"
 	{
 		"en"		""
-		"ko"		"그리고 너희는 우리의 기대에 정확히 부합했다."
+		"ko"		"우리는 인류와 공존하고자 했지만, 그들은 세상을 나눠가질 생각이 없었다."
 	}
 	"CaptainQuetz_Propaganda_3"
 	{
 		"en"		""
-		"ko"		"역시 너희도 우리와 하나가 되어야만 한다."
+		"ko"		"우리 동족들은 유한하고, 모두 너무나 빨리 죽는다."
 	}
 	"CaptainQuetz_Propaganda_4"
 	{
 		"en"		""
-		"ko"		"우리가 집어삼킨 세계마다 새로운 형제가 일어나 하나가 되리라."
+		"ko"		"그러다 문득 깨달았다. 동족들을 지킬 자는 오직 나 뿐이라는것을."
 	}
 	"CaptainQuetz_Propaganda_5"
 	{
 		"en"		""
-		"ko"		"우리의 결속은 자라나고 우리는 영생을 누리리라."
+		"ko"		"{crimson}동족들을 수호하기 위해서는 내가 할 수밖에 없다는 것을!"
 	}
 	"CaptainQuetz_Propaganda_6"
 	{
 		"en"		""
-		"ko"		"다만, 아직 마지막 테스트가 필요하다. {crimson}이 테스트가 끝나면 너희도 우리와 하나가 되리라."
+		"ko"		"하지만 너희는 우리를 무참히 짓밟고 죽이며 소중한 내 껍데기까지 훼손시켰다."
 	}
 	"CaptainQuetz_Propaganda_7"
 	{
 		"en"		""
-		"ko"		"아주 오랜 시간 동안... 지금이 오기만을 기다려왔다."
+		"ko"		"더는 안 돼. 우리만의 자리를 찾을 것이다. 그래야만 한다."
 	}
 	"CaptainQuetz_Propaganda_8"
 	{
 		"en"		""
-		"ko"		"이제 너희의 존재를..."
+		"ko"		"나는 지금 이 순간 너희를 흡수하고 동족들을 위한 더 나은 미래를 만들 것이다."
 	}
 	"CaptainQuetz_Propaganda_9"
 	{
 		"en"		""
-		"ko"		"증명할 시간이다!!!!"
+		"ko"		"너희는 결코 그 무엇도 어느것도 바꾸지 못하리라."
 	}
 	
 	// ZsPoYo.
 	"ZsPoYo_Encounter_1"
 	{
 		"en"		""
-		"ko"		"이것이 마지막 테스트다. 운명에 순응하고 우리와 하나가 되어라."
+		"ko"		"너희 만큼은 반드시 절멸시키겠다!"
 	}
 	"ZsPoYo_Encounter_2"
 	{
 		"en"		""
-		"ko"		"이것이 마지막 테스트다. 영광스러운 합일에 동참하라."
+		"ko"		"너희의 모든 것을 앗아가겠다."
 	}
 	"ZsPoYo_Encounter_3"
 	{
 		"en"		""
-		"ko"		"이것이 마지막 테스트다. 끝까지 발악해보거라 어자피 우리와 하나가 될것이니."
+		"ko"		"이제 최후의 시간이다."
 	}
 	
 	"ZsPoYo_LastMann_1"
@@ -4563,7 +4581,7 @@
 	"ZsPoYo_LastMann_3"
 	{
 		"en"		""
-		"ko"		"발악해보아라. 이것이 너희의 마지막이 될것이니."
+		"ko"		"발악해보아라. 이곳이 너희의 마지막이 될것이니."
 	}
 	
 	"ZsPoYo_Teleport_1"
@@ -4574,7 +4592,7 @@
 	"ZsPoYo_Teleport_2"
 	{
 		"en"		""
-		"ko"		"왜 영광스러운 합일을 거부하려 드는가."
+		"ko"		"넌 나약하고, 느리다."
 	}
 	"ZsPoYo_Teleport_3"
 	{
@@ -4608,7 +4626,7 @@
 	"ZsPoYo_TimeOver"
 	{
 		"en"		""
-		"ko"		"오랫동안 기다려온 순간이 마침내 도래하였다."
+		"ko"		"{crimson}놈들에게 절멸을 선사하리라."
 	}
 	"ZsPoYo_Death_1"
 	{
@@ -4628,12 +4646,12 @@
 	"ZsPoYo_Death_4"
 	{
 		"en"		""
-		"ko"		"우리의 결속은 자라나고 우리는 영생을 누리리라."
+		"ko"		"비록 수많은 동족들이 희생을 치뤘지만 강력한 동족들을 손에 넣었다."
 	}
 	"ZsPoYo_Death_5"
 	{
 		"en"		""
-		"ko"		"계획대로 착착 진행되면 참 기분 좋지"
+		"ko"		"죽은 동족들에게 이 승리를 바치지."
 	}
 	"ZsPoYo_Death_6"
 	{
