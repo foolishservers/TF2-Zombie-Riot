@@ -1,20 +1,10 @@
 #pragma semicolon 1
 #pragma newdecls required
- 
-static const char g_DeathSounds[][] =
-{
-	"npc/zombie_poison/pz_die2.wav",
-};
 
 static const char g_HurtSounds[][] =
 {
 	"npc/zombie_poison/pz_warn1.wav",
 	"npc/zombie_poison/pz_warn2.wav",
-};
-
-static const char g_IdleAlertedSounds[][] =
-{
-	"npc/fast_zombie/fz_alert_close1.wav",
 };
 
 static const char g_MeleeMissSounds[][] =
@@ -23,23 +13,32 @@ static const char g_MeleeMissSounds[][] =
 	"npc/fast_zombie/claw_miss2.wav",
 };
 
-static const char g_MeleeAttackSounds[][] =
-{
-	"npc/fast_zombie/leap1.wav",
-};
+static const char g_IdleAlertedSounds[] = "npc/fast_zombie/fz_alert_close1.wav";
+static const char g_MeleeAttackSounds[] = "npc/fast_zombie/leap1.wav";
+static const char g_DeathSounds[] = "npc/zombie_poison/pz_die2.wav";
 
-void ZsSpitter_Precache()
+public void ZsSpitter_Precache()
 {
 	NPCData data;
-	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	strcopy(data.Name, sizeof(data.Name), "ZS Spitter");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_spitter");
 	strcopy(data.Icon, sizeof(data.Icon), "gmod_zs_spitter");
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_MeleeMissSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSound(g_IdleAlertedSounds);
+	PrecacheSound(g_MeleeAttackSounds);
+	PrecacheSound(g_DeathSounds);
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
@@ -49,26 +48,11 @@ static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, co
 
 methodmap ZsSpitter < CSeaBody
 {
-	property bool m_bCarrier
-	{
-		public get()
-		{
-			return this.m_iMedkitAnnoyance == 2;
-		}
-	}
-	property bool m_bElite
-	{
-		public get()
-		{
-			return this.m_iMedkitAnnoyance == 1;
-		}
-	}
 	public void PlayIdleSound()
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
-		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME,_);
+		EmitSoundToAll(g_IdleAlertedSounds, this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME,_);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 	}
 	public void PlayHurtSound()
@@ -77,11 +61,11 @@ methodmap ZsSpitter < CSeaBody
 	}
 	public void PlayDeathSound() 
 	{
-		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME,_);
+		EmitSoundToAll(g_DeathSounds, this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME,_);
 	}
 	public void PlayMeleeSound()
  	{
-		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME,_);
+		EmitSoundToAll(g_MeleeAttackSounds, this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME,_);
 	}
 	public void PlayRangedSound()
 	{
@@ -113,12 +97,12 @@ methodmap ZsSpitter < CSeaBody
 		npc.m_flNextMeleeAttack = 0.0;
 		npc.m_flAttackHappens = 0.0;
 		
-		SetEntityRenderColor(npc.index, 50, 50, 255, 255);
+		SetEntityRenderColor(npc.index, 150, 255, 150, 255);
 		return npc;
 	}
 }
 
-public void ZsSpitter_ClotThink(int iNPC)
+static void ZsSpitter_ClotThink(int iNPC)
 {
 	ZsSpitter npc = view_as<ZsSpitter>(iNPC);
 	
@@ -253,12 +237,13 @@ static Action zs_spitter_StartTouch(int entity, int target)
         float DamageDeal = 40.0;
         if(ShouldNpcDealBonusDamage(target))
             DamageDeal *= 0.5;
+		else
+			Elemental_AddPheromoneDamage(target, owner, 15);
         SDKHooks_TakeDamage(target, owner, inflictor, DamageDeal, DMG_BULLET|DMG_PREVENT_PHYSICS_FORCE, -1);    //acts like a kinetic rocket    
         if(target <= MaxClients && !IsInvuln(target))
             if(!HasSpecificBuff(target, "Fluid Movement"))
                 TF2_StunPlayer(target, 2.0, 0.5, TF_STUNFLAG_SLOWDOWN);
         ApplyStatusEffect(owner, target, "Cellular Breakdown", NpcStats_VestanCallToArms(owner) ? 7.5 : 5.0);
-		Elemental_AddPheromoneDamage(target, owner, 15);
     }
     int particle = EntRefToEntIndex(i_WandParticle[entity]);
     if(IsValidEntity(particle))
@@ -267,7 +252,7 @@ static Action zs_spitter_StartTouch(int entity, int target)
     return Plugin_Handled;
 }
 
-public Action ZsSpitter_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action ZsSpitter_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	if(attacker < 1)
 		return Plugin_Continue;
@@ -281,7 +266,7 @@ public Action ZsSpitter_OnTakeDamage(int victim, int &attacker, int &inflictor, 
 	return Plugin_Changed;
 }
 
-void ZsSpitter_NPCDeath(int entity)
+static void ZsSpitter_NPCDeath(int entity)
 {
 	ZsSpitter npc = view_as<ZsSpitter>(entity);
 	if(!npc.m_bGib)

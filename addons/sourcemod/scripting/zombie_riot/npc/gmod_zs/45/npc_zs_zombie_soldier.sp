@@ -32,9 +32,22 @@ static const char g_IdleAlertedSounds[][] = {
 	"vo/taunts/soldier_taunts18.mp3",
 };
 
+static const char g_MeleeHitSounds[][] =
+{
+	"weapons/cbar_hit1.wav",
+	"weapons/cbar_hit2.wav"
+};
+
+static const char g_MeleeAttackSounds[][] =
+{
+	"weapons/pickaxe_swing1.wav",
+	"weapons/pickaxe_swing2.wav",
+	"weapons/pickaxe_swing3.wav"
+};
+
 static const char g_RangeAttackSounds[] = "weapons/rocket_shoot.wav";
 
-void ZSoldierGrave_OnMapStart_NPC()
+public void ZSoldierGrave_OnMapStart_NPC()
 {
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Soldier Rocketeer");
@@ -46,6 +59,15 @@ void ZSoldierGrave_OnMapStart_NPC()
 	data.Func = ClotSummon;
 	data.Precache = ClotPrecache;
 	NPC_Add(data);
+	
+	strcopy(data.Name, sizeof(data.Name), "Infected Soldier");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_zombie_soldier_pickaxe");
+	strcopy(data.Icon, sizeof(data.Icon), "soldier");
+	data.IconCustom = false;
+	data.Flags = 0;
+	data.Category = Type_GmodZS;
+	data.Func = ClotSummon_ALT;
+	NPC_Add(data);
 }
 
 static void ClotPrecache()
@@ -54,14 +76,21 @@ static void ClotPrecache()
 	PrecacheSoundArray(g_HurtSounds);
 	PrecacheSoundArray(g_IdleSounds);
 	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
 	PrecacheSound(g_RangeAttackSounds);
 	PrecacheModel("models/player/soldier.mdl");
 }
 
+static any ClotSummon_ALT(int client, float vecPos[3], float vecAng[3], int team)
+{
+	return ZSoldierGrave(vecPos, vecAng, team, true);
+}
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
-	return ZSoldierGrave(vecPos, vecAng, team);
+	return ZSoldierGrave(vecPos, vecAng, team, false);
 }
+
 methodmap ZSoldierGrave < CClotBody
 {
 	public void PlayIdleSound() {
@@ -70,14 +99,12 @@ methodmap ZSoldierGrave < CClotBody
 		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(NORMAL_ZOMBIE_SOUNDLEVEL, 100));
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(24.0, 48.0);
 	}
-	
 	public void PlayIdleAlertSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
 		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(NORMAL_ZOMBIE_SOUNDLEVEL, 100));
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 	}
-	
 	public void PlayHurtSound() {
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
@@ -85,27 +112,31 @@ methodmap ZSoldierGrave < CClotBody
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(NORMAL_ZOMBIE_SOUNDLEVEL, 100));
 	}
-	
 	public void PlayDeathSound() {
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(NORMAL_ZOMBIE_SOUNDLEVEL, 100));
 	}
-	
 	public void PlayRangeSound() {
 		EmitSoundToAll(g_RangeAttackSounds, this.index, SNDCHAN_STATIC, 80, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(NORMAL_ZOMBIE_SOUNDLEVEL, 100));
 	}
-	
-	public ZSoldierGrave(float vecPos[3], float vecAng[3], int ally)
+	public void PlayMeleeSound()
+ 	{
+		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _);
+	}
+	public void PlayMeleeHitSound()
 	{
-		ZSoldierGrave npc = view_as<ZSoldierGrave>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", "15000", ally));
+		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, _);	
+	}
+
+	public ZSoldierGrave(float vecPos[3], float vecAng[3], int ally, bool Alt)
+	{
+		ZSoldierGrave npc = view_as<ZSoldierGrave>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.0", (Alt ? "20000" : "15000"), ally));
 		
 		i_NpcWeight[npc.index] = 1;
 		
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
-		int iActivity = npc.LookupActivity("ACT_MP_RUN_PRIMARY");
+		int iActivity = npc.LookupActivity((Alt ? "ACT_MP_RUN_PRIMARY" : "ACT_MP_RUN_MELEE"));
 		if(iActivity > 0) npc.StartActivity(iActivity);
-		
-		npc.m_flNextMeleeAttack = 0.0;
 		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
@@ -113,21 +144,29 @@ methodmap ZSoldierGrave < CClotBody
 
 		func_NPCDeath[npc.index] = ZSoldierGrave_NPCDeath;
 		func_NPCOnTakeDamage[npc.index] = ZSoldierGrave_OnTakeDamage;
-		func_NPCThink[npc.index] = ZSoldierGrave_ClotThink;		
+		func_NPCThink[npc.index] = (Alt ? ZSoldierMelee_ClotThink : ZSoldierGrave_ClotThink);		
 		
 		//IDLE
-		npc.m_flSpeed = 280.0;
+		npc.m_flSpeed = (Alt ? 175.0 : 280.0);		
 		npc.m_iMaxAmmo = 1;
 		npc.m_iAmmo = 1;
 		
 		npc.m_flGetClosestTargetTime = 0.0;
-		npc.StartPathing();
+		npc.m_flNextMeleeAttack = 0.0;
+		npc.m_flNextRangedAttack = 0.0;
+		npc.m_flAttackHappens = 0.0;
+		npc.m_flMeleeArmor = 1.0;
+		npc.m_flRangedArmor = (Alt ? 0.6 : 1.0);	
 		
+		npc.StartPathing();
 		
 		int skin = 5;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
 		
-		npc.m_iWearable1 = npc.EquipItem("head", "models/weapons/c_models/c_rocketlauncher/c_rocketlauncher.mdl");
+		if(Alt)
+			npc.m_iWearable1 = npc.EquipItem("head", "models/weapons/c_models/c_pickaxe/c_pickaxe.mdl");
+		else
+			npc.m_iWearable1 = npc.EquipItem("head", "models/weapons/c_models/c_rocketlauncher/c_rocketlauncher.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
 		npc.m_iWearable2	= npc.EquipItem("head", "models/player/items/soldier/soldier_zombie.mdl");
@@ -301,17 +340,128 @@ static int ZSoldierGrave_Work(ZSoldierGrave npc, float gameTime, int target, flo
 static Action ZSoldierGrave_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	ZSoldierGrave npc = view_as<ZSoldierGrave>(victim);
-	
 	if(attacker <= 0)
 		return Plugin_Continue;
-		
+	
 	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 	{
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
 	}
-	
 	return Plugin_Changed;
+}
+
+static void ZSoldierMelee_ClotThink(int iNPC)
+{
+	ZSoldierGrave npc = view_as<ZSoldierGrave>(iNPC);
+
+	float gameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > gameTime)
+		return;
+	
+	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
+	npc.Update();
+
+	if(npc.m_blPlayHurtAnimation)
+	{
+		npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
+		npc.PlayHurtSound();
+		npc.m_blPlayHurtAnimation = false;
+	}
+	
+	if(npc.m_flNextThinkTime > gameTime)
+		return;
+	
+	npc.m_flNextThinkTime = gameTime + 0.1;
+
+	int target = npc.m_iTarget;
+	if(i_Target[npc.index] != -1 && !IsValidEnemy(npc.index, target))
+		i_Target[npc.index] = -1;
+	
+	if(i_Target[npc.index] == -1 || npc.m_flGetClosestTargetTime < gameTime)
+	{
+		target = GetClosestTarget(npc.index);
+		npc.m_iTarget = target;
+		npc.m_flGetClosestTargetTime = gameTime + 1.0;
+	}
+
+	int maxhealth = ReturnEntityMaxHealth(npc.index);
+	int health = GetEntProp(npc.index, Prop_Data, "m_iHealth");
+	int minhealth = maxhealth / (Rogue_Paradox_RedMoon() ? 8 : 4);
+	if(health < minhealth)
+		health = minhealth;
+	
+	float hpRatio = float(maxhealth) / float(health);
+
+	if(!NpcStats_IsEnemySilenced(npc.index))
+		npc.m_flSpeed = 100.0 + (hpRatio * 75.0);
+	
+	if(target > 0)
+	{
+		float vecTarget[3]; WorldSpaceCenter(target, vecTarget);
+		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
+		float distance = GetVectorDistance(vecTarget, VecSelfNpc, true);	
+		
+		if(distance < npc.GetLeadRadius())
+		{
+			float vPredictedPos[3]; PredictSubjectPosition(npc, target,_,_, vPredictedPos);
+			npc.SetGoalVector(vPredictedPos);
+		}
+		else 
+		{
+			npc.SetGoalEntity(target);
+		}
+
+		npc.StartPathing();
+		
+		if(npc.m_flAttackHappens)
+		{
+			if(npc.m_flAttackHappens < gameTime)
+			{
+				npc.m_flAttackHappens = 0.0;
+				
+				Handle swingTrace;
+				npc.FaceTowards(vecTarget, 15000.0);
+				if(npc.DoSwingTrace(swingTrace, target, _, _, _, _))
+				{
+					target = TR_GetEntityIndex(swingTrace);
+					if(target > 0)
+					{
+						float damage = 100.0 * hpRatio;
+						if(ShouldNpcDealBonusDamage(target))
+							damage *= 6.0;
+
+						npc.PlayMeleeHitSound();
+						SDKHooks_TakeDamage(target, npc.index, npc.index, damage, DMG_CLUB);
+					}
+				}
+
+				delete swingTrace;
+			}
+		}
+
+		if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED) && npc.m_flNextMeleeAttack < gameTime)
+		{
+			target = Can_I_See_Enemy(npc.index, target);
+			if(IsValidEnemy(npc.index, target))
+			{
+				npc.m_iTarget = target;
+				npc.m_flGetClosestTargetTime = gameTime + 1.0;
+
+				npc.AddGesture("ACT_MP_ATTACK_STAND_MELEE");
+				npc.PlayMeleeSound();
+				
+				npc.m_flAttackHappens = gameTime + 0.35;
+				npc.m_flNextMeleeAttack = gameTime + 0.95;
+			}
+		}
+	}
+	else
+	{
+		npc.StopPathing();
+	}
+
+	npc.PlayIdleSound();
 }
 
 static void ZSoldierGrave_NPCDeath(int entity)
@@ -319,7 +469,6 @@ static void ZSoldierGrave_NPCDeath(int entity)
 	ZSoldierGrave npc = view_as<ZSoldierGrave>(entity);
 	if(!npc.m_bGib)
 		npc.PlayDeathSound();	
-	
 	if(IsValidEntity(npc.m_iWearable2))
 		RemoveEntity(npc.m_iWearable2);
 	if(IsValidEntity(npc.m_iWearable1))

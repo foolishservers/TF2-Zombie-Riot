@@ -48,22 +48,10 @@ static const char g_MeleeMissSounds[][] = {
 	"npc/fast_zombie/claw_miss2.wav",
 };
 
-static const char g_PlayHowlerWarCry[][] = {
-	"zombiesurvival/medieval_raid/special_mutation/arkantos_scream_buff.mp3",
-};
+static const char g_PlayHowlerWarCry[] = "zombiesurvival/medieval_raid/special_mutation/arkantos_scream_buff.mp3";
 
 public void ZSHowler_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleSounds));		i++) { PrecacheSound(g_IdleSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_PlayHowlerWarCry));		i++) { PrecacheSound(g_PlayHowlerWarCry[i]);		}
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds));	i++) { PrecacheSound(g_MeleeHitSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeAttackSounds));	i++) { PrecacheSound(g_MeleeAttackSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
-
-	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "ZS Howler");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_howler");
@@ -71,10 +59,24 @@ public void ZSHowler_OnMapStart_NPC()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
 #define ZSHOWLER_BUFF_MAXRANGE 500.0
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeMissSounds);
+	PrecacheSound(g_PlayHowlerWarCry);
+	PrecacheSound("player/flow.wav");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
+}
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
@@ -96,20 +98,16 @@ methodmap ZSHowler < CClotBody
 	}
 	public void PlayHowlerWarCry() 
 	{
-		EmitSoundToAll(g_PlayHowlerWarCry[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_PlayHowlerWarCry, this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	public void PlayHurtSound() {
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	public void PlayDeathSound() {
-	
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-		
 	}
 	public void PlayMeleeSound() {
 		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
@@ -157,7 +155,7 @@ methodmap ZSHowler < CClotBody
 	}
 }
 
-public void ZSHowler_ClotThink(int iNPC)
+static void ZSHowler_ClotThink(int iNPC)
 {
     ZSHowler npc = view_as<ZSHowler>(iNPC);
     
@@ -166,19 +164,13 @@ public void ZSHowler_ClotThink(int iNPC)
     AcceptEntityInput(iNPC, "SetBodyGroup");
 
     if(IsValidEntity(npc.m_iWearable1))
-    {
         SetEntProp(npc.m_iWearable1, Prop_Send, "m_nBody", 64);
-    }
     
     float gameTime = GetGameTime(iNPC);
-
 	if(npc.m_flNextDelayTime > gameTime)
-	{
 		return;
-	}
 	
 	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
-	
 	npc.Update();	
 	
 	if(npc.m_blPlayHurtAnimation)
@@ -189,12 +181,8 @@ public void ZSHowler_ClotThink(int iNPC)
 	}
 	
 	if(npc.m_flNextThinkTime > gameTime)
-	{
 		return;
-	}
-	
 	npc.m_flNextThinkTime = gameTime + 0.1;
-
 
 	if(i_ClosestAllyCD[npc.index] < GetGameTime())
 	{
@@ -327,7 +315,8 @@ public void ZSHowler_ClotThink(int iNPC)
 
 	npc.PlayIdleSound();
 }
-void ZSHowlerAOEBuff(ZSHowler npc, float gameTime, bool mute = false)
+
+static void ZSHowlerAOEBuff(ZSHowler npc, float gameTime, bool mute = false)
 {
 	float pos1[3];
 	GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos1);
@@ -406,7 +395,8 @@ void ZSHowlerAOEBuff(ZSHowler npc, float gameTime, bool mute = false)
 		}
 	}
 }
-void ZSHowlerSelfDefense(ZSHowler npc, float gameTime)
+
+static void ZSHowlerSelfDefense(ZSHowler npc, float gameTime)
 {
 	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
 	{
@@ -493,14 +483,12 @@ void ZSHowlerSelfDefense(ZSHowler npc, float gameTime)
 		}	
 	}
 }
-public void ZSHowler_NPCDeath(int entity)
+
+static void ZSHowler_NPCDeath(int entity)
 {
 	ZSHowler npc = view_as<ZSHowler>(entity);
 	if(!npc.m_bGib)
-	{
 		npc.PlayDeathSound();	
-	}
-	
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
 }

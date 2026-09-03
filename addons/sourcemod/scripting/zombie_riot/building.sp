@@ -261,13 +261,8 @@ void AutobuyMetal(int client)
 			if(metal >= MetalToMaxBuy)
 				return;
 
-			int cash = (CurrentCash + GlobalExtraCash) - CashSpent[client];
-			if(StarterCashMode[client])
-			{
-				int maxCash = StartCash;
-				maxCash -= CashSpentLoadout[client];
-				cash = maxCash;
-			}
+			int cash = Store_GetPlayerCash(client, false);
+
 			//metal to cost ratio
 			MetalToMaxBuy -= metal;
 
@@ -276,9 +271,7 @@ void AutobuyMetal(int client)
 			if((TimesToBuy * AmmoData[Ammo_Metal][0]) >= cash)
 				return;
 			
-			CashSpent[client] += AmmoData[Ammo_Metal][0] * TimesToBuy;
-			CashSpentTotal[client] += AmmoData[Ammo_Metal][0] * TimesToBuy;
-			CashSpentLoadout[client] += AmmoData[Ammo_Metal][0] * TimesToBuy;
+			Store_SpendPlayerCash(client, AmmoData[Ammo_Metal][0] * TimesToBuy);
 			
 			int ammo = GetAmmo(client, Ammo_Metal) + (AmmoData[Ammo_Metal][1] * TimesToBuy);
 			SetAmmo(client, Ammo_Metal, ammo);
@@ -351,13 +344,7 @@ static void BuildingMenu(int client)
 	}
 	
 	int metal = GetAmmo(client, Ammo_Metal);
-	int cash = (CurrentCash + GlobalExtraCash) - CashSpent[client];
-	if(StarterCashMode[client])
-	{
-		int maxCash = StartCash;
-		maxCash -= CashSpentLoadout[client];
-		cash = maxCash;
-	}
+	int cash = Store_GetPlayerCash(client, false);
 	//float multi = Object_GetMaxHealthMulti(client);
 	float gameTime = GetGameTime();
 	bool ducking = view_as<bool>(GetClientButtons(client) & IN_DUCK);
@@ -594,7 +581,7 @@ static void BuildingMenu(int client)
 	if(menu.Display(client, 2))
 		MenuTimer[client] = CreateTimer(0.5, Timer_RefreshMenu, client);
 
-	AnyMenuOpen[client] = 1.0;
+	AnyMenuOpen[client] = 1;
 }
 
 static int BuildingMenuH(Menu menu, MenuAction action, int client, int choice)
@@ -605,17 +592,17 @@ static int BuildingMenuH(Menu menu, MenuAction action, int client, int choice)
 		{
 			delete menu;
 			if(IsValidClient(client))
-				AnyMenuOpen[client] = 0.0;
+				AnyMenuOpen[client] = 0;
 		}
 		case MenuAction_Cancel:
 		{
 			delete MenuTimer[client];
-			AnyMenuOpen[client] = 0.0;
+			AnyMenuOpen[client] = 0;
 		}
 		case MenuAction_Select:
 		{
 			delete MenuTimer[client];
-			AnyMenuOpen[client] = 0.0;
+			AnyMenuOpen[client] = 0;
 
 			if(HasWrench(client))
 			{
@@ -631,9 +618,7 @@ static int BuildingMenuH(Menu menu, MenuAction action, int client, int choice)
 						}
 						case 1:
 						{
-							CashSpent[client] += AmmoData[Ammo_Metal][0] * 10;
-							CashSpentTotal[client] += AmmoData[Ammo_Metal][0] * 10;
-							CashSpentLoadout[client] += AmmoData[Ammo_Metal][0] * 10;
+							Store_SpendPlayerCash(client, AmmoData[Ammo_Metal][0] * 10);
 							ClientCommand(client, "playgamesound \"mvm/mvm_bought_upgrade.wav\"");
 							
 							int ammo = GetAmmo(client, Ammo_Metal) + (AmmoData[Ammo_Metal][1] * 10);
@@ -669,9 +654,7 @@ static int BuildingMenuH(Menu menu, MenuAction action, int client, int choice)
 						}
 						case 1:
 						{
-							CashSpent[client] += AmmoData[Ammo_Metal][0] * 10;
-							CashSpentTotal[client] += AmmoData[Ammo_Metal][0] * 10;
-							CashSpentLoadout[client] += AmmoData[Ammo_Metal][0] * 10;
+							Store_SpendPlayerCash(client, AmmoData[Ammo_Metal][0] * 10);
 							ClientCommand(client, "playgamesound \"mvm/mvm_bought_upgrade.wav\"");
 							
 							int ammo = GetAmmo(client, Ammo_Metal) + (AmmoData[Ammo_Metal][1] * 10);
@@ -745,6 +728,13 @@ static int BuildingMenuH(Menu menu, MenuAction action, int client, int choice)
 										if(HasSpecificBuff(client, "Starting Grace"))
 										{
 											CooldownGive *= 0.5;
+										}
+										if(EntityOnBuildObject[client] && EntityOnBuildObject[client] != INVALID_FUNCTION)
+										{
+											Call_StartFunction(null, EntityOnBuildObject[client]);
+											Call_PushCell(client);
+											Call_PushCell(entity);
+											Call_Finish();
 										}
 										
 										info.Cooldowns[client] = GetGameTime() + CooldownGive;
@@ -954,6 +944,10 @@ stock void ApplyBuildingCollectCooldown(int building, int client, float Duration
 	{
 		Building_Collect_Cooldown[building][client] = FAR_FUTURE;
 	}
+	else if(HasSpecificBuff(client, "Depot Transfer"))
+	{
+		Building_Collect_Cooldown[building][client] = GetGameTime() + 0.5;
+	}
 	else
 	{
 		Building_Collect_Cooldown[building][client] = GetGameTime() + Duration;
@@ -972,13 +966,18 @@ public void Pickup_Building_Multi(int client, int weapon, bool crit)
 
 public void Pickup_Building_M2(int client, int weapon, bool crit)
 {
+	Building_Pickup(client, 150.0);
+}
+
+void Building_Pickup(int client, float dist = 150.0)
+{
 	if(IsValidEntity(Player_BuildingBeingCarried[client]))
 	{
 		int buildingindx = EntRefToEntIndex(Player_BuildingBeingCarried[client]);
 		Building_AttemptPlace(buildingindx, client);
 		return;
 	}
-	int entity = GetClientPointVisible(client, 150.0 , false, false,_,1);
+	int entity = GetClientPointVisible(client, dist , false, false,_,1);
 	if(entity <= MaxClients)	
 		return;
 
@@ -1226,13 +1225,14 @@ void BuildingPickUp(int BuildingNPC)
 	{
 		return;
 	}
-	GrabThrottle[BuildingNPC] = GetGameTime() + 0.1;
 	int client = EntRefToEntIndex(Building_BuildingBeingCarried[BuildingNPC]);
 	if(!IsValidClient(client))
 	{
 		RemoveEntity(BuildingNPC);
 		return;
 	}
+	bool gunsaw = Gunsaw_IsMerc(client);
+	GrabThrottle[BuildingNPC] = GetGameTime() + (gunsaw ? 0.01 : 0.1);
 	PlayerWasHoldingProp[client] = GetGameTime() + 0.2;
 	if(!IsPlayerAlive(client))
 	{
@@ -1240,6 +1240,11 @@ void BuildingPickUp(int BuildingNPC)
 		RemoveEntity(BuildingNPC);
 		return;
 	}
+
+	float distance = BUILDING_DISTANCE_GRAB;
+	if(gunsaw)
+		distance *= 2.0;
+
 	float vecView[3];
 	float vecView2[3];
 	float vecFwd[3];
@@ -1253,9 +1258,9 @@ void BuildingPickUp(int BuildingNPC)
 	GetClientEyePosition(client, vecPos);
 	vecPosbase = vecPos;
 	vecPosbase[2] -= 15.0;
-	vecPos[0]+=vecFwd[0]* BUILDING_DISTANCE_GRAB;
-	vecPos[1]+=vecFwd[1]* BUILDING_DISTANCE_GRAB;
-	vecPos[2]+=vecFwd[2]* BUILDING_DISTANCE_GRAB;
+	vecPos[0]+=vecFwd[0]* distance;
+	vecPos[1]+=vecFwd[1]* distance;
+	vecPos[2]+=vecFwd[2]* distance;
 
 	GetEntPropVector(BuildingNPC, Prop_Data, "m_vecAbsOrigin", vecFwd);
 
@@ -1276,14 +1281,23 @@ void BuildingPickUp(int BuildingNPC)
 	float VecCheckBottom[3];
 	TR_GetEndPosition(VecCheckBottom, hTrace);
 	delete hTrace;
-	
+
 	if(f3_CustomMinMaxBoundingBoxMinExtra[BuildingNPC][2])
 	{
 		//wierd offset.
 		VecCheckBottom[2] -= f3_CustomMinMaxBoundingBoxMinExtra[BuildingNPC][2];
 	}
 	TeleportEntity(BuildingNPC, VecCheckBottom, vecView2, NULL_VECTOR);
-	Building_AttemptPlace(BuildingNPC, client, true);
+	
+	if(gunsaw)
+	{
+		VecCheckBottom[2] += 20.0;
+		TE_SetupBeamPoints(vecPosbase, VecCheckBottom, Shared_BEAM_Laser, 0, 0, 0, 0.1, 1.5, 1.5, 0, 1.2, {100,100,250,200}, 2);
+		TE_SendToAll(0.0);
+	}
+
+	if(!gunsaw)
+		Building_AttemptPlace(BuildingNPC, client, true);
 }
 
 
@@ -2767,7 +2781,8 @@ void DeleteAndRefundBuilding(int client, int entity)
 			return;
 	}
 
-	if(IsValidClient(client))
+	int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
+	if(IsValidClient(client) && client == owner)
 	{
 		int Repair = 	GetEntProp(entity, Prop_Data, "m_iRepair");
 		int MaxRepair = GetEntProp(entity, Prop_Data, "m_iRepairMax");
@@ -3053,4 +3068,46 @@ bool Building_ValidSpaceEmpty(int buildingindx, float VecBottom[3], float HullMi
 		return false;
 	}
 	return true;
+}
+
+
+
+void RandomBuildingGet(int client, char[] Buildingch, int StringSize)
+{
+	int Buildings;
+	int[] iBuilding = new int[MaxClients];
+
+	BuildingInfo info;
+	int length = BuildingList.Length;
+	for(int i; i < length; i++)
+	{
+		char buffer1[196];
+		bool allowed = true;
+		int maxcount = 0;
+		BuildingList.GetArray(i, info);
+		if(info.Section == 2 || info.Section == 3)
+			continue;
+		
+		if(info.Func != INVALID_FUNCTION)
+			allowed = Object_CanBuild(info.Func, client,_,maxcount);
+		
+		// Hide if maxcount is 0
+		if(maxcount < 1)
+			continue;
+
+		if(!allowed)
+			continue;
+
+		
+		NPC_GetNameByPlugin(info.Plugin, buffer1, sizeof(buffer1));
+
+		iBuilding[Buildings++] = i;
+	}
+
+	if(Buildings)
+	{
+		int winner = iBuilding[GetURandomInt() % Buildings];
+		BuildingList.GetArray(winner, info);
+		Format(Buildingch, StringSize, "%s", info.Plugin);
+	}
 }

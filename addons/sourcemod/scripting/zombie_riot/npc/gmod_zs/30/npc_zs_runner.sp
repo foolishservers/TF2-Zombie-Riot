@@ -38,10 +38,8 @@ static const char g_MeleeAttackSounds[][] =
 	"npc/zombie/zo_attack2.wav"
 };
 
-void Zsrunner_Precache()
+public void Zsrunner_Precache()
 {
-	PrecacheSound("player/flow.wav");
-	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Zombie Runner");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_runner");
@@ -49,8 +47,20 @@ void Zsrunner_Precache()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSound("player/flow.wav");
+	PrecacheModel("models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
@@ -116,7 +126,7 @@ methodmap Zsrunner < CSeaBody
 	}
 }
 
-public void Zsrunner_ClotThink(int iNPC)
+static void Zsrunner_ClotThink(int iNPC)
 {
 	Zsrunner npc = view_as<Zsrunner>(iNPC);
 
@@ -192,7 +202,6 @@ public void Zsrunner_ClotThink(int iNPC)
 						// 360 x 0.15
 					}
 				}
-
 				delete swingTrace;
 			}
 		}
@@ -224,7 +233,7 @@ public void Zsrunner_ClotThink(int iNPC)
 	npc.PlayIdleSound();
 }
 
-public Action Zsrunner_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action Zsrunner_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	if(attacker < 1)
 		return Plugin_Continue;
@@ -238,7 +247,7 @@ public Action Zsrunner_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 	return Plugin_Changed;
 }
 
-void Zsrunner_NPCDeath(int entity)
+static void Zsrunner_NPCDeath(int entity)
 {
 	Zsrunner npc = view_as<Zsrunner>(entity);
 	if(!npc.m_bGib)

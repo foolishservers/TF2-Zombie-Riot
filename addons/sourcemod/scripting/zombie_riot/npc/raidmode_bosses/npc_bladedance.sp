@@ -34,6 +34,7 @@ static const char g_RangedSpecialAttackSoundsSecondary[][] = {
 void RaidbossBladedance_MapStart()
 {
 	PrecacheModel("models/effects/combineball.mdl");
+	PrecacheSound("ambient/machines/teleport3.wav");
 	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
 	for (int i = 0; i < (sizeof(g_IdleSound));	i++) { PrecacheSound(g_IdleSound[i]);	}
 	for (int i = 0; i < (sizeof(g_HurtSound));	i++) { PrecacheSound(g_HurtSound[i]);	}
@@ -164,6 +165,7 @@ methodmap RaidbossBladedance < CClotBody
 
 		
 		bool final = StrContains(data, "final_item") != -1;
+		bool clone = StrContains(data, "clone") != -1;
 		npc.m_bBossRushDuo = StrContains(data, "bossrush_duo") != -1;
 		
 		if(Rogue_HasNamedArtifact("Ascension Stack"))
@@ -173,7 +175,6 @@ methodmap RaidbossBladedance < CClotBody
 		{
 			i_RaidGrantExtra[npc.index] = 1;
 		}
-		RemoveAllDamageAddition();
 
 		npc.m_bThisNpcIsABoss = true;
 		npc.Anger = false;
@@ -185,8 +186,6 @@ methodmap RaidbossBladedance < CClotBody
 		npc.Anger = false;
 		npc.m_iOverlordComboAttack = 0;
 		npc.m_flMeleeArmor = 0.75;
-		
-		Citizen_MiniBossSpawn();
 		
 		npc.m_iWearable1 = npc.EquipItem("partyhat", "models/player/items/spy/spy_party_phantom.mdl");
 		SetVariantString("1.25");
@@ -200,44 +199,63 @@ methodmap RaidbossBladedance < CClotBody
 
 		SetEntityRenderColor(npc.m_iWearable2, 255, 55, 55, 255);
 		
-		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);	
-		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);	
 		npc.m_flBladedanceAngerResistance = 0.0;
-
-		for(int client_check=1; client_check<=MaxClients; client_check++)
-		{
-			if(IsClientInGame(client_check) && !IsFakeClient(client_check))
-				LookAtTarget(client_check, npc.index);
-		}
 
 		SetVariantInt(3);
 		AcceptEntityInput(npc.index, "SetBodyGroup");
 
-		RaidModeScaling = 0.0;
-		RaidModeTime = GetGameTime() + ((300.0) * (1.0 + (MultiGlobalEnemy * 0.4)));
-		RaidAllowsBuildings = true;
-		RaidAllowLastman = true;
-		
-		if (npc.m_bBossRushDuo)
+		if (clone)
 		{
-			if (!IsValidEntity(RaidBossActive))
-				RaidBossActive = EntIndexToEntRef(npc.index);
-			
-			GiveNpcOutLineLastOrBoss(npc.index, true);
-			RaidAllowsBuildings = false;
-			RaidAllowLastman = true;
-			RaidModeTime = GetGameTime() + 500.0;
+			EmitSoundToAll("ambient/machines/teleport3.wav", _, _, _, _, 1.0);
+			EmitSoundToAll("ambient/machines/teleport3.wav", _, _, _, _, 1.0);
 		}
 		else
 		{
-			Format(WhatDifficultySetting, sizeof(WhatDifficultySetting), "??????????????????????????????????");
-			CPrintToChatAll("{crimson}칼춤{default}: 어떻게 여기까지 온 거지? 날 공격하는 이유가 뭐냐? 네 놈들도 또 공허의 하수인들이겠군?");
-			
-			RaidBossActive = EntIndexToEntRef(npc.index);
+			EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);
+			EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);
+
+			RemoveAllDamageAddition();
+			Citizen_MiniBossSpawn();
+
+			for(int client_check=1; client_check<=MaxClients; client_check++)
+			{
+				if(IsClientInGame(client_check) && !IsFakeClient(client_check))
+					LookAtTarget(client_check, npc.index);
+			}
+
+			RaidModeScaling = 0.0;
+			RaidModeTime = GetGameTime() + ((300.0) * (1.0 + (MultiGlobalEnemy * 0.4)));
+			RaidAllowsBuildings = true;
+			RaidAllowLastman = true;
+
+			if (npc.m_bBossRushDuo)
+			{
+				if (!IsValidEntity(RaidBossActive))
+					RaidBossActive = EntIndexToEntRef(npc.index);
+
+				GiveNpcOutLineLastOrBoss(npc.index, true);
+				RaidAllowsBuildings = false;
+				RaidAllowLastman = true;
+				RaidModeTime = GetGameTime() + 500.0;
+			}
+			else
+			{
+				Format(WhatDifficultySetting, sizeof(WhatDifficultySetting), "?????????????????????");
+				RaidBossBladedance_NPCTalkMessage(npc.index, "Bladedance_Encounter");
+				
+				RaidBossActive = EntIndexToEntRef(npc.index);
+			}
 		}
 
 		return npc;
 	}
+}
+
+static void RaidBossBladedance_NPCTalkMessage(int iNPC, const char[] message, any ...)
+{
+	char buffer[255];
+	VFormat(buffer, sizeof(buffer), message, 3);
+	NPC_TalkMessageWithTranslationCheck(iNPC, "crimson", buffer);
 }
 
 public void RaidbossBladedance_ClotThink(int iNPC)
@@ -307,9 +325,16 @@ public void RaidbossBladedance_ClotThink(int iNPC)
 	}
 	else if(npc.m_iOverlordComboAttack > 45 && !npc.m_bForceNextWave && i_RaidGrantExtra[npc.index] == 1)
 	{
-		delete WaveTimer;
-		WaveTimer = CreateTimer(0.1, Waves_ProgressTimer);
-		npc.m_bForceNextWave = true;
+		//0 is default
+		int WaveWhich = 0;
+		int length = Rounds[WaveWhich].Length-1;
+		length--;
+		if(CurrentRound[WaveWhich] < length)
+		{
+			delete WaveTimer;
+			WaveTimer = CreateTimer(0.1, Waves_ProgressTimer);
+			npc.m_bForceNextWave = true;
+		}
 	}
 	else if(npc.m_iOverlordComboAttack > 50)
 	{
@@ -324,22 +349,13 @@ public void RaidbossBladedance_ClotThink(int iNPC)
 			
 			npc.PlayRangedSpecialAttackSecondarySound(vecTarget);
 			npc.AddGesture("ACT_BLADEDANCE_BUFF");
-			switch(GetRandomInt(1,3))
-			{
-				case 1:
-					CPrintToChatAll("{crimson}칼춤{default}: 가라, 내 분신들아!");
-				case 2:
-					CPrintToChatAll("{crimson}칼춤{default}: 이젠 정말 지긋지긋한 싸움이다! 여기서 꺼져라!");
-				case 3:
-					CPrintToChatAll("{crimson}Bladedance{default}: Wish you could lose at the casino I once owned!");
-
-			}
+			
+			RaidBossBladedance_NPCTalkMessage(npc.index, "Bladedance_BuffAlly_%d", GetRandomInt(1, 3));
 			
 			npc.m_flDoingAnimation = gameTime + 0.9;
 			npc.m_flNextRangedAttackHappening = 0.0;
 			npc.m_bisWalking = false;
 			npc.StopPathing();
-			
 
 			float pos[3];
 			GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos);
@@ -490,6 +506,12 @@ public Action RaidbossBladedance_OnTakeDamage(int victim, int &attacker, int &in
 		if(!npc.Anger)
 			npc.m_iOverlordComboAttack++;
 	}
+	if(npc.m_flHurtForAbility < gameTime)
+	{
+		npc.m_flHurtForAbility = gameTime + DEFAULT_HURTDELAY;
+		if(!npc.Anger)
+			npc.m_iOverlordComboAttack++;
+	}
 	if(!npc.m_flBladedanceAngerResistance)
 	{
 		if((ReturnEntityMaxHealth(npc.index)/2) >= GetEntProp(npc.index, Prop_Data, "m_iHealth")) //Anger after half hp/400 hp
@@ -497,7 +519,7 @@ public Action RaidbossBladedance_OnTakeDamage(int victim, int &attacker, int &in
 			npc.m_flBladedanceAngerResistance = 1.0;
 			ApplyStatusEffect(npc.index, npc.index, "Very Defensive Backup", 25.0);
 			ApplyStatusEffect(npc.index, npc.index, "Godly Motivation", 40.0);
-			CPrintToChatAll("{crimson}Bladedance{default}: You have seen nothing I say! I'm the least of your worries!");
+			RaidBossBladedance_NPCTalkMessage(npc.index, "Bladedance_Anger");
 			npc.DispatchParticleEffect(npc.index, "hightower_explosion", NULL_VECTOR, NULL_VECTOR, NULL_VECTOR, npc.FindAttachment("eyes"), PATTACH_POINT_FOLLOW, true);
 		}
 	}
@@ -524,14 +546,14 @@ public void RaidbossBladedance_NPCDeath(int entity)
 	
 	if(i_RaidGrantExtra[npc.index] == 1 && GameRules_GetRoundState() == RoundState_ZombieRiot)
 	{
-		CPrintToChatAll("{crimson}Bladedance{default}: You and Bob the first.. you both misunderstand who the enemy is.. its {white}Whiteflower{default} you fools! He betrayed {crimson}Guln{default} aswell!");
-		CPrintToChatAll("{crimson}Bladedance{default} escapes from you... and gains the ability to copy {crimson}you.");
+		RaidBossBladedance_NPCTalkMessage(npc.index, "Bladedance_Win");
+		CPrintToChatAll("%t", "Bladedance_Escape");
 		for (int client = 1; client <= MaxClients; client++)
 		{
 			if(IsValidClient(client) && GetClientTeam(client) == 2 && TeutonType[client] != TEUTON_WAITING && PlayerPoints[client] > 500)
 			{
 				Items_GiveNamedItem(client, "Bob's true fear");
-				CPrintToChat(client,"{default}This battle wasn't something that should have happened. You had little to no chance... This is... {red}''Bob's True fear.''{default}!");
+				CPrintToChat(client, "%T", "Bladedance_Trophies", client);
 			}
 		}
 		for(int i; i < i_MaxcountNpcTotal; i++)

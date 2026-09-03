@@ -15,7 +15,8 @@ static const char g_HurtSounds[][] =
 	"vo/sniper_painsharp03.mp3",
 	"vo/sniper_painsharp04.mp3",
 };
-void InfectedSniperOnMapStart()
+
+public void InfectedSniperOnMapStart()
 {
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Infected Sniper");
@@ -24,8 +25,16 @@ void InfectedSniperOnMapStart()
 	data.IconCustom = false;
 	data.Flags = MVM_CLASS_FLAG_SUPPORT;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheModel("models/player/sniper.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
@@ -39,7 +48,6 @@ methodmap InfectedSniper < CClotBody
 	{
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
@@ -66,19 +74,13 @@ methodmap InfectedSniper < CClotBody
 		func_NPCDeath[npc.index] = view_as<Function>(InfectedSniper_NPCDeath);
 		func_NPCOnTakeDamage[npc.index] = view_as<Function>(InfectedSniper_OnTakeDamage);
 		func_NPCThink[npc.index] = view_as<Function>(InfectedSniper_ClotThink);
-		
-		npc.m_iChanged_WalkCycle = 0;
-
-		if(npc.m_iChanged_WalkCycle != 1)
-		{
-			npc.m_bisWalking = true;
-			npc.m_iChanged_WalkCycle = 1;
-			npc.SetActivity("ACT_MP_RUN_PRIMARY");
-			npc.StartPathing();
-			npc.m_flSpeed = 300.0;
-		}
 
 		npc.m_flNextMeleeAttack = GetGameTime() + 1.0;
+		Is_a_Medic[npc.index] = true;
+		npc.m_bisWalking = true;
+		npc.m_iChanged_WalkCycle = 1;
+		npc.m_flSpeed = 300.0;
+		npc.StartPathing();
 		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
@@ -86,7 +88,6 @@ methodmap InfectedSniper < CClotBody
 		
 		int skin = 5;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
-		Is_a_Medic[npc.index] = true;
 
 		npc.m_iWearable1 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_sydney_sleeper/c_sydney_sleeper.mdl");
 		npc.m_iWearable2 = npc.EquipItem("head", "models/player/items/sniper/sniper_zombie.mdl");
@@ -115,34 +116,26 @@ methodmap InfectedSniper < CClotBody
 			LastSpawnDiversio = GetGameTime() + 20.0;
 			TeleportDiversioToRandLocation(npc.index,_,1750.0, 1250.0);
 		}
-		
 		return npc;
 	}
 }
 
-public void InfectedSniper_ClotThink(int iNPC)
+static void InfectedSniper_ClotThink(int iNPC)
 {
 	InfectedSniper npc = view_as<InfectedSniper>(iNPC);
 	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
-	{
 		return;
-	}
 	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
-
 	if(npc.m_blPlayHurtAnimation)
 	{
 		npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
 		npc.m_blPlayHurtAnimation = false;
 		npc.PlayHurtSound();
 	}
-	
 	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
-	{
 		return;
-	}
 	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
-
 	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
 	{
 		npc.m_iTargetWalkTo = GetClosestTarget(npc.index);
@@ -152,11 +145,9 @@ public void InfectedSniper_ClotThink(int iNPC)
 	if(IsValidEnemy(npc.index, npc.m_iTargetWalkTo))
 	{
 		float vecTarget[3]; WorldSpaceCenter(npc.m_iTargetWalkTo, vecTarget );
-	
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-		int ExtraBehavior = InfectedSniperSelfDefense(npc,GetGameTime(npc.index)); 
-
+		int ExtraBehavior = InfectedSniperSelfDefense(npc,GetGameTime(npc.index));
 		switch(ExtraBehavior)
 		{
 			case 0:
@@ -182,7 +173,6 @@ public void InfectedSniper_ClotThink(int iNPC)
 				}
 			}
 		}
-
 		if(flDistanceToTarget < npc.GetLeadRadius()) 
 		{
 			float vPredictedPos[3];
@@ -201,13 +191,11 @@ public void InfectedSniper_ClotThink(int iNPC)
 	}
 }
 
-public Action InfectedSniper_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action InfectedSniper_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	InfectedSniper npc = view_as<InfectedSniper>(victim);
-		
 	if(attacker <= 0)
 		return Plugin_Continue;
-		
 	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 	{
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
@@ -217,14 +205,14 @@ public Action InfectedSniper_OnTakeDamage(int victim, int &attacker, int &inflic
 	return Plugin_Changed;
 }
 
-public void InfectedSniper_NPCDeath(int entity)
+static void InfectedSniper_NPCDeath(int entity)
 {
 	InfectedSniper npc = view_as<InfectedSniper>(entity);
 	if(!npc.m_bGib)
 	{
 		npc.PlayDeathSound();	
 	}
-		
+	
 	if(IsValidEntity(npc.m_iWearable5))
 		RemoveEntity(npc.m_iWearable5);
 	if(IsValidEntity(npc.m_iWearable4))
@@ -235,10 +223,9 @@ public void InfectedSniper_NPCDeath(int entity)
 		RemoveEntity(npc.m_iWearable2);
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
-
 }
 
-int InfectedSniperSelfDefense(InfectedSniper npc, float gameTime)
+static int InfectedSniperSelfDefense(InfectedSniper npc, float gameTime)
 {
 	if(!npc.m_flAttackHappens)
 	{
@@ -308,7 +295,7 @@ int InfectedSniperSelfDefense(InfectedSniper npc, float gameTime)
 		TE_SetupBeamPoints(origin, ThrowPos[npc.index], Shared_BEAM_Laser, 0, 0, 0, 0.11, 5.0, 5.0, 0, 0.0, {0,0,255,255}, 3);
 		TE_SendToAll(0.0);
 	}
-			
+	
 	npc.FaceTowards(ThrowPos[npc.index], 15000.0);
 	if(npc.m_flAttackHappens)
 	{
@@ -324,13 +311,9 @@ int InfectedSniperSelfDefense(InfectedSniper npc, float gameTime)
 			Handle hTrace = TR_TraceRayFilterEx(pos_npc, AngleAim, MASK_SOLID, RayType_Infinite, BulletAndMeleeTrace, npc.index);
 			int Traced_Target = TR_GetEntityIndex(hTrace);
 			if(Traced_Target > 0)
-			{
 				WorldSpaceCenter(Traced_Target, ThrowPos[npc.index]);
-			}
 			else if(TR_DidHit(hTrace))
-			{
 				TR_GetEndPosition(ThrowPos[npc.index], hTrace);
-			}
 			delete hTrace;	
 			int target = Can_I_See_Enemy(npc.index, npc.m_iTarget,_ ,ThrowPos[npc.index]);
 			npc.AddGesture("ACT_MP_ATTACK_STAND_PRIMARY");
@@ -348,10 +331,8 @@ int InfectedSniperSelfDefense(InfectedSniper npc, float gameTime)
 			} 
 		}
 	}
-
 	if(gameTime > npc.m_flNextMeleeAttack)
 	{
-		
 		npc.m_flAttackHappens = gameTime + 1.25;
 		npc.m_flDoingAnimation = gameTime + 0.95;
 		npc.m_flNextMeleeAttack = gameTime + 2.5;

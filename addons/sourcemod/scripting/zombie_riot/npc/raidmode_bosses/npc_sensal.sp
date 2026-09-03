@@ -6,14 +6,8 @@
 #define SENSAL_LASER_THICKNESS 25
 
 static bool BlockLoseSay;
-
-
-
 static float f_TimeSinceHasBeenHurt[MAXENTITIES];
-
 static int i_LaserEntityIndex[MAXENTITIES]={-1, ...};
-
-
 
 static const char g_DeathSounds[][] = {
 	"weapons/rescue_ranger_teleport_receive_01.wav",
@@ -40,7 +34,6 @@ static const char g_MissAbilitySound[][] = {
 	"vo/soldier_negativevocalization06.mp3",
 };
 
-
 static const char g_IdleAlertedSounds[][] = {
 	"vo/taunts/soldier_taunts19.mp3",
 	"vo/taunts/soldier_taunts20.mp3",
@@ -53,9 +46,11 @@ static const char g_RangedAttackSounds[][] = {
 	"weapons/airstrike_fire_02.wav",
 	"weapons/airstrike_fire_03.wav",
 };
+
 static const char g_MeleeAttackSounds[][] = {
 	"weapons/cbar_miss1.wav",
 };
+
 static const char g_MeleeHitSounds[][] = {
 	"weapons/neon_sign_hit_01.wav",
 	"weapons/neon_sign_hit_02.wav",
@@ -68,6 +63,7 @@ static const char g_HurtArmorSounds[][] = {
 	")physics/metal/metal_box_impact_bullet2.wav",
 	")physics/metal/metal_box_impact_bullet3.wav",
 };
+
 static const char g_SuperJumpSound[][] = {
 	"misc/halloween/spell_mirv_explode_primary.wav",
 };
@@ -252,7 +248,6 @@ methodmap Sensal < CClotBody
 
 	}
 	
-	
 	public Sensal(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
 		Sensal npc = view_as<Sensal>(CClotBody(vecPos, vecAng, "models/player/soldier.mdl", "1.35", "40000", ally, false, true, true,true)); //giant!
@@ -300,7 +295,6 @@ methodmap Sensal < CClotBody
 			fl_AlreadyStrippedMusic[client_clear] = 0.0; //reset to 0
 		}
 		
-
 		bool final = StrContains(data, "final_item") != -1;
 		
 		i_RaidGrantExtra[npc.index] = 1;
@@ -341,7 +335,7 @@ methodmap Sensal < CClotBody
 		if(tripple)
 		{
 			RemoveAllDamageAddition();
-			NPCTalkMessage(npc.index, "This is your final challange, beat all 3 of us at once, Fear the might of {gold}Expidonsa{default}!");
+			RaidBossSensal_NPCTalkMessage(npc.index, "Sensal_Encounter_Trio", true);
 			GiveOneRevive(true);
 		}
 		for(int client_check=1; client_check<=MaxClients; client_check++)
@@ -487,9 +481,16 @@ methodmap Sensal < CClotBody
 	}
 }
 
-static void NPCTalkMessage(int entity, const char[] message, bool translated = false)
+static void RaidBossSensal_NPCTalkMessage(int entity, const char[] message, bool translated = false, any ...)
 {
-	PrintNPCMessageWithPrefixes(entity, "blue", message, translated);
+	char buffer[256];
+	VFormat(buffer, sizeof(buffer), message, 4);
+	PrintNPCMessageWithPrefixes(entity, "blue", buffer, translated);
+}
+
+static void RaidBossSensal_NPCTalkMessageAbout(int entity, const char[] message, int client)
+{
+	NPC_TalkMessageFormat(entity, "blue", "%t", _, _, message, client);
 }
 
 static void Internal_ClotThink(int iNPC)
@@ -571,11 +572,11 @@ static void Internal_ClotThink(int iNPC)
 		{
 			case 0:
 			{
-				NPCTalkMessage(npc.index, "Castellan_And_Sensal_Talk-1", true);
+				RaidBossSensal_NPCTalkMessage(npc.index, "Castellan_And_Sensal_Talk-1", true);
 			}
 			case 1:
 			{
-				NPCTalkMessage(npc.index, "Castellan_And_Sensal_Talk-2", true);
+				RaidBossSensal_NPCTalkMessage(npc.index, "Castellan_And_Sensal_Talk-2", true);
 			}
 			case 2:
 			{
@@ -583,11 +584,11 @@ static void Internal_ClotThink(int iNPC)
 			}
 			case 3:
 			{
-				NPCTalkMessage(npc.index, "Castellan_And_Sensal_Talk-4", true);
+				RaidBossSensal_NPCTalkMessage(npc.index, "Castellan_And_Sensal_Talk-4", true);
 			}
 			case 4:
 			{
-				NPCTalkMessage(npc.index, "Castellan_And_Sensal_Talk-5", true);
+				RaidBossSensal_NPCTalkMessage(npc.index, "Castellan_And_Sensal_Talk-5", true);
 			}
 			case 5:
 			{
@@ -595,7 +596,7 @@ static void Internal_ClotThink(int iNPC)
 			}
 			case 6:
 			{
-				NPCTalkMessage(npc.index, "Castellan_And_Sensal_Talk-7", true);
+				RaidBossSensal_NPCTalkMessage(npc.index, "Castellan_And_Sensal_Talk-7", true);
 			}
 			case 7:
 			{
@@ -603,7 +604,7 @@ static void Internal_ClotThink(int iNPC)
 			}
 			case 8:
 			{
-				NPCTalkMessage(npc.index, "Castellan_And_Sensal_Talk-9", true);
+				RaidBossSensal_NPCTalkMessage(npc.index, "Castellan_And_Sensal_Talk-9", true);
 			}
 			case 9:
 			{
@@ -638,21 +639,7 @@ static void Internal_ClotThink(int iNPC)
 		if(!npc.m_fbGunout)
 		{
 			npc.m_fbGunout = true;
-			switch(GetRandomInt(0,2))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "You are the last one.");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "None of you criminals are of any importance to {gold}Expidonsa{default}.");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "All your friends are gone. Submit to {gold}Expidonsan{default} might.");
-				}
-			}
+			RaidBossSensal_NPCTalkMessage(npc.index, "Sensal_LastMann_%d", true, GetRandomInt(1, 3));
 		}
 	}
 	if(i_RaidGrantExtra[npc.index] == RAIDITEM_INDEX_WIN_COND)
@@ -662,7 +649,7 @@ static void Internal_ClotThink(int iNPC)
 		npc.SetCycle(0.01);
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		
-		NPCTalkMessage(npc.index, "Refusing to collaborate or even reason with {gold}Expidonsa{default} will result in termination.");
+		RaidBossSensal_NPCTalkMessage(npc.index, "Sensal_Lose", true);
 		return;
 	}
 	if(RaidModeTime < GetGameTime())
@@ -676,7 +663,8 @@ static void Internal_ClotThink(int iNPC)
 		npc.SetCycle(0.01);
 		RaidBossActive = INVALID_ENT_REFERENCE;
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
-		NPCTalkMessage(npc.index, "You are under arrest. The Expidonsan elite forces will take you now.");
+		
+		RaidBossSensal_NPCTalkMessage(npc.index, "Sensal_TimeOver", true);
 		for(int i; i<32; i++)
 		{
 			float pos[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos);
@@ -814,7 +802,9 @@ static Action Internal_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 			RemoveNpcFromEnemyList(npc.index);
 			GiveProgressDelay(20.0);
 			
-			NPCTalkMessage(npc.index, "You keep talking about Silvester and Waldch, what is the meaning of this?");
+			RaidBossSensal_NPCTalkMessage(npc.index, "Sensal_Anger", true);
+			
+			Sensal_Cleanup(npc.index);
 
 			damage = 0.0; //So he doesnt get oneshot somehow, atleast once.
 			return Plugin_Handled;
@@ -842,7 +832,8 @@ static void Internal_NPCDeath(int entity)
 	npc.PlayDeathSound();	
 
 	RaidBossActive = INVALID_ENT_REFERENCE;
-		
+	
+	Sensal_Cleanup(npc.index);
 	
 	if(IsValidEntity(npc.m_iWearable8))
 		RemoveEntity(npc.m_iWearable8);
@@ -871,9 +862,9 @@ static void Internal_NPCDeath(int entity)
 	if(i_RaidGrantExtra[npc.index] == 50)
 	{
 		if(XenoExtraLogic())
-			NPCTalkMessage(npc.index, "This area is restricted for all of you.");
+			RaidBossSensal_NPCTalkMessage(npc.index, "Sensal_Xeno_Lab", true);
 		else
-			NPCTalkMessage(npc.index, "You all are coming with me.");
+			RaidBossSensal_NPCTalkMessage(npc.index, "Sensal_Xeno", true);
 
 		return;
 	}
@@ -881,29 +872,11 @@ static void Internal_NPCDeath(int entity)
 	{
 		return;
 	}
+	
 	if(BlockLoseSay)
 		return;
-
-	switch(GetRandomInt(0,3))
-	{
-		case 0:
-		{
-			NPCTalkMessage(npc.index, "Your actions against a fellow {gold}Expidonsan{default} will not be forgiven, I will be back with reinforcements.");
-		}
-		case 1:
-		{
-			NPCTalkMessage(npc.index, "Your time will come when you pay for going against the law of {gold}Expidonsa{default}.");
-		}
-		case 2:
-		{
-			NPCTalkMessage(npc.index, "{gold}Expidonsa{default} is beyond your level of understanding.");
-		}
-		case 3:
-		{
-			NPCTalkMessage(npc.index, "You do not know what you are getting yourself into.");
-		}
-	}
-
+	
+	RaidBossSensal_NPCTalkMessage(npc.index, "Sensal_Death_%d", true, GetRandomInt(1, 4));
 }
 /*
 
@@ -1717,7 +1690,7 @@ bool SensalTalkPostWin(Sensal npc)
 	}
 	if(GetGameTime() > f_TimeSinceHasBeenHurt[npc.index])
 	{
-		NPCTalkMessage(npc.index, "We apologize for the sudden attack. We didn't know, take this as an apology.");
+		RaidBossSensal_NPCTalkMessage(npc.index, "Sensal_Win_5", true);
 		
 		RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
 		BlockLoseSay = true;
@@ -1726,29 +1699,29 @@ bool SensalTalkPostWin(Sensal npc)
 			if(IsValidClient(client) && GetClientTeam(client) == 2 && TeutonType[client] != TEUTON_WAITING && PlayerPoints[client] > 500)
 			{
 				Items_GiveNamedItem(client, "Expidonsan Battery Device");
-				CPrintToChat(client,"{default}센살이 당신에게 고에너지 배터리를 건네주었습니다: {darkblue}''엑스피돈사인의 배터리 장비''{default}!");
+				CPrintToChat(client, "%T", "Sensal_Trophies", client);
 			}
 		}
 	}
 	else if(GetGameTime() + 5.0 > f_TimeSinceHasBeenHurt[npc.index] && i_SaidLineAlready[npc.index] < 4)
 	{
 		i_SaidLineAlready[npc.index] = 4;
-		NPCTalkMessage(npc.index, "But I see that this was to protect you guys and yet you were able to destroy {green}Calmaticus.");
+		RaidBossSensal_NPCTalkMessage(npc.index, "Sensal_Win_4", true);
 	}
 	else if(GetGameTime() + 10.0 > f_TimeSinceHasBeenHurt[npc.index] && i_SaidLineAlready[npc.index] < 3)
 	{
 		i_SaidLineAlready[npc.index] = 3;
-		NPCTalkMessage(npc.index, "We got sent to rescue him and we saw you attacking him.");
+		RaidBossSensal_NPCTalkMessage(npc.index, "Sensal_Win_3", true);
 	}
 	else if(GetGameTime() + 13.0 > f_TimeSinceHasBeenHurt[npc.index] && i_SaidLineAlready[npc.index] < 2)
 	{
 		i_SaidLineAlready[npc.index] = 2;
-		NPCTalkMessage(npc.index, "We are close friends though we lost contact since he left the city.");
+		RaidBossSensal_NPCTalkMessage(npc.index, "Sensal_Win_2", true);
 	}
 	else if(GetGameTime() + 16.5 > f_TimeSinceHasBeenHurt[npc.index] && i_SaidLineAlready[npc.index] < 1)
 	{
 		i_SaidLineAlready[npc.index] = 1;
-		NPCTalkMessage(npc.index, "....I see. They are friend of yours now as well.");
+		RaidBossSensal_NPCTalkMessage(npc.index, "Sensal_Win_1", true);
 	}
 	return true; //He is trying to help.
 }
@@ -2321,34 +2294,62 @@ static void Sensal_Weapon_Lines(Sensal npc, int client)
 		return;
 
 	bool valid = true;
+	bool mentionClient;
 	char Text_Lines[255];
-
+	
 	Text_Lines = "";
-
+	
 	switch(i_CustomWeaponEquipLogic[weapon])
 	{
-		
-		case WEAPON_SENSAL_SCYTHE,WEAPON_SENSAL_SCYTHE_PAP_1,WEAPON_SENSAL_SCYTHE_PAP_2,WEAPON_SENSAL_SCYTHE_PAP_3:
-		 switch(GetRandomInt(0,1)) 	{case 0: Format(Text_Lines, sizeof(Text_Lines), "You are trying to wield my weapon, {gold}%N{default}? You are not competent enough for it.", client);
-		  							case 1: Format(Text_Lines, sizeof(Text_Lines), "You think you can use it to its fullest potential {gold}%N{default}? You do not even own the {gold}Manifestation glove.", client);}	//IT ACTUALLY WORKS, LMFAO
-		case WEAPON_FUSION,WEAPON_FUSION_PAP1,WEAPON_FUSION_PAP2: switch(GetRandomInt(0,1)) 		{case 0: Format(Text_Lines, sizeof(Text_Lines), "{gold}Silvesters{default} blade? Why is he so nice to everyone...");
-		 							case 1: Format(Text_Lines, sizeof(Text_Lines), "{gold}Silvester{default}, you...");}
-		case WEAPON_SICCERINO,WEAPON_WALDCH_SWORD_NOVISUAL:  Format(Text_Lines, sizeof(Text_Lines), "How do you have access to such {gold}Expidonsan{default} weaponry {gold}%N{default}?",client);
-		case WEAPON_WALDCH_SWORD_REAL:  Format(Text_Lines, sizeof(Text_Lines), "What? How did you get this elite blade {gold}%N{default}?",client);
-		case WEAPON_NEARL:  Format(Text_Lines, sizeof(Text_Lines), "{gold}Silvester{default} decided to visit Grunwald?");
-		case WEAPON_KAHMLFIST:  Format(Text_Lines, sizeof(Text_Lines), "Kahmlstein caused enough problems as it is.");
-		case WEAPON_KIT_BLITZKRIEG_CORE:  Format(Text_Lines, sizeof(Text_Lines), "This machine is gone now, use it better then it has {gold}%N{default}.",client);
-		case WEAPON_AMPHI:  Format(Text_Lines, sizeof(Text_Lines), "Almina's Weapons!? Looks like the secret is out of the bag now...");
-		case WEAPON_BOBS_GUN:  Format(Text_Lines, sizeof(Text_Lines), "OH MY GOD, {snow}BOB THE FIRST{default} IS ON YOUR SIDE?!");
-		case WEAPON_ANGELIC_SHOTGUN:  Format(Text_Lines, sizeof(Text_Lines), "How did you get {lightblue}Nemal's{default} weapon {gold}%N{default}?",client);
-		case WEAPON_IMPACT_LANCE:  Format(Text_Lines, sizeof(Text_Lines), "That lance... the only weapon that was forged from both {snow}Ruina{default} and {gold}Expidonsa{default}...");
-		/*
-		//uncomment on release
-		case WEAPON_NECRO_WANDS:
+		case WEAPON_SENSAL_SCYTHE, WEAPON_SENSAL_SCYTHE_PAP_1, WEAPON_SENSAL_SCYTHE_PAP_2, WEAPON_SENSAL_SCYTHE_PAP_3:
 		{
-			Format(Text_Lines, sizeof(Text_Lines), "이건 또 뭐지, 죽은 자를 모방...? 또{green} 스푸크마스터 본즈{default}의 장난질인가?");
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Sensal_Response_Sensal_Scythe_%d", GetRandomInt(1, 2));
+			mentionClient = true;
 		}
-		*/
+		case WEAPON_FUSION,WEAPON_FUSION_PAP1,WEAPON_FUSION_PAP2:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Sensal_Response_Fusion_%d", GetRandomInt(1, 2));
+		}
+		case WEAPON_SICCERINO, WEAPON_WALDCH_SWORD_NOVISUAL:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Sensal_Response_Siccerino");
+			mentionClient = true;
+		}
+		case WEAPON_WALDCH_SWORD_REAL:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Sensal_Response_Waldch_Sword");
+			mentionClient = true;
+		}
+		case WEAPON_NEARL:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Sensal_Response_Nearl_Spear");
+		}
+		case WEAPON_KAHMLFIST:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Sensal_Response_Kahlm_Fist");
+		}
+		case WEAPON_KIT_BLITZKRIEG_CORE:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Sensal_Response_Blitzkreig_Kit");
+			mentionClient = true;
+		}
+		case WEAPON_AMPHI:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Sensal_Response_Amphi");
+		}
+		case WEAPON_BOBS_GUN:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Sensal_Response_Bobs_Sexy_Gun");
+		}
+		case WEAPON_ANGELIC_SHOTGUN:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Sensal_Response_Angelica_Shotgonnus");
+			mentionClient = true;
+		}
+		case WEAPON_IMPACT_LANCE:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Sensal_Response_Impact_Lance");
+		}
 		default:
 		{
 			valid = false;
@@ -2357,13 +2358,19 @@ static void Sensal_Weapon_Lines(Sensal npc, int client)
 
 	if(valid)
 	{
-		NPCTalkMessage(npc.index, Text_Lines);
+		if(mentionClient)
+		{
+			RaidBossSensal_NPCTalkMessageAbout(npc.index, Text_Lines, client);
+		}
+		else
+		{
+			RaidBossSensal_NPCTalkMessage(npc.index, Text_Lines, true);
+		}
+		
 		fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(17.0, 26.0);
 		b_said_player_weaponline[client] = true;
 	}
 }
-
-
 
 bool Target_CrystalTrue(int target)
 {
@@ -2381,4 +2388,18 @@ bool Target_CrystalFalse(int entity, int target)
 		return false;
 	}
 	return true;
+}
+
+static void Sensal_Cleanup(int entity)
+{
+	for (int i = 1; i < MAXENTITIES; i++)
+	{
+		if (!IsValidEntity(i) || !b_IsAProjectile[i])
+			continue;
+		
+		if (GetEntPropEnt(i, Prop_Send, "m_hOwnerEntity") != entity)
+			continue;
+		
+		RemoveEntity(i);
+	}
 }

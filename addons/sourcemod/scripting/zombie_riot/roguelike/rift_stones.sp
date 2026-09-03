@@ -361,16 +361,16 @@ static void GiveCash(int cash)
 	CPrintToChatAll("{green}%t", "자금 획득!", cash);
 }
 
-
-
 public void Rogue_LelouchCrestBroken_Ally(int entity, StringMap map)
 {
 	if(map)	// Player
 	{
 		float value;
 		//give 1 armor level
-		map.GetValue("701", value);
-		map.SetValue("701", value + 50.0);
+		//map.GetValue("701", value);
+		//map.SetValue("701", value + 50.0);
+		map.GetValue("5000", value);
+		map.SetValue("5000", value * 2.0);
 	}
 }
 public void Rogue_IncorruptableLeaf_Ally(int entity, StringMap map)

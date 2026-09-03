@@ -43,6 +43,10 @@ methodmap ObjectHealingStation < ObjectGeneric
 		func_NPCInteract[npc.index] = ClotInteract;
 		i_PlayerToCustomBuilding[client] = EntIndexToEntRef(npc.index);
 
+		for (int i = 1; i <= MaxClients; i++)
+		{
+			ApplyBuildingCollectCooldown(npc.index, i, 45.0);
+		}
 		return npc;
 	}
 }
@@ -102,6 +106,8 @@ static bool ClotInteract(int client, int weapon, ObjectHealingStation npc)
 		default:
 			MaxHealthPerc *= 0.15;
 	}
+	if(ZR_Get_Modifier() == KITERS_DREAM)
+		MaxHealthPerc *= 0.5;
 	if(HealAmmount < MaxHealthPerc)
 	{
 		HealAmmount = MaxHealthPerc;
@@ -110,5 +116,6 @@ static bool ClotInteract(int client, int weapon, ObjectHealingStation npc)
 
 	HealEntityGlobal(owner, client, HealAmmount, _, 3.0, _);
 	ApplyStatusEffect(owner, client, "Fridge Food", 5.0);
+	Gunsaw_Monologue_UseFridge(client);
 	return true;
 }

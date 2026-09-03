@@ -145,7 +145,7 @@ public void SDKHook_ScoreThink(int entity)
 	for(int client=1; client<=MaxClients; client++)
 	{
 	#if defined ZR
-		CashCurrentlyOwned[client] = (CurrentCash + GlobalExtraCash)-CashSpent[client];
+		CashCurrentlyOwned[client] = Store_GetPlayerCash(client, true);
 		alive[client] = (TeutonType[client] == TEUTON_NONE && IsClientInGame(client) && IsPlayerAlive(client));
 	#else
 		CashCurrentlyOwned[client] = TextStore_Cash(client);
@@ -578,40 +578,87 @@ public void OnPostThink(int client)
 #if defined ZR
 	bool Mana_Regen_Tick = false;
 
-	if(Rogue_CanRegen() && (Mana_Regen_Delay[client] < GameTime || (b_AggreviatedSilence[client] && Mana_Regen_Delay_Aggreviated[client] < GameTime)))
+	if(Rogue_CanRegen())
 	{
-		Mana_Regen_Delay[client] = GameTime + 0.4;
-		Mana_Regen_Delay_Aggreviated[client] = GameTime + 0.4;
-
-		has_mage_weapon[client] = false;
-		
-		Mana_Regen_Tick = true;
-
-		ManaCalculationsBefore(client);
-	
-		if(Current_Mana[client] < RoundToCeil(max_mana[client]) && Mana_Regen_Block_Timer[client] < GameTime)
+		if((Mana_Regen_Delay_Aggreviated[client] < GameTime || Mana_Regen_Delay[client] < GameTime))
 		{
-			Current_Mana[client] += RoundToCeil(mana_regen[client]);
-				
-			if(Current_Mana[client] > RoundToCeil(max_mana[client])) //Should only apply during actual regen
+			int RegenAutoDo = RechargeManaPassively(client);
+			
+			if(b_AggreviatedSilence[client])
+				RegenAutoDo = 2;
+			
+			if(RegenAutoDo == 1)
 			{
-				Current_Mana[client] = RoundToCeil(max_mana[client]);
-				mana_regen[client] = 0.0;
+				//We will check if auto regen from mana is allowed
+				if(Mana_Regen_Delay[client] < GameTime)
+				{
+					RegenAutoDo = 0;
+					//use normal regen
+				}
 			}
+
+			if(RegenAutoDo == 1 || RegenAutoDo == 2)
+			{
+				if(Mana_Regen_Delay_Aggreviated[client] < GameTime)
+				{
+					RegenAutoDo = 4;
+					//We auto regen
+					Mana_Regen_Delay_Aggreviated[client] = GameTime + 0.4;
+					if(f_TimeSinceLastRegenStop[client] < GetGameTime() + 0.4)
+						f_TimeSinceLastRegenStop[client] = GetGameTime() + 0.4;
+				}
+			}
+			else
+			{
+				//when regenrating normally, always trigger aggreviated.
+				Mana_Regen_Delay_Aggreviated[client] = GameTime + 0.4;
+				if(Mana_Regen_Delay[client] < GameTime)
+				{
+					RegenAutoDo = 5;
+					Mana_Regen_Delay[client] = GameTime + 0.4;
+				}
+				//normal regen
+			}
+
+				
+			
+			//small reuse of a bool to make it check for stuff
+			if(RegenAutoDo >= 4)
+			{
+				has_mage_weapon[client] = false;
+				ManaCalculationsBefore(client);
+				if(RegenAutoDo == 4)
+					mana_regen[client] *= 0.2;
+				//always set this
+
+				Mana_Regen_Tick = true;
+			
+				if(Current_Mana[client] < RoundToCeil(max_mana[client]) && Mana_Regen_Block_Timer[client] < GameTime)
+				{
+					Current_Mana[client] += RoundToCeil(mana_regen[client]);
+						
+					if(Current_Mana[client] > RoundToCeil(max_mana[client])) //Should only apply during actual regen
+					{
+						Current_Mana[client] = RoundToCeil(max_mana[client]);
+						mana_regen[client] = 0.0;
+					}
+				}
+				else
+				{
+					mana_regen[client] = 0.0;
+				}
+				if(HasSpecificBuff(client, "Dimensional Turbulence"))
+				{
+					Current_Mana[client] = 9999999;
+					mana_regen[client] = 9999999.9;
+					max_mana[client] = 9999999.9;
+				}
+							
+				if(!IsIn_HitDetectionCooldown(client,client, DontUpdateHudClient))
+					Mana_Hud_Delay[client] = 0.0;
+			}
+			
 		}
-		else
-		{
-			mana_regen[client] = 0.0;
-		}
-		if(HasSpecificBuff(client, "Dimensional Turbulence"))
-		{
-			Current_Mana[client] = 9999999;
-			mana_regen[client] = 9999999.9;
-			max_mana[client] = 9999999.9;
-		}
-					
-		if(!IsIn_HitDetectionCooldown(client,client, DontUpdateHudClient))
-			Mana_Hud_Delay[client] = 0.0;
 	}
 	//A part of Ruina's special mana "corrosion"
 	if(Current_Mana[client] > RoundToCeil(max_mana[client]+10.0))	
@@ -1662,10 +1709,7 @@ public void OnPostThink(int client)
 			char HudBuffer[256];
 			if(!TeutonType[client])
 			{
-				int downsleft;
-				downsleft = 2;
-				if(ZR_Get_Modifier() == PREFIX_ONESTAND)
-					downsleft = 3;
+				int downsleft = TotalDowns();
 
 				downsleft -= i_AmountDowned[client];
 				SDKHooks_UpdateMarkForDeath(client);
@@ -1701,10 +1745,14 @@ public void OnPostThink(int client)
 				Format(HudBuffer, sizeof(HudBuffer), "%s %t",HudBuffer, "You Wait Teuton"
 				);
 			}
-			SetEntProp(client, Prop_Send, "m_nCurrency", (CurrentCash + GlobalExtraCash)-CashSpent[client]);
+			SetEntProp(client, Prop_Send, "m_nCurrency", Store_GetPlayerCash(client, true));
 			
 			if(HudBuffer[0])
 				PrintKeyHintText(client,"%s", HudBuffer);
+		}
+		else if (IsClientObserver(client) && GetEntProp(client, Prop_Send, "m_iObserverMode") == OBS_MODE_ROAMING)
+		{
+			PrintKeyHintText(client, "%t", "Free Roam Spec Notice");
 		}
 #endif	// ZR
 	}
@@ -2293,6 +2341,9 @@ public Action Player_OnTakeDamageAlive_DeathCheck(int victim, int &attacker, int
 					//We trigger lastman if we hit this
 				}
 			}
+
+			Gunsaw_TryBodySteal(victim, true);
+
 			damage = 0.0;
 			GiveCompleteInvul(victim, 3.0);
 			MorphineShotLogic(victim, true);
@@ -2321,10 +2372,8 @@ public Action Player_OnTakeDamageAlive_DeathCheck(int victim, int &attacker, int
 			Rogue_PlayerDowned(victim);	
 			
 			//there are players still left, down them.
-			int DownsLeft = 2;
-			if(ZR_Get_Modifier() == PREFIX_ONESTAND)
-				DownsLeft = 3;
-			if((SpecterCheckIfAutoRevive(victim) || i_AmountDowned[victim] < (DownsLeft + Dungeon_DownedBonus())) && !HasSpecificBuff(victim, "Nightmare Terror"))
+			int DownsLeft = TotalDowns();
+			if(((SpecterCheckIfAutoRevive(victim) || i_AmountDowned[victim] < DownsLeft)) && !HasSpecificBuff(victim, "Nightmare Terror"))
 			{
 				if(i_CurrentEquippedPerk[victim] & PERK_WHO)
 					Citizen_PlayerReplacement(victim, false);
@@ -2348,6 +2397,7 @@ public Action Player_OnTakeDamageAlive_DeathCheck(int victim, int &attacker, int
 				*/
 
 				Dungeon_PlayerDowned(victim);
+				Gunsaw_Monologue_OnDowned(victim);
 				
 				ApplyRapidSuturing(victim);
 				ExtinguishTargetDebuff(victim);
@@ -2424,7 +2474,7 @@ public Action Player_OnTakeDamageAlive_DeathCheck(int victim, int &attacker, int
 					if(i_WeaponVMTExtraSetting[entity] != -1)
 						continue;
 
-					if(!autoRevive)
+					if(!autoRevive || HasSpecificBuff(victim, "Defibrillator"))
 					{
 						SetEntityRenderMode(entity, RENDER_NORMAL);
 						SetEntityRenderColor(entity, 255, 125, 125, 255);
@@ -2435,7 +2485,7 @@ public Action Player_OnTakeDamageAlive_DeathCheck(int victim, int &attacker, int
 						SetEntityRenderColor(entity, 255, 255, 255, 10);
 					}
 				}
-				if(!autoRevive)
+				if(!autoRevive || HasSpecificBuff(victim, "Defibrillator"))
 				{
 					SetEntityRenderMode(victim, RENDER_NORMAL);
 					SetEntityRenderColor(victim, 255, 125, 125, 255);
@@ -2471,19 +2521,19 @@ void Replicate_Damage_Medications(int victim, float &damage, int damagetype)
 {
 	if(!CheckInHud() && TF2_IsPlayerInCondition(victim, TFCond_MarkedForDeath))
 	{
-		i_WasInMarkedForDeath[victim] = TF2Util_GetPlayerConditionDuration(victim, TFCond_MarkedForDeath);
+		i_WasInMarkedForDeath[victim] = VS_GetPlayerCondDuration(victim, TFCond_MarkedForDeath);
 		TF2_RemoveCondition(victim, TFCond_MarkedForDeath);
 	}
 	if(!CheckInHud() && TF2_IsPlayerInCondition(victim, TFCond_MarkedForDeathSilent))
 	{
-		i_WasInMarkedForDeathSilent[victim] = TF2Util_GetPlayerConditionDuration(victim, TFCond_MarkedForDeathSilent);
+		i_WasInMarkedForDeathSilent[victim] = VS_GetPlayerCondDuration(victim, TFCond_MarkedForDeathSilent);
 		TF2_RemoveCondition(victim, TFCond_MarkedForDeathSilent);
 	}
 	if(TF2_IsPlayerInCondition(victim, TFCond_Jarated))
 	{
 		if(!CheckInHud())
 		{
-			i_WasInJarate[victim] = TF2Util_GetPlayerConditionDuration(victim, TFCond_Jarated);
+			i_WasInJarate[victim] = VS_GetPlayerCondDuration(victim, TFCond_Jarated);
 			TF2_RemoveCondition(victim, TFCond_Jarated);
 		}
 		damage *= 1.35;
@@ -2492,7 +2542,7 @@ void Replicate_Damage_Medications(int victim, float &damage, int damagetype)
 	{
 		if(!CheckInHud())
 		{
-			i_WasInDefenseBuff[victim] = TF2Util_GetPlayerConditionDuration(victim, TFCond_DefenseBuffed);
+			i_WasInDefenseBuff[victim] = VS_GetPlayerCondDuration(victim, TFCond_DefenseBuffed);
 			TF2_RemoveCondition(victim, TFCond_DefenseBuffed);
 		}
 		if(!(damagetype & DMG_TRUEDAMAGE))
@@ -2500,7 +2550,7 @@ void Replicate_Damage_Medications(int victim, float &damage, int damagetype)
 	}
 	if(!CheckInHud() && TF2_IsPlayerInCondition(victim, TFCond_RuneResist))
 	{
-		i_WasInResPowerup[victim] = TF2Util_GetPlayerConditionDuration(victim, TFCond_RuneResist);
+		i_WasInResPowerup[victim] = VS_GetPlayerCondDuration(victim, TFCond_RuneResist);
 		TF2_RemoveCondition(victim, TFCond_RuneResist);
 		//This is purely visual, it doesnt grant anything by itself.
 	}
@@ -2642,6 +2692,8 @@ public Action SDKHook_NormalSHook(int clients[MAXPLAYERS], int &numClients, char
 				}
 			}
 			LouderSoundStop = false;
+
+			Gunsaw_Monologue_LoudPrefix();
 		}
 	}
 /*
@@ -2755,7 +2807,7 @@ public Action SDKHook_NormalSHook(int clients[MAXPLAYERS], int &numClients, char
 						entity, channel, volume, level, pitch, flags,seed);
 					}
 					//nothing for niko. silent!
-					case NIKO_2:
+					case NIKO_2, CLAIRE_FPE:
 					{
 
 					}
@@ -2972,7 +3024,7 @@ void ApplyLastmanOrDyingOverlay(int client)
 	{
 		switch(Yakuza_Lastman())
 		{
-			case 1,2,3,4,7,9, 15:
+			case 1,2,3,4,7,9,15,17:
 			{
 				return;
 			}
@@ -2986,6 +3038,16 @@ void ApplyLastmanOrDyingOverlay(int client)
 			case 8:
 			{
 				if(!HasSpecificBuff(client, "Death is comming."))
+					return;
+			}
+			case 18:
+			{
+				if(Gunsaw_IsMerc(client) && f_OneShotProtectionTimer[client] < GetGameTime())
+					return;
+			}
+			default:
+			{
+				if(Weapon_AddonsOverlayForLastMan(client, Yakuza_Lastman()))
 					return;
 			}
 		}
@@ -3047,12 +3109,8 @@ void SDKHooks_UpdateMarkForDeath(int client, bool force_Clear = false)
 	if (TeutonType[client] != TEUTON_NONE)
 		force_Clear = true;
 
-	int downsleft;
-	downsleft = 2;
-	if(ZR_Get_Modifier() == PREFIX_ONESTAND)
-		downsleft = 3;
+	int downsleft = TotalDowns();
 	downsleft -= i_AmountDowned[client];
-	downsleft += Dungeon_DownedBonus();
 	if(HasSpecificBuff(client, "Nightmare Terror"))
 		downsleft = 0;
 	if(!force_Clear && downsleft <= 0 && !SpecterCheckIfAutoRevive(client))
@@ -3628,7 +3686,7 @@ stock void SDKhooks_SetManaRegenDelayTime(int client, float time)
 		f_TimeSinceLastRegenStop[client] = GetGameTime() + time;
 		
 	//Set to 0 so hud is good
-	if(!b_AggreviatedSilence[client])
+	if(!RechargeManaPassively(client))
 		mana_regen[client] = 0.0;
 #endif
 }
@@ -3664,6 +3722,9 @@ void ManaCalculationsBefore(int client)
 	float ManaMaxExtra = 500.0;
 	if(ZR_Get_Modifier() == NOSTALGICA)
 		ManaRegen *= 0.75;
+	ManaRegen *= 1.10;
+	ManaMaxExtra *= 1.10;
+	
 	
 	while(TF2_GetItem(client, entity, i))
 	{
@@ -3898,3 +3959,16 @@ bool PlayersLeftAlive(int victim)
 	return Any_Left;
 }
 #endif
+
+
+bool RechargeManaPassively(int client)
+{
+	if(b_AggreviatedSilence[client])
+		return true;
+	
+	if(HasSpecificBuff(client, "Mana Recharge"))
+	{
+		return true;
+	}
+	return false;
+}

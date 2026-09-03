@@ -1,13 +1,8 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-
 #define Silvester_BASE_RANGED_SCYTHE_DAMGAE 13.0
 #define Silvester_LASER_THICKNESS 25
-
-
-
-
 
 static bool b_SilvLine[MAXENTITIES];
 static bool b_SilvesterAttackSame[MAXENTITIES];
@@ -347,71 +342,17 @@ methodmap Silvester < CClotBody
 		if(StrContains(data, "wave_30") != -1)
 		{
 			i_RaidGrantExtra[npc.index] = 2;
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Sorry that im late!");
-				}
-				case 1:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Had to do some errands with {blue}Sensal{default}.");
-				}
-				case 2:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Here i am!");
-				}
-				case 3:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Starting easy? Got it!");
-				}
-			}
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Wave30_%d", GetRandomInt(1, 4));
 		}
 		if(StrContains(data, "wave_45") != -1)
 		{
 			i_RaidGrantExtra[npc.index] = 3;
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Just like old times, eh Mercs?");
-				}
-				case 1:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Its good to practice, i shouldnt slack off.");
-				}
-				case 2:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Sorry {lightblue}Nemal{default} I should take this more seriously.");
-				}
-				case 3:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Wish {darkblue}Waldch{default} would come with train with us, but ever since the {crimson}hitman{default} is gone, he can finally do work.");
-				}
-			}
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Wave45_%d", GetRandomInt(1, 4));
 		}
 		if(StrContains(data, "wave_60") != -1)
 		{
 			i_RaidGrantExtra[npc.index] = 4;
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Here it is.");
-				}
-				case 1:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Final Challange.");
-				}
-				case 2:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "No more holding back.");
-				}
-				case 3:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Im giving it my all.");
-				}
-			}
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Final_%d", GetRandomInt(1, 4));
 		}
 		bool final = StrContains(data, "final_item") != -1;
 		
@@ -419,29 +360,9 @@ methodmap Silvester < CClotBody
 		{
 			i_RaidGrantExtra[npc.index] = 5;
 			b_NpcUnableToDie[npc.index] = true;
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Here it is.");
-				}
-				case 1:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Final Challange.");
-				}
-				case 2:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "No more holding back.");
-				}
-				case 3:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Im giving it my all.");
-				}
-			}
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Encounter_Final_%d", GetRandomInt(1, 4));
 		}
-
-
-
+		
 		func_NPCFuncWin[npc.index] = view_as<Function>(Raidmode_Expidonsa_Silvester_Win);
 
 		npc.m_iChanged_WalkCycle = -1;
@@ -510,14 +431,12 @@ static void Internal_ClotThink(int iNPC)
 		return;
 	}
 	
-
 	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 	bool NemalAssistance = false;
 	if(IsValidEntity(npc.m_iTargetAlly) && !IsPartnerGivingUpNemalSilv(npc.index))
 		NemalAssistance = true; //they are alive and helping.
-
-
+	
 	if(npc.m_flSilvesterHudCD < GetGameTime())
 	{
 		npc.m_flSilvesterHudCD = GetGameTime() + 0.2;
@@ -594,7 +513,7 @@ static void Internal_ClotThink(int iNPC)
 		{
 			npc.m_flInTeleportLogic = 0.0;
 			npc.m_flChangeTargetsSilvester -= 3.0;
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Oh damn She is already gone...");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Teleport_Fail");
 			RemoveSpecificBuff(npc.index, "Very Defensive Backup");
 			return;
 		}
@@ -656,28 +575,10 @@ static void Internal_ClotThink(int iNPC)
 				npc.m_bisWalking = false;
 				npc.AddActivityViaSequence("taunt_borrowed_bones");
 				npc.SetCycle(0.03);
-				switch(GetRandomInt(0,4 * 2)) //have half the chance to say nothing
-				{
-					case 0:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Hold on {lightblue}Nemal{default} i'm coming!");
-					}
-					case 1:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Thinking of taking {lightblue}Nemal{default} out first?");
-					}
-					case 2:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "{lightblue}Nemal{default}... {darkblue}Waldch{default}... you both are the same i swear!");
-					}
-					case 3:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Rahhh, ill teleport to you wait.");
-					}
-					case 4:
-					{
-						RaidbossSilvester_NPCTalkMessage(npc.index, "Here i go !");
-					}
+				
+				int num = GetRandomInt(1, 5 * 2);
+				if (num <= 5) {
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Teleport_Prepare_%d", num);
 				}
 			}
 		}
@@ -689,21 +590,7 @@ static void Internal_ClotThink(int iNPC)
 		if(!npc.m_fbGunout)
 		{
 			npc.m_fbGunout = true;
-			switch(GetRandomInt(0,2))
-			{
-				case 0:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "You dont beat me, then youll never be able to face the full force of the {purple}void{default}.");
-				}
-				case 1:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Not beating me means no beating the {purple}void{default}.");
-				}
-				case 2:
-				{
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Use that adrenaline against me, come on!");
-				}
-			}
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_LastMann_%d", GetRandomInt(1, 3));
 		}
 	}
 	if(i_RaidGrantExtra[npc.index] == RAIDITEM_INDEX_WIN_COND)
@@ -713,21 +600,7 @@ static void Internal_ClotThink(int iNPC)
 		npc.SetCycle(0.01);
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		
-		switch(GetRandomInt(0,2))
-		{
-			case 0:
-			{
-				RaidbossSilvester_NPCTalkMessage(npc.index, "Gotta go, youll win next time.");
-			}
-			case 1:
-			{
-				RaidbossSilvester_NPCTalkMessage(npc.index, "Atleast you fought, and didnt run!");
-			}
-			case 2:
-			{
-				RaidbossSilvester_NPCTalkMessage(npc.index, "I can try to go easier next time, but that wont help with training.");
-			}
-		}
+		RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Lose_%d", GetRandomInt(1, 3));
 		return;
 	}
 	if(npc.m_flSilvesterTransformRegardless < GetGameTime(npc.index))
@@ -749,7 +622,7 @@ static void Internal_ClotThink(int iNPC)
 			{
 				RemoveEntity(npc.m_iWearable8);
 			}
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Youre taking to long to hurt me, ill try harder myself then.");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Force_Transform");
 			npc.m_flSilvesterTransformRegardless = FAR_FUTURE;
 			npc.i_GunMode = 0;
 		}
@@ -769,36 +642,24 @@ static void Internal_ClotThink(int iNPC)
 		npc.SetCycle(0.01);
 		RaidBossActive = INVALID_ENT_REFERENCE;
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
-		switch(GetRandomInt(0,2))
-		{
-			case 0:
-			{
-				RaidbossSilvester_NPCTalkMessage(npc.index, "Sorry, too slow.");
-			}
-			case 1:
-			{
-				RaidbossSilvester_NPCTalkMessage(npc.index, "Well thats a boring end.");
-			}
-			case 2:
-			{
-				RaidbossSilvester_NPCTalkMessage(npc.index, "If you would stop running, this wouldnt happen.");
-			}
-		}
+		RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_TimeOver_%d", GetRandomInt(1, 3));
 		BlockLoseSay = true;
 	}
+	
 	if(SilvesterTransformation(npc, NemalAssistance))
 		return;
-
+	
 	if(npc.Anger)
 	{
 		if(SilvesterSwordSlicer(npc, NemalAssistance))
 			return;
 	}
+	
 	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
 	{
 		return;
 	}
-
+	
 	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
 
 	if(npc.m_blPlayHurtAnimation)
@@ -807,8 +668,7 @@ static void Internal_ClotThink(int iNPC)
 		npc.m_blPlayHurtAnimation = false;
 		npc.PlayHurtSound();
 	}
-
-
+	
 	if(!IsValidEntity(RaidBossActive))
 	{
 		RaidBossActive = EntIndexToEntRef(npc.index);
@@ -898,7 +758,7 @@ static void Internal_ClotThink(int iNPC)
 					npc.SetActivity("ACT_MP_STAND_MELEE_ALLCLASS");
 					npc.m_flSpeed = 320.0;
 					npc.m_bAllowBackWalking = false;
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Oh you seem to be alone, i'll wait.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_SoloWait");
 					b_NpcIsInvulnerable[npc.index] = true; //Special huds for invul targets
 				}	
 			}
@@ -912,7 +772,7 @@ static void Internal_ClotThink(int iNPC)
 					npc.SetActivity("ACT_MP_STAND_MELEE");
 					npc.m_flSpeed = 320.0;
 					npc.m_bAllowBackWalking = false;
-					RaidbossSilvester_NPCTalkMessage(npc.index, "Oh you seem to be alone, i'll wait.");
+					RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_SoloWait");
 					b_NpcIsInvulnerable[npc.index] = true; //Special huds for invul targets
 				}				
 			}
@@ -927,7 +787,7 @@ static void Internal_ClotThink(int iNPC)
 	{
 		if(!b_SilvLine[npc.index])
 		{
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Fighting me alone now? Guess ill give it extra.");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_SoloFight");
 			b_SilvLine[npc.index] = true;
 			RaidModeScaling *= 1.15;
 		}
@@ -1061,7 +921,7 @@ static Action Internal_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 				RemoveEntity(npc.m_iWearable8);
 			}
 			SetEntProp(npc.index, Prop_Data, "m_iHealth", ReturnEntityMaxHealth(npc.index)/2);
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Well, looks like i gotta take off the training wheels.");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Anger_1");
 			npc.m_flSilvesterTransformRegardless = FAR_FUTURE;
 			npc.i_GunMode = 0;
 			damage = 0.0; //So he doesnt get oneshot somehow, atleast once.
@@ -1084,7 +944,7 @@ static Action Internal_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 			MakeObjectIntangeable(npc.index);
 			SetEntProp(npc.index, Prop_Data, "m_iHealth", 1);
 			
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Not in the face! ah... fine.");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Anger_2");
 
 			damage = 0.0; //So he doesnt get oneshot somehow, atleast once.
 			return Plugin_Handled;
@@ -1137,27 +997,8 @@ static void Internal_NPCDeath(int entity)
 
 	if(BlockLoseSay)
 		return;
-
-	switch(GetRandomInt(0,3))
-	{
-		case 0:
-		{
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Welp i gotta help {blue}Sensal{default} again, cya!");
-		}
-		case 1:
-		{
-			RaidbossSilvester_NPCTalkMessage(npc.index, "I have some stuff to do, exhausted anyways currently, till later.");
-		}
-		case 2:
-		{
-			RaidbossSilvester_NPCTalkMessage(npc.index, "You guys pack a punch!");
-		}
-		case 3:
-		{
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Remember when i was infected? I still thank you for helping me!");
-		}
-	}
-
+	
+	RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_Win_%d", GetRandomInt(1, 4));
 }
 /*
 
@@ -1350,8 +1191,6 @@ int SilvesterSelfDefense(Silvester npc, float gameTime, int target, float distan
 							SDKHooks_TakeDamage(targetTrace, npc.index, npc.index, damage * RaidModeScaling, DMG_CLUB, -1, _, vecHit);								
 							// Hit particle
 							
-						
-							
 							bool Knocked = false;
 										
 							if(IsValidClient(targetTrace))
@@ -1541,10 +1380,10 @@ bool SilvesterTransformation(Silvester npc, bool NemalAssistance)
 			ApplyStatusEffect(npc.index, npc.index, "Defensive Backup", 5.0);
 			npc.m_flDoingAnimation = 0.0;
 
-			RaidbossSilvester_NPCTalkMessage(npc.index, "Here's my scythe!");
+			RaidbossSilvester_NPCTalkMessage(npc.index, "SilvesterTrainer_SpecialAttack");
 			if(NemalAssistance)
 			{
-				CPrintToChatAll("{lightblue}네말{default}: 나도 열심히 노력해야겠네. 아니면... 그냥 노력을 안 해야되나?");
+				Nemal_NPCTalkMessage(npc.m_iTargetAlly, "Nemal_Response_SilvesterSpecialAttack");
 			}
 			Nemal_SilvesterApplyEffects(npc.index, false);
 
@@ -1574,6 +1413,7 @@ bool SilvesterTransformation(Silvester npc, bool NemalAssistance)
 	return false;
 }
 
+// TODO: There are same function but different name.
 static void Silvester_Weapon_Lines(Silvester npc, int client)
 {
 	if(client > MaxClients)
@@ -1594,22 +1434,44 @@ static void Silvester_Weapon_Lines(Silvester npc, int client)
 
 	bool valid = true;
 	char Text_Lines[255];
-
-	Text_Lines = "";
-
-
+	bool mentionClient;
+	
 	switch(i_CustomWeaponEquipLogic[weapon])
 	{
+		case WEAPON_SENSAL_SCYTHE, WEAPON_SENSAL_SCYTHE_PAP_1, WEAPON_SENSAL_SCYTHE_PAP_2, WEAPON_SENSAL_SCYTHE_PAP_3:
+		{
+			switch(GetRandomInt(0,1))
+			{
+				case 0:
+				{
+					Text_Lines = "Silvester_Response_Sensal_Scythe_1";
+				}
+		  		case 1:
+				{
+					Text_Lines = "Silvester_Response_Sensal_Scythe_2";
+					mentionClient = true;
+				}
+			}
+		}
 		
-		case WEAPON_SENSAL_SCYTHE,WEAPON_SENSAL_SCYTHE_PAP_1,WEAPON_SENSAL_SCYTHE_PAP_2,WEAPON_SENSAL_SCYTHE_PAP_3:
-		 switch(GetRandomInt(0,1)) 	{case 0: Format(Text_Lines, sizeof(Text_Lines), "그건 그 사람 무기인데. 그래도 원 주인이 너보단 더 잘 쓸 것 같은데.");
-		  							case 1: Format(Text_Lines, sizeof(Text_Lines), "음? {blue}센살{default}이 너한테 그걸 줬다고, {gold}%N{default}? 세상에.", client);}	//IT ACTUALLY WORKS, LMFAO
-		case WEAPON_FUSION,WEAPON_FUSION_PAP1,WEAPON_FUSION_PAP2, WEAPON_NEARL: switch(GetRandomInt(0,1)) 		{case 0: Format(Text_Lines, sizeof(Text_Lines), "그거 내 무기인거 알고 있는거지?");
-		 							case 1: Format(Text_Lines, sizeof(Text_Lines), "야! 그건 내 무기잖아!");}
-		case WEAPON_KIT_BLITZKRIEG_CORE:  Format(Text_Lines, sizeof(Text_Lines), "어? 설마 그 미친 기계를 부순거야? 대단한데!");
-		case WEAPON_BOBS_GUN:  Format(Text_Lines, sizeof(Text_Lines), "그 총은 나한테는 아무것도 아니지!");
-		case WEAPON_ANGELIC_SHOTGUN:  Format(Text_Lines, sizeof(Text_Lines), "그거... {lightblue}네말{default}의 총인데...? 음...");
-
+		case WEAPON_FUSION, WEAPON_FUSION_PAP1, WEAPON_FUSION_PAP2, WEAPON_NEARL:
+		{
+			FormatEx(Text_Lines, sizeof(Text_Lines), "Silvester_Response_Fusion_%d", GetRandomInt(1, 2));
+		}
+		
+		case WEAPON_KIT_BLITZKRIEG_CORE:
+		{
+			Text_Lines = "Silvester_Response_Blitzkrieg_Kit";
+		}
+		case WEAPON_BOBS_GUN:
+		{
+			Text_Lines = "Silvester_Response_Bobs_Sexy_Gun";
+		}
+		case WEAPON_ANGELIC_SHOTGUN:
+		{
+			Text_Lines = "Silvester_Response_Angelica_Shotgonnus";
+		}
+		
 		default:
 		{
 			valid = false;
@@ -1618,12 +1480,16 @@ static void Silvester_Weapon_Lines(Silvester npc, int client)
 
 	if(valid)
 	{
-		RaidbossSilvester_NPCTalkMessage(npc.index, "%s", Text_Lines);
+		if (mentionClient) {
+			RaidbossSilvester_NPCTalkMessageAbout(npc.index, Text_Lines, client);
+		}
+		else {
+			RaidbossSilvester_NPCTalkMessage(npc.index, Text_Lines);
+		}
 		fl_said_player_weaponline_time[npc.index] = GameTime + GetRandomFloat(17.0, 26.0);
 		b_said_player_weaponline[client] = true;
 	}
 }
-
 
 void Nemal_SilvesterApplyEffects(int entity, bool withoutweapon = false)
 {
@@ -1651,9 +1517,9 @@ void Nemal_SilvesterApplyEffects(int entity, bool withoutweapon = false)
 			Nemal_SilvesterApplyEffectsForm2(entity, 1);		
 	}
 }
+
 void SilvesterEarsApply(int iNpc, char[] attachment = "head")
 {
-	
 	int red = 255;
 	int green = 215;
 	int blue = 0;
@@ -1688,7 +1554,6 @@ void SilvesterEarsApply(int iNpc, char[] attachment = "head")
 	int Laser_ears_1_r = ConnectWithBeamClient(particle_ears4_r, particle_ears2_r, red, green, blue, 1.0, 1.0, 1.0, LASERBEAM);
 	int Laser_ears_2_r = ConnectWithBeamClient(particle_ears4_r, particle_ears3_r, red, green, blue, 1.0, 1.0, 1.0, LASERBEAM);
 	
-
 	i_ExpidonsaEnergyEffect[iNpc][15] = EntIndexToEntRef(particle_ears1);
 	i_ExpidonsaEnergyEffect[iNpc][16] = EntIndexToEntRef(particle_ears2);
 	i_ExpidonsaEnergyEffect[iNpc][17] = EntIndexToEntRef(particle_ears3);
@@ -1701,6 +1566,7 @@ void SilvesterEarsApply(int iNpc, char[] attachment = "head")
 	i_ExpidonsaEnergyEffect[iNpc][24] = EntIndexToEntRef(Laser_ears_1_r);
 	i_ExpidonsaEnergyEffect[iNpc][25] = EntIndexToEntRef(Laser_ears_2_r);
 }
+
 void Nemal_SilvesterApplyEffectsForm2(int entity, int WeaponSettingDo = 0)
 {
 	if(AtEdictLimit(EDICT_RAID))
@@ -1868,12 +1734,12 @@ bool SilvesterSwordSlicer(Silvester npc, bool NemalAssistance)
 			npc.m_flSilvesterSlicerHappening = 0.0;	
 			npc.SetVelocity({0.0,0.0,-1000.0});
 		}
+		
 		return true;
 	}
+	
 	return false;
 }
-
-
 
 bool IsPartnerGivingUpNemalSilv(int iNpc)
 {

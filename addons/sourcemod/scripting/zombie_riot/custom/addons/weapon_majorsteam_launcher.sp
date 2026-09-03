@@ -8,6 +8,7 @@ static int i_MajorSteam_Launcher_Resistance[MAXPLAYERS];
 static int i_MajorSteam_Launcher_Recharging[MAXPLAYERS];
 static int i_MajorSteam_Launcher_WeaponPap[MAXPLAYERS];
 static int i_MajorSteam_Launcher_Perk[MAXPLAYERS];
+static bool b_MajorSteam_Launcher_HasTrophy[MAXPLAYERS];
 static bool b_MajorSteam_Launcher_Toggle[MAXPLAYERS];
 static int Chaos_ParticleEffect_I[MAXPLAYERS];
 static int Chaos_ParticleEffect_II[MAXPLAYERS];
@@ -51,7 +52,7 @@ void TFProjectile_Rocket_Spawn(int entity)
 	RequestFrame(TFProjectile_Rocket_SpawnFrame, EntIndexToEntRef(entity));
 }
 
-void TFProjectile_Rocket_SpawnFrame(int ref)
+static void TFProjectile_Rocket_SpawnFrame(int ref)
 {
 	int entity = EntRefToEntIndex(ref);
 	if(IsValidEntity(entity))
@@ -64,11 +65,11 @@ void TFProjectile_Rocket_SpawnFrame(int ref)
 				float vecSwingStart[3], vecAngles[3];
 				GetAbsOrigin(entity, vecSwingStart);
 				int particle = ParticleEffectAt(vecSwingStart, "critical_rocket_blue", 0.0); //Inf duartion
-				i_rocket_particle[entity]= EntIndexToEntRef(particle);
+				i_WandParticle[entity]= EntIndexToEntRef(particle);
 				GetEntPropVector(entity, Prop_Data, "m_angRotation", vecAngles);
 				TeleportEntity(particle, NULL_VECTOR, vecAngles, NULL_VECTOR);
 				SetParent(entity, particle);
-				SDKHook(entity, SDKHook_StartTouchPost, MajorSteam_ProjectileTouch);
+				WandProjectile_ApplyFunctionToEntity(entity, MajorSteam_ProjectileTouch);
 			}
 		}
 	}
@@ -78,7 +79,7 @@ static void MajorSteam_ProjectileTouch(int entity, int target)
 {
 	if(target > 0 && target < MAXENTITIES)
 	{
-		int particle = EntRefToEntIndex(i_rocket_particle[entity]);
+		int particle = EntRefToEntIndex(i_WandParticle[entity]);
 		if(IsValidEntity(particle))
 			RemoveEntity(particle);
 	}
@@ -88,11 +89,12 @@ public void MajorSteam_Launcher_OnMapStart()
 {
 	Zero(i_MajorSteam_Launcher_WeaponPap);
 	Zero(i_MajorSteam_Launcher_Resistance);
-	Zero(f_MajorSteam_Launcher_Delay);
-	Zero(f_MajorSteam_Launcher_HUDDelay);
+	ZeroFloat(f_MajorSteam_Launcher_Delay);
+	ZeroFloat(f_MajorSteam_Launcher_HUDDelay);
 	Zero(i_MajorSteam_Launcher_Recharging);
 	Zero(i_MajorSteam_Launcher_Perk);
 	Zero(b_MajorSteam_Launcher_Toggle);
+	Zero(b_MajorSteam_Launcher_HasTrophy);
 	PrecacheSoundArray(g_ResistanceSounds);
 }
 
@@ -107,46 +109,33 @@ public void MajorSteam_Launcher_WaveEnd()
 
 public void Enable_MajorSteam_Launcher(int client, int weapon)
 {
-	if(h_TimerMajorSteam_Launcher[client] != null)
+	if(i_CustomWeaponEquipLogic[weapon] == WEAPON_MAJORSTEAM_LAUNCHER)
 	{
-		if(i_CustomWeaponEquipLogic[weapon] == WEAPON_MAJORSTEAM_LAUNCHER)
-		{
-			i_MajorSteam_Launcher_Perk[client]=i_CurrentEquippedPerk[client];
-			i_MajorSteam_Launcher_WeaponPap[client] = RoundToFloor(Attributes_Get(weapon, 122, 0.0));
-			b_MajorSteam_Launcher_Toggle[client] = false;
-			int RocketLoad = GetEntData(weapon, FindSendPropInfo("CBaseCombatWeapon", "m_iClip1"));
-			int RockeyAmmo=GetAmmo(client, 8);
-			int RocketAmmoMAX=(i_MajorSteam_Launcher_WeaponPap[client]==1 ? 11 : 6);
-			if(RocketLoad<RocketAmmoMAX)
-			{
-				SetAmmo(client, 8, RockeyAmmo+RocketLoad);
-				SetEntData(weapon, FindSendPropInfo("CBaseCombatWeapon", "m_iClip1"), 0);
-			}
-			DestroyChaos_ParticleEffect(client);
-			Add_Chaos_ParticleEffect(client);
-			delete h_TimerMajorSteam_Launcher[client];
-			h_TimerMajorSteam_Launcher[client] = null;
-			DataPack pack;
-			h_TimerMajorSteam_Launcher[client] = CreateDataTimer(0.1, Timer_MajorSteam_Launcher, pack, TIMER_REPEAT);
-			pack.WriteCell(client);
-			pack.WriteCell(EntIndexToEntRef(weapon));
-		}
-	}
-	else if(i_CustomWeaponEquipLogic[weapon] == WEAPON_MAJORSTEAM_LAUNCHER)
-	{
-		i_MajorSteam_Launcher_Perk[client]=i_CurrentEquippedPerk[client];
-		i_MajorSteam_Launcher_WeaponPap[client] = RoundToFloor(Attributes_Get(weapon, 391, 0.0));
+		i_MajorSteam_Launcher_Perk[client] = i_CurrentEquippedPerk[client];
+		i_MajorSteam_Launcher_WeaponPap[client] = RoundToFloor(Attributes_Get(weapon, 122, 0.0));
 		b_MajorSteam_Launcher_Toggle[client] = false;
+		
 		int RocketLoad = GetEntData(weapon, FindSendPropInfo("CBaseCombatWeapon", "m_iClip1"));
-		int RockeyAmmo=GetAmmo(client, 8);
-		int RocketAmmoMAX=(i_MajorSteam_Launcher_WeaponPap[client]==1 ? 11 : 6);
+		int RockeyAmmo = GetAmmo(client, 8);
+		int RocketAmmoMAX = (i_MajorSteam_Launcher_WeaponPap[client]==1 ? 11 : 6);
+		
 		if(RocketLoad<RocketAmmoMAX)
 		{
 			SetAmmo(client, 8, RockeyAmmo+RocketLoad);
 			SetEntData(weapon, FindSendPropInfo("CBaseCombatWeapon", "m_iClip1"), 0);
 		}
+		
 		DestroyChaos_ParticleEffect(client);
 		Add_Chaos_ParticleEffect(client);
+		
+		if(h_TimerMajorSteam_Launcher[client])
+		{
+			delete h_TimerMajorSteam_Launcher[client];
+			h_TimerMajorSteam_Launcher[client] = null;
+		}
+		
+		b_MajorSteam_Launcher_HasTrophy[client] = Items_HasNamedItem(client, "Major Steam's Rocket");
+		
 		DataPack pack;
 		h_TimerMajorSteam_Launcher[client] = CreateDataTimer(0.1, Timer_MajorSteam_Launcher, pack, TIMER_REPEAT);
 		pack.WriteCell(client);
@@ -182,12 +171,17 @@ static Action Timer_MajorSteam_Launcher(Handle timer, DataPack pack)
 	return Plugin_Continue;
 }
 
-public void MajorSteam_Launcher_PlayerTakeDamage(int victim, int attacker, float &damage, int weapon)
+public void MajorSteam_Launcher_PlayerTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, int equipped_weapon, float damagePosition[3], int zr_custom_damage)
 {
+	if(CheckInHud())
+		return;
+	
 	if(!IsValidEntity(attacker) || GetTeam(attacker) == TFTeam_Red)
 		return;
+	
 	if(!IsValidClient(victim))
 		return;
+	
 	f_MajorSteam_Launcher_Delay[victim]= GetGameTime() + 10.0;
 	if(i_MajorSteam_Launcher_Resistance[victim] > 0)
 	{
@@ -211,11 +205,11 @@ public void MajorSteam_Launcher_PlayerTakeDamage(int victim, int attacker, float
 	}
 }
 
-public void MajorSteam_Launcher_NPCTakeDamage(int attacker, int victim, float &damage, int weapon, int damagetype)
+public void MajorSteam_Launcher_NPCTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int zr_custom_damage)
 {
 	if(!CheckInHud() && i_MajorSteam_Launcher_WeaponPap[attacker]==1)
 	{
-		if(Items_HasNamedItem(attacker, "Major Steam's Rocket"))
+		if(b_MajorSteam_Launcher_HasTrophy[attacker])
 		{
 			ApplyStatusEffect(attacker, victim, "Cryo", 1.0);
 			Elemental_AddCyroDamage(victim, attacker, RoundFloat(damage*0.65), 1);
@@ -292,7 +286,7 @@ static void MajorSteam_Launcher_M1_PreThink(int client)
 				ClientCommand(client, "playgamesound items/medshotno1.wav");
 				SetDefaultHudPosition(client);
 				SetGlobalTransTarget(client);
-				ShowSyncHudText(client,  SyncHud_Notifaction, "You need to Reload by %i!", (i_MajorSteam_Launcher_WeaponPap[client]==1 ? 11 : 6));
+				ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "You need to Reload by Ammo", (i_MajorSteam_Launcher_WeaponPap[client]==1 ? 11 : 6));
 			}
 			b_MajorSteam_Launcher_Toggle[client]=false;
 			SDKUnhook(client, SDKHook_PreThink, MajorSteam_Launcher_M1_PreThink);
@@ -313,21 +307,24 @@ static void MajorSteam_Launcher_HUD(int client)
 	{
 		char C_point_hints[512]="";
 		
+		SetGlobalTransTarget(client);
 		Format(C_point_hints, sizeof(C_point_hints),
-		"Shield: %1.f％", (float(i_MajorSteam_Launcher_Resistance[client])/1000.0)*100.0);
+		"%t", "MajorSteam Shield");
+		Format(C_point_hints, sizeof(C_point_hints),
+		"%s: %1.f％", C_point_hints, (float(i_MajorSteam_Launcher_Resistance[client])/1000.0)*100.0);
 		if(Armor_Charge[client] < 1)
 		{
 			Format(C_point_hints, sizeof(C_point_hints),
-			"%s\n[Reactor startup requires Armor!]", C_point_hints);
+			"%s\n[%t]", C_point_hints, "MajorSteam Requires Armor");
 		}
 		else if(Waves_InSetup() || i_MajorSteam_Launcher_Resistance[client]>=1000)
 		{
 			Format(C_point_hints, sizeof(C_point_hints),
-			"%s\n[Reactor Idle Mode]", C_point_hints);
+			"%s\n[%t]", C_point_hints, "MajorSteam Reactor Idle");
 		}
 		else if(f_MajorSteam_Launcher_Delay[client] > GetGameTime())
 			Format(C_point_hints, sizeof(C_point_hints),
-			"%s\n[Reactor Restarting in %1.fs]", C_point_hints, (f_MajorSteam_Launcher_Delay[client]-GetGameTime()));
+			"%s\n[%t %1.fs]", C_point_hints, "MajorSteam Reactor Restart", (f_MajorSteam_Launcher_Delay[client]-GetGameTime()));
 		else
 		{
 			Format(C_point_hints, sizeof(C_point_hints),

@@ -20,7 +20,7 @@ static void OnKritzkriegDeployed(Event event, const char[] name, bool dontBroadc
 		return;
 
 	int medigun;
-	bool Continune = false;
+	bool Continune = false, Adaptive = false;
 	int ie;
 	int entity;
 	while(TF2_GetItem(client, entity, ie))
@@ -29,6 +29,11 @@ static void OnKritzkriegDeployed(Event event, const char[] name, bool dontBroadc
 		{
 			medigun = entity;
 			Continune = true;
+		}
+		if(i_CustomWeaponEquipLogic[entity] == WEAPON_ADAPTIVE_MEDIGUN)
+		{
+			medigun = entity;
+			Adaptive = true;
 		}
 	}
 	GiveMedigunBuffUber(medigun, client, client);
@@ -43,6 +48,49 @@ static void OnKritzkriegDeployed(Event event, const char[] name, bool dontBroadc
 			EmitSoundToClient(target, "player/invuln_on_vaccinator.wav", target, SNDCHAN_AUTO, 65, _, 0.6);
 
 		EmitSoundToAll("player/invuln_on_vaccinator.wav", client, SNDCHAN_AUTO, 65, _, 0.6);
+		
+		if(Adaptive)
+		{
+			float Healing_Value = Attributes_GetOnWeapon(client, medigun, 8, true);
+			if(IsValidClient(target) && IsPlayerAlive(target))
+			{
+				if(dieingstate[target] > 0)
+					dieingstate[target] = 1;
+				else
+					HealEntityGlobal(client, target, (float(SDKCall_GetMaxHealth(target))*0.2)+Healing_Value, 1.25*Attributes_Get(medigun, 4002, 1.0), 1.0, HEAL_ABSOLUTE);
+			}
+			if(dieingstate[client] > 0)
+				dieingstate[client] = 1;
+			else
+				HealEntityGlobal(client, client, (float(SDKCall_GetMaxHealth(client))*0.2)+Healing_Value, 1.25*Attributes_Get(medigun, 4002, 1.0), 1.0, HEAL_SELFHEAL);
+			float position[3]; WorldSpaceCenter(client, position);
+			for(int entitycount; entitycount<i_MaxcountNpcTotal; entitycount++)
+			{
+				int npc = EntRefToEntIndexFast(i_ObjectsNpcsTotal[entitycount]);
+				if(IsValidEntity(npc) && GetTeam(npc) == TFTeam_Red)
+				{
+					float position2[3];
+					WorldSpaceCenter(npc, position2);
+					if(GetVectorDistance(position, position2,true)<250000.0)
+						ApplyStatusEffect(client, npc, "UBERCHARGED", 3.0);
+				}
+			}
+			for(int AoE=1; AoE<=MaxClients; AoE++)
+			{
+				if(IsValidClient(AoE) && IsPlayerAlive(AoE) && TeutonType[AoE] == TEUTON_NONE)
+				{
+					float position2[3];
+					WorldSpaceCenter(AoE, position2);
+					if(GetVectorDistance(position, position2,true)<250000.0)
+					{
+						TF2_AddCondition(AoE, TFCond_UberBulletResist, 3.0);
+						TF2_AddCondition(AoE, TFCond_UberBlastResist, 3.0);
+						TF2_AddCondition(AoE, TFCond_UberFireResist, 3.0);
+						ApplyStatusEffect(client, AoE, "UBERCHARGED", 3.0);
+					}
+				}
+			}
+		}
 		return;
 	}
 	if(IsValidEntity(target) && IsValidClient(target))
@@ -51,9 +99,9 @@ static void OnKritzkriegDeployed(Event event, const char[] name, bool dontBroadc
 	EmitSoundToAll("player/mannpower_invulnerable.wav", client, SNDCHAN_AUTO, 65, _, 0.6);
 
 	if(IsValidClient(target) && IsPlayerAlive(target)) 
-	{
 		GiveArmorViaPercentage(target, 0.5, 1.0,_,_,client);
-	}
+	else if(IsValidEntity(target) && !b_NpcHasDied[target])
+		GrantEntityArmor(target, false, 0.5, 0.7, 0);
 	GiveArmorViaPercentage(client, 0.5, 1.0,_,_,client);
 	if(RaidbossIgnoreBuildingsLogic(1))
 	{
@@ -61,9 +109,6 @@ static void OnKritzkriegDeployed(Event event, const char[] name, bool dontBroadc
 		flChargeLevel *= 0.65;
 		SetEntPropFloat(medigun, Prop_Send, "m_flChargeLevel", flChargeLevel);
 	}
-
-
-
 }
 static int GetHealingTarget(int client)
 {
@@ -120,4 +165,20 @@ void Kritzkrieg_Magical(int client, float Scale, bool apply)
 			}
 		}
 	}
+}
+
+int Adaptive_FastRevive(int client)
+{
+	int speed = 6;
+	if(i_CurrentEquippedPerk[client] & 1)
+		speed = 12;
+	
+	if(HasSpecificBuff(client, "Dimensional Turbulence"))
+		speed *= 2;
+	
+	int activeWeapon = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
+	if(IsValidEntity(activeWeapon))
+		speed = RoundToNearest(float(speed) * Attributes_Get(activeWeapon, Attrib_ReviveSpeedBonus, 1.0));
+	Rogue_ReviveSpeed(speed);
+	return speed;
 }

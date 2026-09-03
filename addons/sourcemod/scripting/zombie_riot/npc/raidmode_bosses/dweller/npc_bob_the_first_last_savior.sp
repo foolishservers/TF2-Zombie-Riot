@@ -132,8 +132,6 @@ void RaidbossBobTheFirst_OnMapStart()
 	data.Func = ClotSummon;
 	data.Precache = ClotPrecacheSea;
 	NPC_Add(data);
-
-	
 }
 
 static void ClotPrecache()
@@ -272,7 +270,22 @@ methodmap RaidbossBobTheFirst < CClotBody
 		public get()							{ return fl_AbilityOrAttack[this.index][1]; }
 		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][1] = TempValueForProperty; }
 	}
-
+	property bool m_bXenoAssistance
+	{
+		public get()							{ return b_FUCKYOU[this.index]; }
+		public set(bool TempValueForProperty) 	{ b_FUCKYOU[this.index] = TempValueForProperty; }
+	}
+	property int m_iTalkLines
+	{
+		public get()							{ return i_AttacksTillMegahit[this.index]; }
+		public set(int TempValueForProperty) 	{ i_AttacksTillMegahit[this.index] = TempValueForProperty; }
+	}
+	property bool m_bXenoExtraLogic
+	{
+		public get()							{ return b_FUCKYOU_move_anim[this.index]; }
+		public set(bool TempValueForProperty) 	{ b_FUCKYOU_move_anim[this.index] = TempValueForProperty; }
+	}
+	
 	public RaidbossBobTheFirst(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
 		float pos[3];
@@ -402,11 +415,16 @@ methodmap RaidbossBobTheFirst < CClotBody
 
 		npc.m_iAttackType = 0;
 		npc.m_flAttackHappens = 0.0;
-
+		
 		npc.m_flNextMeleeAttack = 0.0;
 		npc.m_flNextRangedAttack = 0.0;
 		npc.m_flNextRangedSpecialAttack = 0.0;
 		npc.m_iPullCount = 0;
+		
+		npc.m_bXenoExtraLogic = XenoExtraLogic();
+		npc.m_bXenoAssistance = false;
+		npc.m_iTalkLines = 0;
+		
 		b_BobPistolPhase[npc.index] = false;
 		Zero(b_BobPistolPhaseSaid);
 
@@ -430,7 +448,6 @@ methodmap RaidbossBobTheFirst < CClotBody
 			strcopy(music.Name, sizeof(music.Name), "Irln Last Stand against the Sea Intro");
 			strcopy(music.Artist, sizeof(music.Artist), "Grandpa Bard");
 			Music_SetRaidMusic(music, true);
-
 		
 			npc.m_flOverrideMusicNow = GetGameTime() + 5.0;
 			npc.StopPathing();
@@ -438,7 +455,17 @@ methodmap RaidbossBobTheFirst < CClotBody
 			RaidBossActive = EntIndexToEntRef(npc.index);
 			RaidAllowsBuildings = false;
 			RaidAllowLastman = true;
-			RaidModeTime = GetGameTime() + 292.0;
+			
+			if(i_RaidGrantExtra[npc.index] == 1)
+			{
+				RaidModeTime = GetGameTime() + 30.0;
+				RaidTimerAlert = false;
+			}
+			else
+			{
+				RaidModeTime = GetGameTime() + 292.0;
+			}
+			
 			RaidModeScaling = 0.0;
 			Zero(b_EnemyCloseToMainBob);
 		}
@@ -446,27 +473,19 @@ methodmap RaidbossBobTheFirst < CClotBody
 		strcopy(c_NpcName[npc.index], sizeof(c_NpcName[]), "?????????????");
 		if(SmittenNpc)
 		{
-			if(ZR_Get_Modifier() == 1)
+			if(npc.m_bXenoExtraLogic)
 			{
-				NPCTalkMessage(npc.index, "The chaos is everywhere, we're too late, join me, dont attack.\nProve me your innocence.");
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Encounter_Xeno", true);
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Encounter_Xeno_1", true);
+			}
+			else if(ZR_Get_Modifier() == 1)
+			{
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Encounter_Chaos_Intrusion", true);
 			}
 			else
 			{
-				switch(GetRandomInt(0,2))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "I'll Handle this one.");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "Stella and Karlas, you did enough, stand back.");
-					}
-					case 2:
-					{
-						NPCTalkMessage(npc.index, "I know enough about infections and its weaknesses to fend you off.");
-					}
-				}
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Encounter_%d", true, GetRandomInt(1, 3));
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Give_A_Chance", true);
 			}
 		}
 		
@@ -474,9 +493,11 @@ methodmap RaidbossBobTheFirst < CClotBody
 	}
 }
 
-static void NPCTalkMessage(int iNPC, const char[] message)
+static void RaidbossBobTheFirst_NPCTalkMessage(int iNPC, const char[] message, bool translated = false, any ...)
 {
-	PrintNPCMessageWithPrefixes(iNPC, "white", message);
+	char buffer[256];
+	VFormat(buffer, sizeof(buffer), message, 4);
+	PrintNPCMessageWithPrefixes(iNPC, "white", buffer, translated);
 }
 
 public void RaidbossBobTheFirst_ClotThink(int iNPC)
@@ -513,6 +534,7 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 	{
 		b_NpcIsInvulnerable[npc.index] = true;
 	}
+	
 	if(i_RaidGrantExtra[npc.index] == RAIDITEM_INDEX_WIN_COND)
 		return;
 		
@@ -552,22 +574,17 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 		{
 			if(!b_BobPistolPhaseSaid[npc.index])
 			{
-				CPrintToChatAll("{crimson}%s 의 엄청난 의지력으로 인해 그의 힘이 되돌아오고 있다...", NpcStats_ReturnNpcName(npc.index, true));
-				switch(GetRandomInt(0,2))
+				CPrintToChatAll("%t", "Bob_The_First_Sea_Pistol_Phase", "Bob_The_First_Real_Name");
+				
+				if(npc.m_bXenoExtraLogic)
 				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "Hope my sharp shooting skills will miss your brain, curing is still an option.");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "If only i could cure it off you with this handgun, have to take lives to save lives.");
-					}
-					case 2:
-					{
-						NPCTalkMessage(npc.index, "Im starting to reach my limit...");
-					}
+					RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Pistol_Phase_Xeno", true);
 				}
+				else
+				{
+					RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Pistol_Phase_%d", true, GetRandomInt(1, 3));
+				}
+				
 				int MaxHealth = ReturnEntityMaxHealth(npc.index);
 				HealEntityGlobal(npc.index, npc.index, float((MaxHealth / 10)), 1.0, 0.0, HEAL_ABSOLUTE);
 			}
@@ -575,6 +592,7 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 			b_BobPistolPhaseSaid[npc.index] = true;
 		}
 	}
+	
 	if(npc.m_bFakeClone)
 	{
 		int FellowBobFound = 0;
@@ -595,6 +613,7 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 				}
 			}
 		}
+		
 		if(!FellowBobFound)
 		{
 			SmiteNpcToDeath(npc.index);
@@ -605,77 +624,31 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 			b_BobPistolPhase[npc.index] = b_BobPistolPhase[FellowBobFound];
 		}
 	}
+	
 	if(!npc.m_bFakeClone && LastMann)
 	{
 		if(!npc.m_fbGunout)
 		{
 			npc.m_fbGunout = true;
-			switch(GetRandomInt(0,2))
+			if(npc.m_bXenoExtraLogic)
 			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "One infected left.");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "This nightmare ends soon.");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "Last. Infected. Left.");
-				}
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_LastMann_Xeno", true);
+			}
+			else
+			{
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_LastMann_%d", true, GetRandomInt(1, 3));
 			}
 		}
 	}
-	//Raidmode timer runs out, they lost.
-	if(!npc.m_bFakeClone && npc.m_flNextThinkTime != FAR_FUTURE && RaidModeTime < GetGameTime())
+	
+	if(!npc.m_bFakeClone && !npc.m_bXenoAssistance && npc.m_flNextThinkTime != FAR_FUTURE && RaidModeTime < GetGameTime())
 	{
-		if(healthPoints < 20)
-		{
-			if(IsValidEntity(RaidBossActive))
-			{
-				ForcePlayerLoss();
-			}
-
-			for(int client = 1; client <= MaxClients; client++)
-			{
-				if(IsClientInGame(client) && IsPlayerAlive(client))
-					ForcePlayerSuicide(client);
-			}
-
-			switch(GetURandomInt() % 3)
-			{
-				case 0:
-					NPCTalkMessage(npc.index, "You weren't supposed to have this infection.");
-				
-				case 1:
-					NPCTalkMessage(npc.index, "No choice but to kill you, it consumes you.");
-				
-				case 2:
-					NPCTalkMessage(npc.index, "Nobody wins.");
-			}
-			
-			// Play funny animation intro
-			npc.StopPathing();
-			npc.m_flNextThinkTime = FAR_FUTURE;
-			npc.m_bisWalking = false;
-			npc.SetActivity("ACT_IDLE_ZOMBIE");
-		}
-		else
-		{
-
-			NPCTalkMessage(npc.index, "You think you can fool me!? I'll destroy you!");
-			
-			SetEntProp(npc.index, Prop_Data, "m_iHealth", ReturnEntityMaxHealth(npc.index) -1);
-			fl_Extra_Damage[npc.index] = 999.9;
-			fl_Extra_Speed[npc.index] = 5.0;
-			RaidModeTime = FAR_FUTURE;
-		}
+		RaidbossBobTheFirst_TimeOverThink(iNPC, healthPoints);
 	}
-
+	
 	if(npc.m_flNextDelayTime > gameTime)
 		return;
-
+	
 	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 	
@@ -683,176 +656,15 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 		return;
 	
 	//npc.m_flNextThinkTime = gameTime + 0.05;
-
+	if(!npc.m_bFakeClone && npc.m_bXenoAssistance)
+	{
+		RaidbossBobTheFirst_TalkThink(iNPC);
+		return;
+	}
+	
 	if(i_RaidGrantExtra[npc.index] > 1)
 	{
-		npc.StopPathing();
-		npc.m_flNextThinkTime = FAR_FUTURE;
-		npc.m_bisWalking = false;
-		npc.SetActivity("ACT_IDLE_SHIELDZOBIE");
-		RaidModeTime += 1000.0;
-
-		if(XenoExtraLogic())
-		{
-			switch(i_RaidGrantExtra[npc.index])
-			{
-				case 2:
-				{
-					ReviveAll(true);
-					NPCTalkMessage(npc.index, "So...");
-					npc.m_flNextThinkTime = gameTime + 5.0;
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "What do you think will happen..?");
-					npc.m_flNextThinkTime = gameTime + 4.0;
-				}
-				case 4:
-				{
-					NPCTalkMessage(npc.index, "Wait... no... you were fighting it..! No this.. This cannot be!");
-					npc.m_flNextThinkTime = gameTime + 4.0;
-				}
-				case 5:
-				{
-					NPCTalkMessage(npc.index, "I'm too hurt, I can't, I have to run... I can't....");
-					npc.m_flNextThinkTime = gameTime + 4.0;
-				}
-				case 6:
-				{
-					NPCTalkMessage(npc.index, "...");
-					npc.m_flNextThinkTime = gameTime + 2.0;
-				}
-				case 7:
-				{
-					GiveProgressDelay(30.0);
-					SmiteNpcToDeath(npc.index);
-					CPrintToChatAll("{white}밥 1세가 급하게 자리를 떴습니다... 뭔가가 잘못 됐습니다. 그를 따라가야했을까요...? 그러기엔 너무 늦은것 같습니다...");
-					MusicEnum music;
-					strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/medieval_raid/special_mutation/incomming_boss_wait_scary.mp3");
-					music.Time = 100;
-					music.Volume = 1.0;
-					music.Custom = true;
-					strcopy(music.Name, sizeof(music.Name), "Howilng Emptiness");
-					strcopy(music.Artist, sizeof(music.Artist), "....");
-					Music_SetRaidMusic(music);
-					GivePlayerItems();
-					return;
-				}
-			}
-		}
-		else
-		{
-			switch(i_RaidGrantExtra[npc.index])
-			{
-				case 2:
-				{
-					ReviveAll(true);
-					NPCTalkMessage(npc.index, "No...");
-					npc.m_flNextThinkTime = gameTime + 5.0;
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "This infection...");
-					npc.m_flNextThinkTime = gameTime + 3.0;
-				}
-				case 4:
-				{
-					NPCTalkMessage(npc.index, "How did this thing make you this powerful..?");
-					npc.m_flNextThinkTime = gameTime + 4.0;
-				}
-				case 5:
-				{
-					NPCTalkMessage(npc.index, "Took out every single Dweller and took the infection in yourselves...");
-					npc.m_flNextThinkTime = gameTime + 4.0;
-				}
-				case 6:
-				{
-					NPCTalkMessage(npc.index, "You people fighting these cities and infections...");
-					npc.m_flNextThinkTime = gameTime + 4.0;
-				}
-				case 7:
-				{
-					NPCTalkMessage(npc.index, "However...");
-					npc.m_flNextThinkTime = gameTime + 3.0;
-				}
-				case 8:
-				{
-					NPCTalkMessage(npc.index, "I will remove what does not belong to you...");
-					npc.m_flNextThinkTime = gameTime + 3.0;
-					CreateTimer(12.0, SafetyFixBobDo, EntIndexToEntRef(npc.index));
-				}
-				case 50:
-				{
-					SmiteNpcToDeath(npc.index);
-					GivePlayerItems();
-				}
-				default:
-				{
-					bool found;
-
-					for(int client = 1; client <= MaxClients; client++)
-					{
-						if(IsClientInGame(client) && IsPlayerAlive(client) && TeutonType[client] == TEUTON_NONE)
-						{
-							float pos[3]; GetEntPropVector(client, Prop_Data, "m_vecAbsOrigin", pos);
-							float ang[3];
-							ang[1] = GetRandomFloat(-179.0, 179.0);
-
-							TeleportEntity(npc.index, pos);
-
-							npc.m_iAnimationState = -1;
-							npc.m_bisWalking = false;
-							npc.SetActivity("ACT_PUSH_PLAYER");
-							npc.SetPlaybackRate(3.0);
-
-							npc.DispatchParticleEffect(npc.index, "mvm_soldier_shockwave", NULL_VECTOR, NULL_VECTOR, NULL_VECTOR, npc.FindAttachment("anim_attachment_LH"), PATTACH_POINT_FOLLOW, true);
-							npc.PlayRandomEnemyPullSound();
-
-							ForcePlayerSuicide(client);
-							ApplyLastmanOrDyingOverlay(client);
-							found = true;
-							break;
-						}
-					}
-
-					// Don't lose when everyone dies
-					GiveProgressDelay(15.0);
-					Waves_ForceSetup(15.0);
-
-					//dont respawn during setup.
-					PreventRespawnsAll = GetGameTime() + 10.0;
-
-					if(found)
-					{
-						npc.m_flNextThinkTime = gameTime + 0.25;
-						i_RaidGrantExtra[npc.index]--;
-					}
-					else
-					{
-						npc.AddGesture("ACT_IDLE_ZOMBIE");
-						npc.m_flNextThinkTime = gameTime + 1.25;
-						
-						for(int client = 1; client <= MaxClients; client++)
-						{
-							if(IsClientInGame(client) && !IsFakeClient(client))
-							{
-								ApplyLastmanOrDyingOverlay(client);
-								SendConVarValue(client, sv_cheats, "1");
-								Convars_FixClientsideIssues(client);
-							}
-						}
-						ResetReplications();
-
-						cvarTimeScale.SetFloat(0.1);
-						CreateTimer(0.5, SetTimeBack);
-						i_RaidGrantExtra[npc.index] = 49;
-						PreventRespawnsAll = GetGameTime() + 2.0;
-					}
-				}
-			}
-		}
-
-		i_RaidGrantExtra[npc.index]++;
+		RaidbossBobTheFirst_WinThink(iNPC);
 		return;
 	}
 
@@ -878,36 +690,13 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 		strcopy(c_NpcName[npc.index], sizeof(c_NpcName[]), "Bob the First");
 		SetEntProp(npc.index, Prop_Data, "m_iHealth", ReturnEntityMaxHealth(npc.index) * 17 / 20);
 
-		if(XenoExtraLogic())
+		if(npc.m_bXenoExtraLogic)
 		{
-			switch(GetURandomInt() % 3)
-			{
-				case 0:
-					NPCTalkMessage(npc.index, "You're in the wrong place in the wrong time!");
-				
-				case 1:
-					NPCTalkMessage(npc.index, "This is not how it goes!");
-				
-				case 2:
-					NPCTalkMessage(npc.index, "Stop trying to change fate!");
-			}
+			RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Anger_Xeno_%d", true, GetRandomInt(1, 3));
 		}
 		else
 		{
-			switch(GetURandomInt() % 4)
-			{
-				case 0:
-					NPCTalkMessage(npc.index, "Enough of this!");
-				
-				case 1:
-					NPCTalkMessage(npc.index, "Do you see yourself? Your slaughter?");
-				
-				case 2:
-					NPCTalkMessage(npc.index, "You are no god.");
-				
-				case 3:
-					NPCTalkMessage(npc.index, "Xeno. Dweller. Then there's you.");
-			}
+			RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Anger_%d", true, GetRandomInt(1, 3));
 		}
 
 		npc.m_flNextMeleeAttack = gameTime + 2.0;
@@ -949,8 +738,24 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 			if(b_ThisEntityIgnoredByOtherNpcsAggro[npc.index])
 			{
 				b_ThisEntityIgnoredByOtherNpcsAggro[npc.index] = false;
-				if(ZR_Get_Modifier() == 1 && i_RaidGrantExtra[npc.index] == 1)
-					NPCTalkMessage(npc.index, "Nevermind then, you're one of the affected.");
+				if(i_RaidGrantExtra[npc.index] == 1)
+				{
+					if(npc.m_bXenoExtraLogic)
+					{
+						RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Fight_Xeno", true);
+					}
+					else if(ZR_Get_Modifier() == 1)
+					{
+						RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Fight_Chaos_Intrusion", true);
+					}
+					else
+					{
+						RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Fight", true);
+					}
+					
+					RaidModeTime += 262.0;
+					RaidTimerAlert = true;
+				}
 			}
 		}
 		int summon;
@@ -993,7 +798,7 @@ public void RaidbossBobTheFirst_ClotThink(int iNPC)
 		}
 	}
 
-	if(!npc.m_bFakeClone && !npc.m_bSecondPhase)
+	if(!npc.m_bFakeClone && !npc.m_bSecondPhase && !npc.m_bXenoAssistance)
 	{
 		if(healthPoints < 9)
 		{
@@ -1802,8 +1607,9 @@ void RaidbossBobTheFirst_NPCDeath(int entity)
 	
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
-
-	Format(WhatDifficultySetting, sizeof(WhatDifficultySetting), "%s",WhatDifficultySetting_Internal);
+	
+	RaidTimerAlert = true;
+	Format(WhatDifficultySetting, sizeof(WhatDifficultySetting), "%s", WhatDifficultySetting_Internal);
 	WavesUpdateDifficultyName();
 	for(int i; i < i_MaxcountNpcTotal; i++)
 	{
@@ -1823,18 +1629,37 @@ void RaidbossBobTheFirst_NPCDeath(int entity)
 
 static void GivePlayerItems(int coolwin = 0)
 {
-	for(int client = 1; client <= MaxClients; client++)
+	char trophyName[64], trophyPhrase[64];
+	switch (coolwin)
 	{
-		if(IsClientInGame(client) && GetClientTeam(client) == 2 && TeutonType[client] != TEUTON_WAITING && PlayerPoints[client] > 500)
+		case 1:
 		{
-			Items_GiveNamedItem(client, "Bob's Curing Hand");
-			if(coolwin == 0)
-				CPrintToChat(client, "{default}밥이 당신에게 깃든 심해의 감염원을 전부 제거해주었습니다. 당신이 얻은 것은... : {yellow}''밥의 치유의 손길''{default}!");
-			else
-				CPrintToChat(client, "{default}당신은 밥을 공격하지 않았고, 그런 밥이 당신에게 준 것은... : {yellow}''밥의 치유의 손길''{default}!");
+			strcopy(trophyName, sizeof(trophyName), "Bob's Trust");
+			strcopy(trophyPhrase, sizeof(trophyPhrase), "Bob_The_First_Sea_Trophies_Coolwin");
+		}
+		case 2:
+		{
+			strcopy(trophyName, sizeof(trophyName), "Bob's Curing Hand");
+			strcopy(trophyPhrase, sizeof(trophyPhrase), "Bob_The_First_Sea_Trophies_Xeno");
+		}
+		default:
+		{
+			strcopy(trophyName, sizeof(trophyName), "Bob's Curing Hand");
+			strcopy(trophyPhrase, sizeof(trophyPhrase), "Bob_The_First_Sea_Trophies");
 		}
 	}
-
+	
+	if (trophyName[0] && trophyPhrase[0])
+	{
+		for(int client = 1; client <= MaxClients; client++)
+		{
+			if(IsClientInGame(client) && GetClientTeam(client) == 2 && TeutonType[client] != TEUTON_WAITING && PlayerPoints[client] > 500)
+			{
+				Items_GiveNamedItem(client, trophyName);
+				CPrintToChat(client, "%T", trophyPhrase, client);
+			}
+		}
+	}
 }
 
 public Action Smite_Timer_Bob(Handle Smite_Logic, DataPack pack)
@@ -1846,7 +1671,7 @@ public Action Smite_Timer_Bob(Handle Smite_Logic, DataPack pack)
 	{
 		return Plugin_Stop;
 	}
-		
+	
 	float NumLoops = ReadPackFloat(pack);
 	float spawnLoc[3];
 	for (int GetVector = 0; GetVector < 3; GetVector++)
@@ -2234,10 +2059,8 @@ public void Raidmode_BobFirst_Win(int entity)
 {
 	i_RaidGrantExtra[entity] = RAIDITEM_INDEX_WIN_COND;
 	func_NPCThink[entity] = INVALID_FUNCTION;
-	NPCTalkMessage(entity, "Deep sea threat cleaned, finally at peace...");
+	RaidbossBobTheFirst_NPCTalkMessage(entity, "Bob_The_First_Sea_Lose", true);
 }
-
-
 
 public Action SafetyFixBobDo(Handle timer, int refbob)
 {
@@ -2250,4 +2073,323 @@ public Action SafetyFixBobDo(Handle timer, int refbob)
 		i_RaidGrantExtra[Entity] = 50;
 	PreventRespawnsAll = GetGameTime() + 0.0;
 	return Plugin_Handled;
+}
+
+static void RaidbossBobTheFirst_TalkThink(int entity)
+{
+	RaidbossBobTheFirst npc = view_as<RaidbossBobTheFirst>(entity);
+	
+	float gameTime = GetGameTime(npc.index);
+	
+	switch(npc.m_iTalkLines)
+	{
+		case 0:
+		{
+			ReviveAll(true);
+			
+			Music_SetRaidMusicSimple("vo/null.mp3", 30, false, 0.5);
+			
+			NPCStats_RemoveAllDebuffs(npc.index, 1.0);
+			SetEntityCollisionGroup(npc.index, 24);
+			SetTeam(npc.index, TFTeam_Red);
+			AddNpcToAliveList(npc.index, 1);
+			GiveProgressDelay(30.0);
+			
+			RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Coolwin_Xeno_1", true);
+			npc.m_flNextThinkTime = gameTime + 5.0;
+		}
+		case 1:
+		{
+			RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Coolwin_Xeno_2", true);
+			npc.m_flNextThinkTime = gameTime + 4.0;
+		}
+		case 2:
+		{
+			RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Coolwin_Xeno_3", true);
+			npc.m_flNextThinkTime = gameTime + 4.0;
+		}
+		case 3:
+		{
+			RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Coolwin_Xeno_4", true);
+			npc.m_flNextThinkTime = gameTime + 4.0;
+			
+			MusicEnum music;
+			strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/medieval_raid/special_mutation/incomming_boss_wait_scary.mp3");
+			music.Time = 100;
+			music.Volume = 1.0;
+			music.Custom = true;
+			strcopy(music.Name, sizeof(music.Name), "Howilng Emptiness");
+			strcopy(music.Artist, sizeof(music.Artist), "....");
+			Music_SetRaidMusic(music);
+		}
+		case 4:
+		{
+			RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Coolwin_Xeno_5", true);
+			
+			SmiteNpcToDeath(npc.index);
+			GivePlayerItems(1);
+			
+			float flPos[3];
+			GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", flPos);
+			NPC_CreateByName("npc_bob_first_follower", -1, flPos, {0.0, 0.0, 0.0}, TFTeam_Red);
+			
+			return;
+		}
+	}
+	
+	npc.m_iTalkLines++;
+}
+
+static void RaidbossBobTheFirst_TimeOverThink(int entity, int healthPoints)
+{
+	RaidbossBobTheFirst npc = view_as<RaidbossBobTheFirst>(entity);
+	
+	//Raidmode timer runs out, they lost.
+	if(healthPoints < 20)
+	{
+		if(IsValidEntity(RaidBossActive))
+		{
+			ForcePlayerLoss();
+		}
+
+		for(int client = 1; client <= MaxClients; client++)
+		{
+			if(IsClientInGame(client) && IsPlayerAlive(client))
+				ForcePlayerSuicide(client);
+		}
+		
+		if(npc.m_bXenoExtraLogic)
+		{
+			RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_TimeOver_Xeno", true);
+		}
+		else
+		{
+			RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_TimeOver_%d", true, GetRandomInt(1, 3));
+		}
+		
+		// Play funny animation intro
+		npc.StopPathing();
+		npc.m_flNextThinkTime = FAR_FUTURE;
+		npc.m_bisWalking = false;
+		npc.SetActivity("ACT_IDLE_BOBPRIME");
+	}
+	else if(i_RaidGrantExtra[npc.index] == 1)
+	{
+		npc.StopPathing();
+		npc.m_bisWalking = false;
+		npc.SetActivity("ACT_IDLE_BOBPRIME");
+		RaidModeTime += 1000.0;
+		
+		// Draw real name on cool win.
+		strcopy(c_NpcName[npc.index], sizeof(c_NpcName[]), "Bob the First");
+		
+		if(npc.m_bXenoExtraLogic)
+		{
+			npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.5;
+			npc.m_bXenoAssistance = true;
+		}
+		else
+		{
+			npc.m_flNextThinkTime = FAR_FUTURE;
+			
+			Music_SetRaidMusicSimple("vo/null.mp3", 30, false, 0.5);
+			
+			ForcePlayerWin();
+			
+			if(ZR_Get_Modifier() == 1)
+			{
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Coolwin_Chaos_Intrusion", true);
+			}
+			else
+			{
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Coolwin", true);
+			}
+			
+			GivePlayerItems(1);
+		}
+	}
+	else
+	{
+		RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Lose_His_Temper", true);
+		
+		SetEntProp(npc.index, Prop_Data, "m_iHealth", ReturnEntityMaxHealth(npc.index) - 1);
+		fl_Extra_Damage[npc.index] = 999.9;
+		fl_Extra_Speed[npc.index] = 5.0;
+		RaidModeTime = FAR_FUTURE;
+	}
+}
+
+static void RaidbossBobTheFirst_WinThink(int entity)
+{
+	RaidbossBobTheFirst npc = view_as<RaidbossBobTheFirst>(entity);
+	
+	npc.StopPathing();
+	npc.m_flNextThinkTime = FAR_FUTURE;
+	npc.m_bisWalking = false;
+	npc.SetActivity("ACT_IDLE_ZOMBIE");
+	RaidModeTime += 1000.0;
+	
+	float gameTime = GetGameTime(npc.index);
+	
+	if(npc.m_bXenoExtraLogic)
+	{
+		switch(i_RaidGrantExtra[npc.index])
+		{
+			case 2:
+			{
+				ReviveAll(true);
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_Xeno_1", true);
+				npc.m_flNextThinkTime = gameTime + 5.0;
+			}
+			case 3:
+			{
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_Xeno_2", true);
+				npc.m_flNextThinkTime = gameTime + 4.0;
+			}
+			case 4:
+			{
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_Xeno_3", true);
+				npc.m_flNextThinkTime = gameTime + 4.0;
+			}
+			case 5:
+			{
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_Xeno_4", true);
+				npc.m_flNextThinkTime = gameTime + 4.0;
+			}
+			case 6:
+			{
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "...");
+				npc.m_flNextThinkTime = gameTime + 2.0;
+			}
+			case 7:
+			{
+				GiveProgressDelay(30.0);
+				SmiteNpcToDeath(npc.index);
+				CPrintToChatAll("%t", "Bob_The_First_Sea_Win_Xeno_5");
+				MusicEnum music;
+				strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/medieval_raid/special_mutation/incomming_boss_wait_scary.mp3");
+				music.Time = 100;
+				music.Volume = 1.0;
+				music.Custom = true;
+				strcopy(music.Name, sizeof(music.Name), "Howilng Emptiness");
+				strcopy(music.Artist, sizeof(music.Artist), "....");
+				Music_SetRaidMusic(music);
+				GivePlayerItems(2);
+				return;
+			}
+		}
+	}
+	else
+	{
+		switch(i_RaidGrantExtra[npc.index])
+		{
+			case 2:
+			{
+				ReviveAll(true);
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_1", true);
+				npc.m_flNextThinkTime = gameTime + 5.0;
+			}
+			case 3:
+			{
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_2", true);
+				npc.m_flNextThinkTime = gameTime + 3.0;
+			}
+			case 4:
+			{
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_3", true);
+				npc.m_flNextThinkTime = gameTime + 4.0;
+			}
+			case 5:
+			{
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_4", true);
+				npc.m_flNextThinkTime = gameTime + 4.0;
+			}
+			case 6:
+			{
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_5", true);
+				npc.m_flNextThinkTime = gameTime + 4.0;
+			}
+			case 7:
+			{
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_6", true);
+				npc.m_flNextThinkTime = gameTime + 3.0;
+			}
+			case 8:
+			{
+				RaidbossBobTheFirst_NPCTalkMessage(npc.index, "Bob_The_First_Sea_Win_7", true);
+				npc.m_flNextThinkTime = gameTime + 3.0;
+				CreateTimer(12.0, SafetyFixBobDo, EntIndexToEntRef(npc.index));
+			}
+			case 50:
+			{
+				SmiteNpcToDeath(npc.index);
+				GivePlayerItems();
+			}
+			default:
+			{
+				bool found;
+
+				for(int client = 1; client <= MaxClients; client++)
+				{
+					if(IsClientInGame(client) && IsPlayerAlive(client) && TeutonType[client] == TEUTON_NONE)
+					{
+						float pos[3]; GetEntPropVector(client, Prop_Data, "m_vecAbsOrigin", pos);
+						float ang[3];
+						ang[1] = GetRandomFloat(-179.0, 179.0);
+
+						TeleportEntity(npc.index, pos);
+
+						npc.m_iAnimationState = -1;
+						npc.m_bisWalking = false;
+						npc.SetActivity("ACT_PUSH_PLAYER");
+						npc.SetPlaybackRate(3.0);
+
+						npc.DispatchParticleEffect(npc.index, "mvm_soldier_shockwave", NULL_VECTOR, NULL_VECTOR, NULL_VECTOR, npc.FindAttachment("anim_attachment_LH"), PATTACH_POINT_FOLLOW, true);
+						npc.PlayRandomEnemyPullSound();
+
+						ForcePlayerSuicide(client);
+						ApplyLastmanOrDyingOverlay(client);
+						found = true;
+						break;
+					}
+				}
+
+				// Don't lose when everyone dies
+				GiveProgressDelay(15.0);
+				Waves_ForceSetup(15.0);
+
+				//dont respawn during setup.
+				PreventRespawnsAll = GetGameTime() + 10.0;
+
+				if(found)
+				{
+					npc.m_flNextThinkTime = gameTime + 0.25;
+					i_RaidGrantExtra[npc.index]--;
+				}
+				else
+				{
+					npc.AddGesture("ACT_IDLE_ZOMBIE");
+					npc.m_flNextThinkTime = gameTime + 1.25;
+					
+					for(int client = 1; client <= MaxClients; client++)
+					{
+						if(IsClientInGame(client) && !IsFakeClient(client))
+						{
+							ApplyLastmanOrDyingOverlay(client);
+							SendConVarValue(client, sv_cheats, "1");
+							Convars_FixClientsideIssues(client);
+						}
+					}
+					ResetReplications();
+
+					cvarTimeScale.SetFloat(0.1);
+					CreateTimer(0.5, SetTimeBack);
+					i_RaidGrantExtra[npc.index] = 49;
+					PreventRespawnsAll = GetGameTime() + 2.0;
+				}
+			}
+		}
+	}
+
+	i_RaidGrantExtra[npc.index]++;
 }

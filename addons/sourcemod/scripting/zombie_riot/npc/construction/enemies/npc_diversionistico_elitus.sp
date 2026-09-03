@@ -149,7 +149,7 @@ methodmap Diversionistico_Elitus < CClotBody
 		func_NPCOnTakeDamage[npc.index] = Diversionistico_Elitus_OnTakeDamage;
 		func_NPCThink[npc.index] = Diversionistico_Elitus_ClotThink;
 		
-		
+		npc.m_bCamo = true;
 		npc.StartPathing();
 		npc.m_flSpeed = 330.0;
 		b_TryToAvoidTraverse[npc.index] = true;
@@ -252,6 +252,72 @@ public void Diversionistico_Elitus_ClotThink(int iNPC)
 		return;
 	}
 	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
+
+	if(HasSpecificBuff(npc.index, "Revealed"))
+	{
+		if(npc.m_bCamo)
+		{
+			SetEntPropFloat(npc.index, Prop_Send, "m_fadeMinDist", 30000.0);
+			SetEntPropFloat(npc.index, Prop_Send, "m_fadeMaxDist", 30000.0);
+			if(IsValidEntity(npc.m_iWearable1))
+			{
+				SetEntPropFloat(npc.m_iWearable1, Prop_Send, "m_fadeMinDist", 30000.0);
+				SetEntPropFloat(npc.m_iWearable1, Prop_Send, "m_fadeMaxDist", 30000.0);
+			}
+			if(IsValidEntity(npc.m_iWearable2))
+			{
+				SetEntPropFloat(npc.m_iWearable2, Prop_Send, "m_fadeMinDist", 30000.0);
+				SetEntPropFloat(npc.m_iWearable2, Prop_Send, "m_fadeMaxDist", 30000.0);
+			}
+			if(IsValidEntity(npc.m_iWearable3))
+			{
+				SetEntPropFloat(npc.m_iWearable3, Prop_Send, "m_fadeMinDist", 30000.0);
+				SetEntPropFloat(npc.m_iWearable3, Prop_Send, "m_fadeMaxDist", 30000.0);
+			}
+			if(IsValidEntity(npc.m_iWearable4))
+			{
+				SetEntPropFloat(npc.m_iWearable4, Prop_Send, "m_fadeMinDist", 30000.0);
+				SetEntPropFloat(npc.m_iWearable4, Prop_Send, "m_fadeMaxDist", 30000.0);
+			}
+			if(IsValidEntity(npc.m_iWearable6))
+			{
+				SetEntPropFloat(npc.m_iWearable6, Prop_Send, "m_fadeMinDist", 30000.0);
+				SetEntPropFloat(npc.m_iWearable6, Prop_Send, "m_fadeMaxDist", 30000.0);
+			}
+			npc.m_bCamo=false;
+		}
+	}
+	else if(!npc.m_bCamo)
+	{
+		SetEntPropFloat(npc.index, Prop_Send, "m_fadeMinDist", 350.0);
+		SetEntPropFloat(npc.index, Prop_Send, "m_fadeMaxDist", 500.0);
+		if(IsValidEntity(npc.m_iWearable1))
+		{
+			SetEntPropFloat(npc.m_iWearable1, Prop_Send, "m_fadeMinDist", 350.0);
+			SetEntPropFloat(npc.m_iWearable1, Prop_Send, "m_fadeMaxDist", 500.0);
+		}
+		if(IsValidEntity(npc.m_iWearable2))
+		{
+			SetEntPropFloat(npc.m_iWearable2, Prop_Send, "m_fadeMinDist", 350.0);
+			SetEntPropFloat(npc.m_iWearable2, Prop_Send, "m_fadeMaxDist", 500.0);
+		}
+		if(IsValidEntity(npc.m_iWearable3))
+		{
+			SetEntPropFloat(npc.m_iWearable3, Prop_Send, "m_fadeMinDist", 350.0);
+			SetEntPropFloat(npc.m_iWearable3, Prop_Send, "m_fadeMaxDist", 500.0);
+		}
+		if(IsValidEntity(npc.m_iWearable4))
+		{
+			SetEntPropFloat(npc.m_iWearable4, Prop_Send, "m_fadeMinDist", 350.0);
+			SetEntPropFloat(npc.m_iWearable4, Prop_Send, "m_fadeMaxDist", 500.0);
+		}
+		if(IsValidEntity(npc.m_iWearable6))
+		{
+			SetEntPropFloat(npc.m_iWearable6, Prop_Send, "m_fadeMinDist", 350.0);
+			SetEntPropFloat(npc.m_iWearable6, Prop_Send, "m_fadeMaxDist", 500.0);
+		}
+		npc.m_bCamo=true;
+	}
 
 	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
 	{

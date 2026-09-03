@@ -54,9 +54,9 @@ static void ClotPrecache()
 	PrecacheModel("models/player/spy.mdl");
 }
 
-static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
+static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
 {
-	return CaptinoBaguettus(vecPos, vecAng, team);
+	return CaptinoBaguettus(vecPos, vecAng, team, data);
 }
 
 methodmap CaptinoBaguettus < CClotBody
@@ -220,8 +220,18 @@ methodmap CaptinoBaguettus < CClotBody
 		public get()							{ return fl_AbilityOrAttack[this.index][4]; }
 		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][4] = TempValueForProperty; }
 	}
+	property float m_flNextTMITalk
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][5]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][5] = TempValueForProperty; }
+	}
+	property int m_iNextTMITalk
+	{
+		public get()							{ return i_OverlordComboAttack[this.index]; }
+		public set(int TempValueForProperty) 	{ i_OverlordComboAttack[this.index] = TempValueForProperty; }
+	}
 	
-	public CaptinoBaguettus(float vecPos[3], float vecAng[3], int ally)
+	public CaptinoBaguettus(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
 		CaptinoBaguettus npc = view_as<CaptinoBaguettus>(CClotBody(vecPos, vecAng, "models/player/spy.mdl", "1.0", "750", ally, true, true));
 		
@@ -231,8 +241,8 @@ methodmap CaptinoBaguettus < CClotBody
 		int iActivity = npc.LookupActivity("selectionMenu_Idle");
 		if(iActivity > 0) npc.StartActivity(iActivity);
 		
-		npc.m_flNextMeleeAttack = 0.0;
 		npc.g_TimesSummoned = 0;
+		npc.m_iNextTMITalk = -1;
 		npc.m_iAttacksTillMegahit = 0;
 		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
@@ -248,12 +258,17 @@ methodmap CaptinoBaguettus < CClotBody
 		npc.m_flAttackHappens = 0.0;
 		npc.m_flCaptinoMeniusTeleportForAlly = 0.0;
 		npc.m_flCaptinoMeniusTeleportForEnemy = 0.0;
+		npc.m_flNextTMITalk = 0.0;
 		npc.m_bCamo = false;
 		npc.Anger = false;
 		npc.m_bFUCKYOU = false;
 		npc.m_bDissapearOnDeath = true;
 		b_NpcIsInvulnerable[npc.index] = true;
 		b_NoKillFeed[npc.index] = true;
+		if(StrContains(data, "no_scaleswithwaves") != -1)
+			npc.m_bScalesWithWaves = false;
+		else
+			npc.m_bScalesWithWaves = true;
 		
 		b_ThisNpcIsImmuneToNuke[npc.index] = true;
 		b_NoKnockbackFromSources[npc.index] = true;
@@ -418,7 +433,7 @@ public void CaptinoBaguettus_ClotThink(int iNPC)
 			{
 				if(AlreadySaidWin)
 				{
-					NPCPritToChat_Noname("CaptinoMenius_Talk-2", false);
+					NPCPritToChat_Noname("CaptinoMenius_Talk-6", false);
 					npc.g_TimesSummoned=-1;
 				}
 				else
@@ -519,7 +534,7 @@ public void CaptinoBaguettus_ClotThink(int iNPC)
 						npc.SetCycle(0.01);
 						npc.SetPlaybackRate(1.0);
 					}
-					NPCPritToChat(npc.index, "{paleturquoise}", "CaptinoMenius_Talk-1", false, false);
+					NPCPritToChat(npc.index, "{paleturquoise}", "CaptinoMenius_Talk-5", false, false);
 					npc.PlayCloakSound();
 					npc.m_bCamo=true;
 				}
@@ -690,6 +705,123 @@ public void CaptinoBaguettus_ClotThink(int iNPC)
 	if(npc.m_flNextThinkTime > GameTime)
 		return;
 	npc.m_flNextThinkTime = GameTime + 0.1;
+	
+	switch(npc.m_iNextTMITalk)
+	{
+		case -1:
+		{
+			npc.m_flNextTMITalk = GameTime + 1.0;
+			npc.m_iNextTMITalk=0;
+		}
+		//{
+			//if(!StrContains(data, "voidsurv") != -1)
+			//{
+				//NPCPritToChat_Override("Sensal", "{blue}", "CaptinoMenius_Sensal_And_Zeina_Talk-1", false);	
+				//npc.m_flNextTMITalk = GameTime + 1.0;
+				//npc.m_iNextTMITalk=9;
+			//}
+			//else
+			//{
+				//npc.m_flNextTMITalk = GameTime + 1.0;
+				//npc.m_iNextTMITalk=0;
+			//}
+		//}
+		case 0:
+		{
+			if(npc.m_flNextTMITalk < GameTime)
+			{
+				NPCPritToChat(npc.index, "{paleturquoise}", "CaptinoMenius_Talk-1-1", false, false);
+				npc.m_flNextTMITalk = GameTime + 3.5;
+				npc.m_iNextTMITalk=1;
+			}
+		}
+		case 1:
+		{
+			if(npc.m_flNextTMITalk < GameTime)
+			{
+				NPCPritToChat(npc.index, "{paleturquoise}", "CaptinoMenius_Talk-1-2", false, false);
+				npc.m_iNextTMITalk=2;
+			}
+		}
+		case 2:
+		{
+			if(Waves_GetRoundScale()+1==11)
+			{
+				NPCPritToChat(npc.index, "{paleturquoise}", "CaptinoMenius_Talk-2-1", false, false);
+				npc.m_flNextTMITalk = GameTime + 4.0;
+				npc.m_iNextTMITalk=3;
+			}
+		}
+		case 3:
+		{
+			if(npc.m_flNextTMITalk < GameTime)
+			{
+				NPCPritToChat(npc.index, "{paleturquoise}", "CaptinoMenius_Talk-2-2", false, false);
+				npc.m_iNextTMITalk=4;
+			}
+		}
+		case 4:
+		{
+			if(Waves_GetRoundScale()+1==21)
+			{
+				NPCPritToChat(npc.index, "{paleturquoise}", "CaptinoMenius_Talk-3-1", false, false);
+				npc.m_flNextTMITalk = GameTime + 4.0;
+				npc.m_iNextTMITalk=5;
+			}
+		}
+		case 5:
+		{
+			if(npc.m_flNextTMITalk < GameTime)
+			{
+				NPCPritToChat(npc.index, "{paleturquoise}", "CaptinoMenius_Talk-3-2", false, false);
+				npc.m_flNextTMITalk = GameTime + 2.0;
+				npc.m_iNextTMITalk=6;
+			}
+		}
+		case 6:
+		{
+			if(npc.m_flNextTMITalk < GameTime)
+			{
+				NPCPritToChat(npc.index, "{paleturquoise}", "CaptinoMenius_Talk-3-3", false, false);
+				npc.m_iNextTMITalk=7;
+			}
+		}
+		case 7:
+		{
+			if(Waves_GetRoundScale()+1==31)
+			{
+				NPCPritToChat(npc.index, "{paleturquoise}", "CaptinoMenius_Talk-4-1", false, false);
+				npc.m_flNextTMITalk = GameTime + 4.0;
+				npc.m_iNextTMITalk=8;
+			}
+		}
+		case 8:
+		{
+			if(npc.m_flNextTMITalk < GameTime)
+			{
+				NPCPritToChat(npc.index, "{paleturquoise}", "CaptinoMenius_Talk-4-2", false, false);
+				npc.m_iNextTMITalk=11;
+			}
+		}
+		//case 9:
+		//{
+			//if(npc.m_flNextTMITalk < GameTime)
+			//{
+				//NPCPritToChat_Override("Zeina", "{lightcyan}", "CaptinoMenius_Sensal_And_Zeina_Talk-2", false);
+				//npc.m_flNextTMITalk = GameTime + 1.0;
+				//npc.m_iNextTMITalk=10;
+			//}
+		//}
+		//case 10:
+		//{
+			//if(npc.m_flNextTMITalk < GameTime)
+			//{
+				//NPCPritToChat(npc.index, "{paleturquoise}", "CaptinoMenius_Sensal_And_Zeina_Talk-3", false, false);
+				//npc.m_flNextTMITalk = GameTime + 1.0;
+				//npc.m_iNextTMITalk=11;
+			//}
+		//}
+	}
 	
 	if(!IsValidAlly(npc.index, npc.m_iTargetAlly) || npc.m_flGetClosestTargetAllyTime < GameTime)
 	{

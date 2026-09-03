@@ -1,8 +1,8 @@
 #pragma semicolon 1
 #pragma newdecls required
-bool g_dasnaggenvatcher_died;
-float g_dasnaggenvatcher_die;
+
 static int NPCId;
+
 static char g_HurtSounds[][] =
 {
 	"cof/purnell/hurt1.mp3",
@@ -18,24 +18,14 @@ static char g_KillSounds[][] =
 	"cof/purnell/kill3.mp3",
 	"cof/purnell/kill4.mp3"
 };
+
 static char g_SummonSounds[][] = {
 	"weapons/buff_banner_horn_blue.wav",
 	"weapons/buff_banner_horn_red.wav",
 };
 
-
-void DasNaggenvatcher_OnMapStart()
+public void DasNaggenvatcher_OnMapStart()
 {
-	
-	for (int i = 0; i < (sizeof(g_HurtSounds));	   i++) { PrecacheSoundCustom(g_HurtSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_KillSounds));	   i++) { PrecacheSoundCustom(g_KillSounds[i]);	   }
-	PrecacheSoundCustom("cof/purnell/death.mp3");
-	PrecacheSoundCustom("cof/purnell/intro.mp3");
-	PrecacheSoundCustom("cof/purnell/converted.mp3");
-	PrecacheSoundCustom("cof/purnell/reload.mp3");
-	PrecacheSoundCustom("cof/purnell/shoot.mp3");
-	PrecacheSoundCustom("cof/purnell/shove.mp3");
-	PrecacheSoundCustom("cof/purnell/meleehit.mp3");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Das Naggenvatcher Doctor");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_doctor_unclean_one");
@@ -43,8 +33,25 @@ void DasNaggenvatcher_OnMapStart()
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;
 	data.Category = Type_Raid;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPCId = NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_KillSounds);
+	PrecacheSoundArray(g_SummonSounds);
+	PrecacheSoundCustom("cof/purnell/death.mp3");
+	PrecacheSoundCustom("cof/purnell/intro.mp3");
+	PrecacheSoundCustom("cof/purnell/converted.mp3");
+	PrecacheSoundCustom("cof/purnell/reload.mp3");
+	PrecacheSoundCustom("cof/purnell/shoot.mp3");
+	PrecacheSoundCustom("cof/purnell/shove.mp3");
+	PrecacheSoundCustom("cof/purnell/meleehit.mp3");
+	PrecacheModel("models/player/spy.mdl");
+	PrecacheModel("models/player/medic.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
@@ -54,21 +61,10 @@ static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, co
 
 methodmap DasNaggenvatcher < CClotBody
 {
-	property float m_flMaxDeath
-	{
-		public get()							{ return fl_AbilityOrAttack[this.index][9]; }
-		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][9] = TempValueForProperty; }
-	}
-	property float m_flReviveDasNaggenvatcherTime
-	{
-		public get()							{ return fl_GrappleCooldown[this.index]; }
-		public set(float TempValueForProperty) 	{ fl_GrappleCooldown[this.index] = TempValueForProperty; }
-	}
 	public void PlayHurtSound()
 	{
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-		
 		this.m_flNextHurtSound = GetGameTime(this.index) + 1.0;
 		EmitCustomToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, 3.0);
 	}
@@ -124,67 +120,52 @@ methodmap DasNaggenvatcher < CClotBody
 		spawnRing(this.index, 75.0 * 2.0, 0.0, 0.0, 75.0, "materials/sprites/laserbeam.vmt", r, g, b, a, 1, 0.3, 6.0, 6.1, 1);
 		spawnRing(this.index, 75.0 * 2.0, 0.0, 0.0, 85.0, "materials/sprites/laserbeam.vmt", r, g, b, a, 1, 0.2, 6.0, 6.1, 1);
 	}
+	public void SetActivity(const char[] animation)
+	{
+		int activity = this.LookupActivity(animation);
+		if(activity > 0 && activity != this.m_iState)
+		{
+			this.m_iState = activity;
+			//this.m_bisWalking = false;
+			this.StartActivity(activity);
+		}
+	}
+	
+	property float m_flMaxDeath
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][0]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][0] = TempValueForProperty; }
+	}
+	property float m_flReviveDasNaggenvatcherTime
+	{
+		public get()							{ return fl_GrappleCooldown[this.index]; }
+		public set(float TempValueForProperty) 	{ fl_GrappleCooldown[this.index] = TempValueForProperty; }
+	}
+	property int m_iMyTrueTeam
+	{
+		public get()		{ return this.m_iMedkitAnnoyance; }
+		public set(int value) 	{ this.m_iMedkitAnnoyance = value; }
+	}
+	property int m_iMaxHP
+	{
+		public get()							{ return i_AttacksTillMegahit[this.index]; }
+		public set(int TempValueForProperty) 	{ i_AttacksTillMegahit[this.index] = TempValueForProperty; }
+	}
+	property float m_flNPCTalkDelay
+	{
+		public get()							{ return fl_NextChargeSpecialAttack[this.index]; }
+		public set(float TempValueForProperty) 	{ fl_NextChargeSpecialAttack[this.index] = TempValueForProperty; }
+	}
+	
 	public DasNaggenvatcher(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
-		int WaveSetting = 1;
-		char SizeChar[5];
-		SizeChar = "1.35";
-		if(StrContains(data, "first") != -1)
-		{
-			WaveSetting = 1;
-			SizeChar = "1.0";
-		}
-		else if(StrContains(data, "second") != -1)
-		{
-			WaveSetting = 2;
-			SizeChar = "1.0";
-		}
-		else if(StrContains(data, "third") != -1)
-		{
-			WaveSetting = 3;
-			SizeChar = "1.0";
-		}
-		else if(StrContains(data, "forth") != -1)
-		{
-			//outside of wave stuff.
-			WaveSetting = 4;
-			SizeChar = "1.0";
-		}
-		else if(StrContains(data, "shadowbattle") != -1)
-		{
-			//outside of wave stuff.
-			WaveSetting = 6;
-			SizeChar = "1.0";
-		}
-		else if(StrContains(data, "shadowcutscene") != -1)
-		{
-			//outside of wave stuff.z
-			WaveSetting = 7;
-			SizeChar = "1.0";
-		}
-		else if(StrContains(data, "final_item") != -1)
-		{
-			WaveSetting = 5;
-			SizeChar = "1.0";
-		}
-		DasNaggenvatcher npc = view_as<DasNaggenvatcher>(CClotBody(vecPos, vecAng, "models/player/spy.mdl", SizeChar, "7000000", ally, false, true));
+		DasNaggenvatcher npc = view_as<DasNaggenvatcher>(CClotBody(vecPos, vecAng, "models/player/spy.mdl", "1.0", "7000000", ally, false, true));
 		i_NpcWeight[npc.index] = 4;
 		
 		SetEntityRenderMode(npc.index, RENDER_NONE);
 
 		npc.m_iState = -1;
 		npc.SetActivity("ACT_MP_RUN_SECONDARY");
-		
-		if(ally == TFTeam_Red)
-		{
-			npc.PlayFriendlySound();
-		}
-		else
-		{
-			npc.PlayIntroSound();
-		}
-		
-		npc.g_TimesSummoned = 0;
 		
 		npc.m_iWearable1 = npc.EquipItem("head", "models/player/medic.mdl");
 
@@ -201,56 +182,80 @@ methodmap DasNaggenvatcher < CClotBody
 		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 1);
 		SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", 1);
 		SetEntProp(npc.m_iWearable5, Prop_Send, "m_nSkin", 1);
-		
-		i_RaidGrantExtra[npc.index] = WaveSetting;
-		if(WaveSetting == 6 || WaveSetting == 7)
-		{
-			npc.m_bDissapearOnDeath = true;
-		}
-		if(WaveSetting == 5 || WaveSetting == 7)
-		{
-			//lazy identifier lol
-			if(WaveSetting == 7)
-			{
-				b_ThisEntityIgnoredByOtherNpcsAggro[npc.index] = true;
-			}
-			b_NpcUnableToDie[npc.index] = true;
-		}
 
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;
 		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
 		
-		SDKHook(npc.index, SDKHook_OnTakeDamagePost, DasNaggenvatcher_OnTakeDamagePost);
-		func_NPCOnTakeDamage[npc.index] = DasNaggenvatcher_OnTakeDamage;
-		npc.m_iInjuredLevel = 0;
+		npc.m_iMyTrueTeam=ally;
 		npc.m_bThisNpcIsABoss = true;
 		npc.m_iTarget = -1;
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_bDissapearOnDeath = false;
 		i_ClosestAllyCDTarget[npc.index] = 0.0;
-		g_dasnaggenvatcher_died=false;
-		g_dasnaggenvatcher_die=0.0;
+		npc.g_TimesSummoned = 0;
 		WaveStart_SubWaveStart(GetGameTime() + 1000.0);
+		npc.m_iMaxHP = 10000000;
+		
+		i_SaidLineAlready[npc.index]=0;
+		npc.m_bFUCKYOU=false;
+		npc.m_flNPCTalkDelay=0.0;
 		
 		RaidModeTime = GetGameTime(npc.index) + 60.0;
 		RaidBossActive = EntIndexToEntRef(npc.index);
 		RaidAllowsBuildings = true;
 		npc.Anger = false;
+		RaidModeScaling = float(Waves_GetRoundScale()+1);
 		
-		char buffers[3][64];
-		ExplodeString(data, ";", buffers, sizeof(buffers), sizeof(buffers[]));
-		if(buffers[0][0] == 's' && buffers[0][1] == 'c')
+		static char countext[3][216];
+		int count = ExplodeString(data, ";", countext, sizeof(countext), sizeof(countext[]));
+		for(int i = 0; i < count; i++)
 		{
-			//remove SC
-			ReplaceString(buffers[0], 64, "sc", "");
-			float value = StringToFloat(buffers[0]);
-			RaidModeScaling = value;
+			if(i>=count)break;
+			else if(StrContains(countext[i], "final_item") != -1)
+			{
+				ReplaceString(countext[i], sizeof(countext[]), "final_item", "");
+				npc.m_bGib = true;
+				i_RaidGrantExtra[npc.index] = 1557;
+			}
+			else if(StrContains(countext[i], "maxhp") != -1)
+			{
+				ReplaceString(countext[i], sizeof(countext[]), "maxhp", "");
+				npc.m_iMaxHP = StringToInt(countext[i]);
+			}
+			else if(StrContains(countext[i], "sc") != -1)
+			{
+				ReplaceString(countext[i], sizeof(countext[]), "sc", "");
+				RaidModeScaling = StringToFloat(countext[i]);
+			}
 		}
-		else
-		{	
-			RaidModeScaling = float(Waves_GetRoundScale()+1);
+		
+		bool ScaleWithHpMore = Waves_GetRoundScale() == 0;
+		float multiBoss;
+		if(ScaleWithHpMore)
+			multiBoss = MultiGlobalHighHealthBoss;
+		if(!ScaleWithHpMore)
+			multiBoss = MultiGlobalHealthBoss;
+		if(!ScaleWithHpMore && Waves_GetRoundScale() > 0)
+		{
+			multiBoss *= MultiGlobalEnemyBoss;
+			count = RoundToNearest(float(Waves_GetRoundScale()) * MultiGlobalEnemyBoss);
+			
+			if(count < 1)
+				count = 1;
+			
+			if(count > 250)
+				count = 250;
+			
+			float decrease = count / float(Waves_GetRoundScale());
+			if(decrease > 1.0)
+			{
+				multiBoss /= decrease;
+			}
 		}
+		int Tempomary_Health = RoundToNearest(float(npc.m_iMaxHP) * multiBoss);
+		npc.m_iMaxHP=Tempomary_Health;
+		
 		if(RaidModeScaling < 35)
 		{
 			RaidModeScaling *= 0.25; //abit low, inreacing
@@ -263,9 +268,7 @@ methodmap DasNaggenvatcher < CClotBody
 		float amount_of_people = ZRStocks_PlayerScalingDynamic();
 		
 		if(amount_of_people > 12.0)
-		{
 			amount_of_people = 12.0;
-		}
 		
 		amount_of_people *= 0.12;
 		
@@ -280,51 +283,131 @@ methodmap DasNaggenvatcher < CClotBody
 		npc.m_flNextRangedAttack = 0.0;
 		npc.m_iAttacksTillReload = 5;
 		npc.m_flReloadDelay = GetGameTime(npc.index) + 0.8;
-
-		float wave = float(Waves_GetRoundScale()+1);
-		wave *= 0.133333;
-		npc.m_flWaveScale = wave;
-		npc.m_flWaveScale *= MinibossScalingReturn();
 		
 		npc.m_flNextRangedSpecialAttack = 0.0;
 
-		func_NPCDeath[npc.index] = view_as<Function>(DasNaggenvatcher_NPCDeath);
-		func_NPCThink[npc.index] = view_as<Function>(DasNaggenvatcher_ClotThink);
+		func_NPCDeath[npc.index] = DasNaggenvatcher_NPCDeath;
+		func_NPCThink[npc.index] = DasNaggenvatcher_ClotThink;
+		func_NPCOnTakeDamage[npc.index] = DasNaggenvatcher_OnTakeDamage;
+		SDKHook(npc.index, SDKHook_OnTakeDamagePost, DasNaggenvatcher_OnTakeDamagePost);
 		
-		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);	
-		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);	
-		for(int client_check=1; client_check<=MaxClients; client_check++)
+		if(ally == TFTeam_Red)
+			npc.PlayFriendlySound();
+		else
 		{
-			if(IsClientInGame(client_check) && !IsFakeClient(client_check))
+			npc.PlayIntroSound();
+			EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);	
+			EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);	
+			for(int client_check=1; client_check<=MaxClients; client_check++)
 			{
-				LookAtTarget(client_check, npc.index);
-				SetGlobalTransTarget(client_check);
-				ShowGameText(client_check, "voice_player", 1, "%t", "DasNaggenvatcher Spawned");
-				UTIL_ScreenFade(client_check, 180, 1, FFADE_OUT, 0, 0, 0, 255);
+				if(IsClientInGame(client_check) && !IsFakeClient(client_check))
+				{
+					LookAtTarget(client_check, npc.index);
+					SetGlobalTransTarget(client_check);
+					ShowGameText(client_check, "voice_player", 1, "%t", "DasNaggenvatcher Spawned");
+					UTIL_ScreenFade(client_check, 180, 1, FFADE_OUT, 0, 0, 0, 255);
+				}
 			}
 		}
-
 		return npc;
-	}
-	
-	public void SetActivity(const char[] animation)
-	{
-		int activity = this.LookupActivity(animation);
-		if(activity > 0 && activity != this.m_iState)
-		{
-			this.m_iState = activity;
-			//this.m_bisWalking = false;
-			this.StartActivity(activity);
-		}
-	}
-	property int m_iInjuredLevel
-	{
-		public get()		{ return this.m_iMedkitAnnoyance; }
-		public set(int value) 	{ this.m_iMedkitAnnoyance = value; }
 	}
 }
 
-public void DasNaggenvatcher_ClotThink(int iNPC)
+static void DasNaggenvatcher_Wait(int iNPC)
+{
+	DasNaggenvatcher npc = view_as<DasNaggenvatcher>(iNPC);
+	float gameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > gameTime)
+		return;
+	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
+	npc.Update();
+	
+	if(npc.m_flNextThinkTime > gameTime)
+		return;
+	npc.m_flNextThinkTime = gameTime + 0.1;
+	
+	b_NpcIsInvulnerable[npc.index] = true;
+
+	if(npc.m_bFUCKYOU)
+	{
+		npc.m_flNextThinkTime = 0.0;
+		npc.StopPathing();
+		
+		npc.m_bisWalking = false;
+		npc.SetActivity("ACT_MP_CROUCH_MELEE");
+		if(gameTime > npc.m_flNPCTalkDelay)
+		{
+			if(i_RaidGrantExtra[npc.index] == 1557)
+			{
+				npc.m_bGib = true;
+				float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
+				int spawn_index = NPC_CreateByName("npc_zs_unspeakable", npc.index, VecSelfNpc, {0.0,0.0,0.0}, npc.m_iMyTrueTeam, "sc40;final_item");
+				if(spawn_index > MaxClients)
+				{
+					NpcAddedToZombiesLeftCurrently(spawn_index, true);
+					SetEntProp(spawn_index, Prop_Data, "m_iHealth", npc.m_iMaxHP);
+					SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", npc.m_iMaxHP);
+					fl_Extra_MeleeArmor[spawn_index] = fl_Extra_MeleeArmor[npc.index];
+					fl_Extra_RangedArmor[spawn_index] = fl_Extra_RangedArmor[npc.index];
+					fl_Extra_Speed[spawn_index] = fl_Extra_Speed[npc.index];
+					fl_Extra_Damage[spawn_index] = fl_Extra_Damage[npc.index];
+					IncreaseEntityDamageTakenBy(spawn_index, 0.000001, 9.5);
+				}
+			}
+			RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
+			npc.m_bDissapearOnDeath = true;
+			SpawnMoney(npc.index, true);
+			npc.PlayDeathSound();
+		}
+		else if(gameTime + 4.0 > npc.m_flNPCTalkDelay && i_SaidLineAlready[npc.index] < 9)
+		{
+			i_SaidLineAlready[npc.index] = 9;
+			PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_Propaganda_9", true);
+		}
+		else if(gameTime + 8.0 > npc.m_flNPCTalkDelay && i_SaidLineAlready[npc.index] < 8)
+		{
+			i_SaidLineAlready[npc.index] = 8;
+			PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_Propaganda_8", true);
+		}
+		else if(gameTime + 12.0 > npc.m_flNPCTalkDelay && i_SaidLineAlready[npc.index] < 7)
+		{
+			i_SaidLineAlready[npc.index] = 7;
+			PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_Propaganda_7", true);
+		}
+		else if(gameTime + 16.0 > npc.m_flNPCTalkDelay && i_SaidLineAlready[npc.index] < 6)
+		{
+			i_SaidLineAlready[npc.index] = 6;
+			PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_Propaganda_6", true);
+		}
+		else if(gameTime + 20.0 > npc.m_flNPCTalkDelay && i_SaidLineAlready[npc.index] < 5)
+		{
+			i_SaidLineAlready[npc.index] = 5;
+			PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_Propaganda_5", true);
+		}
+		else if(gameTime + 24.0 > npc.m_flNPCTalkDelay && i_SaidLineAlready[npc.index] < 4)
+		{
+			i_SaidLineAlready[npc.index] = 4;
+			PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_Propaganda_4", true);
+		}
+		else if(gameTime + 28.0 > npc.m_flNPCTalkDelay && i_SaidLineAlready[npc.index] < 3)
+		{
+			i_SaidLineAlready[npc.index] = 3;
+			PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_Propaganda_3", true);
+		}
+		else if(gameTime + 32.0 > npc.m_flNPCTalkDelay && i_SaidLineAlready[npc.index] < 2)
+		{
+			i_SaidLineAlready[npc.index] = 2;
+			PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_Propaganda_2", true);
+		}
+		else if(gameTime + 36.0 > npc.m_flNPCTalkDelay && i_SaidLineAlready[npc.index] < 1)
+		{
+			i_SaidLineAlready[npc.index] = 1;
+			PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_Propaganda_1", true);
+		}
+	}
+}
+
+static void DasNaggenvatcher_ClotThink(int iNPC)
 {
 	DasNaggenvatcher npc = view_as<DasNaggenvatcher>(iNPC);
 	
@@ -338,15 +421,13 @@ public void DasNaggenvatcher_ClotThink(int iNPC)
 	if(npc.m_flNextRangedSpecialAttack < gameTime)
 	{
 		npc.m_flNextRangedSpecialAttack = gameTime + 0.25;
-		
-		int target = GetClosestAlly(npc.index, (250.0 * 250.0), _,DasNaggenvatcherBuffAlly);
-		if(target)
+		// 250.0*250.0 = 62500.0
+		int target = GetClosestAlly(npc.index, 62500.0, _,DasNaggenvatcherBuffAlly);
+		if(target && !HasSpecificBuff(target, "False Therapy"))
 		{
-			if(!HasSpecificBuff(target, "False Therapy"))
-			{
-				ApplyStatusEffect(npc.index, target, "False Therapy", 30.0);
-				npc.AddGesture("ACT_MP_GESTURE_VC_FISTPUMP_SECONDARY",_,_,_,3.0);
-			}
+			VausMagicaGiveShield(target, 20, true, 20);
+			ApplyStatusEffect(npc.index, target, "False Therapy", 30.0);
+			npc.AddGesture("ACT_MP_GESTURE_VC_FISTPUMP_SECONDARY",_,_,_,3.0);
 		}
 	}
 	
@@ -361,15 +442,15 @@ public void DasNaggenvatcher_ClotThink(int iNPC)
 
 	if(!IsValidAlly(npc.index, npc.m_iTargetAlly))
 	{
-		if(i_ClosestAllyCDTarget[npc.index] < GetGameTime(npc.index))
+		if(i_ClosestAllyCDTarget[npc.index] < gameTime)
 		{
 			npc.m_iTargetAlly = GetClosestAlly(npc.index, _, _,DasNaggenvatcherBuffAlly);
-			i_ClosestAllyCDTarget[npc.index] = GetGameTime(npc.index) + 1.0;
+			i_ClosestAllyCDTarget[npc.index] = gameTime + 1.0;
 		}
 	}
 	else
 	{
-		i_ClosestAllyCDTarget[npc.index] = GetGameTime(npc.index) + 0.0;
+		i_ClosestAllyCDTarget[npc.index] = gameTime + 0.0;
 	}
 
 	if(npc.m_flGetClosestTargetTime < gameTime)
@@ -380,8 +461,8 @@ public void DasNaggenvatcher_ClotThink(int iNPC)
 	if(IsValidAlly(npc.index, npc.m_iTargetAlly) && IsValidEnemy(npc.index, npc.m_iTarget))
 	{
 		float vecTargetally[3]; WorldSpaceCenter(npc.m_iTargetAlly, vecTargetally);
-		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget );
-		float vecPos[3]; WorldSpaceCenter(npc.index, vecPos );
+		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget);
+		float vecPos[3]; WorldSpaceCenter(npc.index, vecPos);
 		
 		float distanceToAlly = GetVectorDistance(vecTargetally, vecPos, true);
 		float distanceToEnemy = GetVectorDistance(vecTarget, vecTargetally, true);
@@ -426,14 +507,15 @@ public void DasNaggenvatcher_ClotThink(int iNPC)
 					if(target > 0) 
 					{
 						float damage = 50.0;
-											
-											
-						if(!ShouldNpcDealBonusDamage(target))
-							SDKHooks_TakeDamage(target, npc.index, npc.index, damage * npc.m_flWaveScale, DMG_CLUB, -1, _, vecHit);
+						damage *= RaidModeScaling;
+						if(ShouldNpcDealBonusDamage(target))
+							damage *= 3.0;
 						else
-							SDKHooks_TakeDamage(target, npc.index, npc.index, damage * 3.0 * npc.m_flWaveScale, DMG_CLUB, -1, _, vecHit);
+							CaptainQuetz_DebuffApply(npc.index, target);
+						SDKHooks_TakeDamage(target, npc.index, npc.index, damage, DMG_CLUB, -1, _, vecHit);
 
 						Custom_Knockback(npc.index, target, 500.0);
+						SensalCauseKnockback(npc.index, target, (600.0 / 900.0), false);
 						npc.m_iAttacksTillReload++;
 						npc.PlayHitSound();
 					}
@@ -494,8 +576,11 @@ public void DasNaggenvatcher_ClotThink(int iNPC)
 							
 							PredictSubjectPositionForProjectiles(npc, npc.m_iTarget, 700.0, _,vecTarget);
 							float damage = 50.0;
-
-							npc.FireRocket(vecTarget, damage * 0.9 * npc.m_flWaveScale, 700.0, "models/weapons/w_bullet.mdl", 2.0);
+							damage *= 0.9;
+							damage *= RaidModeScaling;
+							int RocketGet = npc.FireRocket(vecTarget, damage, 700.0, "models/weapons/w_bullet.mdl", 2.0);
+							if(IsValidEntity(RocketGet))
+								SDKHook(RocketGet, SDKHook_StartTouch, HEGrenade_StartTouch);
 							
 							npc.PlayShootSound();
 						}
@@ -614,22 +699,10 @@ public void DasNaggenvatcher_ClotThink(int iNPC)
 			RaidModeTime += 10.0;
 			switch(GetRandomInt(0,3))
 			{
-				case 0:
-				{
-					CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 너 혼자서는 아무것도 하지 못 한다!");
-				}
-				case 1:
-				{
-					CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 영광스러운 합일에 동참하라.");
-				}
-				case 2:
-				{
-					CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 지금 항복할텐가?!");
-				}
-				case 3:
-				{
-					CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 너가 그래도 니 동료들보단 나은것 같군");
-				}
+				case 0: PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_LastMann_1", true);
+				case 1: PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_LastMann_2", true);
+				case 2: PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_LastMann_3", true);
+				case 3: PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_LastMann_4", true);
 			}
 		}
 	}
@@ -672,7 +745,8 @@ public void DasNaggenvatcher_ClotThink(int iNPC)
 		{
 			if(!npc.Anger)
 			{
-				DasNaggenvatcherSayWordsAngry(npc.index);
+				if(i_RaidGrantExtra[npc.index] == 1557)
+					DasNaggenvatcherSayWords(npc.index, true);
 				npc.Anger = true;
 				b_NpcIsInvulnerable[npc.index] = false;
 			}
@@ -686,90 +760,17 @@ public void DasNaggenvatcher_ClotThink(int iNPC)
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		switch(GetRandomInt(0,3))
 		{
-			case 0:
-			{
-				CPrintToChatAll("{crimson}캡틴 퀘츠{crimson}: 정말 한심하기 짝이없군 고작 이따위 결과를 보려고 우리가 온것이 아닌데");
-			}
-			case 1:
-			{
-				CPrintToChatAll("{crimson}캡틴 퀘츠{crimson}: 너네 그냥 집에 가라. 너희 같은 것들은 우리와 함께 할 수 없다.");
-			}
-			case 2:
-			{
-				CPrintToChatAll("{crimson}캡틴 퀘츠{crimson}: 고작 이따위 것들을 상대하려고 우리가 시간낭비를 했단 말인가?");
-			}
-			case 3:
-			{
-				CPrintToChatAll("{crimson}캡틴 퀘츠{crimson}: 우리가 이딴 약골들에게 쩔쩔맸단 말인가...");
-			}
+			case 0: PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_Death_1", true);
+			case 1: PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_Death_2", true);
+			case 2: PrintNPCMessageWithPrefixes(npc.index, "crimson", "CaptainQuetz_Death_3", true);
+			case 3: PrintNPCMessageWithPrefixes(npc.index, "crimson", "Castellan_Talk_Lastman-1", true);
 		}
 		
 		return;
 	}
-	if(g_dasnaggenvatcher_died)
-	{
-		npc.m_flNextThinkTime = 0.0;
-		npc.StopPathing();
-		
-		npc.m_bisWalking = false;
-		npc.SetActivity("ACT_MP_CROUCH_MELEE");
-		npc.m_bisWalking = false;
-		if(gameTime > g_dasnaggenvatcher_die)
-		{
-			RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
-			npc.m_bDissapearOnDeath = true;
-			SpawnMoney(npc.index, true);
-			npc.PlayDeathSound();
-		}
-		else if(gameTime + 4.0 > g_dasnaggenvatcher_die && i_SaidLineAlready[npc.index] < 9)
-		{
-			i_SaidLineAlready[npc.index] = 9;
-			CPrintToChatAll("{crimson}불결한 존재{default}: 증명할 시간이다!!!!");
-		}
-		else if(gameTime + 8.0 > g_dasnaggenvatcher_die && i_SaidLineAlready[npc.index] < 8)
-		{
-			i_SaidLineAlready[npc.index] = 8;
-			CPrintToChatAll("{crimson}불결한 존재{default}: 이제 너희의 존재를...");
-		}
-		else if(gameTime + 12.0 > g_dasnaggenvatcher_die && i_SaidLineAlready[npc.index] < 7)
-		{
-			i_SaidLineAlready[npc.index] = 7;
-			CPrintToChatAll("{crimson}불결한 존재{default}: 아주 오랜 시간 동안... 지금이 오기만을 기다려왔다.");
-		}
-		else if(gameTime + 16.0 > g_dasnaggenvatcher_die && i_SaidLineAlready[npc.index] < 6)
-		{
-			i_SaidLineAlready[npc.index] = 6;
-			CPrintToChatAll("{crimson}캡틴 퀘츠?{default}: 다만, 아직 마지막 테스트가 필요하다.{crimson} 이 테스트가 끝나면 너희도 우리와 하나가 되리라.");
-		}
-		else if(gameTime + 20.0 > g_dasnaggenvatcher_die && i_SaidLineAlready[npc.index] < 5)
-		{
-			i_SaidLineAlready[npc.index] = 5;
-			CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 우리의 결속은 자라나고 우리는 영생을 누리리라.");
-		}
-		else if(gameTime + 24.0 > g_dasnaggenvatcher_die && i_SaidLineAlready[npc.index] < 4)
-		{
-			i_SaidLineAlready[npc.index] = 4;
-			CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 우리가 집어삼킨 세계마다 새로운 형제가 일어나 하나가 되리라.");
-		}
-		else if(gameTime + 28.0 > g_dasnaggenvatcher_die && i_SaidLineAlready[npc.index] < 3)
-		{
-			i_SaidLineAlready[npc.index] = 3;
-			CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 역시 너희도 우리와 하나가 되어야만 한다.");
-		}
-		else if(gameTime + 32.0 > g_dasnaggenvatcher_die && i_SaidLineAlready[npc.index] < 2)
-		{
-			i_SaidLineAlready[npc.index] = 2;
-			CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 그리고 너희는 우리의 기대에 정확히 부합했다.");
-		}
-		else if(gameTime + 36.0 > g_dasnaggenvatcher_die && i_SaidLineAlready[npc.index] < 1)
-		{
-			i_SaidLineAlready[npc.index] = 1;
-			CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 너희를 오랜 시간 동안 지켜보고 있었다.");
-		}
-	}
 }
 
-public Action DasNaggenvatcher_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action DasNaggenvatcher_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	//Valid attackers only.
 	if(attacker <= 0)
@@ -786,7 +787,60 @@ public Action DasNaggenvatcher_OnTakeDamage(int victim, int &attacker, int &infl
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
 	}
-	if(!npc.Anger)
+	if(i_RaidGrantExtra[victim] >= 1557)
+	{
+		if(!npc.Anger)
+		{
+			int health = GetEntProp(victim, Prop_Data, "m_iHealth") - RoundToCeil(damage);
+			if(health < 1)
+			{
+				SetEntProp(victim, Prop_Data, "m_iHealth", 1);
+				damage = 0.0;
+				return Plugin_Handled;
+			}
+		}
+		if(npc.Anger && RoundToCeil(damage) >= GetEntProp(npc.index, Prop_Data, "m_iHealth"))
+		{
+			if(!npc.m_bFUCKYOU)
+			{
+				b_NpcIsInvulnerable[npc.index] = true;
+				b_ThisEntityIgnoredByOtherNpcsAggro[npc.index] = true;
+				npc.m_bFUCKYOU=true;
+				npc.m_bThisNpcIsABoss = false;
+				RemoveNpcFromEnemyList(npc.index);
+				if(EntRefToEntIndex(RaidBossActive)==npc.index)
+					RaidBossActive = INVALID_ENT_REFERENCE;
+				npc.m_flNPCTalkDelay = GetGameTime(npc.index) + 40.0;
+				RaidModeTime += 120.0;
+				SetEntProp(npc.index, Prop_Data, "m_iHealth", 1);
+				damage = 0.0;
+				func_NPCThink[npc.index] = DasNaggenvatcher_Wait;
+				
+				GiveOneRevive(false);
+				Music_EndLastmann(true);
+				LastMann = false;
+				applied_lastmann_buffs_once = false;
+
+				for(int i=0 ; i < MaxClients ; i++)
+				{
+					if(IsValidClient(i) && IsClientInGame(i) && IsPlayerAlive(i) && TeutonType[i] == TEUTON_NONE && dieingstate[i] == 0)
+					{
+						SDKHooks_UpdateMarkForDeath(i, true);
+						SDKHooks_UpdateMarkForDeath(i, false);
+						TF2_AddCondition(i, TFCond_SpeedBuffAlly, 2.0);
+						int maxhealth = SDKCall_GetMaxHealth(i);
+						if(GetClientHealth(i)<maxhealth)
+							SetEntityHealth(i, maxhealth);
+						GiveArmorViaPercentage(i, 0.5, 1.0);
+						SetGlobalTransTarget(i);
+						GiveCompleteInvul(i, 3.5);
+					}
+				}
+				return Plugin_Handled;
+			}
+		}
+	}
+	else if(!npc.Anger)
 	{
 		int health = GetEntProp(victim, Prop_Data, "m_iHealth") - RoundToCeil(damage);
 		if(health < 1)
@@ -794,24 +848,6 @@ public Action DasNaggenvatcher_OnTakeDamage(int victim, int &attacker, int &infl
 			SetEntProp(victim, Prop_Data, "m_iHealth", 1);
 			damage = 0.0;
 			return Plugin_Handled;
-		}
-	}
-	if(npc.Anger && RoundToCeil(damage) >= GetEntProp(npc.index, Prop_Data, "m_iHealth"))
-	{
-		if(!g_dasnaggenvatcher_died)
-		{
-			b_NpcIsInvulnerable[npc.index] = true;
-			b_ThisEntityIgnoredByOtherNpcsAggro[npc.index] = true;
-			g_dasnaggenvatcher_died=true;
-			npc.m_bThisNpcIsABoss = false;
-			RemoveNpcFromEnemyList(npc.index);
-			if(EntRefToEntIndex(RaidBossActive)==npc.index)
-				RaidBossActive = INVALID_ENT_REFERENCE;
-			g_dasnaggenvatcher_die = GetGameTime(npc.index) + 40.0;
-			RaidModeTime += 120.0;
-			
-			SetEntProp(npc.index, Prop_Data, "m_iHealth", 1);
-			damage = 0.0;
 		}
 	}
 	return Plugin_Changed;
@@ -828,7 +864,7 @@ public void DasNaggenvatcher_OnTakeDamagePost(int victim, int attacker, int infl
 		npc.PlaySummonSound();
 		npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
 		RaidModeTime += 80.0;
-			
+		
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_soldier_pickaxe",40000, RoundToCeil(6.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_soldier",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_demoknight",25000, RoundToCeil(6.0 * MultiGlobalEnemy));
@@ -847,7 +883,7 @@ public void DasNaggenvatcher_OnTakeDamagePost(int victim, int attacker, int infl
 		npc.PlaySummonSound();
 		npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
 		RaidModeTime += 80.0;
-				
+		
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_eradicator",70000, RoundToCeil(6.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_vile_poisonheadcrab_zombie",80000, RoundToCeil(6.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_fastheadcrab_zombie",30000, RoundToCeil(6.0 * MultiGlobalEnemy));
@@ -863,7 +899,7 @@ public void DasNaggenvatcher_OnTakeDamagePost(int victim, int attacker, int infl
 		npc.PlaySummonSound();
 		npc.m_flDoingSpecial = GetGameTime(npc.index) + 10.0;
 		RaidModeTime += 80.0;
-			
+		
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_ihbc",45000, RoundToCeil(5.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_firefighter",50000, RoundToCeil(5.0 * MultiGlobalEnemy));
 		DasNaggenvatcherSpawnEnemy(npc.index,"npc_zs_zombie_breadmonster",50000, RoundToCeil(5.0 * MultiGlobalEnemy));
@@ -894,7 +930,7 @@ public void DasNaggenvatcher_OnTakeDamagePost(int victim, int attacker, int infl
 	}			
 }
 
-void DasNaggenvatcherSpawnEnemy(int dasnaggenvatcher, char[] plugin_name, int health = 0, int count, bool is_a_boss = false)
+static void DasNaggenvatcherSpawnEnemy(int dasnaggenvatcher, char[] plugin_name, int health = 0, int count, bool is_a_boss = false)
 {
 	if(GetTeam(dasnaggenvatcher) == TFTeam_Red)
 	{
@@ -965,64 +1001,45 @@ void DasNaggenvatcherSpawnEnemy(int dasnaggenvatcher, char[] plugin_name, int he
 	Zombies_Currently_Still_Ongoing += count;
 }
 
-void DasNaggenvatcherSayWords(int entity)
+static void DasNaggenvatcherSayWords(int entity, bool ImAngry=false)
 {
-	if(i_RaidGrantExtra[entity] >= 1)
+	if(ImAngry)
 	{
 		switch(GetRandomInt(0,3))
 		{
-			case 0:
-			{
-				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 우리가 이룩한 모든 것을 적이 파괴하려 한다.");
-			}
-			case 1:
-			{
-				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 좋아, 친구들. 우리가 가진 모든걸 쏟아부어라! 우리는 여기서 더이상 낭비할 시간이 없다!");
-			}
-			case 2:
-			{
-				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 우리는 하나가 되어 결코 패배하지 않을 것이다!");
-			}
-			case 3:
-			{
-				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: 너희도 우리와 하나가 될것이다.");
-			}
+			case 0: PrintNPCMessageWithPrefixes(entity, "crimson", "CaptainQuetz_LastMann_2", true);
+			case 1: PrintNPCMessageWithPrefixes(entity, "crimson", "CaptainQuetz_BattleCry_1", true);
+			case 2: PrintNPCMessageWithPrefixes(entity, "crimson", "CaptainQuetz_BattleCry_2", true);
+			case 3: PrintNPCMessageWithPrefixes(entity, "crimson", "CaptainQuetz_BattleCry_3", true);
 		}
 	}
-}
-void DasNaggenvatcherSayWordsAngry(int entity)
-{
-	if(i_RaidGrantExtra[entity] >= 1)
+	else
 	{
 		switch(GetRandomInt(0,3))
 		{
-			case 0:
-			{
-				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: {default}영광스러운 합일에 동참하라.");
-			}
-			case 1:
-			{
-				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: {default}내 기대를 실망시키지 않는군, 역시 너희는 우리와 함께할 자격이 있다.");
-			}
-			case 2:
-			{
-				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: {default}너희도 우리와 하나가 될것이다.");
-			}
-			case 3:
-			{
-				CPrintToChatAll("{crimson}캡틴 퀘츠{default}: {default}우리의 약한 친구들은 도태 되었지만 강한 친구들은 아직 살아있다. 그것이 바로 너희가 될것이다.");
-			}
+			case 0: PrintNPCMessageWithPrefixes(entity, "crimson", "CaptainQuetz_BattleCry_4", true);
+			case 1: PrintNPCMessageWithPrefixes(entity, "crimson", "Castellan_Talk_Ability2-3", true);
+			case 2: PrintNPCMessageWithPrefixes(entity, "crimson", "CaptainQuetz_BattleCry_5", true);
+			case 3: PrintNPCMessageWithPrefixes(entity, "crimson", "CaptainQuetz_BattleCry_6", true);
 		}
 	}
 }
 
-public void DasNaggenvatcher_NPCDeath(int entity)
+static void DasNaggenvatcher_NPCDeath(int entity)
 {
 	DasNaggenvatcher npc = view_as<DasNaggenvatcher>(entity);
-
 	npc.SetModel("models/player/medic.mdl");
 	SetEntityRenderColor(npc.index, 255, 255, 255, 255);
 
+	for(int i = 1; i < MAXENTITIES; i++)
+	{
+		if(!IsValidEntity(i) || !b_IsAProjectile[i])
+			continue;
+		if(GetEntPropEnt(i, Prop_Send, "m_hOwnerEntity") != entity)
+			continue;
+		RemoveEntity(i);
+	}
+	
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
 	if(IsValidEntity(npc.m_iWearable2))
@@ -1035,15 +1052,70 @@ public void DasNaggenvatcher_NPCDeath(int entity)
 		RemoveEntity(npc.m_iWearable5);
 	if(IsValidEntity(npc.m_iWearable6))
 		RemoveEntity(npc.m_iWearable6);
-	
 	npc.PlayDeathSound();
 }
 
-
-public bool DasNaggenvatcherBuffAlly(int provider, int entity)
+static bool DasNaggenvatcherBuffAlly(int provider, int entity)
 {
 	if(HasSpecificBuff(entity, "False Therapy"))
 		return false;
-
 	return true;
+}
+
+static PurnellBuff PurnellDebuffs[] =
+{
+	{ "Icy Dereliction", "-res, -spd" },
+	{ "Raiding Dereliction", "-res" },
+	{ "Degrading Dereliction", "-dmg" },
+	{ "Zero Therapy", "-res, -spd" },
+	{ "Debt-Causing Dereliction", "-res" },
+	{ "Headache-Inducing Dereliction", "-res" },
+	{ "Shocking Dereliction", "-res, -spd" },
+	{ "Therapist's Aura", "--spd" },
+	{ "Electric Dereliction", "-res, -spd" },
+	{ "Caffeinated Dereliction", "-res" },
+};
+
+static void CaptainQuetz_DebuffApply(int entity, int target)
+{
+	char buff[64];
+	int buffId = GetURandomInt() % 10;
+	strcopy(buff, sizeof(buff), PurnellDebuffs[buffId].buffName);
+	
+	ApplyStatusEffect(entity, target, buff, 10.0);
+	ApplyStatusEffect(entity, target, "Therapy Duration", 10.0);
+}
+
+static void HEGrenade_StartTouch(int entity, int target)
+{
+	int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
+	if(!IsValidEntity(owner))
+		owner = -1;
+	int inflictor = h_ArrowInflictorRef[entity];
+	if(inflictor != -1)
+		inflictor = EntRefToEntIndex(h_ArrowInflictorRef[entity]);
+
+	if(inflictor == -1)
+		inflictor = owner;
+	
+	float ProjectileLoc[3];
+	GetEntPropVector(entity, Prop_Data, "m_vecAbsOrigin", ProjectileLoc);
+	Explode_Logic_Custom(0.0, owner, inflictor, -1, ProjectileLoc, EXPLOSION_RADIUS, _, _, true, _, false, _, HEGrenade);
+}
+
+static void HEGrenade(int entity, int victim, float damage, int weapon)
+{
+	if(IsValidEntity(entity) && GetTeam(entity) != GetTeam(victim))
+	{
+		if(!ShouldNpcDealBonusDamage(victim))
+		{
+			int flagsStun = 0;
+			if(Rogue_Paradox_RedMoon())
+				flagsStun |= TF_STUNFLAGS_LOSERSTATE;
+			if(!HasSpecificBuff(victim, "Fluid Movement"))
+				flagsStun |= TF_STUNFLAG_SLOWDOWN;
+			if(victim <= MaxClients)
+				TF2_StunPlayer(victim, 0.6, 0.9, flagsStun);
+		}
+	}
 }

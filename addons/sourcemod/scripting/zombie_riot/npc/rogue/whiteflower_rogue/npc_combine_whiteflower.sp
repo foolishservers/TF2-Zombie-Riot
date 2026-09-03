@@ -314,7 +314,7 @@ methodmap Whiteflower_Boss < CClotBody
 		music.Time = 187;
 		music.Volume = 1.0;
 		music.Custom = true;
-		strcopy(music.Name, sizeof(music.Name), "Almina's Last Stand");
+		strcopy(music.Name, sizeof(music.Name), "The Traitor, Whiteflower");
 		strcopy(music.Artist, sizeof(music.Artist), "Grandpa Bard");
 		Music_SetRaidMusic(music);
 
@@ -399,9 +399,11 @@ methodmap Whiteflower_Boss < CClotBody
 	
 }
 
-static void NPCTalkMessage(int entity, const char[] message)
+static void RaidBossWhiteflower_NPCTalkMessage(int entity, const char[] message, any ...)
 {
-	PrintNPCMessageWithPrefixes(entity, "crimson", message, .customName = "Whiteflower");
+	char buffer[255];
+	VFormat(buffer, sizeof(buffer), message, 3);
+	NPC_TalkMessageWithTranslationCheck(entity, "crimson", buffer, .name = "Whiteflower");
 }
 
 public void WhiteflowerWinLine(int entity)
@@ -412,7 +414,7 @@ public void WhiteflowerWinLine(int entity)
 		return;
 
 	AlreadySaidWin = true;
-	NPCTalkMessage(entity, "Now all that's left...\nIs Bob.");
+	RaidBossWhiteflower_NPCTalkMessage(entity, "Whiteflower_Lose");
 }
 
 public void Whiteflower_Boss_ClotThink(int iNPC)
@@ -449,7 +451,7 @@ public void Whiteflower_Boss_ClotThink(int iNPC)
 		npc.StopPathing();
 		npc.m_flNextThinkTime = FAR_FUTURE;
 		i_RaidGrantExtra[npc.index] = 0;
-		NPCTalkMessage(npc.index, "Out of time, you're completely surrounded.\nYou now belong to me.\nSubmit.\nHelp me kill Bob, and we will rule it all.");	
+		RaidBossWhiteflower_NPCTalkMessage(npc.index, "Whiteflower_TimeOver");	
 	}
 
 	if(npc.m_flNextThinkTime > gameTime)
@@ -946,7 +948,10 @@ public Action Whiteflower_Boss_OnTakeDamage(int victim, int &attacker, int &infl
 	if(RoundToCeil(damage) > Health)
 	{	
 		if(i_RaidGrantExtra[npc.index] == 1)
-			NPCTalkMessage(npc.index, "Y-You... fucking rats... rot in hell Bob...\n...\nWhiteflower perishes.\nHis army scatters.");	
+		{
+			RaidBossWhiteflower_NPCTalkMessage(npc.index, "Whiteflower_Death_1");
+			CPrintToChatAll("%t", "Whiteflower_Death_2");
+		}
 		
 		npc.StopPathing();
 		ApplyStatusEffect(victim, victim, "Infinite Will", 5.0);
@@ -974,7 +979,10 @@ public void Whiteflower_Boss_NPCDeath(int entity)
 		npc.PlayDeathSound();
 	}
 	if(i_RaidGrantExtra[npc.index] == 1)
-		NPCTalkMessage(npc.index, "Y-You... fucking rats... rot in hell Bob...\n...\nWhiteflower perishes.\nHis army scatters.");	
+	{
+		RaidBossWhiteflower_NPCTalkMessage(npc.index, "Whiteflower_Death_1");
+		CPrintToChatAll("%t", "Whiteflower_Death_2");
+	}
 		
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
@@ -1002,8 +1010,6 @@ public void Whiteflower_Boss_NPCDeath_After(int entity)
 	if(IsValidEntity(npc.m_iWearable4))
 		RemoveEntity(npc.m_iWearable4);
 }
-
-
 
 void WF_ThrowGrenadeHappening(Whiteflower_Boss npc)
 {
@@ -1171,13 +1177,12 @@ public Action Timer_WF_SupportGrenade(Handle timer, DataPack pack)
 
 public void Whiteflower_Boss_NPCDeathAlly(int self, int ally)
 {
-	
 	if(GetTeam(ally) != GetTeam(self))
 	{
 		return;
 	}
 
-	int speech = GetRandomInt(1,10);
+	int speech = GetRandomInt(1, 10);
 	Whiteflower_Boss npc = view_as<Whiteflower_Boss>(self);
 	float ReduceEnemyCountLogic = 1.0 / MultiGlobalEnemy;
 	if(!Waves_InFreeplay())
@@ -1197,72 +1202,25 @@ public void Whiteflower_Boss_NPCDeathAlly(int self, int ally)
 	npc.m_flCooldownSay = GetGameTime() + 20.0;
 	switch(speech)
 	{
-		case 1:
+		case 1, 2, 4, 5, 6, 7, 8:
 		{
-			NPCTalkMessage(npc.index, "Argk... You're next.");
+			RaidBossWhiteflower_NPCTalkMessage(npc.index, "Whiteflower_AllyDeath_%d", speech);
 		}
-		case 2:
-		{
-			NPCTalkMessage(npc.index, "Why are you running?");	
-		}
-		case 3:
+		case 3, 9, 10:
 		{
 			if(!Waves_InFreeplay())
 			{
-				NPCTalkMessage(npc.index, "First my army so I'm alone? Pah!");
+				RaidBossWhiteflower_NPCTalkMessage(npc.index, "Whiteflower_AllyDeath_%d", speech);
 			}
 			else
 			{
-				NPCTalkMessage(npc.index, "From one maniac to another huh?");
-			}
-			
-		}
-		case 4:
-		{
-			NPCTalkMessage(npc.index, "You are dirty.");	
-		}
-		case 5:
-		{
-			NPCTalkMessage(npc.index, "From one maniac to another huh?");	
-		}
-		case 6:
-		{
-			NPCTalkMessage(npc.index, "You are just like them, weak.");	
-		}
-		case 7:
-		{
-			NPCTalkMessage(npc.index, "You are a fool.");	
-		}
-		case 8:
-		{
-			NPCTalkMessage(npc.index, "Such ignorance.");	
-		}
-		case 9:
-		{
-			if(!Waves_InFreeplay())
-			{
-				NPCTalkMessage(npc.index, "They at least believe in their leader, do you?");	
-			}
-			else
-			{
-				NPCTalkMessage(npc.index, "Argk... You're next.");
-			}	
-		}
-		case 10:
-		{
-			if(!Waves_InFreeplay())
-			{
-				NPCTalkMessage(npc.index, "I actually care for them, do you care for your own army?");	
-			}
-			else
-			{
-				NPCTalkMessage(npc.index, "You are dirty.");
+				RaidBossWhiteflower_NPCTalkMessage(npc.index, "Whiteflower_AllyDeath_%d_Freeplay", speech);
 			}
 		}
 	}
 	if(!Waves_InFreeplay())
 	{
-		CPrintToChatAll("당신이 그의 무리를 파괴한 이후, 그는 훨씬 약해졌습니다.");	
+		CPrintToChatAll("%t", "Whiteflower_AllyDeath_Alert");	
 	}
 }
 
@@ -1308,12 +1266,13 @@ static void Whiteflower_KickTouched(int entity, int enemy)
 void WhiteflowerKickLogic(int iNPC)
 {
 	CClotBody npc = view_as<CClotBody>(iNPC);
-	static float vel[3];
-	static float flMyPos[3];
+	float vel[3];
+	float flMyPos[3];
 	npc.GetVelocity(vel);
-	fClamp(vel[0], -300.0, 300.0);
-	fClamp(vel[1], -300.0, 300.0);
-	fClamp(vel[2], -300.0, 300.0);
+	//clamping so insane speeds dont translate through hitting the entire map.
+	vel[0] = fClamp(vel[0], -300.0, 300.0);
+	vel[1] = fClamp(vel[1], -300.0, 300.0);
+	vel[2] = fClamp(vel[2], -300.0, 300.0);
 	GetEntPropVector(iNPC, Prop_Data, "m_vecAbsOrigin", flMyPos);
 		
 	static float hullcheckmins[3];

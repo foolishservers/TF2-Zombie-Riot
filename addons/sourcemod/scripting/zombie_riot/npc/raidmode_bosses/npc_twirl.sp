@@ -4856,7 +4856,7 @@ static void Timer_Twirl_TripleIntro(Handle timer, bool shouldKarlasChat)
 		// Karlas' turn
 		Karlas allyNpc = view_as<Karlas>(raids[2]);
 		
-		Karlas_Lines(allyNpc, ".....");
-		Karlas_Lines(allyNpc, ":(");			
+		RaidBossKarlas_NPCTalkeMessage(allyNpc, ".....");
+		RaidBossKarlas_NPCTalkeMessage(allyNpc, ":(");			
 	}
 }

@@ -354,6 +354,8 @@ public void Weapon_SpecterSurvive(int client, int weapon, bool &result, int slot
 
 bool SpecterCheckIfAutoRevive(int client)
 {
+	if(HasSpecificBuff(client, "Defibrillator"))
+		return true;
 	if(SpecterCharge[client] >= SpecterMaxCharge(client))
 	{
 		if(f_SpecterDeadDamage[client] == 0.0)
@@ -382,7 +384,7 @@ public void SpecterAlter_Cooldown_Logic(int client, int weapon)
 		{
 			SpecterCharge[client] = 0;
 		}
-		if(dieingstate[client] > 159 || (dieingstate[client] > 0 && !b_LeftForDead[client]))
+		if((dieingstate[client] > 159 && !HasSpecificBuff(client, "Defibrillator")) || (dieingstate[client] > 0 && !b_LeftForDead[client] && !HasSpecificBuff(client, "Defibrillator")))
 		{
 			if(SpecterCharge[client] >= SpecterMaxCharge(client))
 			{

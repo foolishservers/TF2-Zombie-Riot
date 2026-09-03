@@ -16,6 +16,11 @@
 		"en" "True Fusion Warrior"
 		"ko" "트루 퓨전 워리어"
 	}
+	"Puke Pus"
+	{
+		"en" "Puke Pus"
+		"ko" "푸크 퍼스"
+	}
 	
 	//등장 알람
 	"True Fusion Warrior Spawn"
@@ -99,6 +104,32 @@
 	{
 		"en"	"This is a simulation prepared by Mr. V\nYou can face all bosses, and you can unlock items by clearing Normal - EX Hard\nStarting money and starting supplies vary depending on the selected difficulty."
 		"ko"	"Mr.V가 준비한 시뮬레이션 입니다.\n모든 보스를 상대해 볼 수 있습니다, 보통-EX 하드를 클리어하면 아이템을 해금할 수 있습니다.\n시작 자금 및 시작 보급품은 선택된 난이도에 따라 다름"
+	}
+	
+	"FishyLab_Lore_1"
+	{
+		"en"		""
+		"ko"		"알락시오스가 군대를 이끌고 드웰러 무리를 유인하러 갔습니다.\n그동안 여러분은 드웰러의 본진으로 추정되는 이 곳을 탐사해야 합니다."
+	}
+	"FishyLab_Lore_2"
+	{
+		"en"		""
+		"ko"		"이 연구소는 오래 전에 폐쇄된 것처럼 보입니다. 이런 곳에서 드웰러가 탄생한 것 같지는 않아 보입니다.."
+	}
+	"FishyLab_Lore_3"
+	{
+		"en"		""
+		"ko"		"스텔라와 카를라스가 막아서는 이유가 뭘까요? 우리가 잘못된 길에 들어선 걸까요?"
+	}
+	"FishyLab_Lore_4"
+	{
+		"en"		""
+		"ko"		"무언가 잘못됐습니다. 이 연구소는 칼마티커스와 제노가 탄생한 곳에 더 가까워 보입니다."
+	}
+	"FishyLab_Lore_5"
+	{
+		"en"		""
+		"ko"		"더 이상 돌이킬 수는 없습니다. 일단 이 드웰러들을 막아낸다면, 이 연구소를 들어갈 기회가 생길 겁니다."
 	}
 	
 	//NPC 대사
@@ -203,6 +234,8 @@
 	{
 		"en"	"You have cleared [EX Hard] Cyber ​​Grind!\nStart with extra 30 extra credits."
 		"ko"	"[EX Hard] 난이도의 사이버 그라인드를 클리어했습니다!\n시작 자금 +30"
+		//"en"	"When equipped, You get Silvester Wings..\nRemember. He watches."
+		//"ko"	"착용시, 실베스터의 날개를 얻습니다..\n기억하십시오. 그가 지켜보고 있습니다."
 	}
 	
 	//인벤토리 모듈
@@ -233,8 +266,8 @@
 	}
 	"Inv Mini Shell Pouch desc"
 	{
-		"en"	"Multi Pellet Weapon Only\n50％ more Max Clip, and Reload Speed +5％\Damage -30％, Bullets per shot -20％, Accuracy -30％"
-		"ko"	"산탄 무기 전용\n장탄수 +50％, 장속 +5％\n피해량 -30％, 탄환수 -20％, 집탄율 -30％"
+		"en"	"Multi Pellet Weapon Only\n50％ more Max Clip, and Reload Speed +5％\Damage -30％, Bullets per shot -20％, Accuracy -30％\nThe Commander’s Shotgun increases Attack Speed by 20％"
+		"ko"	"산탄 무기 전용\n장탄수 +50％, 장속 +5％\n피해량 -30％, 탄환수 -20％, 집탄율 -30％\n지휘관 킷의 샷건은 공속이 20％ 증가"
 	}
 	"Rose of SelfHarm"
 	{
@@ -273,8 +306,8 @@
 	}
 	"Inv Barricade Stabilizer desc"
 	{
-		"en"	"Barricade is mounted, damage taken is reduced, but when the mounted Barricade also takes damage.\nIf hit by a raid boss, it will be destroyed faster."
-		"ko"	"바리케이드를 장착한 경우, 받는 피해가 감소하지만, 장착한 바리케이드도 피해를 입습니다.\n레이드 보스에게 피격되면 더 빨리 파괴됩니다."
+		"en"	"Barricade or Decorative Object is mounted, damage taken is reduced, but when the mounted Building also takes damage.\nIf hit by a raid boss, it will be destroyed faster."
+		"ko"	"바리케이드및 장식물을 장착한 경우, 받는 피해가 감소하지만, 장착한 구조물도 피해를 입습니다.\n레이드 보스에게 피격되면 더 빨리 파괴됩니다."
 	}
 	"Inv Barricade Stabilizer desc Extra"
 	{
@@ -308,8 +341,8 @@
 	}
 	"Inv Compressed Explosive desc"
 	{
-		"en"	"Victorian Launcher Only\nIncreases Explosion Radius by 33％"
-		"ko"	"빅토리아 런처 전용\n폭발 범위 +33％"
+		"en"	"Vestan Launcher Only\nIncreases Explosion Radius by 33％"
+		"ko"	"베스타 런처 전용\n폭발 범위 +33％"
 	}
 	"Modern Defense"
 	{
@@ -318,8 +351,8 @@
 	}
 	"Inv Modern Defense desc"
 	{
-		"en"	"Barracks uses Hitscan instead of Projectiles."
-		"ko"	"배럭이 투사체 대신 히트스캔을 사용합니다."
+		"en"	"Barracks building use Hitscan Bullets instead of Projectiles"
+		"ko"	"배럭이 투사체 대신 히트스캔을 사용합니다"
 	}
 	"Mortar Support"
 	{
@@ -328,8 +361,8 @@
 	}
 	"Inv Mortar Support desc"
 	{
-		"en"	"Barracks uses Explosive Projectiles."
-		"ko"	"배럭이 폭발성 투사체를 사용합니다."
+		"en"	"Barracks building can now target enemies through the wall and deal aoe damage"
+		"ko"	"배럭이 벽넘어 적에게 범위 공격을 합니다"
 	}
 	"Grigori's Personal 12g Ammo"
 	{
@@ -340,6 +373,16 @@
 	{
 		"en"	"Multi Pellet Weapon Only\nGain armor per enemy hit upto half of your armor.\nIf recently hurt, its only 25％\Damage -20％"
 		"ko"	"산탄 무기 전용\n적중시 아머를 회복하며 최대 아머의 절반까지 회복\n최근에 피해를 받았다면, 이 효과가 25％로 감소합니다.\n피해량 -20％"
+	}
+	"Barracks Mastery"
+	{
+		"en"	"Barracks Mastery"
+		"ko"	"배럭 마스터리"
+	}
+	"Inv Barracks Mastery desc"
+	{
+		"en"	"The Commander Kit Only\nBarracks units’ max HP increases by 15％ and Barracks units Overheal by 50％\nResource Regen increase by 15％"
+		"ko"	"지휘관 킷 전용\n배럭 유닛 최대 체력 15％ 증가, 배럭 유닛은 50％ 과치료되서 나옵니다\n자원 수급량 15％ 증가"
 	}
 	
 	//인벤토리 첼린지
@@ -464,8 +507,98 @@
 	}
 	"Barricade Stabilizer Desc"
 	{
-		"en"	"Barricade is mounted, damage taken is reduced\n{yellow}but when the mounted Barricade also takes damage.\n{crimson}If hit by a raid boss, it will be destroyed faster."
-		"ko"	"바리케이드를 장착한 경우, 받는 피해가 감소하지만\n{yellow}장착한 바리케이드도 피해를 입습니다.\n{crimson}레이드 보스에게 피격되면 더 빨리 파괴됩니다."
+		"en"	"Barricade or Decorative Object is mounted, damage taken is reduced\n{yellow}but when the mounted Barricade also takes damage.\n{crimson}If hit by a raid boss, it will be destroyed faster."
+		"ko"	"바리케이드 또는 장식물을 장착한 경우, 받는 피해가 감소하지만\n{yellow}장착한 구조물도 피해를 입습니다.\n{crimson}레이드 보스에게 피격되면 더 빨리 파괴됩니다."
+	}
+	"Identifying Targets"
+	{
+		"en"	"Identifying Targets"
+		"ko"	"타겟 식별"
+	}
+	"Identifying Targets Desc"
+	{
+		"en"	"Increases Damage Taken by 20％"
+		"ko"	"대상이 받는 피해가 20％ 증가합니다."
+	}
+	"Taunt"
+	{
+		"en"	"Taunt"
+		"ko"	"도발"
+	}
+	"Taunt Desc"
+	{
+		"en"	"Taunt levels increase. You get Karma."
+		"ko"	"도발 수치가 증가합니다."
+	}
+	"Depot Transfer"
+	{
+		"en"	"Depot Transfer"
+		"ko"	"창고 이송"
+	}
+	"Depot Transfer Desc"
+	{
+		"en"	"Building Cooldown Reduced."
+		"ko"	"구조물 재사용 대기시간이 감소합니다."
+	}
+	"Eye for an Eye"
+	{
+		"en"	"Eye for an Eye"
+		"ko"	"눈에는 눈"
+	}
+	"Eye for an Eye Desc"
+	{
+		"en"	"If you cause damage, you will receive it back."
+		"ko"	"피해를 주면 되돌려 받습니다."
+	}
+	"Defibrillator"
+	{
+		"en"	"Defibrillator"
+		"ko"	"제세동기"
+	}
+	"Defibrillator Desc"
+	{
+		"en"	"It is revived automatically."
+		"ko"	"자동으로 소생됩니다."
+	}
+	"Skill Aura"
+	{
+		"en"	"Skill Aura"
+		"ko"	"스킬 아우라"
+	}
+	"Skill Aura Desc"
+	{
+		"en"	"Ability Cooldown Reduced by 6％"
+		"ko"	"능력 쿨다운 6％ 감소"
+	}
+	"Support Weapon License"
+	{
+		"en"	"Support Weapon License"
+		"ko"	"지원 무기 라이센스"
+	}
+	"Support Weapon License Desc"
+	{
+		"en"	"Support weapons are discarded upon expiration"
+		"ko"	"만료시, 지원무기가 폐기됨"
+	}
+	"Inspire"
+	{
+		"en"	"Inspire"
+		"ko"	"인스파이어"
+	}
+	"Inspire Desc"
+	{
+		"en"	"Revive downed allies faster while Uber is active."
+		"ko"	"우버 지속 중 쓰러진 아군을 더 빠르게 소생시킴."
+	}
+	"Barracks Prepare Siege"
+	{
+		"en"	"Barracks Prepare Siege"
+		"ko"	"배럭 전투준비"
+	}
+	"Barracks Prepare Siege Desc"
+	{
+		"en"	"Training and Research Speed increases."
+		"ko"	"훈련 및 연구 속도가 증가합니다."
 	}
 	
 	//무기 이름
@@ -534,10 +667,194 @@
 		"en"		"Necromancy Staff"
 		"ko"		"부두술 스태프"
 	}
-	"Improvised Armor"
+	"Killing Order"
 	{
-		"en"		"Improvised Armor"
-		"ko"		"급조된 증가 장갑"
+		"en"		"Killing Order"
+		"ko"		"살상 명령"
+	}
+	
+	"Survivalist Kit"
+	{
+		"en"		"Survivalist Kit"
+		"ko"		"생존주의자 키트"
+	}
+	
+	"Survivalist's Carbine"
+	{
+		"en"		"Survivalist's Carbine"
+		"ko"		"생존주의자의 소총"
+	}
+	"Survivalist's Knife"
+	{
+		"en"		"Survivalist's Knife"
+		"ko"		"생존주의자의 칼"
+	}
+	
+	"Dimension Ripper"
+	{
+		"en"		"Dimension Ripper"
+		"ko"		"차원 찢개"
+	}
+	
+	"Dimension: Normal"
+	{
+		"en"		"Dimension: Normal"
+		"ko"		"차원: 감염된 자들"
+	}
+	"Dimension: Blitz"
+	{
+		"en"		"Dimension: Blitz"
+		"ko"		"차원: 블리츠크리그의 군대"
+	}
+	"Dimension: Xeno"
+	{
+		"en"		"Dimension: Xeno"
+		"ko"		"차원: 제노 감염"
+	}
+	"Dimension: Medieval"
+	{
+		"en"		"Dimension: Medieval"
+		"ko"		"차원: 중세"
+	}
+	"Dimension: Deep Sea"
+	{
+		"en"		"Dimension: Deep Sea"
+		"ko"		"차원: 심해의 자식들"
+	}
+	"Dimension: Expidonsa"
+	{
+		"en"		"Dimension: Expidonsa"
+		"ko"		"차원: 엑스피돈사"
+	}
+	"Dimension: Interitus"
+	{
+		"en"		"Dimension: Interitus"
+		"ko"		"차원: 인테리투스"
+	}
+	"Dimension: Ruina"
+	{
+		"en"		"Dimension: Ruina"
+		"ko"		"차원: 루이나"
+	}
+	"Dimension: Void"
+	{
+		"en"		"Dimension: Void"
+		"ko"		"차원: 공허의 유산"
+	}
+	"Dimension: Almina"
+	{
+		"en"		"Dimension: Almina"
+		"ko"		"차원: 알미나"
+	}
+	"Dimension: Vesta"
+	{
+		"en"		"Dimension: Vesta"
+		"ko"		"차원: 베스타"
+	}
+	"Dimension: Lab"
+	{
+		"en"		"Dimension: Lab"
+		"ko"		"차원: 연구소"
+	}
+	
+	"Dimension: Normal - Hardcore"
+	{
+		"en"		"Dimension: Normal - Hardcore"
+		"ko"		"차원 왜곡: 감염된 자들"
+	}
+	"Dimension: Blitz - Hardcore"
+	{
+		"en"		"Dimension: Blitz - Hardcore"
+		"ko"		"차원 왜곡: 블리츠크리그의 군대"
+	}
+	"Dimension: Xeno - Hardcore"
+	{
+		"en"		"Dimension: Xeno - Hardcore"
+		"ko"		"차원 왜곡: 제노 감염"
+	}
+	"Dimension: Medieval - Hardcore"
+	{
+		"en"		"Dimension: Medieval - Hardcore"
+		"ko"		"차원 왜곡: 중세"
+	}
+	"Dimension: Deep Sea - Hardcore"
+	{
+		"en"		"Dimension: Deep Sea - Hardcore"
+		"ko"		"차원 왜곡: 심해의 자식들"
+	}
+	"Dimension: Expidonsa - Hardcore"
+	{
+		"en"		"Dimension: Expidonsa - Hardcore"
+		"ko"		"차원 왜곡: 엑스피돈사"
+	}
+	"Dimension: Interitus - Hardcore"
+	{
+		"en"		"Dimension: Interitus - Hardcore"
+		"ko"		"차원 왜곡: 인테리투스"
+	}
+	"Dimension: Ruina - Hardcore"
+	{
+		"en"		"Dimension: Ruina - Hardcore"
+		"ko"		"차원 왜곡: 루이나"
+	}
+	"Dimension: Void - Hardcore"
+	{
+		"en"		"Dimension: Void - Hardcore"
+		"ko"		"차원 왜곡: 공허의 유산"
+	}
+	"Dimension: Almina - Hardcore"
+	{
+		"en"		"Dimension: Almina - Hardcore"
+		"ko"		"차원 왜곡: 알미나"
+	}
+	"Dimension: Vesta - Hardcore"
+	{
+		"en"		"Dimension: Vesta - Hardcore"
+		"ko"		"차원 왜곡: 베스타"
+	}
+	"Dimension: Lab - Hardcore"
+	{
+		"en"		"Dimension: Lab - Hardcore"
+		"ko"		"차원 왜곡: 연구소"
+	}
+	
+	"Custom Mini Semi Gun: Overheating FeedBack"
+	{
+		"en"		"Overheating FeedBack"
+		"ko"		"과열 피드백"
+	}
+	"Custom Mini Semi Gun: Bullet Storm"
+	{
+		"en"		"Bullet Storm"
+		"ko"		"납탄 폭풍"
+	}
+	
+	"Custom Sniper Rifle: Diligence"
+	{
+		"en"		"Diligence"
+		"ko"		"딜리전스"
+	}
+	"Custom Sniper Rifle: Diligence Counter"
+	{
+		"en"		"Diligence Counter"
+		"ko"		"딜리전스 카운터"
+	}
+	"Custom Sniper Rifle: Heavy Caliber RSASS"
+	{
+		"en"		"Heavy Caliber R.S.A.S.S"
+		"ko"		"대구경 R.S.A.S.S"
+	}
+	
+	"Custom Barracks Kit: The CastleSiege"
+	{
+		"en"		"The CastleSiege"
+		"ko"		"공성전"
+	}
+	
+	"Protethia"
+	{
+		"en"		"Protethia"
+		"ko"		"프로테시아"
 	}
 	
 	//무기 설명
@@ -550,6 +867,26 @@
 	{
 		"en"	"Increased Damage, Clip Size,Fire rate and Reloadspeed\nMovement speed reduced\nMust be loaded with at least 11 rocket to fire\nImproved shield performance\nShort freeze debuf\nWeapons are enhanced with ''Major Steam's Rocket'"
 		"ko"	"피해량, 탄창 크기, 발사 속도 및 재장전 속도가 증가\n이동속도 감소\n최소 11발을 장전해야 사격 가능\n실드의 성능 향상\n냉기 디버프 추가 피해\n''Major Steam's Rocket''가 있으면 무기가 강화됨"
+	}
+	"MajorSteam Shield"
+	{
+		"en"	"Shield"
+		"ko"	"실드"
+	}
+	"MajorSteam Requires Armor"
+	{
+		"en"	"Reactor startup requires Armor!"
+		"ko"	"반응로 가동에 아머가 필요합니다!"
+	}
+	"MajorSteam Reactor Idle"
+	{
+		"en"	"Reactor Idle Mode"
+		"ko"	"반응로 대기 모드"
+	}
+	"MajorSteam Reactor Restart"
+	{
+		"en"	"Reactor Restarting in"
+		"ko"	"반응로 재가동 까지"
 	}
 	
 	"LockDown Staff Desc"
@@ -564,8 +901,23 @@
 	}
 	"LockDown Staff Desc pap2"
 	{
-		"en"	"Increased range and damage area, increased damage, slightly reduced attack speed, increased mana consumption\nPassive: When you are alive, apply 'Subjective Time Dilation' debuff to all enemies\nWhen M2 effect ends, passive does not work for 3 seconds."
-		"ko"	"사거리및 피해범위 증가, 피해량 증가, 공속 약간 감소, 마나 소모량 증가\n패시브:자신이 살아있을때 모든 적에게 '시간인지둔화' 디버프 적용\nM2 효과 종료시, 3초동안 패시브가 작동하지 않음."
+		"en"	"Increased range and damage area, increased damage, slightly reduced attack speed, increased mana consumption\nPassive: When you are alive, apply 'Subjective Time Dilation' debuff to all enemies/'Skill Aura' buff for all allies\nWhen M2 effect ends, passive does not work for 3 seconds."
+		"ko"	"사거리및 피해범위 증가, 피해량 증가, 공속 약간 감소, 마나 소모량 증가\n패시브:자신이 살아있을때 모든 적에게 '시간인지둔화' 디버프/모든 아군에게 '스킬 아우라' 버프 적용\nM2 효과 종료시, 3초동안 패시브가 작동하지 않음."
+	}
+	"LockDown Staff Desc AbilityCharging"
+	{
+		"en"	"Key of Ordered Charging"
+		"ko"	"질서의 시간의 열쇠 충전중"
+	}
+	"LockDown Staff Desc AbilityReady"
+	{
+		"en"	"Key of Ordered Ready!"
+		"ko"	"질서의 시간의 열쇠 준비됨!"
+	}
+	"LockDown Staff Desc AbilityActive"
+	{
+		"en"	"Key of Ordered Active!"
+		"ko"	"질서의 시간의 열쇠 발동!"
 	}
 	
 	"Minecraft Sword Desc"
@@ -580,23 +932,23 @@
 	}
 	"Minecraft Sword Pap 2"
 	{
-		"en"	"Forged from iron. Increased damage, increased attack speed"
-		"ko"	"철로 만들었습니다. 피해량 증가, 공속 증가"
+		"en"	"Forged from iron. Increased damage, increased attack speed\nR: Apply an Anvil effect; if used while looking at the sky, removes the Anvil effect"
+		"ko"	"철로 만들었습니다. 피해량 증가, 공속 증가\nR키: 모루 효과 부여, 하늘보고 사용할 경우, 모루 효과 삭제"
 	}
 	"Minecraft Sword Pap 3"
 	{
-		"en"	"Increased damage, greatly increased attack speed, -50％ cooldown on Sweeping Edge ability\nSome tinkering effects applied."
-		"ko"	"피해량 증가, 공속 대폭 증가, 휩쓸기 능력 재사용 대기시간 -50％\n전용 모루 효과 일부 적용"
+		"en"	"Increased damage, greatly increased attack speed, -50％ cooldown on Sweeping Edge ability\nSome tinkering effects applied.\nR: Maximum enhancement of the Anvil effect and cooldown reduction"
+		"ko"	"피해량 증가, 공속 대폭 증가, 휩쓸기 능력 재사용 대기시간 -50％\n전용 모루 효과 일부 적용\nR키 모루 효과 최대 강화및 쿨다운 감소"
 	}
 	"Minecraft Sword Pap 4"
 	{
-		"en"	"Diamond! Increased damage, attack speed, increased area damage."
-		"ko"	"다이아몬드! 피해량, 공속증가, 휩쓸기 충전 속도 +25％"
+		"en"	"Diamond! Increased damage, attack speed, increased area damage.\nR: Anvil effect buff and cooldown reduction"
+		"ko"	"다이아몬드! 피해량, 공속증가, 휩쓸기 충전 속도 +25％\nR키 모루 효과 강화및 쿨다운 감소"
 	}
 	"Minecraft Sword Pap 5"
 	{
-		"en"	"Netherite! Damage increased, attack range and area damage increased."
-		"ko"	"네더라이트! 피해량 증가, 휩쓸기 범위 +17％, 점프 공격 피해량 +10％"
+		"en"	"Netherite! Damage increased, attack range and area damage increased.\nR: Maximum enhancement of the Anvil effect and cooldown reduction"
+		"ko"	"네더라이트! 피해량 증가, 휩쓸기 범위 +17％, 점프 공격 피해량 +10％\nR키 모루 효과 최대 강화및 쿨다운 감소"
 	}
 	"Minecraft Sword Advancement"
 	{
@@ -613,87 +965,450 @@
 	
 	"Cosmic Terror Desc"
 	{
-		"en" "Have you ever looked at the sky and wondered if you could use that as a weapon?\nWell wonder-no-more!\nIntroducing the ''Cosmic Terror''\nEnjoy eviscerating your foes with the power of the moon!"
-		"fr" "Avez-vous observé le ciel vous demandant si vous pourriez l'utiliser comme une arme?\nVoici le Terreur Cosmique!\nExterminez vos ennemis avec la puissance de la Lune!"
-		"ru" "Вы когда-нибудь смотрели на небо и думали, можно ли использовать его в качестве оружия?\nЧто ж, не удивляйтесь!\nПредставляем вам «Космический террор»\nНаслаждайтесь уничтожением своих врагов с помощью силы луны!"
-		"chi" "你是否曾仰望天空，想过是否可以将其用作武器?\n不必再等待!\n介绍“宇宙恐怖”\n享受与月亮的力量掏空你的敌人!"
+		"en"	"Have you ever looked at the sky and wondered if you could use that as a weapon?\nWell wonder-no-more!\nIntroducing the ''Cosmic Terror''\nEnjoy eviscerating your foes with the power of the moon!"
+		"fr"	"Avez-vous observé le ciel vous demandant si vous pourriez l'utiliser comme une arme?\nVoici le Terreur Cosmique!\nExterminez vos ennemis avec la puissance de la Lune!"
+		"ru"	"Вы когда-нибудь смотрели на небо и думали, можно ли использовать его в качестве оружия?\nЧто ж, не удивляйтесь!\nПредставляем вам «Космический террор»\nНаслаждайтесь уничтожением своих врагов с помощью силы луны!"
+		"chi"	"你是否曾仰望天空，想过是否可以将其用作武器?\n不必再等待!\n介绍“宇宙恐怖”\n享受与月亮的力量掏空你的敌人!"
+		"ko"	"하늘을 보면서 저걸 무기로 쓸 수 있지 않을까란 생각 해본 적 있나요?\n당연히 가능합니다!\n이 ''코즈믹 테러''를 사용하면 말이죠.\n달의 힘으로 적을 가루로 만들어 보세요!"
 	}
 	"Cosmic Terror Desc pap1"
 	{
-		"en" "Do you need more power? more oomph?\nWell look no further, introducing 3 magnifying lenses that almost double the potential damage\nWarning: Warranty void on purchase."
-		"fr" "Double les dégats.\nVoici 3 lunnetes de magnification massives pour donner plus de puissance à votre arme ultime.\n(Garantie anulée avec achat du kit de lunnetes de magnification gigantesques.)"
-		"ru" "Вам нужно больше силы? Больше мощи?\nНу тогда смотрите дальше, представляем вам 3 увеличительные линзы, которые почти удваивают потенциальный урон\nПредупреждение: Гарантия аннигилируется при покупке."
-		"chi" "你需要更多的动力吗?更多的性感吗?\n我们不会再看了，介绍3个放大镜，几乎是潜在损害的两倍\n警告:购买保修无效。"
+		"en"	"Do you need more power? more oomph?\nWell look no further, introducing 3 magnifying lenses that almost double the potential damage\nWarning: Warranty void on purchase."
+		"fr"	"Double les dégats.\nVoici 3 lunnetes de magnification massives pour donner plus de puissance à votre arme ultime.\n(Garantie anulée avec achat du kit de lunnetes de magnification gigantesques.)"
+		"ru"	"Вам нужно больше силы? Больше мощи?\nНу тогда смотрите дальше, представляем вам 3 увеличительные линзы, которые почти удваивают потенциальный урон\nПредупреждение: Гарантия аннигилируется при покупке."
+		"chi"	"你需要更多的动力吗?更多的性感吗?\n我们不会再看了，介绍3个放大镜，几乎是潜在损害的两倍\n警告:购买保修无效。"
+		"ko"	"출력이 더 필요하다고요?\n3개의 돋보기 렌즈를 추가한 이 개량판은 피해량을 2배로 끌어올립니다.\n경고: 판매 시 보증 무효"
 	}
 	"Cosmic Terror Desc pap2"
 	{
-		"en" "Whats better than 1 death beam?\n4 more death beams of course\nThanks to these extra beams we have recreated the power of the moon!\nWarning: Warranty annihilated on purchase."
-		"fr" "Quadruple les rayons.\nAvec un total de quatre rayons, nous avons répliqué la puissance totale de la lune!\n(Garantie exterminée avec achat.)"
-		"ru" "Что может быть лучше одного луча смерти?\nЧетыре луча смерти, конечно\nБлагодаря этим дополнительным лучам мы воссоздали силу луны!\nПредупреждение: Гарантия аннигилируется при покупке."
-		"chi" "什么比一个激光更好?\n当然是更多激光！\n多亏这些光束，我们成功复刻出了月球之力！\n警告:购买时保修失效。"
+		"en"	"Whats better than 1 death beam?\n4 more death beams of course\nThanks to these extra beams we have recreated the power of the moon!\nWarning: Warranty annihilated on purchase."
+		"fr"	"Quadruple les rayons.\nAvec un total de quatre rayons, nous avons répliqué la puissance totale de la lune!\n(Garantie exterminée avec achat.)"
+		"ru"	"Что может быть лучше одного луча смерти?\nЧетыре луча смерти, конечно\nБлагодаря этим дополнительным лучам мы воссоздали силу луны!\nПредупреждение: Гарантия аннигилируется при покупке."
+		"chi"	"什么比一个激光更好?\n当然是更多激光！\n多亏这些光束，我们成功复刻出了月球之力！\n警告:购买时保修失效。"
+		"ko"	"죽음의 광선 하나보다 좋은 게 뭐냐고요?\n그건 바로 4개의 죽음의 광선이죠!\n이 광선들 덕에 우린 달의 힘을 재창조해낼 수 있었습니다!\n경고: 판매 시 보증 무효"
 	}
 	"Cosmic Terror Extra Desc"
 	{
-		"en"	"Firerate bonuses affect the speed of the beam\nReload rate bonuses affect how fast you gain heat."
-		"fr"	"Améliorations de cadence de tir améliore la vitesse du rayon laser.\nAméliorations de vitesse du rechargement ralentit le rechauffement de l'arme."
+		"en"	"Firerate bonuses affect the damage of the beam\nReload rate bonuses affect how fast you gain heat."
+		"ko"	"공격 속도 증가는 빔의 피해량을 늘립니다.\n재장전 속도 증가는 과열 속도를 늦춥니다."
 	}
 	
 	"Beam Wand Desc"
 	{
-		"en"	"Increased damage\nHold M1 for a constant beam to eviscerate your enemies. M2: Magic overdrive, more mana=stronger but higher CD."
+		"en"	"Hold M1 for a constant beam to eviscerate your enemies.\nM2 Ability gives attackspeed for a short time."
 		"fr"	"Laser constant qui épuise le Mana. M2 pompe plus de Mana dans l'attaque pour améliorer les dégats."
 		"ru"	"Удерживайте М1 для постоянного луча уничтожения. М2 - усиление магии, больше маны = сильнее, но выше восстановление."
-		"chi"   "按住M1发出一个恒定的光束来清除你的敌人。M2:魔法超速。更多的法力值=更强更快的CD"
+		"chi"	"按住M1发出一个恒定的光束来清除你的敌人。M2:魔法超速。更多的法力值=更强更快的CD"
+		"ko"	"M1를 꾹 눌러서 적을 제거할 때까지 빔을 유지하세요.\n우클릭 능력 사용시 짧은 시간 동안 공격 속도 증가"
 	}
 	"Beam Wand Pap 1"
 	{
 		"en"	"Increased damage and attackspeed"
 		"fr"	"Dégats et cadence des attaques améliorés"
 		"ru"	"Увеличенный урон и скорость атаки."
-		"chi"   "增加伤害和攻击速度。"
+		"chi"	"增加伤害和攻击速度。"
+		"ko"	"공격 속도와 피해량 증가"
 	}
 	"Beam Wand Pap 2"
 	{
 		"en"	"Increased damage and attackspeed"
 		"fr"	"Dégats et cadence des attaques améliorés"
 		"ru"	"Увеличенный урон и скорость атаки."
-		"chi"   "增加伤害和攻击速度。"
+		"chi"	"增加伤害和攻击速度。"
+		"ko"	"공격 속도와 피해량 증가"
 	}
 	"Beam Wand pap Alt 1"
 	{
 		"en"	"Increased damage\Have you ever wondered what it would be like to fire 2 laser beams?\nWell, wonder-no-more!\nHold Mouse1 to attack\nOnce charge is full press Mouse2 to use it!"
 		"fr"	"Chargez une attaque avec M1, utilisez la charge avec M2.\nTire 2 rayons laser."
 		"ru"	"Вы когда-нибудь задумывались, каково это - стрелять двумя лазерными лучами?\nНу, теперь это реальность!\nУдерж. ЛКМ для атаки\n, при полном заряде нажмите ПКМ для использования!"
-		"chi"   "你有没有想过发射两束激光会是什么样子?\n 左键攻击\n一旦充能完毕，按右键使用它!"
+		"chi"	"你有没有想过发射两束激光会是什么样子?\n 左键攻击\n一旦充能完毕，按右键使用它!"
+		"ko"	"피해량 대폭 증가\n레이저 광선 1개로는 부족한가요? 그럼 2개를 써보세요!\nM1를 눌러서 공격하고 충전이 다 되면 M2를 눌러서 사용하세요!"
 	}
 	"Beam Wand pap Alt 2"
 	{
 		"en"	"Increased damage\So, you want more power?\nIntroducing the ''Particle Cannon''tm\nPress RELOAD to switch between the particle Beam/Cannon\nThe particle cannon also has its own Mouse2 ability\nParticle cannon cannot pierce multiple targets!"
 		"fr"	"Appuyez sur RELOAD pour changer entre le rayon laser et le cannon à particules.\nAbilité change avec l'utilisation du cannon.\nCannon à particules ne peut pas perçer les ennemis."
 		"ru"	"Итак, вы хотите больше мощности?\nПредставляем «Нейтронная пушка»tm\nНажмите ПЕРЕЗАРЯДКУ для перекл. между нейтронным лучом/пушкой\nНейтронная пушка также имеет свою собственную способность на ПКМ\nНейтронная пушка не может пробить несколько целей!"
-		"chi"   "所以，你想要更大的力量?\n介绍“粒子炮”\n按R在粒子束/炮之间切换\n粒子炮也有自己的鼠标右键技能\n粒子炮不能拼接多个目标!"
+		"chi"	"所以，你想要更大的力量?\n介绍“粒子炮”\n按R在粒子束/炮之间切换\n粒子炮也有自己的鼠标右键技能\n粒子炮不能拼接多个目标!"
+		"ko"	"피해량 증가\n아직도 모자른가요?\n그럼 이 ''파티클 캐논''을 써보시죠!\n재장전 키를 눌러 광선과 캐논으로 전환할 수 있습니다.\n파티클 캐논도 M2 능력이 따로 있답니다.\n다만 얘는 적 관통이 안돼요!"
 	}
 	
 	"Necromancy Staff Desc"
 	{
 		"en"	"M2 Summons a minion.\nNot having your wand in your hand will half minion damage.\nMinion will only attack marked enemies\nM1 Marks enemies for 5 seconds"
+		"ko"	"우클릭으로 소환수를 소환합니다\n이 스태프를 들고 있지 않다면 소환수의 피해량이 반으로 감소합니다\n소환수는 오직 마킹한 적만 공격합니다\n좌클릭 공격은 5초 동안 적을 마킹합니다."
 	}
 	"Necromancy Staff Pap 1"
 	{
-		"en"	"Increased damage and attackspeed, loses camo detection"
-		"fr"	"Dégats et cadence des attaques améliorés, votre minion ne peut plus détecter le camouflage."
-		"ru"	"Увеличенный урон и скорость атаки, потеря обнаружения камуфляжа."
-		"chi"   "增加伤害和攻击速度，失去伪装检测"
+		"en"	"Increased damage and attackspeed"
+		"fr"	"Dégats et cadence des attaques améliorés"
+		"ru"	"Увеличенный урон и скорость атаки"
+		"chi"   "增加伤害和攻击速度"
+		"ko"	"피해량과 공격 속도 증가"
 	}
 	"Necromancy Staff Pap 2"
 	{
 		"en"	"Increased damage and attackspeed"
+		"fr"	"Dégats et cadence des attaques améliorés"
+		"ru"	"Увеличенный урон и скорость атаки"
+		"chi"   "增加伤害和攻击速度"
+		"ko"	"피해량과 공격 속도 증가"
 	}
 	
+	"Killing Order Pap 1"
+	{
+		"en"	"Change projectile to hitscan\n-Increased damage\n-Increased attackspeed"
+		"ko"	"-피해량, 공격 속도 증가\n공격 방식이 히트스캔으로 변경"
+	}
+	"Killing Order Pap 2"
+	{
+		"en"	"-Additional damage to hit target for 4 seconds\n-Increased damage\n-Increased attackspeed"
+		"ko"	"-피해량, 공격 속도 증가\n적중한 대상에게 4초 동안 추가 피해"
+	}
+	"Killing Order Pap 3"
+	{
+		"en"	"-Increased damage\n-Increased attackspeed"
+		"ko"	"-피해량, 공격 속도 증가"
+	}
+	"Killing Order Pap 4"
+	{
+		"en"	"-Increased damage\n-Increased attackspeed"
+		"ko"	"-피해량, 공격 속도 증가"
+	}
+	
+	"Survivalist's Carbine Desc"
+	{
+		"en"		"-Fast-reload but low clip size"
+		"ko"		"-재장전이 빠르지만, 탄창이 작음"
+	}
+	"Survivalist's Knife Desc"
+	{
+		"en"		"-High-damage but slow attack rate"
+		"ko"		"-피해량이 높지만, 공격 속도가 느림"
+	}
+	
+	"Survivalist Kit Desc"
+	{
+		"en"		"Two is one, One is none.\n-Provides an fast-reload carbine, high-damage knife"
+		"ko"		"둘은 하나고, 하나는 없는 것과 다름 없다.\n-재장전이 빠른 카빈과 높은 피해를 주는 칼을 보유"
+	}
+	"Survivalist Kit Pap 1 Desc"
+	{
+		"en"		"New melee alt-fire ability - Reserved Health:\nAttacking with melee will reserve health and consume via M2\nImproved stats."
+		"ko"		"근접 무기 우클릭 능력 해금 - 체력 비축:\n적을 근접 무기로 타격 시, 체력을 모으고 우클릭으로 소모하여 회복할 수 있음.\n다운된 상태에서 적 처치 시, 소생 게이지가 차오르고, 다 채울 경우 부활함\n전반적인 능력치 증가"
+	}
+	"Survivalist Kit Pap 2 Desc"
+	{
+		"en"		"New primary alt-fire ability - Fire Grenade:\nFire aoe attack immediately\nImproved stats."
+		"ko"		"주무기 우클릭 능력 해금 - 유탄 발사:\n우클릭 시 즉각 유탄이 발사됨.\n전반적인 능력치 증가"
+	}
+	"Survivalist Kit Pap 3 Desc"
+	{
+		"en"		"New ability - Revive:\nIf damage is higher than your health, consume all reserved health and gives uber.\nOnly one chance on wave/raid.\nIncreased attack rate and damage, Decreased reload speed."
+		"ko"		"능력 해금 - 소생:\n만약 죽을 피해를 받으면, 모은 체력을 전부 소모하고 우버를 잠깐 받음.\n레이드/웨이브 당 한 번만 사용 가능\n공격 속도와 피해량 증가, 재장전 속도 감소"
+	}
+	"Survivalist Kit Pap 4 Desc"
+	{
+		"en"		"Improved stats.\nReduce knife ability cooltime"
+		"ko"		"전반적인 능력치 증가\n체력 비축분 소모 쿨타임 감소"
+	}
+	"Survivalist Kit Pap 5 Desc"
+	{
+		"en"		"Improved stats."
+		"ko"		"전반적인 능력치 증가"
+	}
+	"Survivalist Kit Pap 6 Desc"
+	{
+		"en"		"Improved stats.\nReduce grenade and knife ability cooltime."
+		"ko"		"전반적인 능력치 증가\n유탄 발사와 체력 비축분 소모 쿨타임 감소"
+	}
+	"Survivalist Kit Pap 7 Desc"
+	{
+		"en"		"Improved stats."
+		"ko"		"전반적인 능력치 증가"
+	}
+	
+	"Dim Desc"
+	{
+		"en"		"Forbidden weapon known to mankind. \nBuild up charges by hitting enemies with projectiles \nM2 to summon your ally npcs \n Enhancing this weapon in different route will summon different set of npcs!"
+		"ko"		"인류에게 대대로 전해진 금지된 무기입니다.\n투사체를 적중해 에너지를 쌓고 M2를 눌러 소환수를 스폰.\n무기 강화 루트에 따라 다른 그룹의 npc들이 등장"
+	}
+	
+	"Custom Mini Semi Gun: Overheating FeedBack Desc"
+	{
+		"en"		"The longer you hold down fire, the more damage and tighter spread your weapon deals\nWhen used, if the maximum overheating value reaches 200%, damage is tripled according to the overheating value, and if the overheating is below 100%, the overheating value increases faster"
+		"ko"		"공격 버튼을 오래 누르고 있을수록, 이 무기의 피해량및 집탄율 증가\nM2: 사용 시, 사용 시, 최대 과열 수치 200%, 과열 수치에 따른 피해량 3배, 과열이 100％ 미만인 경우 과열 수치가 더 빨리 증가"
+	}
+	"Custom Mini Semi Gun: Overheating FeedBack - MAX"
+	{
+		"en"		"MAX Overheat"
+		"ko"		"최대 과열 도달"
+	}
+	"Custom Mini Semi Gun: Overheating FeedBack - Charge"
+	{
+		"en"		"Heating up:"
+		"ko"		"예열 중:"
+	}
+	"Custom Mini Semi Gun: Overheating FeedBack - Overclocking"
+	{
+		"en"		"[Overclock MOD]"
+		"ko"		"[과부하 모드]"
+	}
+	"Custom Mini Semi Gun: Overheating FeedBack - Meltdown in"
+	{
+		"#format"	"{1:d}"
+		"en"		"Meltdown in T-{1}s"
+		"ko"		"멜트다운까지 {1}초 남음"
+	}
+	"Custom Mini Semi Gun: Overheating FeedBack - Fully Meltdown"
+	{
+		"en"		"Fully Meltdown...: [DMG, ATK DOWN]"
+		"ko"		"멜트 다운...: [피해량, 공속 감소]"
+	}
+	"Custom Mini Semi Gun: Bullet Storm Desc"
+	{
+		"en"		"+300％ bullets per shot\ncannot move while firing, consumes 4 ammo per shot."
+		"ko"		"발사되는 탄환수 +300％증가\n사격중 이동 불가, 발사당 4발의 탄약을 소모."
+	}
+	
+	"Custom Sniper Rifle: Diligence - Desc"
+	{
+		"en"		"Semi Automatic Rifle, you cannot hold down to shoot.\nIncreased damage, but you have to reload.\nM2: Zooming is possible and damage is increased. However, movement speed is reduced.\n-This Marksman rifle trades magazine capacity and rate of fire for powerful, accurate shots."
+		"ko"		"반자동 소총, 이 무기는 꾹 눌러서 사격할 수 없음.\n피해량 증가, 대신 장전을 해야함.\nM2: 조준이 가능하며 피해량이 증가함, 대신 이동속도가 감소됨\n-장탄 수와 연사율은 낮아졌지만 강력하고 정확한 사격이 가능한 지정사수소총입니다."
+	}
+	"Custom Sniper Rifle: Diligence Counter - Desc"
+	{
+		"en"		"Increased damage, reduced movement speed and Increased damage while Zoom, no recoil, Increased headshot damage\nIncreased magazine capacity, decreased reload speed\nApply silence to the victim, 40s cooldown\n-A modified Diligence rifle, offering increased damage."
+		"ko"		"피해량 증가, 조준중 피해량 증가, 조준중 이속 감소 완화, 반동 없음, 헤드샷 피해량 증가\n장탄수 증가, 재장전 속도 감소\n피해자에게 침묵을 적용, 40초 쿨다운\n-개조형 딜리전스 소총으로, 대미지가 증가했습니다."
+	}
+	"Custom Sniper Rifle: Heavy Caliber RSASS - Desc"
+	{
+		"en"		"Increased damage, Increased Damage while Zoom, Increased headshot damage\nIncreased magazine capacity, decreased reload speed\nYour aim will be fixed to nearby enemy and Always Headshot\nApply vulnerability to the victim, 40s cooldown\n-This is the weapon used by the legendary mercenary who once swept through all enemies.\n''Enemy contact''"
+		"ko"		"피해량 증가, 조준중 피해량 증가, 헤드샷 피해량 증가\n장탄수 증가, 재장전 속도 감소\nR:사용시 바라본 적에게 에임이 고정되며 항상 헤드샷 판정이 됨.\n피해자에게 피해 취약을 적용, 40초 쿨다운\n-한때 모든 적을 휩쓸던 전설의 용병이 사용하던 무기입니다.\n''적과 조우했다.''"
+	}
+
+	"Custom Barracks Kit: The CastleSiege Desc"
+	{
+		"en"		"Deals more damage to marked enemies"
+		"ko"		"표적 상태인 대상에게 피해량이 증가합니다"
+	}
+	"Custom Barracks Kit: The CastleSiege Desc Default"
+	{
+		"en"		"Improved stats."
+		"ko"		"전반적인 능력치 증가"
+	}
+	"Custom Barracks Kit: The CastleSiege Desc New Trick"
+	{
+		"en"		"Pressing R increases the barracks training and research speed\nWhen hitting an marked enemy with another ranged weapon\nThis weapon's R cooldown is reduced"
+		"ko"		"R 키 사용 시, 배럭의 훈련 및 연구 속도가 증가합니다,\n다른 원거리 무기로 표적 상태인 대상 적중 시,\n이 무기의 R 키 쿨 다운이 감소합니다"
+	}
+	
+	"Protethia Desc"
+	{
+		"en"		"WIP"
+		"ko"		"WIP"
+	}
+	
+	//추가 장비 이름
+	"Boyo's Mysterious Brew"
+	{
+		"en"	"Boyo's Mysterious Brew"
+		"ko"	"보요의 신비로운 맥주"
+	}
+	"See You In Hell"
+	{
+		"en"	"See You In Hell"
+		"ko"	"지옥에서 보자"
+	}
+	"Deploying Support Weapon"
+	{
+		"en"	"Deploying Support Weapon"
+		"ko"	"지원 무기 배치"
+	}
+	
+	//추가 장비 설명
+	"Mysterious Brew Desc"
+	{
+		"en"	"On use, grant a random status effect"
+		"ko"	"사용 시 무작위 상태 효과를 부여합니다"
+	}
+	"Mysterious Brew Desc Extra"
+	{
+		"en"	"A strange beverage brewed by a forest creature. No clue what's inside of it, but it smells terrible. It'd call you crazy for drinking this, but hey, you do you."
+		"ko"	"숲속 생물이 만든 이상한 음료. 안에 뭐가 들어있는지는 전혀 모르겠지만, 냄새는 끔찍하다. ''이걸 마시면 미쳤다고 하겠지만, 뭐, 네 마음대로 해.''"
+	}
+	"Get_DrinkRND_1"
+	{
+		"en" 	"Armour Point Regenerativen"
+		"ko" 	"아머 포인트 재생"
+	}
+	"Get_DrinkRND_2"
+	{
+		"en" 	"HP Regenerativen"
+		"ko" 	"체력 재생"
+	}
+	"Get_DrinkRND_3"
+	{
+		"en" 	"Poison"
+		"ko" 	"독"
+	}
+	"Get_DrinkRND_4"
+	{
+		"en" 	"Energy Drink!"
+		"ko" 	"에너지 드링크!"
+	}
+	"Get_DrinkRND_5"
+	{
+		"en" 	"No Health?"
+		"ko" 	"체력 없다?"
+	}
+	"Get_DrinkRND_6"
+	{
+		"en" 	"Banner Trio"
+		"ko" 	"삼신기"
+	}
+	"Get_DrinkRND_7"
+	{
+		"en" 	"Burning"
+		"ko" 	"화상"
+	}
+	"Get_DrinkRND_8"
+	{
+		"en" 	"Slow"
+		"ko" 	"둔화"
+	}
+	"Get_DrinkRND_9"
+	{
+		"en" 	"Uber"
+		"ko" 	"무적"
+	}
+	"Get_DrinkRND_10"
+	{
+		"en" 	"Smite"
+		"ko" 	"단죄"
+	}
+	"Get_DrinkRND_11"
+	{
+		"en" 	"Toxic Gas"
+		"ko" 	"독 가스"
+	}
+	"Get_DrinkRND_12"
+	{
+		"en" 	"Teleport"
+		"ko" 	"순간이동"
+	}
+	"Get_DrinkRND_13"
+	{
+		"en" 	"Building Super Recharging"
+		"ko" 	"구조물 슈퍼 재충전"
+	}
+	"Get_DrinkRND_14"
+	{
+		"en" 	"Overmana Overload"
+		"ko" 	"마나 폭발"
+	}
+	"Get_DrinkRND_15"
+	{
+		"en" 	"Mana Regenerativen"
+		"ko" 	"마나 재생"
+	}
+	"Get_DrinkRND_16"
+	{
+		"en" 	"Dimension Ripper"
+		"ko" 	"차원 찢개"
+	}
+	"Get_DrinkRND_17"
+	{
+		"en"	"Armor Melt"
+		"ko"	"아머 멜트"
+	}
+	"Get_DrinkRND_18"
+	{
+		"en"	"Broken Armor"
+		"ko"	"아머 박살"
+	}
+	"Get_DrinkRND_19"
+	{
+		"en"	"Eye for an Eye"
+		"ko"	"눈에는 눈"
+	}
+	"Get_DrinkRND_20"
+	{
+		"en"	"A True Nightmare"
+		"ko"	"실현된 악몽"
+	}
+	"Get_DrinkRND_21"
+	{
+		"en"	"Auto Revive"
+		"ko"	"자동 소생"
+	}
+	"Get_DrinkRND_22"
+	{
+		"en"	"Taunt"
+		"ko"	"도발"
+	}
+	"See You In Hell Desc"
+	{
+		"en"	"you can trigger a large neuro-pulse explosion after you go down.\nA residual neuro-electric field will electrocute and stun enemies."
+		"ko"	"쓰러진 후 강력한 신경 펄스 폭발을 일으킬 수 있습니다.\n잔류 신경 전기장이 적들을 감전시키고 기절시킵니다."
+	}
+	"See You In Hell Desc Extra"
+	{
+		"en"	"tell him I said, 'Fu----ou!'"
+		"ko"	"말 좀 전해줘. 엿이나 드시라고!"
+	}
+	"Deploying Support Weapon Desc"
+	{
+		"en"	"Request Support Weapon Deployment.\nStats increases with range upgrades."
+		"ko"	"지원무기 배치를 요청합니다.\n원거리 개선에 따라 성능이 향상됩니다."
+	}
+	"Deploying Support Weapon Desc Extra"
+	{
+		"en"	"Freedom requires firepower."
+		"ko"	"자유에는 화력이 필요하지."
+	}
+	
+	//Perks
+	"Improvised Armor"
+	{
+		"en"		"Improvised Armor"
+		"ko"		"급조된 증가 장갑"
+	}
 	"Improvised Armor Desc"
 	{
-		"en"	"Final Max Armor +300\n-Max Armor -10％"
-		"ko"	"-최종 최대 아머 +300\n-최대 아머 10％ 감소"
+		"en"	"Final Max Armor +300\n-Max Armor -20％"
+		"ko"	"-최종 최대 아머 +300\n-최대 아머 20％ 감소"
+	}
+	"Passive Hardened Stance"
+	{
+		"en"		"Hardened Stance"
+		"ru"		"Закаленная стойка"
+		"ko"		"단단한 골격"
+	}
+	"Building Sniper Sentry"
+	{
+		"en"		"Sniper Sentry"
+		"fr"		"Mitrailleuse de Sniper"
+		"ru"		"Турель-снайпер"
+		"de"		"Scharfschützen Sentry"
+		"pt"		"Sentinela Sniper"
+		"nl"		"Scherpshutter Schildwacht"
+		"chi"		"大口径炮台"
+		"it"		"Sentinella cecchino"
+		"ko"		"저격 센트리"
+	}
+	"Building Minigun Sentry"
+	{
+		"en"		"Minigun Sentry"
+		"fr"		"Mitrailleuse Minigun"
+		"ru"		"Турель-пулемёт"
+		"de"		"Minigun Sentry"
+		"pt"		"Sentinela Minigun"
+		"nl"		"Minigun Schildwacht"
+		"chi"		"机枪炮台"
+		"it"		"Sentinella Minigun"
+		"ko"		"미니건 센트리"
 	}
 	
 	//Etc
@@ -768,5 +1483,821 @@
 	{
 		"en"		"{crimson}[ZR]{snow} You have found!"
 		"ko"		"{crimson}[ZR]{snow} 아이템을 발견했습니다!"
+	}
+	"Already Used"
+	{
+		"en"		"Already Used"
+		"ko"		"이미 사용됨"
+	}
+	"Use Only Down"
+	{
+		"en"		"Use Only Down"
+		"ko"		"쓰러져 있을 때만 발동 가능"
+	}
+	"Not enough Energy"
+	{
+		"en"		"Not enough energy"
+		"ko"		"에너지가 부족합니다"
+	}
+	"You need to Reload by Ammo"
+	{
+		"#format"	"{1:i}"
+		"en"		"You need to Reload by {1}"
+		"ko"		"최소 {1}이상 장전 해야합니다"
+	}
+	"Survivalist Kit Reserved Health"
+	{
+		"#format"	"{1:d}"
+		"en"		"Reserved Health [+{1}]"
+		"ko"		"비축된 체력 [+{1}]"
+	}
+	"Survivalist Kit Can Revive"
+	{
+		"en"		"Revive: Ready"
+		"ko"		"소생: 준비 완료"
+	}
+	"Survivalist Kit Disabled"
+	{
+		"en"		"Revive: Disabled"
+		"ko"		"소생: 비활성화"
+	}
+	"Survivalist Kit Cooltime"
+	{
+		"#format"	"{1:.1f}"
+		"en"		"Revive: {1} (s)"
+		"ko"		"소생: {1}초 남음"
+	}
+	"Survivalist Kit Not Enough Health"
+	{
+		"en"		"Revive: More Health to Use"
+		"ko"		"소생: 체력 비축분 부족"
+	}
+	
+	//Store
+	"Item Description"
+	{
+		"en"		"Item Description"
+		"ko"		"아이템 설명"
+	}
+	"Store_Grigori_Regular_Discount"
+	{
+		"en"		"{green}Father Grigori{default}: My child, I'm offering new wares!"
+		"ko"		"{green}그리고리 신부{default}: 형제여, 지금 막 새로운 상품이 입고되었다네!"
+	}
+	"Store_Grigori_Special_Discount"
+	{
+		"en"		"{green}Father Grigori{default}: My child, I'm offering extra for a limited time!"
+		"ko"		"{green}그리고리 신부{default}: 형제여, 지금 새로운 상품을 입고했다네! 판매 시간이 그리 길지 않으니 주의하게!"
+	}
+	"Store_World_Machine_Regular_Discount"
+	{
+		"en"		"{purple}The World Machine{default}: Come here! I managed to get some items!"
+		"ko"		"{purple}월드 머신{default}: 방금 새로운 아이템을 들여왔어요!"
+	}
+	"Store_World_Machine_Special_Discount"
+	{
+		"en"		"{purple}The World Machine{default}: Come here! I managed to get some items, but they vanish fast!"
+		"ko"		"{purple}월드 머신{default}: 방금 새로운 아이템을 들여왔어요! 오래 팔 수 없는 물건이니까, 주의하세요!"
+	}
+	"Store_Recovered_Item"
+	{
+		"en"		"{green}Recovered Items:"
+		"ko"		"{green}되찾은 아이템:"
+	}
+	"Store_Recovered_Item_With_Discount"
+	{
+		"#format"	"{1:d}"
+		"en"		"{green}Recovered at {1}％ off:"
+		"ko"		"{green}{1}％ 할인과 함께 되찾은 아이템:"
+	}
+	
+	//Common
+	"Wave_WaitingTime"
+	{
+		"#format"	"{1:.1f}"
+		"en"		"You were given extra {1} seconds to prepare."
+		"ko"		"준비 시간으로 {1}초 드립니다."
+	}
+	"Wave_WaitingTime_RaidBoss_LastMann"
+	{
+		"en"		"You were given extra 45 seconds to prepare for the raidboss... Get ready."
+		"ko"		"레이드 보스 준비 시간으로 45초 드립니다. 준비하세요!"
+	}
+	"Wave_WaitingTime_RaidBoss"
+	{
+		"en"		"You were given extra 30 seconds to prepare for the raidboss... Get ready."
+		"ko"		"레이드 보스 준비 시간으로 30초 드립니다. 준비하세요!"
+	}
+	"Wave_WaitingTime_LastMann_AprilFools26"
+	{
+		"en"		"You were given extra 5 seconds to prepare..."
+		"ko"		"준비 시간으로 5초 드립니다..."
+	}
+	"Wave_WaitingTime_LastMann"
+	{
+		"en"		"You were given extra 45 seconds to prepare..."
+		"ko"		"준비 시간으로 45초 드립니다..."
+	}
+	
+	"Wave_BreakTime_AprilFools26"
+	{
+		"en"		"You were given extra 5 seconds to prepare, as most of your team died......"
+		"ko"		"팀의 대부분이 사망하여 5초의 준비 시간을 드립니다..."
+	}
+	"Wave_BreakTime"
+	{
+		"en"		"You were given extra 30 seconds to prepare, as most of your team died......"
+		"ko"		"팀의 대부분이 사망하여 30초의 준비 시간을 드립니다..."
+	}
+	
+	"Wave_Setup_Disallow_Ready"
+	{
+		"en"		"You cannot ready up for 30 seconds."
+		"ko"		"30초 간은 준비할 수 없습니다."
+	}
+	"Wave_Setup_Allow_Ready"
+	{
+		"en"		"You may now ready up."
+		"ko"		"이제 준비(F4)를 할 수 있습니다."
+	}
+	
+	"Wave_Vote_TieBreaker"
+	{
+		"#format"	"{1:d}"
+		"en"		"Vote for the top {1} options!"
+		"ko"		"{1}개의 선택지 중 하나를 고르세요!"
+	}
+	"Wave_Vote_Modifier"
+	{
+		"en"		"Vote for the wave modifier!"
+		"ko"		"임무 난이도 투표!"
+	}
+	
+	//LastMann.
+	"Special_LastMann_Yakuza"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}Something awakens inside {1}......."
+		"ko"		"{crimson}알 수 없는 잠재력이 {1}의 몸에서 깨어나고 있다..."
+	}
+	"Special_LastMann_Zealot"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}{1} descended into a fanatical worship of Sigmar, and set out to cleanse the unrighteous themselves."
+		"ko"		"{crimson}정의를 더럽히는 자들을 시그마에 대한 광적인 신앙으로 정화하기 위해 {1}이 나섰다."
+	}
+	"Special_LastMann_Fractal"
+	{
+		"#format"	"{1:N}"
+		"en"		"{purple}Twirl{crimson}'s Essence enters {1}..."
+		"ko"		"{purple}트윌{crimson}의 정수가 {1}에게 흘러들어가고 있다..."
+	}
+	"Special_LastMann_Soldine"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}Expidonsa Activates {1}'s emergency protocols..."
+		"ko"		"{crimson}{1}의 엑스피돈사 긴급 프로토콜이 실행되었다..."
+	}
+	"Special_LastMann_Purnell"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}{1} gets filled with the unyielding desire to avenge his patients."
+		"ko"		"{crimson}{1}의 환자들의 복수를 향한 꺾이지 않는 욕망이 가득 차고 있다."
+	}
+	"Special_LastMann_Blacksmith"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}{1} Seems to be completly and utterly screwed."
+		"ko"		"{crimson}나사를 조이던 {1}의 인생도 조여지기 시작했다."
+	}
+	"Special_LastMann_Blitzkrieg"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}The Machine Within {1} screams: FOR VICTORY"
+		"ko"		"{crimson}{1}의 기계 몸이 울부짖는다. 승리를 향해!"
+	}
+	"Special_LastMann_Flagellant"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}The undying soul {1} refuses to ever die."
+		"ko"		"{crimson}{1}의 고행에는 수많은 피가 흐를 것이다."
+	}
+	"Special_LastMann_Leper"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}The King {1} cannot stand this any longer..!"
+		"ko"		"{crimson}수많은 자들이 혼돈을 마주하고 무릎 꿇는다. 허나 {1}은(는) 아니다. 적어도 오늘은."
+	}
+	"Special_LastMann_Dweller"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}The sea entirely corrupts {1}."
+		"ko"		"{crimson}바다의 힘이 {1}를 완벽히 잠식시켰다."
+	}
+	"Special_LastMann_Merchant"
+	{
+		"en"		"{crimson}The merchant knows not who to trade with... Thus massively enrages."
+		"ko"		"{crimson}거래할 상대를 잃은 상인이 격분한다..."
+	}
+	"Special_LastMann_Cheese"
+	{
+		"#format"	"{1:N}"
+		"en"		"{darkviolet}{1} decides to inject themselves with plasma as a last resort..."
+		"ko"		"{darkviolet}{1}이(가) 생각해낸 최후의 저항은, 자기 자신이 플라즈마가 되는 것이었다..."
+	}
+	"Special_LastMann_Arsenal"
+	{
+		"#format"	"{1:N}"
+		"en"		"{gold}{1} is now alone, however giving up isn't in their vocabulary."
+		"ko"		"{gold}{1}은 이제 혼자가 되었지만, 포기라는 단어는 그들의 사전에 없다."
+	}
+	"Special_LastMann_Purge"
+	{
+		"#format"	"{1:N}"
+		"en"		"{crimson}{1}'s purging protocol activates."
+		"ko"		"{crimson}{1}, 분쇄 프로토콜 실행."
+	}
+	"Special_LastMann_HeartBroken"
+	{
+		"#format"	"{1:N}"
+		"en"		"{purple}What kindled this flame of wrath that burns within {1}..?"
+		"ko"		"{purple}{1}의 마음을 처참하게 찢어놓은 자는 누구인가.."
+	}
+	"Special_LastMann_RedMist_MOSB"
+	{
+		"#format"	"{1:N}"
+		"en"		"{maroon}The mountain of dead bodies resonates with {darkgrey}{1}..."
+		"ko"		"{maroon}웃는 시체들의 산이 {darkgrey}{1}{maroon}와(과) 공명한다..."
+	}
+	"Special_LastMann_RedMist"
+	{
+		"#format"	"{1:N}"
+		"en"		"{darkgrey}Even with all this strength {fullred}{1} {darkgrey}still failed to protect everyone."
+		"ko"		"{darkgrey}도시 최강의 무력으로도 {fullred}{1}{darkgrey}는 모두를 지킬 수 없었다.."
+	}
+	"Special_LastMann_Barracks_Shared"
+	{
+		"#format"	"{1:N}"
+		"en"		"{green}{1} and their soldiers are making their last stand."
+		"ko"		"{green}{1}와 그의 병사들은 최후의 저항을 준비하고 있다."
+	}
+	"Special_LastMann_Barracks_Alt"
+	{
+		"en"		"{red}The remnants of Blitzkrieg army overcharge their systems to the maximum, it’s TOTAL BLITZKRIEG."
+		"ko"		"{red}블리츠크리그 잔당들은 시스템을 최대 한도로 과충전한다. 총력 전격전의 시작이다."
+	}
+	"Special_LastMann_Barracks_Combine"
+	{
+		"en"		"{yellow}Not wanting to see you die like Guln, the soldiers of his army quickly load the anti-chaos weaponry, no more mercy."
+		"ko"		"{yellow}당신이 굴른과 같은 운명을 맞이하는 걸 피하기 위해, 그의 군대는 혼돈 섬멸 장비를 준비한다. 더 이상 자비란 없다."
+	}
+	"Special_LastMann_Barracks_Almina"
+	{
+		"en"		"{blue}Soldiers arm their best gears, remembering what cruel fate they had to go through under Whiteflower and Dwellers"
+		"ko"		"{blue}병사들은 최고의 무기를 준비한다. 배풍등과 드웰러 밑에서 고통받던 잔혹한 기억을 떠올리며."
+	}
+	"Special_LastMann_Barracks_Expidonsa"
+	{
+		"en"		"{blue}Expidonsa declares code Epsilon, use of experimental technology has been authorized, no more holding back."
+		"ko"		"{blue}엑스피돈사는 코드 엡실론을 발령하고, 실험적 기술의 사용을 승인했다. 더 이상 머뭇거릴 틈이 없다."
+	}
+	"Special_LastMann_Barracks_Alaxios"
+	{
+		"en"		"{red}A chanting of war can be heard from Alaxios army, they will not go down without a fight."
+		"ko"		"{red}알락시오스의 군대에서 전투의 함성이 들려온다. 그들은 절대 함락되지 않을 것이다."
+	}
+	"Special_LastMann_Merc_RaidBoss"
+	{
+		"en"		"‼ - FOCUSED\n{crimson}Both of us die today. One, just a little later than the other."
+		"ko"		"‼ - (집중)\n{crimson}오늘 살아돌아가는 자는 없겠지. 하지만 먼저 죽는 건 너야."
+	}
+	"Special_LastMann_Merc_RaidBoss_TimeOver"
+	{
+		"en"		"‼ - HORRIFIED\n{crimson}CAN'T FOCUS. CAN'T THINK. NOTHING ELSE MATTERS. RUN FOR YOUR LIFE OR FIGHT FOR IT!"
+		"ko"		"‼ - (공포)\n{crimson}집중할 수가 없어. 아무 생각도 못하겠어. 괜찮아. 도망치거나 맞서 싸워!"
+	}
+	"Special_LastMann_Merc"
+	{
+		"#format"	"{1:N}"
+		"en"		"☠ - Miserable\n{crimson}How does it feel, knowing you're not coming back up {1}..?"
+		"ko"		"☠ - (비참함)\n{crimson}저런, 다시는 올라올 수 없게 되었네. 기분이 어때, {1}..?"
+	}
+	"Special_LastMann_Prescript"
+	{
+		"#format"	"{1:N}"
+		"en"		"{blue}The Prescript demands you kill everyone in your sight who apposes you {crimson}{1}."
+		"ko"		"{blue}지령은... {crimson}{1}의 시야 안에 있는 모두를 죽이라는 군."
+	}
+	"Special_LastMann_Survivalist"
+	{
+		"en"		"{crimson}Everyone here will die. But... the last one to be buried will be YOU."
+		"ko"		"{crimson}모두 이 곳에서 죽을 것이다. 하지만... 가장 마지막에 묻힐 사람은 바로 당신이겠지."
+	}
+	
+	//Auto Loadout.
+	"Ranged - H&K G36 Carbine Route"
+	{
+		"en" 		"SMG: H&K G36 Carbine Route [Easy]"
+		"ko"		"기관단총: H&K G36 카빈 루트 [추천]"
+	}
+	"Ranged - Grigori Shotgun Route"
+	{
+		"en" 		"Shotgun: Grigori Shotgun Route [Hard]"
+		"ko"		"산탄총: 그리고리 산탄총 루트 [어려움]"
+	}
+	"Medic - Basic"
+	{
+		"en" 		"Basic Medic [Hard]"
+		"ko"		"메딕 스타터팩 [어려움]"
+	}
+	"Mage - Gravaton Spell"
+	{
+		"en" 		"Gravaton Spell [Normal]"
+		"ko"		"중력 마법 [보통]"
+	}
+	"Melee - Steel Dagger"
+	{
+		"en" 		"Steel Dagger [Hard]"
+		"ko"		"강철 단검 [어려움]"
+	}
+	
+	// Tinker attributes.
+	"Custom Anvil Menu Main"
+	{
+		"en"		"Enchant Archive"
+		"ko"		"마법부여 보관소"
+	}
+	"Custom Anvil Enchant Refresh"
+	{
+		"en"		"Refresh"
+		"ko"		"새로고침"
+	}
+	"TinkerAttrib_PhysicalDamage"
+	{
+		"en"		"Physical Damage"
+		"ko"		"물리 피해량"
+	}
+	"TinkerAttrib_BaseDamage"
+	{
+		"en"		"Base Damage"
+		"ko"		"기본 피해량"
+	}
+	"TinkerAttrib_ClipSize"
+	{
+		"en"		"Clip Size"
+		"ko"		"장탄수"
+	}
+	"TinkerAttrib_SweepingEdge_MaxHit"
+	{
+		"en"		"Sweeping Edge Max Hit"
+		"ko"		"휩쓸기 최대 적중 수"
+	}
+	"TinkerAttrib_FireRate"
+	{
+		"en"		"Fire Rate"
+		"ko"		"공격 속도"
+	}
+	"TinkerAttrib_HealingRate"
+	{
+		"en"		"Healing Rate"
+		"ko"		"치유 속도"
+	}
+	"TinkerAttrib_UberChargeRate"
+	{
+		"en"		"ÜberCharge Rate"
+		"ko"		"우버차지 충전 속도"
+	}
+	"TinkerAttrib_HealthOnHit"
+	{
+		"en"		"Health On Hit"
+		"ko"		"적중 시 회복"
+	}
+	"TinkerAttrib_MaxHealth"
+	{
+		"en"		"Max Health"
+		"ko"		"최대 체력"
+	}
+	"TinkerAttrib_SweepingEdge_ChargeRate"
+	{
+		"en"		"Sweeping Edge Charge Rate"
+		"ko"		"휩쓸기 충전 속도"
+	}
+	"TinkerAttrib_ChargeRate"
+	{
+		"en"		"Charge Rate"
+		"ko"		"충전 속도"
+	}
+	"TinkerAttrib_BulletsPerShot"
+	{
+		"en"		"Bullets Per Shot"
+		"ko"		"발사되는 탄환 수"
+	}
+	"TinkerAttrib_MovementSpeed"
+	{
+		"en"		"Movement Speed"
+		"ko"		"이동 속도"
+	}
+	"TinkerAttrib_HealthRegen"
+	{
+		"en"		"Health Regen"
+		"ko"		"초당 체력 재생"
+	}
+	"TinkerAttrib_RepairRate"
+	{
+		"en"		"Repair Rate"
+		"ko"		"수리 효율"
+	}
+	"TinkerAttrib_ReloadSpeed"
+	{
+		"en"		"Reload Speed"
+		"ko"		"재장전 속도"
+	}
+	"TinkerAttrib_SweepingEdgeRange"
+	{
+		"en"		"Sweeping Edge Range"
+		"ko"		"휩쓸기 사거리"
+	}
+	"TinkerAttrib_BlastRadius"
+	{
+		"en"		"Blast Radius"
+		"ko"		"폭발 반경"
+	}
+	"TinkerAttrib_ProjectileRange"
+	{
+		"en"		"Projectile Range"
+		"ko"		"투사체 날아가는 거리"
+	}
+	"TinkerAttrib_ProjectileSpeed"
+	{
+		"en"		"Projectile Speed"
+		"ko"		"투사체 속도"
+	}
+	"TinkerAttrib_BulletSpread"
+	{
+		"en"		"Bullet Spread"
+		"ko"		"탄환 집탄도"
+	}
+	"TinkerAttrib_BleedDuration"
+	{
+		"en"		"Bleed Duration"
+		"ko"		"출혈 지속시간"
+	}
+	"TinkerAttrib_RangedResistance"
+	{
+		"en"		"Ranged Damage Resistance"
+		"ko"		"원거리 저항력"
+	}
+	"TinkerAttrib_MeleeResistance"
+	{
+		"en"		"Melee Damage Resistance"
+		"ko"		"근접 저항력"
+	}
+	"TinkerAttrib_KnockbackResistance"
+	{
+		"en"		"Knockback Resistance"
+		"ko"		"넉백 저항력"
+	}
+	"TinkerAttrib_SentryDamage"
+	{
+		"en"		"Sentry Damage"
+		"ko"		"센트리 피해량"
+	}
+	"TinkerAttrib_BuffDuration"
+	{
+		"en"		"Buff Duration"
+		"ko"		"버프 지속 시간"
+	}
+	"TinkerAttrib_JumpHeight"
+	{
+		"en"		"Jump Height"
+		"ko"		"점프 높이"
+	}
+	"TinkerAttrib_SentryFiringSpeed"
+	{
+		"en"		"Sentry Firing Speed"
+		"ko"		"센트리 공격 속도"
+	}
+	"TinkerAttrib_FireAspect"
+	{
+		"en"		"s Enemy is Burned"
+		"ko"		"초 동안 적이 불에 탐"
+	}
+	"TinkerAttrib_JumpCrit"
+	{
+		"en"		"Jump Critical Damage"
+		"ko"		"점프 치명타 피해량"
+	}
+	"TinkerAttrib_BaseDamage"
+	{
+		"en"		"Base Damage"
+		"ko"		"기본 피해량"
+	}
+	"TinkerAttrib_BaneofArthropods"
+	{
+		"en"		"s Enemy is Silence"
+		"ko"		"초 동안 적이 침묵 디버프가 적용됨"
+	}
+	"TinkerAttrib_Resistance"
+	{
+		"en"		"Damage Resistance"
+		"ko"		"모든 피해 저항력"
+	}
+	"TinkerAttrib_SweepingEdgeDamage"
+	{
+		"en"		"Sweeping Edge Damage"
+		"ko"		"휩쓸기 피해량"
+	}
+	"TinkerAttrib_MagicCost"
+	{
+		"en"		"Magic Shot Cost"
+		"ko"		"마나 소모량"
+	}
+	"TinkerAttrib_ExtraMeleeRange"
+	{
+		"en"		"Extra Melee Range"
+		"ko"		"근접 무기 사거리"
+	}
+	"TinkerAttrib_Overheal"
+	{
+		"en"		"More Medigun Overheal"
+		"ko"		"메디건 추가 과치료율"
+	}
+	"TinkerAttrib_TerrianResistance"
+	{
+		"en"		"Terrian Damage Resistance"
+		"ko"		"장판 피해 저항력"
+	}
+	"TinkerAttrib_ElementalResistance"
+	{
+		"en"		"Elemental Damage Resistance"
+		"ko"		"원소 피해 저항력"
+	}
+	"TinkerAttrib_SlowResistance"
+	{
+		"en"		"Slow Resistance"
+		"ko"		"둔화 저항력"
+	}
+	"TinkerAttrib_BuildingTerrianAbsorb"
+	{
+		"en"		"Building Terrian Absorb Chance"
+		"ko"		"구조물의 장판 흡수 확률"
+	}
+	"TinkerAttrib_WeaponArchetype"
+	{
+		"en"		"Weapon Archetype"
+		"ko"		"무기 유형"
+	}
+	"TinkerAttrib_MaxMana"
+	{
+		"en"		"Max Mana"
+		"ko"		"최대 마나"
+	}
+	"TinkerAttrib_ExplosiveHeadshot"
+	{
+		"en"		"Explosive Headshot Damage"
+		"ko"		"폭발성 헤드샷 피해량"
+	}
+	"TinkerAttrib_FullChargeDamage"
+	{
+		"en"		"Full Charge Damage Bonus"
+		"ko"		"완전 충전 시 피해량"
+	}
+	"TinkerAttrib_HeadshotDamage"
+	{
+		"en"		"Headshot Damage"
+		"ko"		"헤드샷 피해량"
+	}
+	"TinkerAttrib_"
+	{
+		"en"		""
+		"ko"		""
+	}
+	
+	"Tinker_SharedGlassy"
+	{
+		"en"		"Glassy"
+		"ko"		"유리 대포"
+	}
+	"Tinker_MeleeRapidSwing"
+	{
+		"en"		"Rapid Haste"
+		"ko"		"성급함"
+	}
+	"Tinker_MeleeHeavySwing"
+	{
+		"en"		"Heavy Swing"
+		"ko"		"묵직한 강타"
+	}
+	"Tinker_MeleeLongSwing"
+	{
+		"en"		"Extended Hands"
+		"ko"		"늘어나는 팔"
+	}
+	"Tinker_HasteMage"
+	{
+		"en"		"Hasty Mage"
+		"ko"		"성급한 마법사"
+	}
+	"Tinker_HeavyMage"
+	{
+		"en"		"Heavy Mage"
+		"ko"		"강격의 마법사"
+	}
+	"Tinker_ConcentratedMagic"
+	{
+		"en"		"Concentrated Magic"
+		"ko"		"집중형 마법"
+	}
+	"Tinker_TankMage"
+	{
+		"en"		"Resistive Mage"
+		"ko"		"튼튼한 마법사"
+	}
+	"Tinker_FastHeal"
+	{
+		"en"		"Healing Overdrive"
+		"ko"		"치유 과충전"
+	}
+	"Tinker_Overhealer"
+	{
+		"en"		"Omega Overheal"
+		"ko"		"오메가 과치료"
+	}
+	"Tinker_Uberer"
+	{
+		"en"		"Pure Uberer"
+		"ko"		"순수한 우버맨쉬"
+	}
+	"Tinker_BurstHeal"
+	{
+		"en"		"Burst Heal"
+		"ko"		"치유 극대화"
+	}
+	"Tinker_BuilderLongSwing"
+	{
+		"en"		"Building Extension"
+		"ko"		"확장 공사"
+	}
+	"Tinker_BuilderRepairMaster"
+	{
+		"en"		"Repair Master"
+		"ko"		"수리의 달인"
+	}
+	"Tinker_SlowHeavyProj"
+	{
+		"en"		"Slow Heavy Energy"
+		"ko"		"느리고 강한 에너지"
+	}
+	"Tinker_FastProj"
+	{
+		"en"		"Speeding Bullets"
+		"ko"		"급가속 탄환"
+	}
+	"Tinker_IntensiveClip"
+	{
+		"en"		"Intensive Clip"
+		"ko"		"대용량 탄창"
+	}
+	"Tinker_ConcentratedClip"
+	{
+		"en"		"Concentrated Clip"
+		"ko"		"대구경 탄환"
+	}
+	"Tinker_HeavyTrigger"
+	{
+		"en"		"Heavy Trigger"
+		"ko"		"중량 방아쇠"
+	}
+	"Tinker_SprayAndPray"
+	{
+		"en"		"Spray and Pray"
+		"ko"		"뿌리고 기도해라"
+	}
+	"Tinker_SmallerSmarterBullets"
+	{
+		"en"		"Smaller Smarter Bullets"
+		"ko"		"소형화 스마트 탄환"
+	}
+	
+	"Tinker_MS_Sharpness"
+	{
+		"en"		"Sharpness"
+		"ko"		"날카로움"
+	}
+	"Tinker_MS_Smite"
+	{
+		"en"		"Smite"
+		"ko"		"강타"
+	}
+	"Tinker_MS_SweepingEdge"
+	{
+		"en"		"Sweeping Edge"
+		"ko"		"휩쓸기"
+	}
+	"Tinker_MS_QuickCharge"
+	{
+		"en"		"Quick Charge"
+		"ko"		"빠른 충전"
+	}
+	"Tinker_MS_BaneofArthropods"
+	{
+		"en"		"Bane of Arthropods"
+		"ko"		"살충"
+	}
+	"Tinker_MS_FireAspect"
+	{
+		"en"		"Fire Aspect"
+		"ko"		"발화"
+	}
+	"Tinker_MS_CurseOfGlassy"
+	{
+		"en"		"Curse Of Glassy"
+		"ko"		"유리 저주"
+	}
+	
+	"Tinker_SR_ExplosiveHeadshot"
+	{
+		"en"		"Explosive Headshot"
+		"ko"		"폭발성 헤드샷"
+	}
+	"Tinker_SR_KillerFocus"
+	{
+		"en"		"Killer Focus"
+		"ko"		"살인적인 집중"
+	}
+	"Tinker_SR_SuperCoolingChamber"
+	{
+		"en"		"Super Cooling Chamber"
+		"ko"		"초냉각 약실"
+	}
+	"Tinker_SR_DepletedUranium"
+	{
+		"en"		"U-238"
+		"ko"		"U-238"
+	}
+	"Tinker_SR_HighSpeedFeedMechanism"
+	{
+		"en"		"High-Speed Feed Mechanism"
+		"ko"		"고속 급탄 메커니즘"
+	}
+	"Tinker_SR_HollowPointBullets"
+	{
+		"en"		"Hollow Point Bullets"
+		"ko"		"할로우 포인트 탄환"
+	}
+	
+	// Wave Vote.
+	"Vote Cooldown"
+	{
+		"en"		"Cooldown"
+		"ko"		"쿨다운"
+	}
+	
+	"Silvester & Waldch"
+	{
+		"en"		"Silvester & Waldch"
+		"ko"		"실베스터 & 왈츠"
+	}
+	"Zombie Survival"
+	{
+		"en"		"Zombie Survival"
+		"ko"		"좀비 서바이벌"
+	}
+	"Stella & Karlas"
+	{
+		"en"		"Stella & Karlas"
+		"ko"		"스텔라 & 카를라스"
+	}
+	"Laboratories"
+	{
+		"en"		"Laboratories"
+		"ko"		"어느 한 연구소"
+	}
+	"Interitus Group"
+	{
+		"en"		"Interitus Group"
+		"ko"		"인테리투스 그룹"
+	}
+	"THE CYBER GRIND"
+	{
+		"en"		"THE CYBER GRIND"
+		"ko"		"사이버 그라인드"
+	}
+	
+	"Sea Monster Annihilation ⚠"
+	{
+		"en"		"Sea Monster Annihilation ⚠"
+		"ko"		"바다 괴물 절멸 작전 ⚠"
+	}
+	"Xeno Investigation ⚠"
+	{
+		"en"		"Xeno Investigation ⚠"
+		"ko"		"제노 감염 조사 ⚠"
+	}
+	
+	"Combine Army [Omega]"
+	{
+		"en"		"Combine Army [Omega]"
+		"ko"		"콤바인 군대 [오메가]"
 	}
 }

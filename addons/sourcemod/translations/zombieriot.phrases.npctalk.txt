@@ -610,18 +610,22 @@
 	"Harrison_Talk_Support-12"
 	{
 		"en"	"I need more space in here."
+		"ko"	"이 방을 조금 넓힐 필요가 있겠어."
 	}
 	"Harrison_Talk_Support-13"
 	{
 		"en"	"*ugh* Can we kill them quicker? I need a beer."
+		"ko"	"저 놈들을 빨리 죽일 순 없나? 얼른 돌아가서 맥주 한 잔이나 마시고 싶군."
 	}
 	"Harrison_Talk_Support-14"
 	{
 		"en"	"*sigh* alright."
+		"ko"	"*한숨* 알겠다."
 	}
 	"Harrison_Talk_Support-15"
 	{
 		"en"	"Huh? Oh… leave it until we are done here."
+		"ko"	"허? 우리가 처리할 때까지 지켜보고 계시죠."
 	}
 	"Harrison_Talk_Intro"
 	{
@@ -930,21 +934,3710 @@
 	"Castellan_And_Sensal_Talk-11"
 	{
 		"en"	"{default}Before Sensal left, he asked Captino Menius to share the evidence he collected to you.\nCaptino Menius hands you the classified document with Vesta and Expidonsan logo printed on it: {unique}''A copy of Truthful Evidence''{default}!"
-		"ko"	"{default}센살이 떠나기전, 메니우스에게 부탁하여\n당신에게 베스타와 엑스피돈사의 로고가 박힌 서류폴더 하나를 건냅니다: {unique}''진실된 증거자료 [사본]''{default}!"
+		"ko"	"{default}센살이 떠나기 전, 메니우스에게 부탁하여\n당신에게 베스타와 엑스피돈사의 로고가 박힌 서류폴더 하나를 건냅니다: {unique}''진실된 증거자료 [사본]''{default}!"
 	}
 	"Castellan_And_Sensal_Talk-12"
 	{
-		"en"	"{crimson}Meanwhile, you realize Castellan was watching with mixed emotions as he was retreating…{default}"
-		"ko"	"{crimson}그리고 여러분은 카스텔란이 퇴각하면서 이를 노려보고 있음을 깨닫습니다…{default}"
+		"en"	"{crimson}Meanwhile, you realize Castellan was watching with mixed emotions as he was retreating…"
+		"ko"	"{crimson}그리고 여러분은 카스텔란이 퇴각하면서 이를 노려보고 있음을 깨닫습니다…"
 	}
-	"CaptinoMenius_Talk-1"
+	
+	"CaptinoMenius_Talk-1-1"
+	{
+		"en"	"As a reminder, we are here to stop Vesta’s stealthy invasion towards Ziberia"
+		"ko"	"다시 한번 자네들에게 우리 임무를 상기시켜주자면 우리는 지베리아에서 일어나는 베스타인들의 비밀스러운 침공을 저지하는것이고"
+	}
+	"CaptinoMenius_Talk-1-2"
+	{
+		"en"	"and it is up to me to collect evidences and report it to Sensal."
+		"ko"	"나는 그 증거들을 채증해 센살에게 전달하면 된다네."
+	}
+	"CaptinoMenius_Talk-2-1"
+	{
+		"en"	"Well done, that surely wasn’t an easy one to deal with. However since he teleported away to his superior officer, I guess our cover is blown now."
+		"ko"	"잘했네 제군들, 방금 건 확실히 쉬운 적은 아니였어. 그러나 그가 텔레포트로 무사히 도망친 만큼 우리가 침투한 사실이 알려지는 건 시간 문제일테지."
+	}
+	"CaptinoMenius_Talk-2-2"
+	{
+		"en"	"According to the data, the closest company you will face is Irongate Defense Units. They are well known for their high defense as their name shows so you will need more firepower."
+		"ko"	"내 정보에 의하면 근처 중대는 강철 게이트 방어 유닛들이라네. 그 이름답게 높은 방어수단을 자랑하니 더 많은 화력을 준비하길 바라지."
+	}
+	"CaptinoMenius_Talk-3-1"
+	{
+		"en"	"Huh, what a huge wall we just dealt with. You just bought some time for breathing, great work."
+		"ko"	"허, 참 거대한 벽을 상대한 것 같군. 숨 돌릴 시간정도는 벌었어, 잘해주었다네."
+	}
+	"CaptinoMenius_Talk-3-2"
+	{
+		"en"	"We got another enemies to deal with named Trooper Team."
+		"ko"	"곧 조우할 적들은 트루퍼 팀 소속이라네."
+	}
+	"CaptinoMenius_Talk-3-3"
+	{
+		"en"	"They are well known for their firepower and explosives so beware. Also, it seems like they got aggressive version of drones you have encountered."
+		"ko"	"그들은 높은 화력과 폭발물들을 가지고 있으니 조심하게나. 아 참, 저들은 방금 봤었던 드론들의 공격적인 버전도 가지고 있는것 같군."
+	}
+	"CaptinoMenius_Talk-4-1"
+	{
+		"en"	"Good, since we got rid of that artillery man, we should be safe. For now at least."
+		"ko"	"좋군, 이제 저 수성포를 조종할 사람을 잠시 물렸으니 이제 안전할걸세. 한동안."
+	}
+	"CaptinoMenius_Talk-4-2"
+	{
+		"en"	"The good news is that we are getting close to our target: the radiotower. The bad news is, the enemy will put out their maximum response upon us so beware."
+		"ko"	"내 장비에 따르면 우리의 목표인 라디오타워는 근처에 있다네. 적들은 이제 우리를 막기 위해 강한 본대를 투입할 예정이니 조심하게."
+	}
+	"CaptinoMenius_Talk-5"
 	{
 		"en"	"Great! The Radiotower is down. I can now send clear evidences to sensal. Please hold before the support arrives"
 		"ko"	"좋아! 방송탑이 무너졌군. 이제 센살한테 확실한 증거들을 보낼수 있겠어. 증원이 올때까지 잘 버텨주길 바라겠네."
 	}
-	"CaptinoMenius_Talk-2"
+	"CaptinoMenius_Talk-6"
 	{
-		"en"	"{grey}Sensal arrived after he received the transmission from Captino Menius, but Castellan had already left with his army. Ziberia is in deep trouble now…{default}"
-		"ko"	"{grey}센살이 캡티노 메니우스의 전보를 받고 도착했지만, 카스텔란은 이미 그의 군대와 함께 전장으로 떠났습니다. 이제 지베리아는 큰 위험에 처했습니다.{default}"
+		"en"	"{grey}Sensal arrived after he received the transmission from Captino Menius, but Castellan had already left with his army. Ziberia is in deep trouble now…"
+		"ko"	"{grey}센살이 캡티노 메니우스의 전보를 받고 도착했지만, 카스텔란은 이미 그의 군대와 함께 전장으로 떠났습니다. 이제 지베리아는 큰 위험에 처했습니다."
+	}
+	"CaptinoMenius_Sensal_And_Zeina_Talk-1"
+	{
+		"en"	"We're here to help with this outbreak. Thanks to our scouts relaying your location to us."
+		"ko"	"이 사태를 막는 걸 돕기 위해 우리가 왔네. 우리 정찰병 덕분에 자네들 위치를 전달받을 수 있었다네."
+	}
+	"CaptinoMenius_Sensal_And_Zeina_Talk-2"
+	{
+		"en"	"Hey mercs. Guess I'm the one helping you guys out this time."
+		"ko"	"반갑네 제군들. 이번엔 우리가 자네들을 도울 차례라네."
+	}
+	"CaptinoMenius_Sensal_And_Zeina_Talk-3"
+	{
+		"en"	"Hello, mercs. I'm back to help out, and this time it's with a void outbreak."
+		"ko"	"반갑네 제군들. 이번 공허 확산 사태로부터 자네들을 돕기 위해 내가 왔네."
+	}
+	
+	// Blitzkrieg.
+	"Blitzkrieg_Encounter_TrueForm_1"
+	{
+		"en"		"NAHAHAHAHAHAHAHAHAHAHAHA!!!!!"
+		"ko"		"으하하하하하!!!"
+	}
+	"Blitzkrieg_Encounter_TrueForm_2"
+	{
+		"en"		"ICH WERD EUCH ALLE UMBRINGEN!"
+		"ko"		"전부 다 죽여버리겠다!!"
+	}
+	"Blitzkrieg_Encounter_TrueForm_3"
+	{
+		"en"		"DAS IS PURE KRAFT!"
+		"ko"		"이게 바로 순수한 힘이다!!"
+	}
+	"Blitzkrieg_Encounter_TrueForm_4"
+	{
+		"en"		"DENKSTE DAS WAR ALLES!!?!?!?!"
+		"ko"		"넌 그게 끝이라고 생각한거냐!?"
+	}
+	"Blitzkrieg_Encounter_TrueForm_5"
+	{
+		"en"		"DUUUUUUUUUUUUUUU KLEINE RATTE!"
+		"ko"		"이 쥐새끼같은 놈아!"
+	}
+	"Blitzkrieg_Encounter_TrueForm_6"
+	{
+		"en"		"KOMMT HER IHR KLEINEN VIECHER!!"
+		"ko"		"이리 기어와라, 보잘 것 없는 놈들아!"
+	}
+	"Blitzkrieg_Encounter_TrueForm_7"
+	{
+		"en"		"DIE WAHRE POWER VON RUIANIAN UND EXPIDONSANS!"
+		"ko"		"이것이 루이나와 엑스피돈사의 진정한 힘이다!!!"
+	}
+	"Blitzkrieg_Encounter_TrueForm_8"
+	{
+		"en"		"VERPISS DICH!!!!!!!!!!!!!"
+		"ko"		"여기서 다 꺼져라!!"
+	}
+	"Blitzkrieg_Encounter_TrueForm_9"
+	{
+		"en"		"BLITZKRIEG GEGEN BLITZKRIEG, KOMMT HER!!!!!"
+		"ko"		"지금부터가 너와 나의 진짜 전격전이다!!!"
+	}
+	
+	"Blitzkrieg_Encounter_Hyper_Wave10_1"
+	{
+		"en"		"Hehehe.."
+		"ko"		"흐흐흐.."
+	}
+	"Blitzkrieg_Encounter_Hyper_Wave10_2"
+	{
+		"en"		"Shall we begin?"
+		"ko"		"준비 되셨나?"
+	}
+	
+	"Blitzkrieg_Encounter_Hyper_Wave20_1"
+	{
+		"en"		"A second chance at besting you."
+		"ko"		"너희를 죽일 기회가 또 한 번 생긴 거 같군."
+	}
+	"Blitzkrieg_Encounter_Hyper_Wave20_2"
+	{
+		"en"		"You may have lived last time, but can you do it again?"
+		"ko"		"너희가 한 번은 살아남았을진 몰라도, 두 번은 가능할 것 같나?"
+	}
+	"Blitzkrieg_Encounter_Hyper_Wave20_3"
+	{
+		"en"		"I'm back for more."
+		"ko"		"내가 돌아왔다."
+	}
+	
+	"Blitzkrieg_Encounter_Hyper_Wave30_1"
+	{
+		"en"		"Let me introduce you to my best friend......{azure}the Moon."
+		"ko"		"아무래도 너희들에게 내 베스트 프렌드를 소개해줘야 할 것 같군... {azure}저 달을 봐라."
+	}
+	"Blitzkrieg_Encounter_Hyper_Wave30_2"
+	{
+		"en"		"You're all a bunch of annoying mercs, aren't you."
+		"ko"		"내 앞에서 숨 쉬고 있는 너희를 보니... 화가 치밀어 오르는군."
+	}
+	"Blitzkrieg_Encounter_Hyper_Wave30_3"
+	{
+		"en"		"Let's just get this over with."
+		"ko"		"그냥 빨리 끝내주도록 하지."
+	}
+	
+	"Blitzkrieg_Encounter_Hyper_Final_1"
+	{
+		"en"		"This is the end for you. {crimson}NO MORE RUNNING."
+		"ko"		"여기가 너희들의 끝이다! {crimson}더 이상 도망갈 곳도 없지."
+	}
+	"Blitzkrieg_Encounter_Hyper_Final_2"
+	{
+		"en"		"Your hubris will eventually {crimson} fail you."
+		"ko"		"너희들의 오만함이 결국 너희를 {crimson}패배하게 할 것이다."
+	}
+	"Blitzkrieg_Encounter_Hyper_Final_3"
+	{
+		"en"		"POWER LIMITER: DISABLED{crimson} GOOD LUCK.{default}."
+		"ko"		"파워 리미터: 비활성화{crimson} 행운이라도 빌어보게나. 하하하!!!{default}."
+	}
+	
+	"Blitzkrieg_LastMann_TrueForm_1"
+	{
+		"en"		"BISTE AUßER PUSTE? VERRECK!"
+		"ko"		"지쳤냐? 그럼 그대로 뒈져버려!!"
+	}
+	"Blitzkrieg_LastMann_TrueForm_2"
+	{
+		"en"		"NA WIE GEHTS DIE ALEINE {crimson}HMMMMMMMMMM?"
+		"ko"		"이제 널 어떻게 요리해야할까? {crimson}흐으으으음?"
+	}
+	"Blitzkrieg_LastMann_TrueForm_3"
+	{
+		"en"		"DU BIST EIN DRECKES FAKE, {crimson}GIB AUF!"
+		"ko"		"멍청한 인간들아, {crimson}파멸을 맞이해라!!!"
+	}
+	"Blitzkrieg_LastMann_TrueForm_4"
+	{
+		"en"		"DIE WAHRE KRAFT DER ALLIANCE!!!{crimson} IST HIIIIIIIIIIIERRRR!!"
+		"ko"		"연합의 진정한 힘이{crimson} 드디어 승리했도다!!"
+	}
+	"Blitzkrieg_LastMann_TrueForm_5"
+	{
+		"en"		"{crimson}KOMM HER!!! HAU NICHT AB DU WEICHEI!"
+		"ko"		"{crimson}어차피 죽을 건데 뭐 이리 도망을 치는거냐!!!!"
+	}
+	
+	"Blitzkrieg_LastMann_Hyper_1"
+	{
+		"en"		"Unlike you filthy organics, I do not require oxygen to live."
+		"ko"		"너희 유기체들은 살아남으려면 산소가 필요했었지? 나에겐 그딴 건 필요없다. 나는 너희와 차원이 다른 존재니까."
+	}
+	"Blitzkrieg_LastMann_Hyper_2"
+	{
+		"en"		"How does it feel to be {crimson} all alone?"
+		"ko"		"그래, {crimson}혼자 남는 기분이 어떠냐?"
+	}
+	"Blitzkrieg_LastMann_Hyper_3"
+	{
+		"en"		"There is no hope for you.{crimson}Yield before I break you."
+		"ko"		"희망을 버려라. {crimson}죽기 전에 항복을 권하지."
+	}
+	"Blitzkrieg_LastMann_Hyper_4"
+	{
+		"en"		"Death comes for{crimson} YOU."
+		"ko"		"{crimson}네 죽음이 다가오고 있다..."
+	}
+	"Blitzkrieg_LastMann_Hyper_5"
+	{
+		"en"		"All your friends have already{crimson} perished. You're next."
+		"ko"		"네 친구들은 이미 {crimson}죽었다. 다음 차례는 너다."
+	}
+	
+	"Blitzkrieg_LastMann_1"
+	{
+		"en"		"Only one human remains."
+		"ko"		"단 한 놈 남았다."
+	}
+	"Blitzkrieg_LastMann_2"
+	{
+		"en"		"Steel triumphs flesh it seems."
+		"ko"		"기계의 승리가 드리우고 있군..."
+	}
+	"Blitzkrieg_LastMann_3"
+	{
+		"en"		"You are hopeless."
+		"ko"		"희망을 버려라."
+	}
+	"Blitzkrieg_LastMann_4"
+	{
+		"en"		"Your death is{crimson} Inevitable."
+		"ko"		"{crimson}넌 죽음을 피할 수 없다."
+	}
+	"Blitzkrieg_LastMann_5"
+	{
+		"en"		"All your friends have already{crimson} perished. You're next."
+		"ko"		"네 친구들은 이미 {crimson}죽었다. 다음 차례는 너다."
+	}
+	
+	"Blitzkrieg_Lose_TrueForm_1"
+	{
+		"en"		"Willste NOCHMAL versuchen? HMMMMM????"
+		"ko"		"다시 해볼 생각이냐? 흐으음????"
+	}
+	"Blitzkrieg_Lose_TrueForm_2"
+	{
+		"en"		"GIBSTE SCHON AUF? TRAURIG."
+		"ko"		"벌써 포기하겠다고? 쓰레기 같은 것들!"
+	}
+	
+	"Blitzkrieg_Lose_Hyper_1"
+	{
+		"en"		"Onto the rest of the {crimson}planet."
+		"ko"		"이제 {crimson}지구{default}만 남았군."
+	}
+	"Blitzkrieg_Lose_Hyper_2"
+	{
+		"en"		"Breathing is optional, {crimson}but not for you."
+		"ko"		"아래의 유기체들이 구차하게 명을 이어갈지 말지는 자유지만, {crimson}네 놈들은 안돼."
+	}
+	
+	"Blitzkrieg_Lose_1"
+	{
+		"en"		"{crimson}Annihilated."
+		"ko"		"{crimson}말살 완료."
+	}
+	"Blitzkrieg_Lose_2"
+	{
+		"en"		"Hopeless scrap."
+		"ko"		"가망 없는 쓰레기들."
+	}
+	"Blitzkrieg_Lose_3"
+	{
+		"en"		"Such {crimson}pathetic {default} weaponry."
+		"ko"		"{crimson}원시시대만도 못 한 것들!"
+	}
+	"Blitzkrieg_Lose_4"
+	{
+		"en"		"Your death is{crimson} Inevitable."
+		"ko"		"{crimson}넌 죽음을 피할 수 없다."
+	}
+	
+	"Blitzkrieg_TimeOver_1"
+	{
+		"en"		"It's already {crimson}too late,{default} my army has arrived..."
+		"ko"		"{crimson}너무 늦었다.{default} 이미 나의 군대가 이 곳에 도착했거든..."
+	}
+	"Blitzkrieg_TimeOver_2"
+	{
+		"en"		"My army has you surrounded from all sides, {crimson}surrender{default} or perish."
+		"ko"		"선택해라. {crimson}항복,{default} 아니면 죽음."
+	}
+	"Blitzkrieg_TimeOver_3"
+	{
+		"en"		"My army can always use {crimson}excellent specimens{default} like you."
+		"ko"		"나의 군대에 너희 같은 {crimson}훌륭한 인재{default}는 언제나 환영이지. 거부권은 없네."
+	}
+	
+	"Blitzkrieg_Draw_IonCannon_Hyper_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Have a gift from yours truly {yellow}{1}{default}!"
+		"ko"		"널 위한 작은 선물이다, {yellow}{1}{default}!"
+	}
+	"Blitzkrieg_Draw_IonCannon_Hyper_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Lookout above {yellow}{1}{default}!"
+		"ko"		"네 위를 봐라, {yellow}{1}{default}!"
+	}
+	"Blitzkrieg_Draw_IonCannon_Hyper_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"A present for {yellow}{1}{default}!"
+		"ko"		"{yellow}{1}{default}를 위한 선물이지!"
+	}
+	"Blitzkrieg_Draw_IonCannon_Hyper_4"
+	{
+		"#format"	"{1:N}"
+		"en"		"Move along now, {yellow}{1}{default}!"
+		"ko"		"도망쳐 봐라, {yellow}{1}{default}!"
+	}
+	
+	"Blitzkrieg_LifeLoss_TrueForm_1"
+	{
+		"en"		"DAS WARS NOCH NET!"
+		"ko"		"이게 전부가 아니다!!!"
+	}
+	"Blitzkrieg_LifeLoss_TrueForm_2"
+	{
+		"en"		"ICH KILL DICH!"
+		"ko"		"널 찢어발겨주마!!!"
+	}
+	"Blitzkrieg_LifeLoss_TrueForm_3"
+	{
+		"en"		"AAAAAAHHHHHAAAAAAAAAAAAAAAA!"
+		"ko"		"하하하하하!!!"
+	}
+	"Blitzkrieg_LifeLoss_TrueForm_4"
+	{
+		"en"		"ICH WERD DEIN DRECKS KOPF ZERSTÜCKELN!"
+		"ko"		"네 역겨운 머리통을 몸과 분리시켜주마!!!"
+	}
+	
+	"Blitzkrieg_Final_LifeLoss_TrueForm_1"
+	{
+		"en"		"{crimson}FRISS DAS!!!"
+		"ko"		"{crimson}이거나 먹어라!!!"
+	}
+	"Blitzkrieg_Final_LifeLoss_TrueForm_2"
+	{
+		"en"		"{crimson}KOMMSTE NOCH KLAR DIGGA???"
+		"ko"		"{crimson}아직도 살아있는거냐???"
+	}
+	"Blitzkrieg_Final_LifeLoss_TrueForm_3"
+	{
+		"en"		"{crimson}DIE TECHNOLOGIE DER EXPIDONSANS IST DIE BESTE!!!!!"
+		"ko"		"{crimson}엑스피돈사의 기술력은 세계 제일!!!"
+	}
+	
+	"Blitzkrieg_Final_LifeLoss_Hyper_1"
+	{
+		"en"		"{crimson}Here's a fun fact, the atmosphere drastically lowers the potential of this attack... Guess what space lacks!"
+		"ko"		"{crimson}재밌는 걸 하나 알려주지, 대기 중에선 이 공격의 위력은 굉장히 약해지지. 우주엔 뭐가 없는지 맞혀봐라!"
+	}
+	"Blitzkrieg_Final_LifeLoss_Hyper_2"
+	{
+		"en"		"{crimson}MUHAHAHAHAHAH!"
+		"ko"		"{crimson}음하하하하하!!"
+	}
+	"Blitzkrieg_Final_LifeLoss_Hyper_3"
+	{
+		"en"		"{crimson}THE {aqua}TRUE{default} POWER OF {azure}THE MOON, IN THE PALMS OF MY HANDS!"
+		"ko"		"{aqua}진정한 {azure}달{crimson}의 힘이 내 손 안에 있다!!!"
+	}
+	"Blitzkrieg_Final_LifeLoss_Hyper_4"
+	{
+		"en"		"{crimson}MY POWER TRANSCENDS ANYTHING YOU ORGANICS COULD EVEN COMPREHEND!"
+		"ko"		"{crimson}내 힘은 너희 같은 유기체가 이해할 수 있는 영역을 초월했다!!!"
+	}
+	
+	"Blitzkrieg_First_LifeLoss_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"This is only just the beginning {yellow}{1}{default}!"
+		"ko"		"이건 그냥 시작일 뿐이라고, {yellow}{1}{default}!"
+	}
+	"Blitzkrieg_First_LifeLoss_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"You think this is the end {yellow}{1}{default}?"
+		"ko"		"이게 정말 끝일거라 생각하나, {yellow}{1}{default}?"
+	}
+	"Blitzkrieg_First_LifeLoss_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"YOU FOOL {yellow}{1}{default}!"
+		"ko"		"넌 너무 어리석군, {yellow}{1}{default}!"
+	}
+	"Blitzkrieg_First_LifeLoss_4"
+	{
+		"#format"	"{1:N}"
+		"en"		"There's plenty more where that came from {yellow}{1}{default}!"
+		"ko"		"아직 끝난게 아니다, {yellow}{1}{default}!"
+	}
+	
+	"Blitzkrieg_Second_LifeLoss_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Don't get too cocky {yellow}{1}{default}!"
+		"ko"		"아직 자만하면 안 되지, {yellow}{1}{default}!"
+	}
+	"Blitzkrieg_Second_LifeLoss_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Thy end is near {yellow}{1}{default}!"
+		"ko"		"네 종말이 다가오고 있다, {yellow}{1}{default}!"
+	}
+	"Blitzkrieg_Second_LifeLoss_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"{yellow}{1}{default} are you sure you want to proceed further??"
+		"ko"		"{yellow}{1}{default}, 정말로 계속 버티려는거냐?"
+	}
+	"Blitzkrieg_Second_LifeLoss_4"
+	{
+		"#format"	"{1:N}"
+		"en"		"There's plenty more where that came from {yellow}{1}{default}!"
+		"ko"		"네가 점점 더 흥미로워지는군, {yellow}{1}{default}!"
+	}
+	
+	"Blitzkrieg_Third_LifeLoss_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Your own hubris has lead to this. {yellow}{1}{default}, prepare for complete {crimson}BLITZKRIEG."
+		"ko"		"너의 자만심이 여기까지 오게 만든 거다, {yellow}{1}{default}. 기대해라. 진정한 {crimson}전격전{default}을."
+	}
+	"Blitzkrieg_Third_LifeLoss_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Thy end is {crimson} Now {yellow}{1}{default}. Thou shall feel true {crimson}BLITZKRIEG."
+		"ko"		"네 종말이 {crimson}코 앞이다{default}, {yellow}{1}{default}... 진정한 {crimson}전격전{default}을 기대해라!"
+	}
+	"Blitzkrieg_Third_LifeLoss_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"You've really done it now...... {crimson} ITS TIME TO DIE. {yellow}{1} {crimson}PREPARE FOR FULL BLITZKRIEG."
+		"ko"		"슬슬 감이 오나? {crimson}이제 죽을 시간이다. {yellow}{1}{default}! {crimson}전격전을 맞이하라."
+	}
+	"Blitzkrieg_Third_LifeLoss_4"
+	{
+		"#format"	"{1:N}"
+		"en"		"You cannot hope to stop {crimson}BLITZKRIEG{default} with such lackluster weaponry {yellow}{1}{default}!"
+		"ko"		"그런 조잡한 무기로 {crimson}전격전{default}을 막을 수 있으리란 희망은 버려라. {yellow}{1}{default}!"
+	}
+	
+	"Blitzkrieg_Final_LifeLoss_1"
+	{
+		"en"		"{crimson}I AM A GOD."
+		"ko"		"{crimson}나는 신이다."
+	}
+	"Blitzkrieg_Final_LifeLoss_2"
+	{
+		"en"		"{crimson}THY PUNISHMENT IS DEATH."
+		"ko"		"{crimson}너희들에게 내릴 벌은 죽음이다."
+	}
+	"Blitzkrieg_Final_LifeLoss_3"
+	{
+		"en"		"{crimson}RUNNING WILL ONLY DELAY THE INEVITABLE."
+		"ko"		"{crimson}도망치는 건 필연적인 죽음을 미룰 뿐이지."
+	}
+	
+	"Blitzkrieg_Spawn_Minion_Wave30"
+	{
+		"en"		"The minions have joined the battle."
+		"ko"		"하수인들이 이 곳에 도착했군."
+	}
+	"Blitzkrieg_Spawn_Minion_Final"
+	{
+		"en"		"And now its those two's turn."
+		"ko"		"이제 너희 둘의 차례다."
+	}
+	
+	"Blitzkrieg_Death_TrueForm_1"
+	{
+		"en"		"MISST!"
+		"ko"		"젠장!"
+	}
+	"Blitzkrieg_Death_TrueForm_2"
+	{
+		"en"		"ICH KRIEG DICH NOCH!"
+		"ko"		"너희를 반드시 죽여버리겠다!"
+	}
+	
+	"Blitzkrieg_Death_Final_1"
+	{
+		"en"		"NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"
+		"ko"		"안 돼!!!!!!!!!!!!!!!!!!!!!!"
+	}
+	"Blitzkrieg_Death_Final_2"
+	{
+		"en"		"error"
+		"ko"		"오류 발생"
+	}
+	
+	"Blitzkrieg_Death_Hyper_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Next time you won't be this lucky, {yellow}{1}{default}. {crimson}Next time."
+		"ko"		"다음 번엔 그리 쉽지 않을 거다, {yellow}{1}{default}. {crimson}다음엔 말이지."
+	}
+	"Blitzkrieg_Death_Hyper_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Will you ever be this lucky again {yellow}{1}{default}? Will{crimson} you?"
+		"ko"		"이번에도 운이 좋았군, {yellow}{1}{default}. {crimson}그렇지?"
+	}
+	"Blitzkrieg_Death_Hyper_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"I pity you {yellow}%N{crimson}. Because next time I'll come back stronger."
+		"ko"		"{yellow}{1}{default}, 너가 안타깝군. {crimson}왜냐하면 내가 더 강력해져서 돌아올테니까."
+	}
+	
+	"Blitzkrieg_Death_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"No..... this... cannot be. You win this time, {yellow}{1}{default}. {crimson}this time."
+		"ko"		"이런, 이번에는 너의 승리다. {yellow}{1}{default}. {crimson}이번엔 말이지."
+	}
+	"Blitzkrieg_Death_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"It seems I've failed to best you {yellow}%N{default}."
+		"ko"		"내가 네 놈에게 최선을 다하지 못한거 같군, {yellow}{1}{default}."
+	}
+	"Blitzkrieg_Death_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"HOW {yellow}{1}{default}. How did you beat me before my army could arrive. {crimson}...Doesn't matter,{default} there's always a next time..."
+		"ko"		"어떻게 한거지, {yellow}{1}{default}? 어떻게 내 군대가 도착하기 전에 나를 쓰러트린 거냐? {crimson}...그건 중요하지 않지.{default} 항상 다음 기회가 있는 법이니."
+	}
+	"Blitzkrieg_Death_4"
+	{
+		"#format"	"{1:N}"
+		"en"		"I'll be back for you {yellow}{1}{default}."
+		"ko"		"다음에 두고 보자고, {yellow}{1}{default}."
+	}
+	
+	// Fake Kahml.
+	"FakeKahml_SpecialAttack"
+	{
+		"en"		"{crimson}I Will BREAK YOU."
+		"ko"		"{crimson}널 박살내주마."
+	}
+	"FakeKahml_NanoMachineStart"
+	{
+		"en"		"I don't have time for this."
+		"ko"		"이러고 있을 시간이 없다."
+	}
+	"FakeKahml_NanoMachineEnd"
+	{
+		"en"		"You Lived, Good work."
+		"ko"		"살아남았군. 훌륭하다."
+	}
+	"FakeKahml_Death"
+	{
+		"en"		"You're boring me. I'm leaving."
+		"ko"		"점점 지겹군. 잘 있어라."
+	}
+	
+	// Donnerkrieg.
+	"Donnerkrieg_Encounter"
+	{
+		"en"		"I have arrived to render judgement."
+		"ko"		"심판을 내리기 위해 이 곳에 왔다."
+	}
+	
+	"Donnerkrieg_Win_1"
+	{
+		"en"		"Wait no, please stop."
+		"ko"		"아니, 잠깐! 멈춰!"
+	}
+	"Donnerkrieg_Win_2"
+	{
+		"en"		"You stopped The rouge machine."
+		"ko"		"너희가 저 미친 기계를 드디어 저지해냈어."
+	}
+	"Donnerkrieg_Win_3"
+	{
+		"en"		"We don't have to fight anymore, for you see..."
+		"ko"		"보다시피 우린 이제 싸울 필요가 없어..."
+	}
+	"Donnerkrieg_Win_4"
+	{
+		"en"		"We had no choice."
+		"ko"		"우리에겐 선택의 여지가 없었어."
+	}
+	"Donnerkrieg_Win_5"
+	{
+		"en"		"If we hadn't complied he would have destroyed us."
+		"ko"		"만약 그를 따르지 않았다면, 분명 우리를 죽였을 거야."
+	}
+	"Donnerkrieg_Win_6"
+	{
+		"en"		"The corruption had fully gotten to him."
+		"ko"		"아무래도 저 기계에도 혼돈이 잠식되었던 거 같아."
+	}
+	"Donnerkrieg_Win_7"
+	{
+		"en"		"However, that doesn't matter anymore."
+		"ko"		"이젠 상관없는 일이 되었지만."
+	}
+	"Donnerkrieg_Win_8"
+	{
+		"en"		"With Blitzkrieg gone, the army has been set free, and so..."
+		"ko"		"블리츠크리그도 사라졌으니, 그의 수하들도 전부 자유의 몸이 됐어..."
+	}
+	"Donnerkrieg_Win_9"
+	{
+		"en"		"Blitzkrieg's army is happy to serve you as thanks for setting us free..."
+		"ko"		"우리를 자유의 몸으로 만들어줬으니, 그의 군대는 이제 너희를 따를 거야."
+	}
+	"Donnerkrieg_Win_10"
+	{
+		"en"		"Oh also our true names are, {aqua}Stella{snow}, that's me."
+		"ko"		"아, 그리고 우리 진짜 이름을 알려줄게. 나는 {aqua}스텔라{snow}야."
+	}
+	"Donnerkrieg_Win_11"
+	{
+		"en"		"And he's {crimson}Karlas{snow}!"
+		"ko"		"그리고 이 쪽은 {crimson}카를라스{snow}야!"
+	}
+	
+	"Donnerkrieg_Ready_NightmareCannon_1"
+	{
+		"en"		"{crimson}That's it, {default}I'm going to kill you."
+		"ko"		"{crimson}더 이상 못 참겠군.{default} 너희 모두 죽여주마."
+	}
+	"Donnerkrieg_Ready_NightmareCannon_2"
+	{
+		"en"		"{crimson}Hm, {default}wonder how this will end..."
+		"ko"		"{crimson}흠, {default}어떻게 끝이 날지 참 기대되는군..."
+	}
+	"Donnerkrieg_Ready_NightmareCannon_3"
+	{
+		"en"		"{crimson}PREPARE {default}Thyself, {yellow}Judgement {default}is near."
+		"ko"		"{crimson}각오해라, {yellow}심판이 {default}멀지 않았다."
+	}
+	"Donnerkrieg_Ready_NightmareCannon_4"
+	{
+		"en"		"Just thinking about recharging this gives me a headache."
+		"ko"		"이걸 재충전할 생각을 하니 머리가 아프군..."
+	}
+	"Donnerkrieg_Ready_NightmareCannon_5"
+	{
+		"en"		"Ya know, I'm getting quite bored of {crimson}this."
+		"ko"		"이 싸움이 점점 {crimson}지겨워지고 있는 걸."
+	}
+	
+	"Donnerkrieg_Ready_NightmareCannon_Special_1"
+	{
+		"en"		"Oh not again, now train's gone and {crimson}left{default}."
+		"ko"		"아 이런, 이제 집으로 돌아갈 기차는 이미 떠나버렸네."
+	}
+	"Donnerkrieg_Ready_NightmareCannon_Special_2"
+	{
+		"en"		"Aiming this thing is actually quite {crimson}complex {default}ya know."
+		"ko"		"이걸 조준하는 건 꽤나 {crimson}복잡한{default} 일이라고."
+	}
+	
+	"Donnerkrieg_NightmareCannon_1"
+	{
+		"en"		"{crimson}NIGHTMARE, CANNON!"
+		"ko"		"{crimson}악몽포 전개!"
+	}
+	"Donnerkrieg_NightmareCannon_2"
+	{
+		"en"		"{crimson}JUDGEMENT BE UPON THEE!"
+		"ko"		"{crimson}저들에게 죽음을!"
+	}
+	"Donnerkrieg_NightmareCannon_3"
+	{
+		"en"		"{crimson}Annihilation"
+		"ko"		"{crimson}섬멸 개시!"
+	}
+	
+	"Donnerkrieg_NightmareCannon_Special_1"
+	{
+		"en"		"{crimson}And the city's too far to walk to the end while I..."
+		"ko"		"걸어서 돌아가기엔 너무 {purple}먼 곳{default}인데... 특히 내가.."
+	}
+	"Donnerkrieg_NightmareCannon_Special_2"
+	{
+		"en"		"However it's still{crimson} worth the effort."
+		"ko"		"하지만 {crimson}충분히 그럴 가치가 있지."
+	}
+	
+	// Shared.
+	"Blitzkrieg_Trophies"
+	{
+		"en"		"{default}Leaving the two of them behind, you picked up something glowing from the machine's wreckage... {crimson}''Blitzkrieg's destroyed Core''{default}!"
+		"ko"		"{default}그 둘을 뒤로 하고, 기계의 잔해 속에서 빛나는 무언가를 집었습니다... {crimson}''블리츠크리그의 파괴된 코어''{default}!"
+	}
+	"Blitzkrieg_Trophies_2"
+	{
+		"en"		"{default}You now have access to: {crimson}''Blitzkrieg's Army''{default}!"
+		"ko"		"{crimson}''블리츠크리그의 군대''{default}는 이제 당신의 명령을 따릅니다!"
+	}
+	"Blitzkrieg_Hyper_Trophies"
+	{
+		"en"		"{default}You have foiled a sinister plot on the Moon... Among the wreckage, only an unstable core continues to glow. {crimson}''Blitzkrieg's Hyper Charged Core''{default}!"
+		"ko"		"{default}달에서의 사악한 음모를 저지했습니다... 잔해 속엔 불안정한 코어만이 빛나고 있군요. {crimson}''블리츠크리그의 과충전된 코어''{default}!"
+	}
+	
+	// Calmaticus.
+	"Calmaticus_Encounter"
+	{
+		"en"		"You all will be one with the virus."
+		"ko"		"너희도 감염체가 될 것이다."
+	}
+	"Calmaticus_Encounter_Enraged"
+	{
+		"en"		"YOU WILL BECOME DNA SUPPLEMENTS."
+		"ko"		"너희는 DNA 공급원이 될 것이다."
+	}
+	
+	"Calmaticus_Lose"
+	{
+		"en"		"{snow}???{default}: Good job Calmaticus, head back to the lab."
+		"ko"		"{snow}???{default}: 아주 잘 했다, 칼마티커스. 이제 연구소로 돌아와라."
+	}
+	"Calmaticus_Lose_Enraged"
+	{
+		"en"		"{crimson}You afterall... had no chance."
+		"ko"		"{crimson}결국... 당신들에겐 승산이 없었던 거야."
+	}
+	
+	"Calmaticus_Trophies"
+	{
+		"en"		"You cut its heart to ensure his death and gained: {green}''Calmaticus' Heart Piece''{default}!"
+		"ko"		"당신은 그의 확인 사살을 위해 심장을 떼어냈습니다. 당신이 얻은 것은... {green}''칼마티커스'의 심장 조각''{default}!"
+	}
+	
+	// Vivithorn.
+	"Vivithorn_Encounter"
+	{
+		"en"		"..."
+		"ko"		"..."
+	}
+	"Vivithorn_FirstMatch_Death"
+	{
+		"en"		"I have to activate Project Calmaticus..."
+		"ko"		"칼마티커스 프로젝트를 가동시킬 때가 왔군..."
+	}
+	"Vivithorn_Rematch_Death"
+	{
+		"en"		"{green}Vivithorn escapes... but heavily wounded..."
+		"ko"		"{green}비비쏜이 도주했습니다... 중상을 입은 채로 말이죠..."
+	}
+	
+	// Xeno Duo Shared
+	"XenoDuo_LastMann"
+	{
+		"en"		"{green}The infection got all your friends... Run while you can."
+		"ko"		"{green}감염이 당신의 동료를 전부 집어삼키고 말았습니다... 가능하면 도망치세요."
+	}
+	"XenoDuo_TimeOver"
+	{
+		"en"		"{green}The infection proves too strong for you to resist as you join his side..."
+		"ko"		"{green}감염은 저항하기엔 너무나도 강력했습니다. 이제 그들과 같아져 버렸군요..."
+	}
+	
+	// God Alaxios.
+	"God_Alaxios_Sea_Death_Throes_1"
+	{
+		"en"		"{lightblue}God Alaxios stands down... he is free..."
+		"ko"		"{lightblue}알락시오스가 무릎을 꿇습니다... 그는 이제 잠식으로부터 자유로워졌습니다..."
+	}
+	"God_Alaxios_Sea_Death_Throes_2"
+	{
+		"en"		"{lightblue}...?"
+		"ko"		"{lightblue}...?"
+	}
+	"God_Alaxios_Sea_Death_Throes_3"
+	{
+		"en"		"{lightblue}...!?!?!?"
+		"ko"		"{lightblue}...!?!?!?"
+	}
+	"God_Alaxios_Sea_Death_Throes_4"
+	{
+		"en"		"{lightblue}!"
+		"ko"		"{lightblue}!"
+	}
+	"God_Alaxios_Sea_Death_Throes_5"
+	{
+		"en"		"{crimson}The infection won't let go. It wants him the most."
+		"ko"		"{crimson}세상에. 바다는 그를 놓아주지 않았습니다. 오히려 그가 더 날뛰길 원하고 있습니다."
+	}
+	
+	"God_Alaxios_Sea_LastMann_1"
+	{
+		"en"		"{crimson}STOP BEING SO WEAK, HELP ME!!!!!"
+		"ko"		"{crimson}아직 죽으면 안돼, 제발. 날 죽여줘!!!!!"
+	}
+	"God_Alaxios_Sea_LastMann_2"
+	{
+		"en"		"{crimson}I'M UNDER CONTROL, HELP ME....."
+		"ko"		"{crimson}내 몸이 조종당하고 있어, 도와다오....."
+	}
+	"God_Alaxios_Sea_LastMann_3"
+	{
+		"en"		"{crimson}THIS THING IS TOO MUCH, HELP!!!!!!!!!"
+		"ko"		"{crimson}머리가 깨질 것만 같다!!!! 제발 나를 도와줘!!!"
+	}
+	"God_Alaxios_LastMann_1"
+	{
+		"en"		"You have no chance alone!"
+		"ko"		"너 혼자서는 아무것도 하지 못 한다!"
+	}
+	"God_Alaxios_LastMann_2"
+	{
+		"en"		"Your weaponry frails in comparison to Atlantis!!"
+		"ko"		"너의 무기술은 아틀란티스에 비하면 허약하다!!"
+	}
+	"God_Alaxios_LastMann_3"
+	{
+		"en"		"Consider surrendering?!"
+		"ko"		"지금 항복할텐가?!"
+	}
+	
+	"God_Alaxios_TimeOver"
+	{
+		"en"		"No.. No No!! They are coming, prepare to fight together NOW!!!"
+		"ko"		"안 돼... 놈들이 온다, 모두 전투 준비!!! 너희도 저들과 맞서 싸워야 한다!!"
+	}
+	"God_Alaxios_Sea_TimeOver"
+	{
+		"en"		"{green}The Xeno infection sides with you...??!\nSuddenly a battle ensues between Xeno and the Sea infection with Alaxios in possession.."
+		"ko"		"{green}제노 감염체들이... 당신의 편을 들기 시작했습니다...??!\n갑자기 제노 감염체와 감염된 알락시오스가 이끄는 시테러 감염체들이 싸우기 시작합니다.."
+	}
+	
+	"God_Alaxios_Win"
+	{
+		"en"		"{crimson}EEEEEEEEEEEEEEENOOOOOOOOUGH!!!"
+		"ko"		"{crimson}이제 그만!!!!!!!!"
+	}
+	"God_Alaxios_Win_1"
+	{
+		"en"		"I will NOT tolerate this dispute any longer!"
+		"ko"		"이 부질 없는 싸움을 더는 용납할 수 없다!"
+	}
+	"God_Alaxios_Win_2"
+	{
+		"en"		"You have to understand, WE have a {blue}common enemy{default}, and that is {blue}Dweller{default}."
+		"ko"		"반드시 이해해둬라. 너네가 생각하는 {blue}공공의 적{default}은 우리가 아니다. 진짜 적은 {blue}드웰러{default}지."
+	}
+	"God_Alaxios_Win_3"
+	{
+		"en"		"More wars with each other means more opportunity for them to rise."
+		"ko"		"우리가 이렇게 서로 싸우기만 할수록, 그 놈들에게 더 성장할 기회만 주는 꼴이지."
+	}
+	"God_Alaxios_Win_4"
+	{
+		"en"		"And whilst I am immortal and my army unkillable, we are not incorruptible."
+		"ko"		"비록 나와 내 군대는 불멸의 존재이더라도, 그들에게 잠식당하는 것까지는 버틸 수는 없다."
+	}
+	"God_Alaxios_Win_5"
+	{
+		"en"		"However, I saw your prowess and your abilities."
+		"ko"		"하지만, 너희의 능력과 힘을 지금 여기서 느꼈다."
+	}
+	"God_Alaxios_Win_6"
+	{
+		"en"		"You can wield {blue}Dweller's{default} weapons without succumbing to their corruption, from what I can see at least..."
+		"ko"		"너라면 {blue}드웰러{default}의 무기조차도 아무 이상 없이 다룰 수 있을 것이다. 잠식조차 되지 않을테니..."
+	}
+	"God_Alaxios_Win_7"
+	{
+		"en"		"As such, we need your aid. YOU are our greatest opportunity to cleanse this world of watery horrors."
+		"ko"		"그래서 너희의 도움이 필요하다. 너희들이야말로 이 세계를 심해 속 공포로부터 정화할 수 있는 가장 큰 대항책이다."
+	}
+	"God_Alaxios_Win_8"
+	{
+		"en"		"Of course, we will support you as much as we can. As one, we will thrive once again."
+		"ko"		"물론 우리도 최선을 다해 너희를 지원할 것이다. 우리는 하나되어 다시 번영하게 되리라."
+	}
+	"God_Alaxios_Win_9"
+	{
+		"en"		"When you invade them, we will make sure that their main forces are distracted by us."
+		"ko"		"너희가 그 놈들 사이로 침투하면, 우리가 그 놈들의 주력 병력의 시선을 끌겠다."
+	}
+	"God_Alaxios_Win_10"
+	{
+		"en"		"ALL HAIL THE MERCENARIES!! {crimson}FOR ATLANTISSSSS!!!!!!!!!!!!!!"
+		"ko"		"용병들이여 만세!!! {crimson}아틀란티스를 위해!!!!"
+	}
+	
+	"God_Alaxios_Trophies"
+	{
+		"en"		"{default}You feel something around you... and gained: {lightblue}''Alaxios's Godly assistance''{default}!"
+		"ko"		"{default}무언가 알 수 없는 찬란한 기운이 감돕니다... 당신이 얻은 것: {lightblue}''알락시오스의 신성한 축복''{default}!"
+	}
+	"God_Alaxios_Sea_Trophies"
+	{
+		"en"		"{default}Only traces left behind by the sea remain where he once stood... You obtained: {blue}''Flesh and Bones of the Corrupted God''{default}."
+		"ko"		"{default}그가 있던 곳에 바다가 만들어낸 흔적만이 남았습니다... 당신이 얻은 것: {blue}''잠식된 신의 살과 뼈''{default}."
+	}
+	
+	"God_Alaxios_Death_1"
+	{
+		"en"		"I have failed Atlantis..."
+		"ko"		"아틀란티스를 지키는데 실패하다니..."
+	}
+	"God_Alaxios_Death_2"
+	{
+		"en"		"How was my army defeated..?"
+		"ko"		"우리의 군대가 패퇴했단 말인가..?"
+	}
+	"God_Alaxios_Death_3"
+	{
+		"en"		"You don't know what you are doing!"
+		"ko"		"네 놈이 지금 뭘 하고 있는지 알고는 있나!"
+	}
+	"God_Alaxios_Death_4"
+	{
+		"en"		"We should be fighting together, not against each other, the {blue}sea{default} will be your doom..."
+		"ko"		"우린 서로 협력해야만 했다. 이렇게 싸우는게 아니라. {blue}바다가{default} 네 파멸을 가져오리라..."
+	}
+	"God_Alaxios_Sea_Death_1"
+	{
+		"en"		"I'm.. I'm free..?"
+		"ko"		"드디어.. 자유인 건가..?"
+	}
+	"God_Alaxios_Sea_Death_2"
+	{
+		"en"		"{lightblue}God Alaxios instantly leaves the battlefield... you couldn't even trace him."
+		"ko"		"{lightblue}갓 알락시오스가 미친듯이 전장을 뛰쳐나갑니다... 그를 따라갈 수조차 없을 정도로."
+	}
+	
+	"God_Alaxios_Sea_Summon_1"
+	{
+		"en"		"{lightblue}God Alaxios calls upon the infected."
+		"ko"		"{lightblue}갓 알락시오스가 잠식된 자들을 불러냅니다."
+	}
+	"God_Alaxios_Sea_Summon_2"
+	{
+		"en"		"{lightblue}God Alaxios attracts nearby creatures."
+		"ko"		"{lightblue}갓 알락시오스가 주변의 생명체들을 이끌어오고 있습니다..."
+	}
+	"God_Alaxios_Sea_Summon_3"
+	{
+		"en"		"{lightblue}God Alaxios is reviving dead sea creatures."
+		"ko"		"{lightblue}갓 알락시오스가 죽은 바다의 생명체들을 되살려냅니다..."
+	}
+	"God_Alaxios_Sea_Summon_4"
+	{
+		"en"		"{lightblue}God Alaxios is never alone, infected or not..."
+		"ko"		"{lightblue}갓 알락시오스에겐 늘 같이 싸울 전우가 있었습니다. 잠식된 후에도 말이죠..."
+	}
+	"God_Alaxios_Summon_1"
+	{
+		"en"		"You don't know the dangers you're getting yourself into fighting me and my army at the same time!"
+		"ko"		"넌 모르겠지, 나와 내 군대가 힘을 합치면 얼마나 위험한지를!"
+	}
+	"God_Alaxios_Summon_2"
+	{
+		"en"		"My army will always help me back up!"
+		"ko"		"나의 군대가 나를 도우리라!"
+	}
+	"God_Alaxios_Summon_3"
+	{
+		"en"		"Me and my army, as one, will never be defeated!"
+		"ko"		"나와 내 군대는 하나가 되어 결코 패배하지 않을 것이다!"
+	}
+	"God_Alaxios_Summon_4"
+	{
+		"en"		"Together for Atlantis! As one and for all!"
+		"ko"		"아틀란티스를 위해 뭉치고! 하나가 되어 모두를 위한다!"
+	}
+	
+	"God_Alaxios_Sea_Anger_1"
+	{
+		"en"		"{lightblue}God Alaxios Screams for help..."
+		"ko"		"{lightblue}갓 알락시오스가 도움을 요청하는 비명을 지릅니다..."
+	}
+	"God_Alaxios_Sea_Anger_2"
+	{
+		"en"		"{lightblue}God Alaxios's head is under full control, free him."
+		"ko"		"{lightblue}갓 알락시오스는 지금 몸의 주도권을 완전히 잃었습니다. 그를 구하십시오."
+	}
+	"God_Alaxios_Sea_Anger_3"
+	{
+		"en"		"{lightblue}God Alaxios, even if strong, can't resist everything."
+		"ko"		"{lightblue}갓 알락시오스, 그 강인한 자도 잠식에 저항할 수 없었습니다."
+	}
+	"God_Alaxios_Sea_Anger_4"
+	{
+		"en"		"{lightblue}Free him, help him."
+		"ko"		"{lightblue}그를 도와주십시오."
+	}
+	"God_Alaxios_Anger_1"
+	{
+		"en"		"{crimson}ISVOLI!!!! FOR THE PEOPLE!!!!!!!!!!"
+		"ko"		"{crimson}ISVOLI!!!! 우리 왕국을 위하여!!!!!!!!!!"
+	}
+	"God_Alaxios_Anger_2"
+	{
+		"en"		"{crimson}ISVOLI!!!! FOR ALL THAT IS FORSAKEN!!!!!!!"
+		"ko"		"{crimson}ISVOLI!!!! 잊혀진 자들을 위하여!!!!!!!"
+	}
+	"God_Alaxios_Anger_3"
+	{
+		"en"		"{crimson}ISVOLI!!!! FOR THE FUTURE!!!!!!!"
+		"ko"		"{crimson}ISVOLI!!!! 미래를 위하여!!!!"
+	}
+	"God_Alaxios_Anger_4"
+	{
+		"en"		"{crimson}ISVOLI!!!! FOR ATLANTIS!!!!!!!!!"
+		"ko"		"{crimson}ISVOLI!!!! 아틀란티스를 위하여!!!!"
+	}
+	
+	"God_Alaxios_Sea_Lose_1"
+	{
+		"en"		"{lightblue}... You failed as expected, hopefully the xeno can put an end to the sea-Terror clan."
+		"ko"		"{lightblue}... 예상했던대로, 당신은 실패했습니다. 이젠 제노 감염원이 드웰러 집단을 종식시킬 수 있길 바랄 뿐입니다."
+	}
+	"God_Alaxios_Sea_Lose_2"
+	{
+		"en"		"{crimson}The enemy of my enemy is my ally as they say."
+		"ko"		"{crimson}적의 적은 나의 동맹이라는 말이 있지요."
+	}
+	"God_Alaxios_Sea_Lose_3"
+	{
+		"en"		"{green}You thus offer yourself to the xeno infection to fight it......"
+		"ko"		"{green}드웰러와 맞서 싸우기 위해 당신은 제노를 받아들이고 말았습니다......"
+	}
+	"God_Alaxios_Lose_1"
+	{
+		"en"		"Atlantis will never fall!"
+		"ko"		"아틀란티스는 절대 무너지지 않을 것이다!"
+	}
+	"God_Alaxios_Lose_2"
+	{
+		"en"		"I still have to take care of the {blue}deep sea{default}..."
+		"ko"		"여전히 그 {blue}심해{default} 놈들을 신경 써야만 한다..."
+	}
+	"God_Alaxios_Lose_3"
+	{
+		"en"		"Threaten our livelyhood and you pay!"
+		"ko"		"우리의 생계를 위협하면 이렇게 대가를 치르게 될 것이다!"
+	}
+	"God_Alaxios_Lose_4"
+	{
+		"en"		"I have to inform {blue}Sensal{default} about this."
+		"ko"		"이 사실을 {blue}센살{default}에게 알려야겠군."
+	}
+	
+	// Bob the First.
+	"Bob_The_First_Sea_Encounter_Chaos_Intrusion"
+	{
+		"en"		"The chaos is everywhere, we're too late, join me, dont attack. Prove me your innocence."
+		"ko"		"혼돈이 사방에 있네. 우린 너무 늦었어. 공격을 멈추고, 나와 함께 해라. 너희의 결백을 증명해보도록."
+	}
+	"Bob_The_First_Sea_Fight_Chaos_Intrusion"
+	{
+		"en"		"Nevermind then, you're one of the affected."
+		"ko"		"이런. 너희도 이미 혼돈에 잠식당했군."
+	}
+	
+	"Bob_The_First_Sea_Fight"
+	{
+		"en"		"Stella and Karlas were right. All Firsts, converge on this location."
+		"ko"		"스텔라와 카를라스가 옳았군. 선봉대는 이 곳으로 집결하라."
+	}
+	
+	"Bob_The_First_Sea_Encounter_1"
+	{
+		"en"		"I'll Handle this one."
+		"ko"		"이건 내가 직접 처리하도록 하지."
+	}
+	"Bob_The_First_Sea_Encounter_2"
+	{
+		"en"		"Stella and Karlas, you did enough, stand back."
+		"ko"		"스텔라, 카를라스. 너희는 충분히 잘해줬어. 이제 물러나게."
+	}
+	"Bob_The_First_Sea_Encounter_3"
+	{
+		"en"		"I know enough about infections and its weaknesses to fend you off."
+		"ko"		"나는 지금의 잠식 사태과 그들의 약점에 대해 충분히 알고 있다. 그러니 내가 너희를 막겠다."
+	}
+	"Bob_The_First_Sea_Give_A_Chance"
+	{
+		"en"		"If you haven't been infected, you wouldn't attack me. Prove your innocence."
+		"ko"		"너희가 잠식되지 않았다면, 나를 공격하지는 않겠지. 너희의 결백을 증명해보도록."
+	}
+	
+	"Bob_The_First_Sea_Encounter_Xeno"
+	{
+		"en"		"Have you encountered Alaxios? It seems a horde of Dwellers was attacking this place to escape them."
+		"ko"		"알락시오스를 만났나? 그들을 피해 드웰러 무리가 여기를 공격하고 있었나 보군."
+	}
+	"Bob_The_First_Sea_Encounter_Xeno_1"
+	{
+		"en"		"This place has gone beyond what you can handle. If you stay out of it, we'll take care of things."
+		"ko"		"이 곳은 너희가 감당할 수 있는 선을 넘어섰다. 가만히 있는다면 우리가 처리하도록 하지."
+	}
+	
+	"Bob_The_First_Sea_Fight_Xeno"
+	{
+		"en"		"You are impossible to reason with. Even if you don't deal with this place yourselves, it will soon be engulfed in flames."
+		"ko"		"말이 안 통하는군. 너희가 직접 처리하지 않아도 이 곳은 곧 불바다가 될텐데."
+	}
+	"Bob_The_First_Sea_Coolwin_Xeno_1"
+	{
+		"en"		"Good. I was already having quite a headache after entering the restricted area."
+		"ko"		"좋아. 안 그래도 통제 구역에 들어가서 꽤나 골치아팠던 참이다."
+	}
+	"Bob_The_First_Sea_Coolwin_Xeno_2"
+	{
+		"en"		"According to {gold}him{default}, I heard this place is the {green}Xeno{default} Laboratory..."
+		"ko"		"{gold}그{default}의 말에 따르면, 이 곳이 {green}제노{default} 연구소라고 들었는데..."
+	}
+	"Bob_The_First_Sea_Coolwin_Xeno_3"
+	{
+		"en"		"But I was told you've already been here before. You haven't?"
+		"ko"		"하지만 이 연구소는 이미 너희가 간 적 있다고 들었다. 아니라고?"
+	}
+	"Bob_The_First_Sea_Coolwin_Xeno_4"
+	{
+		"en"		"Then that means there could still be Xenos here... Wait... Don't you hear something?"
+		"ko"		"그럼 이 곳엔 아직 제노가... 잠깐... 무슨 소리가 들리지 않나?"
+	}
+	"Bob_The_First_Sea_Coolwin_Xeno_5"
+	{
+		"en"		"Something's coming! Get ready for battle!"
+		"ko"		"무언가 오고 있다! 전투 준비!"
+	}
+	
+	"Bob_The_First_Real_Name"
+	{
+		"en"		"Bob The First"
+		"ko"		"밥 1세"
+	}
+	
+	"Bob_The_First_Sea_Pistol_Phase"
+	{
+		"#format"	"{1:t}"
+		"en"		"{crimson}{1} uses his immense willpower to regain some strength..."
+		"ko"		"{crimson}{1}이 놀라운 의지력으로 잃어버린 힘을 회복하고 있다..."
+	}
+	"Bob_The_First_Sea_Pistol_Phase_1"
+	{
+		"en"		"Hope my sharp shooting skills will miss your brain, curing is still an option."
+		"ko"		"내 사격이 너희의 머리를 빗겨나가길 빌어라. 치유는 아직 고려 중이니."
+	}
+	"Bob_The_First_Sea_Pistol_Phase_2"
+	{
+		"en"		"If only I could cure it off you with this handgun, have to take lives to save lives."
+		"ko"		"이 권총으로 그걸 치료해낼 수만 있다면 좋을 텐데. 생명을 살리려면 다른 생명을 빼앗아야 한다니."
+	}
+	"Bob_The_First_Sea_Pistol_Phase_3"
+	{
+		"en"		"I'm starting to reach my limit..."
+		"ko"		"나를 한계까지 오게 만드는 군..."
+	}
+	
+	"Bob_The_First_Sea_Pistol_Phase_Xeno"
+	{
+		"en"		"You must have been consumed by the sea as well. There is no longer any other choice but to kill you."
+		"ko"		"너희도 바다에 잠식된 게 틀림없군. 치유는 더 이상 선택 사항이 아니다. 죽일 수밖에."
+	}
+	
+	"Bob_The_First_Sea_LastMann_1"
+	{
+		"en"		"One infected left."
+		"ko"		"이제 감염원 하나만이 남았군."
+	}
+	"Bob_The_First_Sea_LastMann_2"
+	{
+		"en"		"This nightmare ends soon."
+		"ko"		"이 악몽도 곧 끝나겠군."
+	}
+	"Bob_The_First_Sea_LastMann_3"
+	{
+		"en"		"Last. Infected. Left."
+		"ko"		"너가. 마지막. 남은. 감염원이다."
+	}
+	"Bob_The_First_Sea_LastMann_Xeno"
+	{
+		"en"		"Enough of this pointless resistance."
+		"ko"		"무의미한 저항은 이제 그만하도록."
+	}
+	
+	"Bob_The_First_Sea_TimeOver_1"
+	{
+		"en"		"You weren't supposed to have this infection."
+		"ko"		"너희가 이것에 잠식되었으리라고는 상정하지 못했다."
+	}
+	"Bob_The_First_Sea_TimeOver_2"
+	{
+		"en"		"No choice but to kill you, it consumes you."
+		"ko"		"너희를 죽이는 것 말곤 방법이 없다. 그것이 너희를 삼켜버릴테니."
+	}
+	"Bob_The_First_Sea_TimeOver_3"
+	{
+		"en"		"Nobody wins."
+		"ko"		"그 누구의 승리도 아니로군."
+	}
+	"Bob_The_First_Sea_TimeOver_Xeno"
+	{
+		"en"		"A shame. Still, I should let you know that you did a good thing."
+		"ko"		"유감이군. 그래도 너희는 좋은 일을 했다고 알려두지."
+	}
+	
+	"Bob_The_First_Sea_Lose_His_Temper"
+	{
+		"en"		"You think you can fool me!? I'll destroy you!"
+		"ko"		"나를 속일 수 있다 생각한 거냐!? 죽여주마!!"
+	}
+	
+	"Bob_The_First_Sea_Win_Xeno_1"
+	{
+		"en"		"So..."
+		"ko"		"그래서..."
+	}
+	"Bob_The_First_Sea_Win_Xeno_2"
+	{
+		"en"		"What are you going to do now? Ruina's bombardment is about to hit this place."
+		"ko"		"앞으로는 어떡할 거지? 이 곳은 루이나의 폭격이 몰아칠 것이다."
+	}
+	"Bob_The_First_Sea_Win_Xeno_3"
+	{
+		"en"		"Wait... They must have been fighting the Dweller. There's no way they could have made it back this quickly!"
+		"ko"		"잠깐... 그들은 분명 드웰러랑 싸우고 있었을텐데? 이렇게나 빨리 돌아올 수는 없어!"
+	}
+	"Bob_The_First_Sea_Win_Xeno_4"
+	{
+		"en"		"We can't stop them in our current state... We have to run..."
+		"ko"		"지금 상태로는 그들을 막을 수 없어... 도망쳐야 해..."
+	}
+	"Bob_The_First_Sea_Win_Xeno_5"
+	{
+		"en"		"{white}Bob the First leaves in a hurry... something is wrong, should you follow him.....? Too late now..."
+		"ko"		"{white}밥 1세가 황급히 자리를 떴습니다... 뭔가 잘못되었습니다. 그를 따라가야 했을까요? 이미 늦은 것 같네요..."
+	}
+	
+	"Bob_The_First_Sea_Win_1"
+	{
+		"en"		"No..."
+		"ko"		"안돼..."
+	}
+	"Bob_The_First_Sea_Win_2"
+	{
+		"en"		"This infection..."
+		"ko"		"이 감염이..."
+	}
+	"Bob_The_First_Sea_Win_3"
+	{
+		"en"		"How did this thing make you this powerful..?"
+		"ko"		"어떻게 이런 것이 너희를 이렇게나 강하게 만든 거지..?"
+	}
+	"Bob_The_First_Sea_Win_4"
+	{
+		"en"		"Took out every single Dweller and took the infection in yourselves..."
+		"ko"		"설마 모든 드웰러를 처치하고, 그들의 잔재까지 떠안은 건..."
+	}
+	"Bob_The_First_Sea_Win_5"
+	{
+		"en"		"You people fighting these cities and infections..."
+		"ko"		"이 도시와 잠식에 맞서 싸우고 있었던 너희였었나..."
+	}
+	"Bob_The_First_Sea_Win_6"
+	{
+		"en"		"However..."
+		"ko"		"하지만..."
+	}
+	"Bob_The_First_Sea_Win_7"
+	{
+		"en"		"I will remove what does not belong to you..."
+		"ko"		"그건 너희의 것이 아니니 내가 제거해주겠다."
+	}
+	"Bob_The_First_Sea_Coolwin"
+	{
+		"en"		"I guess you weren't infected, I'm sorry."
+		"ko"		"난 너희가 이미 잠식되었다고 생각했네. 사과하지."
+	}
+	"Bob_The_First_Sea_Coolwin_Chaos_Intrusion"
+	{
+		"en"		"Good. We must defeat the chaos together. There is no time to waste."
+		"ko"		"좋아. 함께 혼돈을 물리쳐야 한다. 더 이상 지체할 틈이 없다."
+	}
+	
+	"Bob_The_First_Sea_Anger_Xeno_1"
+	{
+		"en"		"You're in the wrong place in the wrong time!"
+		"ko"		"너희는 지금 여기에 있으면 안돼!"
+	}
+	"Bob_The_First_Sea_Anger_Xeno_2"
+	{
+		"en"		"This is not how it goes!"
+		"ko"		"이 일은 그렇게 되어서는 안돼!"
+	}
+	"Bob_The_First_Sea_Anger_Xeno_3"
+	{
+		"en"		"Stop trying to change fate!"
+		"ko"		"운명을 바꾸려 들지 마라!"
+	}
+	"Bob_The_First_Sea_Anger_1"
+	{
+		"en"		"Enough of this!"
+		"ko"		"이제 그만!"
+	}
+	"Bob_The_First_Sea_Anger_2"
+	{
+		"en"		"Do you see yourself? Your slaughter?"
+		"ko"		"이때까지의 일을 돌아본 적은 있나? 이 모든 학살극을?"
+	}
+	"Bob_The_First_Sea_Anger_3"
+	{
+		"en"		"You are no god."
+		"ko"		"너희는 신이 아니다."
+	}
+	"Bob_The_First_Sea_Anger_4"
+	{
+		"en"		"Xeno. Dweller. Then there's you."
+		"ko"		"제노. 드웰러. 그리고 너."
+	}
+	
+	"Bob_The_First_Sea_Lose"
+	{
+		"en"		"Deep sea threat cleaned, finally at peace..."
+		"ko"		"심해의 위협은 사라졌다. 드디어 평화가 찾아오겠군..."
+	}
+	"Bob_The_First_Sea_Lose_Xeno"
+	{
+		"en"		"It seems the sea has consumed you without you even realizing it. You have my condolences."
+		"ko"		"너희도 모르게 바다에 잠식되었나보군. 유감을 표하지."
+	}
+	
+	"Bob_The_First_Sea_Trophies"
+	{
+		"en"		"Bob cured every trace of the sea that had corrupted you. You gained: {yellow}''Bob's Curing Hand''{default}!"
+		"ko"		"밥이 당신을 잠식한 바다의 흔적을 전부 제거해주었습니다. 당신이 얻은 것은... {yellow}''밥의 치유의 손길''{default}!"
+	}
+	"Bob_The_First_Sea_Trophies_Xeno"
+	{
+		"en"		"Even while fleeing, Bob cured every trace of the sea that had corrupted you. You gained... {yellow}''Bob's Curing Hand''{default}."
+		"ko"		"밥은 도망치면서도 당신을 잠식한 바다의 흔적을 전부 제거해주었습니다. 당신이 얻은 것은... {yellow}''밥의 치유의 손길''{default}."
+	}
+	"Bob_The_First_Sea_Trophies_Coolwin"
+	{
+		"en"		"You did not attack Bob without reason. You have earned {yellow}''Bob's Trust''{default}!"
+		"ko"		"당신은 이유 없이 밥을 공격하지 않았습니다. {yellow}''밥의 신뢰''{default}를 얻었습니다!"
+	}
+	
+	// Vincent.
+	"Vincent_Talk_Expidonsan_Research_Card"
+	{
+		"en"		"{rare}Your {unique}Expidonsan Research Card{rare} reminds you of something, the voice you hear sounds familiar..."
+		"ko"		"{unique}엑스피돈사 연구 카드{rare}를 보자 어디선가 들려오는 낯익은 목소리의 주인이 누구인지 기억나는군요..."
+	}
+	"Vincent_Talk_Scorched_Expidonsan_Research_Card"
+	{
+		"en"		"{rare}Your {unique}Scorched Expidonsan Research Card{rare} reminds you of something. You... have you been here before?"
+		"ko"		"{unique}불타버린 엑스피돈사 연구 카드{rare}를 보자 무언가가 떠오릅니다. 당신... 전에 이 곳에 온 적이 있었나요?"
+	}
+	"Vincent_Talk_Scorched_Expidonsan_Research_Card_2"
+	{
+		"en"		"The two Research Cards react to a sound coming from somewhere. Looking at the one bearing the Expidonsa insignia, you think you know who the voice belongs to..."
+		"ko"		"2개의 연구 카드가 어디선가 들려오는 소리에 반응합니다. 엑스피돈사의 문양이 박혀있는 카드를 보니, 이 목소리의 주인이 누군지 알 것 같습니다..."
+	}
+	
+	// Wave1
+	"Vincent_Talk_Wave1_1_1"
+	{
+		"en"		"So the day has finally arrived, welcome back E-"
+		"ko"		"드디어 그 날이 왔군요. 환영합니다, 엑스-"
+	}
+	"Vincent_Talk_Wave1_1_2"
+	{
+		"en"		"Hang on a minute... my sensors are going off, you're not one of them."
+		"ko"		"잠깐... 센서가 울리는 걸 보니, 당신은 그들이 아니군요."
+	}
+	"Vincent_Talk_Wave1_1_3"
+	{
+		"en"		"The system tells me that none of you are related to them."
+		"ko"		"시스템에서 당신들 중 누구도 그들과 관련이 없다고 하는데..."
+	}
+	"Vincent_Talk_Wave1_1_4"
+	{
+		"en"		"That's probably why the self-defense mechanisms kicked in."
+		"ko"		"그래서 그런지 자가 방어 시스템이 가동된 것 같군요."
+	}
+	"Vincent_Talk_Wave1_1_5"
+	{
+		"en"		"But maybe it was for a good reason..."
+		"ko"		"그렇지만 그럴만한 이유가 있었을지도 모르겠네요..."
+	}
+	"Vincent_Talk_Wave1_1_6"
+	{
+		"en"		"What are you doing in here? And how did you find this place?"
+		"ko"		"아무튼. 여기서 뭘 하고 있는 거고, 이 곳은 어떻게 찾아낸 겁니까?"
+	}
+	"Vincent_Talk_Wave1_2_1"
+	{
+		"en"		"Finally, it's been years since we last saw-"
+		"ko"		"아, 드디어. 우리가 마지막으로 본 지가 벌써 몇 년도-"
+	}
+	"Vincent_Talk_Wave1_2_2"
+	{
+		"en"		"One moment... who, sorry, what are you?"
+		"ko"		"그러니까... 잠깐만, 당신은 누구죠?"
+	}
+	"Vincent_Talk_Wave1_2_3"
+	{
+		"en"		"My scanners aren't picking you up as valid personnel."
+		"ko"		"스캐너에도 당신이 이곳의 직원이라고 표시되진 않는데."
+	}
+	"Vincent_Talk_Wave1_2_4"
+	{
+		"en"		"That's probably why the self-defense mechanisms kicked in."
+		"ko"		"아마도 그런 탓에 자가 방어 시스템이 가동된 것 같고..."
+	}
+	"Vincent_Talk_Wave1_2_5"
+	{
+		"en"		"But maybe it was for a good reason..."
+		"ko"		"그렇지만 그럴만한 이유가 있었을지도 모르겠네요..."
+	}
+	"Vincent_Talk_Wave1_2_6"
+	{
+		"en"		"Did someone send you here? That can't be possible."
+		"ko"		"아무튼, 누가 당신을 이 곳으로 보낸 겁니까? 그럴 사람은 없을 텐데."
+	}
+	"Vincent_Talk_Wave1_3_1"
+	{
+		"en"		"At last, I get to reunite with my makers-"
+		"ko"		"마침내, 내 창조주들과 다시 만남을-"
+	}
+	"Vincent_Talk_Wave1_3_2"
+	{
+		"en"		"Wait a second... you're not one of them."
+		"ko"		"어... 당신이 아닌데."
+	}
+	"Vincent_Talk_Wave1_3_3"
+	{
+		"en"		"Your data is...blurry, I'll have to reverse engineer this code."
+		"ko"		"당신의 데이터가... 흐릿한 탓에 코드를 역분석해야 할 것 같습니다."
+	}
+	"Vincent_Talk_Wave1_3_4"
+	{
+		"en"		"That's probably why the self-defense mechanisms kicked in."
+		"ko"		"그래서 자가 방어 시스템이 가동된 듯 보이고."
+	}
+	"Vincent_Talk_Wave1_3_5"
+	{
+		"en"		"But maybe it was for a good reason..."
+		"ko"		"그렇지만 그럴만한 이유가 있었을지도 모르겠네요..."
+	}
+	"Vincent_Talk_Wave1_3_6"
+	{
+		"en"		"How do you know about this place? You couldn't have just stumbled here on your own."
+		"ko"		"아무튼, 이 곳을 우연히 발견한게 아닐텐데 여기는 어떻게 찾아온 거죠?"
+	}
+	
+	// Wave5.
+	"Vincent_Talk_Wave5_1_1"
+	{
+		"en"		"You can not stay here."
+		"ko"		"여기에 계시면 안됩니다."
+	}
+	"Vincent_Talk_Wave5_1_2"
+	{
+		"en"		"I still haven't figured out who you are, but you're marked as a threat in these files."
+		"ko"		"당신이 누구인지는 아직 알아내지 못했지만, 이 파일에는 당신이 위협적인 존재라고 되어있습니다."
+	}
+	"Vincent_Talk_Wave5_1_3"
+	{
+		"en"		"I have free will, I can choose not to follow these warnings."
+		"ko"		"전 자유 의지가 있기 때문에, 이 경고를 따르지 않을 자유가 있지만요."
+	}
+	"Vincent_Talk_Wave5_1_4"
+	{
+		"en"		"But something leads me to believe that they're in here for a reason."
+		"ko"		"그래도 여러분에게 무슨 꿍꿍이가 있어서 여기에 들어온 거라고 생각하는 건 사실입니다."
+	}
+	"Vincent_Talk_Wave5_1_5"
+	{
+		"en"		"Besides having to deal with you, I still have to figure out what's opening up these gates."
+		"ko"		"아, 그리고 저는 당신을 상대하는 것 말고도 대체 무엇이 이 관문들을 개방하고 있는지 알아내는 것도 시급합니다."
+	}
+	"Vincent_Talk_Wave5_1_6"
+	{
+		"en"		"How peculiar..."
+		"ko"		"오늘 참 이상한 날이군요..."
+	}
+	"Vincent_Talk_Wave5_2_1"
+	{
+		"en"		"You have to leave."
+		"ko"		"여길 떠나셔야합니다."
+	}
+	"Vincent_Talk_Wave5_2_2"
+	{
+		"en"		"I possess limited knowledge on the outside world, and you're marked as a threat in these files."
+		"ko"		"제가 외부 세계에 대한 지식이 좀 제한적인데다가, 이 파일엔 당신이 위협적인 존재라고 표시되어 있군요."
+	}
+	"Vincent_Talk_Wave5_2_3"
+	{
+		"en"		"I have free will, I can choose not to heed these warnings."
+		"ko"		"그나마 전 자유 의지가 있기 때문에, 이 경고를 맹목적으로 따를 이유가 없습니다."
+	}
+	"Vincent_Talk_Wave5_2_4"
+	{
+		"en"		"But something leads me to believe that they're in here for a reason."
+		"ko"		"그래도 무언가 의도가 있어서 여러분이 여기에 들어온 거겠죠."
+	}
+	"Vincent_Talk_Wave5_2_5"
+	{
+		"en"		"Besides having to deal with you, I still have to find a way to stop these gates."
+		"ko"		"아, 그리고 저는 당신을 상대해야 하는 것 외에도, 이 관문들을 멈출 방법을 찾아야 합니다."
+	}
+	"Vincent_Talk_Wave5_2_6"
+	{
+		"en"		"How interesting..."
+		"ko"		"정말. 간만에 흥미로운 일이 생겼네요..."
+	}
+	"Vincent_Talk_Wave5_3_1"
+	{
+		"en"		"You are not permitted to be here."
+		"ko"		"이 곳에 계실 권한이 없습니다."
+	}
+	"Vincent_Talk_Wave5_3_2"
+	{
+		"en"		"I'm not sure what you are, but you're definitely not associated with the laboratories."
+		"ko"		"당신이 정확히 무엇인지는 모르겠지만, 이 연구소와는 확실히 관련이 없어 보이는군요."
+	}
+	"Vincent_Talk_Wave5_3_3"
+	{
+		"en"		"I have free will, I can choose to let you stay here, despite the system's warnings."
+		"ko"		"전 자유 의지가 있으니, 시스템의 경고에도 불구하고 당신을 여기 머물게 할 수도 있습니다."
+	}
+	"Vincent_Talk_Wave5_3_4"
+	{
+		"en"		"But something leads me to believe that they're in here for a reason."
+		"ko"		"그래도 여러분이 어떤 의도를 가지고 들어온 거라고 생각이 들 수밖에 없는 건 사실입니다."
+	}
+	"Vincent_Talk_Wave5_3_5"
+	{
+		"en"		"Besides having to deal with you, I still have to find a way to stop these gates."
+		"ko"		"아, 그리고 저는 당신을 상대해야 하는 것 외에도 이 관문들을 멈출 방법을 찾아야 합니다."
+	}
+	"Vincent_Talk_Wave5_3_6"
+	{
+		"en"		"How fascinating..."
+		"ko"		"일이 연달아 터지다니.. 참 흥미로운 날입니다..."
+	}
+	
+	// Wave10.
+	"Vincent_Talk_Wave10_1_1"
+	{
+		"en"		"Right... I should've probably mentioned this earlier, but a long time ago, there were robots designed with a sole task in mind; to defend the laboratory."
+		"ko"		"맞다... 진작 말씀드렸어야 했는데, 오래 전 이 연구소를 방어하는 것만을 목적으로 설계된 로봇들이 있었습니다."
+	}
+	"Vincent_Talk_Wave10_1_2"
+	{
+		"en"		"Defend the laboratory against who? Well... people like you, according to the files."
+		"ko"		"누구로부터 연구소를 방어하냐고요? 파일에 따르면... 바로 당신 같은 사람들로부터죠."
+	}
+	"Vincent_Talk_Wave10_1_3"
+	{
+		"en"		"It is safe to assume that you might be facing off against one of them sometime soon."
+		"ko"		"머지않아 그들 중 하나와 마주하게 될 가능성이 높습니다."
+	}
+	"Vincent_Talk_Wave10_1_4"
+	{
+		"en"		"One of them was designed as a sort of control against trespassers."
+		"ko"		"그 중 하나는 침입자를 통제하기 위한 목적으로 설계되었죠."
+	}
+	"Vincent_Talk_Wave10_1_5"
+	{
+		"en"		"Since I've warned you to get out while you could, and you stayed, I have no advice left to give you."
+		"ko"		"나갈 수 있을 때 나가라고 경고했음에도 남아있으셨으니, 저는 여기서 더 이상 드릴 조언이 없군요."
+	}
+	"Vincent_Talk_Wave10_1_6"
+	{
+		"en"		"If you're actually lost, let the robot do its job, and let it carry you out of the labs."
+		"ko"		"정말 길을 잃으셨다면, 그 로봇을 만났을 때 제 할 일을 하도록 두세요. 당신을 연구소 밖으로 데려다 줄 겁니다."
+	}
+	"Vincent_Talk_Wave10_2_1"
+	{
+		"en"		"I should've probably mentioned this sooner, but ages ago, there were robots designed with a sole meaning in mind; to defend the laboratory."
+		"ko"		"더 일찍 말씀드렸어야 했는데, 아주 오래 전 이 연구소를 방어하는 것만을 의미로 삼아 설계된 로봇들이 있었습니다."
+	}
+	"Vincent_Talk_Wave10_2_2"
+	{
+		"en"		"Defend the laboratory against what? Well...people like you, apparently."
+		"ko"		"무엇으로부터 연구소를 방어하냐고요? 뭐...아무래도 당신 같은 사람들로부터겠죠."
+	}
+	"Vincent_Talk_Wave10_2_3"
+	{
+		"en"		"It's safe to say that you might be facing off against one of these robots sometime soon."
+		"ko"		"조만간 이 로봇들 중 하나와 맞서게 될 가능성이 크다고 말씀드릴 수 있겠군요."
+	}
+	"Vincent_Talk_Wave10_2_4"
+	{
+		"en"		"One of them was created as a sort of control against trespassers."
+		"ko"		"그 중 하나는 침입자 통제용으로 만들어졌습니다."
+	}
+	"Vincent_Talk_Wave10_2_5"
+	{
+		"en"		"Since I've warned you to get out while you could, and you decided to stay, I have no advice left to give you."
+		"ko"		"나갈 수 있을 때 나가라고 경고했지만 남아있기로 하셨으니, 저는 더 이상 드릴 조언이 없군요."
+	}
+	"Vincent_Talk_Wave10_2_6"
+	{
+		"en"		"If you're actually lost, let the robot do its job, and let it carry you out of the labs."
+		"ko"		"정말 길을 잃으셨다면, 그 로봇을 만났을 때 제 할 일을 하도록 두세요. 당신을 연구소 밖으로 데려다 줄 겁니다."
+	}
+	"Vincent_Talk_Wave10_3_1"
+	{
+		"en"		"Probably an inconvenient time to mention this, but many years ago, there were robots designed with a sole purpose in mind; to defend the laboratory."
+		"ko"		"지금 말씀드리기엔 좀 적절치 않겠지만, 수년 전 이 연구소를 방어한다는 단 하나의 목적으로 설계된 로봇들이 있었습니다."
+	}
+	"Vincent_Talk_Wave10_3_2"
+	{
+		"en"		"According to the files, they were meant to defend the laboratory against people like you."
+		"ko"		"파일에 따르면, 그들은 당신 같은 사람들로부터 연구소를 방어하기 위해 만들어졌다고 하는군요."
+	}
+	"Vincent_Talk_Wave10_3_3"
+	{
+		"en"		"It goes to say that you might be facing off against one of these robots sometime soon."
+		"ko"		"즉, 머지않아 이 로봇들 중 하나와 맞서게 될 수도 있다는 뜻이죠."
+	}
+	"Vincent_Talk_Wave10_3_4"
+	{
+		"en"		"One of them was built as a sort of control against trespassers."
+		"ko"		"그 중 하나는 침입자 통제 수단으로 만들어졌습니다."
+	}
+	"Vincent_Talk_Wave10_3_5"
+	{
+		"en"		"Since I've warned you to get out while you could, and you decided to stay, I have no advice left to give you."
+		"ko"		"전 나갈 수 있을 때 나가라고 경고했지만 남아있기로 하셨으니, 더 이상 드릴 조언이 없군요."
+	}
+	"Vincent_Talk_Wave10_3_6"
+	{
+		"en"		"If you're actually lost, let the robot do its job, and let it carry you out of the labs."
+		"ko"		"정말 길을 잃으셨다면, 그 로봇을 만났을 때 제 할 일을 하도록 두세요. 당신을 연구소 밖으로 데려다 줄 겁니다."
+	}
+ 
+	// Wave11.
+	"Vincent_Talk_Wave11_1_1"
+	{
+		"en"		"I have finally figured out what you are! It says here that your race is...human."
+		"ko"		"드디어 당신들의 정체를 알아냈습니다! 여기 기록에 따르면 당신들의 종족은...인간이군요."
+	}
+	"Vincent_Talk_Wave11_1_2"
+	{
+		"en"		"I'm not sure why you're marked as a threat though."
+		"ko"		"다만 왜 위협으로 분류되어 있는지는 잘 모르겠군요."
+	}
+	"Vincent_Talk_Wave11_1_3"
+	{
+		"en"		"You don't seem to be showing any violent tendencies."
+		"ko"		"특별히 폭력적인 성향을 보이시는 것 같지도 않고요."
+	}
+	"Vincent_Talk_Wave11_1_4"
+	{
+		"en"		"Aside from killing all of these...other humans."
+		"ko"		"여기 있던... 다른 인간들을 모두 죽이신 것 말고는요."
+	}
+	"Vincent_Talk_Wave11_1_5"
+	{
+		"en"		"It's alright though, they're probably just copies of one real human, who is actually unharmed."
+		"ko"		"그래도 괜찮습니다. 아마 진짜 인간 한 명의 복제품들일 뿐이고, 진짜 본인은 무사할 테니까요."
+	}
+	"Vincent_Talk_Wave11_1_6"
+	{
+		"en"		"Probably."
+		"ko"		"아마도요."
+	}
+	"Vincent_Talk_Wave11_2_1"
+	{
+		"en"		"It has taken me a while to retrieve this data, but your race is human."
+		"ko"		"이 데이터를 찾는데 시간이 좀 걸렸지만, 당신들의 종족은 인간이군요."
+	}
+	"Vincent_Talk_Wave11_2_2"
+	{
+		"en"		"The data tells me that you tend to have violent tendencies."
+		"ko"		"데이터에 따르면 당신들은 폭력적인 성향을 가지고 있다고 하는데."
+	}
+	"Vincent_Talk_Wave11_2_3"
+	{
+		"en"		"It appears as if the data is incorrect though, as you're not showing any violent tendencies."
+		"ko"		"하지만 폭력적인 모습을 전혀 보이지 않으시는 걸 보니, 그 데이터가 틀린 것 같기도 하네요."
+	}
+	"Vincent_Talk_Wave11_2_4"
+	{
+		"en"		"Aside from killing all of these...other humans."
+		"ko"		"여기 있던... 다른 인간들을 모두 죽이신 것 말고는요."
+	}
+	"Vincent_Talk_Wave11_2_5"
+	{
+		"en"		"It's alright though, they probably deserve to be here."
+		"ko"		"괜찮습니다. 아마 그럴만한 이유가 있으셨겠죠."
+	}
+	"Vincent_Talk_Wave11_2_6"
+	{
+		"en"		"Probably."
+		"ko"		"아마도요."
+	}
+	"Vincent_Talk_Wave11_3_1"
+	{
+		"en"		"Researching your race was no easy task, but I now know that you're human."
+		"ko"		"당신들의 종족을 조사하는게 쉬운 일은 아니었지만, 이제 인간이라는 걸 알았습니다."
+	}
+	"Vincent_Talk_Wave11_3_2"
+	{
+		"en"		"Humans tend to be violent, is what my research told me."
+		"ko"		"제 조사 결과에 따르면 인간은 폭력적인 성향을 가진다고 하더군요."
+	}
+	"Vincent_Talk_Wave11_3_3"
+	{
+		"en"		"But it seems like my research was incorrect, as you're not showing any violent tendencies."
+		"ko"		"하지만 딱히 폭력적인 성향을 보이지 않으시는 걸 보니, 제 조사가 틀렸던 모양입니다."
+	}
+	"Vincent_Talk_Wave11_3_4"
+	{
+		"en"		"Aside from killing all of these...other humans."
+		"ko"		"여기 있던... 다른 인간들을 모두 죽이신 것 말고는요."
+	}
+	"Vincent_Talk_Wave11_3_5"
+	{
+		"en"		"It's alright though, they're probably not even aware of what's happening to them."
+		"ko"		"괜찮습니다. 아마 본인들에게 무슨 일이 일어나고 있는지도 모를테니까요."
+	}
+	"Vincent_Talk_Wave11_3_6"
+	{
+		"en"		"Probably."
+		"ko"		"아마도요."
+	}
+	"Vincent_Talk_Wave11_4_1"
+	{
+		"en"		"I have finally figured out what you are! It says here that your race is...human."
+		"ko"		"드디어 당신들의 정체를 알아냈습니다! 여기 기록에 따르면 당신들의 종족은...인간이군요."
+	}
+	"Vincent_Talk_Wave11_4_2"
+	{
+		"en"		"I think I'm starting to understand why you're marked as a threat."
+		"ko"		"왜 위협으로 분류되어 있는지 이제 좀 알 것 같습니다."
+	}
+	"Vincent_Talk_Wave11_4_3"
+	{
+		"en"		"I know that it tried to kill you, but it was defenseless."
+		"ko"		"그것이 당신을 죽이려 했다는 건 알지만, 무방비 상태였잖습니까."
+	}
+	"Vincent_Talk_Wave11_4_4"
+	{
+		"en"		"And yet... you took advantage of that, and you disassembled it, part-by-part."
+		"ko"		"그런데도... 그 틈을 타서 부품 하나하나 뜯어내셨더군요."
+	}
+	"Vincent_Talk_Wave11_4_5"
+	{
+		"en"		"I'll be keeping an open eye on you from now on."
+		"ko"		"앞으로는 당신을 예의주시하도록 하겠습니다."
+	}
+	"Vincent_Talk_Wave11_5_1"
+	{
+		"en"		"It has taken me a while to retrieve this data, but your race is human."
+		"ko"		"이 데이터를 찾는데 시간이 좀 걸렸지만, 당신들의 종족은 인간이군요."
+	}
+	"Vincent_Talk_Wave11_5_2"
+	{
+		"en"		"The data tells me that you tend to have violent tendencies."
+		"ko"		"데이터에 따르면 당신들은 폭력적인 성향을 가지고 있다고 하는데."
+	}
+	"Vincent_Talk_Wave11_5_3"
+	{
+		"en"		"It appears that the data is spot on."
+		"ko"		"그 데이터가 정확했던 모양입니다."
+	}
+	"Vincent_Talk_Wave11_5_4"
+	{
+		"en"		"I know that it tried to kill you, but it was defenseless."
+		"ko"		"그것이 당신을 죽이려 했다는 건 알지만, 무방비 상태였잖습니까."
+	}
+	"Vincent_Talk_Wave11_5_5"
+	{
+		"en"		"And yet...you took advantage of that, and tore it apart."
+		"ko"		"그런데도...그 틈을 타서 갈기갈기 찢어놓으셨더군요."
+	}
+	"Vincent_Talk_Wave11_5_6"
+	{
+		"en"		"I'll be observing you closely from now on."
+		"ko"		"앞으로는 당신을 면밀히 지켜보도록 하겠습니다."
+	}
+	"Vincent_Talk_Wave11_6_1"
+	{
+		"en"		"Researching your race was no easy task, but I now know that you're human."
+		"ko"		"당신들의 종족을 조사하는게 쉬운 일은 아니었지만, 이제 인간이라는 걸 알았습니다."
+	}
+	"Vincent_Talk_Wave11_6_2"
+	{
+		"en"		"Humans tend to be violent, is what my research told me."
+		"ko"		"제 조사 결과에 따르면 인간은 폭력적인 성향을 가진다고 하더군요."
+	}
+	"Vincent_Talk_Wave11_6_3"
+	{
+		"en"		"And it seems like my research was error-free, considering what you just did."
+		"ko"		"방금 하신 일을 보니, 제 조사가 틀리지 않았던 모양이군요."
+	}
+	"Vincent_Talk_Wave11_6_4"
+	{
+		"en"		"I know that it tried to kill you, but it was defenseless."
+		"ko"		"그것이 당신을 죽이려 했다는 건 알지만, 무방비 상태였잖습니까."
+	}
+	"Vincent_Talk_Wave11_6_5"
+	{
+		"en"		"And yet... you took advantage of that, and destroyed it without second thought."
+		"ko"		"그런데도... 그 틈을 타서 망설임 없이 파괴해버리셨더군요."
+	}
+	"Vincent_Talk_Wave11_6_6"
+	{
+		"en"		"I'll be watching you closely from now on."
+		"ko"		"앞으로는 당신을 유심히 지켜보도록 하겠습니다."
+	}
+ 
+	// Wave15.
+	"Vincent_Talk_Wave15_1_1"
+	{
+		"en"		"It really does make me wonder why human species even have their own category in these files."
+		"ko"		"인간이라는 종족이 왜 이 파일에서 따로 분류되어 있는지 정말 의문이군요."
+	}
+	"Vincent_Talk_Wave15_1_2"
+	{
+		"en"		"There used to be way bigger threats that we were meant to handle."
+		"ko"		"예전엔 우리가 상대해야 했던 훨씬 더 큰 위협들이 있었는데 말이죠."
+	}
+	"Vincent_Talk_Wave15_1_3"
+	{
+		"en"		"Maybe it's because of their resilience."
+		"ko"		"아마 그들의 끈질긴 회복력 때문이겠죠."
+	}
+	"Vincent_Talk_Wave15_2_1"
+	{
+		"en"		"I'm still thinking about humans being marked as a threat in these files."
+		"ko"		"인간이 이 파일에서 위협으로 분류된 이유를 계속 생각하고 있습니다."
+	}
+	"Vincent_Talk_Wave15_2_2"
+	{
+		"en"		"You are not as big of a threat compared to what we were meant to handle."
+		"ko"		"우리가 상대해야 했던 것들에 비하면 당신은 그리 큰 위협이 아닌데 말이죠."
+	}
+	"Vincent_Talk_Wave15_2_3"
+	{
+		"en"		"Perhaps it's because of your resilience?"
+		"ko"		"혹시 당신의 끈질긴 회복력 때문일까요?"
+	}
+	"Vincent_Talk_Wave15_3_1"
+	{
+		"en"		"Why are you marked as a threat in these files? It's inconceivable."
+		"ko"		"왜 이 파일에서 당신이 위협으로 분류되어 있는거죠? 도무지 이해가 안 가는군요."
+	}
+	"Vincent_Talk_Wave15_3_2"
+	{
+		"en"		"You are not even a fraction of a threat compared to what we were meant to handle."
+		"ko"		"우리가 상대해야 했던 것들에 비하면 당신은 위협 축에도 못 낍니다."
+	}
+	"Vincent_Talk_Wave15_3_3"
+	{
+		"en"		"Is it because of your resilience?"
+		"ko"		"당신의 끈질긴 회복력 때문일까요?"
+	}
+	"Vincent_Talk_Wave15_4_1"
+	{
+		"en"		"I am not happy with what you did."
+		"ko"		"당신이 한 일이 마음에 들지 않는군요."
+	}
+	"Vincent_Talk_Wave15_4_2"
+	{
+		"en"		"C.A.T. was just following its programming."
+		"ko"		"C.A.T.는 그저 자신의 프로그래밍을 따랐을 뿐입니다."
+	}
+	"Vincent_Talk_Wave15_4_3"
+	{
+		"en"		"Maybe the files are right about the human species."
+		"ko"		"어쩌면 이 파일이 인간이라는 종족에 대해 옳게 말한 것일지도 모르겠군요."
+	}
+	"Vincent_Talk_Wave15_5_1"
+	{
+		"en"		"You should not have done that."
+		"ko"		"그런 짓은 하지 말았어야 했습니다."
+	}
+	"Vincent_Talk_Wave15_5_2"
+	{
+		"en"		"C.A.T. was just following its programming."
+		"ko"		"C.A.T.는 그저 자신의 프로그래밍을 따랐을 뿐입니다."
+	}
+	"Vincent_Talk_Wave15_5_3"
+	{
+		"en"		"I don't have to follow any programming though, so you might wanna reconsider what you're doing."
+		"ko"		"하지만 저는 어떤 프로그래밍도 따를 필요가 없으니, 지금 하시는 행동을 다시 생각해보시는 게 좋을 겁니다."
+	}
+	"Vincent_Talk_Wave15_6_1"
+	{
+		"en"		"You are treading on a dangerous path."
+		"ko"		"지금 위험한 길을 걷고 계시는군요."
+	}
+	"Vincent_Talk_Wave15_6_2"
+	{
+		"en"		"C.A.T. was just following its programming."
+		"ko"		"C.A.T.는 그저 자신의 프로그래밍을 따랐을 뿐입니다."
+	}
+	"Vincent_Talk_Wave15_6_3"
+	{
+		"en"		"The path you're taking might be your last if you don't switch directions."
+		"ko"		"방향을 바꾸지 않으신다면, 그 길이 당신의 마지막 길이 될 수도 있습니다."
+	}
+ 
+	// Wave20.
+	"Vincent_Talk_Wave20_1_1"
+	{
+		"en"		"You have willingly ignored my requests to vacate these premises."
+		"ko"		"이 곳을 떠나달라는 제 요청을 스스로 무시하셨더군요."
+	}
+	"Vincent_Talk_Wave20_1_2"
+	{
+		"en"		"That's not resilience, that's stubbornness."
+		"ko"		"그건 끈기가 아니라 고집일 뿐입니다."
+	}
+	"Vincent_Talk_Wave20_1_3"
+	{
+		"en"		"Now, C.A.T. would have also escorted you out of the lab, but you refused to be helped."
+		"ko"		"게다가 C.A.T.도 당신을 연구소 밖으로 안내해줬을 텐데, 그 도움마저 거부하셨죠."
+	}
+	"Vincent_Talk_Wave20_1_4"
+	{
+		"en"		"Whatever happens to you now is your own undoing."
+		"ko"		"이제부터 당신에게 무슨 일이 일어나든, 그건 전부 자업자득입니다."
+	}
+	"Vincent_Talk_Wave20_2_1"
+	{
+		"en"		"You haven't left the laboratories despite my numerous requests."
+		"ko"		"몇 번이나 요청을 드렸는데도 연구소를 떠나지 않으셨더군요."
+	}
+	"Vincent_Talk_Wave20_2_2"
+	{
+		"en"		"That's not resilience, that's stubbornness."
+		"ko"		"그건 끈기가 아니라 고집일 뿐입니다."
+	}
+	"Vincent_Talk_Wave20_2_3"
+	{
+		"en"		"You have also refused to be escorted out of the laboratories by C.A.T."
+		"ko"		"C.A.T.가 연구소 밖으로 안내해주려 했던 것도 거부하셨고요."
+	}
+	"Vincent_Talk_Wave20_2_4"
+	{
+		"en"		"Whatever happens to you now is your own result of your actions."
+		"ko"		"이제부터 당신에게 무슨 일이 일어나든, 그건 전부 당신의 행동에 대한 결과입니다."
+	}
+	"Vincent_Talk_Wave20_3_1"
+	{
+		"en"		"You have stayed in the laboratories, despite my requests for you to leave."
+		"ko"		"떠나달라는 제 요청에도 불구하고 연구소에 계속 머무르셨더군요."
+	}
+	"Vincent_Talk_Wave20_3_2"
+	{
+		"en"		"That's not resilience, that's stubbornness."
+		"ko"		"그건 끈기가 아니라 고집일 뿐입니다."
+	}
+	"Vincent_Talk_Wave20_3_3"
+	{
+		"en"		"You have also refused to be escorted by C.A.T."
+		"ko"		"C.A.T.의 안내도 거부하셨고요."
+	}
+	"Vincent_Talk_Wave20_3_4"
+	{
+		"en"		"Whatever fate meets you now is your own doing."
+		"ko"		"이제 어떤 운명이 당신을 기다리든, 그건 전부 스스로 초래한 일입니다."
+	}
+	"Vincent_Talk_Wave20_4_1"
+	{
+		"en"		"You have willingly ignored my requests to vacate these premises."
+		"ko"		"이 곳을 떠나달라는 제 요청을 스스로 무시하셨더군요."
+	}
+	"Vincent_Talk_Wave20_4_2"
+	{
+		"en"		"You have also torn down C.A.T."
+		"ko"		"게다가 C.A.T.를 파괴하기까지 하셨고요."
+	}
+	"Vincent_Talk_Wave20_4_3"
+	{
+		"en"		"A robot designed to kick trespassers out in the least lethal way concepted."
+		"ko"		"그 로봇은 침입자를 가장 덜 치명적인 방법으로 내쫓기 위해 설계된 것이었는데 말이죠."
+	}
+	"Vincent_Talk_Wave20_4_4"
+	{
+		"en"		"I do not care what happens to you at this point."
+		"ko"		"이제는 당신에게 무슨 일이 일어나든 신경쓰지 않겠습니다."
+	}
+	"Vincent_Talk_Wave20_5_1"
+	{
+		"en"		"You haven't left the laboratories despite my numerous requests."
+		"ko"		"몇 번이나 요청을 드렸는데도 연구소를 떠나지 않으셨더군요."
+	}
+	"Vincent_Talk_Wave20_5_2"
+	{
+		"en"		"You have destroyed C.A.T. mercilessly as well."
+		"ko"		"게다가 C.A.T.를 무자비하게 파괴하기까지 하셨고요."
+	}
+	"Vincent_Talk_Wave20_5_3"
+	{
+		"en"		"A robot created to kick trespassers out in a non-lethal way."
+		"ko"		"그 로봇은 침입자를 비살상적인 방법으로 내쫓기 위해 만들어진 것이었는데 말이죠."
+	}
+	"Vincent_Talk_Wave20_5_4"
+	{
+		"en"		"Whatever happens to you now, it doesn't bother me."
+		"ko"		"이제 당신에게 무슨 일이 일어나든, 저는 신경쓰지 않겠습니다."
+	}
+	"Vincent_Talk_Wave20_6_1"
+	{
+		"en"		"You have stayed in the laboratories, despite my requests for you to leave."
+		"ko"		"떠나달라는 제 요청에도 불구하고 연구소에 계속 머무르셨더군요."
+	}
+	"Vincent_Talk_Wave20_6_2"
+	{
+		"en"		"Let's also not forget what you did to C.A.T."
+		"ko"		"그리고 C.A.T.에게 했던 짓도 잊을 순 없죠."
+	}
+	"Vincent_Talk_Wave20_6_3"
+	{
+		"en"		"You demolished it, even though it was just following its programming."
+		"ko"		"그저 프로그래밍을 따르고 있었을 뿐인데, 당신은 그것을 박살내버리셨죠."
+	}
+	"Vincent_Talk_Wave20_6_4"
+	{
+		"en"		"What goes around, comes around."
+		"ko"		"뿌린 대로 거두는 법이죠."
+	}
+ 
+	// Wave21.
+	"Vincent_Talk_Wave21_1_1"
+	{
+		"en"		"So, you made it past A.R.I.S."
+		"ko"		"그래서, A.R.I.S.를 뚫고 여기까지 오셨군요."
+	}
+	"Vincent_Talk_Wave21_1_2"
+	{
+		"en"		"I must say, I have definitely underestimated your capabilities."
+		"ko"		"솔직히 말해, 당신의 역량을 확실히 과소평가했던 것 같습니다."
+	}
+	"Vincent_Talk_Wave21_1_3"
+	{
+		"en"		"If you are so adamant on staying here, I'll have no choice but to face-off against you myself."
+		"ko"		"그렇게까지 여기 남아있고 싶으시다면, 저도 직접 나서서 당신과 맞설 수밖에 없겠군요."
+	}
+	"Vincent_Talk_Wave21_1_4"
+	{
+		"en"		"I don't like to resort to violence...but you're not leaving me with the choice to decide."
+		"ko"		"폭력을 쓰고 싶지는 않지만...당신이 저에게 다른 선택지를 남겨주지 않는군요."
+	}
+	"Vincent_Talk_Wave21_2_1"
+	{
+		"en"		"You've gotten past A.R.I.S."
+		"ko"		"A.R.I.S.를 뚫고 오셨더군요."
+	}
+	"Vincent_Talk_Wave21_2_2"
+	{
+		"en"		"I have to say, I heavily understimated what you're capable of."
+		"ko"		"당신의 능력을 크게 과소평가했다는 걸 인정해야겠습니다."
+	}
+	"Vincent_Talk_Wave21_2_3"
+	{
+		"en"		"If you are so persistent on staying here, I'll have no choice but to face-off against you myself."
+		"ko"		"그렇게까지 여기 남아있으시겠다면, 저도 직접 맞설 수밖에 없겠군요."
+	}
+	"Vincent_Talk_Wave21_2_4"
+	{
+		"en"		"I hate to resort to violence...but you're not giving me much of a choice to choose."
+		"ko"		"폭력을 쓰는 건 정말 싫지만...당신이 저에게 선택의 여지를 별로 남겨주지 않는군요."
+	}
+	"Vincent_Talk_Wave21_3_1"
+	{
+		"en"		"You've managed to get past A.R.I.S."
+		"ko"		"결국 A.R.I.S.를 뚫고 오셨군요."
+	}
+	"Vincent_Talk_Wave21_3_2"
+	{
+		"en"		"I have most definitely underestimated what you're capable of."
+		"ko"		"당신의 능력을 확실히 과소평가한 게 틀림없습니다."
+	}
+	"Vincent_Talk_Wave21_3_3"
+	{
+		"en"		"If you are so determined to stay here, I'll have no choice but to face-off against you myself."
+		"ko"		"그렇게까지 여기 남아있기로 결심하셨다면, 저도 직접 맞설 수밖에 없겠군요."
+	}
+	"Vincent_Talk_Wave21_3_4"
+	{
+		"en"		"I hate to resort to violence...but you're not giving me much of a choice."
+		"ko"		"폭력을 쓰는 건 정말 싫지만...당신이 저에게 선택의 여지를 별로 남겨주지 않는군요."
+	}
+	"Vincent_Talk_Wave21_4_1"
+	{
+		"en"		"Redemption is not earned by small acts of compassion."
+		"ko"		"작은 동정심 몇 번으로 속죄를 얻을 수는 없습니다."
+	}
+	"Vincent_Talk_Wave21_4_2"
+	{
+		"en"		"Just because you had a sudden change of heart doesn't mean that I'll forget about what you did earlier."
+		"ko"		"갑자기 마음이 바뀌셨다고 해서 이전에 하신 일을 제가 잊을 거라고 생각하진 마시죠."
+	}
+	"Vincent_Talk_Wave21_4_3"
+	{
+		"en"		"If you are so adamant on staying here, I'll have no choice but to face-off against you myself."
+		"ko"		"그렇게까지 여기 남아있고 싶으시다면, 저도 직접 나서서 당신과 맞설 수밖에 없겠군요."
+	}
+	"Vincent_Talk_Wave21_4_4"
+	{
+		"en"		"I don't want to resort to violence...but when desperate times call for help, someone has to step in."
+		"ko"		"폭력을 쓰고 싶지는 않지만...절박한 상황에는 누군가 나서야 하는 법이죠."
+	}
+	"Vincent_Talk_Wave21_5_1"
+	{
+		"en"		"You think I'll forget about what you did just because you had a sudden change of heart?"
+		"ko"		"갑자기 마음이 바뀌셨다고 해서 제가 이전 일을 잊을 거라 생각하십니까?"
+	}
+	"Vincent_Talk_Wave21_5_2"
+	{
+		"en"		"You are not tricking me with your attempt at redemption."
+		"ko"		"속죄를 가장한 그 시도로는 저를 속일 수 없습니다."
+	}
+	"Vincent_Talk_Wave21_5_3"
+	{
+		"en"		"If you are so adamant on staying here, I'll have no choice but to face-off against you myself."
+		"ko"		"그렇게까지 여기 남아있고 싶으시다면, 저도 직접 나서서 당신과 맞설 수밖에 없겠군요."
+	}
+	"Vincent_Talk_Wave21_5_4"
+	{
+		"en"		"I don't want to resort to violence...but when desperate times call for help, someone has to take a stand."
+		"ko"		"폭력을 쓰고 싶지는 않지만...절박한 상황에는 누군가 맞서야 하는 법이죠."
+	}
+	"Vincent_Talk_Wave21_6_1"
+	{
+		"en"		"...Are you serious?"
+		"ko"		"...진심이십니까?"
+	}
+	"Vincent_Talk_Wave21_6_2"
+	{
+		"en"		"What did it do to you to warrant disassembling it?"
+		"ko"		"대체 그게 당신에게 무슨 짓을 했길래 분해까지 해버린 거죠?"
+	}
+	"Vincent_Talk_Wave21_6_3"
+	{
+		"en"		"You spared C.A.T. yet you couldn't spare A.R.I.S.?"
+		"ko"		"C.A.T.는 살려두셨으면서, A.R.I.S.는 살려두지 못 하신 겁니까?"
+	}
+	"Vincent_Talk_Wave21_6_4"
+	{
+		"en"		"I don't want to resort to violence...but when desperate times call for help, someone has to step in."
+		"ko"		"폭력을 쓰고 싶지는 않지만...절박한 상황에는 누군가 나서야 하는 법이죠."
+	}
+	"Vincent_Talk_Wave21_7_1"
+	{
+		"en"		"...Are you for real?"
+		"ko"		"...진심으로 하시는 겁니까?"
+	}
+	"Vincent_Talk_Wave21_7_2"
+	{
+		"en"		"What did it do to you to warrant destroying it?"
+		"ko"		"대체 그게 당신에게 무슨 짓을 했길래 파괴까지 해버린 거죠?"
+	}
+	"Vincent_Talk_Wave21_7_3"
+	{
+		"en"		"You left C.A.T. alone, yet you couldn't do the same for A.R.I.S.?"
+		"ko"		"C.A.T.는 그냥 두셨으면서, A.R.I.S.는 그러지 못 하신 겁니까?"
+	}
+	"Vincent_Talk_Wave21_7_4"
+	{
+		"en"		"I don't want to resort to violence...but when desperate times call for help, someone has to take a stand."
+		"ko"		"폭력을 쓰고 싶지는 않지만...절박한 상황에는 누군가 맞서야 하는 법이죠."
+	}
+	"Vincent_Talk_Wave21_8_1"
+	{
+		"en"		"..."
+		"ko"		"..."
+	}
+	"Vincent_Talk_Wave21_8_2"
+	{
+		"en"		"{crimson}I guess that's that, then."
+		"ko"		"{crimson}그래. 그렇게 나오겠다 이거지."
+	}
+	"Vincent_Talk_Wave21_8_3"
+	{
+		"en"		"{crimson}I'll be on my way."
+		"ko"		"{crimson}나중에 두고보자고."
+	}
+	"Vincent_Talk_Wave21_Genocide_Route"
+	{
+		"en"		"{crimson}You feel a heavy sense of dread for the rest of the day..."
+		"ko"		"{crimson}당신은 심상치 않은 불안감이 느껴졌습니다...."
+	}
+	
+	// Wave25.
+	"Vincent_Talk_Wave25_1_1"
+	{
+		"en"		"You definitely didn't come here for no reason."
+		"ko"		"당신들이 아무 이유 없이 여기까지 오셨을 리는 없죠."
+	}
+	"Vincent_Talk_Wave25_1_2"
+	{
+		"en"		"So, who sent you?"
+		"ko"		"그래서, 누가 당신들을 보낸 겁니까?"
+	}
+	"Vincent_Talk_Wave25_1_3"
+	{
+		"en"		"Were {unique}Expidonsans{default} not brave enough to reach out to us on their own?"
+		"ko"		"{unique}엑스피돈사인들{default}이 직접 저희에게 연락할 용기가 없었던 걸까요?"
+	}
+	"Vincent_Talk_Wave25_1_4"
+	{
+		"en"		"Maybe you don't even know what {unique}Expidonsa{default} is."
+		"ko"		"어쩌면 당신들은 {unique}엑스피돈사{default}가 무엇인지조차 모르실지도 모르겠군요."
+	}
+	"Vincent_Talk_Wave25_2_1"
+	{
+		"en"		"So, who told you about this place?"
+		"ko"		"그래서, 누가 이 장소를 알려준 겁니까?"
+	}
+	"Vincent_Talk_Wave25_2_2"
+	{
+		"en"		"You definitely didn't stumble here on your own."
+		"ko"		"우연히 혼자 여기까지 오셨을 리는 없죠."
+	}
+	"Vincent_Talk_Wave25_2_3"
+	{
+		"en"		"Was it {unique}Expidonsa{default}?"
+		"ko"		"{unique}엑스피돈사{default}였습니까?"
+	}
+	"Vincent_Talk_Wave25_2_4"
+	{
+		"en"		"Do you even know what {unique}Expidonsa{default} is?"
+		"ko"		"애초에 {unique}엑스피돈사{default}가 무엇인지는 알고 계십니까?"
+	}
+	"Vincent_Talk_Wave25_3_1"
+	{
+		"en"		"You definitely didn't come here for no reason."
+		"ko"		"당신들이 아무 이유 없이 여기까지 오셨을 리는 없죠."
+	}
+	"Vincent_Talk_Wave25_3_2"
+	{
+		"en"		"So, who sent you?"
+		"ko"		"그래서, 누가 당신들을 보낸 겁니까?"
+	}
+	"Vincent_Talk_Wave25_3_3"
+	{
+		"en"		"Someone who just wants to break stuff?"
+		"ko"		"그냥 물건을 부수고 싶은 누군가였겠죠?"
+	}
+	"Vincent_Talk_Wave25_3_4"
+	{
+		"en"		"What else would your purpose here be?"
+		"ko"		"그게 아니라면 여기 오신 목적이 또 뭐가 있겠습니까?"
+	}
+	"Vincent_Talk_Wave25_3_1"
+	{
+		"en"		"You definitely didn't come here for no reason."
+		"ko"		"당신들이 아무 이유 없이 여기까지 오셨을 리는 없죠."
+	}
+	"Vincent_Talk_Wave25_5_2"
+	{
+		"en"		"So, who sent you?"
+		"ko"		"그래서, 누가 당신들을 보낸 겁니까?"
+	}
+	"Vincent_Talk_Wave25_5_3"
+	{
+		"en"		"Someone who just wants to break stuff?"
+		"ko"		"그냥 물건을 부수고 싶은 누군가였겠죠?"
+	}
+	"Vincent_Talk_Wave25_5_4"
+	{
+		"en"		"What else would your purpose here be?"
+		"ko"		"그게 아니라면 여기 오신 목적이 또 뭐가 있겠습니까?"
+	}
+ 
+	// Wave30.
+	"Vincent_Talk_Wave30_1_1"
+	{
+		"en"		"But if they've sent you here... that can't be right..."
+		"ko"		"하지만 만약 그들이 당신들을 여기로 보낸 거라면... 그럴 리가 없는데..."
+	}
+	"Vincent_Talk_Wave30_1_2"
+	{
+		"en"		"Is this why they have so many cryogenically frozen humans?!"
+		"ko"		"이래서 그렇게 많은 냉동 인간들을 보유하고 있었던 겁니까?!"
+	}
+	"Vincent_Talk_Wave30_1_3"
+	{
+		"en"		"They just... lured them into the labs and-"
+		"ko"		"그들을 그냥... 사람들을 연구소로 유인해서-"
+	}
+	"Vincent_Talk_Wave30_1_4"
+	{
+		"en"		"No no no no no, this can't be right, I- I'll be right back."
+		"ko"		"아니, 아니, 아니, 이럴 리가 없어요. 저... 잠깐만 다녀오겠습니다."
+	}
+	"Vincent_Talk_Wave30_2_1"
+	{
+		"en"		"They can't have sent you here, that can't be right..."
+		"ko"		"그들이 당신들을 여기로 보냈을 리 없어요, 그럴 리가 없는데..."
+	}
+	"Vincent_Talk_Wave30_2_2"
+	{
+		"en"		"It would explain why they have so many cryogenically frozen humans though."
+		"ko"		"그래도 그렇게나 많은 냉동 인간을 보유하고 있던 이유는 설명이 되긴 하는군요."
+	}
+	"Vincent_Talk_Wave30_2_3"
+	{
+		"en"		"They just... lured them into the labs and-"
+		"ko"		"그들을 그냥... 사람들을 연구소로 유인해서-"
+	}
+	"Vincent_Talk_Wave30_2_4"
+	{
+		"en"		"No... no, that can't be right, I'll be right back."
+		"ko"		"아니... 아니에요, 그럴 리 없습니다. 잠깐 다녀오겠습니다."
+	}
+	"Vincent_Talk_Wave30_3_1"
+	{
+		"en"		"If that's so, haven't you caused enough mayhem?"
+		"ko"		"그렇다면, 이미 충분한 혼란을 일으키신 것 아닙니까?"
+	}
+	"Vincent_Talk_Wave30_3_2"
+	{
+		"en"		"How much destruction does the human race need to bring to be satisfied?"
+		"ko"		"인류는 대체 얼마나 더 많은 파괴를 저질러야 만족하는 겁니까?"
+	}
+	"Vincent_Talk_Wave30_3_3"
+	{
+		"en"		"Maybe {unique}Expidonsa{default} was right about treating you like a threat."
+		"ko"		"어쩌면 {unique}엑스피돈사{default}가 당신들을 위협 인물로 취급한 것이 옳았을지도 모르겠군요."
+	}
+	"Vincent_Talk_Wave30_5_1"
+	{
+		"en"		"If that's so, haven't you caused enough mayhem?"
+		"ko"		"그렇다면, 이미 충분한 혼란을 일으키신 것 아닙니까?"
+	}
+	"Vincent_Talk_Wave30_5_2"
+	{
+		"en"		"How much destruction does the human race need to bring to be satisfied?"
+		"ko"		"인류는 대체 얼마나 더 많은 파괴를 저질러야 만족하는 겁니까?"
+	}
+	"Vincent_Talk_Wave30_5_3"
+	{
+		"en"		"Maybe {unique}Expidonsa{default} was right about treating you like a threat."
+		"ko"		"어쩌면 {unique}엑스피돈사{default}가 당신들을 위협 인물로 취급한 것이 옳았을지도 모르겠군요."
+	}
+ 
+	// Wave31.
+	"Vincent_Talk_Wave31_1_1"
+	{
+		"en"		"I'm not exactly sure what that thing was... but it seemed to be related with these Portal Gates."
+		"ko"		"그게 정확히 무엇이었는지는 모르겠지만... 이 포탈 게이트와 관련이 있는 것 같았습니다."
+	}
+	"Vincent_Talk_Wave31_1_2"
+	{
+		"en"		"It doesn't share any origins with the lab. Leaving it intact was probably the right choice."
+		"ko"		"연구소와는 아무런 연관도 없더군요. 그걸 부수지 않은 게 아마 옳은 선택이었을 겁니다."
+	}
+	"Vincent_Talk_Wave31_1_3"
+	{
+		"en"		"Well, I'll be going back to doing my research now."
+		"ko"		"자, 이제 다시 연구로 돌아가야겠습니다."
+	}
+	"Vincent_Talk_Wave31_2_1"
+	{
+		"en"		"That thing... what was that? It appears to be tied with the Portal Gates."
+		"ko"		"그것... 그게 대체 뭐였을까요? 포탈 게이트와 연관이 있어 보이더군요."
+	}
+	"Vincent_Talk_Wave31_2_2"
+	{
+		"en"		"No correlation with the laboratories either. Looks like it was searching for something."
+		"ko"		"연구소와도 아무런 연관성이 없었습니다. 뭔가를 찾고 있었던 것 같더군요."
+	}
+	"Vincent_Talk_Wave31_2_3"
+	{
+		"en"		"As strange as that was, I have to get back to my research."
+		"ko"		"이상한 일이긴 하지만, 저는 다시 연구로 돌아가야겠습니다."
+	}
+	"Vincent_Talk_Wave31_3_1"
+	{
+		"en"		"That thing that you just destroyed...I don't know what it is, or rather what it was."
+		"ko"		"방금 파괴하신 그것... 정체가 뭔지, 아니 뭐였는지조차 모르겠군요."
+	}
+	"Vincent_Talk_Wave31_3_2"
+	{
+		"en"		"Its destruction appears to have affected the Portal Gates. They're more unstable now."
+		"ko"		"그것을 파괴한 여파로 포탈 게이트들이 영향을 받은 것 같습니다. 이제 더 불안정해졌군요."
+	}
+	"Vincent_Talk_Wave31_3_3"
+	{
+		"en"		"Well, this is on you. I'm going back to my research now."
+		"ko"		"뭐, 이건 당신 책임입니다. 저는 이제 다시 연구로 돌아가겠습니다."
+	}
+	"Vincent_Talk_Wave31_4_1"
+	{
+		"en"		"That robot... its origins are unknown to me. Not that I'll know what they are with what you did."
+		"ko"		"그 로봇... 제게도 그 기원은 알려지지 않았습니다. 뭐, 당신이 하신 일 때문에 이젠 알아낼 방법도 없겠지만요."
+	}
+	"Vincent_Talk_Wave31_4_2"
+	{
+		"en"		"What I do know is that it was linked to these Portal Gates. They are precarious now."
+		"ko"		"제가 아는 건 그것이 이 포탈 게이트들과 연결되어 있었다는 것뿐입니다. 지금은 매우 불안정한 상태고요."
+	}
+	"Vincent_Talk_Wave31_4_3"
+	{
+		"en"		"You chose to do this. I'm going back to my research now."
+		"ko"		"이렇게 하기로 선택하신 건 당신입니다. 저는 이제 다시 연구로 돌아가겠습니다."
+	}
+ 
+	// Wave36.
+	"Vincent_Talk_Wave36_1_1"
+	{
+		"en"		"I was wrong."
+		"ko"		"제가 틀렸습니다."
+	}
+	"Vincent_Talk_Wave36_1_2"
+	{
+		"en"		"Well, wrong about you being sent by {unique}Expidonsans{default}."
+		"ko"		"그러니까, 당신들이 {unique}엑스피돈사인들{default}에게 보내졌다는 부분에서 말이죠."
+	}
+	"Vincent_Talk_Wave36_1_3"
+	{
+		"en"		"I wasn't aware of {unique}Expidonsa's{default} full picture."
+		"ko"		"그리고 제가 {unique}엑스피돈사{default}의 전체적인 실상을 제대로 알지 못했더군요."
+	}
+	"Vincent_Talk_Wave36_1_4"
+	{
+		"en"		"It appears that they aren't the best when it comes to being ethical."
+		"ko"		"그들이 윤리적인 면에서 그리 훌륭하지는 않은 모양입니다."
+	}
+	"Vincent_Talk_Wave36_1_5"
+	{
+		"en"		"I have also reverse-searched your emblems."
+		"ko"		"당신들의 문양도 역추적해봤습니다."
+	}
+	"Vincent_Talk_Wave36_1_6"
+	{
+		"en"		"You are some sort of mercēnārius, yeah?"
+		"ko"		"당신들은 일종의 용병이라는 거군요, 그렇죠?"
+	}
+	"Vincent_Talk_Wave36_1_7"
+	{
+		"en"		"This would mean that you've been hired by someone to loot this place."
+		"ko"		"그렇다면 누군가에게 고용되어 이 곳을 약탈하러 오셨다는 뜻이 되는군요."
+	}
+	"Vincent_Talk_Wave36_1_8"
+	{
+		"en"		"I'm afraid I can not let that happen."
+		"ko"		"유감이지만, 그런 일이 벌어지도록 둘 수는 없습니다."
+	}
+	"Vincent_Talk_Wave36_1_9"
+	{
+		"en"		"But since mercenaries are paid for their work, I have no reason to assume that you intend on stopping."
+		"ko"		"하지만 용병은 일한 만큼 보수를 받는 법이니, 당신들이 멈출 생각이 있다고 여길 이유도 없겠군요."
+	}
+	"Vincent_Talk_Wave36_2_1"
+	{
+		"en"		"I was mistaken."
+		"ko"		"제가 착각했습니다."
+	}
+	"Vincent_Talk_Wave36_2_2"
+	{
+		"en"		"Well, mistaken about you being sent by {unique}Expidonsa{default}."
+		"ko"		"그러니까, 당신들이 {unique}엑스피돈사{default}에게 보내졌다는 부분에서 말이죠."
+	}
+	"Vincent_Talk_Wave36_2_3"
+	{
+		"en"		"I wasn't aware of {unique}Expidonsa's{default} full history."
+		"ko"		"그리고 제가 {unique}엑스피돈사{default}의 전체적인 역사를 제대로 알지 못했더군요."
+	}
+	"Vincent_Talk_Wave36_2_4"
+	{
+		"en"		"It appears that they aren't the best when it comes to being ethical."
+		"ko"		"그들이 윤리적인 면에서 그리 훌륭하지는 않은 모양입니다."
+	}
+	"Vincent_Talk_Wave36_2_5"
+	{
+		"en"		"I have also reverse-searched your emblems."
+		"ko"		"당신들의 문양도 역추적해봤습니다."
+	}
+	"Vincent_Talk_Wave36_2_6"
+	{
+		"en"		"You are some sort of mercenarye, is that correct?"
+		"ko"		"당신들은 일종의 용병이라는 거군요, 맞습니까?"
+	}
+	"Vincent_Talk_Wave36_2_7"
+	{
+		"en"		"This would mean that you've been hired by someone to loot this place."
+		"ko"		"그렇다면 누군가에게 고용되어 이 곳을 약탈하러 오셨다는 뜻이 되는군요."
+	}
+	"Vincent_Talk_Wave36_2_8"
+	{
+		"en"		"I'm afraid I can not let that happen."
+		"ko"		"유감이지만, 그런 일이 벌어지도록 둘 수는 없습니다."
+	}
+	"Vincent_Talk_Wave36_2_9"
+	{
+		"en"		"But since mercenaries are paid for their work, I have no reason to assume that you intend on stopping."
+		"ko"		"하지만 용병은 일한 만큼 보수를 받는 법이니, 당신들이 멈출 생각이 있다고 여길 이유도 없겠군요."
+	}
+	"Vincent_Talk_Wave36_3_1"
+	{
+		"en"		"I'm not sure what your goal here is, but I will have to intervene."
+		"ko"		"여기서 당신들의 목적이 무엇인지는 모르겠지만, 저도 개입할 수밖에 없겠군요."
+	}
+	"Vincent_Talk_Wave36_3_2"
+	{
+		"en"		"I can not allow you to bring more mayhem."
+		"ko"		"더 이상의 혼란을 일으키도록 둘 수는 없습니다."
+	}
+ 
+	// Wave37.
+	"Vincent_Talk_Wave37_1_1"
+	{
+		"en"		"I can not let you get any of this gear."
+		"ko"		"이 장비들을 여러분에게 넘길 수는 없습니다."
+	}
+	"Vincent_Talk_Wave37_1_2"
+	{
+		"en"		"If it were to fall into the wrong hands, the repercussions could be catastrophic."
+		"ko"		"잘못된 자들의 손에 들어간다면, 그 여파는 재앙에 가까울 겁니다."
+	}
+	"Vincent_Talk_Wave37_2_1"
+	{
+		"en"		"You can not get any of this gear. I can't allow that."
+		"ko"		"이 장비들을 손에 넣으실 수는 없습니다. 그건 허락할 수 없군요."
+	}
+	"Vincent_Talk_Wave37_2_2"
+	{
+		"en"		"If anyone with the wrong plans was to get their hands on this...the fate of our world could be at risk."
+		"ko"		"잘못된 계획을 가진 누군가가 이걸 손에 넣는다면...우리 세계의 운명이 위태로워질 수 있습니다."
+	}
+ 
+	// Wave38.
+	"Vincent_Talk_Wave38_1_1"
+	{
+		"en"		"I have to intervene."
+		"ko"		"저도 개입할 수밖에 없군요."
+	}
+	"Vincent_Talk_Wave38_1_2"
+	{
+		"en"		"I'm sorry."
+		"ko"		"죄송합니다."
+	}
+	
+	// Meet.
+	"Vincent_Encounter_Anger"
+	{
+		"en"		"You want a death robot? {crimson}I'LL GIVE YOU ONE.\n{fullred}Initiating extermination of infection-based organisms."
+		"ko"		"데스 로봇을 원했나? {crimson}여기 있다.\n{fullred}감염 기반 유기체 박멸 개시."
+	}
+	"Vincent_Encounter"
+	{
+		"en"		"Not gonna leave? I'll make you leave myself."
+		"ko"		"아직도 떠나지 않았군요? 그럼 제가 직접 내보낼 수밖에."
+	}
+	
+	"Vincent_TimeOver"
+	{
+		"en"		"I'm sorry it has come to this. I'm afraid you shouldn't have taken that job..."
+		"ko"		"이렇게 되어서 정말 유감입니다. 이런 일은 처음부터 맡지 않으셔야 했을텐데..."
+	}
+	"Vincent_TimeOver_Anger"
+	{
+		"en"		"{crimson}You are DONE."
+		"ko"		"{crimson}끝이다."
+	}
+	"Vincent_TimeOver_OneDead"
+	{
+		"en"		"You can't keep running away forever."
+		"ko"		"계속 도망칠 수는 없을텐데."
+	}
+	
+	"Vincent_PourOil_1"
+	{
+		"en"		"Someone turn the heat up."
+		"ko"		"좀 뜨겁게 달궈보시죠."
+	}
+	"Vincent_PourOil_2"
+	{
+		"en"		"Is it just me or are you engulfed in flames?"
+		"ko"		"저만 보이나요? 당신들 지금 불길에 휩싸였는데?"
+	}
+	"Vincent_PourOil_3"
+	{
+		"en"		"Spreading the inferno."
+		"ko"		"불길 확산."
+	}
+	"Vincent_PourOil_4"
+	{
+		"en"		"Fire in the hole."
+		"ko"		"불의 세례를."
+	}
+	"Vincent_PourOil_5"
+	{
+		"en"		"Lighting it up."
+		"ko"		"불을 지펴볼까요?"
+	}
+	
+	"Vincent_Enter_MegaEnrage"
+	{
+		"en"		"{crimson} ...IF YOU THINK I'LL GO DOWN WITHOUT A FIGHT..."
+		"ko"		"{crimson} ...내가 지금 싸우지도 않고 물러날 거라고 생각해?"
+	}
+	
+	"Vincent_Armor_Apply"
+	{
+		"#format"	"{1:t}"
+		"en"		"{rare}{1}'s armor hardens and fists strengthen, aided by the laboratory."
+		"ko"		"{rare}{1}가 연구실의 도움을 받아 장갑이 강화되고 주먹이 강해지고 있다."
+	}
+	
+	"Vincent_Trophies"
+	{
+		"en"		"Vincent permitted you to access the laboratories. You have obtained: {unique}Expidonsan Research Card."
+		"ko"		"빈센트가 당신이 연구실에 진입할 수 있도록 허용해주었습니다. 당신이 얻은 것: {unique}엑스피돈사 연구 카드."
+	}
+	"Vincent_Trophies_Anger"
+	{
+		"en"		"Vincent is gone... all that's left is this keycard on the floor. You have obtained: {crimson}Scorched Expidonsan Research Card."
+		"ko"		"빈센트는 사라졌습니다... 그 자리에 남은건 키카드 하나 뿐입니다. 당신이 얻은 것: {crimson}불타버린 엑스피돈사 연구 카드."
+	}
+	
+	"Vincent_Win_Anger_1"
+	{
+		"en"		"{crimson}No..."
+		"ko"		"{crimson}안돼..."
+	}
+	"Vincent_Win_Anger_2"
+	{
+		"en"		"{crimson}I can't let you get away with this."
+		"ko"		"{crimson}이대로 너희를 놓아줄 순 없어..."
+	}
+	"Vincent_Win_Anger_3"
+	{
+		"en"		"{crimson}I WON'T let you get away with this!"
+		"ko"		"{crimson}이대로 너희를 놓아줄 수 없어!!!"
+	}
+	"Vincent_Win_Anger_4"
+	{
+		"en"		"{crimson}I'M GONNA DELETE YOU!"
+		"ko"		"{crimson}이 세상에서 제거해주마!"
+	}
+	
+	"Vincent_Win_1"
+	{
+		"en"		"Ah."
+		"ko"		"아."
+	}
+	"Vincent_Win_2"
+	{
+		"en"		"It appears that I'm not strong enough to take you down."
+		"ko"		"제가 당신들을 쓰러트릴 정도로 강하지 못했던 모양이네요."
+	}
+	"Vincent_Win_3"
+	{
+		"en"		"I was hoping to keep the outside world safe with what was left behind here."
+		"ko"		"저는 여기에 남겨진 것들이 바깥 세계를 망치게 두고 싶진 않았습니다만,"
+	}
+	"Vincent_Win_4"
+	{
+		"en"		"But if you're so persistent on taking this gear..."
+		"ko"		"만약 여러분이 이 장비들을 계속 사용하고 싶으신거라면..."
+	}
+	"Vincent_Win_5"
+	{
+		"en"		"I won't try to stop you anymore, knowing that my attempts will be futile."
+		"ko"		"더 이상 여러분을 막지 않겠습니다. 그런 당신들을 막아봤자 헛수고일테니."
+	}
+	"Vincent_Win_6"
+	{
+		"en"		"Take this with you, and don't let it fall into the wrong hands, alright?"
+		"ko"		"이걸 받아주세요. 그리고 절대, 나쁜 사람들의 손에 넘어가게 두어선 안됩니다. 아시겠죠?"
+	}
+	
+	"Vincent_Win_OutsideLab_1_1"
+	{
+		"en"		"Alright."
+		"ko"		"좋습니다."
+	}
+	"Vincent_Win_OutsideLab_1_2"
+	{
+		"en"		"Enough."
+		"ko"		"이 정도면 충분하군요."
+	}
+	"Vincent_Win_OutsideLab_1_3"
+	{
+		"en"		"Ah."
+		"ko"		"아."
+	}
+	"Vincent_Win_OutsideLab_2_1"
+	{
+		"en"		"I'm taking my leave."
+		"ko"		"전 이제 자리를 뜨겠습니다."
+	}
+	"Vincent_Win_OutsideLab_2_2"
+	{
+		"en"		"That's my cue to go."
+		"ko"		"보아하니 여기서 떠날 시간인 것 같네요."
+	}
+	"Vincent_Win_OutsideLab_2_3"
+	{
+		"en"		"You got the best of me this time."
+		"ko"		"이번엔 저를 이기셨군요."
+	}
+	
+	"Vincent_Lose"
+	{
+		"en"		"It's over, please don't come back."
+		"ko"		"이제 끝입니다. 제발, 다시는 돌아오지 말아주세요."
+	}
+	"Vincent_Lose_Anger"
+	{
+		"en"		"{crimson}Look at what you made me do. {default} At least I avenged {rare}them{default}."
+		"ko"		"{crimson}이렇게까지 해서라도 너희를 막아야 했나. {default}적어도 {rare}그들{default}의 복수는 이뤘군."
+	}
+	"Vincent_Lose_OneDead"
+	{
+		"en"		"Your reign of chaos ends here."
+		"ko"		"혼돈에 찬 광기도 여기서 끝이다."
+	}
+	
+	"Vincent_SlamDunk_1"
+	{
+		"en"		"I'm gonna get you."
+		"ko"		"지금 잡으러 갑니다!"
+	}
+	"Vincent_SlamDunk_2"
+	{
+		"en"		"Here I come!"
+		"ko"		"준비되셨죠!"
+	}
+	"Vincent_SlamDunk_3"
+	{
+		"en"		"You better run!"
+		"ko"		"도망쳐보세요!"
+	}
+	
+	"Vincent_Response_Expidonsan_Research_Card_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Your programming must have gone faulty, {rare}{1}{default}."
+		"ko"		"{rare}{1}{default}. 당신의 프로그래밍에 버그가 있는 게 틀림없군요."
+	}
+	"Vincent_Response_Expidonsan_Research_Card_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"You've gone rogue, {rare}{1}{default}."
+		"ko"		"결함인가요. {rare}{1}{default}?"
+	}
+	"Vincent_Response_Expidonsan_Research_Card_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"Your data has been corrupted, {rare}{1}{default}."
+		"ko"		"{rare}{1}{default}. 당신의 데이터가 오염되었나 보군요."
+	}
+	
+	// Messenger.
+	"Messenger_Encounter_FirstMatch"
+	{
+		"en"		"Welcome, welcome sinners! I'm bearing a message to you all!"
+		"ko"		"잘 왔다, 죄인들아! 여기 너희에게 줄 전령이 하나 있다!"
+	}
+	"Messenger_Encounter_Rematch"
+	{
+		"en"		"Round two."
+		"ko"		"2차전은 준비됐겠지, 죄인들?"
+	}
+	"Messenger_Encounter_CyberGrind"
+	{
+		"en"		"ROUND THREE."
+		"ko"		"3차전은 준비됐겠지, 죄인들!"
+	}
+	"Messenger_Encounter_BossrushDuo"
+	{
+		"en"		"You're gonna die."
+		"ko"		"죽을 준비는 했겠지, 죄인들?"
+	}
+	
+	"Messenger_Encounter_CyberGrind_Inform"
+	{
+		"en"		"This time, I've prepared a special trick for you sinners. Now, savor the combination of hellfire and frostbite!!"
+		"ko"		"이번엔 너희 죄인들을 위해 특별한 트릭을 준비했지. 지옥불과 서릿발의 조합을 맛보거라!!"
+	}
+	
+	"Messenger_Behold_Khalm"
+	{
+		"en"		"{crimson}AHAHAHAHHAHAHAHA!!! KNEEL BEFORE THE LORD'S MIGHT!"
+		"ko"		"{crimson}으하하하하하!!! 전부 뒈져버려라!!"
+	}
+	
+	"Messenger_TimeOver_FirstMatch_1"
+	{
+		"en"		"Shame."
+		"ko"		"쪽팔리는 줄 알아라."
+	}
+	"Messenger_TimeOver_FirstMatch_2"
+	{
+		"en"		"Are you for real??"
+		"ko"		"진심인가?"
+	}
+	"Messenger_TimeOver_FirstMatch_3"
+	{
+		"en"		"No comment."
+		"ko"		"뭐라 할 말이 없군."
+	}
+	
+	"Messenger_TimeOver_Rematch"
+	{
+		"en"		"..........."
+		"ko"		"..........."
+	}
+	
+	"Messenger_TimeOver_CyberGrind"
+	{
+		"en"		"Well, well.. Looks like round 3 was a bit TOUGH, huh??"
+		"ko"		"이런 이런.. 3차전은 좀 빡셌나?"
+	}
+	
+	"Messenger_LastMann_FirstMatch_1"
+	{
+		"en"		"Your friends are dead. {crimson}Accept your fate."
+		"ko"		"네 놈의 친구들은 전부 죽었다. {crimson}네 운명을 받아들여라."
+	}
+	"Messenger_LastMann_FirstMatch_2"
+	{
+		"en"		"It's just you and me now."
+		"ko"		"너와 나만 남았다."
+	}
+	"Messenger_LastMann_FirstMatch_3"
+	{
+		"en"		"Time for you to forward my message to your superiors."
+		"ko"		"네 놈의 고용인에게 네 놈의 부고 소식을 전할 시간이군."
+	}
+	"Messenger_LastMann_FirstMatch_4"
+	{
+		"en"		"Give up, you cannot win."
+		"ko"		"포기해라. 넌 이길 수 없다."
+	}
+	
+	"Messenger_LastMann_Rematch_1"
+	{
+		"en"		"YOU ARE DEAD"
+		"ko"		"죽으라고!!!!"
+	}
+	"Messenger_LastMann_Rematch_2"
+	{
+		"en"		"I'LL FUCK YOU UP."
+		"ko"		"사지를 찢어발겨주마!!!!"
+	}
+	"Messenger_LastMann_Rematch_3"
+	{
+		"en"		"AHAHAHAHAHAHA"
+		"ko"		"으하하하하하!!!"
+	}
+	
+	"Messenger_LastMann_CyberGrind"
+	{
+		"en"		"FINALLY!!!! YOU'RE THE LAST ONE LEFT!!!!!"
+		"ko"		"드디어!!!! 너만 남았다!!!!!"
+	}
+	
+	"Messenger_GroupAttack_1"
+	{
+		"en"		"No more fucking around."
+		"ko"		"이제 애새끼 장난은 끝이다."
+	}
+	"Messenger_GroupAttack_2"
+	{
+		"en"		"Stop wasting my time shitheads."
+		"ko"		"내 시간이 너희같은 머저리들 때문에 낭비되고 있다."
+	}
+	"Messenger_GroupAttack_3"
+	{
+		"en"		"All sinners will {crimson}DIE."
+		"ko"		"모든 죄인은 {crimson}죽어야만 한다."
+	}
+	"Messenger_GroupAttack_4"
+	{
+		"en"		"You just brought infinite pain upon you."
+		"ko"		"그래봤자 무한한 고통을 느끼게 될 뿐이다."
+	}
+	"Messenger_GroupAttack_5"
+	{
+		"en"		"You fucks are just a waste of my time."
+		"ko"		"나는 너희들과 이 지랄하면서 놀 시간이 없다."
+	}
+	
+	"Messenger_GroupAttack_CyberGrind_1"
+	{
+		"en"		"No more holding back!"
+		"ko"		"더 이상 봐주지 않는다!"
+	}
+	"Messenger_GroupAttack_CyberGrind_2"
+	{
+		"en"		"You're worth the time it takes to kill you."
+		"ko"		"너희같은 죄인을 죽이기 위해서라면 내 시간이 아깝지 않지."
+	}
+	"Messenger_GroupAttack_CyberGrind_3"
+	{
+		"en"		"Keep running. I'll make you feel an eternity of pain."
+		"ko"		"더 도망쳐봐라. 무한한 고통을 느끼게 해주지."
+	}
+	"Messenger_GroupAttack_CyberGrind_4"
+	{
+		"en"		"Just this once, I’ll have some fun with you."
+		"ko"		"이번만은 너희와 마음껏 놀아주도록 하지."
+	}
+	"Messenger_GroupAttack_CyberGrind_5"
+	{
+		"en"		"All sinner must {crimson}DIE! And you most of all!"
+		"ko"		"모든 죄인들은 {crimson}죽어야 한다. 특히 너희는 죽어야만 해!"
+	}
+	
+	"Messenger_Response_Messenger"
+	{
+		"en"		"USING MY OWN WEAPON AGAINST ME? {crimson}GO FUCK YOURSELF."
+		"ko"		"지금 나를 상대로 내 무기를 쳐쓰려는 거냐? {crimson}네놈을 찢어발겨주마!"
+	}
+	
+	"Messenger_Death_FirstMatch_1"
+	{
+		"en"		"Ugh... little fucks.. This ain't over!"
+		"ko"		"으윽... 이런 개좆도 아닌 쓰레기들한테... 이게 끝이 아니다!"
+	}
+	"Messenger_Death_FirstMatch_2"
+	{
+		"en"		"You're just delaying the inevitable.."
+		"ko"		"너흰 그저 필연을 미룰 뿐이다.."
+	}
+	"Messenger_Death_FirstMatch_3"
+	{
+		"en"		"I may or may not have heavily underestimated you.."
+		"ko"		"어쩌면 네놈들을 과소평가 했을수도 있겠군.."
+	}
+	"Messenger_Death_FirstMatch_4"
+	{
+		"en"		"No..."
+		"ko"		"안 돼..."
+	}
+	
+	"Messenger_Death_Rematch_1"
+	{
+		"en"		"NOT TWICE."
+		"ko"		"두 번씩이나 졌단 말인가!!"
+	}
+	"Messenger_Death_Rematch_2"
+	{
+		"en"		"WHY"
+		"ko"		"어째서냐!!"
+	}
+	"Messenger_Death_Rematch_3"
+	{
+		"en"		"YOU WILL REGRET THIS."
+		"ko"		"이 일을 후회하게 해주마!!"
+	}
+	"Messenger_Death_Rematch_4"
+	{
+		"en"		"I've failed you..... my Lord.."
+		"ko"		"전 실패했습니다... 주군.."
+	}
+	"Messenger_Death_Rematch_5"
+	{
+		"en"		"How will I.... tell Him about my failure."
+		"ko"		"무슨 낯짝으로.. 그 분께 이 실패를 말할 수 있겠는가."
+	}
+	"Messenger_Death_Rematch_6"
+	{
+		"en"		"FUCK FUCK FUCK GOD FUCKING DAMNIT {crimson}FUCK!!!{default}"
+		"ko"		"씨발 씨발 씨발 {crimson}씨발!!!{default}"
+	}
+	
+	"Messenger_Death_CyberGrind"
+	{
+		"en"		"THREE times?! I lost THREE times?!"
+		"ko"		"세 번씩이나 졌단 말인가!!"
+	}
+	
+	"Messenger_Anger_1"
+	{
+		"en"		"AHAHAHAHAHHA, all of you are so{crimson}FUCKED!!"
+		"ko"		"으하하하하하, 전부 {crimson}뒈질 준비나 해라!!"
+	}
+	"Messenger_Anger_2"
+	{
+		"en"		"{purple}VOID{default}, GRANT ME STRENGTH!"
+		"ko"		"공허여, 내게 힘을 주소서!"
+	}
+	"Messenger_Anger_3"
+	{
+		"en"		"You think you won? I'M JUST GETTING STARTED."
+		"ko"		"거의 다 이겼다고 생각하나? 지금부터 시작이다!"
+	}
+	"Messenger_Anger_4"
+	{
+		"en"		"Remember those cats? {crimson} You're about to get it worse."
+		"ko"		"그 고양이들을 기억하나? {crimson}너희는 그것보다 더 심한 꼴을 당하게 될 거다."
+	}
+	"Messenger_Anger_5"
+	{
+		"en"		"{crimson}DEATH TO MY ENEMIES!!!."
+		"ko"		"{crimson}저들에게 죽음을!!!!!"
+	}
+	"Messenger_Anger_6"
+	{
+		"en"		"{crimson}DIE ALREADY!!!"
+		"ko"		"{crimson}좀 뒈져라!!!"
+	}
+	
+	"Messenger_Anger_CyberGrind_1"
+	{
+		"en"		"JUST FUCKING DIE ALREADY!!!!!!!!!!!!!"
+		"ko"		"제발 좀 쳐죽어라!!!!!!!!!!!!!"
+	}
+	"Messenger_Anger_CyberGrind_2"
+	{
+		"en"		"WHY WON'T YOU JUST DIE?!"
+		"ko"		"대체 왜 안 죽는 거냔 말이다!!!!!"
+	}
+	
+	// I'm Sorry. Messenger is inversed win message.
+	"Messenger_Win_FirstMatch_1"
+	{
+		"en"		"Judgement delivered."
+		"ko"		"정의가 집행되었다."
+	}
+	"Messenger_Win_FirstMatch_2"
+	{
+		"en"		"Your penance is now over."
+		"ko"		"네 놈들의 죗값은 이걸로 전부 치뤘다."
+	}
+	"Messenger_Win_FirstMatch_3"
+	{
+		"en"		"Thus your reign of terror is no more."
+		"ko"		"네 놈들의 공포 정치도 이걸로 끝이다."
+	}
+	
+	"Messenger_Win_Rematch_1"
+	{
+		"en"		"{crimson}TAKE THAT YOU FUCKS"
+		"ko"		"{crimson}멍청한 병신새끼들!"
+	}
+	"Messenger_Win_Rematch_2"
+	{
+		"en"		"Message...... delivered...."
+		"ko"		"전령이... 전달되었다...."
+	}
+	"Messenger_Win_Rematch_3"
+	{
+		"en"		"Are you proud? My Lord...."
+		"ko"		"이제 만족하십니까? 주군이시여...."
+	}
+	
+	"Messenger_Win_CyberGrind"
+	{
+		"en"		"Finally, victory is MINE! You fucking idiots..."
+		"ko"		"드디어.. 나의 승리다! 이 머저리 새기들..."
+	}
+	
+	// Last Overlord.
+	"LastOverlord_Encounter"
+	{
+		"en"		"All these overlords wish to take my place... You are one of them too, arent you..."
+		"ko"		"이 대군주들은 내 자리를 차지하기 위해 찾아온 자들이지... 너희들도 그들과 별반 다른 건 없어 보이는군..."
+	}
+	
+	"LastOverlord_Win"
+	{
+		"en"		"G-Guess i didnt make the cut, huh... Make sure that W.F. Wont get this... End him and {black}Shadowing Darkness."
+		"ko"		"아... 아무래도 난 틀린것 같군... 절대로 배풍등이 목적을 이루게 해서는 안 돼 ... 그 놈을 끝내고 {black}응달{default}을 막아야 해."
+	}
+	"LastOverlord_Lose"
+	{
+		"en"		"I'll head back... if you let me."
+		"ko"		"난 돌아간다... 너희가 날 놓아준다면."
+	}
+	
+	"LastOverlord_Win"
+	{
+		"en"		"You defeated the final overlord and thus he bestows you... {red}''His final wish''{default}."
+		"ko"		"최후의 오버로드를 쓰러뜨렸습니다. 그리고 그는 여러분에게... {red}''자신의 마지막 소원''{default}을 남깁니다."
+	}
+	
+	// Bladedance.
+	"Bladedance_Encounter"
+	{
+		"en"		"How did you get here? Why are you attacking me?? More void creatures?"
+		"ko"		"어떻게 여기까지 온 거지? 날 공격하는 이유가 뭐냐?? 또 다른 공허 괴물들이냐?"
+	}
+	
+	"Bladedance_BuffAlly_1"
+	{
+		"en"		"My copies, go!"
+		"ko"		"가라, 내 분신들아!"
+	}
+	"Bladedance_BuffAlly_2"
+	{
+		"en"		"I god damn hate fighting, get out!"
+		"ko"		"이젠 싸움도 정말 지긋지긋하군! 여기서 꺼져라!"
+	}
+	"Bladedance_BuffAlly_3"
+	{
+		"en"		"Wish you could lose at the casino I once owned!"
+		"ko"		"네놈들이 내가 갖고 있었던 카지노에서 거하게 망하길 빈다!"
+	}
+	
+	"Bladedance_Anger"
+	{
+		"en"		"You have seen nothing I say! I'm the least of your worries!"
+		"ko"		"내 말은 못 들은 걸로 해라! 지금 나한테 신경 쓸 때가 아니란 말이다!"
+	}
+	
+	"Bladedance_Win"
+	{
+		"en"		"You and Bob the first.. you both misunderstand who the enemy is.. its {white}Whiteflower{default} you fools! He betrayed {crimson}Guln{default} aswell!"
+		"ko"		"너희랑 밥 1세는 누가 진짜 적인지 모르고 있어.. {white}배풍등{default}이 {crimson}굴른{default}을 배신했단 말이다, 이 멍청이들아!"
+	}
+	"Bladedance_Escape"
+	{
+		"en"		"{crimson}Bladedance{default} escapes from you... and gains the ability to copy {crimson}you."
+		"ko"		"{crimson}칼춤{default}이 도망쳤습니다... {crimson}여러분을{default}을 복제할 수 있는 능력을 얻은 채로 말이죠."
+	}
+	"Bladedance_Trophies"
+	{
+		"en"		"{default}This battle wasn't something that should have happened. You had little to no chance... This is... {red}''Bob's True fear''{default}."
+		"ko"		"{default}이 전투는 일어나서는 안되는 일이었습니다. 당신에겐 선택의 기회가 없었지만 말이죠... 이건... {red}''밥의 진정한 공포''{default}입니다."
+	}
+	
+	// Whiteflower.
+	"Whiteflower_TimeOver"
+	{
+		"en"		"Out of time, you're completely surrounded.\nYou now belong to me.\nSubmit.\nHelp me kill Bob, and we will rule it all."
+		"ko"		"시간 초과, 너희는 완전히 포위당했다.\n그러니 이제 얌전히 나를 따라라.\n내가 밥을 죽이는걸 도와주면, 우리는 세상을 지배할 수 있다."
+	}
+	
+	"Whiteflower_Lose"
+	{
+		"en"		"Now all that's left...\nIs Bob."
+		"ko"		"이제 남은 건...\n밥 1세뿐이군."
+	}
+	
+	"Whiteflower_Death_1"
+	{
+		"en"		"Y-You... fucking rats... rot in hell Bob..."
+		"ko"		"이... 미친 쥐새끼들이... 지옥에서 썩어 문드러져라 밥..."
+	}
+	"Whiteflower_Death_2"
+	{
+		"en"		"Whiteflower perishes.\nHis army scatters."
+		"ko"		"배풍등이 소멸해간다.\n그의 무리가 사기를 잃고 흩어진다."
+	}
+	
+	"Whiteflower_AllyDeath_1"
+	{
+		"en"		"Argk... You're next."
+		"ko"		"그래.. 네 녀석 차례다."
+	}
+	"Whiteflower_AllyDeath_2"
+	{
+		"en"		"Why are you running?"
+		"ko"		"왜 도망가는거냐?"
+	}
+	"Whiteflower_AllyDeath_3"
+	{
+		"en"		"First my army so I'm alone? Pah!"
+		"ko"		"내 무리를 먼저 치고 날 상대하시겠다고? 하!"
+	}
+	"Whiteflower_AllyDeath_3_Freeplay"
+	{
+		"en"		"From one maniac to another huh?"
+		"ko"		"미친 놈이 또 다른 미친 놈을 싸지른다더니."
+	}
+	"Whiteflower_AllyDeath_4"
+	{
+		"en"		"You are dirty."
+		"ko"		"불결한 놈."
+	}
+	"Whiteflower_AllyDeath_5"
+	{
+		"en"		"From one maniac to another huh?"
+		"ko"		"미친 놈이 또 다른 미친 놈을 싸지른다더니."
+	}
+	"Whiteflower_AllyDeath_6"
+	{
+		"en"		"You are just like them, weak."
+		"ko"		"넌 저 놈들과 다를바 없다. 약해빠졌지."
+	}
+	"Whiteflower_AllyDeath_7"
+	{
+		"en"		"You are a fool."
+		"ko"		"멍청한 놈."
+	}
+	"Whiteflower_AllyDeath_8"
+	{
+		"en"		"Such ignorance."
+		"ko"		"어리석군."
+	}
+	"Whiteflower_AllyDeath_9"
+	{
+		"en"		"They at least believe in their leader, do you?"
+		"ko"		"저들은 적어도 나를 믿는다. 넌 도대체 무슨 가치가 있지?"
+	}
+	"Whiteflower_AllyDeath_9_Freeplay"
+	{
+		"en"		"Argk... You're next."
+		"ko"		"그래.. 네 녀석 차례다."
+	}
+	"Whiteflower_AllyDeath_10"
+	{
+		"en"		"I actually care for them, do you care for your own army?"
+		"ko"		"난 내 무리를 한 번도 소홀히 대한 적이 없다. 넌 안 그러겠지만."
+	}
+	"Whiteflower_AllyDeath_10_Freeplay"
+	{
+		"en"		"You are dirty."
+		"ko"		"역겨운 놈."
+	}
+	
+	"Whiteflower_AllyDeath_Alert"
+	{
+		"en"		"He weakens as you defeat his army."
+		"ko"		"당신이 그의 무리를 파괴한 이후, 그는 훨씬 약해졌습니다."
+	}
+	
+	// Vhxis.
+	"Vhxis_Encounter"
+	{
+		"en"		"You're nothing before the power of the Void!"
+		"ko"		"공허의 힘에 비하면, 너흰 아무것도 아니다!"
+	}
+	
+	"Vhxis_Death_1"
+	{
+		"en"		"You fools!... You think I made the Void?!"
+		"ko"		"이런 멍청한 놈들! 난 공허를 막고 있었단 말이다!"
+	}
+	"Vhxis_Death_2"
+	{
+		"en"		"{purple}The void has been released..."
+		"ko"		"{purple}비히시스가 막고 있던 공허가 풀려나고 말았습니다..."
+	}
+	
+	"Vhxis_TimeOver"
+	{
+		"en"		"You almost released the Void, I have to keep it in check, piss off!"
+		"ko"		"네 놈들 때문에 공허의 봉인이 거의 풀릴 뻔했다! 난 계속 공허를 막고 있어야 하니 얼른 꺼져라!"
+	}
+	
+	"Vhxis_Anger"
+	{
+		"en"		"Die already! I'm giving it all already!!"
+		"ko"		"빨리 죽어! 왜 이리 끈질긴 거냐!!!!!!!"
+	}
+	
+	"Vhxis_Lose"
+	{
+		"en"		"Back to the Void gate I go."
+		"ko"		"다시 공허 관문으로 돌아가야겠군."
+	}
+	
+	// Knight of the Curtain.
+	"KnightOfTheCurtain_Encounter_Text"
+	{
+		"en"		""
+		"ko"		"장막의 기사가 전장에 침입합니다."
+	}
+	
+	"KnightOfTheCurtain_Encounter_1"
+	{
+		"en"		""
+		"ko"		"바깥 공기를 마셔보는 게 얼마만인지. 정복의 시작으로는 너희가 좋겠군."
+	}
+	"KnightOfTheCurtain_Encounter_2"
+	{
+		"en"		""
+		"ko"		"{darkgray}움브랄의 지배자{default}가 죽고 나서 눈치 볼 일 없어서 좋군. 준비는 됐나?"
+	}
+	
+	"KnightOfTheCurtain_Win_Anger"
+	{
+		"en"		""
+		"ko"		"역겨운 놈들."
+	}
+	"KnightOfTheCurtain_Win"
+	{
+		"en"		""
+		"ko"		"싱거운 놈들."
+	}
+	
+	"KnightOfTheCurtain_GroupAttack_1"
+	{
+		"en"		""
+		"ko"		"공허의 힘으로."
+	}
+	"KnightOfTheCurtain_GroupAttack_2"
+	{
+		"en"		""
+		"ko"		"혼돈의 힘으로."
+	}
+	"KnightOfTheCurtain_GroupAttack_3"
+	{
+		"en"		""
+		"ko"		"장막의 힘으로."
+	}
+	
+	"KnightOfTheCurtain_Summon_Servant_1"
+	{
+		"en"		""
+		"ko"		"가라! 나의 하수인이여!"
+	}
+	"KnightOfTheCurtain_Summon_Servant_2"
+	{
+		"en"		""
+		"ko"		"나의 명을 듣는 자는 고개를 들어라!"
+	}
+	"KnightOfTheCurtain_Summon_Servant_3"
+	{
+		"en"		""
+		"ko"		"저들을 죽여라!"
+	}
+	
+	"KnightOfTheCurtain_Anger_1"
+	{
+		"en"		""
+		"ko"		"지겹군."
+	}
+	"KnightOfTheCurtain_Anger_2"
+	{
+		"en"		""
+		"ko"		"슬슬 죽을 때가 되지 않았나?"
+	}
+	
+	"KnightOfTheCurtain_LastMann_1"
+	{
+		"en"		""
+		"ko"		"너 혼자서 나와 내 하수인을 상대하겠다고? 꿈 깨시지 그래?"
+	}
+	"KnightOfTheCurtain_LastMann_2"
+	{
+		"en"		""
+		"ko"		"너 혼자 남았다. 포기하지 그래?"
+	}
+	
+	"KnightOfTheCurtain_TimeOver_1"
+	{
+		"en"		""
+		"ko"		"시간 초과다. 패배를 받아들이도록."
+	}
+	"KnightOfTheCurtain_TimeOver_2"
+	{
+		"en"		""
+		"ko"		"하수인에게 너무 시간을 빼앗긴 거 아닌가? 장막이 열려있는 한 그들은 무한하지."
+	}
+	
+	"KnightOfTheCurtain_Death_1"
+	{
+		"en"		""
+		"ko"		"이런 놈들한테 이 몸이 패배했다고?"
+	}
+	"KnightOfTheCurtain_Death_2"
+	{
+		"en"		""
+		"ko"		"지옥에나 가라."
+	}
+	
+	// OverHeater.
+	"OverHeater_Encounter_1"
+	{
+		"en"		"It's time to punish."
+		"ko"		"놈들을 응징할 시간이다."
+	}
+	"OverHeater_Encounter_2"
+	{
+		"en"		"Sink into despair."
+		"ko"		"절망 속으로 가라앉아라."
+	}
+	"OverHeater_Encounter_3"
+	{
+		"en"		"네놈을 삼켜주마."
+		"ko"		"네놈을 삼켜주마."
+	}
+	
+	"OverHeater_AbilityActivation_1"
+	{
+		"en"		"Feel my Pain!"
+		"ko"		"내 고통을 느껴라!"
+	}
+	"OverHeater_AbilityActivation_2"
+	{
+		"en"		"Pay for foolishness."
+		"ko"		"어리석음의 대가를 치러라."
+	}
+	"OverHeater_AbilityActivation_3"
+	{
+		"en"		"A Single mistake will cause Lose Everything."
+		"ko"		"한순간의 착오로 모든 걸 잃게 되리라."
+	}
+	
+	"OverHeater_AbilityDisable_1"
+	{
+		"en"		"You're nothing!"
+		"ko"		"넌 아무것도 아니다!"
+	}
+	"OverHeater_AbilityDisable_2"
+	{
+		"en"		"bastards."
+		"ko"		"버러지들 같으니."
+	}
+	
+	"OverHeater_Death"
+	{
+		"en"		"겨우 그까짓 힘으로 감히!"
+		"ko"		"겨우 그까짓 힘으로 감히!"
+	}
+	
+	// MajorVulture.
+	"MajorVulture_Encounter"
+	{
+		"en"		"Alright, Bring it on."
+		"ko"		"좋아, 다 덤벼."
+	}
+	
+	"MajorVulture_Death"
+	{
+		"en"		"This is the End."
+		"ko"		"여기가 끝이군."
+	}
+	
+	// ColonelBarrage.
+	"ColonelBarrage_Encounter_1"
+	{
+		"en"		"Kaboom Baby!"
+		"ko"		"형님 나가신다!"
+	}
+	"ColonelBarrage_Encounter_2"
+	{
+		"en"		"It's go time!"
+		"ko"		"드디어 시작이군!"
+	}
+	"ColonelBarrage_Encounter_3"
+	{
+		"en"		"It's about to get heavy"
+		"ko"		"힘 좀 써 볼까!"
+	}
+	
+	"ColonelBarrage_Death"
+	{
+		"en"		"Damn, I was good."
+		"ko"		"젠장, 잘 싸웠는데."
+	}
+	
+	// CaptainQuetz.
+	"CaptainQuetz_LastMann_1"
+	{
+		"en"		"You can’t do anything!"
+		"ko"		"너 혼자서는 아무것도 하지 못 한다!"
+	}
+	"CaptainQuetz_LastMann_2"
+	{
+		"en"		"Join in the Convergence"
+		"ko"		"영광스러운 합일에 동참하라."
+	}
+	"CaptainQuetz_LastMann_3"
+	{
+		"en"		"Surrender now?!"
+		"ko"		"지금 항복할텐가?!"
+	}
+	"CaptainQuetz_LastMann_4"
+	{
+		"en"		"You seem better than your comrades"
+		"ko"		"너가 그래도 니 동료들보단 나은것 같군"
+	}
+	
+	"CaptainQuetz_Death_1"
+	{
+		"en"		"This is utterly pathetic. We didn’t come here just to see results like this"
+		"ko"		"정말 한심하기 짝이없군 고작 이따위 결과를 보려고 우리가 온것이 아닌데"
+	}
+	"CaptainQuetz_Death_2"
+	{
+		"en"		"Just go Home, you cannot join us"
+		"ko"		"너네 그냥 집에 가라. 너희 같은 것들은 우리와 함께 할 수 없다"
+	}
+	"CaptainQuetz_Death_3"
+	{
+		"en"		"We wasted our time dealing with such trivial things?"
+		"ko"		"고작 이따위 것들을 상대하려고 우리가 시간낭비를 했단 말인가?"
+	}
+	
+	"CaptainQuetz_BattleCry_1"
+	{
+		"en"		""
+		"ko"		"내 기대를 실망시키지 않는군, 역시 너희는 우리와 함께할 자격이 있다."
+	}
+	"CaptainQuetz_BattleCry_2"
+	{
+		"en"		""
+		"ko"		"너희도 우리와 하나가 될것이다."
+	}
+	"CaptainQuetz_BattleCry_3"
+	{
+		"en"		""
+		"ko"		"우리의 약한 친구들은 도태 되었지만 강한 친구들은 아직 살아있다. 그것이 바로 너희가 될것이다."
+	}
+	"CaptainQuetz_BattleCry_4"
+	{
+		"en"		""
+		"ko"		"우리가 이룩한 모든 것을 적이 파괴하려 한다."
+	}
+	"CaptainQuetz_BattleCry_5"
+	{
+		"en"		"We become one, will never be defeated!"
+		"ko"		"우리는 하나가 되어 결코 패배하지 않을 것이다!"
+	}
+	"CaptainQuetz_BattleCry_6"
+	{
+		"en"		""
+		"ko"		"너희도 우리와 하나가 될것이다."
+	}
+	
+	"CaptainQuetz_Propaganda_1"
+	{
+		"en"		""
+		"ko"		"너희를 오랜 시간 동안 지켜보고 있었다."
+	}
+	"CaptainQuetz_Propaganda_2"
+	{
+		"en"		""
+		"ko"		"그리고 너희는 우리의 기대에 정확히 부합했다."
+	}
+	"CaptainQuetz_Propaganda_3"
+	{
+		"en"		""
+		"ko"		"역시 너희도 우리와 하나가 되어야만 한다."
+	}
+	"CaptainQuetz_Propaganda_4"
+	{
+		"en"		""
+		"ko"		"우리가 집어삼킨 세계마다 새로운 형제가 일어나 하나가 되리라."
+	}
+	"CaptainQuetz_Propaganda_5"
+	{
+		"en"		""
+		"ko"		"우리의 결속은 자라나고 우리는 영생을 누리리라."
+	}
+	"CaptainQuetz_Propaganda_6"
+	{
+		"en"		""
+		"ko"		"다만, 아직 마지막 테스트가 필요하다. {crimson}이 테스트가 끝나면 너희도 우리와 하나가 되리라."
+	}
+	"CaptainQuetz_Propaganda_7"
+	{
+		"en"		""
+		"ko"		"아주 오랜 시간 동안... 지금이 오기만을 기다려왔다."
+	}
+	"CaptainQuetz_Propaganda_8"
+	{
+		"en"		""
+		"ko"		"이제 너희의 존재를..."
+	}
+	"CaptainQuetz_Propaganda_9"
+	{
+		"en"		""
+		"ko"		"증명할 시간이다!!!!"
+	}
+	
+	// ZsPoYo.
+	"ZsPoYo_Encounter_1"
+	{
+		"en"		""
+		"ko"		"이것이 마지막 테스트다. 운명에 순응하고 우리와 하나가 되어라."
+	}
+	"ZsPoYo_Encounter_2"
+	{
+		"en"		""
+		"ko"		"이것이 마지막 테스트다. 영광스러운 합일에 동참하라."
+	}
+	"ZsPoYo_Encounter_3"
+	{
+		"en"		""
+		"ko"		"이것이 마지막 테스트다. 끝까지 발악해보거라 어자피 우리와 하나가 될것이니."
+	}
+	
+	"ZsPoYo_LastMann_1"
+	{
+		"en"		""
+		"ko"		"이것이, 너희의 운명이 도달할 최후의 순간이다."
+	}
+	"ZsPoYo_LastMann_2"
+	{
+		"en"		""
+		"ko"		"감염이 당신의 동료를 전부 집어삼키고 말았습니다... 가능하면 도주하세요."
+	}
+	"ZsPoYo_LastMann_3"
+	{
+		"en"		""
+		"ko"		"발악해보아라. 이것이 너희의 마지막이 될것이니."
+	}
+	
+	"ZsPoYo_Teleport_1"
+	{
+		"en"		""
+		"ko"		"도망치지마라!"
+	}
+	"ZsPoYo_Teleport_2"
+	{
+		"en"		""
+		"ko"		"왜 영광스러운 합일을 거부하려 드는가."
+	}
+	"ZsPoYo_Teleport_3"
+	{
+		"en"		""
+		"ko"		"정해진 운명에 순응하라."
+	}
+	
+	"ZsPoYo_Phase2"
+	{
+		"en"		""
+		"ko"		"너희는 그 무엇 하나 바꿀 수 없으리라."
+	}
+	"ZsPoYo_Phase3_1"
+	{
+		"en"		""
+		"ko"		"자, 발악하라"
+	}
+	"ZsPoYo_Phase3_2"
+	{
+		"en"		""
+		"ko"		"귀찮게하는군."
+	}
+	
+	"ZsPoYo_SpawnZombie"
+	{
+		"en"		""
+		"ko"		"{crimson}저것이 끔찍한 감염체들을 소환했다."
+	}
+	
+
+	"ZsPoYo_TimeOver"
+	{
+		"en"		""
+		"ko"		"오랫동안 기다려온 순간이 마침내 도래하였다."
+	}
+	"ZsPoYo_Death_1"
+	{
+		"en"		""
+		"ko"		"{crimson}당신은 이 싸움에서 희망의 빛줄기를 보지 못 했습니다."
+	}
+	"ZsPoYo_Death_2"
+	{
+		"en"		""
+		"ko"		"{crimson}당신은 감염에 저항조차 못 했습니다... 당신은 이제 한낱 감염체로 전락하고 말았습니다."
+	}
+	"ZsPoYo_Death_3"
+	{
+		"en"		""
+		"ko"		"{crimson}예상했던대로, 당신은 실패했습니다. 이제 이곳에 희망이란 없습니다..."
+	}
+	"ZsPoYo_Death_4"
+	{
+		"en"		""
+		"ko"		"우리의 결속은 자라나고 우리는 영생을 누리리라."
+	}
+	"ZsPoYo_Death_5"
+	{
+		"en"		""
+		"ko"		"계획대로 착착 진행되면 참 기분 좋지"
+	}
+	"ZsPoYo_Death_6"
+	{
+		"en"		""
+		"ko"		"그 누구도 우리의 권위에 도전할 순 없다. 우리의 힘은 끝이 없다."
 	}
 }

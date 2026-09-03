@@ -97,6 +97,8 @@ methodmap VestaTank < CClotBody
 		npc.m_fbRangedSpecialOn = false;
 		npc.m_bFUCKYOU = false;
 		npc.m_bDoSpawnGesture = false;
+		b_CannotBeHeadshot[npc.index] = true;
+		f_HeadshotDamageMultiNpc[npc.index] = 0.0;
 		
 		f_ExtraOffsetNpcHudAbove[npc.index] = -45.0;
 		

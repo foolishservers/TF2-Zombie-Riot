@@ -35,6 +35,7 @@ static int swing_type[MAXPLAYERS];
 static float GradeWeaponAm[MAXPLAYERS];
 static int RandomSeedDo[MAXPLAYERS];
 static bool ValueGoUpOrDown[MAXPLAYERS];
+static bool HasSaidSpecialLine;
 static float Special_Cooldowns[MAXPLAYERS][4]; //IT WORKS :D, who needs premade cooldowns when you can make your own
 // Note from artvin: this will not work with any cooldown reductions or any "on hit" cooldown reductions unless its specifically coded in.
 
@@ -148,6 +149,24 @@ static Action Timer_Red_Mist(Handle timer, DataPack pack)
 		}
 		return Plugin_Stop;
 	}
+	if(GetNTBuff(client) && !HasSaidSpecialLine)
+	{
+		HasSaidSpecialLine = true;
+		
+		char TextChar[255];
+		switch(GetRandomInt(1,2))
+		{
+			case 1:
+				TextChar = "Hearing it mimic the voice of my coworker almost made me barf.";
+			case 2:
+				TextChar = "That's just the shape i remember... A creature trying to mimic humans...";
+			case 3:
+				TextChar = "Ugh... The nightmares are coming back...";
+		}
+		NpcSpeechBubble(client, TextChar, 7, {255, 65, 65, 255}, {0.0,0.0,120.0}, "");
+		CPrintToChatAll("{crimson}%N : %s",client, TextChar);
+		CPrintToChat(client, "{crimson}%t", "Explain NT Buff");
+	}
 	if(dieingstate[client] || TeutonType[client] != TEUTON_NONE)
 	{
 		Disable_Everything_Red_Mist(client);
@@ -224,8 +243,10 @@ static Action Timer_Red_Mist(Handle timer, DataPack pack)
 		{
 			delete h_Onrush_Check_Timer[client];
 			h_Onrush_Check_Timer[client] = null;
+			//PrintToChatAll("redashes deleted timer");
 		}
 		redashes[client] = 0;
+		//PrintToChatAll("redashes set to 0");
 		Ability_Apply_Cooldown(client, 2, 20.0, weapon);
 	}
 	if(LastMann)
@@ -311,10 +332,17 @@ static Action Timer_Red_Mist_Ego(Handle timer, int client)
 		//PrintToChatAll("ego energy [%d]", Ego_Energy[client]);
 		if(!LastMann)
 		{
+			//double ego duration
+			int EgoDrain = 0;
 			if(HasSpecificBuff(client, "Ego Grace"))
-				Ego_Energy[client] -= 25;
+				EgoDrain = 25;
 			else
-				Ego_Energy[client] -= 35;
+				EgoDrain = 35;
+			
+			if(GetNTBuff(client))
+				EgoDrain /= 2;
+
+			Ego_Energy[client] -= EgoDrain;
 
 			if(Ego_Energy[client] <= 0)
 				Ego_Energy[client] = 0;
@@ -326,12 +354,15 @@ static Action Timer_Red_Mist_Ego(Handle timer, int client)
 
 void Disable_Everything_Red_Mist(int client)
 {
-	Ego_Energy[client] = 0;
-	RemoveSpecificBuff(client, "Ego Manifestation");
-	RemoveSpecificBuff(client, "Influence of the bodies");
-	RemoveSpecificBuff(client, "Red_Mist_Strength");
-	Special_Cooldowns[client][2] = GetGameTime() + (120.00 * CooldownReductionAmount(client));
-	Ego_Active[client] = false;
+	if(Ego_Active[client])
+	{
+		Ego_Energy[client] = 0;
+		RemoveSpecificBuff(client, "Ego Manifestation");
+		RemoveSpecificBuff(client, "Influence of the bodies");
+		RemoveSpecificBuff(client, "Red_Mist_Strength");
+		Special_Cooldowns[client][2] = GetGameTime() + (120.00 * CooldownReductionAmount(client));
+		Ego_Active[client] = false;
+	}
 }
 
 void Red_Mist_Horizontal_Slash_DoSwingTrace(int client, float &CustomMeleeRange, float &CustomMeleeWide, bool &ignore_walls, int &enemies_hit_aoe)
@@ -364,6 +395,7 @@ public void RedMist_ResetAbnorms()
 }
 public void Red_Mist_OnMapStart()
 {
+	HasSaidSpecialLine = false;
 	PrecacheSound(ABNORM_ENTER_SOUND);
 	PrecacheSound(ABNORM_EXIT_SOUND);
 	PrecacheSound(PAGE_SELECT_SOUND);
@@ -510,6 +542,11 @@ public void Red_Mist_OnTakeDamage_Take(int victim, int &attacker, int &inflictor
 {
 	if(CheckInHud())
 		return;
+	if(GetNTBuff(victim))
+	{
+		//reduce flat dmg
+		damage -= 12.0;
+	}
 	if(zr_custom_damage & ZR_DAMAGE_DO_NOT_APPLY_BURN_OR_BLEED)
 		return;
 	
@@ -888,6 +925,7 @@ void AddEgoEnergy(int client, int dividing = 1)
 {
 	if(Ego_Active[client])
 	{
+
 		Ego_Energy[client] += (75 / dividing);
 		if(Ego_Energy[client] > 1000)
 		{
@@ -1065,7 +1103,7 @@ public void Red_Mist_Onrush(int client, int weapon)
 		redashes[client] += 1;
 	}
 	
-	Ability_Apply_Cooldown(client, 2, 0.5);
+	Ability_Apply_Cooldown(client, 2, 0.5);//give tiny cd between each redash
 	if(redashes[client] >= 3)
 	{
 		Ability_Apply_Cooldown(client, 2, 20.0);
@@ -1125,7 +1163,7 @@ public Action Onrush_Check_Distance(Handle timer, DataPack Onrush_pack)
 	int weapon = EntRefToEntIndex(Onrush_pack.ReadCell());
 	int target = EntRefToEntIndex(Onrush_pack.ReadCell());
 
-	if(!IsEntityAlive(target) || !IsValidClient(client) || !IsClientInGame(client) || !IsPlayerAlive(client) || !IsValidEntity(weapon))
+	if(!IsEntityAlive(target) || !IsValidClient(client) || !IsClientInGame(client) || !IsPlayerAlive(client) || !IsValidEntity(weapon) || Onrush_Redash_Window[client] < GetGameTime())
 	{
 		h_Onrush_Check_Timer[clientindx] = null;
 		return Plugin_Stop;
@@ -1137,11 +1175,13 @@ public Action Onrush_Check_Distance(Handle timer, DataPack Onrush_pack)
 	float VecVictim[3];
 	WorldSpaceCenter(target, VecVictim);
 	float dist = GetVectorDistance(VecMe, VecVictim, true);
+	//PrintToChatAll("%f", "Distance", dist);
 	float DistanceMin = 125.0;
 	if(b_IsGiant[target])
 		DistanceMin = 150.0;
 	if(dist < (DistanceMin * DistanceMin))
 	{
+		//PrintToChatAll("hit enemy ?");
 		float OnrushDamage = 65.0;
 		OnrushDamage *= WeaponDamageAttributeMultipliers(weapon,_,client);
 		float Strenght_boost;

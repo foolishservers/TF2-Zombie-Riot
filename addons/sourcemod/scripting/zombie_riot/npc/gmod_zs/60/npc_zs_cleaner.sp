@@ -1,7 +1,6 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-
 static const char g_DeathSounds[][] = {
 	"vo/pyro_paincrticialdeath01.mp3",
 	"vo/pyro_paincrticialdeath02.mp3",
@@ -16,10 +15,6 @@ static const char g_HurtSounds[][] = {
 	"vo/pyro_painsharp05.mp3",
 };
 
-static const char g_IdleAlertedSounds[][] = {
-	"vo/pyro_helpme01.mp3",
-};
-
 static const char g_SuperJumpSound[][] = {
 	"npc/zombie_poison/pz_warn1.wav",
 	"npc/zombie_poison/pz_warn2.wav",
@@ -32,71 +27,64 @@ static const char g_MeleeHitSounds[][] = {
 	"weapons/stunstick/spark3.wav",
 };
 
-void InfectedCleaner_OnMapStart_NPC()
+static const char g_IdleAlertedSounds[] = "vo/pyro_helpme01.mp3";
+
+public void InfectedCleaner_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds)); i++) { PrecacheSound(g_MeleeHitSounds[i]); }
-	for (int i = 0; i < (sizeof(g_SuperJumpSound)); i++) { PrecacheSound(g_SuperJumpSound[i]); }
-	PrecacheModel("models/player/medic.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Infected Cleaner");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_cleaner");
 	strcopy(data.Icon, sizeof(data.Icon), "pyro_freeze_1");
 	data.IconCustom = true;
 	data.Flags = 0;
-	data.Category = Type_GmodZS; 
+	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
 }
 
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_SuperJumpSound);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSound(g_IdleAlertedSounds);
+	PrecacheModel("models/player/pyro.mdl");
+}
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
 	return InfectedCleaner(vecPos, vecAng, team);
 }
+
 methodmap InfectedCleaner < CClotBody
 {
 	public void PlayIdleAlertSound() 
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
-		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_IdleAlertedSounds, this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
-		
 	}
-	
 	public void PlayHurtSound() 
 	{
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		
 	}
 	public void PlaySuperJumpSound()
 	{
 		EmitSoundToAll(g_SuperJumpSound[GetRandomInt(0, sizeof(g_SuperJumpSound) - 1)], this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-	}	
-	
+	}
 	public void PlayDeathSound() 
 	{
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 	}
-	
 	public void PlayMeleeHitSound() 
 	{
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
-	}
-	
-	property float m_flPulveriserAttackDelay
-	{
-		public get()							{ return fl_AbilityOrAttack[this.index][1]; }
-		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][1] = TempValueForProperty; }
 	}
 	
 	public InfectedCleaner(float vecPos[3], float vecAng[3], int ally)
@@ -126,7 +114,6 @@ methodmap InfectedCleaner < CClotBody
 		
 		int skin = 5;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
-	
 
 		npc.m_iWearable1 = npc.EquipItem("head", "models/workshop_partner/weapons/c_models/c_ai_flamethrower/c_ai_flamethrower.mdl");
 		npc.m_iWearable2 = npc.EquipItem("head", "models/player/items/medic/qc_glove.mdl");
@@ -144,14 +131,13 @@ methodmap InfectedCleaner < CClotBody
 	}
 }
 
-public void InfectedCleaner_ClotThink(int iNPC)
+static void InfectedCleaner_ClotThink(int iNPC)
 {
 	InfectedCleaner npc = view_as<InfectedCleaner>(iNPC);
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
-	{
+	float GameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > GameTime)
 		return;
-	}
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
+	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 	
 	if(npc.m_bAllowBackWalking)
@@ -170,16 +156,14 @@ public void InfectedCleaner_ClotThink(int iNPC)
 		npc.PlayHurtSound();
 	}
 	
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
-	{
+	if(npc.m_flNextThinkTime > GameTime)
 		return;
-	}
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
+	npc.m_flNextThinkTime = GameTime + 0.1;
 
-	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	if(npc.m_flGetClosestTargetTime < GameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
+		npc.m_flGetClosestTargetTime = GameTime + GetRandomRetargetTime();
 	}
 	
 	if(IsValidEnemy(npc.index, npc.m_iTarget))
@@ -189,7 +173,7 @@ public void InfectedCleaner_ClotThink(int iNPC)
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
 		int SetGoalVectorIndex = 0;
-		SetGoalVectorIndex = InfectedCleanerSelfDefense(npc,GetGameTime(npc.index), npc.m_iTarget, flDistanceToTarget); 
+		SetGoalVectorIndex = InfectedCleanerSelfDefense(npc,GameTime, npc.m_iTarget, flDistanceToTarget); 
 		switch(SetGoalVectorIndex)
 		{
 			case 0:
@@ -204,7 +188,7 @@ public void InfectedCleaner_ClotThink(int iNPC)
 				}
 				else 
 				{		
-					if(npc.m_flJumpCooldown < GetGameTime(npc.index))
+					if(npc.m_flJumpCooldown < GameTime)
 					{
 						if(flDistanceToTarget > (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 4.0) && flDistanceToTarget < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 10.0))
 						{
@@ -213,7 +197,7 @@ public void InfectedCleaner_ClotThink(int iNPC)
 								npc.FaceTowards(vecTarget, 15000.0);
 								PluginBot_Jump(npc.index, vecTarget);
 								npc.PlayIdleAlertSound();
-								npc.m_flJumpCooldown = GetGameTime(npc.index) + 7.5;
+								npc.m_flJumpCooldown = GameTime + 7.5;
 								npc.PlaySuperJumpSound();
 							}
 						}
@@ -239,7 +223,7 @@ public void InfectedCleaner_ClotThink(int iNPC)
 }
 
 
-int InfectedCleanerSelfDefense(InfectedCleaner npc, float gameTime, int target, float distance)
+static int InfectedCleanerSelfDefense(InfectedCleaner npc, float gameTime, int target, float distance)
 {
 	if(gameTime > npc.m_flNextMeleeAttack)
 	{
@@ -311,30 +295,25 @@ int InfectedCleanerSelfDefense(InfectedCleaner npc, float gameTime, int target, 
 	return 0;
 }
 
-public Action InfectedCleaner_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action InfectedCleaner_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	InfectedCleaner npc = view_as<InfectedCleaner>(victim);
-		
 	if(attacker <= 0)
 		return Plugin_Continue;
-		
+	
 	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
 	{
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
 	}
-	
 	return Plugin_Changed;
 }
 
-public void InfectedCleaner_NPCDeath(int entity)
+static void InfectedCleaner_NPCDeath(int entity)
 {
 	InfectedCleaner npc = view_as<InfectedCleaner>(entity);
 	if(!npc.m_bGib)
-	{
-		npc.PlayDeathSound();	
-	}
-		
+		npc.PlayDeathSound();
 	if(IsValidEntity(npc.m_iWearable7))
 		RemoveEntity(npc.m_iWearable7);
 	if(IsValidEntity(npc.m_iWearable6))
@@ -351,9 +330,7 @@ public void InfectedCleaner_NPCDeath(int entity)
 		RemoveEntity(npc.m_iWearable1);
 }
 
-
-
-public void InfectedCleaner_Rocket_Particle_StartTouch(int entity, int target)
+static void InfectedCleaner_Rocket_Particle_StartTouch(int entity, int target)
 {
 	if(target > 0 && target < MAXENTITIES)	//did we hit something???
 	{

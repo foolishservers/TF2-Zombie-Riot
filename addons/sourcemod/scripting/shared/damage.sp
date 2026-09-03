@@ -645,11 +645,10 @@ stock bool Damage_NPCVictim(int victim, int &attacker, int &inflictor, float &da
 
 		if(attacker <= MaxClients && attacker > 0)
 		{
+			if(!CheckInHud())
+				DoClientHitmarker(attacker);
 			if(!(i_HexCustomDamageTypes[victim] & ZR_DAMAGE_DO_NOT_APPLY_BURN_OR_BLEED))
 			{
-				if(!CheckInHud())
-					DoClientHitmarker(attacker);
-
 				if(IsValidEntity(weapon))
 				{
 					damage = NPC_OnTakeDamage_Equipped_Weapon_Logic(victim, attacker, inflictor, damage, damagetype, weapon, damageForce, damagePosition, i_HexCustomDamageTypes[victim]);
@@ -729,9 +728,33 @@ stock bool Damage_NPCVictim(int victim, int &attacker, int &inflictor, float &da
 		
 	}
 
+	if(!CheckInHud())
+		MageAttackDamageCheck_NpcTakeDamagePost(victim, attacker, weapon, i_HexCustomDamageTypes[victim]);
+	
 	return false;
 }
 
+void MageAttackDamageCheck_NpcTakeDamagePost(int victim, int attacker, int weapon, int zrcustomdamage)
+{
+	if(attacker > MaxClients)
+		return;
+	if((zrcustomdamage & ZR_DAMAGE_DO_NOT_APPLY_BURN_OR_BLEED))
+		return;
+
+	if(weapon < 0)
+		return;
+
+	if(!i_IsWandWeapon[weapon])
+		return;
+
+	float vecTarget[3]; WorldSpaceCenter(attacker, vecTarget );
+	float VecSelfNpc[3]; WorldSpaceCenter(victim, VecSelfNpc);
+	float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
+	if(flDistanceToTarget > (500.0 * 500.0))
+		return;
+	ApplyStatusEffect(attacker, attacker, "Mana Recharge", 2.0);
+	
+}
 void NpcArmorExtra(int victim, int &attacker, int &inflictor, float &damage, int &damagetype)
 {
 	CClotBody npc = view_as<CClotBody>(victim);
@@ -1097,8 +1120,9 @@ static float Player_OnTakeDamage_Equipped_Weapon_Logic(int victim, int &attacker
 			if(!(damagetype & DMG_TRUEDAMAGE))
 				return Player_OnTakeDamage_Fractal(victim, damage, damagePosition,attacker);
 		}
-		default: Weapon_AddonsCustom_PlayerTakeDamage(victim, attacker, damage, equipped_weapon, damagePosition, damagetype);
 	}
+
+	Gunsaw_Monologue_OnTakeDamage(victim, damage);
 	return damage;
 }
 
@@ -2082,12 +2106,13 @@ static stock bool OnTakeDamagePlayerSpecific(int victim, int &attacker, int &inf
 	}
 #else
 	float CritChance = Attributes_GetOnPlayer(attacker, Attrib_CritChance, false,_, 0.0);
+	CritChance += float(StatusEffects_PoiseReturnCount(attacker)) * (0.00625);
 	if(CritChance && GetRandomFloat(0.0, 1.0) < (CritChance))
 	{
 		if(Rogue_Rift_BookOfWeakness())
-			damage *= 2.0;
-		else
 			damage *= 3.0;
+		else
+			damage *= 2.0;
 			
 		DisplayCritAboveNpc(victim, attacker, true); //Display crit above head
 	}
@@ -2348,11 +2373,11 @@ void EntityBuffHudShow(int victim, int attacker, char[] Debuff_Adder_left, char[
 	{
 		if(GetTeam(victim) != TFTeam_Red)
 		{
-			Format(Debuff_Adder_right, SizeOfChar, "%c%s", BufferAdd,Debuff_Adder_right);
+			Format(Debuff_Adder_right, SizeOfChar, "%s%s", BufferAdd,Debuff_Adder_right);
 		}
 		else
 		{
-			Format(Debuff_Adder_left, SizeOfChar, "%c%s", BufferAdd,Debuff_Adder_left);
+			Format(Debuff_Adder_left, SizeOfChar, "%s%s", BufferAdd,Debuff_Adder_left);
 		}
 	}
 }

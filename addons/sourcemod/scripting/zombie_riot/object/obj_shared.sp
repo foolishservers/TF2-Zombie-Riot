@@ -845,6 +845,11 @@ static bool ObjectGeneric_ClotThink(ObjectGeneric objstats)
 			}
 			
 			int r = 255 - g;
+			if(ZR_Get_Modifier() == KITERS_DREAM)
+			{
+				r = 0;
+				g = 0;
+			}
 			
 			int wearable = objstats.m_iWearable1;
 			if(wearable != -1)
@@ -933,6 +938,13 @@ bool Object_Interact(int client, int weapon, int obj)
 		MountedObjectInteracted = true;
 	}
 
+	if(EntityOnAllyInteract[client] && EntityOnAllyInteract[client] != INVALID_FUNCTION)
+	{
+		Call_StartFunction(null, EntityOnAllyInteract[client]);
+		Call_PushCell(client);
+		Call_PushCell(obj);
+		Call_Finish();
+	}
 	Function func = func_NPCInteract[entity];
 	if((!func || func == INVALID_FUNCTION) && GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity") != -1)
 		return false;
@@ -1093,6 +1105,7 @@ int Object_MaxSupportBuildings(int client, bool ingore_glass = false)
 	maxAllowed += Building_health_attribute; 
 	maxAllowed += Blacksmith_Additional_SupportBuildings(client); 
 	maxAllowed += Merchant_Additional_SupportBuildings(client); 
+	maxAllowed += Gunsaw_Additional_SupportBuildings(client);
 	if(CvarInfiniteCash.BoolValue)
 	{
 		maxAllowed += 999;
@@ -1678,7 +1691,7 @@ public void ObjectGeneric_ClotTakeDamage_Post(int victim, int attacker, int infl
 		OnPostAttackUniqueWeapon(attacker, victim, weapon, i_HexCustomDamageTypes[victim]);
 #endif
 		//Do not show this event if they are attacked with DOT. Earls bleedin.
-		if(!(i_HexCustomDamageTypes[victim] & ZR_DAMAGE_DO_NOT_APPLY_BURN_OR_BLEED))
+	//	if(!(i_HexCustomDamageTypes[victim] & ZR_DAMAGE_DO_NOT_APPLY_BURN_OR_BLEED))
 		{
 			Event event = CreateEvent("npc_hurt");
 			if(event) 

@@ -39,7 +39,7 @@ static const char g_MeleeAttackSounds[][] =
 	"weapons/boxing_gloves_swing4.wav"
 };
 
-void InfectedFatSpy_Precache()
+public void InfectedFatSpy_Precache()
 {
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Infected Fat Spy");
@@ -48,8 +48,19 @@ void InfectedFatSpy_Precache()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSound("models/player/heavy.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
@@ -63,7 +74,6 @@ methodmap InfectedFatSpy < CClotBody
 	{
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 	}
@@ -138,17 +148,15 @@ methodmap InfectedFatSpy < CClotBody
 	}
 }
 
-public void InfectedFatSpy_ClotThink(int iNPC)
+static void InfectedFatSpy_ClotThink(int iNPC)
 {
 	InfectedFatSpy npc = view_as<InfectedFatSpy>(iNPC);
 
 	float gameTime = GetGameTime(npc.index);
 	if(npc.m_flNextDelayTime > gameTime)
 		return;
-	
 	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
-
 	if(npc.m_blPlayHurtAnimation)
 	{
 		npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
@@ -205,7 +213,6 @@ public void InfectedFatSpy_ClotThink(int iNPC)
 						SDKHooks_TakeDamage(target, npc.index, npc.index, 300.0, DMG_CLUB);
 					}
 				}
-
 				delete swingTrace;
 			}
 		}
@@ -216,11 +223,8 @@ public void InfectedFatSpy_ClotThink(int iNPC)
 			if(IsValidEnemy(npc.index, target))
 			{
 				npc.m_iTarget = target;
-
 				npc.AddGesture("ACT_MP_ATTACK_STAND_MELEE_ALLCLASS");
-
 				npc.PlayMeleeSound();
-				
 				npc.m_flAttackHappens = gameTime + 0.25;
 				npc.m_flNextMeleeAttack = gameTime + 0.45;
 			}
@@ -230,11 +234,10 @@ public void InfectedFatSpy_ClotThink(int iNPC)
 	{
 		npc.StopPathing();
 	}
-
 	npc.PlayIdleSound();
 }
 
-public Action InfectedFatSpy_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action InfectedFatSpy_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	InfectedFatSpy npc = view_as<InfectedFatSpy>(victim);
 	if(!NpcStats_IsEnemySilenced(victim))
@@ -290,7 +293,8 @@ public Action InfectedFatSpy_OnTakeDamage(int victim, int &attacker, int &inflic
 	
 	return Plugin_Changed;
 }
-public Action InfectedFatSpy_Zombie_Resistance(Handle timer, int ref)
+
+static Action InfectedFatSpy_Zombie_Resistance(Handle timer, int ref)
 {
 	int zombie = EntRefToEntIndex(ref);
 	if(IsValidEntity(zombie))
@@ -300,23 +304,23 @@ public Action InfectedFatSpy_Zombie_Resistance(Handle timer, int ref)
 		SetEntityRenderColor(zombie, 255, 255, 255, 255);
 		SetEntityRenderMode(npc.m_iWearable4, RENDER_NORMAL);
 		SetEntityRenderColor(npc.m_iWearable4, 255, 255, 255, 255);
-			
+		
 		SetEntityRenderMode(npc.m_iWearable5, RENDER_NORMAL);
 		SetEntityRenderColor(npc.m_iWearable5, 255, 255, 255, 255);
-			
+		
 		SetEntityRenderMode(npc.m_iWearable3, RENDER_NORMAL);
 		SetEntityRenderColor(npc.m_iWearable3, 255, 255, 255, 255);
-			
+		
 		SetEntityRenderMode(npc.m_iWearable1, RENDER_NORMAL);
 		SetEntityRenderColor(npc.m_iWearable1, 255, 255, 255, 255);
-			
+		
 		SetEntityRenderMode(npc.m_iWearable2, RENDER_NORMAL);
 		SetEntityRenderColor(npc.m_iWearable2, 255, 255, 255, 255);
 	}
 	return Plugin_Handled;
 }
 
-public Action InfectedFatSpy_Revert_Resistance_Enable(Handle timer, int ref)
+static Action InfectedFatSpy_Revert_Resistance_Enable(Handle timer, int ref)
 {
 	int zombie = EntRefToEntIndex(ref);
 	if(IsValidEntity(zombie))
@@ -326,7 +330,8 @@ public Action InfectedFatSpy_Revert_Resistance_Enable(Handle timer, int ref)
 	}
 	return Plugin_Handled;
 }
-void InfectedFatSpy_NPCDeath(int entity)
+
+static void InfectedFatSpy_NPCDeath(int entity)
 {
 	InfectedFatSpy npc = view_as<InfectedFatSpy>(entity);
 	if(!npc.m_bGib)

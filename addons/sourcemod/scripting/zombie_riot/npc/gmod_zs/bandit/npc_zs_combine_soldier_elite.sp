@@ -27,10 +27,6 @@ static const char g_IdleAlertedSounds[][] = {
 	"npc/combine_soldier/vo/contactconfim.wav",
 };
 
-static const char g_MeleeHitSounds[][] = {
-	"npc/vort/foot_hit.wav",
-};
-
 static const char g_MeleeAttackSounds[][] = {
 	"npc/combine_soldier/gear1.wav",
 	"npc/combine_soldier/gear2.wav",
@@ -40,33 +36,13 @@ static const char g_MeleeAttackSounds[][] = {
 	"npc/combine_soldier/gear6.wav",
 };
 
+static const char g_MeleeHitSounds[] = "npc/vort/foot_hit.wav";
+static const char g_RangedAttackSounds[] = "weapons/ar2/fire1.wav";
+static const char g_RangedAttackSoundsSecondary[] = "weapons/irifle/irifle_fire2.wav";
+static const char g_RangedReloadSound[] = "weapons/ar2/npc_ar2_reload.wav";
 
-static const char g_RangedAttackSounds[][] = {
-	"weapons/ar2/fire1.wav",
-};
-
-static const char g_RangedAttackSoundsSecondary[][] = {
-	"weapons/irifle/irifle_fire2.wav",
-};
-
-static const char g_RangedReloadSound[][] = {
-	"weapons/ar2/npc_ar2_reload.wav",
-};
-
-void ZSCombineElite_OnMapStart_NPC()
+public void ZSCombineElite_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleSounds));		i++) { PrecacheSound(g_IdleSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds));	i++) { PrecacheSound(g_MeleeHitSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeAttackSounds));	i++) { PrecacheSound(g_MeleeAttackSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_DefaultMeleeMissSounds));   i++) { PrecacheSound(g_DefaultMeleeMissSounds[i]);   }
-	for (int i = 0; i < (sizeof(g_RangedAttackSounds));   i++) { PrecacheSound(g_RangedAttackSounds[i]);   }
-	for (int i = 0; i < (sizeof(g_RangedReloadSound));   i++) { PrecacheSound(g_RangedReloadSound[i]);   }
-	for (int i = 0; i < (sizeof(g_RangedAttackSoundsSecondary));   i++) { PrecacheSound(g_RangedAttackSoundsSecondary[i]);   }
-	PrecacheModel("models/combine_super_soldier.mdl");
-	PrecacheModel("models/effects/combineball.mdl");
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Bandit Elite");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_combine_soldier_elite");
@@ -74,14 +50,31 @@ void ZSCombineElite_OnMapStart_NPC()
 	data.IconCustom = true;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSound(g_MeleeHitSounds);
+	PrecacheSound(g_RangedAttackSounds);
+	PrecacheSound(g_RangedAttackSoundsSecondary);
+	PrecacheSound(g_RangedReloadSound);
+	PrecacheModel("models/combine_super_soldier.mdl");
+	PrecacheModel("models/effects/combineball.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
 	return ZSCombineElite(vecPos, vecAng, team);
 }
+
 methodmap ZSCombineElite < CClotBody
 {
 	public void PlayIdleSound() {
@@ -89,69 +82,38 @@ methodmap ZSCombineElite < CClotBody
 			return;
 		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(24.0, 48.0);
-		
-
 	}
-	
 	public void PlayIdleAlertSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
-		
-		
 	}
-	
 	public void PlayHurtSound() {
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 		this.m_flNextHurtSound = GetGameTime(this.index) + GetRandomFloat(0.6, 1.6);
-		
-		
 	}
-	
 	public void PlayDeathSound() {
-	
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		
-		
 	}
-	
 	public void PlayMeleeSound() {
 		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, _, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		
-
 	}
-	
 	public void PlayRangedSound() {
 		EmitSoundToAll(g_RangedAttackSounds[GetRandomInt(0, sizeof(g_RangedAttackSounds) - 1)], this.index, _, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		
-
 	}
 	public void PlayRangedReloadSound() {
 		EmitSoundToAll(g_RangedReloadSound[GetRandomInt(0, sizeof(g_RangedReloadSound) - 1)], this.index, _, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		
-
 	}
 	public void PlayRangedAttackSecondarySound() {
 		EmitSoundToAll(g_RangedAttackSoundsSecondary[GetRandomInt(0, sizeof(g_RangedAttackSoundsSecondary) - 1)], this.index, _, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		
-
 	}
-	
 	public void PlayMeleeHitSound() {
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, _, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		
-
 	}
-
 	public void PlayMeleeMissSound() {
 		EmitSoundToAll(g_DefaultMeleeMissSounds[GetRandomInt(0, sizeof(g_DefaultMeleeMissSounds) - 1)], this.index, _, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		
-		
 	}
-	
 	
 	public ZSCombineElite(float vecPos[3], float vecAng[3], int ally)
 	{
@@ -205,8 +167,7 @@ methodmap ZSCombineElite < CClotBody
 	
 }
 
-
-public void ZSCombineElite_ClotThink(int iNPC)
+static void ZSCombineElite_ClotThink(int iNPC)
 {
     ZSCombineElite npc = view_as<ZSCombineElite>(iNPC);
     
@@ -425,8 +386,7 @@ public void ZSCombineElite_ClotThink(int iNPC)
     npc.PlayIdleAlertSound();
 }
 
-
-public Action ZSCombineElite_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action ZSCombineElite_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	//Valid attackers only.
 	if(attacker <= 0)
@@ -443,7 +403,7 @@ public Action ZSCombineElite_OnTakeDamage(int victim, int &attacker, int &inflic
 	return Plugin_Changed;
 }
 
-public void Combine_Rocket_Particle_StartTouch(int entity, int target)
+static void Combine_Rocket_Particle_StartTouch(int entity, int target)
 {
 	if(target > 0 && target < MAXENTITIES)	//did we hit something???
 	{
@@ -481,7 +441,7 @@ public void Combine_Rocket_Particle_StartTouch(int entity, int target)
 	RemoveEntity(entity);
 }
 
-public void ZSCombineElite_NPCDeath(int entity)
+static void ZSCombineElite_NPCDeath(int entity)
 {
 	ZSCombineElite npc = view_as<ZSCombineElite>(entity);
 	if(!npc.m_bGib)

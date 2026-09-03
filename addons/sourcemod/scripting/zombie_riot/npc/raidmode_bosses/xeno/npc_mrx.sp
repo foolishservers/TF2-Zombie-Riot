@@ -121,9 +121,9 @@ static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, co
 {
 	return RaidbossMrX(vecPos, vecAng, team, data);
 }
+
 methodmap RaidbossMrX < CClotBody
 {
-
 	property int m_iLastChargedTarget
 	{
 		public get()		 
@@ -320,8 +320,8 @@ methodmap RaidbossMrX < CClotBody
 		npc.m_flNextRangedSpecialAttackHappens = 0.0;
 		i_SideHurtWhich[npc.index] = 0;
 
-		NPCTalkMessage(npc.index, "...");
-
+		RaidbossMrX_NPCTalkMessage(npc.index, "Vivithorn_Encounter", true);
+		
 		Citizen_MiniBossSpawn();
 		npc.StartPathing();
 		npc.m_iWearable6 = npc.EquipItem("weapon_bone" ,"models/player/items/spy/spy_hat.mdl", .model_size = 1.2);
@@ -334,9 +334,9 @@ methodmap RaidbossMrX < CClotBody
 	}
 }
 
-static void NPCTalkMessage(int iNPC, const char[] message)
+static void RaidbossMrX_NPCTalkMessage(int iNPC, const char[] message, bool translated = false)
 {
-	PrintNPCMessageWithPrefixes(iNPC, "green", message, .messageColor = "green");
+	PrintNPCMessageWithPrefixes(iNPC, "green", message, translated, .messageColor = "green");
 }
 
 public void RaidbossMrX_ClotThink(int iNPC)
@@ -349,7 +349,7 @@ public void RaidbossMrX_ClotThink(int iNPC)
 		if(!npc.m_fbGunout)
 		{
 			npc.m_fbGunout = true;
-			CPrintToChatAll("{green}The infection got all your friends... Run while you can.");
+			CPrintToChatAll("%t", "XenoDuo_LastMann");
 		}
 	}
 	if(RaidModeTime < GetGameTime())
@@ -358,7 +358,7 @@ public void RaidbossMrX_ClotThink(int iNPC)
 		i_RaidGrantExtra[npc.index] = 0;
 		ForcePlayerLoss();
 		RaidBossActive = INVALID_ENT_REFERENCE;
-		CPrintToChatAll("{green}The infection proves too strong for you to resist as you join his side...");
+		CPrintToChatAll("%t", "XenoDuo_TimeOver");
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		return;
 	}
@@ -537,10 +537,12 @@ public void RaidbossMrX_ClotThink(int iNPC)
 				if(IsValidEntity(client))
 				{
 					SDKHooks_TakeDamage(client, npc.index, npc.index, 50000.0, DMG_CLUB, -1);
-					f_AntiStuckPhaseThrough[client] = GetGameTime() + 3.0;
 					ApplyStatusEffect(client, client, "Intangible", 3.0);
 					if(client <= MaxClients)
+					{
+						f_AntiStuckPhaseThrough[client] = GetGameTime() + 3.0;
 						Client_Shake(client, 0, 20.0, 20.0, 1.0, false);
+					}
 
 					npc.PlaySnapSound();
 					b_NoGravity[client] = false;
@@ -1080,14 +1082,14 @@ public void RaidbossMrX_NPCDeath(int entity)
 	{
 		if(XenoExtraLogic())
 		{
-			NPCTalkMessage(npc.index, "I have to activate Project Calmaticus...");
+			RaidbossMrX_NPCTalkMessage(npc.index, "Vivithorn_FirstMatch_Death", true);
 		}
 	}
 	if(i_RaidGrantExtra[npc.index] == 1 && GameRules_GetRoundState() == RoundState_ZombieRiot)
 	{
 		if(XenoExtraLogic())
 		{
-			CPrintToChatAll("{green}Vivithorn escapes... but heavily wounded...");
+			CPrintToChatAll("%t", "Vivithorn_Rematch_Death");
 		}
 		
 		for(int i; i < i_MaxcountNpcTotal; i++)

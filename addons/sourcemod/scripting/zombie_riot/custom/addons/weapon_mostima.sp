@@ -63,7 +63,7 @@ public Action Timer_LockDown_Wand(Handle timer, DataPack pack)
 	pack.Reset();
 	int client = pack.ReadCell();
 	int weapon = EntRefToEntIndex(pack.ReadCell());
-	if(!IsValidClient(client) || !IsClientInGame(client) || !IsPlayerAlive(client) || !IsValidEntity(weapon))
+	if(!IsValidClient(client) || !IsPlayerAlive(client) || !IsValidEntity(weapon))
 	{
 		LockDownTimer[client] = null;
 		return Plugin_Stop;
@@ -78,7 +78,7 @@ public Action Timer_LockDown_Wand(Handle timer, DataPack pack)
 		{
 			LockDown_Wand_Hud(client, GameTime);
 			
-			KeyofOrdered_charges_Max[client]=110*(1.0/Attributes_Get(weapon, 41, 1.0));
+			KeyofOrdered_charges_Max[client]=110*(1.0/Attributes_Get(weapon, 41, 1.0))*CooldownReductionAmount(client);
 			if(KeyofOrdered_charges[client] < KeyofOrdered_charges_Max[client])KeyofOrdered_charges[client] += 0.1;
 			if(KeyofOrdered_charges[client] > KeyofOrdered_charges_Max[client])KeyofOrdered_charges[client] = KeyofOrdered_charges_Max[client];
 			if(i_Current_Pap[client]>=2 && Passive_delay[client] < GameTime)
@@ -89,6 +89,14 @@ public Action Timer_LockDown_Wand(Handle timer, DataPack pack)
 					if(IsValidEntity(entity) && GetTeam(entity) != TFTeam_Red)
 					{
 						ApplyStatusEffect(client, entity, "Subjective Time Dilation", 1.0);
+					}
+				}
+				for(int Ally = 1; Ally <= MaxClients; Ally++)
+				{
+					if(IsValidClient(Ally) && IsPlayerAlive(Ally))
+					{
+						if(GetTeam(client) == GetTeam(Ally) && TeutonType[Ally] == TEUTON_NONE)
+							ApplyStatusEffect(client, Ally, "Skill Aura", 1.0);
 					}
 				}
 			}
@@ -131,7 +139,7 @@ public void LockDown_Wand_Secondary_Attack(int client, int weapon, bool crit, in
 			ClientCommand(client, "playgamesound items/medshotno1.wav");
 			SetDefaultHudPosition(client);
 			SetGlobalTransTarget(client);
-			ShowSyncHudText(client,  SyncHud_Notifaction, "Not enough energy");
+			ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Not enough Energy");
 			return;
 		}
 	}
@@ -321,18 +329,23 @@ static void LockDown_Wand_Hud(int client, float GameTime)
 
 	char HUDText[255] = "";
 
+	SetGlobalTransTarget(client);
 	if(KeyofOrdered_duration[client] < GameTime)
 	{
 		if(KeyofOrdered_charges[client] >= KeyofOrdered_charges_Max[client])
-			Format(HUDText, sizeof(HUDText), "%sKey of Ordered Ready!", HUDText);
+			Format(HUDText, sizeof(HUDText), "%t", "LockDown Staff Desc AbilityReady");
 		else
-			Format(HUDText, sizeof(HUDText), "%sKey of Ordered Charges: [%.1f/%.1f]", HUDText, KeyofOrdered_charges[client], KeyofOrdered_charges_Max[client]);
+		{
+			Format(HUDText, sizeof(HUDText), "%t", "LockDown Staff Desc AbilityCharging");
+			Format(HUDText, sizeof(HUDText), "%s [%.1f/%.1f]", HUDText, KeyofOrdered_charges[client], KeyofOrdered_charges_Max[client]);
+		}
 	}
 	else
 	{
 		int Mana_Max = RoundToCeil(400.0*Mana_Regen_Level[client]);
 		float Duration = KeyofOrdered_duration[client]-GameTime;
-		Format(HUDText, sizeof(HUDText), "%sKey of Ordered Active! [%.1f]", HUDText, Duration);
+		Format(HUDText, sizeof(HUDText), "%t", "LockDown Staff Desc AbilityActive");
+		Format(HUDText, sizeof(HUDText), "%s [%.1f]", HUDText, Duration);
 		if(Current_Mana[client] < Mana_Max)
 		{
 			Current_Mana[client]+=RoundToCeil(float(Mana_Max)*0.15);

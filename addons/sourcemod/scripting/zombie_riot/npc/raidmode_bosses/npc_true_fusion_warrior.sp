@@ -70,8 +70,6 @@ public void TrueFusionWarrior_OnMapStart()
 	data.Func = ClotSummon;
 	data.Precache = ClotPrecache;
 	NPC_Add(data);
-
-	
 }
 
 static void ClotPrecache()
@@ -425,16 +423,17 @@ methodmap TrueFusionWarrior < CClotBody
 	}
 }
 
-static void NPCTalkMessage(int iNPC, const char[] message)
+static void InfectedSilvester_NPCTalkMessage(int iNPC, const char[] message, any ...)
 {
 	char name[128];
-	
 	if (b_angered_twice[iNPC])
-		name = "Silvester";
+		name = "NPCTalk_Silvester";
 	else
-		name = "Silvester?";
+		name = "NPCTalk_Silvester?";
 	
-	PrintNPCMessageWithPrefixes(iNPC, "gold", message, .customName = name);
+	char buffer[255];
+	VFormat(buffer, sizeof(buffer), message, 3);
+	NPC_TalkMessageWithTranslationCheck(iNPC, "gold", buffer, name);
 }
 
 public void TrueFusionWarrior_ClotThink(int iNPC)
@@ -446,35 +445,21 @@ public void TrueFusionWarrior_ClotThink(int iNPC)
 		if(!npc.m_fbGunout)
 		{
 			npc.m_fbGunout = true;
-			switch(GetRandomInt(0,2))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "Run... Away...");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "Help...");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "{crimson}AGHHRRR!!!");
-				}
-			}
+			InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_LastMann_%d", GetRandomInt(1, 3));
 		}
 	}
 	if(i_RaidGrantExtra[npc.index] == RAIDITEM_INDEX_WIN_COND)
 	{
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		
-		NPCTalkMessage(npc.index, "New... victims to infect...");
+		InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_Lose");
 		return;
 	}
 	if(RaidModeTime < GetGameTime())
 	{
 		ForcePlayerLoss();
 		RaidBossActive = INVALID_ENT_REFERENCE;
-		NPCTalkMessage(npc.index, "{green}Xeno{default} virus too strong... to resist.. {crimson}join...{default}");
+		InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_TimeOver");
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		return;
 	}
@@ -518,7 +503,7 @@ public void TrueFusionWarrior_ClotThink(int iNPC)
 		}
 		if(GetGameTime() > npc.m_flTimeSinceHasBeenHurt)
 		{
-			NPCTalkMessage(npc.index, "You will get soon in touch with a friend of mine, I thank you, though beware of the rogue machine... {red}Blitzkrieg.");
+			InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_Win_6");
 			npc.m_bDissapearOnDeath = true;
 			RequestFrame(KillNpc, EntIndexToEntRef(npc.index));
 			for (int client = 1; client <= MaxClients; client++)
@@ -526,29 +511,29 @@ public void TrueFusionWarrior_ClotThink(int iNPC)
 				if(IsValidClient(client) && GetClientTeam(client) == 2 && TeutonType[client] != TEUTON_WAITING && PlayerPoints[client] > 500)
 				{
 					Items_GiveNamedItem(client, "Cured Silvester");
-					CPrintToChat(client,"{default}당신은 그의 호의를 얻었습니다. 그에게서 이것을 받았습니다 : {yellow}''감염이 치유된 실베스터''{default}!");
+					CPrintToChat(client, "%T", "InfectedSilvester_Trophies", client);
 				}
 			}
 		}
 		else if(GetGameTime() + 5.0 > npc.m_flTimeSinceHasBeenHurt && i_SaidLineAlready[npc.index] < 4)
 		{
 			i_SaidLineAlready[npc.index] = 4;
-			NPCTalkMessage(npc.index, "Help the world, retain the chaos!");
+			InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_Win_5");
 		}
 		else if(GetGameTime() + 10.0 > npc.m_flTimeSinceHasBeenHurt && i_SaidLineAlready[npc.index] < 3)
 		{
 			i_SaidLineAlready[npc.index] = 3;
-			NPCTalkMessage(npc.index, "I thank you, but I will need help from you later, and I will warn you of dangers.");
+			InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_Win_4");
 		}
 		else if(GetGameTime() + 13.0 > npc.m_flTimeSinceHasBeenHurt && i_SaidLineAlready[npc.index] < 2)
 		{
 			i_SaidLineAlready[npc.index] = 2;
-			NPCTalkMessage(npc.index, "A huge chaos is breaking out, you were able to knock some sense into me..!");
+			InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_Win_3");
 		}
 		else if(GetGameTime() + 16.5 > npc.m_flTimeSinceHasBeenHurt && i_SaidLineAlready[npc.index] < 1)
 		{
 			i_SaidLineAlready[npc.index] = 1;
-			NPCTalkMessage(npc.index, "Listen to me, please!");
+			InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_Win_2");
 		}
 		return; //He is trying to help.
 	}
@@ -652,7 +637,7 @@ public void TrueFusionWarrior_ClotThink(int iNPC)
 				npc.SetPoseParameter(iPitch, ApproachAngle(ang[0], flPitch, 10.0));
 			}
 			if(flDistanceToTarget < npc.GetLeadRadius()) {
-				
+			
 			/*	int color[4];
 				color[0] = 255;
 				color[1] = 255;
@@ -997,7 +982,7 @@ public Action TrueFusionWarrior_OnTakeDamage(int victim, int &attacker, int &inf
 
 			SDKUnhook(npc.index, SDKHook_Think, TrueFusionWarrior_TBB_Tick);
 
-			NPCTalkMessage(npc.index, "Stop, stop please I beg you, I was infected!");
+			InfectedSilvester_NPCTalkMessage(npc.index, "InfectedSilvester_Win_1");
 			int i = MaxClients + 1;
 			while((i = FindEntityByClassname(i, "obj_sentrygun")) != -1)
 			{
@@ -1014,8 +999,7 @@ public Action TrueFusionWarrior_OnTakeDamage(int victim, int &attacker, int &inf
 			{
 				RemoveEntity(npc.m_iWearable7);
 			}
-
-
+			
 			SetVariantColor(view_as<int>({150, 150, 0, 150}));
 			AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
 			damage = 0.0; //So he doesnt get oneshot somehow, atleast once.

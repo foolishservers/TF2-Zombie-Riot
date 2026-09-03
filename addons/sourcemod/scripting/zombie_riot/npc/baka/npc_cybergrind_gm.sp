@@ -43,6 +43,7 @@ static void ClotPrecache()
 	PrecacheSoundCustom("#zombiesurvival/expidonsa_waves/raid_sensal_group.mp3");
 	PrecacheSoundCustom("#zombiesurvival/ruina/raid_ruina_trio.mp3");
 	PrecacheSoundCustom("#zombiesurvival/victoria_1/wave_45.mp3");
+	PrecacheSoundCustom("#zombiesurvival/xeno_raid/mr_duo_battle.mp3");
 	PrecacheSoundCustom(RAIDBOSS_TWIRL_THEME);
 	PrecacheModel("models/items/tf_gift.mdl", true);
 	PrecacheModel("models/player/spy.mdl");
@@ -184,19 +185,15 @@ methodmap CyberGrindGM < CClotBody
 		{
 			func_NPCDeath[npc.index] = INVALID_FUNCTION;
 			func_NPCOnTakeDamage[npc.index] = INVALID_FUNCTION;
-			func_NPCThink[npc.index] = INVALID_FUNCTION;
+			func_NPCThink[npc.index] = CyberGrindGM_OverrideMusic;
 			
 			char buffers[3][64];
 			ExplodeString(data, ";", buffers, sizeof(buffers), sizeof(buffers[]));
 			ReplaceString(buffers[0], 64, "set_wavelimit", "");
 			
-			WaveStart_SubWaveStart(GetGameTime() + StringToFloat(buffers[0]));
-			
-			b_NpcForcepowerupspawn[npc.index] = 0;
-			i_RaidGrantExtra[npc.index] = 0;
-			b_DissapearOnDeath[npc.index] = true;
-			b_DoGibThisNpc[npc.index] = true;
-			SmiteNpcToDeath(npc.index);
+			npc.m_flAddRiadTime = StringToFloat(buffers[0]);
+			npc.m_iOverlordComboAttack = 101;
+			npc.m_flCoolDown = GetGameTime() + 1.0;
 			return npc;
 		}
 		else if(!StrContains(data, "set_raidlimit"))
@@ -211,7 +208,7 @@ methodmap CyberGrindGM < CClotBody
 			
 			npc.m_flAddRiadTime = StringToFloat(buffers[0]);
 			npc.m_iOverlordComboAttack = 100;
-			npc.m_flCoolDown = GetGameTime() + 0.5;
+			npc.m_flCoolDown = GetGameTime() + 1.0;
 			return npc;
 		}
 		else if(!StrContains(data, "difficulty"))
@@ -461,7 +458,7 @@ methodmap CyberGrindGM < CClotBody
 			func_NPCOnTakeDamage[npc.index] = INVALID_FUNCTION;
 			func_NPCThink[npc.index] = CyberGrindGM_OverrideMusic;
 			npc.m_iOverlordComboAttack = 0;
-			npc.m_flCoolDown = GetGameTime() + 0.5;
+			npc.m_flCoolDown = GetGameTime() + 1.0;
 			return npc;
 		}
 		else if(!StrContains(data, "the_ruina_trio_bgm"))
@@ -470,7 +467,7 @@ methodmap CyberGrindGM < CClotBody
 			func_NPCOnTakeDamage[npc.index] = INVALID_FUNCTION;
 			func_NPCThink[npc.index] = CyberGrindGM_OverrideMusic;
 			npc.m_iOverlordComboAttack = 1;
-			npc.m_flCoolDown = GetGameTime() + 0.5;
+			npc.m_flCoolDown = GetGameTime() + 1.0;
 			return npc;
 		}
 		else if(!StrContains(data, "xeno_duo"))
@@ -479,7 +476,7 @@ methodmap CyberGrindGM < CClotBody
 			func_NPCOnTakeDamage[npc.index] = INVALID_FUNCTION;
 			func_NPCThink[npc.index] = CyberGrindGM_OverrideMusic;
 			npc.m_iOverlordComboAttack = 2;
-			npc.m_flCoolDown = GetGameTime() + 0.5;
+			npc.m_flCoolDown = GetGameTime() + 1.0;
 			return npc;
 		}
 		else if(!StrContains(data, "world_end"))
@@ -488,7 +485,7 @@ methodmap CyberGrindGM < CClotBody
 			func_NPCOnTakeDamage[npc.index] = INVALID_FUNCTION;
 			func_NPCThink[npc.index] = CyberGrindGM_OverrideMusic;
 			npc.m_iOverlordComboAttack = 3;
-			npc.m_flCoolDown = GetGameTime() + 0.5;
+			npc.m_flCoolDown = GetGameTime() + 1.0;
 			return npc;
 		}
 		else if(!StrContains(data, "is_twirl"))
@@ -722,6 +719,7 @@ static void CyberGrindGM_OverrideMusic(int iNPC)
 				Music_SetRaidMusic(music);
 			}
 			case 100: RaidModeTime += npc.m_flAddRiadTime;
+			case 101: WaveStart_SubWaveStart(GetGameTime() + npc.m_flAddRiadTime);
 		}
 		b_NpcForcepowerupspawn[npc.index] = 0;
 		i_RaidGrantExtra[npc.index] = 0;
@@ -1043,20 +1041,20 @@ static void CyberGrindGM_ClotThink(int iNPC)
 						NPCPritToChat(npc.index, "{slateblue}", "MrV Talk 12", false, false);
 					//Citizen_SpawnAtPoint("b");
 					//Citizen_SpawnAtPoint();
-					if(CyberGrind_Difficulty==4)
+					float SelfPos[3];
+					GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", SelfPos);
+					float AllyAng[3];
+					GetEntPropVector(npc.index, Prop_Data, "m_angRotation", AllyAng);
+					int Spawner_entity = GetRandomActiveSpawner();
+					if(IsValidEntity(Spawner_entity))
 					{
-						float SelfPos[3];
-						GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", SelfPos);
-						float AllyAng[3];
-						GetEntPropVector(npc.index, Prop_Data, "m_angRotation", AllyAng);
-						int Spawner_entity = GetRandomActiveSpawner();
-						if(IsValidEntity(Spawner_entity))
-						{
-							GetEntPropVector(Spawner_entity, Prop_Data, "m_vecOrigin", SelfPos);
-							GetEntPropVector(Spawner_entity, Prop_Data, "m_angRotation", AllyAng);
-						}
-						NPC_CreateByName("npc_invisible_trigger_man", -1, SelfPos, AllyAng, TFTeam_Stalkers, "cybergrind_ex_hard");
+						GetEntPropVector(Spawner_entity, Prop_Data, "m_vecOrigin", SelfPos);
+						GetEntPropVector(Spawner_entity, Prop_Data, "m_angRotation", AllyAng);
 					}
+					if(CyberGrind_Difficulty==4)
+						NPC_CreateByName("npc_invisible_trigger_man", -1, SelfPos, AllyAng, TFTeam_Stalkers, "cybergrind_ex_hard");
+					else
+						NPC_CreateByName("npc_invisible_trigger_man", -1, SelfPos, AllyAng, TFTeam_Stalkers, "fast_building_cooldown");
 					Spawn_Cured_Grigori();
 					//CyberGrindGM_Talk("Rebels Arrive", true);
 					/*if(CyberGrind_Difficulty!=4)

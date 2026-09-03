@@ -94,7 +94,7 @@ bool NeedCrouchAbility(int client)
 public void MedigunChangeModeR(int client, int weapon, bool crit, int slot)
 {
 
-	MedigunChangeModeRInternal(client, weapon, crit, slot, NeedCrouchAbility(client));
+	MedigunChangeModeRInternal(client, weapon, crit, slot, false);
 }
 public void MedigunChangeModeRInternal(int client, int weapon, bool crit, int slot, bool checkCrouch)
 {
@@ -252,6 +252,26 @@ public void GiveMedigunBuffUber(int medigun, int owner, int receiver)
 			}
 			ApplyStatusEffect(owner, receiver, "Weapon Overclock", UBERCHARGE_BUFFDURATION);
 		}
+		case WEAPON_ADAPTIVE_MEDIGUN:
+		{
+			if(IsValidClient(receiver))
+			{
+				TF2_AddCondition(receiver, TFCond_UberBulletResist, UBERCHARGE_BUFFDURATION);
+				TF2_AddCondition(receiver, TFCond_UberBlastResist, UBERCHARGE_BUFFDURATION);
+				TF2_AddCondition(receiver, TFCond_UberFireResist, UBERCHARGE_BUFFDURATION);
+				if(dieingstate[receiver] > 0)
+				{
+					if(i_CurrentEquippedPerk[owner] & PERK_REGENE)
+						SetEntityHealth(receiver,  GetClientHealth(receiver) + 6);
+					else
+						SetEntityHealth(receiver,  GetClientHealth(receiver) + 3);
+					if(dieingstate[owner] > 0)
+						dieingstate[receiver] -= RoundToNearest(float(Adaptive_FastRevive(owner))*0.65);
+				}
+			}
+			ApplyStatusEffect(owner, receiver, "Inspire", UBERCHARGE_BUFFDURATION);
+			ApplyStatusEffect(owner, receiver, "UBERCHARGED", UBERCHARGE_BUFFDURATION);
+		}
 		default:
 		{
 			if(IsValidClient(receiver))
@@ -357,6 +377,11 @@ public MRESReturn OnMedigunPostFramePost(int medigun) {
 							{
 								ApplyStatusEffect(owner, owner, "Healing Adaptiveness Ranged", 0.15);
 								ApplyStatusEffect(owner, healTarget, "Healing Adaptiveness Ranged", 0.15);
+							}
+							case 2:
+							{
+								ApplyStatusEffect(owner, owner, "Healing Adaptiveness All", 0.15);
+								ApplyStatusEffect(owner, healTarget, "Healing Adaptiveness All", 0.15);
 							}
 						}
 					}
@@ -673,17 +698,17 @@ float MedigunGetUberDuration(int owner)
 public void Adaptive_MedigunChangeBuff(int client, int weapon, bool crit, int slot)
 {
 	//only swithc with crouch R
-	if((GetClientButtons(client) & IN_DUCK))
+	if(GetClientButtons(client) & IN_DUCK)
 	{
-		ClientCommand(client, "playgamesound weapons/vaccinator_toggle.wav");
-		MedigunModeSet[client]++;
-		if(MedigunModeSet[client] > 1)
-		{
-			MedigunModeSet[client] = 0;
-		}
+		MedigunChangeModeRInternal(client, weapon, crit, slot, NeedCrouchAbility(client));
 		return;
 	}
-	MedigunChangeModeRInternal(client, weapon, crit, slot, false);
+	ClientCommand(client, "playgamesound weapons/vaccinator_toggle.wav");
+	MedigunModeSet[client]++;
+	if(MedigunModeSet[client] > 1)
+	{
+		MedigunModeSet[client] = 0;
+	}
 }
 
 

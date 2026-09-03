@@ -37,6 +37,7 @@ enum struct MiniBoss
 	bool SoundCustom;
 	char Sound[128];
 	char Icon[128];
+	char Data[128];
 	char Text_1[128];
 	char Text_2[128];
 	char Text_3[128];
@@ -592,25 +593,49 @@ bool Waves_CallVote(int client, int force = 0)
 				//There must be atleast 4 selections for the cooldown to work.
 				if(length >= 4 && vote.Level > 0 && LastWaveWas[0] && StrEqual(vote.Config, LastWaveWas))
 				{
-					Format(vote.Name, sizeof(vote.Name), "%s (Cooldown)", vote.Name);
-					if(AprilFoolsIconOverride() == STEAM_HAPPY)
-						Format(vote.Name, sizeof(vote.Name), "Steam Happy (Cooldown)");
+					if (AprilFoolsIconOverride() == STEAM_HAPPY)
+					{
+						Format(vote.Name, sizeof(vote.Name), "%t (%t)", "Steam Happy", "Vote Cooldown");
+					}
+					else if (TranslationPhraseExists(vote.Name))
+					{
+						Format(vote.Name, sizeof(vote.Name), "%t (%t)", vote.Name, "Vote Cooldown");
+					}
+					else
+					{
+						Format(vote.Name, sizeof(vote.Name), "%s (%t)", vote.Name, "Vote Cooldown");
+					}
 					menu.AddItem(vote.Config, vote.Name, ITEMDRAW_DISABLED);
 				}
 				// Unlocks (atleast one player needs it)
 				else if(vote.Unlock1[0] && (!Items_HasNamedItem(client, vote.Unlock1) || (vote.Unlock2[0] && !Items_HasNamedItem(client, vote.Unlock2))))
 				{
-					Format(vote.Name, sizeof(vote.Name), "%s (%s)", vote.Name, vote.Append);
-					if(AprilFoolsIconOverride() == STEAM_HAPPY)
-						Format(vote.Name, sizeof(vote.Name), "Steam Happy (%s)", vote.Append);
+					if (AprilFoolsIconOverride() == STEAM_HAPPY)
+					{
+						Format(vote.Name, sizeof(vote.Name), "%t (%t)", "Steam Happy", "Vote Cooldown");
+					}
+					else
+					{
+						int show = 0;
+						if (TranslationPhraseExists(vote.Name))
+							show |= (1 << 0);
 						
+						if (TranslationPhraseExists(vote.Append))
+							show |= (1 << 1);
+						
+						char voteName[64];
+						FormatEx(voteName, sizeof(voteName), "%s %s", (show & 1) ? "%t" : "%s", (show & 2) ? "(%t)" : "(%s)");
+						
+						Format(vote.Name, sizeof(vote.Name), voteName, vote.Name, vote.Append);
+					}
+					
 					menu.AddItem(vote.Config, vote.Name, (Items_HasNamedItem(0, vote.Unlock1) && (!vote.Unlock2[0] || Items_HasNamedItem(0, vote.Unlock2))) ? ITEMDRAW_DEFAULT : ITEMDRAW_DISABLED);
 				}
 				else
 				{
 					if(levels)
-						Format(vote.Name, sizeof(vote.Name), "%s (Lv %d)", vote.Name, vote.Level);
-
+						Format(vote.Name, sizeof(vote.Name), TranslationPhraseExists(vote.Name) ? "%t (Lv %d)" : "%s (Lv %d)", vote.Name, vote.Level);
+					
 					int MenuDo = ITEMDRAW_DISABLED;
 					if(!vote.Level || i == 0)
 						MenuDo = ITEMDRAW_DEFAULT;
@@ -624,11 +649,11 @@ bool Waves_CallVote(int client, int force = 0)
 		{
 			if(levels)
 			{
-				Format(vote.Name, sizeof(vote.Name), "Standard (Lv %d)", WaveLevel);
+				Format(vote.Name, sizeof(vote.Name), "%t (Lv %d)", "Standard", WaveLevel);
 			}
 			else
 			{
-				strcopy(vote.Name, sizeof(vote.Name), "Standard");
+				Format(vote.Name, sizeof(vote.Name), "%t", "Standard");
 			}
 			
 			menu.AddItem(NULL_STRING, vote.Name);
@@ -649,7 +674,7 @@ bool Waves_CallVote(int client, int force = 0)
 					
 					level = WaveLevel + RoundFloat(level * multi);
 
-					Format(vote.Name, sizeof(vote.Name), "%s (Lv %d)", vote.Name, level);
+					Format(vote.Name, sizeof(vote.Name), TranslationPhraseExists(vote.Name) ? "%t (Lv %d)" : "%s (Lv %d)", vote.Name, level);
 				}
 				int MenuDo = ITEMDRAW_DISABLED;
 				if(Level[client] >= 1)
@@ -1228,6 +1253,7 @@ void Waves_SetupMiniBosses(KeyValues map)
 			}
 				
 			kv.GetString("icon", boss.Icon, sizeof(boss.Icon));
+			kv.GetString("data", boss.Data, sizeof(boss.Data));
 			
 			kv.GetString("text_1", boss.Text_1, sizeof(boss.Text_1));
 			kv.GetString("text_2", boss.Text_2, sizeof(boss.Text_2));
@@ -1341,6 +1367,7 @@ void WavesDeleteSet(int ArrayDo = Rounds_Default)
 		delete Rounds[ArrayDo];
 	}
 }
+
 void Waves_SetupWaves(KeyValues kv, bool start, int ArrayDo = Rounds_Default)
 {
 	Round round;
@@ -1899,7 +1926,7 @@ public Action Waves_RoundStartTimer(Handle timer)
 public Action Waves_AllowVoting(Handle timer)
 {
 	Waves_SetReadyStatus(1);
-	SPrintToChatAll("이제 준비(F4)를 할 수 있습니다.");
+	CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_Setup_Allow_Ready");
 	return Plugin_Continue;
 }
 
@@ -1972,8 +1999,8 @@ public Action Waves_EndVote(Handle timer, int WhatWasMyCancel)
 					VoteEndTime = GetGameTime() + 30.0;
 					MostRecentVoteCancel++;
 					CreateTimer(30.0, Waves_EndVote, MostRecentVoteCancel, TIMER_FLAG_NO_MAPCHANGE);
-					PrintHintTextToAll("Vote for the top %d options!", list.Length);
-					SPrintToChatAll("Vote for the top %d options!", list.Length);
+					PrintHintTextToAll("%t", "Wave_Vote_TieBreaker", list.Length);
+					CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_Vote_TieBreaker", list.Length);
 					Waves_SetReadyStatus(2);
 					return Plugin_Continue;
 				}
@@ -2055,8 +2082,8 @@ public Action Waves_EndVote(Handle timer, int WhatWasMyCancel)
 					MostRecentVoteCancel++;
 					CreateTimer(duration, Waves_EndVote, MostRecentVoteCancel, TIMER_FLAG_NO_MAPCHANGE);
 
-					PrintHintTextToAll("Vote for the wave modifier!");
-					SPrintToChatAll("Vote for the wave modifier!");
+					PrintHintTextToAll("%t", "Wave_Vote_Modifier");
+					CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_Vote_Modifier");
 				}
 				else
 				{
@@ -2210,9 +2237,9 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 			if(WaveWhich == Rounds_Default)
 			{
 				float WaitingTimeGive = wave.EnemyData.WaitingTimeGive;
-				if(!LastMann && WaitingTimeGive > 0.0)
+				if((!LastMann || Is_a_boss == 2) && WaitingTimeGive > 0.0)
 				{
-					SPrintToChatAll("준비 시간으로 %.1f초 드립니다.",WaitingTimeGive);
+					CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_WaitingTime", WaitingTimeGive);
 					GiveProgressDelay(WaitingTimeGive);
 					f_DelaySpawnsForVariousReasons = GetGameTime() + WaitingTimeGive;
 					SpawnTimer(WaitingTimeGive);
@@ -2224,14 +2251,14 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 					{
 						if(LastMann && !b_IsAloneOnServer)
 						{
-							SPrintToChatAll("You were given extra 45 seconds to prepare for the raidboss... Get ready.");
+							CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_WaitingTime_RaidBoss_LastMann");
 							GiveProgressDelay(45.0);
 							f_DelaySpawnsForVariousReasons = GetGameTime() + 45.0;
 							SpawnTimer(45.0);
 						}
 						else if(WaitingTimeGive <= 0.0)
 						{
-							SPrintToChatAll("You were given extra 30 seconds to prepare for the raidboss... Get ready.");
+							CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_WaitingTime_RaidBoss");
 							GiveProgressDelay(30.0);
 							f_DelaySpawnsForVariousReasons = GetGameTime() + 30.0;
 							SpawnTimer(30.0);
@@ -2980,7 +3007,7 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 						{
 							Waves_SetReadyStatus(2);
 							//wait a minimum of 30 seconds when theres too many players.
-							SPrintToChatAll("30초 간은 준비할 수 없습니다.");
+							CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_Setup_Disallow_Ready");
 							CreateTimer(30.0, Waves_AllowVoting, _, TIMER_FLAG_NO_MAPCHANGE);
 						}
 						else
@@ -3003,13 +3030,12 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 					zr_tagblacklist.GetString(buffer, sizeof(buffer));
 					if(StrContains(buffer, "fools26", false) != -1)
 					{
-
 						Cooldown = GetGameTime() + 5.0;
 
 						SpawnTimer(5.0);
 						CreateTimer(5.0, Waves_RoundStartTimer, _, TIMER_FLAG_NO_MAPCHANGE);
 
-						SPrintToChatAll("You were given extra 5 seconds to prepare...");
+						CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_WaitingTime_LastMann_AprilFools26");
 					}
 					else
 					{
@@ -3018,9 +3044,8 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 						SpawnTimer(45.0);
 						CreateTimer(45.0, Waves_RoundStartTimer, _, TIMER_FLAG_NO_MAPCHANGE);
 
-						SPrintToChatAll("You were given extra 45 seconds to prepare...");
+						CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_WaitingTime_LastMann");
 					}
-					
 				}
 				else if(GiveBreakForPlayers && !Rogue_Mode() && round.Waves.Length)
 				{					
@@ -3034,7 +3059,7 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 						SpawnTimer(5.0);
 						CreateTimer(5.0, Waves_RoundStartTimer, _, TIMER_FLAG_NO_MAPCHANGE);
 
-						SPrintToChatAll("You were given extra 5 seconds to prepare, as most of your team died......");
+						CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_BreakTime_AprilFools26");
 					}
 					else
 					{
@@ -3043,8 +3068,7 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 						SpawnTimer(30.0);
 						CreateTimer(30.0, Waves_RoundStartTimer, _, TIMER_FLAG_NO_MAPCHANGE);
 						
-						SPrintToChatAll("You were given extra 30 seconds to prepare, as most of your team died......");
-						
+						CPrintToChatAll("%s%t", STORE_PREFIX, "Wave_BreakTime");
 					}
 				}
 				else
@@ -4587,15 +4611,15 @@ bool Waves_NextFreeplayCall(bool donotAdvanceRound)
 
 		for(int i; i < Max_Enemy_Get; i++)
 		{
-			int dangerlevel = Freeplay_GetDangerLevelCurrent();
+			int dangerlevel = Freeplay_GetDangerLevelCurrent(postWaves);
 			bool isBoss = !(GetURandomInt() % 9);
 
 			if(isBoss)
 			{
 				int bossdanger = dangerlevel;
 				
-				if(bossdanger >= 5)
-					bossdanger = 4;
+				if(bossdanger >= 7)
+					bossdanger = 6;
 
 				int index = boss.FindValue(bossdanger, Wave::DangerLevel);
 				if(index == -1)

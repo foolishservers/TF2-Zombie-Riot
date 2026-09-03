@@ -839,11 +839,6 @@ static void ClotDeath(int entity)
 		SetEntityCollisionGroup(entity_death, 2);
 		SetVariantString("bugbait_hit");
 		AcceptEntityInput(entity_death, "SetAnimation");
-		for(int client=1; client<=MaxClients; client++)
-		{
-			if(IsValidClient(client))
-				Music_Stop_All(client); //It cost 400000$ to stop music...once...
-		}
 		pos[2] += 20.0;
 		
 		CreateTimer(1.0, Timer_RemoveEntityThirtySixFifty, EntIndexToEntRef(entity_death), TIMER_FLAG_NO_MAPCHANGE); //timer that starts the Timer_RemoveEntityThirtySixFifty chain of events

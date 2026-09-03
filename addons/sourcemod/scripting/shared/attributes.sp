@@ -65,13 +65,21 @@ enum
 	Attrib_Armor_AliveMode = 4058,
 	Attrib_MultiBuildingDamage = 4059,
 	
-	Attrib_MaxArmor_Multiplier = 5000,
-	Attrib_MaxArmor_BaseAdditive = 5001,
-	Attrib_MaxArmor_FinalAdditive = 5002,
 	Attrib_ASPD_StatusCalc,	// Only used in status_effect to determine their current ASPD amount
 	Attrib_RegenElementalOutOfBattleScaling = 4061,
 	Attrib_MaxHpNerfForAbility = 4062
 }
+
+enum
+{
+	Attrib_MaxArmor_Multiplier = 5000,
+	Attrib_MaxArmor_BaseAdditive = 5001,
+	Attrib_MaxArmor_FinalAdditive = 5002,
+	Attrib_IsSniperRifle = 5003,
+	Attrib_ExplosiveHeadshot = 5004,
+	Attrib_MaxHealthMulti = 5005,
+	Attrib_DamageBonusFullCharge = 5006,
+};
 
 StringMap WeaponAttributes[MAXENTITIES + 1];
 
@@ -403,17 +411,30 @@ void Attributes_OnHit(int client, int victim, int weapon, float &damage, int& da
 				float ArmorMax = Attributes_Get(weapon, Attrib_ArmorOnHitMax, 1.0);
 				GiveArmorViaPercentage(client, value / ArmorMax, ArmorMax);
 			}
+			
+			value = Attributes_Get(weapon, 795, 1.0);	// bonus damage to burning players
+			if(value != 1.0)
+			{
+				if(IgniteFor[victim] > 0)
+					damage *= value;
+			}
+			
+			value = Attributes_Get(weapon, Attrib_DamageBonusFullCharge, 1.0);
+			if(value != 1.0 && IsValidEntity(weapon) && HasEntProp(weapon, Prop_Send, "m_flChargedDamage"))
+			{
+				if(GetEntPropFloat(weapon, Prop_Send, "m_flChargedDamage") >= 150.0)
+				{
+					damage *= value;
+				}
+			}
 #endif
-	
 			value = Attributes_Get(weapon, 149, 0.0);	// bleeding duration
 			if(value)
 				StartBleedingTimer(victim, client, Attributes_Get(weapon, 2, 1.0) * 4.0, RoundFloat(value * 2.0), weapon, damagetype);
 			
 			value = Attributes_Get(weapon, 208, 0.0);	// Set DamageType Ignite
-
 			if(value)
 			{
-
 				if(value == 1.0)
 					value = 7.5;
 
@@ -421,7 +442,8 @@ void Attributes_OnHit(int client, int victim, int weapon, float &damage, int& da
 					value = 2.0;
 					
 				NPC_Ignite(victim, client, value, weapon);
-			}	
+			}
+			
 			value = Attributes_Get(weapon, 638, 0.0);
 			if(value)	// Extinquisher
 			{
@@ -594,28 +616,7 @@ void Attributes_OnKill(int victim, int client, int weapon)
 
 	if(IsValidEntity(weapon) && weapon > MaxClients)
 	{
-		//dont give health on kill!
-		if(!(b_OnDeathExtraLogicNpc[victim] & ZRNPC_DEATH_NOHEALTH))
-		{
-			value = Attributes_Get(weapon, 180, 0.0);	// heal on kill
-			if(value)
-			{
-				if(b_thisNpcIsABoss[victim] || b_thisNpcIsARaid[victim])
-				{
-					value *= 4.0;
-				}
-				else if(b_IsGiant[victim])
-				{
-					value *= 2.0;
-				}
-				//Grilled!
-				if(HasSpecificBuff(victim, "Burn"))
-					value *= 1.1;
-					
-				HealEntityGlobal(client, client, value, 1.0, 1.0, HEAL_SELFHEAL);
-			}
-		}
-		
+		Attributes_Trigger_HealOnKill(client, victim, weapon, 0.9);
 		value = Attributes_Get(weapon, 613, 0.0);	// minicritboost on kill
 		if(value)
 			TF2_AddCondition(client, TFCond_MiniCritOnKill, value);
@@ -626,6 +627,30 @@ void Attributes_OnKill(int victim, int client, int weapon)
 	}
 
 
+}
+
+void Attributes_Trigger_HealOnKill(int attacker, int victim, int weapon, float ValueModify = 1.0)
+{
+	//dont give health on kill!
+	if((b_OnDeathExtraLogicNpc[victim] & ZRNPC_DEATH_NOHEALTH))
+		return;
+	float value = Attributes_Get(weapon, 180, 0.0);	// heal on kill
+	if(!value)
+		return;
+	value *= ValueModify;
+	if(b_thisNpcIsABoss[victim] || b_thisNpcIsARaid[victim])
+	{
+		value *= 4.0;
+	}
+	else if(b_IsGiant[victim])
+	{
+		value *= 2.0;
+	}
+	//Grilled!
+	if(HasSpecificBuff(victim, "Burn"))
+		value *= 1.1;
+		
+	HealEntityGlobal(attacker, attacker, value, 1.0, 1.0, HEAL_SELFHEAL);
 }
 
 //override default
@@ -754,4 +779,22 @@ float WeaponDamageAttributeMultipliers(int weapon, int Flags = MULTIDMG_NONE, in
 		DamageBonusLogic *= Attributes_Get(weapon, 2, 1.0); //non wand dmg multi
 	}
 	return DamageBonusLogic;
+}
+
+void Attributes_ApplyHealthModifier(StringMap map)
+{
+	float multi = 1.0;
+	if(map.GetValue("5005", multi))
+	{
+		if (multi <= 0.0) // little safe guard.
+		{
+			map.SetValue("26", 1.0);
+		}
+		else if (multi != 1.0)
+		{
+			float value = 0.0;
+			map.GetValue("26", value);
+			map.SetValue("26", value * multi);
+		}
+	}
 }

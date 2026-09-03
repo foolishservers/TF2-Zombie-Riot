@@ -1,7 +1,8 @@
 #pragma semicolon 1
 #pragma newdecls required
-
+//배럭을 위한 변수
 bool Inv_Golden_Crown[MAXENTITIES];
+
 bool Inv_Mining_Foreman_Hat[MAXPLAYERS];
 bool Inv_LSandvich_SafeHouse[MAXPLAYERS];
 bool Inv_Slug_Shell_Pouch[MAXPLAYERS];
@@ -68,14 +69,20 @@ stock bool Custom_Inventory_Enable(int client, int entity, int Attribute)
 {
 	switch(Attribute)
 	{
-		case 1000:Inv_Golden_Crown[client]=true;
+		case 1000:{Inv_Golden_Crown[client]=true;Inv_Mining_Foreman_Hat[client]=true;Inv_Barrack_Backup[client]=true;}
 		case 1001:Inv_LSandvich_SafeHouse[client]=true;
 		case 1002:Inv_Slug_Shell_Pouch[client]=true;
-		case 1003:Inv_Mining_Foreman_Hat[client]=true;
+		case 1003:
+		{
+			//none
+		}
 		case 1004:Inv_Scrap_Backpack[client]=true;
 		case 1005:Inv_Dragon_Breath_Shell[client]=true;
 		case 1006:Inv_Mini_Shell[client]=true;
-		case 1007:Inv_Barrack_Backup[client]=true;
+		case 1007:
+		{
+			//none
+		}
 		case 1008:Inv_MarketGardener_Uniform[client]=true;
 		case 1009:
 		{
@@ -113,7 +120,7 @@ stock bool Custom_Inventory_Enable(int client, int entity, int Attribute)
 
 public void Custom_Inventory_Attribute(int client, int weapon)
 {
-	if(i_WeaponArchetype[weapon] == Archetype_Charger && Custom_Inventory_IsShotgun(weapon))
+	if(i_WeaponArchetype[weapon] == Archetype_Charger && Custom_Inventory_IsShotgun(weapon, client))
 	{
 		if(Inv_Slug_Shell_Pouch[client])
 		{
@@ -127,6 +134,7 @@ public void Custom_Inventory_Attribute(int client, int weapon)
 		
 			if(Pellets>1)
 			{
+				bool CompleteFailure;
 				switch(i_CustomWeaponEquipLogic[weapon])
 				{
 					case WEAPON_BOOMSTICK, WEAPON_IS_SHOTGUN, WEAPON_ANGELIC_SHOTGUN, WEAPON_IS_AUTOSHOTGUN:
@@ -156,6 +164,22 @@ public void Custom_Inventory_Attribute(int client, int weapon)
 						{
 							Attributes_Set(weapon, 45, 0.25);
 							Pellets=RoundToCeil(4.0*ExtraPellets);
+							Attributes_SetMulti(weapon, 2, float(Pellets));
+							if(i_WeaponDamageFalloff[weapon]==1.0)
+								i_WeaponDamageFalloff[weapon]=0.99;
+							else
+								i_WeaponDamageFalloff[weapon]-=0.01;
+						}
+					}
+					default: CompleteFailure=true;
+				}
+				if(CompleteFailure)
+				{
+					if(IsValidClient(client) && Inv_ReconstructiveShotgun_Enable(client))
+					{
+						if(ExtraPellets)
+						{
+							Attributes_Set(weapon, 45, 0.1);
 							Attributes_SetMulti(weapon, 2, float(Pellets));
 							if(i_WeaponDamageFalloff[weapon]==1.0)
 								i_WeaponDamageFalloff[weapon]=0.99;
@@ -194,6 +218,9 @@ public void Custom_Inventory_Attribute(int client, int weapon)
 				Attributes_Set(weapon, 97, 1.0);
 			Attributes_SetMulti(weapon, 4, 1.5);
 			Attributes_SetMulti(weapon, 97, 0.95);
+			if(Inv_ReconstructiveShotgun_Enable(client))
+				Attributes_SetMulti(weapon, 5, 0.8);
+			
 			if(i_WeaponDamageFalloff[weapon]==1.0)
 				i_WeaponDamageFalloff[weapon]=0.99;
 			else
@@ -333,12 +360,12 @@ public float Custom_Inventory_PlayerOnTakeDamage(int victim, int attacker, float
 
 public float Custom_Inventory_NPCOnTakeDamage(int victim, int attacker, int inflictor, float &damage, int &damagetype, int weapon)
 {
-	if(!IsValidEntity(victim) || CheckInHud())
+	if(!IsValidEntity(victim) || !IsValidEntity(weapon) || CheckInHud())
 		return damage;
 
 	if(IsValidClient(attacker))
 	{
-		if(Inv_Dragon_Breath_Shell[attacker] && Custom_Inventory_IsShotgun(weapon))
+		if(Inv_Dragon_Breath_Shell[attacker] && Custom_Inventory_IsShotgun(weapon, attacker))
 		{
 			if(!(damagetype & DMG_TRUEDAMAGE) && !(i_HexCustomDamageTypes[victim] & ZR_DAMAGE_DO_NOT_APPLY_BURN_OR_BLEED))
 			{
@@ -367,7 +394,7 @@ public float Custom_Inventory_NPCOnTakeDamage(int victim, int attacker, int infl
 			float YPOS = GetVectorDistance(attackerPos, victimPos);
 			if(YPOS>100.0) damage *= 1.10;
 		}
-		if(Store_HasNamedItem(attacker, "Grigori's Personal 12g Ammo"))
+		if(Store_HasNamedItem(attacker, "Grigori's Personal 12g Ammo") && Custom_Inventory_IsShotgun(weapon, attacker))
 		{
 			float value = Attributes_Get(weapon, Attrib_ArmorOnHitMax, 0.0);
 			if(PreventSameFrameGivearmor[attacker] == GetGameTime())
@@ -378,6 +405,7 @@ public float Custom_Inventory_NPCOnTakeDamage(int victim, int attacker, int infl
 				PreventSameFrameGivearmor[attacker] = GetGameTime();
 				if(b_thisNpcIsARaid[victim])
 					value *= 2.0;
+				value *= 1.5;
 					
 				float attackerPos[3], victimPos[3];
 				GetEntPropVector(attacker, Prop_Send, "m_vecOrigin", attackerPos);
@@ -410,9 +438,9 @@ bool Inv_Mining_Foreman_Hat_Enable(int client)
 	return Inv_Mining_Foreman_Hat[client];
 }
 
-bool Custom_Inventory_IsShotgun(int weapon)
+bool Custom_Inventory_IsShotgun(int weapon, int client=-1)
 {
-	if(i_WeaponArchetype[weapon] == Archetype_Charger)
+	if(IsValidEntity(weapon) && i_WeaponArchetype[weapon] == Archetype_Charger)
 	{
 		switch(i_CustomWeaponEquipLogic[weapon])
 		{
@@ -423,13 +451,15 @@ bool Custom_Inventory_IsShotgun(int weapon)
 					return true;
 			}
 		}
+		if(IsValidClient(client) && Inv_ReconstructiveShotgun_Enable(client))
+			return true;
 	}
 	return false;
 }
 
 float Custom_Inventory_Falloff(int attacker, int weapon)
 {
-	if(Inv_Slug_Shell_Pouch[attacker] && i_WeaponArchetype[weapon] == Archetype_Charger)
+	if(IsValidEntity(weapon) && Inv_Slug_Shell_Pouch[attacker] && i_WeaponArchetype[weapon] == Archetype_Charger)
 	{
 		switch(i_CustomWeaponEquipLogic[weapon])
 		{
@@ -440,8 +470,10 @@ float Custom_Inventory_Falloff(int attacker, int weapon)
 					return 0.77;
 			}
 		}
+		if(Inv_ReconstructiveShotgun_Enable(attacker))
+			return 0.77;
 	}
-	if(Inv_Mini_Shell[attacker] && i_WeaponArchetype[weapon] == Archetype_Charger)
+	if(IsValidEntity(weapon) && Inv_Mini_Shell[attacker] && i_WeaponArchetype[weapon] == Archetype_Charger)
 	{
 		switch(i_CustomWeaponEquipLogic[weapon])
 		{
@@ -452,11 +484,13 @@ float Custom_Inventory_Falloff(int attacker, int weapon)
 					return 0.83;
 			}
 		}
+		if(Inv_ReconstructiveShotgun_Enable(attacker))
+			return 0.83;
 	}
 	return 1.0;
 }
 
-float MoveSpeed(int client, bool maxspeed = false, bool upspeed = false)
+stock float MoveSpeed(int client, bool maxspeed = false, bool upspeed = false)
 {
 	float Fvel[3];
 	GetEntPropVector(client, Prop_Data, "m_vecAbsVelocity", Fvel);
@@ -473,9 +507,68 @@ float MoveSpeed(int client, bool maxspeed = false, bool upspeed = false)
 	return Speed;
 }
 
-float Barricade_Stabilizer_FeedBack(int client)
+stock float Barricade_Stabilizer_FeedBack(int client, int BarricadeHP, bool IsDecorativeObject, bool IsExplosiveBarrel)
 {
 	float f_Resistance=0.95;
+	
+	if(Store_HasWeaponKit(client))
+	{
+		if(IsExplosiveBarrel)
+		{
+			f_Resistance*=0.98;
+			if(BarricadeHP>=15)
+				f_Resistance*=0.97;
+			if(BarricadeHP>=30)
+				f_Resistance*=0.96236;
+			if(BarricadeHP>=50)
+				f_Resistance*=0.98;
+			if(BarricadeHP>=100)
+				f_Resistance*=0.95;
+			if(BarricadeHP>=140)
+				f_Resistance*=0.912673;
+			if(BarricadeHP>=200)
+				f_Resistance*=0.9;
+		}
+		else if(IsDecorativeObject)
+		{
+			if(BarricadeHP>=15)
+				f_Resistance*=0.98;
+			if(BarricadeHP>=76)
+				f_Resistance*=0.97;
+			if(BarricadeHP>=125)
+				f_Resistance*=0.96236;
+			if(BarricadeHP>=200)
+				f_Resistance*=0.98;
+			if(BarricadeHP>=350)
+				f_Resistance*=0.95;
+			if(BarricadeHP>=490)
+				f_Resistance*=0.912673;
+			if(BarricadeHP>=800)
+				f_Resistance*=0.9;
+		}
+		else
+		{
+			if(BarricadeHP>=350)
+				f_Resistance*=0.98;
+			if(BarricadeHP>=700)
+				f_Resistance*=0.97;
+			if(BarricadeHP>=1100)
+				f_Resistance*=0.96236;
+			if(BarricadeHP>=2000)
+				f_Resistance*=0.98;
+			if(BarricadeHP>=2950)
+				f_Resistance*=0.95;
+			if(BarricadeHP>=4200)
+				f_Resistance*=0.97;
+			if(BarricadeHP>=5500)
+				f_Resistance*=0.9409;
+			if(BarricadeHP>=10000)
+				f_Resistance*=0.9;
+		}
+		/*PrintToChat(client, "Resistance: %.1f", f_Resistance);
+		PrintToChat(client, "Barricade HP: %i", BarricadeHP);*/
+		return f_Resistance;
+	}
 	
 	if(Store_HasNamedItem(client, "Construction Novice"))
 		f_Resistance*=0.98;

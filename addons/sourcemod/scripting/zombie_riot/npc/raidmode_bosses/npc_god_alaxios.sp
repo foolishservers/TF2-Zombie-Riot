@@ -158,6 +158,12 @@ methodmap GodAlaxios < CClotBody
 		public get()							{ return fl_GrappleCooldown[this.index]; }
 		public set(float TempValueForProperty) 	{ fl_GrappleCooldown[this.index] = TempValueForProperty; }
 	}
+	property bool m_bGiveFinalItem
+	{
+		public get()							{ return b_FUCKYOU[this.index]; }
+		public set(bool TempValueForProperty) 	{ b_FUCKYOU[this.index] = TempValueForProperty; }
+	}
+	
 	public void PlayHurtSound()
 	{
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
@@ -335,6 +341,7 @@ methodmap GodAlaxios < CClotBody
 		}
 		if(StrContains(data, "seainfection") != -1)
 		{
+			WaveStart_SubWaveStart(GetGameTime() + 700.0);
 			b_NpcUnableToDie[npc.index] = true;
 			i_RaidGrantExtra[npc.index] = ALAXIOS_SEA_INFECTED;
 		}
@@ -369,8 +376,20 @@ methodmap GodAlaxios < CClotBody
 		
 		if(final)
 		{
-			b_NpcUnableToDie[npc.index] = true;
-			i_RaidGrantExtra[npc.index] = 6;
+			if(i_RaidGrantExtra[npc.index] != ALAXIOS_SEA_INFECTED)
+			{
+				b_NpcUnableToDie[npc.index] = true;
+				i_RaidGrantExtra[npc.index] = 6;
+			}
+			else
+			{
+				// Only used on sea corrupted alaxios.
+				npc.m_bGiveFinalItem = true;
+			}
+		}
+		else
+		{
+			npc.m_bGiveFinalItem = false;
 		}
 
 		if(i_RaidGrantExtra[npc.index] >= 5)
@@ -484,7 +503,6 @@ methodmap GodAlaxios < CClotBody
 		}
 		else
 		{
-			
 			MusicEnum music;
 			strcopy(music.Path, sizeof(music.Path), "#zombiesurvival/medieval_raid/kazimierz_boss.mp3");
 			music.Time = 189;
@@ -501,7 +519,6 @@ methodmap GodAlaxios < CClotBody
 			RaidModeTime += 100.0;
 		}
 		
-
 		//Sea version: lobotomy corp - insignia decay
 
 		float flPos[3]; // original
@@ -515,9 +532,11 @@ methodmap GodAlaxios < CClotBody
 	}
 }
 
-static void NPCTalkMessage(int iNPC, const char[] message)
+static void RaidBossGodAlaxios_NPCTalkMessage(int iNPC, const char[] message, bool translated = false, any ...)
 {
-	PrintNPCMessageWithPrefixes(iNPC, "lightblue", message);
+	char buffer[256];
+	VFormat(buffer, sizeof(buffer), message, 4);
+	PrintNPCMessageWithPrefixes(iNPC, "lightblue", buffer, translated);
 }
 
 public void GodAlaxios_ClotThink(int iNPC)
@@ -541,25 +560,25 @@ public void GodAlaxios_ClotThink(int iNPC)
 						npc.AddActivityViaSequence("Lucian_Death_Real");
 						npc.SetPlaybackRate(0.75);	
 						npc.PlayDeathSound();
-						CPrintToChatAll("{lightblue}알락시오스가 무릎을 꿇습니다... 그는 이제...");
+						CPrintToChatAll("%t", "God_Alaxios_Sea_Death_Throes_1");
 					}
 					case 3:
 					{
-						CPrintToChatAll("{lightblue}...?");
+						CPrintToChatAll("%t", "God_Alaxios_Sea_Death_Throes_2");
 					}
 					case 2:
 					{
-						CPrintToChatAll("{lightblue}...!?!?!?");
+						CPrintToChatAll("%t", "God_Alaxios_Sea_Death_Throes_3");
 					}
 					case 1:
 					{
-						CPrintToChatAll("{lightblue}!");
+						CPrintToChatAll("%t", "God_Alaxios_Sea_Death_Throes_4");
 					}
 					case 0:
 					{
 						f_AttackSpeedNpcIncrease[npc.index] *= 0.75;
 						fl_Extra_Damage[npc.index] *= 0.75;
-						CPrintToChatAll("{crimson}세상에. 감염원은 그를 놓아주지 않았습니다. 오히려 그가 더 날뛰길 원하고 있습니다.");
+						CPrintToChatAll("%t", "God_Alaxios_Sea_Death_Throes_5");
 						b_NpcUnableToDie[npc.index] = false;
 						RaidModeTime = GetGameTime(npc.index) + 150.0;
 						RaidBossActive = EntIndexToEntRef(npc.index);
@@ -673,39 +692,11 @@ public void GodAlaxios_ClotThink(int iNPC)
 			npc.m_fbGunout = true;
 			if(i_RaidGrantExtra[npc.index] == ALAXIOS_SEA_INFECTED)
 			{
-				switch(GetRandomInt(0,2))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "{crimson}STOP BEING SO WEAK, HELP ME!!!!!");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "{crimson}I'M UNDER CONTROL, HELP ME.....");
-					}
-					case 3:
-					{
-						NPCTalkMessage(npc.index, "{crimson}THIS THING IS TOO MUCH, HELP!!!!!!!!!");
-					}
-				}
+				RaidBossGodAlaxios_NPCTalkMessage(npc.index, "God_Alaxios_Sea_LastMann_%d", true, GetRandomInt(1, 3));
 			}
 			else
 			{
-				switch(GetRandomInt(0,2))
-				{
-					case 0:
-					{
-						NPCTalkMessage(npc.index, "You have no chance alone!");
-					}
-					case 1:
-					{
-						NPCTalkMessage(npc.index, "Your weaponry frails in comparison to Atlantis!!");
-					}
-					case 3:
-					{
-						NPCTalkMessage(npc.index, "Consider surrendering?!");
-					}
-				}
+				RaidBossGodAlaxios_NPCTalkMessage(npc.index, "God_Alaxios_LastMann_%d", true, GetRandomInt(1, 3));
 			}
 		}
 	}
@@ -727,7 +718,7 @@ public void GodAlaxios_ClotThink(int iNPC)
 					SetEntityCollisionGroup(baseboss_index, 24);
 				}
 			}
-			NPCTalkMessage(npc.index, "No.. No No!! They are coming, prepare to fight together NOW!!!");
+			RaidBossGodAlaxios_NPCTalkMessage(npc.index, "God_Alaxios_TimeOver", true);
 			RaidBossActive = INVALID_ENT_REFERENCE;
 			for(int i; i<32; i++)
 			{
@@ -771,8 +762,7 @@ public void GodAlaxios_ClotThink(int iNPC)
 		}
 		else
 		{
-
-			CPrintToChatAll("{green}제노 감염체들이... 당신의 편을 들기 시작했습니다...??!\n갑자기 제노 감염체와 감염된 알락시오스가 이끄는 시테러 감염체들이 싸우기 시작합니다..");
+			CPrintToChatAll("%t", "God_Alaxios_Sea_TimeOver");
 			for(int i; i<32; i++)
 			{
 				float pos[3]; GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", pos);
@@ -1147,7 +1137,7 @@ public Action GodAlaxios_OnTakeDamage(int victim, int &attacker, int &inflictor,
 		{
 			if(RoundToCeil(damage) >= GetEntProp(npc.index, Prop_Data, "m_iHealth"))
 			{
-				GiveProgressDelay(55.0);
+				GiveProgressDelay(10.0);
 				b_angered_twice[npc.index] = true;
 				RaidModeTime = 9999999.9;
 				RaidBossActive = INVALID_ENT_REFERENCE;
@@ -1175,7 +1165,7 @@ public Action GodAlaxios_OnTakeDamage(int victim, int &attacker, int &inflictor,
 			damage = 0.0;
 			RaidModeTime += 120.0;
 			f_TalkDelayCheck = GetGameTime() + 4.0;
-			NPCTalkMessage(npc.index, "{crimson}EEEEEEEEEEEEEEENOOOOOOOOUGH!!!");
+			RaidBossGodAlaxios_NPCTalkMessage(npc.index, "God_Alaxios_Win", true);
 			return Plugin_Handled;
 		}
 	}
@@ -1445,30 +1435,24 @@ public void GodAlaxios_NPCDeath(int entity)
 			
 		if(i_RaidGrantExtra[npc.index] != ALAXIOS_SEA_INFECTED)
 		{
-			switch(GetRandomInt(0,3))
-			{
-				case 0:
-				{
-					NPCTalkMessage(npc.index, "I have failed Atlantis...");
-				}
-				case 1:
-				{
-					NPCTalkMessage(npc.index, "How was my army defeated..?");
-				}
-				case 2:
-				{
-					NPCTalkMessage(npc.index, "You dont know what you are doing!");
-				}
-				case 3:
-				{
-					NPCTalkMessage(npc.index, "We should be fighting together, not against each other, the {blue}sea{default} will be your doom...");
-				}
-			}
+			RaidBossGodAlaxios_NPCTalkMessage(npc.index, "God_Alaxios_Death_%d", true, GetRandomInt(1, 4));
 		}
 		else
 		{
-			NPCTalkMessage(npc.index, "I'm.. I'm free..?");
-			CPrintToChatAll("{lightblue}God Alaxios instantly leaves the battlefield... you couldn't even trace him.");
+			RaidBossGodAlaxios_NPCTalkMessage(npc.index, "God_Alaxios_Sea_Death_1", true);
+			CPrintToChatAll("%t", "God_Alaxios_Sea_Death_2");
+			
+			if(npc.m_bGiveFinalItem)
+			{
+				for(int client = 1; client <= MaxClients; client++)
+				{
+					if(IsValidClient(client) && GetClientTeam(client) == 2 && TeutonType[client] != TEUTON_WAITING && PlayerPoints[client] > 500)
+					{
+						Items_GiveNamedItem(client, "Flesh and Bones of the Corrupted God");
+						CPrintToChat(client, "%T", "God_Alaxios_Sea_Trophies", client);
+					}
+				}
+			}
 		}
 	}
 	else
@@ -2173,47 +2157,13 @@ void AlaxiosSayWords(int entity)
 {
 	if(i_RaidGrantExtra[entity] == ALAXIOS_SEA_INFECTED)
 	{
-		switch(GetRandomInt(0,3))
-		{
-			case 0:
-			{
-				CPrintToChatAll("{lightblue}갓 알락시오스가 감염체들을 불러냅니다.");
-			}
-			case 1:
-			{
-				CPrintToChatAll("{lightblue}갓 알락시오스가 주변의 생명체들을 이끌어오고 있습니다...");
-			}
-			case 2:
-			{
-				CPrintToChatAll("{lightblue}갓 알락시오스가 죽은 바다의 생명체들을 되살려냅니다...");
-			}
-			case 3:
-			{
-				CPrintToChatAll("{lightblue}갓 알락시오스는 혼자가 아닙니다... 감염체든 무엇이든간에.");
-			}
-		}
+		char buffer[64];
+		FormatEx(buffer, sizeof(buffer), "God_Alaxios_Sea_Summon_%d", GetRandomInt(1, 4));
+		CPrintToChatAll("%t", buffer);
 	}
 	else
 	{
-		switch(GetRandomInt(0,3))
-		{
-			case 0:
-			{
-				NPCTalkMessage(entity, "You don't know the dangers you're getting yourself into fighting me and my army at the same time!");
-			}
-			case 1:
-			{
-				NPCTalkMessage(entity, "My army will always help me back up!");
-			}
-			case 2:
-			{
-				NPCTalkMessage(entity, "Me and my army, as one, will never be defeated!");
-			}
-			case 3:
-			{
-				NPCTalkMessage(entity, "Together for Atlantis! As one and for all!");
-			}
-		}
+		RaidBossGodAlaxios_NPCTalkMessage(entity, "God_Alaxios_Summon_%d", true, GetRandomInt(1, 4));
 	}
 }
 
@@ -2224,47 +2174,13 @@ void AlaxiosSayWordsAngry(int entity)
 
 	if(i_RaidGrantExtra[entity] == ALAXIOS_SEA_INFECTED)
 	{
-		switch(GetRandomInt(0,3))
-		{
-			case 0:
-			{
-				CPrintToChatAll("{lightblue}갓 알락시오스가 도움을 요청하는 비명을 지릅니다...");
-			}
-			case 1:
-			{
-				CPrintToChatAll("{lightblue}갓 알락시오스는 지금 완전히 정신 지배 당하고 있습니다. 그를 구하십시오.");
-			}
-			case 2:
-			{
-				CPrintToChatAll("{lightblue}갓 알락시오스, 그조차 되는 강인한 자도 감염을 저항하지 못 하고 있습니다.");
-			}
-			case 3:
-			{
-				CPrintToChatAll("{lightblue}그를 도와주십시오.");
-			}
-		}
+		char buffer[64];
+		FormatEx(buffer, sizeof(buffer), "God_Alaxios_Sea_Anger_%d", GetRandomInt(1, 4));
+		CPrintToChatAll("%t", buffer);
 	}
 	else
 	{
-		switch(GetRandomInt(0,3))
-		{
-			case 0:
-			{
-				NPCTalkMessage(entity, "{crimson}ISVOLI!!!! FOR THE PEOPLE!!!!!!!!!!");
-			}
-			case 1:
-			{
-				NPCTalkMessage(entity, "{crimson}ISVOLI!!!! FOR ALL THAT IS FORSAKEN!!!!!!!");
-			}
-			case 2:
-			{
-				NPCTalkMessage(entity, "{crimson}ISVOLI!!!! FOR THE FUTURE!!!!!!!");
-			}
-			case 3:
-			{
-				NPCTalkMessage(entity, "{crimson}ISVOLI!!!! FOR ATLANTIS!!!!!!!!!");
-			}
-		}
+		RaidBossGodAlaxios_NPCTalkMessage(entity, "God_Alaxios_Anger_%d", true, GetRandomInt(1, 4));
 	}
 }
 
@@ -2284,59 +2200,59 @@ bool AlaxiosForceTalk(int entity)
 			case 0:
 			{
 				ReviveAll(true);
-				NPCTalkMessage(entity, "I will NOT tolerate this dispute any longer!");
+				RaidBossGodAlaxios_NPCTalkMessage(entity, "God_Alaxios_Win_1", true);
 				i_TalkDelayCheck += 1;
 			}
 			case 1:
 			{
-				NPCTalkMessage(entity, "You have to understand, WE have a {blue}common enemy{default}, and that is {blue}Dweller{default}.");
+				RaidBossGodAlaxios_NPCTalkMessage(entity, "God_Alaxios_Win_2", true);
 				i_TalkDelayCheck += 1;
 			}
 			case 2:
 			{
-				NPCTalkMessage(entity, "More wars with each other means more opportunity for them to rise.");
+				RaidBossGodAlaxios_NPCTalkMessage(entity, "God_Alaxios_Win_3", true);
 				i_TalkDelayCheck += 1;
 			}
 			case 3:
 			{
-				NPCTalkMessage(entity, "And whilst I am immortal and my army unkillable, we are not incorruptible.");
+				RaidBossGodAlaxios_NPCTalkMessage(entity, "God_Alaxios_Win_4", true);
 				i_TalkDelayCheck += 1;
 			}
 			case 4:
 			{
-				NPCTalkMessage(entity, "However, I saw your prowess and your abilities.");
+				RaidBossGodAlaxios_NPCTalkMessage(entity, "God_Alaxios_Win_5", true);
 				i_TalkDelayCheck += 1;
 			}
 			case 5:
 			{
-				NPCTalkMessage(entity, "You can wield {blue}Dweller's{default} weapons without succumbing to their corruption, from what I can see at least...");
+				RaidBossGodAlaxios_NPCTalkMessage(entity, "God_Alaxios_Win_6", true);
 				i_TalkDelayCheck += 1;
 			}
 			case 6:
 			{
-				NPCTalkMessage(entity, "As such, we need your aid. YOU are our greatest opportunity to cleanse this world of watery horrors.");
+				RaidBossGodAlaxios_NPCTalkMessage(entity, "God_Alaxios_Win_7", true);
 				i_TalkDelayCheck += 1;
 			}
 			case 7:
 			{
-				NPCTalkMessage(entity, "Of course, we will support you as much as we can. As one, we will thrive once again.");
+				RaidBossGodAlaxios_NPCTalkMessage(entity, "God_Alaxios_Win_8", true);
 				i_TalkDelayCheck += 1;
 			}
 			case 8:
 			{
-				NPCTalkMessage(entity, "When you invade them, we will make sure that their main forces are distracted by us.");
+				RaidBossGodAlaxios_NPCTalkMessage(entity, "God_Alaxios_Win_9", true);
 				i_TalkDelayCheck += 1;
 			}
 			case 9:
 			{
-				NPCTalkMessage(entity, "ALL HAIL THE MERCENARIES!! {crimson}FOR ATLANTISSSSS!!!!!!!!!!!!!!.");
+				RaidBossGodAlaxios_NPCTalkMessage(entity, "God_Alaxios_Win_10", true);
 				i_TalkDelayCheck = 11;
 				for (int client = 1; client <= MaxClients; client++)
 				{
 					if(IsValidClient(client) && GetClientTeam(client) == 2 && TeutonType[client] != TEUTON_WAITING && PlayerPoints[client] > 500)
 					{
 						Items_GiveNamedItem(client, "Alaxios's Godly assistance");
-						CPrintToChat(client, "{default}무언가 알 수 없는 찬란한 기운이 감돕니다... 당신이 얻은 것: {lightblue}''알락시오스의 신성한 축복''{default}!");
+						CPrintToChat(client, "%T", "God_Alaxios_Trophies", client);
 					}
 				}
 			}
@@ -2353,31 +2269,13 @@ public void Raidmode_Alaxios_Win(int entity)
 	
 	if(i_RaidGrantExtra[npc.index] == ALAXIOS_SEA_INFECTED)
 	{
-		CPrintToChatAll("{lightblue}... 예상했던대로, 당신은 실패했습니다. 제노 감염원이 시테러 집단을 종식시킬 수 있길 바랍니다.");
-		CPrintToChatAll("{crimson}적의 적은 나의 동맹이라는 말이 있지요.");
-		CPrintToChatAll("{green}그리고 당신은 제노 감염에 맞서 싸우기 위해 몸을 던졌습니다...");
+		CPrintToChatAll("%t", "God_Alaxios_Sea_Lose_1");
+		CPrintToChatAll("%t", "God_Alaxios_Sea_Lose_2");
+		CPrintToChatAll("%t", "God_Alaxios_Sea_Lose_3");
 	}
 	else
 	{
-		switch(GetRandomInt(0,3))
-		{
-			case 0:
-			{
-				NPCTalkMessage(npc.index, "Atlantis will never fall!");
-			}
-			case 1:
-			{
-				NPCTalkMessage(npc.index, "I still have to take care of the {blue}deep sea{default}...");
-			}
-			case 2:
-			{
-				NPCTalkMessage(npc.index, "Threaten our livelyhood and you pay!");
-			}
-			case 3:
-			{
-				NPCTalkMessage(npc.index, "I have to inform {blue}Sensal{default} about this.");
-			}
-		}
+		RaidBossGodAlaxios_NPCTalkMessage(entity, "God_Alaxios_Lose_%d", true, GetRandomInt(1, 4));
 	}
 	i_RaidGrantExtra[entity] = RAIDITEM_INDEX_WIN_COND;
 }

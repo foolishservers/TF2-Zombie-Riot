@@ -1,18 +1,56 @@
 #pragma semicolon 1
 #pragma newdecls required
 
+#define SUPPLYDROP_CRATE_SMALL_MODEL "models/props_island/mannco_case_small.mdl"
+#define SUPPLYDROP_CRATE_SMALL_SOUND "ui/itemcrate_smash_rare.wav"
+#define SUPPLYDROP_CRATE_SMALL_PARTICLE "crate_drop_debris"
+
+#define SUPPLYDROP_CRATE_LARGE_MODEL "models/props_island/mannco_case_large.mdl"
+#define SUPPLYDROP_CRATE_LARGE_SOUND "ui/itemcrate_smash_ultrarare_short.wav"
+#define SUPPLYDROP_CRATE_LARGE_PARTICLE "mvm_loot_debris"
+
+#define SUPPLYDROP_PARACHUTE_MODEL "models/workshop/weapons/c_models/c_paratooper_pack/c_paratrooper_parachute.mdl"
+
+#define SUPPLYDROP_FLARE_SOUND "weapons/flare_detonator_launch.wav"
+#define SUPPLYDROP_FLARE_PARTICLE_NORMAL "utaunt_celebrationtime_yellow_flare1"
+#define SUPPLYDROP_FLARE_PARTICLE_RED "utaunt_celebrationtime_red_flare1"
+#define SUPPLYDROP_FLARE_PARTICLE_BLU "utaunt_celebrationtime_blue_flare1"
+
+#define SUPPLYDROP_MAX_PICKUPS 16
+#define SUPPLYDROP_MAX_POWERUPS 2
+
 static bool SmartBounce;
 static int LastHitTarget;
-static int SuppliesUsed;
+static int PickupsDropped;
+static int PowerupsDropped;
 
 void SniperMonkey_ResetUses()
 {
-	SuppliesUsed = 0;
+	PickupsDropped = 0;
+	PowerupsDropped = 0;
 }
+
 void SniperMonkey_ClearAll()
 {
 	SmartBounce = false;
-	SuppliesUsed = 0;
+	SniperMonkey_ResetUses();
+}
+
+void SupplyDrop_MapStart()
+{
+	PrecacheModel(SUPPLYDROP_CRATE_SMALL_MODEL);
+	PrecacheModel(SUPPLYDROP_CRATE_LARGE_MODEL);
+	PrecacheModel(SUPPLYDROP_PARACHUTE_MODEL);
+	
+	PrecacheSound(SUPPLYDROP_CRATE_SMALL_SOUND);
+	PrecacheSound(SUPPLYDROP_CRATE_LARGE_SOUND);
+	PrecacheSound(SUPPLYDROP_FLARE_SOUND);
+	
+	PrecacheParticleSystem(SUPPLYDROP_CRATE_SMALL_PARTICLE);
+	PrecacheParticleSystem(SUPPLYDROP_CRATE_LARGE_PARTICLE);
+	PrecacheParticleSystem(SUPPLYDROP_FLARE_PARTICLE_NORMAL);
+	PrecacheParticleSystem(SUPPLYDROP_FLARE_PARTICLE_RED);
+	PrecacheParticleSystem(SUPPLYDROP_FLARE_PARTICLE_BLU);
 }
 
 float SniperMonkey_BouncingBullets(int victim, int &attacker, int &inflictor, float damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3])
@@ -187,6 +225,250 @@ public void Weapon_EliteDefender(int client, int weapon, bool &result, int slot)
 
 public void Weapon_SupplyDrop(int client, int weapon, bool &result, int slot)
 {
+	if (!Waves_Started())
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		ShowSyncHudText(client, SyncHud_Notifaction, "%T", "Supply Drop Wave Hasn't Started", client);
+		return;
+	}
+	
+	float cooldown = Ability_Check_Cooldown(client, slot);
+	if(cooldown > 0.0)
+	{
+		float Ability_CD = Ability_Check_Cooldown(client, slot);
+		
+		if(Ability_CD <= 0.0)
+			Ability_CD = 0.0;
+		
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		SetGlobalTransTarget(client);
+		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);
+		return;
+	}
+	
+	int pap = RoundFloat(Attributes_Get(weapon, Attrib_PapNumber, 0.0));
+	int amount = 2;
+	bool enhanced = false;
+	
+	if (pap >= 4)
+	{
+		amount = 3;
+		enhanced = Weapon_SupplyDrop_CanSpawnPickupType(true); // if max amount of powerups was reached, use pickups instead
+	}
+	
+	if (!enhanced && !Weapon_SupplyDrop_CanSpawnPickupType(enhanced))
+	{
+		ClientCommand(client, "playgamesound items/medshotno1.wav");
+		SetDefaultHudPosition(client);
+		ShowSyncHudText(client, SyncHud_Notifaction, "%T", "Supply Drop Wave Limit Reached", client);
+		return;
+	}
+	
+	ArrayList teammates = new ArrayList();
+	for (int other = 1; other <= MaxClients; other++)
+	{
+		if (IsValidClient(other) && !IsFakeClient(other) && IsEntityAlive(other, _, true) && GetTeam(client) == GetTeam(other) && client != other)
+			teammates.Push(other);
+	}
+	
+	// not enough teammates, also add this player
+	if (teammates.Length < amount)
+	{
+		teammates.Push(client);
+		amount = teammates.Length;
+	}
+	
+	if (amount)
+		teammates.Sort(Sort_Random, Sort_Integer);
+	
+	int pickupsSpawned, powerupsSpawned;
+	for (int i = 0; i < amount; i++)
+	{
+		bool enhancedPickup;
+		if (i == 0 && enhanced)
+			enhancedPickup = true;
+		
+		if (!Weapon_SupplyDrop_CanSpawnPickupType(enhancedPickup))
+			continue;
+		
+		int other = teammates.Get(i);
+		float pos[3];
+		WorldSpaceCenter(other, pos);
+		
+		if (enhancedPickup)
+		{
+			PowerupsDropped++;
+			powerupsSpawned++;
+		}
+		else
+		{
+			PickupsDropped++;
+			pickupsSpawned++;
+		}
+		
+		Weapon_SupplyDrop_SpawnPickupHeadingToPos(client, pos, enhancedPickup);
+	}
+	
+	delete teammates;
+	
+	char flareParticle[64];
+	if (powerupsSpawned)
+	{
+		if (ZR_Get_Modifier() == SECONDARY_MERCS)
+			flareParticle = SUPPLYDROP_FLARE_PARTICLE_BLU;
+		else
+			flareParticle = SUPPLYDROP_FLARE_PARTICLE_RED;
+		
+	}
+	else
+	{
+		flareParticle = SUPPLYDROP_FLARE_PARTICLE_NORMAL;
+	}
+	
+	if (flareParticle[0])
+	{
+		EmitSoundToAll(SUPPLYDROP_FLARE_SOUND, client, SNDCHAN_STATIC, .volume = 0.5, .pitch = 85, .soundtime = GetGameTime() - 0.12);
+		
+		float pos[3];
+		WorldSpaceCenter(client, pos);
+		ParticleEffectAt(pos, flareParticle, 2.5);
+	}
+	
+	Ability_Apply_Cooldown(client, slot, 30.0);
+}
+
+static void Weapon_SupplyDrop_SpawnPickupHeadingToPos(int client, float initialPos[3], bool enhancedPickup)
+{
+	float mins[3], maxs[3], pos[3];
+	mins = { -24.0, -24.0, 0.0 };
+	maxs = { 24.0, 24.0, 24.0 };
+	
+	pos = initialPos;
+	pos[2] += 1000.0;
+	
+	Handle trace;
+	trace = TR_TraceHullFilterEx(initialPos, pos, mins, maxs, MASK_PLAYERSOLID_BRUSHONLY, TraceRayHitWorldOnly);
+	TR_GetEndPosition(pos, trace);
+	delete trace;
+	
+	pos[2] -= 16.0;
+	
+	float distance = GetVectorDistance(initialPos, pos);
+	float speed = distance / GetRandomFloat(5.0, 7.0);
+	if (speed < 30.0)
+		speed = 30.0;
+	
+	CClotBody npc = view_as<CClotBody>(client); // steamhappy!
+	int rocket = npc.FireParticleRocket(initialPos, 0.0, speed, 0.0, "", .FromBlueNpc = false, .Override_Spawn_Loc = true, .Override_VEC = pos);
+	SetEntityCollisionGroup(rocket, COLLISION_GROUP_DEBRIS);
+	SDKUnhook(rocket, SDKHook_StartTouch, Rocket_Particle_StartTouch);
+	WandProjectile_ApplyFunctionToEntity(rocket, enhancedPickup ? Weapon_SupplyDrop_Enhanced_Rocket_StartTouch : Weapon_SupplyDrop_Rocket_StartTouch);
+	
+	int crate = CreateEntityByName("prop_dynamic_override");
+	if(IsValidEntity(crate))
+	{
+		b_ToggleTransparency[crate] = false;
+		DispatchKeyValue(crate, "model", enhancedPickup ? SUPPLYDROP_CRATE_LARGE_MODEL : SUPPLYDROP_CRATE_SMALL_MODEL);
+		DispatchKeyValue(crate, "StartDisabled", "false");
+		DispatchKeyValue(crate, "Solid", "2");
+		DispatchKeyValue(crate, "skin", "1");
+		
+		pos[2] += 20.0;
+		TeleportEntity(crate, pos);
+		DispatchSpawn(crate);
+		SetEntProp(crate, Prop_Send, "m_usSolidFlags", 12); 
+		SetEntityCollisionGroup(crate, 27);
+		
+		SetEntPropFloat(crate, Prop_Send, "m_flModelScale", 0.6);
+		
+		if (ZR_Get_Modifier() == SECONDARY_MERCS)
+			SetEntityRenderColor(crate, 88, 133, 162);
+		else
+			SetEntityRenderColor(crate, 210, 100, 103);
+		
+		SetVariantString("!activator");
+		AcceptEntityInput(crate, "SetParent", rocket);
+	}
+	
+	int parachute = CreateEntityByName("prop_dynamic_override");
+	if(IsValidEntity(parachute))
+	{
+		b_ToggleTransparency[parachute] = false;
+		DispatchKeyValue(parachute, "model", SUPPLYDROP_PARACHUTE_MODEL);
+		DispatchKeyValue(parachute, "StartDisabled", "false");
+		DispatchKeyValue(parachute, "Solid", "2");
+		
+		pos[0] += 16.0;
+		pos[2] -= 50.0;
+		TeleportEntity(parachute, pos);
+		DispatchSpawn(parachute);
+		SetVariantString("deploy_idle");
+		AcceptEntityInput(parachute, "SetDefaultAnimation");
+		SetVariantString("deploy");
+		AcceptEntityInput(parachute, "SetAnimation");
+		DispatchKeyValueFloat(parachute, "playbackrate", 0.5);
+		SetEntProp(parachute, Prop_Send, "m_usSolidFlags", 12); 
+		SetEntityCollisionGroup(parachute, 27);
+		
+		// 1/50 chance to spawn with a random color
+		if (GetURandomInt() % 50)
+			SetEntityRenderColor(parachute, 75, 75, 75);
+		else
+			SetEntityRenderColor(parachute, GetURandomInt() % 256, GetURandomInt() % 256, GetURandomInt() % 256);
+		
+		SetVariantString("!activator");
+		AcceptEntityInput(parachute, "SetParent", crate);
+	}
+}
+
+static bool Weapon_SupplyDrop_CanSpawnPickupType(bool enhancedPickup)
+{
+	if (enhancedPickup)
+		return PowerupsDropped < SUPPLYDROP_MAX_POWERUPS;
+	
+	return PickupsDropped < SUPPLYDROP_MAX_PICKUPS;
+}
+
+static void Weapon_SupplyDrop_Rocket_StartTouch(int entity, int target)
+{
+	if (0 < target < MAXENTITIES)
+		return;
+	
+	float pos[3];
+	WorldSpaceCenter(entity, pos);
+	RandomPickup_SpawnPickup(pos, 60.0);
+	
+	ParticleEffectAt(pos, SUPPLYDROP_CRATE_SMALL_PARTICLE);
+	EmitSoundToAll(SUPPLYDROP_CRATE_SMALL_SOUND, entity, SNDCHAN_STATIC);
+	RemoveEntity(entity);
+}
+
+static void Weapon_SupplyDrop_Enhanced_Rocket_StartTouch(int entity, int target)
+{
+	if (0 < target < MAXENTITIES)
+		return;
+	
+	float pos[3];
+	WorldSpaceCenter(entity, pos);
+	
+	bool follow = IsPointHazard(pos);
+	switch (GetURandomInt() % 3)
+	{
+		case 0: SpawnMaxAmmo(entity, follow);
+		case 1: SpawnHealth(entity, follow);
+		case 2: SpawnMoney(entity, follow);
+	}
+	
+	ParticleEffectAt(pos, SUPPLYDROP_CRATE_LARGE_PARTICLE);
+	EmitSoundToAll(SUPPLYDROP_CRATE_LARGE_SOUND, entity, SNDCHAN_STATIC);
+	RemoveEntity(entity);
+}
+
+/*
+public void Weapon_SupplyDrop(int client, int weapon, bool &result, int slot)
+{
 	if(SuppliesUsed >= 2)
 	{
 		ClientCommand(client, "playgamesound items/medshotno1.wav");
@@ -293,3 +575,205 @@ public void Weapon_SupplyDropElite(int client, int weapon, bool &result, int slo
 		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);	
 	}
 }
+
+static Handle SniperSupply_Management[MAXPLAYERS] = {null, ...};
+
+public void SniperSupply_OnMap(int client, int weapon)
+{
+	Zero(SniperSupply_DropPerWave);
+}
+
+public void SniperSupply_Deploy(int client, int weapon)
+{
+	if(SniperSupply_Management[client] != null)
+	{
+		delete SniperSupply_Management[client];
+		SniperSupply_Management[client] = null;
+		DataPack pack;
+		SniperSupply_Management[client] = CreateDataTimer(0.1, Timer_Management_SniperSupply, pack, TIMER_REPEAT);
+		pack.WriteCell(client);
+		pack.WriteCell(weapon);
+	}
+	else
+	{
+		DataPack pack;
+		SniperSupply_Management[client] = CreateDataTimer(0.1, Timer_Management_SniperSupply, pack, TIMER_REPEAT);
+		pack.WriteCell(client);
+		pack.WriteCell(weapon);
+	}
+}
+
+public void SniperSupply_Holster(int client)
+{
+	if(SniperSupply_Management[client] != null)
+	{
+		delete SniperSupply_Management[client];
+		SniperSupply_Management[client] = null;
+	}
+}
+
+static Action Timer_Management_SniperSupply(Handle timer, DataPack pack)
+{
+	pack.Reset();
+	int client = pack.ReadCell();
+	int weapon = pack.ReadCell();
+	if(!IsValidClient(client) || !IsClientInGame(client) || !IsPlayerAlive(client) || !IsValidEntity(weapon))
+	{
+		if(SniperSupply_Management[client] != null)
+		{
+			delete SniperSupply_Management[client];
+			SniperSupply_Management[client] = null;
+		}
+		return Plugin_Stop;
+	}
+	if(CvarInfiniteCash.BoolValue)
+		SniperSupply_DropPerWave[client]=false;
+	
+	if(Ability_Check_Cooldown(client, 1) <= 0.0 && !SniperSupply_DropPerWave[client])
+	{
+		int target = -1;
+		for(int entitycount; entitycount<i_MaxcountNpcTotal; entitycount++)
+		{
+			int entity = EntRefToEntIndexFast(i_ObjectsNpcsTotal[entitycount]);
+			if(IsValidEntity(entity) && !b_NpcHasDied[entity] && b_NpcForcepowerupspawn[entity] != 2 && GetTeam(entity) != TFTeam_Red
+			&& GetTeam(entity) != TFTeam_Stalkers && !b_ThisEntityIgnored[entity] && !b_NpcIsInvulnerable[entity] && !b_thisNpcIsARaid[entity] && !b_thisNpcIsABoss[entity]
+			&& !b_StaticNPC[entity] && !b_ThisEntityIgnoredByOtherNpcsAggro[entity])
+			{
+				target = entity;
+				break;
+			}
+		}
+		
+		if(target != -1)
+		{
+			b_NpcForcepowerupspawn[target] = 2;
+			CClotBody npc = view_as<CClotBody>(target);
+			if(!IsValidEntity(npc.m_iTeamGlow))
+			{
+				npc.m_bTeamGlowDefault = false;
+				Update_TransmitState(target);
+				npc.m_iTeamGlow = TF2_CreateGlow(target);
+				
+				SetVariantColor(view_as<int>({136, 200, 5, 200}));
+				AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
+			}
+			else
+			{
+				if(IsValidEntity(npc.m_iTeamGlow)) 
+				{
+					npc.m_bTeamGlowDefault = false;
+					Update_TransmitState(target);
+					SetVariantColor(view_as<int>({136, 200, 5, 200}));
+					AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
+				}		
+			}
+			ClientCommand(client, "playgamesound ui/quest_status_tick_expert_friend.wav");
+			Rogue_OnAbilityUse(client, weapon);
+			Ability_Apply_Cooldown(client, 1, 90.0);
+			SniperSupply_DropPerWave[client]=true;
+		}
+		else
+			Ability_Apply_Cooldown(client, 1, 5.0, .ignoreCooldown=true);
+	}
+	
+	return Plugin_Continue;
+}
+
+public void SniperSupply_M1(int client, int weapon, bool crit, int slot)
+{
+	static float vAngles[3], vOrigin[3];
+	GetClientEyePosition(client, vOrigin);
+	GetClientEyeAngles(client, vAngles);
+	Handle trace = TR_TraceRayFilterEx(vOrigin, vAngles, MASK_SHOT, RayType_Infinite, BulletAndMeleeTrace, client);
+	if(TR_GetFraction(trace) < 1.0)
+	{
+		TR_GetEndPosition(vOrigin, trace);
+		int target = TR_GetEntityIndex(trace);
+		if(target > 0 && !b_CannotBeHeadshot[target])
+		{
+			if(TR_GetHitGroup(trace) == HITGROUP_HEAD)
+			{
+				DisplayCritAboveNpc(target, client, true);
+				SniperRifle_HeadShot[client]=true;
+			}
+		}
+	}
+	delete trace;
+	if(SniperRifle_HeadShot[client])
+	{
+		if(i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER
+		|| i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER_X)
+		{
+			float Ability_CD = Ability_Check_Cooldown(client, 3)-3.0;
+			if(Ability_CD <= 0.0)
+				Ability_CD = 0.0;
+			Ability_Apply_Cooldown(client, 3, Ability_CD, .ignoreCooldown=true);
+			Ability_CD = Ability_Check_Cooldown(client, 1)-5.0;
+			if(Ability_CD <= 0.0)
+				Ability_CD = 0.0;
+			Ability_Apply_Cooldown(client, 1, Ability_CD, .ignoreCooldown=true);
+		}
+		SniperRifle_HeadShot[client]=false;
+	}
+	if(TF2_IsPlayerInCondition(client, TFCond_FocusBuff))
+	{
+		int KITER_Pack=RandomPickup_SpawnPickup(vOrigin);
+		if(IsValidEntity(KITER_Pack))
+		{
+			int MaxPickups = 8;
+			if(ZR_Get_Modifier() == KITERS_DREAM)
+				MaxPickups *= 2;
+			CClotBody npc = view_as<CClotBody>(KITER_Pack);
+			if(!IsValidEntity(npc.m_iTeamGlow))
+			{
+				npc.m_bTeamGlowDefault = false;
+				Update_TransmitState(KITER_Pack);
+				npc.m_iTeamGlow = TF2_CreateGlow(KITER_Pack);
+				
+				SetVariantColor(view_as<int>({136, 200, 5, 200}));
+				AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
+				CreateTimer(45.0 * MaxPickups, Timer_RemoveEntity, EntIndexToEntRef(npc.m_iTeamGlow), TIMER_FLAG_NO_MAPCHANGE);
+			}
+			else
+			{
+				if(IsValidEntity(npc.m_iTeamGlow)) 
+				{
+					npc.m_bTeamGlowDefault = false;
+					Update_TransmitState(KITER_Pack);
+					SetVariantColor(view_as<int>({136, 200, 5, 200}));
+					AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
+					CreateTimer(45.0 * MaxPickups, Timer_RemoveEntity, EntIndexToEntRef(npc.m_iTeamGlow), TIMER_FLAG_NO_MAPCHANGE);
+				}		
+			}
+			if(Ability_Check_Cooldown(client, 3) < 999.0 && Attributes_Get(weapon, Attrib_PapNumber, 0.0)==2)
+				Ability_Apply_Cooldown(client, 3, 9999999.0, .ignoreCooldown=true);
+			else
+				Ability_Apply_Cooldown(client, 3, 60.0);
+			vOrigin[2] += 5.0;
+			spawnRing_Vectors(vOrigin, 0.0, 0.0, 0.0, 0.0, LASERBEAM, 0, 255, 0, 255, 5, 0.5, 3.0, 1.0, 3, 150.0);
+			ClientCommand(client, "playgamesound ui/medic_alert.wav");
+			TF2_RemoveCondition(client, TFCond_FocusBuff);
+		}
+	}
+}
+
+public void SniperSupply_R(int client, int weapon, bool crit, int slot)
+{
+	float Ability_CD = Ability_Check_Cooldown(client, slot);
+	
+	if(Ability_CD <= 0.0 || CvarInfiniteCash.BoolValue)
+		Ability_CD = 0.0;
+	if(Ability_CD <= 0.0 || Ability_CD > 999.0)
+	{
+		if(TF2_IsPlayerInCondition(client, TFCond_FocusBuff))
+			TF2_RemoveCondition(client, TFCond_FocusBuff);
+		else
+			TF2_AddCondition(client, TFCond_FocusBuff, 5.0);
+		return;
+	}
+	ClientCommand(client, "playgamesound items/medshotno1.wav");
+	SetDefaultHudPosition(client);
+	SetGlobalTransTarget(client);
+	ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_CD);
+}
+*/

@@ -685,7 +685,7 @@ void Dungeon_StartSetup()
 {
 	Zero(PlayerVotedForThis);
 	Rogue_StartSetup();
-	Construction_RoundEnd();
+	Construction_Reset();
 
 	s_MissionClient = "{white}Bob the First";
 	NextAttackAt = 0.0;
@@ -2523,7 +2523,7 @@ public void ZRModifs_GiveRandomPrefix(int iNpc)
 		GiveOneGuranteed = false;
 		RetryBuffGiving = false;
 		
-		switch(GetRandomInt(1,46))
+		switch(GetRandomInt(1,45))
 		{
 			case 1:
 			{
@@ -2720,8 +2720,8 @@ public void ZRModifs_GiveRandomPrefix(int iNpc)
 					if(GetRandomInt(1,4) == 1)
 					{
 						ApplyStatusEffect(iNpc, iNpc, "Stalker Prefix", 999999.9);
-						ApplyStatusEffect(iNpc, iNpc, "Stalker Prefix Nerf", 999999.9);
-						ApplyStatusEffect(iNpc, iNpc, "Anti-Waves", 999999.9);
+						ApplyStatusEffect(iNpc, iNpc, "Stalker Prefix Nerf", 1.0);	// Constantly re-applied by the prefix
+						ApplyStatusEffect(iNpc, iNpc, "Anti-Waves", 1.0);			// Constantly re-applied by the prefix
 					}
 					else
 					{
@@ -2850,33 +2850,26 @@ public void ZRModifs_GiveRandomPrefix(int iNpc)
 			}
 			case 42:
 			{
-				if(HasSpecificBuff(iNpc, "Seraph Prefix"))
-					RetryBuffGiving = true;
-				else
-					ApplyStatusEffect(iNpc, iNpc, "Seraph Prefix", 999999.9);
-			}
-			case 43:
-			{
 				if(HasSpecificBuff(iNpc, "Party Popper Prefix"))
 					RetryBuffGiving = true;
 				else
 					ApplyStatusEffect(iNpc, iNpc, "Party Popper Prefix", 999999.9);
 			}
-			case 44:
+			case 43:
 			{
 				if(HasSpecificBuff(iNpc, "Gory Prefix"))
 					RetryBuffGiving = true;
 				else
 					ApplyStatusEffect(iNpc, iNpc, "Gory Prefix", 999999.9);
 			}
-			case 45:
+			case 44:
 			{
 				if(HasSpecificBuff(iNpc, "Aleph Prefix"))
 					RetryBuffGiving = true;
 				else
 					ApplyStatusEffect(iNpc, iNpc, "Aleph Prefix", 999999.9);
 			}
-			case 46:
+			case 45:
 			{
 				//free token
 				RetryBuffGiving = true;

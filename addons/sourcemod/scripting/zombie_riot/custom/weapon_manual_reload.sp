@@ -24,6 +24,8 @@ public void SemiAutoWeapon(int client, int buttons)
 							float Fire_rate = f_SemiAutoStats_FireRate[entity];
 							
 							Fire_rate *= Attributes_Get(entity, 6, 1.0);
+							if(Attributes_Get(entity, Attrib_IsSniperRifle, 0.0)==2.0)
+								Fire_rate *= Attributes_Get(entity, 5, 1.0);
 		
 							
 							SetEntPropFloat(client, Prop_Send, "m_flNextAttack", GetGameTime() + Fire_rate);
@@ -112,9 +114,13 @@ void Reload_Me(int client)
 		{
 			if(f_Actualm_flNextPrimaryAttack[entity] <= GetGameTime())
 			{
-				if(i_SemiAutoWeapon_AmmoCount[entity] < i_SemiAutoStats_MaxAmmo[entity])
+				float Attrib = 1.0;
+				Attrib *= Attributes_Get(entity, 3, 1.0);
+				Attrib *= Attributes_Get(entity, 4, 1.0);
+				int MaxAmmo = RoundToCeil(float(i_SemiAutoStats_MaxAmmo[entity])*Attrib);
+				if(i_SemiAutoWeapon_AmmoCount[entity] < MaxAmmo)
 				{
-					i_SemiAutoWeapon_AmmoCount[entity] = i_SemiAutoStats_MaxAmmo[entity];
+					i_SemiAutoWeapon_AmmoCount[entity] = MaxAmmo;
 					
 					
 					DoReloadAnimation(client, entity);

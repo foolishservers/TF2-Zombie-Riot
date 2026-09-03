@@ -235,6 +235,17 @@ methodmap Invisible_TRIGGER_Man < CClotBody
 			b_ThisEntityIgnoredByOtherNpcsAggro[npc.index] = true;
 			fVerify=true;
 		}
+		if(!StrContains(data, "fast_building_cooldown"))
+		{
+			npc.i_NPCStats=9;
+			
+			SetTeam(npc.index, TFTeam_Red);
+			AddNpcToAliveList(npc.index, 1);
+			Is_a_Medic[npc.index] = true;
+			npc.m_bStaticNPC = true;
+			b_ThisEntityIgnoredByOtherNpcsAggro[npc.index] = true;
+			fVerify=true;
+		}
 
 		func_NPCDeath[npc.index] = view_as<Function>(Invisible_TRIGGER_Man_NPCDeath);
 		func_NPCOnTakeDamage[npc.index] = view_as<Function>(Invisible_TRIGGER_Man_OnTakeDamage);
@@ -297,6 +308,18 @@ static void Cybergrind_EX_Hard_Mode_ClotThink(int iNPC)
 	if(npc.m_flNextThinkTime > gameTime)
 		return;
 	npc.m_flNextThinkTime = gameTime + 0.1;
+	
+	if(!(Waves_Started() && !Waves_InSetup()))
+	{
+		for(int client = 1; client <= MaxClients; client++)
+		{
+			if(IsValidClient(client))
+			{
+				if(TeutonType[client] == TEUTON_NONE && IsPlayerAlive(client))
+					ApplyStatusEffect(client, client, "Depot Transfer", 1.0);
+			}
+		}
+	}
 	
 	if(npc.m_bIsToggle)
 		return;
@@ -974,6 +997,7 @@ static void Invisible_TRIGGER_Man_ClotThink(int iNPC)
 		{
 			if(Waves_Started() && !Waves_InSetup())
 			{
+				WaveStart_SubWaveStart(GetGameTime() + 600.0);
 				NPCStats_RemoveAllDebuffs(npc.index, 1.0);
 				if(!npc.m_iTargetAlly || npc.m_flGetClosestTargetTime < gameTime)
 				{
@@ -1112,7 +1136,36 @@ static void Invisible_TRIGGER_Man_ClotThink(int iNPC)
 			b_DissapearOnDeath[npc.index] = true;
 			b_DoGibThisNpc[npc.index] = true;
 			SmiteNpcToDeath(npc.index);
-		}
+		} 
+		case 9:
+		{
+			if(Waves_Started() && !Waves_InSetup())
+			{
+				if(!npc.m_flCoolDown)
+					npc.m_flCoolDown = gameTime + 20.0;
+			}
+			else
+			{
+				npc.m_flCoolDown=0.0;
+				for(int client = 1; client <= MaxClients; client++)
+				{
+					if(IsValidClient(client))
+					{
+						if(TeutonType[client] == TEUTON_NONE && IsPlayerAlive(client))
+							ApplyStatusEffect(client, client, "Depot Transfer", 1.0);
+					}
+				}
+			}
+
+			/*if(npc.m_flCoolDown && npc.m_flCoolDown < gameTime)
+			{
+				b_NpcForcepowerupspawn[npc.index] = 0;
+				i_RaidGrantExtra[npc.index] = 0;
+				b_DissapearOnDeath[npc.index] = true;
+				b_DoGibThisNpc[npc.index] = true;
+				SmiteNpcToDeath(npc.index);
+			}*/
+		} 
 	}
 	
 	if(npc.m_flNextThinkTime > gameTime)

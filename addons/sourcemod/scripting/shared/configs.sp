@@ -147,6 +147,7 @@ void Configs_ConfigsExecuted()
 			OnClientPutInServer(client);
 	}
 #if defined ZR
+	AutoLoadouts_ConfigSetup();
 	ZR_FastDownloadForce();
 #endif
 }
@@ -172,6 +173,32 @@ static void ExecuteMapOverrides(KeyValues kv)
 }
 
 #if defined ZR || defined RPG
+stock int Config_GetClipOfEntity(int entity)
+{
+	static char classname[36];
+	GetEntityClassname(entity, classname, sizeof(classname));
+	
+	static WeaponData data;
+
+	int i;
+	int val = WeaponList.Length;
+
+	for(; i<val; i++)
+	{
+		WeaponList.GetArray(i, data);
+		if(StrEqual(classname, data.Classname))
+			break;
+	}
+	
+	if(i == val)
+		return 0;
+	float clip = data.Clip;
+	clip *= Attributes_Get(entity, 298, 1.0);
+	clip *= Attributes_Get(entity, 3, 1.0);
+	clip *= Attributes_Get(entity, 4, 1.0);
+	return RoundFloat(clip);
+}
+
 stock float Config_GetDPSOfEntity(int entity)
 {
 	static char classname[36];

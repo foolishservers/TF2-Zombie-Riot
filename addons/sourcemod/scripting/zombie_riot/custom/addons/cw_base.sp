@@ -4,6 +4,19 @@
 
 행운을 빕니다.
 */
+static int GetLastManPlayer;
+
+stock int CWPlayer_Lastman(int client = -1)
+{
+	if(client != -1)
+		GetLastManPlayer = GetClientUserId(client);
+	
+	client = GetClientOfUserId(GetLastManPlayer)
+	if(IsValidClient(client))
+		return client;
+	return -1;
+}
+
 public void Weapon_AddonsCustom_OnMapStart()
 {
 	/*초기화*/
@@ -11,6 +24,7 @@ public void Weapon_AddonsCustom_OnMapStart()
 	MajorSteam_Launcher_OnMapStart();
 	LockDown_Wand_MapStart();
 	MSword_OnMapStart();
+	GetLastManPlayer=-1;
 }
 
 public void Weapon_AddonsCustom_Enable(int client, int weapon)
@@ -21,12 +35,11 @@ public void Weapon_AddonsCustom_Enable(int client, int weapon)
 	MSword_Enable(client, weapon);
 }
 
-void Weapon_AddonsCustomLastMan(int client)
+stock void Weapon_AddonsCustomLastMan(int client)
 {
-	if(client)
-	{
-		/*에러 제거용*/
-	}
+	if(!IsValidClient(client))
+		return;
+	CWPlayer_Lastman(client);
 	/*lms일때 트리거됨*/
 	/*if(Wkit_Omega_LastMann(client))
 	{
@@ -38,9 +51,12 @@ void Weapon_AddonsCustomLastMan(int client)
 		CPrintToChatAll("{blue}Diabolus Ex Machina", client);
 		Yakuza_Lastman(13);
 	}*/
+	
+	if(IsBarracks(client))
+		Barracks_OnLastManStand(client);
 }
 
-bool Weapon_AddonsStartCustomSoundForLastMan(int client, int WhatSoundPlay)
+stock bool Weapon_AddonsStartCustomSoundForLastMan(int client, int WhatSoundPlay)
 {
 	if(client)
 	{
@@ -55,13 +71,39 @@ bool Weapon_AddonsStartCustomSoundForLastMan(int client, int WhatSoundPlay)
 			EmitCustomToClient(client, "#zombiesurvival/combinehell/escalationP2.mp3", client, SNDCHAN_STATIC, SNDLEVEL_NONE, _, 2.0);
 			SetMusicTimer(client, GetTime() + 195);
 		}*/
+		case 17:
+		{
+			switch(WhatCiv(CWPlayer_Lastman()))
+			{
+				case Almina_Thorns, Almina_Thornless:{
+					EmitCustomToClient(client, "#zombiesurvival/iberia/wave_30.mp3",client, SNDCHAN_STATIC, SNDLEVEL_NONE, _, 1.5);
+					SetMusicTimer(client, GetTime() + 177);
+				}
+				case Thorns:{
+					EmitCustomToClient(client, "#zombiesurvival/expidonsa_waves/wave_45_music_1.mp3",client, SNDCHAN_STATIC, SNDLEVEL_NONE, _, 1.0);
+					SetMusicTimer(client, GetTime() + 279);
+				}
+				case Combine:{
+					EmitCustomToClient(client, "#zombiesurvival/xeno_raid/xeno_shared_bossmusic.mp3",client, SNDCHAN_STATIC, SNDLEVEL_NONE, _, 2.0);
+					SetMusicTimer(client, GetTime() + 170);
+				}
+				case Alternative:{
+					EmitCustomToClient(client, "#zombiesurvival/altwaves_and_blitzkrieg/music/wave60_2.mp3",client, SNDCHAN_STATIC, SNDLEVEL_NONE, _, 0.6);
+					SetMusicTimer(client, GetTime() + 320);
+				}
+				default:{
+					EmitCustomToClient(client, "#zombiesurvival/medieval_raid/kazimierz_boss.mp3",client, SNDCHAN_STATIC, SNDLEVEL_NONE, _, 1.8);
+					SetMusicTimer(client, GetTime() + 189);
+				}
+			}
+		}
 		default:CompleteFailure=true;
 	}
 	/*무엇도 해당 안되면 기본 라스맨 브금 재생*/
 	return CompleteFailure;
 }
 
-void Weapon_AddonsStopCustomSoundForLastMan(int client, int WhatSoundPlay)
+stock void Weapon_AddonsStopCustomSoundForLastMan(int client, int WhatSoundPlay)
 {
 	if(client)
 	{
@@ -71,7 +113,28 @@ void Weapon_AddonsStopCustomSoundForLastMan(int client, int WhatSoundPlay)
 	switch(WhatSoundPlay)
 	{
 		//case 12:StopCustomSound(client, SNDCHAN_STATIC, "#zombiesurvival/combinehell/escalationP2.mp3", 2.0);
+		case 17:
+		{
+			StopCustomSound(client, SNDCHAN_STATIC, "#zombiesurvival/medieval_raid/kazimierz_boss.mp3", 2.0);
+			StopCustomSound(client, SNDCHAN_STATIC, "#zombiesurvival/altwaves_and_blitzkrieg/music/wave60_2.mp3", 2.0);
+			StopCustomSound(client, SNDCHAN_STATIC, "#zombiesurvival/iberia/wave_30.mp3", 2.0);
+			StopCustomSound(client, SNDCHAN_STATIC, "#zombiesurvival/xeno_raid/xeno_shared_bossmusic.mp3", 2.0);
+		}
 	}
+}
+
+stock bool Weapon_AddonsOverlayForLastMan(int client, int Overlay)
+{
+	if(client)
+	{
+		/*에러 제거용*/
+	}
+	/*lms발동때 화면에 흑백 적용 안할껀지 여부*/
+	switch(Overlay)
+	{
+		//case 12:StopCustomSound(client, SNDCHAN_STATIC, "#zombiesurvival/combinehell/escalationP2.mp3", 2.0);
+	}
+	return false;
 }
 
 void Weapon_AddonsCustom_WaveEnd()
@@ -86,36 +149,3 @@ void Weapon_AddonsCustom_OnKill(int attacker)
 	if(!IsValidEntity(attacker))
 		return;
 }
-
-public void Weapon_AddonsCustom_NPCTakeDamage(int attacker, int victim, float &damage, int weapon, float damagePosition[3], int damagetype)
-{
-	/*┌이녀석은 아래 싱크 허드(원/근거리 저항)에 사용되는 기능때문에 있어야함, 하지만 일부 무기는 있든 없든 상관 없음.*/
-	/*if(!CheckInHud())
-		return;*/
-	/*적에게 피해를 주면 트리거 됨*/
-	if(!IsValidEntity(victim) || GetTeam(victim) == TFTeam_Red)
-		return;
-	if(!IsValidClient(attacker))
-		return;
-	switch(i_CustomWeaponEquipLogic[weapon])
-	{
-		case WEAPON_MAJORSTEAM_LAUNCHER:MajorSteam_Launcher_NPCTakeDamage(attacker, victim, damage, weapon, damagetype);
-		case WEAPON_MINECRAFT_SWORD:MSword_NPCTakeDamage(attacker, victim, damage, weapon);
-	}
-}
-
-public void Weapon_AddonsCustom_PlayerTakeDamage(int victim, int attacker, float &damage, int weapon, float damagePosition[3], int damagetype)
-{
-	/*if(!CheckInHud())
-		return;*/
-	/*플레이어가 피해를 받으면 트리거 됨*/
-	if(!IsValidEntity(attacker) || GetTeam(attacker) == TFTeam_Red)
-		return;
-	if(!IsValidClient(victim))
-		return;
-	switch(i_CustomWeaponEquipLogic[weapon])
-	{
-		case WEAPON_MAJORSTEAM_LAUNCHER:MajorSteam_Launcher_PlayerTakeDamage(victim, attacker, damage, weapon)
-	}
-}
-

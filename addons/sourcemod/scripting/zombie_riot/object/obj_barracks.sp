@@ -963,11 +963,13 @@ void Barracks_BuildingThink(int entity)
 		return;
 	}
 	
-	npc.m_flNextThinkTime = GameTime + 0.2;
 	int client = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
-
 	if(!IsValidClient(client))
+	{
+		npc.m_flNextThinkTime = GameTime + 0.2;
 		return;
+	}
+	npc.m_flNextThinkTime = GameTime + (Store_HasNamedItem(client, "Modern Defense") ? 0.1 : 0.2);
 	
 	if(GetTeam(client) != 2)
 		return;
@@ -1067,11 +1069,13 @@ void Barracks_BuildingThink(int entity)
 					{
 						TrainingIndex[client] = TrainingQueue[client];
 						TrainingStartedIn[client] = GetGameTime();
-						float trainingTime = float(GetSData(CivType[client], TrainingQueue[client], TrainTime));
+						float trainingTime = float(LastMann ? (GetSData(CivType[client], TrainingQueue[client], TrainTime) / 3) : GetSData(CivType[client], TrainingQueue[client], TrainTime));
 						if(i_NormalBarracks_HexBarracksUpgrades[client] & ZR_BARRACKS_UPGRADES_CONSCRIPTION)
 						{
 							trainingTime *= 0.75;
 						}
+						if(HasSpecificBuff(client, "Barracks Prepare Siege"))
+							trainingTime *= 0.55;
 						if(CvarInfiniteCash.BoolValue)
 						{
 							trainingTime = 0.0;
@@ -1345,7 +1349,7 @@ static void Barracks_MortarSupport_Mode(BarrackBody npc, int client, bool mounte
 	float BlastDamage = 500.0;
 	float BlastRange = EXPLOSION_RADIUS;
 	float AttackDelay = 10.0;
-	float projectile_speed = 1100.0;
+	float projectile_speed = 3.0;
 	float MaximumDistance = 700.0;
 	float MinimumDistance = 500.0;
 	
@@ -1382,7 +1386,7 @@ static void Barracks_MortarSupport_Mode(BarrackBody npc, int client, bool mounte
 	MaximumDistance = Barracks_UnitExtraRangeCalc(npc.index, client, MaximumDistance, true);
 	
 	if(i_NormalBarracks_HexBarracksUpgrades[client] & ZR_BARRACKS_UPGRADES_CRENELLATIONS)
-		projectile_speed *= 1.5;
+		projectile_speed -= 1.0;
 	
 	if(i_NormalBarracks_HexBarracksUpgrades[client] & ZR_BARRACKS_UPGRADES_CHEMISTY)
 		BlastDamage *= 1.25;
@@ -1406,12 +1410,13 @@ static void Barracks_MortarSupport_Mode(BarrackBody npc, int client, bool mounte
 	
 	Barracks_UnitExtraDamageCalc(npc.index, client, BlastDamage, 1);
 	
+	projectile_speed/=3.0;
 	if(npc.m_flNextMeleeAttack < GameTime)
 	{
-		int Target = GetClosestTarget((mounted ? client : npc.index), true, MaximumDistance, true, _, _ ,SelfPos, true,_,_,true, (MinimumDistance * MinimumDistance));
+		int Target = GetClosestTarget((mounted ? client : npc.index), true, MaximumDistance, true, _, _ ,SelfPos, _,_,_,true, (MinimumDistance * MinimumDistance));
 		if(IsValidEnemy(client, Target))
 		{
-			float vecTarget[3];
+			/*float vecTarget[3];
 			if(i_NormalBarracks_HexBarracksUpgrades[client] & ZR_BARRACKS_UPGRADES_BALLISTICS)
 			{
 				BarrackBody playerclient = view_as<BarrackBody>(client);
@@ -1432,14 +1437,76 @@ static void Barracks_MortarSupport_Mode(BarrackBody npc, int client, bool mounte
 				fl_Dead_Ringer_Invis[RocketGet] = BlastRange;
 				h_ArrowInflictorRef[RocketGet] = GetClientUserId(client);
 				SDKHook(RocketGet, SDKHook_StartTouch, HEGrenade_StartTouch);
-			}
+			}*/
+			float vecTarget[3], SpeedReturn[3]; WorldSpaceCenter(Target, vecTarget);
+			int RocketGet = npc.FireRocket(SelfPos, 0.0, 650.0,_,1.5);
+			ArcToLocationViaSpeedProjectile(RocketGet, vecTarget, SpeedReturn, 5.0, 2.0);
+			float ang[3]; GetVectorAngles(SpeedReturn, ang);
+			TeleportEntity(RocketGet, NULL_VECTOR, NULL_VECTOR, SpeedReturn);
+			SetEntityMoveType(RocketGet, MOVETYPE_NOCLIP);
+			fl_Extra_Damage[RocketGet] = 0.0;
+			CreateTimer(2.5, Timer_RemoveEntity, EntIndexToEntRef(RocketGet), TIMER_FLAG_NO_MAPCHANGE);
+			vecTarget[2] += 3000.0;
+			int particle = ParticleEffectAt(vecTarget, "kartimpacttrail", projectile_speed);
+			SetEdictFlags(particle, (GetEdictFlags(particle) | FL_EDICT_ALWAYS));
+			CreateTimer(projectile_speed-0.3, MortarFire_Falling_Shot, EntIndexToEntRef(particle), TIMER_FLAG_NO_MAPCHANGE);	
+			vecTarget[2] -= 3000.0;
 			EmitSoundToAll("weapons/grenade_launcher_shoot.wav", (mounted ? client : npc.index), _, 80, _, 0.7);
 			npc.m_flNextMeleeAttack = GameTime + AttackDelay;
+			
+			DataPack HEStrike = new DataPack();
+			HEStrike.WriteCell(client);
+			HEStrike.WriteCell(EntIndexToEntRef(npc.index));
+			HEStrike.WriteFloatArray(vecTarget, 3);
+			HEStrike.WriteFloat(BlastDamage);
+			HEStrike.WriteFloat(GetGameTime()+projectile_speed);
+			HEStrike.WriteFloat(projectile_speed);
+			HEStrike.WriteFloat(BlastRange);
+			HEStrike.WriteFloat(0.75);
+			RequestFrame(HE_StrikeThink, HEStrike);
 		}
 	}
 }
 
-static Action HEGrenade_StartTouch(int entity, int target)
+static void HE_StrikeThink(DataPack pack)
+{
+	pack.Reset();
+	int client = pack.ReadCell();
+	int entity = EntRefToEntIndex(pack.ReadCell());
+	float targetpos[3]; pack.ReadFloatArray(targetpos, 3);
+	float damage = pack.ReadFloat();
+	float delay = pack.ReadFloat();
+	float maxdelay = pack.ReadFloat();
+	float radius = pack.ReadFloat();
+	float falloff = pack.ReadFloat();
+	if(!IsValidClient(client) || !IsValidEntity(entity))
+		return;
+	if(GetGameTime() >= delay)
+	{
+		ParticleEffectAt(targetpos, "rd_robot_explosion", 1.0);
+		CreateEarthquake(targetpos, 0.5, radius*0.8, 16.0, 255.0);
+		Explode_Logic_Custom(damage, client, client, -1, targetpos, radius, falloff);
+		EmitSoundToAll("beams/beamstart5.wav", 0, SNDCHAN_AUTO, 90, SND_NOFLAGS, 0.8, SNDPITCH_NORMAL, -1, targetpos);
+		return;
+	}
+	delete pack;
+	DataPack pack2 = new DataPack();
+	pack2.WriteCell(client);
+	pack2.WriteCell(EntIndexToEntRef(entity));
+	pack2.WriteFloatArray(targetpos, 3);
+	pack2.WriteFloat(damage);
+	pack2.WriteFloat(delay);
+	pack2.WriteFloat(maxdelay);
+	pack2.WriteFloat(radius);
+	pack2.WriteFloat(falloff);
+	float Throttle = 0.04;	//0.025
+	int frames_offset = RoundToCeil(66.0*Throttle);
+	if(frames_offset < 0)
+		frames_offset = 1;
+	RequestFrames(HE_StrikeThink, frames_offset, pack2);
+}
+
+/*static Action HEGrenade_StartTouch(int entity, int target)
 {
 	int owner = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
 	if(!IsValidEntity(owner))
@@ -1452,7 +1519,7 @@ static Action HEGrenade_StartTouch(int entity, int target)
 	GetEntPropVector(entity, Prop_Data, "m_vecAbsOrigin", ProjectileLoc);
 	Explode_Logic_Custom(fl_Extra_Damage[entity], owner, owner, -1, ProjectileLoc, fl_Dead_Ringer_Invis[entity]);
 	return Plugin_Handled;
-}
+}*/
 
 static void Barracks_ModernDefense_Mode(BarrackBody npc, int client, bool mounted, float SelfPos[3], float GameTime)
 {
@@ -2362,12 +2429,14 @@ public int SummonerMenuH(Menu menu, MenuAction action, int client, int choice)
 							{
 								TimeUntillResearch *= 0.85; 
 							}
-							if(Rogue_Mode() || !StrContains(WhatDifficultySetting_Internal, "THE CYBER GRIND"))
+							if(Rogue_Mode())
 							{
 								TimeUntillResearch *= 0.5;
 							}
+							if(HasSpecificBuff(client, "Barracks Prepare Siege"))
+								TimeUntillResearch *= 0.55;
 							ResearchIn[client] = ResearchStartedIn[client] + TimeUntillResearch;
-							if(CvarInfiniteCash.BoolValue)
+							if(CvarInfiniteCash.BoolValue || !StrContains(WhatDifficultySetting_Internal, "THE CYBER GRIND"))
 							{
 								ResearchIn[client] = GetGameTime() + 0.1; 
 							}
@@ -2399,6 +2468,8 @@ public int SummonerMenuH(Menu menu, MenuAction action, int client, int choice)
 								{
 									ModifySpawnRate *= (1.0 / 1.2);
 								}
+								if(HasSpecificBuff(client, "Barracks Prepare Siege"))
+									ModifySpawnRate *= 0.55;
 								TrainingIn[client] = TrainingStartedIn[client] + (ModifySpawnRate * float(LastMann ? (GetSData(CivType[client], item, TrainTime) / 3) : GetSData(CivType[client], item, TrainTime)));
 								if(CvarInfiniteCash.BoolValue)
 								{
@@ -2587,6 +2658,11 @@ void BarracksUnitAttack_NPCTakeDamagePost(int victim, int attacker, float damage
 		//make sure they have a barracks
 
 		int MaxHealth = ReturnEntityMaxHealth(victim);
+		
+		// prevent dividing by zero...
+		if (MaxHealth <= 0)
+			MaxHealth = 50;
+
 		if(damage >= float(MaxHealth))
 			damage = float(MaxHealth);
 			

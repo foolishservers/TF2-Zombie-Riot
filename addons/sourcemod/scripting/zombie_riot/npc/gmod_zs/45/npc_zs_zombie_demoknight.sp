@@ -29,12 +29,8 @@ static const char g_MeleeHitSounds[][] = {
 	"weapons/blade_slice_4.wav",
 };
 
-void InfectedDemoMain_OnMapStart_NPC()
+public void InfectedDemoMain_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
-	for (int i = 0; i < (sizeof(g_charge_sound)); i++) { PrecacheSound(g_charge_sound[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds));	i++) { PrecacheSound(g_MeleeHitSounds[i]);	}
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Infected Demoknight");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_zombie_demoknight");
@@ -42,37 +38,43 @@ void InfectedDemoMain_OnMapStart_NPC()
 	data.IconCustom = false;
 	data.Flags = 0;
 	data.Category = Type_GmodZS;
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_charge_sound);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheModel("models/player/demo.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
 	return InfectedDemoMain(vecPos, vecAng, team);
 }
+
 methodmap InfectedDemoMain < CClotBody
 {
 	public void PlayIdleAlertSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		
 		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(4.0, 7.0);
 	}
-	
 	public void PlayMeleeHitSound() {
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(80, 85));
 	}
 	public void PlayChargeSound() {
 		EmitSoundToAll(g_charge_sound[GetRandomInt(0, sizeof(g_charge_sound) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(80, 85));
 	}
-	
 	public void PlayHurtSound() {
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
-			
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 	}
 	public InfectedDemoMain(float vecPos[3], float vecAng[3], int ally)
@@ -129,19 +131,16 @@ methodmap InfectedDemoMain < CClotBody
 	}
 }
 
-public void InfectedDemoMain_ClotThink(int iNPC)
+static void InfectedDemoMain_ClotThink(int iNPC)
 {
 	InfectedDemoMain npc = view_as<InfectedDemoMain>(iNPC);
 	
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
-	{
+	float GameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > GameTime)
 		return;
-	}
 	
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
-	
-	npc.Update();	
-			
+	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
+	npc.Update();
 	if(npc.m_blPlayHurtAnimation)
 	{
 		npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
@@ -149,132 +148,120 @@ public void InfectedDemoMain_ClotThink(int iNPC)
 		npc.PlayHurtSound();
 	}
 	
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
-	{
+	if(npc.m_flNextThinkTime > GameTime)
 		return;
-	}
-	
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
+	npc.m_flNextThinkTime = GameTime + 0.1;
 
-	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	if(npc.m_flGetClosestTargetTime < GameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
+		npc.m_flGetClosestTargetTime = GameTime + GetRandomRetargetTime();
 	}
 	
 	int PrimaryThreatIndex = npc.m_iTarget;
-	
 	if(IsValidEnemy(npc.index, PrimaryThreatIndex))
 	{
-			float vecTarget[3]; WorldSpaceCenter(PrimaryThreatIndex, vecTarget);
-			
-			float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
-			float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-			
-			if(npc.m_flCharge_Duration < GetGameTime(npc.index))
+		float vecTarget[3]; WorldSpaceCenter(PrimaryThreatIndex, vecTarget);
+		
+		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
+		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
+		
+		if(npc.m_flCharge_Duration < GameTime)
+		{
+			npc.m_flSpeed = 300.0;
+			if(npc.m_flCharge_delay < GameTime)
 			{
-				npc.m_flSpeed = 300.0;
-				if(npc.m_flCharge_delay < GetGameTime(npc.index))
+				int Enemy_I_See;
+				Enemy_I_See = Can_I_See_Enemy(npc.index, PrimaryThreatIndex);
+				//Target close enough to hit
+				if(IsValidEnemy(npc.index, Enemy_I_See) && Enemy_I_See == PrimaryThreatIndex && flDistanceToTarget > NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED && flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 10.0)
 				{
-					int Enemy_I_See;
-					Enemy_I_See = Can_I_See_Enemy(npc.index, PrimaryThreatIndex);
-					//Target close enough to hit
-					if(IsValidEnemy(npc.index, Enemy_I_See) && Enemy_I_See == PrimaryThreatIndex && flDistanceToTarget > NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED && flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 10.0)
-					{
-						npc.PlayChargeSound();
-						npc.m_flCharge_delay = GetGameTime(npc.index) + 10.0;
-						npc.m_flCharge_Duration = GetGameTime(npc.index) + 1.5;
-						PluginBot_Jump(npc.index, vecTarget);
-					}
+					npc.PlayChargeSound();
+					npc.m_flCharge_delay = GameTime + 10.0;
+					npc.m_flCharge_Duration = GameTime + 1.5;
+					PluginBot_Jump(npc.index, vecTarget);
 				}
 			}
-			else
-			{
-				npc.m_flSpeed = 500.0;
-			}
+		}
+		else
+		{
+			npc.m_flSpeed = 500.0;
+		}
+		
+		//Predict their pos.
+		if(flDistanceToTarget < npc.GetLeadRadius()) {
 			
-			//Predict their pos.
-			if(flDistanceToTarget < npc.GetLeadRadius()) {
-				
-				float vPredictedPos[3]; PredictSubjectPosition(npc, PrimaryThreatIndex,_,_, vPredictedPos);
-				
-				npc.SetGoalVector(vPredictedPos);
-			}
-			else 
-			{
-				npc.SetGoalEntity(PrimaryThreatIndex);
-			}
-			npc.StartPathing();
+			float vPredictedPos[3]; PredictSubjectPosition(npc, PrimaryThreatIndex,_,_, vPredictedPos);
 			
-			if(flDistanceToTarget < 10000 || npc.m_flAttackHappenswillhappen)
+			npc.SetGoalVector(vPredictedPos);
+		}
+		else 
+		{
+			npc.SetGoalEntity(PrimaryThreatIndex);
+		}
+		npc.StartPathing();
+		
+		if(flDistanceToTarget < 10000 || npc.m_flAttackHappenswillhappen)
+		{
+			if(npc.m_flNextMeleeAttack < GameTime)
 			{
-				//Look at target so we hit.
-			//	npc.FaceTowards(vecTarget, 1000.0);
-				
-				//Can we attack right now?
-				if(npc.m_flNextMeleeAttack < GetGameTime(npc.index))
+				//Play attack ani
+				if (!npc.m_flAttackHappenswillhappen)
 				{
-					//Play attack ani
-					if (!npc.m_flAttackHappenswillhappen)
+					npc.AddGesture("ACT_MP_ATTACK_STAND_ITEM1");
+					npc.m_flAttackHappens = GameTime+0.4;
+					npc.m_flAttackHappens_bullshit = GameTime+0.54;
+					npc.m_flAttackHappenswillhappen = true;
+				}
+				
+				if (npc.m_flAttackHappens < GameTime && npc.m_flAttackHappens_bullshit >= GameTime && npc.m_flAttackHappenswillhappen)
+				{
+					Handle swingTrace;
+					npc.FaceTowards(vecTarget, 20000.0);
+					if(npc.DoSwingTrace(swingTrace, PrimaryThreatIndex))
 					{
-						npc.AddGesture("ACT_MP_ATTACK_STAND_ITEM1");
-						npc.m_flAttackHappens = GetGameTime(npc.index)+0.4;
-						npc.m_flAttackHappens_bullshit = GetGameTime(npc.index)+0.54;
-						npc.m_flAttackHappenswillhappen = true;
-					}
+						int target = TR_GetEntityIndex(swingTrace);
+						float vecHit[3];
+						TR_GetEndPosition(vecHit, swingTrace);
 						
-					if (npc.m_flAttackHappens < GetGameTime(npc.index) && npc.m_flAttackHappens_bullshit >= GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
-					{
-						Handle swingTrace;
-						npc.FaceTowards(vecTarget, 20000.0);
-						if(npc.DoSwingTrace(swingTrace, PrimaryThreatIndex))
+						if(target > 0) 
 						{
-							int target = TR_GetEntityIndex(swingTrace);	
+							if(!ShouldNpcDealBonusDamage(target))
+								SDKHooks_TakeDamage(target, npc.index, npc.index, 200.0, DMG_CLUB, -1, _, vecHit);
+							else
+								SDKHooks_TakeDamage(target, npc.index, npc.index, 500.0, DMG_CLUB, -1, _, vecHit);
+							// Hit sound
+							StartBleedingTimer(target, npc.index, 10.0, 5, -1, DMG_TRUEDAMAGE, 0);
+							npc.PlayMeleeHitSound();
 							
-							float vecHit[3];
-							TR_GetEndPosition(vecHit, swingTrace);
-							
-							if(target > 0) 
-							{
-								
-								if(!ShouldNpcDealBonusDamage(target))
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 200.0, DMG_CLUB, -1, _, vecHit);
-								else
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 500.0, DMG_CLUB, -1, _, vecHit);
-								// Hit sound
-								StartBleedingTimer(target, npc.index, 10.0, 5, -1, DMG_TRUEDAMAGE, 0);
-								npc.PlayMeleeHitSound();
-								
-							} 
-						}
-						delete swingTrace;
-						npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.8;
-						npc.m_flAttackHappenswillhappen = false;
+						} 
 					}
-					else if (npc.m_flAttackHappens_bullshit < GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
-					{
-						npc.m_flAttackHappenswillhappen = false;
-						npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.8;
-					}
+					delete swingTrace;
+					npc.m_flNextMeleeAttack = GameTime + 0.8;
+					npc.m_flAttackHappenswillhappen = false;
+				}
+				else if (npc.m_flAttackHappens_bullshit < GameTime && npc.m_flAttackHappenswillhappen)
+				{
+					npc.m_flAttackHappenswillhappen = false;
+					npc.m_flNextMeleeAttack = GameTime + 0.8;
 				}
 			}
-			else
-			{
-				npc.StartPathing();
-				
-			}
+		}
+		else
+		{
+			npc.StartPathing();
+		}
 	}
 	else
 	{
 		npc.StopPathing();
-		
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_iTarget = GetClosestTarget(npc.index);
 	}
 	npc.PlayIdleAlertSound();
 }
 
-public Action InfectedDemoMain_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action InfectedDemoMain_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	//Valid attackers only.
 	if(attacker <= 0)
@@ -290,10 +277,10 @@ public Action InfectedDemoMain_OnTakeDamage(int victim, int &attacker, int &infl
 	return Plugin_Changed;
 }
 
-public void InfectedDemoMain_NPCDeath(int entity)
+static void InfectedDemoMain_NPCDeath(int entity)
 {
 	InfectedDemoMain npc = view_as<InfectedDemoMain>(entity);
-		
+	
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
 	if(IsValidEntity(npc.m_iWearable2))

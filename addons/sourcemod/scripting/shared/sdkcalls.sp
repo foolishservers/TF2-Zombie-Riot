@@ -9,7 +9,6 @@ Handle g_hSDKStartTouch;
 static Handle g_hSetAbsOrigin;
 static Handle g_hSetAbsAngle;
 static Handle g_hInvalidateBoneCache;
-
 static Handle g_hCTFCreateArrow;
 //static Handle g_hCTFCreatePipe;
 //Handle g_hSDKMakeCarriedObject;
@@ -28,6 +27,10 @@ static Handle g_SDKCallRemoveImmediate;
 static Handle SDKGetShootSound;
 static Handle SDKBecomeRagdollOnClient;
 static Handle SDKSetSpeed;
+static Handle SDKGetSmoothedVelocity;
+
+static Handle SDKLookupBone;
+static Handle SDKGetBonePosition;
 
 void SDKCall_Setup()
 {
@@ -141,6 +144,8 @@ void SDKCall_Setup()
 	if(!g_hCTFCreateArrow)
 		LogError("[Gamedata] Could not find CTFProjectile_Arrow::Create");
 	//from kenzzer
+	StartPrepSDKCall(SDKCall_Entity);
+	
 	
 	StartPrepSDKCall(SDKCall_Entity);
 	PrepSDKCall_SetFromConf(gamedata, SDKConf_Signature, "CTFWeaponBaseMelee::GetShootSound");
@@ -175,9 +180,34 @@ void SDKCall_Setup()
 	if(!SDKSetSpeed)
 		LogError("[Gamedata] Could not find CTFPlayer::TeamFortress_SetSpeed()");
 
+	StartPrepSDKCall(SDKCall_Entity);
+	PrepSDKCall_SetFromConf(gamedata, SDKConf_Virtual, "CBaseEntity::GetSmoothedVelocity");
+	PrepSDKCall_SetReturnInfo(SDKType_Vector, SDKPass_ByValue);
+	SDKGetSmoothedVelocity = EndPrepSDKCall();
+	if(!SDKGetSmoothedVelocity)
+		LogError("[Gamedata] Could not find CBaseEntity::GetSmoothedVelocity");
 	
 	//copied from 
 	//https://github.com/bhopppp/Shavit-Surf-Timer/blob/289b9df123e61f2a0982ded688d2c611023b25f5/addons/sourcemod/scripting/shavit-replay-playback.sp#L204
+	
+	StartPrepSDKCall(SDKCall_Entity);
+	PrepSDKCall_SetFromConf(gamedata, SDKConf_Signature, "CBaseAnimating::LookupBone");
+	PrepSDKCall_AddParameter(SDKType_String, SDKPass_Pointer);
+	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
+	SDKLookupBone = EndPrepSDKCall();
+	if(!SDKLookupBone)
+		LogError("[Gamedata] Could not find CBaseAnimating::LookupBone");
+	
+	// void CBaseAnimating::GetBonePosition ( int iBone, Vector &origin, QAngle &angles )
+	StartPrepSDKCall(SDKCall_Entity);
+	PrepSDKCall_SetFromConf(gamedata, SDKConf_Signature, "CBaseAnimating::GetBonePosition");
+	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
+	PrepSDKCall_AddParameter(SDKType_Vector, SDKPass_ByRef, .encflags = VENCODE_FLAG_COPYBACK);
+	PrepSDKCall_AddParameter(SDKType_QAngle, SDKPass_ByRef, .encflags = VENCODE_FLAG_COPYBACK);
+	SDKGetBonePosition = EndPrepSDKCall();
+	if(!SDKGetBonePosition)
+		LogError("[Gamedata] Could not find CBaseAnimating::GetBonePosition");
+	
 	delete gamedata;
 }
 
@@ -541,4 +571,24 @@ void SDKCall_StartTouch(int entity, int target)
 	{
 		SDKCall(g_hSDKStartTouch, entity, target);
 	}
+}
+
+stock void SDKCall_GetSmoothedVelocity(int entity, float vec[3])
+{
+	if(SDKGetSmoothedVelocity)
+		SDKCall(SDKGetSmoothedVelocity, entity, vec);
+}
+
+stock int SDKCall_LookupBone(int entity, const char[] bone)
+{
+	if(SDKLookupBone)
+		return SDKCall(SDKLookupBone, entity, bone);
+	
+	return -1;
+}
+
+stock void SDKCall_GetBonePosition(int entity, int iBone, float origin[3], float angles[3])
+{
+	if(SDKGetBonePosition)
+		SDKCall(SDKGetBonePosition, entity, iBone, origin, angles);
 }

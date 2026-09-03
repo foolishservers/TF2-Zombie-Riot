@@ -80,7 +80,7 @@ static const char g_SlicerHitSound[][] = {
 	"ambient/machines/slicer4.wav",
 };
 
-
+static int NPCID;
 public void Construction_Raid_Zilius_OnMapStart()
 {
 	NPCData data;
@@ -92,10 +92,13 @@ public void Construction_Raid_Zilius_OnMapStart()
 	data.Category = Type_Raid;
 	data.Func = ClotSummon;
 	data.Precache = Zilius_TBB_Precahce;
-	NPC_Add(data);
+	NPCID = NPC_Add(data);
 }
 
-
+int Zilius_ID()
+{
+	return NPCID;
+}
 
 void Zilius_TBB_Precahce()
 {
@@ -310,6 +313,11 @@ methodmap Construction_Raid_Zilius < CClotBody
 		public get()		{	return this.m_iMedkitAnnoyance;	}
 		public set(int value) 	{	this.m_iMedkitAnnoyance = value;	}
 	}
+	property bool m_bClearFollower
+	{
+		public get()							{ return b_FUCKYOU[this.index]; }
+		public set(bool TempValueForProperty) 	{ b_FUCKYOU[this.index] = TempValueForProperty; }
+	}
 	public void SayStuffZilius()
 	{
 		//one in 3 chance.
@@ -423,6 +431,7 @@ methodmap Construction_Raid_Zilius < CClotBody
 		RemoveAllDamageAddition();
 		bool final = StrContains(data, "final_item") != -1;
 		bool bossrush = StrContains(data, "bossrush") != -1;
+		npc.m_bClearFollower = StrContains(data, "free_zeina") != -1;
 		
 		Zero(b_said_player_weaponline);
 		fl_said_player_weaponline_time[npc.index] = GetGameTime() + GetRandomFloat(0.0, 5.0);
@@ -1065,6 +1074,7 @@ void Zilius_SpawnAllyDuoRaid(int ref)
 	int entity = EntRefToEntIndex(ref);
 	if(IsValidEntity(entity))
 	{
+		Construction_Raid_Zilius npc = view_as<Construction_Raid_Zilius>(entity);
 		float pos[3]; GetEntPropVector(entity, Prop_Data, "m_vecAbsOrigin", pos);
 		float ang[3]; GetEntPropVector(entity, Prop_Data, "m_angRotation", ang);
 		int maxhealth;
@@ -1076,9 +1086,10 @@ void Zilius_SpawnAllyDuoRaid(int ref)
 		int spawn_index = NPC_CreateByName("npc_zeina_prisoner", -1, pos, ang, GetTeam(entity));
 		if(spawn_index > MaxClients)
 		{
-			Construction_Raid_Zilius npc = view_as<Construction_Raid_Zilius>(spawn_index);
-			npc.m_iTargetAlly = entity;
+			ZeinaPrisoner npcSummon = view_as<ZeinaPrisoner>(spawn_index);
+			npcSummon.m_iTargetAlly = entity;
 			NpcStats_CopyStats(entity, spawn_index);
+			npcSummon.m_bClearFollower = npc.m_bClearFollower;
 			NpcAddedToZombiesLeftCurrently(spawn_index, true);
 			SetEntProp(spawn_index, Prop_Data, "m_iHealth", maxhealth);
 			SetEntProp(spawn_index, Prop_Data, "m_iMaxHealth", maxhealth);
@@ -1474,12 +1485,13 @@ static void Zilius_KickTouched(int entity, int enemy)
 void Zilius_KickLogic(int iNPC)
 {
 	CClotBody npc = view_as<CClotBody>(iNPC);
-	static float vel[3];
-	static float flMyPos[3];
+	float vel[3];
+	float flMyPos[3];
 	npc.GetVelocity(vel);
-	fClamp(vel[0], -300.0, 300.0);
-	fClamp(vel[1], -300.0, 300.0);
-	fClamp(vel[2], -300.0, 300.0);
+	//clamping so insane speeds dont translate through hitting the entire map.
+	vel[0] = fClamp(vel[0], -300.0, 300.0);
+	vel[1] = fClamp(vel[1], -300.0, 300.0);
+	vel[2] = fClamp(vel[2], -300.0, 300.0);
 	GetEntPropVector(iNPC, Prop_Data, "m_vecAbsOrigin", flMyPos);
 		
 	static float hullcheckmins[3];

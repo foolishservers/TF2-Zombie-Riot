@@ -18,14 +18,6 @@ static const char g_IdleAlertedSounds[][] = {
 	"npc/zombie_poison/pz_idle4.wav",
 };
 
-static const char g_MeleeAttackSounds[][] = {
-	"weapons/knife_swing.wav",
-};
-
-static const char g_ZapAttackSounds[][] = {
-	"npc/assassin/ball_zap1.wav",
-};
-
 static const char g_MeleeHitSounds[][] = {
 	"weapons/blade_hit1.wav",
 	"weapons/blade_hit2.wav",
@@ -33,22 +25,12 @@ static const char g_MeleeHitSounds[][] = {
 	"weapons/blade_hit4.wav",
 };
 
-static const char g_MeleeAttackBackstabSounds[][] = {
-	"player/spy_shield_break.wav",
-};
+static const char g_MeleeAttackSounds[] = "weapons/knife_swing.wav";
+static const char g_ZapAttackSounds[] = "npc/assassin/ball_zap1.wav";
+static const char g_MeleeAttackBackstabSounds[] = "player/spy_shield_break.wav";
 
-
-void NinjaSpy_OnMapStart_NPC()
+public void NinjaSpy_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeAttackSounds)); i++) { PrecacheSound(g_MeleeAttackSounds[i]); }
-	for (int i = 0; i < (sizeof(g_ZapAttackSounds)); i++) { PrecacheSound(g_ZapAttackSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeAttackBackstabSounds)); i++) { PrecacheSound(g_MeleeAttackBackstabSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds)); i++) { PrecacheSound(g_MeleeHitSounds[i]); }
-	PrecacheModel("models/player/spy.mdl");
-	LastSpawnDiversio = 0.0;
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Infected Ninja Spy");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_ninja_zombie_spy");
@@ -56,14 +38,28 @@ void NinjaSpy_OnMapStart_NPC()
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_SUPPORT;
 	data.Category = Type_GmodZS; 
+	data.Precache = ClotPrecache;
 	data.Func = ClotSummon;
 	NPC_Add(data);
+}
+
+static void ClotPrecache()
+{
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSound(g_MeleeAttackSounds);
+	PrecacheSound(g_ZapAttackSounds);
+	PrecacheSound(g_MeleeAttackBackstabSounds);
+	PrecacheModel("models/player/spy.mdl");
 }
 
 static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team, const char[] data)
 {
 	return NinjaSpy(vecPos, vecAng, team, data);
 }
+
 methodmap NinjaSpy < CClotBody
 {
 	public void PlayIdleAlertSound() 
@@ -75,7 +71,6 @@ methodmap NinjaSpy < CClotBody
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 		
 	}
-	
 	public void PlayHurtSound() 
 	{
 		if(this.m_flNextHurtSound > GetGameTime(this.index))
@@ -86,26 +81,24 @@ methodmap NinjaSpy < CClotBody
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 		
 	}
-	
 	public void PlayDeathSound() 
 	{
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
-	
 	public void PlayMeleeSound()
 	{
-		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_MeleeAttackSounds, this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	public void PlayZapSound()
 	{
-		EmitSoundToAll(g_ZapAttackSounds[GetRandomInt(0, sizeof(g_ZapAttackSounds) - 1)], this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_ZapAttackSounds, this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	public void PlayMeleeBackstabSound(int target)
 	{
-		EmitSoundToAll(g_MeleeAttackBackstabSounds[GetRandomInt(0, sizeof(g_MeleeAttackBackstabSounds) - 1)], this.index, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_MeleeAttackBackstabSounds, this.index, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 		if(target <= MaxClients)
 		{
-			EmitSoundToClient(target, g_MeleeAttackBackstabSounds[GetRandomInt(0, sizeof(g_MeleeAttackBackstabSounds) - 1)], target, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
+			EmitSoundToClient(target, g_MeleeAttackBackstabSounds, target, SNDCHAN_AUTO, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 		}
 	}
 	public void PlayMeleeHitSound() 
@@ -196,14 +189,13 @@ methodmap NinjaSpy < CClotBody
 	}
 }
 
-public void NinjaSpy_ClotThink(int iNPC)
+static void NinjaSpy_ClotThink(int iNPC)
 {
 	NinjaSpy npc = view_as<NinjaSpy>(iNPC);
-	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
-	{
+	float GameTime = GetGameTime(npc.index);
+	if(npc.m_flNextDelayTime > GameTime)
 		return;
-	}
-	npc.m_flNextDelayTime = GetGameTime(npc.index) + DEFAULT_UPDATE_DELAY_FLOAT;
+	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 
 	if(npc.m_blPlayHurtAnimation)
@@ -213,24 +205,67 @@ public void NinjaSpy_ClotThink(int iNPC)
 		npc.PlayHurtSound();
 	}
 	
-	if(npc.m_flNextThinkTime > GetGameTime(npc.index))
-	{
+	if(npc.m_flNextThinkTime > GameTime)
 		return;
-	}
-	npc.m_flNextThinkTime = GetGameTime(npc.index) + 0.1;
+	npc.m_flNextThinkTime = GameTime + 0.1;
 
-	if(npc.m_flGetClosestTargetTime < GetGameTime(npc.index))
+	if(npc.m_flGetClosestTargetTime < GameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index, true);
-		npc.m_flGetClosestTargetTime = GetGameTime(npc.index) + GetRandomRetargetTime();
+		npc.m_flGetClosestTargetTime = GameTime + GetRandomRetargetTime();
+	}
+	
+	if(HasSpecificBuff(npc.index, "Revealed"))
+	{
+		if(npc.m_bCamo)
+		{
+			SetEntPropFloat(npc.index, Prop_Send, "m_fadeMinDist", 30000.0);
+			SetEntPropFloat(npc.index, Prop_Send, "m_fadeMaxDist", 30000.0);
+			if(IsValidEntity(npc.m_iWearable1))
+			{
+				SetEntPropFloat(npc.m_iWearable1, Prop_Send, "m_fadeMinDist", 30000.0);
+				SetEntPropFloat(npc.m_iWearable1, Prop_Send, "m_fadeMaxDist", 30000.0);
+			}
+			if(IsValidEntity(npc.m_iWearable2))
+			{
+				SetEntPropFloat(npc.m_iWearable2, Prop_Send, "m_fadeMinDist", 30000.0);
+				SetEntPropFloat(npc.m_iWearable2, Prop_Send, "m_fadeMaxDist", 30000.0);
+			}
+			if(IsValidEntity(npc.m_iWearable3))
+			{
+				SetEntPropFloat(npc.m_iWearable3, Prop_Send, "m_fadeMinDist", 30000.0);
+				SetEntPropFloat(npc.m_iWearable3, Prop_Send, "m_fadeMaxDist", 30000.0);
+			}
+			npc.m_bCamo=false;
+		}
+	}
+	else if(!npc.m_bCamo)
+	{
+		SetEntPropFloat(npc.index, Prop_Send, "m_fadeMinDist", 500.0);
+		SetEntPropFloat(npc.index, Prop_Send, "m_fadeMaxDist", 750.0);
+		if(IsValidEntity(npc.m_iWearable1))
+		{
+			SetEntPropFloat(npc.m_iWearable1, Prop_Send, "m_fadeMinDist", 500.0);
+			SetEntPropFloat(npc.m_iWearable1, Prop_Send, "m_fadeMaxDist", 750.0);
+		}
+		if(IsValidEntity(npc.m_iWearable2))
+		{
+			SetEntPropFloat(npc.m_iWearable2, Prop_Send, "m_fadeMinDist", 500.0);
+			SetEntPropFloat(npc.m_iWearable2, Prop_Send, "m_fadeMaxDist", 750.0);
+		}
+		if(IsValidEntity(npc.m_iWearable3))
+		{
+			SetEntPropFloat(npc.m_iWearable3, Prop_Send, "m_fadeMinDist", 500.0);
+			SetEntPropFloat(npc.m_iWearable3, Prop_Send, "m_fadeMaxDist", 750.0);
+		}
+		npc.m_bCamo=true;
 	}
 	
 	if(IsValidEnemy(npc.index, npc.m_iTarget))
 	{
+		npc.m_flSpeed = HasSpecificBuff(npc.index, "Revealed") ? 200.0 : 400.0;
 		int AntiCheeseReply = 0;
-
-		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget );
-	
+		float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget);
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
 		if(flDistanceToTarget < npc.GetLeadRadius()) 
@@ -266,27 +301,27 @@ public void NinjaSpy_ClotThink(int iNPC)
 		{
 			case 0:
 			{
-				NinjaSpySelfDefense(npc,GetGameTime(npc.index), npc.m_iTarget, flDistanceToTarget); 
+				NinjaSpySelfDefense(npc,GameTime, npc.m_iTarget, flDistanceToTarget); 
 			}
 			case 1:
 			{
 				npc.m_flAttackHappens = 0.0;
-				NinjaSpySelfDefenseRanged(npc,GetGameTime(npc.index), npc.m_iTarget); 
+				NinjaSpySelfDefenseRanged(npc,GameTime, npc.m_iTarget); 
 			}
 		}
 	}
 	else
 	{
+		npc.m_flSpeed = 0.0;
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_iTarget = GetClosestTarget(npc.index, true);
 	}
 	npc.PlayIdleAlertSound();
 }
 
-public Action NinjaSpy_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
+static Action NinjaSpy_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
 	NinjaSpy npc = view_as<NinjaSpy>(victim);
-		
 	if(attacker <= 0)
 		return Plugin_Continue;
 
@@ -304,26 +339,25 @@ public Action NinjaSpy_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
 		npc.m_blPlayHurtAnimation = true;
 	}
-
-	
 	return Plugin_Changed;
 }
 
-public void NinjaSpy_NPCDeath(int entity)
+static void NinjaSpy_NPCDeath(int entity)
 {
 	NinjaSpy npc = view_as<NinjaSpy>(entity);
 	if(!npc.m_bGib)
-	{
 		npc.PlayDeathSound();	
-	}
-		
+	if(IsValidEntity(npc.m_iWearable4))
+		RemoveEntity(npc.m_iWearable4);
+	if(IsValidEntity(npc.m_iWearable3))
+		RemoveEntity(npc.m_iWearable3);
 	if(IsValidEntity(npc.m_iWearable2))
 		RemoveEntity(npc.m_iWearable2);
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
-
 }
-void NinjaSpySelfDefenseRanged(NinjaSpy npc, float gameTime, int target)
+
+static void NinjaSpySelfDefenseRanged(NinjaSpy npc, float gameTime, int target)
 {
 	float WorldSpaceVec[3]; WorldSpaceCenter(target, WorldSpaceVec);
 	npc.FaceTowards(WorldSpaceVec, 15000.0);
@@ -335,14 +369,14 @@ void NinjaSpySelfDefenseRanged(NinjaSpy npc, float gameTime, int target)
 		npc.m_flNextRangedAttack = gameTime + 1.2;
 		float damageDealt = 40.0;
 		SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_BULLET, -1, _, WorldSpaceVec);
-		if(IsValidEntity(npc.m_iWearable2))
-			RemoveEntity(npc.m_iWearable2);
-
-		npc.m_iWearable5 = ConnectWithBeam(npc.m_iWearable1, target, 100, 100, 250, 3.0, 3.0, 1.35, LASERBEAM);
-		CreateTimer(0.5, Timer_RemoveEntity, EntIndexToEntRef(npc.m_iWearable5), TIMER_FLAG_NO_MAPCHANGE);
+		if(IsValidEntity(npc.m_iWearable4))
+			RemoveEntity(npc.m_iWearable4);
+		npc.m_iWearable4 = ConnectWithBeam(npc.m_iWearable1, target, 100, 100, 250, 3.0, 3.0, 1.35, LASERBEAM);
+		CreateTimer(0.5, Timer_RemoveEntity, EntIndexToEntRef(npc.m_iWearable4), TIMER_FLAG_NO_MAPCHANGE);
 	}
 }
-void NinjaSpySelfDefense(NinjaSpy npc, float gameTime, int target, float distance)
+
+static void NinjaSpySelfDefense(NinjaSpy npc, float gameTime, int target, float distance)
 {
 	bool BackstabDone = false;
 	if(gameTime > npc.m_flNextMeleeAttack)

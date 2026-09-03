@@ -66,6 +66,7 @@ methodmap CyberMessenger < CClotBody
 	{
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_AUTO, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
+	
 	public void PlayProjectileSound() 
 	{
 		if(this.m_flidle_talk > GetGameTime(this.index))
@@ -73,19 +74,23 @@ methodmap CyberMessenger < CClotBody
 		this.m_flidle_talk = GetGameTime(this.index) + 0.1;
 		EmitSoundToAll(g_MessengerThrowIce[GetRandomInt(0, sizeof(g_MessengerThrowIce) - 1)], this.index, SNDCHAN_AUTO, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
+	
 	public void PlayMeleeSound()
 	{
 		EmitSoundToAll(g_MeleeAttackSounds, this.index, SNDCHAN_AUTO, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
+	
 	public void PlayMeleeHitSound() 
 	{
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_AUTO, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_AUTO, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
+	
 	public void PlayRangedSound() 
 	{
 		EmitSoundToAll(g_RangedSound, this.index, SNDCHAN_WEAPON, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
+	
 	public void PlayHurtSound() 
 	{
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, _, RAIDBOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
@@ -229,7 +234,8 @@ methodmap CyberMessenger < CClotBody
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
 		
 		IgniteTargetEffect(npc.m_iWearable1);
-		CPrintToChatAll("{lightblue}메신저{default}: 3차전은 준비 됐겠지, 죄인들!");
+		TheMessenger_NPCTalkMessage(npc.index, "Messenger_Encounter_CyberGrind", true);
+		TheMessenger_NPCTalkMessage(npc.index, "Messenger_Encounter_CyberGrind_Inform", true);
 
 		npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/player/items/demo/cc_summer2015_outta_sight/cc_summer2015_outta_sight.mdl");
 		SetVariantString("1.0");
@@ -252,7 +258,6 @@ methodmap CyberMessenger < CClotBody
 		SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", skin);
 		SetEntProp(npc.m_iWearable5, Prop_Send, "m_nSkin", skin);
 		SetEntProp(npc.m_iWearable6, Prop_Send, "m_nSkin", skin);
-
 		
 		npc.m_iTeamGlow = TF2_CreateGlow(npc.index);
 		npc.m_bTeamGlowDefault = false;
@@ -278,25 +283,14 @@ static void CyberMessenger_ClotThink(int iNPC)
 		ForcePlayerLoss();
 		RaidBossActive = INVALID_ENT_REFERENCE;
 		BlockLoseSay = true;
-		switch(GetRandomInt(0,3))
-		{
-			case 0:CPrintToChatAll("{lightblue}메신저{default}: 쪽팔리는 줄 알아라.");
-			case 1:CPrintToChatAll("{lightblue}메신저{default}: 진심인가?");
-			case 2:CPrintToChatAll("{lightblue}메신저{default}: 뭐라 할 말이 없군.");
-			default:CPrintToChatAll("{lightblue}메신저{default}: ...........");
-		}
+		TheMessenger_NPCTalkMessage(npc.index, "Messenger_TimeOver_CyberGrind", true);
 	}
 	if(LastMann)
 	{
 		if(!npc.m_fbGunout)
 		{
 			npc.m_fbGunout = true;
-			switch(GetRandomInt(0,2))
-			{
-				case 0:CPrintToChatAll("{lightblue}메신저{default}: 죽으라고!!!!");
-				case 1:CPrintToChatAll("{lightblue}메신저{default}: 사지를 찢어발겨주마!!!!");
-				case 3:CPrintToChatAll("{lightblue}메신저{default}: 으하하하하하!!!");
-			}
+			TheMessenger_NPCTalkMessage(npc.index, "Messenger_LastMann_CyberGrind", true);
 		}
 	}
 	
@@ -426,13 +420,7 @@ static bool CyberMessanger_Elemental_Attack_Projectiles(CyberMessenger npc)
 				npc.m_iOverlordComboAttack = 4;
 				fl_TotalArmor[npc.index] = fl_TotalArmor[npc.index] * 0.9;
 				RaidModeScaling *= 1.1;
-				switch(GetRandomInt(0,3))
-				{
-					case 0:CPrintToChatAll("{lightblue}메신저{default}: 나는 너희들과 이 지랄하면서 놀 시간이 없다.");
-					case 1:CPrintToChatAll("{lightblue}메신저{default}: 그만 죽어라, 이 머저리들아.");
-					case 2:CPrintToChatAll("{lightblue}메신저{default}: 모든 죄인은 {crimson}죽어야만한다.");
-					case 3:CPrintToChatAll("{lightblue}메신저{default}: 그래봤자 무한한 고통을 느끼게 될 뿐이다.");
-				}
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_GroupAttack_CyberGrind_%d", true, GetRandomInt(1, 3));
 				CyberMessengerInitiateGroupAttack(npc);
 			}
 			return true;
@@ -623,7 +611,7 @@ static Action CyberMessenger_OnTakeDamage(int victim, int &attacker, int &inflic
 			if(i_CustomWeaponEquipLogic[weapon] == WEAPON_MESSENGER_LAUNCHER)
 			{
 				b_khamlWeaponRage[npc.index] = true;
-				CPrintToChatAll("{lightblue}메신저{default}: 그건 내 무기잖아. 이런 미친 놈이...");
+				TheMessenger_NPCTalkMessage(npc.index, "Messenger_Response_Messenger", true);
 			}
 		}
 	}
@@ -663,12 +651,7 @@ static void CyberMessenger_NPCDeath(int entity)
 
 	if(b_thisNpcIsARaid[npc.index])
 	{
-		switch(GetRandomInt(0,2))
-		{
-			case 0:CPrintToChatAll("{lightblue}메신저{default}: 세 번 씩이나 졌단 말인가!!");
-			case 1:CPrintToChatAll("{lightblue}메신저{default}: 어째서냐!!");
-			case 2:CPrintToChatAll("{lightblue}메신저{default}: 난 그저 그 분에게 한 번이라도 좋은 모습을 보여주고 싶었을 뿐인데... 으윽.....");
-		}
+		TheMessenger_NPCTalkMessage(npc.index, "Messenger_Death_CyberGrind", true);
 	}
 }
 
@@ -1056,23 +1039,12 @@ static void CyberMessenger_OnTakeDamagePost(int victim, int attacker, int inflic
 		f_MessengerSpeedUp[npc.index] = 1.65;
 		npc.m_flSpeed = 330.0;
 
-		switch(GetRandomInt(0,3))
-		{
-			case 0:CPrintToChatAll("{lightblue}메신저{default}: 하하하하하, 전부 {crimson}뒈질 준비나 해라!!");
-			case 1:CPrintToChatAll("{lightblue}메신저{default}: 공허여, 내게 힘을 주소서!");
-			case 2:CPrintToChatAll("{lightblue}메신저{default}: 지금 이겼다고 생각하나? 아직 시작일 뿐이라고.");
-			case 3:CPrintToChatAll("{lightblue}메신저{default}: 그 고양이들을 기억하나? {crimson} 너희는 그것보다 더 심한 꼴을 당하게 될 거다.");
-		}
+		TheMessenger_NPCTalkMessage(npc.index, "Messenger_Anger_CyberGrind_%d", true, GetRandomInt(1, 2));
 	}
 }
 
 
 static void CyberMessenger_Win(int entity)
 {
-	switch(GetRandomInt(0,2))
-	{
-		case 0:CPrintToChatAll("{lightblue}메신저{default}: {crimson}멍청한 병신새끼들!");
-		case 1:CPrintToChatAll("{lightblue}메신저{default}: 보고 계십니까? 제가 해냈습니다...");
-		case 2:CPrintToChatAll("{lightblue}메신저{default}: 이제 만족하십니까, 주군이시여....");
-	}
+	TheMessenger_NPCTalkMessage(entity, "Messenger_Win_CyberGrind", true);
 }

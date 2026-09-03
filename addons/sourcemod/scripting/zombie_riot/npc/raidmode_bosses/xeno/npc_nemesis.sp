@@ -319,11 +319,11 @@ methodmap RaidbossNemesis < CClotBody
 		if(isEnraged)
 		{
 			FormatEx(c_NpcName[npc.index], sizeof(c_NpcName[]), "Enraged Calmaticus");
-			NPCTalkMessage(npc.index, "YOU WILL BECOME DNA SUPLIMENTS.");
+			RaidbossNemesis_NPCTalkMessage(npc.index, "Calmaticus_Encounter_Enraged", true);
 		}
 		else
 		{
-			NPCTalkMessage(npc.index, "You all will be one with the virus.");
+			RaidbossNemesis_NPCTalkMessage(npc.index, "Calmaticus_Encounter", true);
 		}
 		
 		npc.m_iWearable6 = npc.EquipItem("weapon_bone", "models/workshop/player/items/pyro/hw2013_mucus_membrane/hw2013_mucus_membrane.mdl");
@@ -335,9 +335,9 @@ methodmap RaidbossNemesis < CClotBody
 	}
 }
 
-static void NPCTalkMessage(int iNPC, const char[] message)
+static void RaidbossNemesis_NPCTalkMessage(int iNPC, const char[] message, bool translated = false)
 {
-	PrintNPCMessageWithPrefixes(iNPC, "green", message, .customName = "Calmaticus", .messageColor = "green", .customNameIsTranslated = true);
+	PrintNPCMessageWithPrefixes(iNPC, "green", message, translated, .customName = "Calmaticus", .messageColor = "green", .customNameIsTranslated = true);
 }
 
 public void RaidbossNemesis_ClotThink(int iNPC)
@@ -350,7 +350,7 @@ public void RaidbossNemesis_ClotThink(int iNPC)
 		if(!npc.m_fbGunout)
 		{
 			npc.m_fbGunout = true;
-			CPrintToChatAll("{green}The infection got all your friends... Run while you can.");
+			CPrintToChatAll("%t", "XenoDuo_LastMann");
 		}
 	}
 	if(RaidModeTime < GetGameTime())
@@ -359,13 +359,9 @@ public void RaidbossNemesis_ClotThink(int iNPC)
 		i_RaidGrantExtra[npc.index] = 0;
 		ForcePlayerLoss();
 		RaidBossActive = INVALID_ENT_REFERENCE;
-		CPrintToChatAll("{green}The infection proves too strong for you to resist as you join his side...");
+		CPrintToChatAll("%t", "XenoDuo_TimeOver");
 		func_NPCThink[npc.index] = INVALID_FUNCTION;
 		return;
-	}
-	if(npc.m_flNextRangedAttackHappening && npc.flXenoInfectedSpecialHurtTime - 0.45 < gameTime)
-	{
-		ResolvePlayerCollisions_Npc(npc.index, /*damage crush*/ 90.0, true);
 	}
 	if(npc.m_flNextDelayTime < GetGameTime(npc.index))
 	{
@@ -662,11 +658,7 @@ public void RaidbossNemesis_ClotThink(int iNPC)
 		{
 			if(npc.m_flNextRangedAttackHappening < gameTime)
 			{
-				if(npc.m_bIsEnraged)
-				{
-					ResolvePlayerCollisions_Npc(npc.index, /*damage crush*/ 350.0);
-				}
-				else
+				if(!npc.m_bIsEnraged)
 				{
 							
 					float flPos[3]; // original
@@ -792,7 +784,10 @@ public void RaidbossNemesis_ClotThink(int iNPC)
 							f_NpcTurnPenalty[npc.index] = 1.0;
 						}
 					}
-					
+				}
+				else
+				{
+					ResolvePlayerCollisions_Npc(npc.index, /*damage crush*/ 90.0);
 				}
 			}
 			if(npc.m_iChanged_WalkCycle != 5) 
@@ -1233,7 +1228,7 @@ public void RaidbossNemesis_NPCDeath(int entity)
 				if(!npc.m_bIsEnraged)
 				{
 					Items_GiveNamedItem(client_repat, "Calmaticus' Heart Piece");
-					CPrintToChat(client_repat, "{default}당신은 그를 확실히 죽이기 위해 심장을 떼어냈고, 당신이 얻은 것은... : {green}''칼마티커스'의 심장 조각''{default}!");
+					CPrintToChat(client_repat, "%T", "Calmaticus_Trophies", client);
 				}
 			}
 		}
@@ -1727,11 +1722,11 @@ public void Raidmode_Nemesis_Win(int entity)
 	{
 		if(npc.m_bIsEnraged)
 		{
-			CPrintToChatAll("{crimson}당신은 이 싸움에서 희망의 빛줄기를 보지 못 했습니다.");
+			CPrintToChatAll("%t", "Calmaticus_Lose_Enraged");
 		}
 		else
 		{
-			CPrintToChatAll("{snow}???{default}: 아주 잘 했다, 칼마티커스. 연구소로 돌아와라");
+			CPrintToChatAll("%t", "Calmaticus_Lose");
 		}
 	}
 	i_RaidGrantExtra[entity] = RAIDITEM_INDEX_WIN_COND;
