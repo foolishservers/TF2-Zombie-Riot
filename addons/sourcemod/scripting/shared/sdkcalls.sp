@@ -191,7 +191,7 @@ void SDKCall_Setup()
 	//https://github.com/bhopppp/Shavit-Surf-Timer/blob/289b9df123e61f2a0982ded688d2c611023b25f5/addons/sourcemod/scripting/shavit-replay-playback.sp#L204
 	
 	StartPrepSDKCall(SDKCall_Entity);
-	PrepSDKCall_SetFromConf(gameData, SDKConf_Signature, "CBaseAnimating::LookupBone");
+	PrepSDKCall_SetFromConf(gamedata, SDKConf_Signature, "CBaseAnimating::LookupBone");
 	PrepSDKCall_AddParameter(SDKType_String, SDKPass_Pointer);
 	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
 	SDKLookupBone = EndPrepSDKCall();
@@ -200,7 +200,7 @@ void SDKCall_Setup()
 	
 	// void CBaseAnimating::GetBonePosition ( int iBone, Vector &origin, QAngle &angles )
 	StartPrepSDKCall(SDKCall_Entity);
-	PrepSDKCall_SetFromConf(gameData, SDKConf_Signature, "CBaseAnimating::GetBonePosition");
+	PrepSDKCall_SetFromConf(gamedata, SDKConf_Signature, "CBaseAnimating::GetBonePosition");
 	PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
 	PrepSDKCall_AddParameter(SDKType_Vector, SDKPass_ByRef, .encflags = VENCODE_FLAG_COPYBACK);
 	PrepSDKCall_AddParameter(SDKType_QAngle, SDKPass_ByRef, .encflags = VENCODE_FLAG_COPYBACK);
