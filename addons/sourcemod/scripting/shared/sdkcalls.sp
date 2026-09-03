@@ -587,7 +587,8 @@ stock void SDKCall_LookupBone(int entity, const char[] bone)
 	return -1;
 }
 
-stock void SDKCall_GetBonePosition(int entity, int iBone, float origin[3], float angles[3]) {
+stock void SDKCall_GetBonePosition(int entity, int iBone, float origin[3], float angles[3])
+{
 	if(SDKGetBonePosition)
 		SDKCall(SDKGetBonePosition, entity, iBone, origin, angles);
 }
