@@ -21,6 +21,16 @@
 		"en" "Puke Pus"
 		"ko" "푸크 퍼스"
 	}
+	"Mechanized Wall"
+	{
+		"en" "Mechanized Wall"
+		"ko" "기계화된 벽"
+	}
+	"Mechanized Wall Desc"
+	{
+		"en"	"This machine was designed to keeping the Frontline efficiently.\n-Each nearby unit of the same type as yourself gains increased resistance and damage, but has decreased movement speed."
+		"ko"	"이 기계는 전선을 효율적으로 유지하기 위해 제작됐습니다.\n-주변의 자신과 같은 유닛 한 명마다 저항 및 피해량이 증가하지만 이동속도가 감소됩니다."
+	}
 	
 	//등장 알람
 	"True Fusion Warrior Spawn"

@@ -185,7 +185,7 @@ static void VestaIgniter_ClotThink(int iNPC)
 				if(npc.m_iChanged_WalkCycle != 0)
 				{
 					npc.m_bisWalking = false;
-					npc.m_iChanged_WalkCycle = 5;
+					npc.m_iChanged_WalkCycle = 0;
 					npc.SetActivity("ACT_MP_STAND_ITEM1");
 					npc.m_flSpeed = 0.0;
 					npc.StopPathing();
@@ -238,29 +238,22 @@ static void VestaIgniter_NPCDeath(int entity)
 static int VestaIgniterSelfDefense(VestaIgniter npc, float gameTime, float distance)
 {
 	float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget);
-	if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 10.0))
+	if(gameTime > npc.m_flNextMeleeAttack && distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 10.0))
 	{
 		int Enemy_I_See = Can_I_See_Enemy(npc.index, npc.m_iTarget);
-					
 		if(IsValidEnemy(npc.index, Enemy_I_See))
 		{
-			if(gameTime > npc.m_flNextMeleeAttack)
-			{
-				if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 10.0))
-				{	
-					npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 1.25;
-					npc.AddGesture("ACT_MP_ATTACK_STAND_ITEM1", false);
-					npc.PlayRangeSound();
-					npc.FaceTowards(vecTarget, 20000.0);
-					int projectile = npc.FireParticleRocket(vecTarget, 20.0, 1000.0, 200.0, "drg_cow_rockettrail_fire_charged_blue", true);
-					int particle = EntRefToEntIndex(i_WandParticle[projectile]);
-					CreateTimer(8.0, Timer_RemoveEntity, EntIndexToEntRef(projectile), TIMER_FLAG_NO_MAPCHANGE);
-					CreateTimer(8.0, Timer_RemoveEntity, EntIndexToEntRef(particle), TIMER_FLAG_NO_MAPCHANGE);
-					
-					WandProjectile_ApplyFunctionToEntity(projectile, VestaIgniter_Rocket_Particle_StartTouch);
-					return 1;
-				}
-			}
+			npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 1.25;
+			npc.AddGesture("ACT_MP_ATTACK_STAND_ITEM1", false);
+			npc.PlayRangeSound();
+			npc.FaceTowards(vecTarget, 20000.0);
+			int projectile = npc.FireParticleRocket(vecTarget, 20.0, 1000.0, 200.0, "drg_cow_rockettrail_fire_charged_blue", true);
+			int particle = EntRefToEntIndex(i_WandParticle[projectile]);
+			CreateTimer(8.0, Timer_RemoveEntity, EntIndexToEntRef(projectile), TIMER_FLAG_NO_MAPCHANGE);
+			CreateTimer(8.0, Timer_RemoveEntity, EntIndexToEntRef(particle), TIMER_FLAG_NO_MAPCHANGE);
+			
+			WandProjectile_ApplyFunctionToEntity(projectile, VestaIgniter_Rocket_Particle_StartTouch);
+			return 1;
 		}
 	}
 	return (distance < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED*10.0 && Can_I_See_Enemy_Only(npc.index, npc.m_iTarget)) ? 1 : 0;
