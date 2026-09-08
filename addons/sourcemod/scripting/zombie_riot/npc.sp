@@ -1350,6 +1350,7 @@ void NPC_ConfigSetup()
 	KommandantStahlherz_OnMapStart();
 	AltExtra_Mecha_Dimension_Ripper_OnMapStart();
 	AltExtra_Mecha_Base_Destroyer_MapStart();
+	AltExtra_Mechanized_Wall_MapStart();
 	
 	Whiteflower_CombineSmg_OnMapStart_NPC();
 	WFCombineRevolver_OnMapStart_NPC();
@@ -2985,6 +2986,7 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/alt_extra/npc_alt_extra_mecha_base_destroyer.sp"
 //#include "npc/alt_extra/npc_alt_extra_mecha_conqueror.sp"
 //#include "npc/alt_extra/npc_alt_extra_intruso.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_wall.sp"
 
 // Whiteflower survivors
 #include "npc/wf_survivors/npc_wf_combine_smg.sp"
