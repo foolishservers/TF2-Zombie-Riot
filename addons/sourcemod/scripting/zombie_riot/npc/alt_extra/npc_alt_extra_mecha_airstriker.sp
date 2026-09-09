@@ -221,12 +221,12 @@ static int AltExtra_Mecha_AirStriker_SelfDefense(AltExtra_Mecha_AirStriker npc, 
 			if (!IsSpaceOccupiedWorldOnly(flMyPos, vecMins, vecMaxs, npc.index)) {
 				float flPos[3], flAng[3];
 				
-				npc.GetAttachment("foot_L", flPos, flAng);
+				npc.GetBonePositionSimple(npc.index, "bip_foot_L", flPos, flAng);
 				int Particle_1 = ParticleEffectAt_Parent(flPos, "rockettrail", npc.index, "foot_L", {0.0,0.0,0.0});
 				if (IsValidEntity(Particle_1))
 					CreateTimer(1.0, Timer_RemoveEntity, EntIndexToEntRef(Particle_1), TIMER_FLAG_NO_MAPCHANGE);
 				
-				npc.GetAttachment("foot_R", flPos, flAng);
+				npc.GetBonePositionSimple(npc.index, "bip_foot_R", flPos, flAng);
 				int Particle_2 = ParticleEffectAt_Parent(flPos, "rockettrail", npc.index, "foot_R", {0.0,0.0,0.0});
 				if (IsValidEntity(Particle_2))
 					CreateTimer(1.0, Timer_RemoveEntity, EntIndexToEntRef(Particle_2), TIMER_FLAG_NO_MAPCHANGE);

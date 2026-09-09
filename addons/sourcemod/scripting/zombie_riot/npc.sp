@@ -1351,6 +1351,24 @@ void NPC_ConfigSetup()
 	AltExtra_Mecha_Dimension_Ripper_OnMapStart();
 	AltExtra_Mecha_Base_Destroyer_MapStart();
 	AltExtra_Mechanized_Wall_MapStart();
+	AltExtra_CombineOverlord_OnMapStart();
+	AltExtra_CombineCollos_OnMapStart();
+	AltExtra_Mecha_FatherGrigori_OnMapStart();
+	AltExtra_Mecha_Pyro_Chef_OnMapStart();
+	AltExtra_Mecha_Plunderer_Pyro_OnMapStart();
+	AltExtra_Intruso_OnMapStart();
+	AltExtra_Sensal_Clone_OnMapStart();
+	AltExtra_Mecha_Field_Medic_OnMapStart();
+	AltExtra_CombineDDT_OnMapStart();
+	AltExtra_Mecha_Sniper_Railgunner_OnMapStart();
+	AltExtra_Mecha_Conqueror_OnMapStart();
+	AltExtra_Medic_Master_Mage_OnMapStart();
+	AltExtra_Mecha_Sniper_Main_OnMapStart();
+	AltExtra_Sergeant_Charbomb_OnMapStart();
+	AltExtra_Mecha_Flaregun_Main_OnMapStart();
+	AltExtra_Mecha_Killing_Order_OnMapStart();
+	AltExtra_Mecha_Kamikaze_Demo_OnMapStart();
+	AltExtra_Sensal_Clone_Perfected_OnMapStart();
 	
 	Whiteflower_CombineSmg_OnMapStart_NPC();
 	WFCombineRevolver_OnMapStart_NPC();
@@ -2981,12 +2999,29 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/alt_extra/npc_alt_extra_mecha_heavy_particle_rifle.sp"
 #include "npc/alt_extra/npc_alt_extra_mecha_airstriker.sp"
 #include "npc/alt_extra/npc_alt_extra_kommandant_stahlherz.sp"
-//#include "npc/alt_extra/npc_alt_extra_mecha_fuel_rusher.sp"
 #include "npc/alt_extra/npc_alt_extra_mecha_dimension_ripper.sp"
 #include "npc/alt_extra/npc_alt_extra_mecha_base_destroyer.sp"
-//#include "npc/alt_extra/npc_alt_extra_mecha_conqueror.sp"
-//#include "npc/alt_extra/npc_alt_extra_intruso.sp"
 #include "npc/alt_extra/npc_alt_extra_mecha_wall.sp"
+#include "npc/alt_extra/npc_alt_extra_combine_overlord.sp"
+#include "npc/alt_extra/npc_alt_extra_golden_collos.sp"
+#include "npc/alt_extra/npc_alt_extra_last_survivor.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_pyro_chef.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_plunderer_pyro.sp"
+#include "npc/alt_extra/npc_alt_extra_sensal_clone.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_field_medic.sp"
+#include "npc/alt_extra/npc_alt_extra_combine_swordsman_ddt.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_sniper_railgunner.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_berserker_demo.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_conqueror.sp"
+#include "npc/alt_extra/npc_alt_extra_master_mage.sp"
+//#include "npc/alt_extra/npc_alt_extra_mecha_fuel_rusher.sp"
+#include "npc/alt_extra/npc_alt_extra_intruso.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_sniper_main.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_kamikaze_demo.sp"
+#include "npc/alt_extra/npc_alt_extra_sergeant_charbomb.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_flaregun_main.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_killing_order.sp"
+#include "npc/alt_extra/npc_alt_extra_sensal_clone_perfected.sp"
 
 // Whiteflower survivors
 #include "npc/wf_survivors/npc_wf_combine_smg.sp"

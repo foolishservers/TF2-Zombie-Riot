@@ -32,6 +32,9 @@ static const char g_ExpidonsanSword_MeleeHitSounds[][] = {
 	"weapons/neon_sign_hit_04.wav"
 };
 
+static int i_PoseBodyYaw[MAXENTITIES] = { -1, ... };
+static int i_PoseBodyPitch[MAXENTITIES] = { -1, ... };
+
 void AltExtra_Base_MapStart()
 {
 	PrecacheModel("models/bots/heavy/bot_heavy.mdl");
@@ -107,6 +110,23 @@ methodmap AltExtra_Base < CClotBody {
 		float flPitch = this.GetPoseParameter(iPitch);						
 		this.SetPoseParameter(iPitch, ApproachAngle(ang[0], flPitch, 10.0));
 	}
+	
+	public void GetBonePositionSimple(int entity, const char[] name, float origin[3], float angles[3]) {
+		int iBone = SDKCall_LookupBone(entity, name);
+		if (iBone != -1) {
+			SDKCall_GetBonePosition(entity, iBone, origin, angles);
+		}
+	}
+	
+	property int m_iPoseBodyYaw {
+		public get()			{ return i_PoseBodyYaw[this.index]; }
+		public set(int value)	{ i_PoseBodyYaw[this.index] = value; }
+	}
+	
+	property int m_iPoseBodyPitch {
+		public get()			{ return i_PoseBodyPitch[this.index]; }
+		public set(int value)	{ i_PoseBodyPitch[this.index] = value; }
+	}
 }
 
 public Action AltExtra_Shared_RemoveHoming(Handle timer, int ref) {
@@ -115,4 +135,16 @@ public Action AltExtra_Shared_RemoveHoming(Handle timer, int ref) {
 		HomingProjectile_Deactivate(entity);
 	}
 	return Plugin_Stop;
+}
+
+stock float UTIL_AngleNormalize(float angle) {
+	angle = fmodf(angle, 360.0);
+	
+	if (angle > 180.0)
+		angle -= 360.0;
+	
+	if (angle < -180.0)
+		angle += 360.0;
+	
+	return angle;
 }

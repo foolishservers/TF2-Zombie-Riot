@@ -71,7 +71,7 @@ methodmap AltExtra_Mecha_Duelist < AltExtra_Base {
 		
 		npc.m_iBleedType = BLEEDTYPE_METAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;
-		npc.m_iNpcStepVariation = STEPTYPE_ROBOT;
+		npc.m_iNpcStepVariation = STEPTYPE_NONE;
 		
 		npc.m_flNextMeleeAttack = 0.0;
 		npc.m_flAttackHappenswillhappen = false;
@@ -244,7 +244,8 @@ static void AltExtra_Mecha_Duelist_ClotThink(int iNPC) {
 static void AltExtra_Mecha_Duelist_NPCDeath(int iNPC) {
 	AltExtra_Mecha_Duelist npc = view_as<AltExtra_Mecha_Duelist>(iNPC);
 	
-	npc.PlayDeathSound();
+	if (!npc.m_bGib)
+		npc.PlayDeathSound();
 	
 	if (IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);

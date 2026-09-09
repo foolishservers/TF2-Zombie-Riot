@@ -30,11 +30,6 @@ methodmap KommandantStahlherz < AltExtra_Base {
 	}
 	
 	public void PlayHurtSound() {
-		if (this.m_flNextHurtSound > GetGameTime(this.index))
-			return;
-			
-		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_RobotDemo_HurtSounds[GetRandomInt(0, sizeof(g_RobotDemo_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	
@@ -282,6 +277,12 @@ static bool KommandantStahlherz_LifeLost(int iNPC, int lifeAfter) {
 		
 		// not "eye". "eye_1" is correct for this model.
 		npc.DispatchParticleEffect(npc.index, "hightower_explosion", NULL_VECTOR, NULL_VECTOR, NULL_VECTOR, npc.FindAttachment("eye_1"), PATTACH_POINT_FOLLOW, true);
+		
+		if (IsValidEntity(npc.m_iWearable1)) {
+			TE_SetupParticleEffect("critgun_weaponmodel_blu", PATTACH_ABSORIGIN_FOLLOW, npc.m_iWearable1);
+			TE_WriteNum("m_bControlPoint1", npc.m_iWearable1);	
+			TE_SendToAll();
+		}
 	}
 	
 	return true;
