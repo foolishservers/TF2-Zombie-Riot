@@ -104,7 +104,7 @@
 	"SilvesterXeno_LastMann_3"
 	{
 		"en"	"Maybe you just hate us?"
-		"ko"	"뭐야, 우릴 그냥 싫어하는거야?"
+		"ko"	"뭐야, 그냥 우리가 싫은 거야?"
 	}
 	"SilvesterXeno_LastMann_Lab_1"
 	{
@@ -877,7 +877,7 @@
 	"Nemal_Encounter_Wave10_1"
 	{
 		"en"	"We're supposed to train our abilities, remember? Well here I am! Let's start off easy!"
-		"ko"	"역량 훈련이었던거 기억 나지? 그래서 내가 왔어! 살살 해보자!"
+		"ko"	"능력 훈련이었던거 기억 나지? 그래서 내가 왔어! 살살 해보자!"
 	}
 	"Nemal_Encounter_Wave10_2"
 	{
@@ -887,12 +887,12 @@
 	"Nemal_Encounter_Wave10_3"
 	{
 		"en"	"{gold}Silvester{default} is late isn't he? Probably off to some random beach with {blue}Sensal{default} as usual.. without me!!!\nWe said vacation is after this! Oh well, let's begin!"
-		"ko"	"{gold}실베스터{default} 얘 안 온거 맞지? 또 {blue}센살{default}이랑 어디 해변가로 놀러가서 퍼질러 자고 있겠지... 또 나만 쏙 빼놓고!!!\n휴가는 이거 한 다음에 가자고 그렇게 말했는데!"
+		"ko"	"{gold}실베스터{default} 얘 안 온거 맞지? 또 {blue}센살{default}이랑 어디 해변가로 놀러가서 퍼질러 자고 있겠지... 나만 쏙 빼놓고!!!\n휴가는 이거 한 다음에 가자고 그렇게 말했는데!"
 	}
 	"Nemal_Encounter_Wave10_4"
 	{
 		"en"	"Alminans are with us {gold}Expidonsans{default}!... But I'm kinda both...\nProbably not that important, anyways let's go!"
-		"ko"	"알미나인과 {gold}익스피돈사인{default}들은 함께지!... 난 혼혈이지만...\n근데 이건 중요한게 아니고, 일단 해보자!"
+		"ko"	"알미나인과 {gold}엑스피돈사인{default}들은 함께지!... 난 혼혈이지만...\n이게 중요한 건 아니고, 일단 해보자!"
 	}
 	
 	"Nemal_Encounter_Wave20_1"
@@ -961,7 +961,7 @@
 	"Nemal_Encounter_Trio_1"
 	{
 		"en"	"Sorry, {blue}Sensal{default}! {gold}He's{default} comming a bit late."
-		"ko"	"미안, {blue}센살{default}! {gold}그{default}는 조금 늦게 올 거 같아."
+		"ko"	"미안, {blue}센살{default}! {gold}걔{default}는 조금 늦게 올 거 같아."
 	}
 	"Nemal_Encounter_Trio_2"
 	{
@@ -976,7 +976,7 @@
 	"Nemal_Encounter_Trio_4"
 	{
 		"en"	"Sorry but thats all."
-		"ko"	"일단 너희에게 미안하고 어... 더 할 말이 없네."
+		"ko"	"일단 너희에게 미안하다는 말을 해야겠네. 그리고 어... 더 할 말이 없네."
 	}
 	
 	"Nemal_LastMann_1"
@@ -992,7 +992,7 @@
 	"Nemal_LastMann_3"
 	{
 		"en"	"Use that adrenaline against me, come on!"
-		"ko"	"왜 이래! 아마추어 같이! 힘 좀 써봐!"
+		"ko"	"왜 이래! 힘 좀 써봐!"
 	}
 	
 	"Nemal_Lose_1"
@@ -1083,7 +1083,7 @@
 	"Nemal_Trophies"
 	{
 		"en"	"{default}You feel more skilled and obtain: {gold}''Alminan and Expidonsan Training''{default}!"
-		"ko"	"{default}이 훈련에서 더욱 많은 경험을 얻은 것 같습니다. 획득한 트로피: {gold}''알미나-익스피돈사 연합 훈련''{default}!"
+		"ko"	"{default}이 훈련에서 더욱 많은 경험을 얻은 것 같습니다. 획득한 트로피: {gold}''알미나-엑스피돈사 연합 훈련''{default}!"
 	}
 	
 	"Nemal_SpecialAttack"
@@ -1131,7 +1131,7 @@
 	"Nemal_Response_SilvesterHere_4"
 	{
 		"en"	"Just don't attack the same guy as me, thats unfair!"
-		"ko"	"나랑 싸우고 있는 사람은 공격하지 마. 그건 불공평해."
+		"ko"	"나랑 싸우고 있는 사람은 공격하지 마. 그건 불공평하니까!"
 	}
 	
 	"Nemal_Response_SilvesterSpecialAttack"

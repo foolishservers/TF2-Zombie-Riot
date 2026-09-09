@@ -25,22 +25,22 @@
 	"Stella_Encounter_4"
 	{
 		"en"		"We have arrived to render Judgement."
-		"ko"		"흠흠.. 우리는 너희들에게 심판을 내리기 위해 이 곳에 왔다."
+		"ko"		"너희들에게 심판을 내리기 위해 우리가 이 곳에 왔다."
 	}
 	"Stella_Encounter_5"
 	{
 		"en"		"I'm in a good mood, so I'll just let you know, if you take too long, this area will soon become ground zero, good luck."
-		"ko"		"지금 기분 좋으니까, 너희에게 하나 알려줄게. 시간 오래 끌면, 여긴 잿더미가 될 거야~ 그러니 행운을 빌게?"
+		"ko"		"지금 기분 좋으니까, 너희에게 하나 알려줄게. 시간 오래 끌면, 여긴 잿더미가 될 거야. 그러니 행운을 빌게~"
 	}
 	"Stella_Encounter_6"
 	{
 		"en"		"All we have to do is keep them occupied long enough for the ones above to start glassing the area..."
-		"ko"		"우리가 할 일은 번개로 이 곳을 모두 유리로 만들기 전까지 얘네를 최대한 붙잡아두는 것..."
+		"ko"		"우리가 할 일은 위에 있는 인원들이 이 곳을 모두 유리로 만들 때까지 이 녀석들을 최대한 붙잡아두는 것..."
 	}
 	"Stella_Encounter_7"
 	{
 		"en"		"We have arrived to eradicate you."
-		"ko"		"크흠.. 너희를 막기 위해 우리가 이 곳에 왔다."
+		"ko"		"너희를 제거하기 위해 우리가 이 곳에 왔다."
 	}
 	
 	"Stella_Lose_1"
@@ -51,7 +51,7 @@
 	"Stella_Lose_2"
 	{
 		"en"		"HAH, the {darkblue}sea{snow} isn't THAT hard to beat"
-		"ko"		"하! {darkblue}심해{snow}도 별 것 아니었구만?"
+		"ko"		"하! {darkblue}바다{snow}도 별 것 아니었구만?"
 	}
 	"Stella_Lose_3"
 	{
@@ -61,7 +61,7 @@
 	"Stella_Lose_No_Karlas_1"
 	{
 		"en"		"You killed {crimson}Karlas{snow}, and I {crimson}erased{snow} your existance"
-		"ko"		"너희가 {crimson}카를라스{snow}를 죽였어. 그러니 {crimson}너희 존재를 이 세상에서 지워주지."
+		"ko"		"너희가 {crimson}카를라스{snow}를 죽였으니 나도 {crimson}너희 존재를 이 세상에서 지웠을 뿐."
 	}
 	"Stella_Lose_No_Karlas_2"
 	{
@@ -72,12 +72,12 @@
 	"Stella_TimeOver_1"
 	{
 		"en"		"You lose!"
-		"ko"		"패배 확정~!"
+		"ko"		"너희의 패배다!"
 	}
 	"Stella_TimeOver_2"
 	{
 		"en"		"Too late!"
-		"ko"		"너무 늦었다구?"
+		"ko"		"너무 늦었어!"
 	}
 	"Stella_TimeOver_3"
 	{
@@ -103,12 +103,12 @@
 	"Stella_LastMann_2"
 	{
 		"en"		"Ahaha, its almost over now, just{crimson} one more left{snow}!"
-		"ko"		"하하, 이제 거의 다 끝났네. {crimson}한 놈만 더!"
+		"ko"		"하하, 이제 거의 다 끝났어. {crimson}한 놈만 더!"
 	}
 	"Stella_LastMann_No_Karlas"
 	{
 		"en"		"I'm about to turn you into an unrecognisable mass of sea for {crimson}what you've DONE TO KARLAS"
-		"ko"		"너희가 카를라스를 했던 짓을 생각하면... {crimson}너를 형체를 알아보지 못할 정도로 뭉개줘야겠지."
+		"ko"		"너희가 카를라스를 했던 짓을 생각하면... {crimson}너를 형체를 알아보지 못할 정도로 뭉개줘야겠지?"
 	}
 	
 	"Stella_NightmareCannon_Ready_1"
@@ -238,7 +238,7 @@
 	"Stella_Struggle_2"
 	{
 		"en"		"{snow}Oh lord.. this actually hurts..."
-		"ko"		"{snow}너무 아파.."
+		"ko"		"{snow}주여.. 너무 아픕니다.."
 	}
 	"Stella_Struggle_3"
 	{
@@ -248,7 +248,7 @@
 	"Stella_Struggle_4"
 	{
 		"en"		"{snow}Its getting kinda cold.."
-		"ko"		"{snow}나 추워.."
+		"ko"		"{snow}점점 추워지는 걸.."
 	}
 	
 	"Stella_Bob_Appeared_1"
@@ -258,7 +258,7 @@
 	}
 	"Stella_Bob_Appeared_2"
 	{
-		"en"		"Oh boy, this is gonna be fun to watch"
+		"en"		"Oh boy, this is gonna be fun to watch."
 		"ko"		"오, 볼 구경거리가 생겼잖아?"
 	}
 	"Stella_Bob_Appeared_3"
@@ -296,13 +296,13 @@
 	"Stella_Anger_3"
 	{
 		"en"		"How dare you hurt {crimson}Karlas{snow}!"
-		"ko"		"감히 {crimson}카를라스{snow}를 다치게 하다니!"
+		"ko"		"{crimson}카를라스{snow}를 다치게 해? 가만 안둬!"
 	}
 	
 	"Stella_Death_1"
 	{
 		"en"		"Hmph, I'll let this slide,{crimson} for now."
-		"ko"		"으으.. 일단은 가게 냅두자고. {crimson}지금은."
+		"ko"		"으으.. 일단은 가게 두자고. {crimson}지금은."
 	}
 	"Stella_Death_2"
 	{
@@ -373,7 +373,7 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"Oi, {gold}{1}{snow} I helped create that spell, you can't just steal it and use it aggainst me."
-		"ko"		"야!! {gold}{1}{snow}! 그건 내 도움으로 만든 건데, 그걸 훔친 다음에 나한테 쓴다고? 절대 용서 못해!"
+		"ko"		"야! {gold}{1}{snow}! 내 도움으로 만든 걸 훔쳐서 나한테 쓴다고? 절대 용서 못해!"
 	}
 	
 	"Stella_Response_Pulse_Cannon_1"
@@ -426,7 +426,7 @@
 	"Stella_Response_Dweller"
 	{
 		"en"		"{crimson}Karlas{default}? I think we should contact them to hurry up with the ion attack."
-		"ko"		"{crimson}카를라스{default}? 이온 공격 빨리 하라고 위에 연락해야 하는 거 아니야??"
+		"ko"		"{crimson}카를라스{default}? 이온 공격 빨리 하라고 위에 연락해야 할 거 같아."
 	}
 	
 	// Karlas.
