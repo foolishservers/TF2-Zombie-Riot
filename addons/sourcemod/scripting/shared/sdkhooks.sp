@@ -3346,7 +3346,7 @@ float ArmorPlayerReduction(int victim)
 		{
 			return 0.9;
 		}
-		case 250:
+		case 250, 300:
 		{
 			return 0.88;
 		}
