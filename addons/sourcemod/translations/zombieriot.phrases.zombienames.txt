@@ -8495,7 +8495,7 @@
 	"Mecha Duelist"
 	{
 		"en"	"Mecha Duelist"
-		"ko"	"강철 결전자"
+		"ko"	"기계 결전자"
 	}
 	"Mecha Duelist Desc"
 	{
@@ -8571,6 +8571,191 @@
 	{
 		"en"	"-"
 		"ko"	"이 기계들은 기지를 효율적으로 파괴하기 위해 고안되었습니다.\n-주변의 아군에게 고대의 멜로디 버프를 부여합니다.\n-4발을 다 발사하면 전부 재장전할 때까지 공격하지 않습니다."
+	}
+	"Holy Overlord"
+	{
+		"en"	"Holy Overlord"
+		"ko"	"신성 대군주"
+	}
+	"Holy Overlord Desc"
+	{
+		"en"	"-"
+		"ko"	"마나의 사용법을 익힌 대군주입니다.\n-적에게 주기적으로 5갈래의 투사체를 발사합니다.\n-분노의 지속 시간이 더 오래 갑니다."
+	}
+	"Holy Golden Collos"
+	{
+		"en"	"Holy Golden Collos"
+		"ko"	"신성 황금 거인"
+	}
+	"Holy Golden Collos Desc"
+	{
+		"en"	"-"
+		"ko"	"구조물에서 체력을 회복하는 능력은 없지만, 번개의 힘이 주어졌습니다.\n-정면으로 몰아치는 번개 공격을 시전합니다.\n-시전 후에는 영구적으로 카페인 버프를 받습니다."
+	}
+	"Mecha Father Grigori"
+	{
+		"en"	"Mecha Father Grigori"
+		"ko"	"기계 그리고리 신부"
+	}
+	"Mecha Father Grigori Desc"
+	{
+		"en"	"-"
+		"ko"	"신부님?\n-투사체 대신 히트스캔 총알을 발사합니다.\n-2번의 이온 캐논을 전개합니다.\n-첫 번째 이온 캐논이 터질 때 주변의 적을 주위로 끌어옵니다."
+	}
+	"Mecha Pyro Chef"
+	{
+		"en"	"Mecha Pyro Chef"
+		"ko"	"기계 파이로 셰프"
+	}
+	"Mecha Pyro Chef Desc"
+	{
+		"en"	"-"
+		"ko"	"흉물..은 아닙니다.\n-그저 앞의 대상에게 불을 뿜습니다.\n-체력이 감소할수록 이동 속도가 빨라집니다."
+	}
+	"Mecha Plunderer Pyro"
+	{
+		"en"	"Mecha Plunderer Pyro"
+		"ko"	"기계 약탈자 파이로"
+	}
+	"Mecha Plunderer Pyro Desc"
+	{
+		"en"	"-"
+		"ko"	"프랙무비라도 찍나보군요.\n-불이 붙은 대상에게 트루 대미지를 가합니다.\n-적이랑 떨어져 있을 땐 앞으로 돌진합니다."
+	}
+	"Intruso"
+	{
+		"en"	"Intruso"
+		"ko"	"인트루소"
+	}
+	"Intruso Desc"
+	{
+		"en"	"-"
+		"ko"	"다이버저니스티코를 기계로 만든다면 어떨까요?\n-적 처치 시 복제본이 하나 생성됩니다."
+	}
+	"Intruso Spawn"
+	{
+		"en"	"Intruso are invaded."
+		"ko"	"인트루소가 침입했습니다."
+	}
+	"Sensal?"
+	{
+		"en"	"Sensal?"
+		"ko"	"센살?"
+	}
+	"Sensal? Desc"
+	{
+		"en"	"-"
+		"ko"	"센살?\n-주기적으로 낫 2개를 날립니다.\n-어떤 개체는 레이저를 날리고 출력을 버티지 못하고 죽습니다."
+	}
+	"Mecha Field Medic"
+	{
+		"en"	"Mecha Field Medic"
+		"ko"	"기계 야전 의무병"
+	}
+	"Mecha Field Medic Desc"
+	{
+		"en"	"-"
+		"ko"	"루이나의 기술력이 담긴 로봇입니다.\n-아군이 살아있는 동안에는 주기적으로 광역 치유를 시전합니다.\n-아군이 모두 죽었다면 가까운 적을 공격하고 세포 파괴를 부여합니다."
+	}
+	"Holy DDT"
+	{
+		"en"	"Holy DDT"
+		"ko"	"신성 DDT"
+	}
+	"Holy DDT Desc"
+	{
+		"en"	"-"
+		"ko"	"DDT에게도 기회가 주어졌습니다.\n-타격 시 근처의 적을 함께 타격합니다."
+	}
+	"Mecha Sniper Railgunner"
+	{
+		"en"	"Mecha Sniper Railgunner"
+		"ko"	"기계 레일건 스나이퍼"
+	}
+	"Mecha Sniper Railgunner Desc"
+	{
+		"en"	"-"
+		"ko"	"레일건 스나이퍼의 나약한 육신을 기계로 대체했습니다.\n-6번째 공격은 4배의 피해를 가합니다."
+	}
+	"Mecha Conqueror"
+	{
+		"en"	"Mecha Conqueror"
+		"ko"	"기계 정복자"
+	}
+	"Mecha Conqueror Desc"
+	{
+		"en"	"-"
+		"ko"	"이 무자비한 적은 기지를 파괴하기 위해 고안되었습니다.\n-구조물에 높은 피해를 가하고 폭발을 일으킵니다.\n-적이 적절한 거리에 있는 경우, 도약을 시도합니다."
+	}
+	"Medic Master Mage"
+	{
+		"en"	"Medic Master Mage"
+		"ko"	"대마법사 메딕"
+	}
+	"Medic Master Mage Desc"
+	{
+		"en"	"-"
+		"ko"	"마나의 잠재력을 끌어내기 위해 육신을 기계로 바꾼 자들입니다.\n비록 루이나에서 쫓겨났지만, 그래도 강해졌죠.\n-상급 마법사보다 피해량이 높고 사거리가 깁니다. 주의하세요."
+	}
+	"Mecha Sniper Main"
+	{
+		"en"	"Mecha Sniper Main"
+		"ko"	"기계 스나이퍼 메인"
+	}
+	"Mecha Sniper Main Desc"
+	{
+		"en"	"-"
+		"ko"	"평범한 스나이퍼 로봇입니다.\n-평상 시에는 기관단총을 사용합니다.\n-체력이 절반 이하로 감소할 경우, 칼을 들고 달려듭니다."
+	}
+	"Sergeant Charbomb"
+	{
+		"en"	"Sergeant Charbomb"
+		"ko"	"차르봄 병장"
+	}
+	"Sergeant Charbomb Desc"
+	{
+		"en"	"-"
+		"ko"	"폭발물 취급 주의.\n-평상 시에는 주기적으로 적에게 돌격합니다.\n-체력이 일정 수치 이하로 감소할 경우, 이동 속도가 빨라지며 5초 뒤에 자폭합니다."
+	}
+	"Mecha Flaregun Main"
+	{
+		"en"	"Mecha Flaregun Main"
+		"ko"	"기계 조명탄 메인"
+	}
+	"Mecha Flaregun Main Desc"
+	{
+		"en"	"-"
+		"ko"	"평범한 조명탄 파이로 로봇입니다.\n-불이 붙은 대상에게는 피해량 증가"
+	}
+	"Mecha Killing Order Pyro"
+	{
+		"en"	"Mecha Killing Order Pyro"
+		"ko"	"기계 살상 명령 파이로"
+	}
+	"Mecha Killing Order Pyro Desc"
+	{
+		"en"	"-"
+		"ko"	"정말로 사악한 로봇입니다.\n-피격 시 불이 붙고, 받는 피해를 높이는 '타겟 식별' 상태 이상을 받습니다.\n-긴 사거리를 가지고 있습니다."
+	}
+	"Mecha Kamikaze Demo"
+	{
+		"en"	"Mecha Kamikaze Demo"
+		"ko"	"기계 카미카제 데모맨"
+	}
+	"Mecha Kamikaze Demo Desc"
+	{
+		"en"	"-"
+		"ko"	"-"
+	}
+	"Perfected Sensal Clone"
+	{
+		"en"	"Perfected Sensal Clone"
+		"ko"	"완벽해진 센살 클론"
+	}
+	"Perfected Sensal Clone Desc"
+	{
+		"en"	"-"
+		"ko"	"센살과 거의 유사해졌습니다. 누가 이런 걸 만들었을까요?\n-낫 투척 공격과 레이저 공격을 사용합니다.\n-기존 센살 클론보다 이동 속도가 빠릅니다."
 	}
 	
 	"W.F. Suppressor"
