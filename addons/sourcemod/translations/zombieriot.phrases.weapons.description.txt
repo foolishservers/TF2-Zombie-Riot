@@ -618,7 +618,7 @@
 	"Elite Sniper Pap 4"
 	{
 		"en"		"-Increased damage\n-Consumes less ammo\n-Also applies the Crippled debuff on hits with at least 70％ charge\n-Crippled enemies take more damage"
-		"ko"		"-피해량 증가\n-탄약 소모량 감소\n-조준 상태에서 70％ 이상 충전하여 적중시 '신경 쇠약' 디버프 부여\n-신체 장애는 대상이 받는 피해량을 증가시킴"
+		"ko"		"-피해량 증가\n-탄약 소모량 감소\n-조준 상태에서 70％ 이상 충전하여 적중시 '신경 쇠약' 디버프 부여\n-신경 쇠약은 대상이 받는 피해량을 증가시킴"
 	}
 	"Elite Sniper Pap 5"
 	{
@@ -1899,7 +1899,8 @@
 		"en"	"-Increased Max Armor.\n-Gain +50HP\n-Extra Passive resistances if no armor is active."
 		"fr"	"Armure reçu et armure maximalle améliorées. +50 santé.\nDonne une résistance passive qui s'améliore avec vos améliorations pour armure, si votre armure est brisée."
 		"it"	"Aumento della quantità di armatura ottenuta per uso e tetto massimo.+50HP\nFornisce resistenza passiva in caso di rottura dell'armatura e aumenta con i potenziamenti dell'armatura."
-		"ko"	"-최대 아머 +150\n-최대 체력 +50\n-아머가 없으면 추가 저항력 증가(생존 개선에 따라 증가함)"
+		"ko"	"-최대 아머 증가\n-최대 체력 +50\n-아머가 없으면 추가 저항력 증가(생존 개선에 따라 증가함)"
+		//"ko"	"-최대 아머 +150\n-최대 체력 +50\n-아머가 없으면 추가 저항력 증가(생존 개선에 따라 증가함)"
 	}
 	
 	"Kevlar Desc"
@@ -1907,7 +1908,8 @@
 		"en"	"-Increased Max Armor.\n-Gain +100HP\n-Extra Passive resistances if no armor is active."
 		"fr"	"Armure reçu et armure maximalle améliorées. +100 santé.\nDonne une résistance passive qui s'améliore avec vos améliorations pour armure, si votre armure est brisée."
 		"it"	"Aumento della quantità di armatura ottenuta per uso e tetto massimo. +100HP\nFornisce resistenza passiva in caso di rottura dell'armatura e aumenta con i potenziamenti dell'armatura."
-		"ko"	"-최대 아머 +150\n-최대 체력 +100\n-아머가 없으면 추가 저항력 증가(생존 개선에 따라 증가함)"
+		"ko"	"-최대 아머 증가\n-최대 체력 +100\n-아머가 없으면 추가 저항력 증가(생존 개선에 따라 증가함)"
+		//"ko"	"-최대 아머 +150\n-최대 체력 +100\n-아머가 없으면 추가 저항력 증가(생존 개선에 따라 증가함)"
 	}
 	
 	"Heavy Vest Desc"
@@ -1915,34 +1917,37 @@
 		"en"	"-Increased Max Armor.\n-Gain +150HP\n-Extra Passive resistances if no armor is active."
 		"fr"	"Armure reçu et armure maximalle améliorées. +150 santé.\nDonne une résistance passive qui s'améliore avec vos améliorations pour armure, si votre armure est brisée."
 		"it"	"Aumento della quantità di armatura per uso e tetto massimo. +150 HP\nFornisce una resistenza passiva in caso di rottura dell'armatura e aumenta con i potenziamenti dell'armatura."
-		"ko"	"-최대 아머 2배\n-최대 체력 +150\n-아머가 없으면 추가 저항력 증가(생존 개선에 따라 증가함)"
+		"ko"	"-최대 아머 증가\n-최대 체력 +150\n-아머가 없으면 추가 저항력 증가(생존 개선에 따라 증가함)"
+		//"ko"	"-최대 아머 2배\n-최대 체력 +150\n-아머가 없으면 추가 저항력 증가(생존 개선에 따라 증가함)"
 	}
 	
 	"Grigori's Blessing Desc"
 	{
-		"en"	"-Gain +300 Health\n-Life regen 1％ of your max hp per second up to half your HP\n-During bleedout, you also will survive for longer.\n-Out of battle, heals extra with more melee upgrades."
-		"it"	"+300 Salute e rigenerazione della vita pari a 1％ dei tuoi hp massimi al secondo fino a metà dei tuoi HP, durante l'emorragia sopravviverai più a lungo.\nFuori dalla battaglia, guarisce ulteriormente con più potenziamenti in mischia."
-		"ko"	"-최대 체력 +300\n-초당 최대 체력의 1％만큼 체력을 회복하며 최대 체력의 절반까지 회복\n-다운시 더 오래 생존\n-비전투 상태라면 보유한 근접 개선에 따라 추가 회복"
+		"en"	"-Gain +300 Health\n-Life regen 1％ of your max hp per second up to 75％ max hp\n-During bleedout, you also will survive for longer.\n-Out of battle, heals extra with more melee upgrades."
 	}
 	
 	"Full Riot Gear Desc"
 	{
 		"en"	"-Increased Max Armor.\n-Gain +200HP\n-Extra Passive resistances if no armor is active."
-		"fr"	"Armure reçu et armure maximalle améliorées. +150 santé.\nDonne une résistance passive qui s'améliore avec vos améliorations pour armure, si votre armure est brisée."
-		"it"	"Aumento della quantità di armatura per uso e tetto massimo. +150 HP\nFornisce una resistenza passiva in caso di rottura dell'armatura e aumenta con i potenziamenti dell'armatura."
-		"ko"	"-최대 아머 2배\n-최대 체력 +150\n-아머가 없으면 추가 저항력 증가(생존 개선에 따라 증가함)"
+		"fr"	"Armure reçu et armure maximalle améliorées. +200 santé.\nDonne une résistance passive qui s'améliore avec vos améliorations pour armure, si votre armure est brisée."
+		"it"	"Aumento della quantità di armatura per uso e tetto massimo. +200 HP\nFornisce una resistenza passiva in caso di rottura dell'armatura e aumenta con i potenziamenti dell'armatura."
+		"ko"	"-최대 아머 증가\n-최대 체력 +200\n-아머가 없으면 추가 저항력 증가(생존 개선에 따라 증가함)"
+		//"ko"	"-최대 아머 2배\n-최대 체력 +150\n-아머가 없으면 추가 저항력 증가(생존 개선에 따라 증가함)"
 	}
 	"E.G.O. Mimicry Shell"
 	{
 		"en"	"E.G.O. Mimicry Shell"
+		"ko"	"E.G.O. 미미크리 껍데기"
 	}
 	"E.G.O. Mimicry Shell Desc"
 	{
 		"en"	"-Increased Max Armor.\n-Gain +250HP\n-Extra Passive resistances if no armor is active.\nIncreases healing from all sources by 1.15x"
+		"ko"	"-최대 아머 증가\n-최대 체력 +250\n-아머가 없으면 추가 저항력 증가(생존 개선에 따라 증가함)\n-받는 모든 치유 효과가 1.15배로 증가"
 	}
 	"Explain NT Buff"
 	{
 		"en"	"While fighting nothing there you gain 2x ego duration and take 12 flat less damage\nYou also obtain this while having ''E.G.O. Mimicry Shell''"
+		"ko"	"'아무 것도 없는'과 전투 중 E.G.O. 발현 지속 시간이 2배로 증가, 피해를 고정적으로 12만큼 덜 받습니다.\n''E.G.O. 미미크리 껍데기''를 장착하는 동안에도 이 효과를 받습니다."
 	}
 	"Grigoris Special Antidote Desc"
 	{
@@ -5579,8 +5584,7 @@
 	}
 	"The Red Mist Desc 5"
 	{
-		"en"	"-Gain an upgrade point\nUnlocks new special card\n-Overall Stat Increases"
-		"ko"	"-개선 포인트 획득\n-새로운 특별 책장 해금\n-전반적인 능력치 증가"
+		"en"	"-Gain an upgrade point\nUnlocks new special card\n-Overall Stat Increases\n-Special card CD reduced on hit with any ability or melee."
 	}
 	"The Red Mist Desc 6"
 	{
@@ -5789,7 +5793,7 @@
 	}
 	"Gunsaw Mercenary Desc"
 	{
-		"en"	"-Shotgun and pistol, build cheap buildings, but no repairing\n-Able to body swap you to an enemy's body\n  -Takes the stats and weapons of the enemy\n  -Swap by killing a nearby enemy while downed"
+		"en"	"-Shotgun and pistol, build cheap buildings, but no repairing\n-Able to body swap you to an enemy's body\n  -Takes the stats and weapons of the enemy\n  -Swap by melee hitting a nearby enemy while downed or crouched"
 		"ko"	"-산탄총과 권총 보유, 저렴한 구조물을 건설할 수 있으나 수리 불가\n-적의 몸으로 육체를 치환 할 수 있음:\n   적의 능력치와 무기를 탈취\n   다운 상태일 때 적을 처치하여 치환"
 	}
 	"Gunsaw Mercenary Pap 1"

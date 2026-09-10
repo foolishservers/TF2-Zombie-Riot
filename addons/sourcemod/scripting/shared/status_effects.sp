@@ -12242,7 +12242,7 @@ float EgoManifestation_SpeedVunc(int victim, StatusEffect Apply_MasterStatusEffe
 	if(LastMann)
 		return 1.0;
 	else
-		return 1.1;
+		return 1.25;
 }
 
 
@@ -12676,16 +12676,15 @@ void StatusEffects_Gunsaw()
 	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "*");
 	data.Positive 					= false;
 	data.ShouldScaleWithPlayerCount = false;
-	data.OnTakeDamage_TakenFunc		= ShrapnelDamageTaken;
+	data.OnTakeDamage_PostVictim		= ShrapnelDamageTaken;
 	StatusEffect_AddGlobal(data);
 }
 
-static float ShrapnelDamageTaken(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int damagetype, float damage)
+static void ShrapnelDamageTaken(int attacker, int victim, float damage, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int damagetype)
 {
-	if(Apply_StatusEffect.TotalOwners[attacker])
-		StartBleedingTimer(victim, attacker, damage * 0.15, 6, -1, damagetype);
-
-	return 1.0;
+	if(!(i_HexCustomDamageTypes[victim] & ZR_DAMAGE_NOAPPLYBUFFS_OR_DEBUFFS))
+		if(Apply_StatusEffect.TotalOwners[attacker])
+			StartBleedingTimer(victim, attacker, damage * 0.15, 6, -1, damagetype);
 }
 static void FuriosoAbilityStart(int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect)
 {
@@ -12827,7 +12826,7 @@ void ApplyNothingThereBuff(int victim)
 	int AverageLevel = Waves_AverageLevelGet(120);
 	if(AverageLevel <= 75) //dontn spawn if too many noobs
 		return;
-	if(GurannteedForce || GetRandomFloat(0.0,1.0) < (0.01))
+	if(GurannteedForce || GetRandomFloat(0.0,1.0) < (0.015))
 	{
 		GurannteedForce = false;
 		ApplyStatusEffect(victim, victim, "Nothing There Internal", GetRandomFloat(30.0,60.0));
@@ -12838,11 +12837,8 @@ bool NTCheckValidNpc(int victim)
 	//Prevent specific things from getting it
 	char npc_classname[60];
 	NPC_GetPluginById(i_NpcInternalId[victim], npc_classname, sizeof(npc_classname));
-	if(StrEqual(npc_classname, "npc_john_the_allmighty") || 
-	StrEqual(npc_classname, "npc_medival_villager") || 
-	StrEqual(npc_classname, "npc_stalker_goggles") || 
-	StrEqual(npc_classname, "npc_drdam_special_delivery") || 
-	StrEqual(npc_classname, "npc_beheaded_kami"))
+	if(StrEqual(npc_classname, "npc_stalker_goggles") || 
+	StrEqual(npc_classname, "npc_drdam_special_delivery"))
 	{
 		GurannteedForce = true;
 		return false;

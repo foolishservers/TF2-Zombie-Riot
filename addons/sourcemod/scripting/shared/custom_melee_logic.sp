@@ -726,6 +726,7 @@ public void Timer_Do_Melee_Attack_Internal(DataPack pack)
 		{
 			char SoundStringToPlay[256];
 			bool OverrideSound = false;
+			int Pitch = 100;
 #if defined ZR
 			switch(i_CustomWeaponEquipLogic[weapon])
 			{
@@ -734,13 +735,21 @@ public void Timer_Do_Melee_Attack_Internal(DataPack pack)
 					OverrideSound = true;
 					Format(SoundStringToPlay,sizeof(SoundStringToPlay),"replay/snip.wav");	
 				}
+				
+			}
+			if(IsRedMistWeapon(client, weapon) && RedMistFinalSwing(weapon))
+			{
+				OverrideSound = true;
+				
+				Format(SoundStringToPlay,sizeof(SoundStringToPlay),	"weapons/grappling_hook_impact_flesh.wav");
+				Pitch = 95;
 			}
 #endif
 			if(soundIndex == MELEE_HIT && OverrideSound)
 			{
 				
 				EmitSoundToAll(SoundStringToPlay, client, SNDCHAN_STATIC, RoundToNearest(90.0 * f_WeaponVolumeSetRange[weapon])
-				, _, 1.0 * f_WeaponVolumeStiller[weapon]);
+				, _, 1.0 * f_WeaponVolumeStiller[weapon], Pitch);
 			}
 			else if(i_WeaponSoundIndexOverride[weapon] != -1)
 			{
@@ -890,6 +899,10 @@ public void Timer_Do_Melee_Attack_Internal(DataPack pack)
 			i_EntitiesHitAoeSwing[i] = -1;
 		}
 #if defined ZR
+		if(IsRedMistWeapon(client, weapon))
+		{
+			RedMistEndGoodbye(client);
+		}
 		switch(i_CustomWeaponEquipLogic[weapon])
 		{
 			case WEAPON_SUPERUBERSAW: //yes, if we miss, then we do other stuff.

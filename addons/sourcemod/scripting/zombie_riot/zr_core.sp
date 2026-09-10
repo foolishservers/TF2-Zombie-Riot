@@ -2015,7 +2015,7 @@ public Action Timer_Dieing(Handle timer, int client)
 				SetEntityHealth(client, 50);
 				RequestFrame(SetHealthAfterRevive, EntIndexToEntRef(client));
 				Rogue_TriggerFunction(Artifact::FuncRevive, client);
-				//Gunsaw_TryBodySteal(client, false, pos);
+				Gunsaw_TryBodySteal(client, false, pos, true);
 				int entity, i;
 				while(TF2U_GetWearable(client, entity, i))
 				{
@@ -2778,15 +2778,17 @@ stock int MaxArmorCalculation(int ArmorLevel = -1, int client, float multiplyier
 	{
 		ArmorLevel = RoundToNearest(Attributes_GetOnPlayer(client, 701, false));
 	}
-
+	
+	/*
 	int Armor_Max = 200 + RoundToNearest(Attributes_GetOnPlayer(client, Attrib_MaxArmor_BaseAdditive, false, _, 0.0));
 	
 	float Armor_Multiplier = Attributes_GetOnPlayer(client, Attrib_MaxArmor_Multiplier, false, _, 1.0);
 	if (Armor_Multiplier < 0.0)
 		Armor_Multiplier = 0.0;
 	Armor_Max = RoundToCeil(Armor_Max * Armor_Multiplier);
+	*/
 	
-	/*
+	int Armor_Max;
 	if(ArmorLevel == 50)
 		Armor_Max = 300;
 	else if(ArmorLevel == 100)
@@ -2798,10 +2800,9 @@ stock int MaxArmorCalculation(int ArmorLevel = -1, int client, float multiplyier
 	else if(ArmorLevel == 250)
 		Armor_Max = 3000;
 	else if(ArmorLevel > 250)	//Over 250!
-		Armor_Max = 3000+RoundToNearest(ArmorLevel*1.5);
+		Armor_Max = 3000 + RoundToNearest(ArmorLevel*1.5);
 	else
 		Armor_Max = 200;
-	*/
 	
 	if(i_CurrentEquippedPerk[client] & PERK_STOCKPILE_STOUT)
 		Armor_Max = RoundToCeil(float(Armor_Max) * 1.5);
@@ -2809,11 +2810,15 @@ stock int MaxArmorCalculation(int ArmorLevel = -1, int client, float multiplyier
 	//half armor if they have this thing, but only if they arent under corrosion.
 	if((f_LivingArmorPenalty[client] > GetGameTime() || (Attributes_Get(client, Attrib_Armor_AliveMode, 0.0)) != 0.0) && Armor_Charge[client] >= 0)
 		Armor_Max /= 2;
-		
+	
 	if(ZR_Get_Modifier() == NOSTALGICA)
 		Armor_Max = RoundToCeil(float(Armor_Max) * 0.75);
 	
+	multiplyier *= GLOBAL_ELEMENTAL_NERF_PLAYER;
+	
+	/*	
 	Armor_Max += RoundToNearest(Attributes_GetOnPlayer(client, Attrib_MaxArmor_FinalAdditive, false, _, 0.0));
+	*/
 	
 	return (RoundToCeil(float(Armor_Max) * multiplyier));
 }

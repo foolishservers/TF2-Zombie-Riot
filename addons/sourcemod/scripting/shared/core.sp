@@ -3078,6 +3078,13 @@ public void OnEntityCreated(int entity, const char[] classname)
 			b_ThisEntityIgnored_NoTeam[entity] = true;
 			b_EntityCantBeColoured[entity] = true;
  		}
+		else if(!StrContains(classname, "env_spritetrail"))
+		{
+		//	Hook_DHook_UpdateTransmitState(entity);
+			b_ThisEntityIgnored[entity] = true;
+			b_ThisEntityIgnored_NoTeam[entity] = true;
+			b_EntityCantBeColoured[entity] = true;
+ 		}
 		else if(!StrContains(classname, "info_target"))
 		{
 			b_ThisEntityIgnored[entity] = true;
@@ -3920,7 +3927,7 @@ void FullyReviveClient(int target, int client, int extralogic = 0, bool teleport
 	SetEntityHealth(target, 50);
 	RequestFrame(SetHealthAfterRevive, EntIndexToEntRef(target));
 	Rogue_TriggerFunction(Artifact::FuncRevive, target);
-	//Gunsaw_TryBodySteal(target, false, pos);
+	Gunsaw_TryBodySteal(target, false, pos, true);
 	int entity, i;
 	while(TF2U_GetWearable(target, entity, i))
 	{
