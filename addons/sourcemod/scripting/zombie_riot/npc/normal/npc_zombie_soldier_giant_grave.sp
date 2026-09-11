@@ -22,7 +22,6 @@ static const char g_IdleSounds[][] = {
 	"vo/taunts/soldier_taunts01.mp3",
 	"vo/taunts/soldier_taunts09.mp3",
 	"vo/taunts/soldier_taunts14.mp3",
-	
 };
 
 static const char g_IdleAlertedSounds[][] = {
@@ -55,14 +54,15 @@ static const char g_MeleeMissSounds[][] = {
 
 void SoldierGiant_OnMapStart_NPC()
 {
-	for (int i = 0; i < (sizeof(g_DeathSounds));	   i++) { PrecacheSound(g_DeathSounds[i]);	   }
-	for (int i = 0; i < (sizeof(g_HurtSounds));		i++) { PrecacheSound(g_HurtSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleSounds));		i++) { PrecacheSound(g_IdleSounds[i]);		}
-	for (int i = 0; i < (sizeof(g_IdleAlertedSounds)); i++) { PrecacheSound(g_IdleAlertedSounds[i]); }
-	for (int i = 0; i < (sizeof(g_MeleeHitSounds));	i++) { PrecacheSound(g_MeleeHitSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeAttackSounds));	i++) { PrecacheSound(g_MeleeAttackSounds[i]);	}
-	for (int i = 0; i < (sizeof(g_MeleeMissSounds));   i++) { PrecacheSound(g_MeleeMissSounds[i]);   }
-	for (int i = 0; i < (sizeof(g_RangedAttackSounds));   i++) { PrecacheSound(g_RangedAttackSounds[i]);   }
+	PrecacheSoundArray(g_DeathSounds);
+	PrecacheSoundArray(g_HurtSounds);
+	PrecacheSoundArray(g_IdleSounds);
+	PrecacheSoundArray(g_IdleAlertedSounds);
+	PrecacheSoundArray(g_MeleeHitSounds);
+	PrecacheSoundArray(g_MeleeAttackSounds);
+	PrecacheSoundArray(g_MeleeMissSounds);
+	PrecacheSoundArray(g_RangedAttackSounds);
+	
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Soldier Giant Summoner");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zombie_soldier_giant_grave");
@@ -78,16 +78,16 @@ static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
 	return SoldierGiant(vecPos, vecAng, team);
 }
+
 methodmap SoldierGiant < CClotBody
 {
-	
 	public void PlayIdleSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(24.0, 48.0);
 		
-
+		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		
+		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(24.0, 48.0);
 	}
 	
 	public void PlayIdleAlertSound() {
@@ -95,9 +95,8 @@ methodmap SoldierGiant < CClotBody
 			return;
 		
 		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
-		
-		
 	}
 	
 	public void PlayHurtSound() {
@@ -107,41 +106,27 @@ methodmap SoldierGiant < CClotBody
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
 		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		
-		
-		
 	}
 	
 	public void PlayDeathSound() {
-	
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		
-		
 	}
 	
 	public void PlayMeleeSound() {
 		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		
-
 	}
+	
 	public void PlayRangedSound() {
 		EmitSoundToAll(g_RangedAttackSounds[GetRandomInt(0, sizeof(g_RangedAttackSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		
-
 	}
-
+	
 	public void PlayMeleeHitSound() {
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		
-
 	}
 
 	public void PlayMeleeMissSound() {
-		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
-		
-		
+		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);	
 	}
-	
 	
 	public SoldierGiant(float vecPos[3], float vecAng[3], int ally)
 	{
@@ -152,9 +137,8 @@ methodmap SoldierGiant < CClotBody
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
 		int iActivity = npc.LookupActivity("ACT_MP_RUN_MELEE_ALLCLASS");
-		if(iActivity > 0) npc.StartActivity(iActivity);
-		
-		
+		if(iActivity > 0)
+			npc.StartActivity(iActivity);
 		
 		npc.m_flNextMeleeAttack = 0.0;
 		
@@ -162,9 +146,8 @@ methodmap SoldierGiant < CClotBody
 		npc.m_iStepNoiseType = STEPSOUND_GIANT;	
 		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
 		
-
 		func_NPCDeath[npc.index] = SoldierGiant_NPCDeath;
-		func_NPCOnTakeDamage[npc.index] = SoldierGiant_OnTakeDamage;
+		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;
 		func_NPCThink[npc.index] = SoldierGiant_ClotThink;
 				
 		SDKHook(npc.index, SDKHook_OnTakeDamagePost, SoldierGiant_ClotDamaged_Post);
@@ -174,37 +157,31 @@ methodmap SoldierGiant < CClotBody
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.StartPathing();
 		
-		
 		GiveNpcOutLineLastOrBoss(npc.index, true);
 		npc.m_flSpeed = 200.0;
 		npc.g_TimesSummoned = 0;
 		
-		int skin = 5;
+		
+		bool fromGmodZS = !StrContains(WhatDifficultySetting_Internal, "Zombie Survival");
+		
+		int skin = fromGmodZS ? 5 : 4;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
 		
 		npc.m_iWearable1 = npc.EquipItem("head", "models/player/items/soldier/soldier_zombie.mdl");
-		SetVariantString("1.0");
-		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
+		SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", fromGmodZS ? 1 : 0);
 		
 		npc.m_iWearable2 = npc.EquipItem("head", "models/player/items/soldier/bucket.mdl");
-		SetVariantString("1.0");
-		AcceptEntityInput(npc.m_iWearable2, "SetModelScale");
 		
 		npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_picket/c_picket.mdl");
-		SetVariantString("1.0");
-		AcceptEntityInput(npc.m_iWearable3, "SetModelScale");
 		
 		npc.m_iWearable4 = npc.EquipItem("head", "models/player/items/all_class/mtp_bottle_soldier.mdl");
-		SetVariantString("1.0");
-		AcceptEntityInput(npc.m_iWearable4, "SetModelScale");
 		
 		return npc;
 	}
 }
 
 
-public void SoldierGiant_ClotThink(int iNPC)
-{
+public void SoldierGiant_ClotThink(int iNPC) {
 	SoldierGiant npc = view_as<SoldierGiant>(iNPC);
 	
 	if(npc.m_flNextDelayTime > GetGameTime(npc.index))
@@ -241,43 +218,32 @@ public void SoldierGiant_ClotThink(int iNPC)
 	
 	if(IsValidEnemy(npc.index, PrimaryThreatIndex))
 	{
-			float vecTarget[3]; WorldSpaceCenter(PrimaryThreatIndex, vecTarget);
+		float vecTarget[3]; WorldSpaceCenter(PrimaryThreatIndex, vecTarget);
+	
+		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
+		float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
 		
-			float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
-			float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-			
-			//Predict their pos.
-			if(flDistanceToTarget < npc.GetLeadRadius()) {
-				
-				float vPredictedPos[3]; PredictSubjectPosition(npc, PrimaryThreatIndex,_,_, vPredictedPos);
-				
-			/*	int color[4];
-				color[0] = 255;
-				color[1] = 255;
-				color[2] = 0;
-				color[3] = 255;
-			
-				int xd = PrecacheModel("materials/sprites/laserbeam.vmt");
-			
-				TE_SetupBeamPoints(vPredictedPos, vecTarget, xd, xd, 0, 0, 0.25, 0.5, 0.5, 5, 5.0, color, 30);
-				TE_SendToAllInRange(vecTarget, RangeType_Visibility);*/
-				
-				npc.SetGoalVector(vPredictedPos);
-			} else {
-				npc.SetGoalEntity(PrimaryThreatIndex);
-			}
-			npc.StartPathing();
-			
-			//Target close enough to hit
-			if(flDistanceToTarget < 22500 || npc.m_flAttackHappenswillhappen)
+		//Predict their pos.
+		if (flDistanceToTarget < npc.GetLeadRadius())
+		{	
+			float vPredictedPos[3];
+			PredictSubjectPosition(npc, PrimaryThreatIndex,_,_, vPredictedPos);
+			npc.SetGoalVector(vPredictedPos);
+		}
+		else
+		{
+			npc.SetGoalEntity(PrimaryThreatIndex);
+		}
+		
+		npc.StartPathing();
+		
+		//Target close enough to hit
+		if(flDistanceToTarget < 22500 || npc.m_flAttackHappenswillhappen)
+		{
+			//Can we attack right now?
+			if(npc.m_flNextMeleeAttack < GetGameTime(npc.index))
 			{
-				//Look at target so we hit.
-			//	npc.FaceTowards(vecTarget, 2000.0);
-				
-				//Can we attack right now?
-				if(npc.m_flNextMeleeAttack < GetGameTime(npc.index))
-				{
-					//Play attack ani
+				//Play attack ani
 				if (!npc.m_flAttackHappenswillhappen)
 				{
 					npc.AddGesture("ACT_MP_ATTACK_STAND_MELEE_ALLCLASS");
@@ -289,52 +255,46 @@ public void SoldierGiant_ClotThink(int iNPC)
 						
 				if (npc.m_flAttackHappens < GetGameTime(npc.index) && npc.m_flAttackHappens_bullshit >= GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
 				{
-						Handle swingTrace;
-						npc.FaceTowards(vecTarget, 20000.0);
-						if(npc.DoSwingTrace(swingTrace, PrimaryThreatIndex,_,_,_,1))
-							{
-								int target = TR_GetEntityIndex(swingTrace);	
-								
-								float vecHit[3];
-								TR_GetEndPosition(vecHit, swingTrace);
-								
-								if(target > 0) 
-								{
-									
-									if(!ShouldNpcDealBonusDamage(target))
-										SDKHooks_TakeDamage(target, npc.index, npc.index, 150.0, DMG_CLUB, -1, _, vecHit);
-									else
-										SDKHooks_TakeDamage(target, npc.index, npc.index, 1500.0, DMG_CLUB, -1, _, vecHit);
-									
-									
-									Custom_Knockback(npc.index, target, 750.0);
-									
-									
-									// Hit particle
-									
-									
-									// Hit sound
-									npc.PlayMeleeHitSound();
-								} 
-							}
-						delete swingTrace;
-						npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.8;
-						npc.m_flAttackHappenswillhappen = false;
-					}
-					else if (npc.m_flAttackHappens_bullshit < GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
+					Handle swingTrace;
+					npc.FaceTowards(vecTarget, 20000.0);
+					if(npc.DoSwingTrace(swingTrace, PrimaryThreatIndex,_,_,_,1))
 					{
-						npc.m_flAttackHappenswillhappen = false;
-						npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.8;
+						int target = TR_GetEntityIndex(swingTrace);	
+						
+						float vecHit[3];
+						TR_GetEndPosition(vecHit, swingTrace);
+						
+						if(target > 0) 
+						{
+							if(!ShouldNpcDealBonusDamage(target))
+								SDKHooks_TakeDamage(target, npc.index, npc.index, 150.0, DMG_CLUB, -1, _, vecHit);
+							else
+								SDKHooks_TakeDamage(target, npc.index, npc.index, 1500.0, DMG_CLUB, -1, _, vecHit);
+							
+							Custom_Knockback(npc.index, target, 750.0);
+							
+							// Hit sound
+							npc.PlayMeleeHitSound();
+						} 
 					}
+					delete swingTrace;
+					npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.8;
+					npc.m_flAttackHappenswillhappen = false;
+				}
+				else if (npc.m_flAttackHappens_bullshit < GetGameTime(npc.index) && npc.m_flAttackHappenswillhappen)
+				{
+					npc.m_flAttackHappenswillhappen = false;
+					npc.m_flNextMeleeAttack = GetGameTime(npc.index) + 0.8;
 				}
 			}
-			else if(flDistanceToTarget > 22500 && npc.m_flAttackHappens_2 < GetGameTime(npc.index))
-			{
-				npc.AddGesture("ACT_MP_THROW");
-				npc.m_flAttackHappens_2 = GetGameTime(npc.index) + 3.0;
-				npc.PlayRangedSound();
-				npc.FireRocket(vecTarget, 30.0, 600.0);
-			}
+		}
+		else if(flDistanceToTarget > 22500 && npc.m_flAttackHappens_2 < GetGameTime(npc.index))
+		{
+			npc.AddGesture("ACT_MP_THROW");
+			npc.m_flAttackHappens_2 = GetGameTime(npc.index) + 3.0;
+			npc.PlayRangedSound();
+			npc.FireRocket(vecTarget, 30.0, 600.0);
+		}
 	}
 	else
 	{
@@ -343,23 +303,8 @@ public void SoldierGiant_ClotThink(int iNPC)
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_iTarget = GetClosestTarget(npc.index);
 	}
-	npc.PlayIdleAlertSound();
-}
-
-public Action SoldierGiant_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
-{
-	SoldierGiant npc = view_as<SoldierGiant>(victim);
-		
-	if(attacker <= 0)
-		return Plugin_Continue;
-		
-	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index))
-	{
-		npc.m_flHeadshotCooldown = GetGameTime(npc.index) + DEFAULT_HURTDELAY;
-		npc.m_blPlayHurtAnimation = true;
-	}
 	
-	return Plugin_Changed;
+	npc.PlayIdleAlertSound();
 }
 
 public void SoldierGiant_ClotDamaged_Post(int victim, int attacker, int inflictor, float damage, int damagetype) 
