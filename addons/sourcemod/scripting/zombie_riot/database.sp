@@ -115,6 +115,8 @@ public void Database_GlobalConnected(Database db, const char[] error, any data)
 {
 	if(db)
 	{
+		db.SetCharset("utf8mb4");
+		
 		Transaction tr = new Transaction();
 		
 		tr.AddQuery("CREATE TABLE IF NOT EXISTS " ... DATATABLE_LOADOUT ... " ("
