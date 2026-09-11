@@ -632,14 +632,7 @@ public void Database_SaveLoadoutSuccess(Database db, DataPack pack, int numQueri
 	if(!client)
 		return; // 저장 도중 클라이언트가 나감
 	
-	if(!Loadouts[client])
-		Loadouts[client] = new ArrayList(ByteCountToCells(32));
-	
-	if(Loadouts[client].FindString(name) == -1)
-		Loadouts[client].PushString(name);
-	
-	if(InLoadoutMenu[client])
-		LoadoutPage(client, true);
+	LoadoutPage_SaveSuccess(client, name);
 }
 
 public void Database_SaveLoadoutFail(Database db, DataPack pack, int numQueries, const char[] error, int failIndex, any[] queryData)
@@ -690,15 +683,7 @@ public void Database_DeleteLoadoutSuccess(Database db, DataPack pack, int numQue
 	if(!client)
 		return;
 	
-	if(Loadouts[client])
-	{
-		int index = Loadouts[client].FindString(name);
-		if(index != -1)
-			Loadouts[client].Erase(index);
-	}
-	
-	if(InLoadoutMenu[client])
-		LoadoutPage(client);
+	LoadoutPage_DeleteSuccess(client, name);
 }
 
 public void Database_DeleteLoadoutFail(Database db, DataPack pack, int numQueries, const char[] error, int failIndex, any[] queryData)
@@ -746,23 +731,7 @@ public void Database_ResyncLoadoutsSuccess(Database db, int userid, int numQueri
 	if(!client)
 		return;
 	
-	// 기존 로컬 리스트(유령 항목 포함 가능)를 통째로 버리고 DB 결과로 새로 채운다.
-	delete Loadouts[client];
-	Loadouts[client] = new ArrayList(ByteCountToCells(512));
-	
-	char buffer[512];
-	while(results[0].MoreRows)
-	{
-		if(results[0].FetchRow())
-		{
-			results[0].FetchString(0, buffer, sizeof(buffer));
-			if(Loadouts[client].FindString(buffer) == -1)
-				Loadouts[client].PushString(buffer);
-		}
-	}
-	
-	if(InLoadoutMenu[client])
-		LoadoutPage(client, true);
+	LoadoutPage_ResyncSuccess(client, results[0]);
 	
 	PrintToChat(client, "\x04[Loadout]\x01 로드아웃 목록을 서버 데이터베이스 기준으로 다시 동기화했습니다.");
 }

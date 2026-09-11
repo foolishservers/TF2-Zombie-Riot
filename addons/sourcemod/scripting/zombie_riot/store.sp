@@ -8444,3 +8444,49 @@ int Store_GetClientWeaponEntityFromStoreIndex(int client, int index)
 	
 	return -1;
 }
+
+void LoadoutPage_SaveSuccess(int client, const char[] name)
+{
+	if(!Loadouts[client])
+		Loadouts[client] = new ArrayList(ByteCountToCells(32));
+	
+	if(Loadouts[client].FindString(name) == -1)
+		Loadouts[client].PushString(name);
+	
+	if(InLoadoutMenu[client])
+		LoadoutPage(client, true);
+}
+
+void LoadoutPage_DeleteSuccess(int client, const char[] name)
+{
+	if(Loadouts[client])
+	{
+		int index = Loadouts[client].FindString(name);
+		if(index != -1)
+			Loadouts[client].Erase(index);
+	}
+	
+	if(InLoadoutMenu[client])
+		LoadoutPage(client);
+}
+
+void LoadoutPage_ResyncSuccess(int client, DBResultSet result)
+{
+	// 기존 로컬 리스트(유령 항목 포함 가능)를 통째로 버리고 DB 결과로 새로 채운다.
+	delete Loadouts[client];
+	Loadouts[client] = new ArrayList(ByteCountToCells(512));
+	
+	char buffer[512];
+	while(result.MoreRows)
+	{
+		if(result.FetchRow())
+		{
+			result.FetchString(0, buffer, sizeof(buffer));
+			if(Loadouts[client].FindString(buffer) == -1)
+				Loadouts[client].PushString(buffer);
+		}
+	}
+	
+	if(InLoadoutMenu[client])
+		LoadoutPage(client, true);
+}
