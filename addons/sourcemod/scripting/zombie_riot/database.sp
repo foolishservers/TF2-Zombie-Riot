@@ -41,14 +41,28 @@ void Database_PluginStart()
 	}
 
 	RegServerCmd("zr_convert_from_textstore", DBCommand);
-
+	
+	// 패치 적용 전 세션에서 이미 생긴 "유령 로드아웃"(로컬엔 있는데 DB엔 없는 항목)을
+	// 재접속 없이 즉시 정리할 수 있도록 하는 임시/보조 명령어.
+	RegConsoleCmd("sm_fixloadout", Command_FixLoadout, "내 로드아웃 목록을 DB 기준으로 다시 동기화합니다.");
+	RegAdminCmd("sm_fixloadout_all", Command_FixLoadoutAll, ADMFLAG_ROOT, "현재 접속 중인 모든 유저의 로드아웃 목록을 DB 기준으로 다시 동기화합니다.");
 }
+
 bool Database_Escape(char[] buffer, int length, int &bytes)
 {
 	if(!Global)
 		return false;
 	
-	bytes = Global.Format(buffer, length, "%s", buffer);
+	// SQL 특수문자(따옴표 등)를 이스케이프 처리
+	char escaped[256];
+	int result = Global.Escape(buffer, escaped, sizeof(escaped));
+	
+	// 이스케이프 후 길이가 원래 버퍼 용량(length)을 넘으면 실패 처리
+	// (호출부에서 "이름이 너무 길다"와 동일하게 취급되어 안전하게 거부됨)
+	if(result <= 0 || result >= length)
+		return false;
+
+	bytes = strcopy(buffer, length, escaped);
 	return true;
 }
 
@@ -575,49 +589,218 @@ void Database_ResetSkillTree(int client)
 
 void Database_SaveLoadout(int client, const char[] name)
 {
-	if(Global)
+	// 실제 DB 결과 확인 후에 저장
+	int id = GetSteamAccountID(client);
+	if(!Global || !id)
 	{
-		int id = GetSteamAccountID(client);
-		if(id)
+		PrintToChat(client, "\x04[Loadout]\x01 로드아웃을 저장하지 못했습니다. 잠시 후 다시 시도해주세요.");
+		return;
+	}
+	
+	Transaction tr = new Transaction();
+	
+	char buffer[256];
+	Global.Format(buffer, sizeof(buffer), "DELETE FROM " ... DATATABLE_LOADOUT ... " WHERE steamid = %d AND loadout = '%s';", id, name);
+	tr.AddQuery(buffer);
+	
+	int owned, scale, equip, sell, hidden;
+	for(int i; Store_GetNextItem(client, i, owned, scale, equip, sell, buffer, sizeof(buffer), hidden); i++)
+	{
+		if(owned/* && equip*/&& !hidden)
 		{
-			Transaction tr = new Transaction();
-			
-			char buffer[256];
-			Global.Format(buffer, sizeof(buffer), "DELETE FROM " ... DATATABLE_LOADOUT ... " WHERE steamid = %d AND loadout = '%s';", id, name);
+			Global.Format(buffer, sizeof(buffer), "INSERT INTO " ... DATATABLE_LOADOUT ... " (steamid, item, loadout) VALUES ('%d', '%s', '%s')", id, buffer, name);
 			tr.AddQuery(buffer);
-			
-			int owned, scale, equip, sell, hidden;
-			for(int i; Store_GetNextItem(client, i, owned, scale, equip, sell, buffer, sizeof(buffer), hidden); i++)
-			{
-				if(owned/* && equip*/&& !hidden)
-				{
-					Global.Format(buffer, sizeof(buffer), "INSERT INTO " ... DATATABLE_LOADOUT ... " (steamid, item, loadout) VALUES ('%d', '%s', '%s')", id, buffer, name);
-					tr.AddQuery(buffer);
-				}
-			}
-			
-			Global.Execute(tr, Database_Success, Database_Fail);
 		}
 	}
+	
+	DataPack pack = new DataPack();
+	pack.WriteCell(GetClientUserId(client));
+	pack.WriteString(name);
+	
+	Global.Execute(tr, Database_SaveLoadoutSuccess, Database_SaveLoadoutFail, pack, DBPrio_High);
+}
+
+public void Database_SaveLoadoutSuccess(Database db, DataPack pack, int numQueries, DBResultSet[] results, any[] queryData)
+{
+	pack.Reset();
+	int client = GetClientOfUserId(pack.ReadCell());
+	char name[32];
+	pack.ReadString(name, sizeof(name));
+	delete pack;
+	
+	// DB 저장이 실제로 끝난 지금 이 시점에만 로컬 리스트에 반영한다.
+	if(!client)
+		return; // 저장 도중 클라이언트가 나감
+	
+	if(!Loadouts[client])
+		Loadouts[client] = new ArrayList(ByteCountToCells(32));
+	
+	if(Loadouts[client].FindString(name) == -1)
+		Loadouts[client].PushString(name);
+	
+	if(InLoadoutMenu[client])
+		LoadoutPage(client, true);
+}
+
+public void Database_SaveLoadoutFail(Database db, DataPack pack, int numQueries, const char[] error, int failIndex, any[] queryData)
+{
+	pack.Reset();
+	int client = GetClientOfUserId(pack.ReadCell());
+	delete pack;
+	
+	LogError("[Database_SaveLoadoutFail] %s", error);
+	
+	if(client)
+		PrintToChat(client, "\x04[Loadout]\x01 로드아웃을 저장하지 못했습니다. 잠시 후 다시 시도해주세요.");
 }
 
 void Database_DeleteLoadout(int client, const char[] name)
 {
-	if(Global)
+	// 예전 코드: 호출부(store.sp)에서 먼저 로컬 리스트를 지우고 나서 이 함수를 불렀다.
+	// 여기서 Global/id 체크가 실패해 아무 것도 안 해도 화면에는 이미 지워진 것처럼 보였다.
+	// 지금은 로컬 리스트를 여기서 건드리지 않고, DELETE가 실제로 성공한 콜백에서만 지운다.
+	int id = GetSteamAccountID(client);
+	if(!Global || !id)
 	{
-		int id = GetSteamAccountID(client);
-		if(id)
+		PrintToChat(client, "\x04[Loadout]\x01 로드아웃을 삭제하지 못했습니다. 잠시 후 다시 시도해주세요.");
+		return;
+	}
+	
+	Transaction tr = new Transaction();
+	
+	char buffer[256];
+	Global.Format(buffer, sizeof(buffer), "DELETE FROM " ... DATATABLE_LOADOUT ... " WHERE steamid = %d AND loadout = '%s';", id, name);
+	tr.AddQuery(buffer);
+	
+	DataPack pack = new DataPack();
+	pack.WriteCell(GetClientUserId(client));
+	pack.WriteString(name);
+	
+	Global.Execute(tr, Database_DeleteLoadoutSuccess, Database_DeleteLoadoutFail, pack, DBPrio_High);
+}
+
+public void Database_DeleteLoadoutSuccess(Database db, DataPack pack, int numQueries, DBResultSet[] results, any[] queryData)
+{
+	pack.Reset();
+	int client = GetClientOfUserId(pack.ReadCell());
+	char name[32];
+	pack.ReadString(name, sizeof(name));
+	delete pack;
+	
+	if(!client)
+		return;
+	
+	if(Loadouts[client])
+	{
+		int index = Loadouts[client].FindString(name);
+		if(index != -1)
+			Loadouts[client].Erase(index);
+	}
+	
+	if(InLoadoutMenu[client])
+		LoadoutPage(client);
+}
+
+public void Database_DeleteLoadoutFail(Database db, DataPack pack, int numQueries, const char[] error, int failIndex, any[] queryData)
+{
+	pack.Reset();
+	int client = GetClientOfUserId(pack.ReadCell());
+	delete pack;
+	
+	LogError("[Database_DeleteLoadoutFail] %s", error);
+	
+	if(client)
+		PrintToChat(client, "\x04[Loadout]\x01 로드아웃을 삭제하지 못했습니다. 잠시 후 다시 시도해주세요.");
+}
+
+// 재접속 없이 Global DB 기준으로 Loadouts[client]를 통째로 다시 채운다.
+// 패치 이전 코드에서 이미 생겨버린 "DB엔 없는데 화면엔 보이는" 유령 항목을
+// 정리하기 위한 용도. (sm_fixloadout / sm_fixloadout_all 에서 사용)
+void Database_ResyncLoadouts(int client)
+{
+	if(!Global)
+	{
+		PrintToChat(client, "\x04[Loadout]\x01 데이터베이스에 연결되어 있지 않아 동기화할 수 없습니다.");
+		return;
+	}
+	
+	int id = GetSteamAccountID(client);
+	if(!id)
+	{
+		PrintToChat(client, "\x04[Loadout]\x01 SteamID를 확인할 수 없어 동기화할 수 없습니다.");
+		return;
+	}
+	
+	Transaction tr = new Transaction();
+	
+	char buffer[256];
+	FormatEx(buffer, sizeof(buffer), "SELECT loadout FROM " ... DATATABLE_LOADOUT ... " WHERE steamid = %d;", id);
+	tr.AddQuery(buffer);
+	
+	Global.Execute(tr, Database_ResyncLoadoutsSuccess, Database_ResyncLoadoutsFail, GetClientUserId(client));
+}
+
+public void Database_ResyncLoadoutsSuccess(Database db, int userid, int numQueries, DBResultSet[] results, any[] queryData)
+{
+	int client = GetClientOfUserId(userid);
+	if(!client)
+		return;
+	
+	// 기존 로컬 리스트(유령 항목 포함 가능)를 통째로 버리고 DB 결과로 새로 채운다.
+	delete Loadouts[client];
+	Loadouts[client] = new ArrayList(ByteCountToCells(512));
+	
+	char buffer[512];
+	while(results[0].MoreRows)
+	{
+		if(results[0].FetchRow())
 		{
-			Transaction tr = new Transaction();
-			
-			char buffer[256];
-			Global.Format(buffer, sizeof(buffer), "DELETE FROM " ... DATATABLE_LOADOUT ... " WHERE steamid = %d AND loadout = '%s';", id, name);
-			tr.AddQuery(buffer);
-			
-			Global.Execute(tr, Database_Success, Database_Fail);
+			results[0].FetchString(0, buffer, sizeof(buffer));
+			if(Loadouts[client].FindString(buffer) == -1)
+				Loadouts[client].PushString(buffer);
 		}
 	}
+	
+	if(InLoadoutMenu[client])
+		LoadoutPage(client, true);
+	
+	PrintToChat(client, "\x04[Loadout]\x01 로드아웃 목록을 서버 데이터베이스 기준으로 다시 동기화했습니다.");
 }
+
+public void Database_ResyncLoadoutsFail(Database db, int userid, int numQueries, const char[] error, int failIndex, any[] queryData)
+{
+	LogError("[Database_ResyncLoadoutsFail] %s", error);
+	
+	int client = GetClientOfUserId(userid);
+	if(client)
+		PrintToChat(client, "\x04[Loadout]\x01 로드아웃 동기화에 실패했습니다. 잠시 후 다시 시도해주세요.");
+}
+
+public Action Command_FixLoadout(int client, int args)
+{
+	if(!client)
+		return Plugin_Handled;
+	
+	Database_ResyncLoadouts(client);
+	return Plugin_Handled;
+}
+
+public Action Command_FixLoadoutAll(int client, int args)
+{
+	int count;
+	for(int i = 1; i <= MaxClients; i++)
+	{
+		if(IsClientInGame(i) && !IsFakeClient(i))
+		{
+			Database_ResyncLoadouts(i);
+			count++;
+		}
+	}
+	
+	ReplyToCommand(client, "[Loadout] %d명의 로드아웃 목록을 동기화 요청했습니다.", count);
+	return Plugin_Handled;
+}
+
 void Database_EditName(int client, const char[] name, const char[] newname)
 {
 	if(Global)

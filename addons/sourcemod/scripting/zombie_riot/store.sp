@@ -5546,14 +5546,13 @@ public int Store_LoadoutItem(Menu menu, MenuAction action, int client, int choic
 				}
 				case 4:
 				{
-					int index = Loadouts[client].FindString(buffer);
-					if(index != -1)
+					// 여기서 더 이상 로컬 리스트를 먼저 지우지 않는다.
+					// DB DELETE가 실제로 성공했을 때만 Database_DeleteLoadoutSuccess 콜백에서
+					// Loadouts[client]를 지우고 메뉴를 다시 그린다 (database.sp 참고).
+					if(Loadouts[client].FindString(buffer) != -1)
 					{
-						Loadouts[client].Erase(index);
 						Database_DeleteLoadout(client, buffer);
 					}
-					
-					LoadoutPage(client);
 				}
 			}
 		}
@@ -5579,14 +5578,7 @@ public bool Store_SayCommand(int client)
 	int length = 33;
 	if(Database_Escape(buffer, sizeof(buffer), length) && length < 31)
 	{
-
 		Database_SaveLoadout(client, buffer);
-		
-		if(!Loadouts[client])
-			Loadouts[client] = new ArrayList(ByteCountToCells(32));
-		
-		Loadouts[client].PushString(buffer);
-		LoadoutPage(client, true);
 	}
 	else
 	{
