@@ -1491,7 +1491,7 @@
 	"Blitzkrieg_Death_2"
 	{
 		"#format"	"{1:N}"
-		"en"		"It seems I've failed to best you {yellow}%N{default}."
+		"en"		"It seems I've failed to best you {yellow}{1}{default}."
 		"ko"		"내가 네 놈에게 최선을 다하지 못한거 같군, {yellow}{1}{default}."
 	}
 	"Blitzkrieg_Death_3"
