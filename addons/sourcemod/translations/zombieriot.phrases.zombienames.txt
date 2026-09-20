@@ -8757,11 +8757,56 @@
 		"en"	"-"
 		"ko"	"센살과 거의 유사해졌습니다. 누가 이런 걸 만들었을까요?\n-낫 투척 공격과 레이저 공격을 사용합니다.\n-기존 센살 클론보다 이동 속도가 빠릅니다."
 	}
+	"Mecha Tornado Blitz"
+	{
+		"en"	"Mecha Tornado Blitz"
+		"ko"	"기계 토네이도 블리츠"
+	}
+	"Mecha Tornado Blitz Desc"
+	{
+		"en"	"-"
+		"ko"	"특별한 투사체를 사용하는 이 기계는 타겟이 쓰러질 때까지 발사를 멈추지 않을 겁니다."
+	}
+	"Mecha Wizard Heavy"
+	{
+		"en"	"-"
+		"ko"	"기계 마법사 헤비"
+	}
+	"Mecha Wizard Heavy Desc"
+	{
+		"en"	"-"
+		"ko"	"이 다소 게으른 로봇은 4개의 화염구를 연속으로 발사합니다."
+	}
+	"Mecha Flametail Scout"
+	{
+		"en"	"Mecha Flametail Scout"
+		"ko"	"기계 불꼬리 기사 스카웃"
+	}
+	"Mecha Flametail Scout Desc"
+	{
+		"en"	"-"
+		"ko"	"주기적으로 4초마다 모든 공격을 회피합니다.\n어쩌면 그가 모은 돈을 뺏을 수 있을 지도?"
+	}
+	"Mecha Elite Sniper"
+	{
+		"en"	"Mecha Elite Sniper"
+		"ko"	"기계 엘리트 스나이퍼"
+	}
+	"Mecha Elite Sniper Desc"
+	{
+		"en"	"-"
+		"ko"	"다소 문제가 많은 스나이퍼 로봇입니다.\n탄환에 맞으면 주변의 아군에게 튕겨나갑니다.\n주기적으로 특별한 보급품을 투하합니다."
+	}
 	
 	"W.F. Suppressor"
 	{
 		"en"	"W.F. Suppressor"
 		"ko"	"W.F. 제압병"
+	}
+	"W.F. Suppressor Desc"
+	{
+		"en"	"-"
+		"ko"	"특별한 업그레이드가 추가된 기관단총을 사용하는 콤바인입니다.\n주기적으로 유탄을 발사합니다."
 	}
 	"W.F. Grenadier"
 	{
@@ -8783,20 +8828,40 @@
 		"en"	"W.F. Rocketeer"
 		"ko"	"W.F. 로켓사수"
 	}
+	"W.F. Rocketeer Desc"
+	{
+		"en"	"-"
+		"ko"	"지휘부에서는 효과적인 기지 파괴를 위해서는 폭발성 무기가 필요하다는 결론을 냈습니다.\n조준이 완료되면 로켓을 발사합니다.\n무작위 위치에서 등장합니다."
+	}
 	"W.F. Pretorian Guard"
 	{
 		"en"	"W.F. Pretorian Guard"
 		"ko"	"W.F. 근위대"
+	}
+	"W.F. Pretorian Guard Desc"
+	{
+		"en"	"-"
+		"ko"	"한때 굴른의 부대원이었으나, 프레스콧의 지휘 하에 더욱 강력해졌습니다.\n긴 사거리를 보유하고, 기본 공격은 침묵을 부여합니다.\n주기적으로 로켓을 직사로 발사합니다.\n근접 공격에 맞으면 뇌진탕 충격 디버프를 받습니다."
 	}
 	"W.F. Supreme Overlord"
 	{
 		"en"	"W.F. Supreme Overlord"
 		"ko"	"W.F. 최고 대군주"
 	}
+	"W.F. Supreme Overlord Desc"
+	{
+		"en"	"-"
+		"ko"	"기존의 대군주가 권력에 눈이 먼 것과 달리, 이 대군주는 자신의 아군을 극히 아낍니다.\n평소엔 높은 저항을 가지고 선두에 섭니다.\n현재 남아있는 아군이 모두 죽거나, 10명 이상 죽으면 저항을 잃고 분노 상태에 돌입합니다."
+	}
 	"Anti Chaos Robot"
 	{
 		"en"	"Anti Chaos Robot"
 		"ko"	"혼돈 섬멸 로봇"
+	}
+	"Anti Chaos Robot Desc"
+	{
+		"en"	"-"
+		"ko"	"배풍등 이전 알미나를 다스리던 굴른을 기리기 위해 알미나인들이 만든 로봇입니다.\n비록 빼앗겼지만요.\n가까이에 있는 적에게 중압감 디버프를 부여합니다."
 	}
 	"Captured Anti Chaos Robot"
 	{
@@ -8812,6 +8877,26 @@
 	{
 		"en"	"W.F. Bolt Smasher"
 		"ko"	"W.F. 볼트 스매셔"
+	}
+	"W.F. Tank Commander"
+	{
+		"en"	"W.F. Tank Commander"
+		"ko"	"W.F. 전차장"
+	}
+	"W.F. Tank Commander Desc"
+	{
+		"en"	"-"
+		"ko"	"W.F. 전차의 지휘를 담당하는 승무원입니다.\n강력한 기관단총을 주무기로 사용합니다.\n수류탄과 유탄을 사용합니다."
+	}
+	"W.F. Heavy Armored Titan"
+	{
+		"en"	"W.F. Heavy Armored Titan"
+		"ko"	"W.F. 중장갑 거인"
+	}
+	"W.F. Heavy Armored Titan Desc"
+	{
+		"en"	"-"
+		"ko"	"중장갑으로 무장한 거대 콤바인입니다.\n높은 저항을 가지고 있습니다.\n목숨을 잃으면 라이플을 꺼냅니다.\n검을 들고 있을 땐 주변의 투사체를 막아냅니다."
 	}
 	
 	"Knight of the Curtain"

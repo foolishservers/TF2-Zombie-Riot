@@ -331,7 +331,7 @@ static void AltExtra_Mecha_FatherGrigori_SelfDefense(AltExtra_Mecha_FatherGrigor
 		return;
 	}
 	
-	if (npc.m_flNextTeleport < gameTime && flDistanceToTarget < 202500.0) {
+	if (npc.m_flNextTeleport < gameTime && flDistanceToTarget < 202500.0 && !NpcStats_IsEnemySilenced(npc.index)) {
 		npc.FaceTowards(vecTarget, 500.0);
 		npc.AddGesture("ACT_GESTURE_RELOAD_SMG1", .SetGestureSpeed = 2.0);
 		

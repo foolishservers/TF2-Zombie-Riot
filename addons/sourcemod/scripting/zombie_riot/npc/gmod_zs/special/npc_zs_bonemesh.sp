@@ -88,9 +88,10 @@ methodmap Bonemesh < CClotBody
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
 		int iActivity = npc.LookupActivity("ACT_HL2MP_RUN_ZOMBIE_FAST");
-		if(iActivity > 0) npc.StartActivity(iActivity);
+		if(iActivity > 0)
+			npc.StartActivity(iActivity);
 		
-		SetVariantInt(2);
+		SetVariantInt(4);
 		AcceptEntityInput(npc.index, "SetBodyGroup");
 
 		func_NPCDeath[npc.index] = view_as<Function>(Bonemesh_NPCDeath);
@@ -115,7 +116,9 @@ methodmap Bonemesh < CClotBody
 		npc.m_iWearable1 = npc.EquipItem("weapon_bone", "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
-
+		SetVariantInt(256);
+		AcceptEntityInput(npc.m_iWearable1, "SetBodyGroup");
+		
 		return npc;
 	}
 }
@@ -123,11 +126,6 @@ methodmap Bonemesh < CClotBody
 static void Bonemesh_ClotThink(int iNPC)
 {
 	Bonemesh npc = view_as<Bonemesh>(iNPC);
-	
-	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
-	SetVariantInt(4);
-	AcceptEntityInput(iNPC, "SetBodyGroup");
-	SetEntProp(npc.m_iWearable1, Prop_Send, "m_nBody", 256);
 	
 	float GameTime = GetGameTime(npc.index);
 	if(npc.m_flNextRangedAttackHappening < GetGameTime())

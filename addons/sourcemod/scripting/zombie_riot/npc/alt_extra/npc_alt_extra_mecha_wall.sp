@@ -19,8 +19,10 @@ public void AltExtra_Mechanized_Wall_MapStart() {
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Mechanized Wall");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_alt_extra_mecha_wall");
-	strcopy(data.Icon, sizeof(data.Icon), "alt_extra_mecha_wall");
-	data.IconCustom = true;
+	strcopy(data.Icon, sizeof(data.Icon), "");
+	//strcopy(data.Icon, sizeof(data.Icon), "alt_extra_mecha_wall");
+	//data.IconCustom = true;
+	data.IconCustom = false;
 	data.Flags = 0;
 	data.Category = Type_Alt;
 	data.Precache = ClotPrecache;
@@ -43,27 +45,37 @@ methodmap AltExtra_Mechanized_Wall < AltExtra_Base {
 	public void PlayIdleSound() {
 		if (this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
+		
 		EmitSoundToAll(g_RobotHeavy_IdleSounds[GetRandomInt(0, sizeof(g_RobotHeavy_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 	}
+	
 	public void PlayIdleAlertedSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		EmitSoundToAll("vo/mvm/norm/taunts/heavy_mvm_taunts18.mp3", this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, .soundtime = GetGameTime() - 1.0);
+		
+		EmitSoundToAll("vo/mvm/norm/taunts/heavy_mvm_taunts18.mp3", this.index, SNDCHAN_VOICE, _, _, _, .soundtime = GetGameTime() - 1.0);
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 	}
+	
 	public void PlayHurtSound() {
 		if (this.m_flNextHurtSound > GetGameTime(this.index))
 			return;
+		
 		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
+		
 		EmitSoundToAll(g_RobotHeavy_HurtSounds[GetRandomInt(0, sizeof(g_RobotHeavy_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
+	
 	public void PlayDeathSound() {
 		EmitSoundToAll(g_RobotHeavy_DeathSounds[GetRandomInt(0, sizeof(g_RobotHeavy_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
+	
 	public void PlayMeleeHitSound() {
 		EmitSoundToAll(g_BladeHitSounds[GetRandomInt(0, sizeof(g_BladeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
+	
 	public void PlayMeleeAttackSound() {
 		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}

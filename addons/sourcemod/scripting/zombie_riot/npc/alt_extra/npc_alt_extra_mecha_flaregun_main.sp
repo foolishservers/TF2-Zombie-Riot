@@ -73,24 +73,6 @@ methodmap AltExtra_Mecha_Flaregun_Main < AltExtra_Base {
 		EmitSoundToAll(g_RangedAttackSounds, this.index, SNDCHAN_AUTO, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 	}
 	
-	public void ModifyBodyPitch(float vecMe[3], float vecTarget[3]) {
-		if (this.m_iPoseBodyPitch == 0) {
-			this.m_iPoseBodyPitch = this.LookupPoseParameter("body_pitch");
-		}
-		
-		if (this.m_iPoseBodyPitch < 0)
-			return;
-		
-		//Body pitch
-		float v[3], ang[3];
-		SubtractVectors(vecMe, vecTarget, v); 
-		NormalizeVector(v, v);
-		GetVectorAngles(v, ang);
-		
-		float flPitch = this.GetPoseParameter(this.m_iPoseBodyPitch);						
-		this.SetPoseParameter(this.m_iPoseBodyPitch, ApproachAngle(ang[0], flPitch, 10.0));
-	}
-	
 	public bool IsTargetInFiringCone(int target, float maxYawAngle = 20.0, float maxPitchAngle = 20.0) {
 		float vecMe[3], vecTarget[3], vecToTarget[3];
 		WorldSpaceCenter(this.index, vecMe);
@@ -105,139 +87,36 @@ methodmap AltExtra_Mecha_Flaregun_Main < AltExtra_Base {
 		// --- Yaw ---
 		float flViewYaw = angRotation[1];
 		
-		if (this.m_iPoseBodyYaw > -1) {
-			flViewYaw -= this.GetPoseParameter(this.m_iPoseBodyYaw);
+		if (this.m_iBodyYawPoseParameter > -1) {
+			flViewYaw -= this.GetPoseParameter(this.m_iBodyYawPoseParameter);
 		}
 		
 		flViewYaw = UTIL_AngleNormalize(flViewYaw);
 		
 		float flTargetYaw = this.UTIL_VecToYaw(vecToTarget);
 		
-		float flYawDiff = this.UTIL_AngleDiff(flTargetYaw, flViewYaw);
+		float flYawDiff = MyAngleDiff(flTargetYaw, flViewYaw);
 		
-		if (FloatAbs(flYawDiff) > maxYawAngle)
+		if (FloatAbs(flYawDiff) > maxYawAngle) {
 			return false;
+		}
 		
 		// --- Pitch ---
-		if (this.m_iPoseBodyPitch > -1) {
+		if (this.m_iBodyPitchPoseParameter > -1) {
 			float vecDir[3], vecAng[3];
 			SubtractVectors(vecMe, vecTarget, vecDir);
 			NormalizeVector(vecDir, vecDir);
 			GetVectorAngles(vecDir, vecAng);
 			
-			float flCurrentPitch = this.GetPoseParameter(this.m_iPoseBodyPitch);
-			float flPitchDiff = this.UTIL_AngleDiff(vecAng[0], flCurrentPitch);
+			float flCurrentPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
+			float flPitchDiff = MyAngleDiff(vecAng[0], flCurrentPitch);
 			
-			if (FloatAbs(flPitchDiff) > maxPitchAngle)
+			if (FloatAbs(flPitchDiff) > maxPitchAngle) {
 				return false;
+			}
 		}
 		
 		return true;
-	}
-	
-	public void RegisterBody() {
-		if (this.m_iPoseBodyYaw == -1) {
-			this.m_iPoseBodyYaw = this.LookupPoseParameter("body_yaw");
-		}
-		
-		if (this.m_iPoseBodyPitch == -1) {
-			this.m_iPoseBodyPitch = this.LookupPoseParameter("body_pitch");
-		}
-	}
-	
-	public void ResetBody() {
-		this.m_iPoseBodyYaw = -1;
-		this.m_iPoseBodyPitch = -1;
-	}
-	
-	public void ModifyBody(int target) {
-		// I can't see target. so reset poseparameter to 0.
-		bool bCanISee = Can_I_See_Enemy_Only(this.index, target);
-		if (this.m_bPathing || !bCanISee) {
-			if (this.m_iPoseBodyYaw > -1) {
-				float flYaw = this.GetPoseParameter(this.m_iPoseBodyYaw);
-				
-				this.SetPoseParameter(
-					this.m_iPoseBodyYaw,
-					ApproachAngle(0.0, flYaw, 1.0)
-				);
-			}
-			
-			if (this.m_iPoseBodyPitch > -1) {
-				float flPitch = this.GetPoseParameter(this.m_iPoseBodyPitch);
-				
-				this.SetPoseParameter(
-					this.m_iPoseBodyPitch,
-					ApproachAngle(0.0, flPitch, 1.0)
-				);
-			}
-			
-			return;
-		}
-		
-		if (this.m_iPoseBodyPitch < 0 && this.m_iPoseBodyYaw < 0)
-			return;
-		// if (this.m_iPoseBodyYaw <= 0)
-		//	return;
-		
-		float vecMe[3], vecTarget[3];
-		WorldSpaceCenter(this.index, vecMe);
-		WorldSpaceCenter(target, vecTarget);
-		
-		float vecDir[3], vecAng[3];
-		if (this.m_iPoseBodyPitch > -1) {
-			SubtractVectors(vecMe, vecTarget, vecDir);
-			NormalizeVector(vecDir, vecDir);
-			GetVectorAngles(vecDir, vecAng);
-			
-			float flPitch = this.GetPoseParameter(this.m_iPoseBodyPitch);
-			
-			this.SetPoseParameter(
-				this.m_iPoseBodyPitch,
-				ApproachAngle(vecAng[0], flPitch, 1.0)
-			);
-		}
-		
-		if (this.m_iPoseBodyYaw > -1) {
-			SubtractVectors(vecTarget, vecMe, vecDir);
-			NormalizeVector(vecDir, vecDir);
-			GetVectorAngles(vecDir, vecAng);
-			
-			float angRotation[3];
-			GetEntPropVector(this.index, Prop_Data, "m_angRotation", angRotation);
-			
-			float relativeYaw = -UTIL_AngleDiff(vecAng[1], angRotation[1]);
-			
-			// relativeYaw = -relativeYaw;
-			
-			float flYaw = this.GetPoseParameter(this.m_iPoseBodyYaw);
-			
-			float bodyYaw = clamp(relativeYaw, -44.0, 44.0);
-			
-			this.SetPoseParameter(
-				this.m_iPoseBodyYaw,
-				ApproachAngle(bodyYaw, flYaw, 1.0)
-			);
-			
-			//PrintToServer("[DEBUG] angRotation.yaw=%.1f targetAngle=%.1f relativeYaw=%.1f poseYaw(before)=%.1f",
-			//	angRotation[1], vecAng[1], relativeYaw, flYaw);
-			
-			if (relativeYaw > 15.0 || relativeYaw < -15.0) {
-				//this.FaceTowards(vecTarget);
-				this.GetLocomotionInterface().FaceTowards(vecTarget);
-			}
-			
-			// If we are pathing, facetowards are worse to look.
-			// So disable it while pathing.
-			/*
-			if ((relativeYaw > 44.0 || relativeYaw < -44.0)) {
-				this.GetLocomotionInterface().FaceTowards(vecTarget);
-			}
-			*/
-		}
-		else {
-			this.GetLocomotionInterface().FaceTowards(vecTarget);
-		}
 	}
 	
 	public AltExtra_Mecha_Flaregun_Main(float vecPos[3], float vecAng[3], int team) {
@@ -254,7 +133,7 @@ methodmap AltExtra_Mecha_Flaregun_Main < AltExtra_Base {
 		npc.m_flNextRangedAttack = 0.0;
 		
 		npc.m_iBleedType = BLEEDTYPE_METAL;
-		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
+		npc.m_iStepNoiseType = STEPSOUND_NORMAL;
 		npc.m_iNpcStepVariation = STEPTYPE_ROBOT;
 		
 		npc.RegisterBody();
@@ -302,8 +181,12 @@ static void AltExtra_Mecha_Flaregun_Main_ClotThink(int iNPC) {
 	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
 	
-	if (IsValidEnemy(npc.index, npc.m_iTarget))
-		npc.ModifyBody(npc.m_iTarget);
+	if (npc.m_flGetClosestTargetTime < gameTime) {
+		npc.m_iTarget = GetClosestTarget(npc.index);
+		npc.m_flGetClosestTargetTime = gameTime + GetRandomRetargetTime();
+	}
+	
+	npc.UpdateBody();
 	
 	if (npc.m_blPlayHurtAnimation) {
 		npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
@@ -315,11 +198,6 @@ static void AltExtra_Mecha_Flaregun_Main_ClotThink(int iNPC) {
 		return;
 	
 	npc.m_flNextThinkTime = gameTime + 0.1;
-
-	if (npc.m_flGetClosestTargetTime < gameTime) {
-		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = gameTime + GetRandomRetargetTime();
-	}
 	
 	if (IsValidEnemy(npc.index, npc.m_iTarget)) {
 		float vecTarget[3], vecMe[3];
@@ -337,23 +215,8 @@ static void AltExtra_Mecha_Flaregun_Main_ClotThink(int iNPC) {
 					npc.m_flSpeed = 240.0;
 					npc.StartPathing();
 				}
-				
-				// Recalculate it because self defense can change target.
-				WorldSpaceCenter(npc.m_iTarget, vecTarget);
-				flDistanceToTarget = GetVectorDistance(vecTarget, vecMe, true);
-				
-				if (flDistanceToTarget < npc.GetLeadRadius()) {
-					float vecPredictedPos[3];
-					PredictSubjectPosition(npc, npc.m_iTarget, _, _, vecPredictedPos);
-					npc.SetGoalVector(vecPredictedPos);
-				}
-				else {
-					npc.SetGoalEntity(npc.m_iTarget);
-				}
 			}
 			case 1: {
-				npc.ModifyBody(npc.m_iTarget);
-				
 				if (npc.m_iChanged_WalkCycle != 0) {
 					npc.m_bisWalking = false;
 					npc.m_iChanged_WalkCycle = 0;
@@ -362,6 +225,15 @@ static void AltExtra_Mecha_Flaregun_Main_ClotThink(int iNPC) {
 					npc.StopPathing();
 				}
 			}
+		}
+		
+		if (flDistanceToTarget < npc.GetLeadRadius()) {
+			float vecPredictedPos[3];
+			PredictSubjectPosition(npc, npc.m_iTarget, _, _, vecPredictedPos);
+			npc.SetGoalVector(vecPredictedPos);
+		}
+		else {
+			npc.SetGoalEntity(npc.m_iTarget);
 		}
 	}
 	else {
@@ -374,50 +246,40 @@ static void AltExtra_Mecha_Flaregun_Main_ClotThink(int iNPC) {
 
 static int AltExtra_Mecha_Flaregun_Main_SelfDefense(AltExtra_Mecha_Flaregun_Main npc, float gameTime, float distance) {
 	if (distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 10.0)) {
-		if (Can_I_See_Enemy_Only(npc.index, npc.m_iTarget)) {
-			//if (!npc.IsTargetInFiringCone(npc.m_iTarget))
-			//	return 1;
+		float vecStart[3], vecTarget[3];
+		WorldSpaceCenter(npc.m_iTarget, vecTarget);
+		GetAbsOrigin(npc.index, vecStart);
+		vecStart[2] += 54.0;
+		if (!CanFireProjectileAtTarget(npc.index, npc.m_iTarget, vecStart, vecTarget))
+			return 0;
+		
+		if (gameTime > npc.m_flNextRangedAttack && npc.IsTargetInFiringCone(npc.m_iTarget)) {
+			npc.m_flNextRangedAttack = gameTime + 1.25;
 			
-			if (!npc.IsTargetInFiringCone(npc.m_iTarget)) {
-				return 1;
-			}
-						
-			if (gameTime > npc.m_flNextRangedAttack) {
-				npc.m_flNextRangedAttack = gameTime + 1.25;
-				
-				npc.AddGesture("ACT_MP_ATTACK_STAND_ITEM1");
-				npc.PlayRangedSound();
-				
-				float vecTarget[3];
-				WorldSpaceCenter(npc.m_iTarget, vecTarget);
-				//npc.GetLocomotionInterface().FaceTowards(vecTarget);
-				// npc.FaceTowards(vecTarget, 20000.0);
-				
-				int team = GetTeam(npc.index);
-				
-				int projectile = npc.FireParticleRocket(vecTarget, 20.0, 1100.0, 10.0, team == TFTeam_Red ? "flaregun_trail_red" : "flaregun_trail_blue", .hide_projectile = false);
-				if (projectile > -1) {
-					int particle = EntRefToEntIndex(i_WandParticle[projectile]);
-					
-					ApplyCustomModelToWandProjectile(projectile, "models/weapons/w_models/w_flaregun_shell.mdl", 1.0, "idle", 0.0, true);
-					
-					SetEntProp(projectile, Prop_Send, "m_nSkin", team == TFTeam_Red ? 0 : 1);
-					
-					CreateTimer(10.0, Timer_RemoveEntity, EntIndexToEntRef(projectile), TIMER_FLAG_NO_MAPCHANGE);
-					CreateTimer(10.0, Timer_RemoveEntity, EntIndexToEntRef(particle), TIMER_FLAG_NO_MAPCHANGE);
-					
-					WandProjectile_ApplyFunctionToEntity(projectile, AltExtra_Mecha_Flaregun_Main_Projectile_StartTouch);
-				}
-			}
+			npc.AddGesture("ACT_MP_ATTACK_STAND_ITEM1");
+			npc.PlayRangedSound();
 			
-			return 1;
+			//npc.GetLocomotionInterface().FaceTowards(vecTarget);
+			//npc.FaceTowards(vecTarget, 20000.0);
+			
+			int team = GetTeam(npc.index);
+			
+			int projectile = npc.FireParticleRocket(vecTarget, 20.0, 1100.0, 10.0, team == TFTeam_Red ? "flaregun_trail_red" : "flaregun_trail_blue", .hide_projectile = false);
+			if (projectile > -1) {
+				int particle = EntRefToEntIndex(i_WandParticle[projectile]);
+				
+				ApplyCustomModelToWandProjectile(projectile, "models/weapons/w_models/w_flaregun_shell.mdl", 1.0, "idle", 0.0, true);
+				
+				SetEntProp(projectile, Prop_Send, "m_nSkin", team == TFTeam_Red ? 0 : 1);
+				
+				CreateTimer(10.0, Timer_RemoveEntity, EntIndexToEntRef(projectile), TIMER_FLAG_NO_MAPCHANGE);
+				CreateTimer(10.0, Timer_RemoveEntity, EntIndexToEntRef(particle), TIMER_FLAG_NO_MAPCHANGE);
+				
+				WandProjectile_ApplyFunctionToEntity(projectile, AltExtra_Mecha_Flaregun_Main_Projectile_StartTouch);
+			}
 		}
-		/*
-		else {
-			npc.m_flGetClosestTargetTime = 0.0;
-			npc.m_iTarget = GetClosestTarget(npc.index);
-		}
-		*/
+		
+		return 1;
 	}
 	
 	return 0;

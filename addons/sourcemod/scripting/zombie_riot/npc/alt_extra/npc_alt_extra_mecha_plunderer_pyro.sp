@@ -146,6 +146,8 @@ methodmap AltExtra_Mecha_Plunderer_Pyro < AltExtra_Base {
 		npc.m_flSpeed = 300.0;
 		npc.m_iState = 0;
 		
+		npc.m_flCharge_delay = GetGameTime(npc.index) + 5.0;
+		
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.StartPathing();
 		
@@ -224,7 +226,7 @@ static void AltExtra_Mecha_Plunderer_Pyro_ClotThink(int iNPC) {
 		
 		float flDistanceToTarget = GetVectorDistance(vecTarget, vecMe, true);
 		
-		if (npc.m_flCharge_delay < gameTime) {
+		if (npc.m_flCharge_delay < gameTime && !NpcStats_IsEnemySilenced(npc.index)) {
 			if (flDistanceToTarget > NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED && flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 10.0) {
 				npc.PlayChargeSound();
 				npc.m_flCharge_delay = gameTime + 5.0;
@@ -283,11 +285,11 @@ static void AltExtra_Mecha_Plunderer_Pyro_ClotThink(int iNPC) {
 							float damage = 150.0;
 							if (IgniteFor[target] > 0) {
 								damagetype = DMG_TRUEDAMAGE;
-								damage = 300.0;
+								damage = 200.0;
 							}
 							
 							if (ShouldNpcDealBonusDamage(targetHit))
-								damage *= 6.0;
+								damage *= 4.0;
 							
 							SDKHooks_TakeDamage(targetHit, npc.index, npc.index, damage, damagetype, -1, _, vecHit);
 							

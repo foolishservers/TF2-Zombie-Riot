@@ -201,7 +201,7 @@ static void AltExtra_Mecha_Sniper_Railgunner_ClotThink(int entity) {
 						float damage = 100.0;
 						float speed = 1250.0;
 						
-						if (npc.m_iAmmo > 5 && !NpcStats_IsEnemySilenced(npc.index)) {
+						if (npc.m_iAmmo > 5) {
 							speed = 2000.0;
 							damage = 400.0;
 							npc.m_iAmmo = 0;

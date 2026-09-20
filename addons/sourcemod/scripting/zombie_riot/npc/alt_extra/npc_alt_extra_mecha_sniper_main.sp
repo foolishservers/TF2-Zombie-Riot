@@ -104,23 +104,6 @@ methodmap AltExtra_Mecha_Sniper_Main < AltExtra_Base {
 		EmitSoundToAll(g_DefaultMeleeMissSounds[GetRandomInt(0, sizeof(g_DefaultMeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 	}
 	
-	public bool IsTargetInFiringCone(int target, float maxAngle = 20.0) {
-		float vecMe[3], vecTarget[3], vecToTarget[3];
-		WorldSpaceCenter(this.index, vecMe);
-		WorldSpaceCenter(target, vecTarget);
-		
-		SubtractVectors(vecTarget, vecMe, vecToTarget);
-		NormalizeVector(vecToTarget, vecToTarget);
-		
-		float angRotation[3];
-		GetEntPropVector(this.index, Prop_Data, "m_angRotation", angRotation);
-		
-		float flTargetYaw = this.UTIL_VecToYaw(vecToTarget);
-		float flDiff = this.UTIL_AngleDiff(flTargetYaw, angRotation[1]);
-		
-		return (FloatAbs(flDiff) <= maxAngle);
-	}
-	
 	public AltExtra_Mecha_Sniper_Main(float vecPos[3], float vecAng[3], int team) {
 		AltExtra_Mecha_Sniper_Main npc = view_as<AltExtra_Mecha_Sniper_Main>(CClotBody(vecPos, vecAng, "models/bots/sniper/bot_sniper.mdl", "1.0", "12500", team));
 		
@@ -130,9 +113,11 @@ methodmap AltExtra_Mecha_Sniper_Main < AltExtra_Base {
 		if (iActivity > 0)
 			npc.StartActivity(iActivity);
 		
-		npc.m_iBleedType = BLEEDTYPE_NORMAL;
-		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
-		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
+		npc.m_iBleedType = BLEEDTYPE_METAL;
+		npc.m_iStepNoiseType = STEPSOUND_NORMAL;
+		npc.m_iNpcStepVariation = STEPTYPE_ROBOT;
+		
+		npc.RegisterBody();
 		
 		func_NPCDeath[npc.index] = AltExtra_Mecha_Sniper_Main_NPCDeath;
 		func_NPCOnTakeDamage[npc.index] = AltExtra_Mecha_Sniper_Main_OnTakeDamage;
@@ -177,7 +162,8 @@ static void AltExtra_Mecha_Sniper_Main_ClotThink(int entity) {
 	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	
 	npc.Update();
-			
+	npc.UpdateBody();
+	
 	if (npc.m_blPlayHurtAnimation) {
 		npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
 		npc.m_blPlayHurtAnimation = false;
@@ -189,18 +175,13 @@ static void AltExtra_Mecha_Sniper_Main_ClotThink(int entity) {
 	
 	npc.m_flNextThinkTime = gameTime + 0.1;
 	
-	if (npc.m_flGetClosestTargetTime < gameTime) {
-		npc.m_iTarget = GetClosestTarget(npc.index);
-		npc.m_flGetClosestTargetTime = gameTime + GetRandomRetargetTime();
-	}
-	
 	int target = npc.m_iTarget;
 	if (IsValidEnemy(npc.index, target)) {
 		float vecTarget[3], vecMe[3];
 		WorldSpaceCenter(target, vecTarget);
 		WorldSpaceCenter(npc.index, vecMe);
 		
-		npc.ModifyBodyPitch(vecMe, vecTarget);
+		// npc.ModifyBodyPitch(vecMe, vecTarget);
 		
 		float flDistanceToTarget = GetVectorDistance(vecTarget, vecMe, true);
 		
@@ -277,62 +258,58 @@ static void AltExtra_Mecha_Sniper_Main_ClotThink(int entity) {
 		else {
 			// 350 * 350 = 122500
 			if (npc.m_flNextRangedAttack < gameTime && flDistanceToTarget < 122500.0 && npc.m_flReloadDelay < gameTime) {
-				int seenTarget = Can_I_See_Enemy(npc.index, target);
-				if (!IsValidEnemy(npc.index, seenTarget)) {
+				if (!Can_I_See_Enemy_Only(npc.index, target)) {
 					npc.StartPathing();
 				}
-				else if (!npc.IsTargetInFiringCone(seenTarget)) {
-					WorldSpaceCenter(seenTarget, vecTarget);
-					npc.FaceTowards(vecTarget, 750.0);
-				}
 				else {
-					WorldSpaceCenter(seenTarget, vecTarget);
-					npc.FaceTowards(vecTarget, 750.0);
-					
 					npc.StopPathing();
 					
-					npc.m_flNextRangedAttack = GetGameTime(npc.index) + 0.125;
-					npc.m_iAttacksTillReload--;
-					
-					float vecSpread = 0.1;
-					
-					float eyePitch[3];
-					GetEntPropVector(npc.index, Prop_Data, "m_angRotation", eyePitch);
-					
-					float x, y;
-					x = GetRandomFloat( -0.15, 0.15 ) + GetRandomFloat( -0.15, 0.15 );
-					y = GetRandomFloat( -0.15, 0.15 ) + GetRandomFloat( -0.15, 0.15 );
-					
-					float vecDirShooting[3], vecRight[3], vecUp[3];
-					
-					vecTarget[2] += 15.0;
-					float SelfVecPos[3];
-					WorldSpaceCenter(npc.index, SelfVecPos);
-					MakeVectorFromPoints(SelfVecPos, vecTarget, vecDirShooting);
-					GetVectorAngles(vecDirShooting, vecDirShooting);
-					vecDirShooting[1] = eyePitch[1];
-					GetAngleVectors(vecDirShooting, vecDirShooting, vecRight, vecUp);
-					
-					npc.AddGesture("ACT_MP_ATTACK_STAND_SECONDARY");
-					
-					float vecDir[3];
-					vecDir[0] = vecDirShooting[0] + x * vecSpread * vecRight[0] + y * vecSpread * vecUp[0]; 
-					vecDir[1] = vecDirShooting[1] + x * vecSpread * vecRight[1] + y * vecSpread * vecUp[1]; 
-					vecDir[2] = vecDirShooting[2] + x * vecSpread * vecRight[2] + y * vecSpread * vecUp[2]; 
-					NormalizeVector(vecDir, vecDir);
-					
-					float WorldSpaceVec[3];
-					WorldSpaceCenter(npc.index, WorldSpaceVec);
-					
-					FireBullet(npc.index, npc.m_iWearable1, WorldSpaceVec, vecDir, 10.0, 9000.0, DMG_BULLET, "bullet_tracer01_red");
-					
-					npc.PlayRangedSound();
-					
-					if (npc.m_iAttacksTillReload == 0) {
-						npc.AddGesture("ACT_MP_RELOAD_STAND_SECONDARY");
-						npc.m_flReloadDelay = gameTime + 1.4;
-						npc.m_iAttacksTillReload = 10;
-						npc.PlayRangedReloadSound();
+					if (npc.IsTargetInFiringCone(target)) {
+						WorldSpaceCenter(target, vecTarget);
+						
+						npc.m_flNextRangedAttack = GetGameTime(npc.index) + 0.125;
+						npc.m_iAttacksTillReload--;
+						
+						float vecSpread = 0.1;
+						
+						float eyePitch[3];
+						GetEntPropVector(npc.index, Prop_Data, "m_angRotation", eyePitch);
+						
+						float x, y;
+						x = GetRandomFloat( -0.15, 0.15 ) + GetRandomFloat( -0.15, 0.15 );
+						y = GetRandomFloat( -0.15, 0.15 ) + GetRandomFloat( -0.15, 0.15 );
+						
+						float vecDirShooting[3], vecRight[3], vecUp[3];
+						
+						vecTarget[2] += 15.0;
+						float SelfVecPos[3];
+						WorldSpaceCenter(npc.index, SelfVecPos);
+						MakeVectorFromPoints(SelfVecPos, vecTarget, vecDirShooting);
+						GetVectorAngles(vecDirShooting, vecDirShooting);
+						// vecDirShooting[1] = eyePitch[1];
+						GetAngleVectors(vecDirShooting, vecDirShooting, vecRight, vecUp);
+						
+						npc.AddGesture("ACT_MP_ATTACK_STAND_SECONDARY");
+						
+						float vecDir[3];
+						vecDir[0] = vecDirShooting[0] + x * vecSpread * vecRight[0] + y * vecSpread * vecUp[0]; 
+						vecDir[1] = vecDirShooting[1] + x * vecSpread * vecRight[1] + y * vecSpread * vecUp[1]; 
+						vecDir[2] = vecDirShooting[2] + x * vecSpread * vecRight[2] + y * vecSpread * vecUp[2]; 
+						NormalizeVector(vecDir, vecDir);
+						
+						float WorldSpaceVec[3];
+						WorldSpaceCenter(npc.index, WorldSpaceVec);
+						
+						FireBullet(npc.index, npc.m_iWearable1, WorldSpaceVec, vecDir, 10.0, 9000.0, DMG_BULLET, "bullet_tracer01_blue");
+						
+						npc.PlayRangedSound();
+						
+						if (npc.m_iAttacksTillReload == 0) {
+							npc.AddGesture("ACT_MP_RELOAD_STAND_SECONDARY");
+							npc.m_flReloadDelay = gameTime + 1.4;
+							npc.m_iAttacksTillReload = 10;
+							npc.PlayRangedReloadSound();
+						}
 					}
 				}
 			}
@@ -346,7 +323,12 @@ static void AltExtra_Mecha_Sniper_Main_ClotThink(int entity) {
 		npc.StopPathing();
 		
 		npc.m_flGetClosestTargetTime = 0.0;
+		// npc.m_iTarget = GetClosestTarget(npc.index);
+	}
+	
+	if (npc.m_flGetClosestTargetTime < gameTime) {
 		npc.m_iTarget = GetClosestTarget(npc.index);
+		npc.m_flGetClosestTargetTime = gameTime + GetRandomRetargetTime();
 	}
 	
 	npc.PlayIdleAlertSound();
@@ -377,6 +359,8 @@ static void AltExtra_Mecha_Sniper_Main_NPCDeath(int entity) {
 	AltExtra_Mecha_Sniper_Main npc = view_as<AltExtra_Mecha_Sniper_Main>(entity);
 	if (!npc.m_bGib)
 		npc.PlayDeathSound();
+	
+	npc.ResetBody();
 	
 	if (IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);

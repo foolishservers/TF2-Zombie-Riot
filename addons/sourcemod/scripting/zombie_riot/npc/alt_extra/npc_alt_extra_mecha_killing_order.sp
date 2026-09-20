@@ -83,6 +83,171 @@ methodmap AltExtra_Mecha_Killing_Order < AltExtra_Base {
 		vecPos[2] = this.m_flAbilityOrAttack2;
 	}
 	
+	public void UpdateBody() {
+		float gameTime = GetGameTime(this.index);
+		float flDeltaTime = (this.m_flLastBodyUpdateTime > 0.0) ? (gameTime - this.m_flLastBodyUpdateTime) : 0.05;
+		this.m_flLastBodyUpdateTime = gameTime;
+		
+		if (flDeltaTime <= 0.0 || flDeltaTime > 0.5)
+			flDeltaTime = 0.05;
+		
+		bool bHasValidTarget = IsValidEnemy(this.index, this.m_iTarget) && Can_I_See_Enemy_Only(this.index, this.m_iTarget);
+		
+		if (this.m_bPathing || !bHasValidTarget) {
+			if (this.m_iBodyYawPoseParameter > -1) {
+				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
+				
+				this.SetPoseParameter(
+					this.m_iBodyYawPoseParameter,
+					ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
+				);
+			}
+			
+			if (this.m_iBodyPitchPoseParameter > -1) {
+				float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
+				
+				this.SetPoseParameter(
+					this.m_iBodyPitchPoseParameter,
+					ApproachAngle(0.0, flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
+				);
+			}
+			
+			return;
+		}
+		
+		if (this.m_flAttackHappens > gameTime && this.m_flDoingAnimation < gameTime) {
+			return;
+		}
+		
+		if (this.m_iBodyPitchPoseParameter < 0 && this.m_iBodyYawPoseParameter < 0)
+			return;
+		
+		float vecMe[3], vecTarget[3];
+		WorldSpaceCenter(this.index, vecMe);
+		WorldSpaceCenter(this.m_iTarget, vecTarget);
+		
+		float vecDir[3], vecAng[3];
+		if (this.m_iBodyPitchPoseParameter > -1) {
+			SubtractVectors(vecMe, vecTarget, vecDir);
+			NormalizeVector(vecDir, vecDir);
+			GetVectorAngles(vecDir, vecAng);
+			
+			float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
+			
+			this.SetPoseParameter(
+				this.m_iBodyPitchPoseParameter,
+				ApproachAngle(vecAng[0], flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
+			);
+			
+			this.m_bPitchHandedOff = false;
+		}
+		
+		if (this.m_iBodyYawPoseParameter > -1) {
+			SubtractVectors(vecTarget, vecMe, vecDir);
+			NormalizeVector(vecDir, vecDir);
+			GetVectorAngles(vecDir, vecAng);
+			
+			float angRotation[3];
+			GetEntPropVector(this.index, Prop_Data, "m_angRotation", angRotation);
+			
+			float relativeYaw = -MyAngleDiff(vecAng[1], angRotation[1]);
+			
+			if (relativeYaw > 44.0 || relativeYaw < -44.0) {
+				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
+				
+				if (FloatAbs(flYaw) > 0.1) {
+					this.SetPoseParameter(
+						this.m_iBodyYawPoseParameter,
+						ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
+					);
+				}
+				
+				this.GetLocomotionInterface().FaceTowards(vecTarget);
+			}
+			else {
+				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
+				
+				float bodyYaw = clamp(relativeYaw, -44.9, 44.9);
+				
+				this.SetPoseParameter(
+					this.m_iBodyYawPoseParameter,
+					ApproachAngle(bodyYaw, flYaw, ALT_EXTRA_BODY_YAW_TRACK_SPEED * flDeltaTime)
+				);
+			}
+			
+			this.m_bYawHandedOff = false;
+		}
+		else {
+			this.GetLocomotionInterface().FaceTowards(vecTarget);
+		}
+	}
+	
+	public void AimTowardsToPos(float vecTarget[3]) {
+		float gameTime = GetGameTime(this.index);
+		float flDeltaTime = (this.m_flLastBodyUpdateTime > 0.0) ? (gameTime - this.m_flLastBodyUpdateTime) : 0.05;
+		this.m_flLastBodyUpdateTime = gameTime;
+		
+		if (flDeltaTime <= 0.0 || flDeltaTime > 0.5)
+			flDeltaTime = 0.05;
+		
+		if (this.m_iBodyPitchPoseParameter < 0 && this.m_iBodyYawPoseParameter < 0)
+			return;
+		
+		float vecMe[3];
+		WorldSpaceCenter(this.index, vecMe);
+		
+		float vecDir[3], vecAng[3];
+		if (this.m_iBodyPitchPoseParameter > -1) {
+			SubtractVectors(vecMe, vecTarget, vecDir);
+			NormalizeVector(vecDir, vecDir);
+			GetVectorAngles(vecDir, vecAng);
+			
+			float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
+			
+			this.SetPoseParameter(
+				this.m_iBodyPitchPoseParameter,
+				ApproachAngle(vecAng[0], flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
+			);
+		}
+		
+		if (this.m_iBodyYawPoseParameter > -1) {
+			SubtractVectors(vecTarget, vecMe, vecDir);
+			NormalizeVector(vecDir, vecDir);
+			GetVectorAngles(vecDir, vecAng);
+			
+			float angRotation[3];
+			GetEntPropVector(this.index, Prop_Data, "m_angRotation", angRotation);
+			
+			float relativeYaw = -MyAngleDiff(vecAng[1], angRotation[1]);
+			
+			// relativeYaw = -relativeYaw;
+			
+			if (relativeYaw > 44.0 || relativeYaw < -44.0) {
+				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
+				
+				this.SetPoseParameter(
+					this.m_iBodyYawPoseParameter,
+					ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
+				);
+				
+				this.GetLocomotionInterface().FaceTowards(vecTarget);
+			}
+			else {
+				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
+				
+				float bodyYaw = clamp(relativeYaw, -44.9, 44.9);
+				
+				this.SetPoseParameter(
+					this.m_iBodyYawPoseParameter,
+					ApproachAngle(bodyYaw, flYaw, ALT_EXTRA_BODY_YAW_TRACK_SPEED * flDeltaTime)
+				);
+			}
+		}
+		else {
+			this.GetLocomotionInterface().FaceTowards(vecTarget);
+		}
+	}
+	
 	public AltExtra_Mecha_Killing_Order(float vecPos[3], float vecAng[3], int team) {
 		AltExtra_Mecha_Killing_Order npc = view_as<AltExtra_Mecha_Killing_Order>(CClotBody(vecPos, vecAng, "models/bots/pyro/bot_pyro.mdl", "1.0", "20000", team, false, true));
 		
@@ -102,6 +267,8 @@ methodmap AltExtra_Mecha_Killing_Order < AltExtra_Base {
 		npc.m_iBleedType = BLEEDTYPE_METAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPTYPE_ROBOT;
+		
+		npc.RegisterBody();
 		
 		func_NPCDeath[npc.index] = AltExtra_Mecha_Killing_Order_NPCDeath;
 		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;
@@ -140,6 +307,8 @@ static void AltExtra_Mecha_Killing_Order_NPCDeath(int entity) {
 	if (!npc.m_bGib)
 		npc.PlayDeathSound();
 	
+	npc.ResetBody();
+	
 	if (IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
 	
@@ -159,6 +328,7 @@ static void AltExtra_Mecha_Killing_Order_ClotThink(int iNPC) {
 	
 	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
+	npc.UpdateBody();
 	
 	if (npc.m_blPlayHurtAnimation) {
 		npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
@@ -242,6 +412,17 @@ static int AltExtra_Mecha_Killing_Order_SelfDefense(AltExtra_Mecha_Killing_Order
 			return 0;
 		}
 	}
+	else {
+		if (!IsValidEnemy(npc.index, npc.m_iTarget) || !Can_I_See_Enemy_Only(npc.index, npc.m_iTarget)) {
+			npc.m_flAttackHappens = gameTime + 1.25;
+			npc.m_flDoingAnimation = gameTime + 0.95;
+			npc.m_flNextRangedAttack = gameTime + 1.75;
+			
+			npc.m_iTarget = GetClosestTarget(npc.index, _, _, _, _, _, _, true, _, _, true);
+			
+			return 0;
+		}
+	}
 	
 	// Sniper must not being stuck in spawn.
 	if (Rogue_Mode() && i_npcspawnprotection[npc.index] == NPC_SPAWNPROT_ON)
@@ -266,10 +447,11 @@ static int AltExtra_Mecha_Killing_Order_SelfDefense(AltExtra_Mecha_Killing_Order
 				Handle trace = TR_TraceRayFilterEx(vecMe, vecAng, MASK_SOLID, RayType_Infinite, BulletAndMeleeTrace, npc.index);
 				if (TR_DidHit(trace)) {
 					TR_GetEndPosition(vecPos, trace);
-										
+									
 					// 내가 따라갈 수 있을 때만 회전
-					npc.ModifyBodyPitch(vecMe, vecPos);
-					npc.FaceTowards(vecPos, 15000.0);
+					// npc.AimTowardsToPos(vecPos);
+					// npc.ModifyBodyPitch(vecMe, vecPos);
+					// npc.FaceTowards(vecPos, 15000.0);
 				}
 				
 				npc.SetTargetPos(vecPos);
@@ -322,7 +504,7 @@ static int AltExtra_Mecha_Killing_Order_SelfDefense(AltExtra_Mecha_Killing_Order
 				if (IsValidEnemy(npc.index, target)) {
 					TR_GetEndPosition(vecPos, trace);
 					
-					float damageDealt = 100.0;
+					float damageDealt = 125.0;
 					if (ShouldNpcDealBonusDamage(target))
 						damageDealt *= 5.0;
 					
@@ -341,11 +523,18 @@ static int AltExtra_Mecha_Killing_Order_SelfDefense(AltExtra_Mecha_Killing_Order
 			}
 		}
 		
-		if (gameTime > npc.m_flNextRangedAttack) {
-			npc.m_flAttackHappens = gameTime + 1.25;
-			npc.m_flDoingAnimation = gameTime + 0.95;
-			npc.m_flNextRangedAttack = gameTime + 1.75;
+		if (npc.IsTargetInFiringCone(npc.m_iTarget) && gameTime > npc.m_flNextRangedAttack) {
+			npc.m_flAttackHappens = gameTime + 1.0;
+			npc.m_flDoingAnimation = gameTime + 0.8;
+			npc.m_flNextRangedAttack = gameTime + 1.35;
 		}
+		
+		// And now chase the target again.
+		/*
+		if (gameTime > npc.m_flAttackHappens && Can_I_See_Enemy_Only(npc.index, npc.m_iTarget)) {
+			npc.AimTowardsToPos(vecTarget);
+		}
+		*/
 		
 		return 1;
 	}

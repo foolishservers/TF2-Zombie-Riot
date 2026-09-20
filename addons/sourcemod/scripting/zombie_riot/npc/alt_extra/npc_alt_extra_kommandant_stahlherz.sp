@@ -6,7 +6,7 @@ void KommandantStahlherz_OnMapStart() {
 	
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "Kommandant Stahlherz");
-	strcopy(data.Plugin, sizeof(data.Plugin), "npc_kommandant_stahlherz");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_alt_extra_kommandant_stahlherz");
 	strcopy(data.Icon, sizeof(data.Icon), "eisenhard");
 	data.IconCustom = true;
 	data.Flags = MVM_CLASS_FLAG_MINIBOSS|MVM_CLASS_FLAG_ALWAYSCRIT;

@@ -162,10 +162,10 @@ methodmap AltExtra_Sensal_Clone < AltExtra_Base {
 		
 		npc.m_flNextRangedAttack = GetGameTime(npc.index) + 6.0;
 		npc.m_flNextMeleeAttack = 0.0;
+		npc.Anger = false;
 		
 		bool laser = StrContains(data, "laser") != -1;
 		if (laser) {
-			npc.Anger = false;
 			func_NPCThink[npc.index] = AltExtra_Sensal_Clone_Laser_ClotThink;
 		}
 		
@@ -449,6 +449,12 @@ public void AltExtra_Sensal_Clone_NPCDeath(int iNPC) {
 	
 	if (IsValidEntity(npc.m_iWearable5))
 		RemoveEntity(npc.m_iWearable5);
+	
+	if (IsValidEntity(npc.m_iWearable6))
+		RemoveEntity(npc.m_iWearable6);
+	
+	if (IsValidEntity(npc.m_iWearable7))
+		RemoveEntity(npc.m_iWearable7);
 }
 
 static void AltExtra_Sensal_Clone_SummonProjectile(AltExtra_Sensal_Clone npc, int target, int amount, float damage) {
@@ -474,11 +480,16 @@ static void AltExtra_Sensal_Clone_SummonProjectile(AltExtra_Sensal_Clone npc, in
 			
 			int modelApply = ApplyCustomModelToWandProjectile(projectile, WEAPON_CUSTOM_WEAPONRY_1, 1.35, "scythe_spin");
 			
-			if (team == TFTeam_Red) {
-				SetEntityRenderColor(modelApply, 255, 255, 255, 1);
+			if (npc.Anger) {
+				SetEntityRenderColor(modelApply, 255, 255, 255, 3);
 			}
 			else {
-				SetEntityRenderColor(modelApply, 255, 255, 255, 0);
+				if (team == TFTeam_Red) {
+					SetEntityRenderColor(modelApply, 255, 255, 255, 1);
+				}
+				else {
+					SetEntityRenderColor(modelApply, 255, 255, 255, 0);
+				}
 			}
 			
 			SetVariantInt(2);

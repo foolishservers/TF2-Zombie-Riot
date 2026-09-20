@@ -68,7 +68,7 @@ float fl_rocket_particle_dmg[MAXENTITIES];
 float fl_rocket_particle_radius[MAXENTITIES];
 static float f_PredictPos[MAXENTITIES][3];
 static float f_PredictDuration[MAXENTITIES];
-static float f_UnstuckSuckMonitor[MAXENTITIES];
+float f_UnstuckSuckMonitor[MAXENTITIES];
 int i_TargetToWalkTo[MAXENTITIES];
 float f_TargetToWalkToDelay[MAXENTITIES];
 
@@ -2850,7 +2850,9 @@ methodmap CClotBody < CBaseCombatCharacter
 			}
 		}
 	}
+	
 	// BUGBUG: Why do we need both of these?
+	// Do not use this. fmodf gives alway positive value. so it is dead code.
 	public float UTIL_AngleDiff( float destAngle, float srcAngle )
 	{
 		float delta;
@@ -4021,6 +4023,14 @@ public void NPC_Base_InitGamedata()
 		.DefineBoolField("b_BlockDropChances")
 #if defined ZR
 		.DefineFloatField("m_flElementRes", Element_MAX)
+		
+		.DefineIntField("m_iBodyPitchPoseParameter")
+		.DefineIntField("m_iBodyYawPoseParameter")
+		.DefineFloatField("m_flLastBodyUpdateTime")
+		.DefineFloatField("m_flAimTargetSetTime")
+		.DefineBoolField("m_bYawHandedOff")
+		.DefineBoolField("m_bPitchHandedOff")
+		.DefineVectorField("m_vecAimTarget")
 #endif
 	.EndDataMapDesc();
 	EntityFactory.Install();

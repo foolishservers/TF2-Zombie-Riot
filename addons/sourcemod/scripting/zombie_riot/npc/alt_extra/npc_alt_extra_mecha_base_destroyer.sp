@@ -182,7 +182,7 @@ methodmap AltExtra_Mecha_Base_Destroyer < AltExtra_Base {
 				
 				npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_battalion_buffbanner/c_battalion_buffbanner.mdl");
 				
-				npc.m_iWearable4 = npc.EquipItem("head", "models/workshop/player/items/soldier/sum20_breach_and_bomb/sum20_breach_and_bomb.mdl");
+				npc.m_iWearable4 = npc.EquipItem("head", "models/player/items/soldier/armored_authority.mdl");
 			}
 			case 2: {
 				npc.m_iWearable2 = npc.EquipItem("head", "models/workshop_partner/weapons/c_models/c_shogun_warpack/c_shogun_warpack.mdl");
@@ -199,6 +199,10 @@ methodmap AltExtra_Mecha_Base_Destroyer < AltExtra_Base {
 				npc.m_iWearable2 = npc.EquipItem("head", "models/weapons/c_models/c_buffpack/c_buffpack.mdl");
 				
 				npc.m_iWearable3 = npc.EquipItem("head", "models/weapons/c_models/c_buffbanner/c_buffbanner.mdl");
+				
+				npc.m_iWearable4 = npc.EquipItem("head", "models/player/items/soldier/soldier_spartan.mdl");
+				SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", skin);
+				SetEntityRenderColor(npc.m_iWearable4, 125, 100, 100, 255);
 			}
 		}
 		
@@ -289,25 +293,15 @@ static void AltExtra_Mecha_Base_Destroyer_SelfDefense(AltExtra_Mecha_Base_Destro
 			return;
 		}
 		
-		npc.AddGesture("ACT_MP_ATTACK_STAND_PRIMARY");
-		npc.PlayRangedSound();
-		
 		float projectileSpeed = 900.0;
 		
-		float vecTarget[3], vecAngles[3], vecForward[3];
+		float vecTarget[3];
 		PredictSubjectPositionForProjectiles(npc, target, projectileSpeed, _, vecTarget);
 		
-		MakeVectorFromPoints(origin, vecTarget, vecAngles);
-		GetVectorAngles(vecAngles, vecAngles);
+		npc.FireRocketCustom(vecTarget, 200.0, projectileSpeed, _, _, _, true, origin);
 		
-		vecForward[0] = Cosine(DegToRad(vecAngles[0])) * Cosine(DegToRad(vecAngles[1])) * projectileSpeed;
-		vecForward[1] = Cosine(DegToRad(vecAngles[0])) * Sine(DegToRad(vecAngles[1])) * projectileSpeed;
-		vecForward[2] = Sine(DegToRad(vecAngles[0])) * -projectileSpeed;
-		
-		int projectile = npc.FireRocket(vecTarget, 200.0, projectileSpeed);
-		if (projectile > -1) {
-			TeleportEntity(projectile, origin, vecAngles, vecForward, true);
-		}
+		npc.AddGesture("ACT_MP_ATTACK_STAND_PRIMARY");
+		npc.PlayRangedSound();
 		
 		npc.m_iAmmo--;
 		

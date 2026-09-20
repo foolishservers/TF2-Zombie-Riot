@@ -27,6 +27,10 @@ static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team) {
 }
 
 methodmap AltExtra_Sensal_Clone_Perfected < AltExtra_Sensal_Clone {
+	public void PlayAngerSound() {
+		EmitSoundToAll(g_AngerSoundsPassed[GetRandomInt(0, sizeof(g_AngerSoundsPassed) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
+	}
+	
 	property float m_flRangedSpecialAttackHappens {
 		public get()			{ return fl_AbilityOrAttack[this.index][0]; }
 		public set(float value) { fl_AbilityOrAttack[this.index][0] = value; }
@@ -55,7 +59,7 @@ methodmap AltExtra_Sensal_Clone_Perfected < AltExtra_Sensal_Clone {
 		npc.m_flMeleeArmor = 1.25;
 		
 		func_NPCDeath[npc.index] = AltExtra_Sensal_Clone_NPCDeath;
-		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;
+		func_NPCOnTakeDamage[npc.index] = AltExtra_Sensal_Clone_Perfected_OnTakeDamage;
 		func_NPCThink[npc.index] = AltExtra_Sensal_Clone_Perfected_ClotThink;
 		
 		npc.m_flSpeed = 280.0;
@@ -68,6 +72,8 @@ methodmap AltExtra_Sensal_Clone_Perfected < AltExtra_Sensal_Clone {
 			RaidAllowsBuildings = true;
 			RaidAllowLastman = false;
 		}
+		
+		GiveNpcOutLineLastOrBoss(npc.index, true);
 		
 		npc.m_bThisNpcIsABoss = true;
 		
@@ -110,6 +116,10 @@ methodmap AltExtra_Sensal_Clone_Perfected < AltExtra_Sensal_Clone {
 		npc.m_iWearable5 = npc.EquipItem("head", "models/workshop/player/items/soldier/spr18_veterans_attire/spr18_veterans_attire.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable5, "SetModelScale");
+		
+		float flPos[3];
+		npc.GetAttachment("", flPos, NULL_VECTOR);
+		npc.m_iWearable7 = ParticleEffectAt_Parent(flPos, team == TFTeam_Red ? "utaunt_poweraura_teamcolor_red" : "utaunt_poweraura_teamcolor_blue", npc.index, "", {0.0, 0.0, 0.0});
 		
 		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", skin);
 		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", skin);
@@ -177,6 +187,9 @@ static void AltExtra_Sensal_Clone_Perfected_ClotThink(int iNPC) {
 					
 					if (targetHit > 0) {
 						float damage = 250.0;
+						if (npc.Anger)
+							damage *= 1.5;
+						
 						if (ShouldNpcDealBonusDamage(targetHit))
 							damage *= 5.0;
 						
@@ -257,7 +270,7 @@ static void AltExtra_Sensal_Clone_Perfected_ClotThink(int iNPC) {
 				
 				if (Can_I_See_Enemy_Only(npc.index, target)) {
 					npc.AddGesture("ACT_MP_GESTURE_VC_FISTPUMP_MELEE");
-					npc.m_flNextRangedAttack = gameTime + 5.0;
+					npc.m_flNextRangedAttack = gameTime + (npc.Anger ? 5.0 : 8.0);
 					npc.m_flDoingAnimation = gameTime + 1.25;
 					
 					npc.PlaySytheInitSound();
@@ -285,9 +298,9 @@ static void AltExtra_Sensal_Clone_Perfected_ClotThink(int iNPC) {
 					npc.m_flRangedSpecialAttackHappens = gameTime + 0.75;
 					npc.m_flDoingAnimation = gameTime + 2.0;
 					
-					npc.m_flNextRangedSpecialAttack = gameTime + 20.0;
+					npc.m_flNextRangedSpecialAttack = gameTime + (npc.Anger ? 13.5 : 20.0);
 					
-					npc.PlayChargeSound();
+					// npc.PlayChargeSound();
 				}
 			}
 		}
@@ -300,7 +313,6 @@ static void AltExtra_Sensal_Clone_Perfected_ClotThink(int iNPC) {
 	npc.PlayIdleAlertSound();
 }
 
-/*
 static Action AltExtra_Sensal_Clone_Perfected_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom) {
 	AltExtra_Sensal_Clone_Perfected npc = view_as<AltExtra_Sensal_Clone_Perfected>(victim);
 	
@@ -309,14 +321,32 @@ static Action AltExtra_Sensal_Clone_Perfected_OnTakeDamage(int victim, int &atta
 	
 	if (!npc.Anger && float(GetEntProp(npc.index, Prop_Data, "m_iHealth")) <= (float(ReturnEntityMaxHealth(npc.index)) * 0.5)) {
 		npc.Anger = true;
-		
+		npc.m_flSpeed = 320.0;
 		npc.PlayAngerSound();
 		
-		float flPos[3], flAng[3];
-		GetAttachment(victim, "head", flPos, flAng);
-		int particler = ParticleEffectAt(flPos, "scout_dodge_blue", 5.0);
-		SetParent(victim, particler, "head");
-		npc.m_iWearable7 = particler;
+		if (IsValidEntity(npc.m_iWearable1)) {
+			RemoveEntity(npc.m_iWearable1);
+		}
+		
+		npc.m_iWearable1 = npc.EquipItem("head", WEAPON_CUSTOM_WEAPONRY_1);
+		SetVariantString("1.15");
+		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
+		SetVariantInt(1);
+		AcceptEntityInput(npc.m_iWearable1, "SetBodyGroup");
+		SetEntityRenderColor(npc.m_iWearable1, 255, 255, 255, 3);
+		
+		npc.DispatchParticleEffect(npc.index, "hightower_explosion", NULL_VECTOR, NULL_VECTOR, NULL_VECTOR, npc.FindAttachment("eyes"), PATTACH_POINT_FOLLOW, true);
+		
+		float flPos[3]; // original
+		npc.GetAttachment("head", flPos, NULL_VECTOR);
+		npc.m_iWearable6 = ParticleEffectAt_Parent(flPos, "unusual_symbols_parent_ice", npc.index, "head", {0.0, 0.0, 0.0});
+		
+		if (IsValidEntity(npc.m_iWearable7)) {
+			RemoveEntity(npc.m_iWearable7);
+		}
+		
+		npc.GetAttachment("", flPos, NULL_VECTOR);
+		npc.m_iWearable7 = ParticleEffectAt_Parent(flPos, "utaunt_poweraura_yellow_parent", npc.index, "", {0.0, 0.0, 0.0});
 	}
 	
 	if (npc.m_flHeadshotCooldown < GetGameTime(npc.index)) {
@@ -326,4 +356,3 @@ static Action AltExtra_Sensal_Clone_Perfected_OnTakeDamage(int victim, int &atta
 	
 	return Plugin_Continue;
 }
-*/

@@ -550,10 +550,10 @@ static void CombineSupremeOverlord_NPCDeath(int entity)
 {
 	CombineSupremeOverlord npc = view_as<CombineSupremeOverlord>(entity);
 	if(!npc.m_bGib)
-	{
-		npc.PlayDeathSound();	
-	}
-		
+		npc.PlayDeathSound();
+	
+	Is_a_Medic[entity] = false;
+	
 	if(IsValidEntity(npc.m_iWearable1))
 		RemoveEntity(npc.m_iWearable1);
 	if(IsValidEntity(npc.m_iWearable2))

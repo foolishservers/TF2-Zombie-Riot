@@ -106,7 +106,9 @@ methodmap ZSZombine < CClotBody
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
 		int iActivity = npc.LookupActivity("ACT_RUN");
-		if(iActivity > 0) npc.StartActivity(iActivity);
+		if(iActivity > 0)
+			npc.StartActivity(iActivity);
+		
 		SetVariantInt(1);
 		AcceptEntityInput(npc.index, "SetBodyGroup");
 

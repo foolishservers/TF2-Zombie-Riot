@@ -135,7 +135,7 @@ methodmap ZSoldierGrave < CClotBody
 		
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
-		int iActivity = npc.LookupActivity((Alt ? "ACT_MP_RUN_PRIMARY" : "ACT_MP_RUN_MELEE"));
+		int iActivity = npc.LookupActivity((Alt ? "ACT_MP_RUN_MELEE" : "ACT_MP_RUN_PRIMARY"));
 		if(iActivity > 0) npc.StartActivity(iActivity);
 		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
@@ -167,6 +167,7 @@ methodmap ZSoldierGrave < CClotBody
 			npc.m_iWearable1 = npc.EquipItem("head", "models/weapons/c_models/c_pickaxe/c_pickaxe.mdl");
 		else
 			npc.m_iWearable1 = npc.EquipItem("head", "models/weapons/c_models/c_rocketlauncher/c_rocketlauncher.mdl");
+		
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
 		npc.m_iWearable2	= npc.EquipItem("head", "models/player/items/soldier/soldier_zombie.mdl");

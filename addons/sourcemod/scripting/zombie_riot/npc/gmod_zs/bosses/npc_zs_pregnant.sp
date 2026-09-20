@@ -172,7 +172,7 @@ static void Pregnant_ClotThink(int iNPC)
 	
 	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
-
+	
 	if(npc.m_blPlayHurtAnimation)
 	{
 		npc.PlayHurtSound();
@@ -181,6 +181,7 @@ static void Pregnant_ClotThink(int iNPC)
 	
 	if(npc.m_flNextThinkTime > gameTime)
 		return;
+	
 	npc.m_flNextThinkTime = gameTime + 0.1;
 
 	if(npc.m_flGetClosestTargetTime < gameTime)
@@ -188,7 +189,6 @@ static void Pregnant_ClotThink(int iNPC)
 		npc.m_iTarget = GetClosestTarget(npc.index);
 		npc.m_flGetClosestTargetTime = gameTime + GetRandomRetargetTime();
 	}
-	npc.m_flGetClosestTargetTime = gameTime + 1.0;
 	
 	float VecSelfNpc[3], vecTarget[3];
 	int GetPoisonCrab;
@@ -201,19 +201,18 @@ static void Pregnant_ClotThink(int iNPC)
 			int entity = EntRefToEntIndex(i_ObjectsNpcsTotal[i]);
 			if(IsValidEntity(entity))
 			{
-				char npc_classname[60];
-				NPC_GetPluginById(i_NpcInternalId[entity], npc_classname, sizeof(npc_classname));
-				if(entity != INVALID_ENT_REFERENCE && StrEqual(npc_classname, "npc_zs_poisonheadcrab") && IsEntityAlive(entity))
+				if(entity != INVALID_ENT_REFERENCE && i_NpcInternalId[entity] == ZSPoisonHeadcrab_ID() && IsEntityAlive(entity))
 				{
 					WorldSpaceCenter(entity, vecTarget);
-					if(GetVectorDistance(vecTarget, VecSelfNpc, true) < (300.0 * 300.0))
+					if (GetVectorDistance(vecTarget, VecSelfNpc, true) < 90000.0)
 						GetPoisonCrab++;
 				}
 			}
 		}
+		
 		if(GetPoisonCrab)
 		{
-			HealEntityGlobal(npc.index, npc.index, npc.m_flSelfHealing*float(GetPoisonCrab), 1.0);
+			HealEntityGlobal(npc.index, npc.index, npc.m_flSelfHealing * float(GetPoisonCrab), 1.0);
 			npc.m_flHealingDelay = gameTime + 1.0;
 		}
 	}
@@ -225,7 +224,7 @@ static void Pregnant_ClotThink(int iNPC)
 		
 		if(distance < npc.GetLeadRadius())
 		{
-			float vPredictedPos[3]; PredictSubjectPosition(npc, npc.m_iTarget,_,_, vPredictedPos);
+			float vPredictedPos[3]; PredictSubjectPosition(npc, npc.m_iTarget, _, _, vPredictedPos);
 			npc.SetGoalVector(vPredictedPos);
 		}
 		else 
@@ -253,11 +252,15 @@ static void Pregnant_ClotThink(int iNPC)
 							flDamage *= 2.5;
 						else
 							Custom_Knockback(npc.index, target, 750.0);
+						
 						SDKHooks_TakeDamage(target, npc.index, npc.index, flDamage, DMG_CLUB, -1, _, vecHit);
 						Elemental_AddPheromoneDamage(target, npc.index, 200);
+						
 						npc.PlayMeleeHitSound();
 					}
+					
 					npc.m_iAttacksTillMegahit++;
+					
 					if(npc.m_iAttacksTillMegahit > 2)
 					{
 						Pregnant_SpawnFractal(npc, ReturnEntityMaxHealth(npc.index), 4);
@@ -285,6 +288,7 @@ static void Pregnant_ClotThink(int iNPC)
 				}
 			}
 		}
+		
 		if(npc.m_iChanged_WalkCycle != 1)
 		{
 			npc.m_iChanged_WalkCycle = 1;
@@ -306,6 +310,9 @@ static void Pregnant_ClotThink(int iNPC)
 			npc.m_flSpeed = 0.0;
 			npc.StopPathing();
 		}
+		
+		npc.m_flGetClosestTargetTime = 0.0;
+		npc.m_iTarget = GetClosestTarget(npc.index);
 	}
 	npc.PlayIdleSound();
 }

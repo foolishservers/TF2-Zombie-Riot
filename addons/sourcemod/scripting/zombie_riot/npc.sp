@@ -1369,19 +1369,26 @@ void NPC_ConfigSetup()
 	AltExtra_Mecha_Killing_Order_OnMapStart();
 	AltExtra_Mecha_Kamikaze_Demo_OnMapStart();
 	AltExtra_Sensal_Clone_Perfected_OnMapStart();
+	AltExtra_Mecha_Tornado_Blitz_MapStart();
+	AltExtra_Mecha_Wizard_Heavy_MapStart();
+	AltExtra_Mecha_Flametail_Scout_OnMapStart();
+	AltExtra_Mecha_Elite_Sniper_OnMapStart();
 	
-	Whiteflower_CombineSmg_OnMapStart_NPC();
-	WFCombineRevolver_OnMapStart_NPC();
-	WFCombineGrenadier_OnMapStart_NPC();
-	Whiteflower_CombineBazooka_OnMapStart_NPC();
-	Whiteflower_ExpertFighter_OnMapStart_NPC();
-	Whiteflower_CombinePretorianGuard_OnMapStart_NPC();
+	Combine_Base_OnMapStart();
+	//Whiteflower_CombineSmg_OnMapStart_NPC();
+	//WFCombineRevolver_OnMapStart_NPC();
+	//WFCombineGrenadier_OnMapStart_NPC();
+	//Whiteflower_CombineBazooka_OnMapStart_NPC();
+	//Whiteflower_ExpertFighter_OnMapStart_NPC();
+	Combine_Pretorian_Guard_OnMapStart();
 	CombineSupremeOverlord_OnMapStart_NPC();
 	Anti_Chaos_Robot_OnMapStart_NPC();
 	WhiteFlower_BoltSmasher_OnMapStart_NPC();
+	Combine_Tank_Commander_OnMapStart();
+	Combine_Heavy_Armored_Titan_OnMapStart();
 	
-	RaidbossKnightOfTheCurtain_OnMapStart_NPC();
-	RaidbossTraitorPrescott_OnMapStart_NPC();
+	//RaidbossKnightOfTheCurtain_OnMapStart_NPC();
+	//RaidbossTraitorPrescott_OnMapStart_NPC();
 	
 	VScript_CacheNPCs();
 	//precache instantlyx
@@ -3022,17 +3029,25 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/alt_extra/npc_alt_extra_mecha_flaregun_main.sp"
 #include "npc/alt_extra/npc_alt_extra_mecha_killing_order.sp"
 #include "npc/alt_extra/npc_alt_extra_sensal_clone_perfected.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_tornado_blitz.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_wizard_heavy.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_flametail_scout.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_elite_sniper.sp"
+//#include "npc/alt_extra/npc_alt_extra_mega_mecha_loader.sp"
 
 // Whiteflower survivors
-#include "npc/wf_survivors/npc_wf_combine_smg.sp"
-#include "npc/wf_survivors/npc_wf_combine_grenadier.sp"
-#include "npc/wf_survivors/npc_wf_combine_revolver.sp"
-#include "npc/wf_survivors/npc_wf_combine_bazooka.sp"
-#include "npc/wf_survivors/npc_wf_combine_expert_fighter.sp"
-#include "npc/wf_survivors/npc_wf_combine_pretorian_guard.sp"
+#include "npc/wf_survivors/npc_combine_base.sp"
+//#include "npc/wf_survivors/npc_wf_combine_smg.sp"
+//#include "npc/wf_survivors/npc_wf_combine_grenadier.sp"
+//#include "npc/wf_survivors/npc_wf_combine_revolver.sp"
+//#include "npc/wf_survivors/npc_wf_combine_bazooka.sp"
+//#include "npc/wf_survivors/npc_wf_combine_expert_fighter.sp"
+#include "npc/wf_survivors/npc_combine_pretorian_guard.sp"
 #include "npc/wf_survivors/npc_combine_supreme_overlord.sp"
 #include "npc/wf_survivors/npc_anti_chaos_robot.sp"
 #include "npc/wf_survivors/npc_boltsmasher.sp"
+#include "npc/wf_survivors/npc_combine_tank_commander.sp"
+#include "npc/wf_survivors/npc_combine_heavy_armored_titan.sp"
 
-#include "npc/raidmode_bosses/wf_survivors/npc_knight_of_the_curtain.sp"
-#include "npc/raidmode_bosses/wf_survivors/npc_traitor_prescott.sp"
+//#include "npc/raidmode_bosses/wf_survivors/npc_knight_of_the_curtain.sp"
+//#include "npc/raidmode_bosses/wf_survivors/npc_traitor_prescott.sp"

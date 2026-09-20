@@ -60,7 +60,7 @@ methodmap AltExtra_Mecha_Conqueror < AltExtra_Base {
 	}
 	
 	public AltExtra_Mecha_Conqueror(float vecPos[3], float vecAng[3], int team) {
-		AltExtra_Mecha_Conqueror npc = view_as<AltExtra_Mecha_Conqueror>(CClotBody(vecPos, vecAng, ALTBOTSOLDIERMODEL, "1.0", "30000", team));
+		AltExtra_Mecha_Conqueror npc = view_as<AltExtra_Mecha_Conqueror>(CClotBody(vecPos, vecAng, "models/bots/soldier_boss/bot_soldier_boss.mdl", "1.0", "30000", team));
 		
 		i_NpcWeight[npc.index] = 3;
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
@@ -88,7 +88,7 @@ methodmap AltExtra_Mecha_Conqueror < AltExtra_Base {
 		SetEntityRenderColor(npc.m_iWearable1, 25, 25, 25, 255);
 		
 		npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/player/items/soldier/robo_soldier_shako/robo_soldier_shako.mdl");
-		SetVariantString("1.5");
+		SetVariantString("1.25");
 		AcceptEntityInput(npc.m_iWearable2, "SetModelScale");
 		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", skin);
 		SetEntityRenderColor(npc.m_iWearable2, 125, 100, 100, 255);

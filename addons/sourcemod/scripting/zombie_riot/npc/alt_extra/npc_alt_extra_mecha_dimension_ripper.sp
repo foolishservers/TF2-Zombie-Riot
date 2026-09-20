@@ -278,7 +278,7 @@ static void AltExtra_Mecha_Dimension_Ripper_SummonAlly(AltExtra_Mecha_Dimension_
 	GetEntPropVector(npc.index, Prop_Data, "m_angRotation", ang);
 	
 	char npcName[128];
-	switch (GetRandomInt(0, 2)) {
+	switch (GetRandomInt(0, 5)) {
 		case 0: {
 			npcName = "npc_alt_extra_mecha_loader";
 		}
@@ -288,13 +288,22 @@ static void AltExtra_Mecha_Dimension_Ripper_SummonAlly(AltExtra_Mecha_Dimension_
 		case 2: {
 			npcName = "npc_alt_extra_mecha_heavy_particle_rifle";
 		}
+		case 3: {
+			npcName = "npc_alt_extra_mecha_sniper_railgunner";
+		}
+		case 4: {
+			npcName = "npc_alt_extra_last_survivor";
+		}
+		case 5: {
+			npcName = "npc_alt_extra_mecha_airstriker";
+		}
 	}
 	
 	if (!npcName[0])
 		return;
 	
 	int team = GetTeam(npc.index);
-	int maxhealth = ReturnEntityMaxHealth(npc.index) / 7;
+	int maxhealth = ReturnEntityMaxHealth(npc.index) / 6;
 	
 	int entity = NPC_CreateByName(npcName, -1, pos, ang, team);
 	if (entity > MaxClients) {
