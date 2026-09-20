@@ -269,7 +269,7 @@ methodmap AltExtra_Mecha_Elite_Sniper < AltExtra_Base {
 		int target = FireBullet(this.index, this.m_iWearable1, vecMe, vecDirShooting, damage, 9000.0, DMG_BULLET, "bullet_tracer01_red");
 		if (target > 0) {
 			WorldSpaceCenter(target, vecEnd);
-			Explode_Logic_Custom(damage, npc.index, npc.index, -1, vecEnd, 250.0, EXPLOSION_AOE_DAMAGE_FALLOFF, _, true, 4);
+			Explode_Logic_Custom(damage, this.index, this.index, -1, vecEnd, 250.0, EXPLOSION_AOE_DAMAGE_FALLOFF, _, true, 4);
 		}
 		
 		this.AddGesture("ACT_MP_ATTACK_STAND_PRIMARY");

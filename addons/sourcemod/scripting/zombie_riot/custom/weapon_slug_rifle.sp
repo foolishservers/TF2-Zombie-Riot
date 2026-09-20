@@ -204,7 +204,7 @@ public void Weapon_SniperRifle_DMR_R(int client, int weapon, bool crit, int slot
 	float vecSwingForward[3];
 	StartLagCompensation_Base_Boss(client);
 	DoSwingTrace_Custom(swingTrace, client, vecSwingForward, 9900.0, false, 9900.0, true); //infinite range, and does not ignore walls!
-	FinishLagCompensation_Base_boss();
+	FinishLagCompensation_Base_boss(.client = client);
 	
 	int target = TR_GetEntityIndex(swingTrace);	
 	delete swingTrace;
@@ -382,7 +382,7 @@ public void Weapon_SniperRifle_DMR_M1(int client, int weapon, bool crit, int slo
 		}
 	}
 	delete trace;
-	FinishLagCompensation_Base_boss();
+	FinishLagCompensation_Base_boss(.client = client);
 	
 	if(SniperRifle_SpreadTime[client]==0.0)
 		SniperRifle_SpreadTime[client] = GameTime;

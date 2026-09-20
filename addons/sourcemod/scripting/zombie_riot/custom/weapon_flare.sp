@@ -131,7 +131,7 @@ public void KillingOrder_Fire(int client, int weapon, bool crit)
 		SDKHooks_TakeDamage(target, client, client, damage, DMG_BULLET, weapon, NULL_VECTOR, targetPos);
 	}
 	
-	FinishLagCompensation_Base_boss();
+	FinishLagCompensation_Base_boss(.client = client);
 	
 	CalcCorrectWeaponShootPosition({ 60.9, 13.1, -15.1 }, pos, ang);
 	TE_Particle("dxhr_sniper_rail", pos, _, ang, .controlpoint = 1, .controlpointattachment = PATTACH_WORLDORIGIN, .controlpointoffset = hitPos);

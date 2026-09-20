@@ -424,7 +424,7 @@ static Action Management_ShieldMage(Handle timer, DataPack pack)
 				float vecSwingForward[3];
 				StartLagCompensation_Base_Boss(client);
 				DoSwingTrace_Custom(swingTrace, client, vecSwingForward, Range, false, 1.0, true);
-				FinishLagCompensation_Base_boss();
+				FinishLagCompensation_Base_boss(.client = client);
 				TR_GetEndPosition(vecSwingForward, swingTrace);
 				delete swingTrace;
 				OBJ_Model.FaceTowards(vecSwingForward, 15000.0);

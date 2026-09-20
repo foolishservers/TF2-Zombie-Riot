@@ -523,7 +523,7 @@ static void Weapon_Blacksmith_ShootBullet(int client, int weapon)
 		SDKHooks_TakeDamage(target, client, client, damage, DMG_BULLET, weapon, NULL_VECTOR, targetPos);
 	}
 	
-	FinishLagCompensation_Base_boss();
+	FinishLagCompensation_Base_boss(.client = client);
 	
 	CalcCorrectWeaponShootPosition({ 60.9, 13.1, -15.1 }, pos, ang);
 	TE_SetupBeamPoints(pos, hitPos, i_TinkerTracerIndex, 0, 0, 0, 0.3, 3.0, 3.0, 0, 0.0, {255, 255, 255, 255}, 3);
