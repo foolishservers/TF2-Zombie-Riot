@@ -325,7 +325,7 @@ static void Weapon_Sweeping_Edge(DataPack pack)
 		targetList.Push(client);
 		TR_EnumerateEntitiesSphere(pos2, MaxRange, PARTITION_NON_STATIC_EDICTS, TraceSweeping_Edge, targetList);
 		
-		FinishLagCompensation_Base_boss();
+		FinishLagCompensation_Base_boss(.client = client);
 		// Remove client from target list
 		// Avoid shifting by swapping last element and client
 		int length = targetList.Length;

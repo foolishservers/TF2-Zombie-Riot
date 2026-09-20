@@ -1566,7 +1566,7 @@ static int CreateNPC(NPCData npcdata, int id, int client, float vecPos[3], float
 
 void NPC_PostSetup(int entity)
 {
-	if(GetTeam(entity) == 2)
+	if(GetTeam(entity) == 2 || Arena_Mode())
 	{
 		Rogue_AllySpawned(entity);
 		Waves_AllySpawned(entity);

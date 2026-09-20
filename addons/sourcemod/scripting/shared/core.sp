@@ -1793,6 +1793,17 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &impulse, float vel[3
 		buttons = 0;
 		return Plugin_Changed;
 	}
+
+
+	if(Arena_Mode() && dieingstate[client] != 0)
+	{
+		//not being able to use any abilities or attack in arena mode as its quite unfair
+		buttons &= ~IN_ATTACK;
+		buttons &= ~IN_ATTACK2;
+		buttons &= ~IN_ATTACK3;
+		buttons &= ~IN_RELOAD;
+		return Plugin_Changed;
+	}
 	/*
 	Instant community feedback that T is very bad.
 	using idk what other button to use.
@@ -2602,6 +2613,7 @@ public void OnEntityCreated(int entity, const char[] classname)
 //	PrintToChatAll("entity: %i| Clkassname %s",entity, classname);
 	if (entity > 0 && entity <= MAXENTITIES && IsValidEntity(entity))
 	{
+		b_Do_Not_Compensate[entity] = true;
 	//	h_TransmitHookType[entity] = 0;
 		f_TimeTillMeleeAttackShould[entity] = 0.0;
 		StatusEffectReset(entity, true);
@@ -2880,7 +2892,7 @@ public void OnEntityCreated(int entity, const char[] classname)
 			npc.bCantCollidie = true;
 			npc.bCantCollidieAlly = true;
 			SDKHook(entity, SDKHook_SpawnPost, Set_Projectile_Collision);
-			SetTeam(entity, TFTeam_Red);
+		//	SetTeam(entity, TFTeam_Red);
 			b_IsAProjectile[entity] = true;
 		}
 		else if(!StrContains(classname, "tf_projectile_flare"))
@@ -3179,19 +3191,19 @@ void Set_Projectile_CollisionFrame(int ref)
 	if(!IsValidEntity(entity))
 		return;
 
-	if(GetTeam(entity) != view_as<int>(TFTeam_Blue))
-	{
-		SetEntityCollisionGroup(entity, 27);
-		
-#if defined RPG
-		int attacker = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
-		if(RPGCore_PlayerCanPVP(attacker, attacker))
-		{
-			//set team to blue while in pvp, so all interactions work just fine, but only do this while in PVP.
-			SetEntProp(entity, Prop_Data, "m_iTeamNum", TFTeam_Blue);
-		}
-#endif
-	}
+//	if(Arena_Mode() || GetTeam(entity) != view_as<int>(TFTeam_Blue))
+//	{
+//		SetEntityCollisionGroup(entity, 27);
+//		
+//#if defined RPG
+//		int attacker = GetEntPropEnt(entity, Prop_Send, "m_hOwnerEntity");
+//		if(RPGCore_PlayerCanPVP(attacker, attacker))
+//		{
+//			//set team to blue while in pvp, so all interactions work just fine, but only do this while in PVP.
+//			SetEntProp(entity, Prop_Data, "m_iTeamNum", TFTeam_Blue);
+//		}
+//#endif
+//	}
 }
 public void Delete_instantly(int entity)
 {
@@ -3362,7 +3374,7 @@ void CheckIfAloneOnServer(bool CountOnly = false)
 #if defined ZR 
 	if(BetWar_Mode())
 		return;
-	if (players < 4 && players > 0)
+	if (players < 4 && players > 0 && !Arena_Mode())
 	{
 		if (Bob_Exists)
 			return;
@@ -3538,13 +3550,11 @@ stock bool InteractKey(int client, int weapon, bool Is_Reload_Button = false, in
 			static char buffer[64];
 			if(GetEntityClassname(entity, buffer, sizeof(buffer)))
 			{
-				if (GetTeam(entity) != TFTeam_Red)
-				{
-					if(Construction_Material_Interact(client, entity))
-						return false;
-
+				if(Construction_Material_Interact(client, entity))
 					return false;
-				}
+
+				if (GetTeam(entity) != TFTeam_Red && !Arena_Mode())
+					return false;
 				
 				if(Object_Interact(client, weapon, entity))
 					return true;
@@ -3758,6 +3768,15 @@ stock void TF2_SetPlayerClass_ZR(int client, TFClassType classType, bool weapons
 	}
 	
 	TF2_SetPlayerClass(client, classType, weapons, persistent);
+	
+	// This updates the player's hitboxes
+	if(Arena_Mode())
+	{
+		char LastModel[512];
+		GetEntPropString(client, Prop_Send, "m_iszCustomModel", LastModel, sizeof(LastModel));
+		SetVariantString(LastModel);
+		AcceptEntityInput(client, "SetCustomModel");
+	}
 }
 
 #if defined ZR
@@ -4062,6 +4081,8 @@ public void ArrowTouchNonCombatEntity(int entity, int other)
 		return;
 
 	if(!b_ThisWasAnNpc[other])
+		return;
+	if(other <= MaxClients)
 		return;
 
 		

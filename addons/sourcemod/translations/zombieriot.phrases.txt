@@ -1098,6 +1098,11 @@
 		"it"		"Questa abilità ha ancora un cooldown di {1} secondi!"
 		"ko" 		"이 능력은 {1} 초 후에 사용할 수 있습니다!"
 	}
+	"Disabled In This Mode"
+	{
+		"en" 		"Disabled In This Mode"
+		"ko" 		"해당 모드에서는 비활성화됨"
+	}
 	"Backwards Setting"
 	{
 		"en" 		"Reminder: Walking backwards reduces your speed by 30％!"
@@ -1547,17 +1552,17 @@
 	}
 	"Marksman Beer Received"
 	{
-		"en" 		"Marksman Beer! 1.2x Weapon accuracy and 1.25x Extra Headshot and backstab damage\n 1.2x Projectile Speed."
-		"ru"		"Снайпер-лайм! 1.2x точности оружия и 1.25x урона по голове и удара в спину\n 1.2x скорости снарядов."
-		"it"		"Birra del Tiratore scelto! 1.2xprecisione dell'arma 2x e danni extra da colpo alla testa e da pugnalata alle spalle 1,25x e velocità del proiettile 1,2x."
-		"ko" 		"명사수 맥주! 무기 명중률이 1.2배 증가하고 헤드샷과 백스탭 피해량이 1.25배만큼 추가로 증가\n 투사체 속도 1.2배 증가."
+		"en" 		"Marksman Beer! 1.2x Weapon accuracy and 1.25x Extra Headshot and backstab damage\n 1.4x Projectile Speed."
+		"ru"		"Снайпер-лайм! 1.2x точности оружия и 1.25x урона по голове и удара в спину\n 1.4x скорости снарядов."
+		"it"		"Birra del Tiratore scelto! 1.2xprecisione dell'arma 2x e danni extra da colpo alla testa e da pugnalata alle spalle 1,25x e velocità del proiettile 1,4x."
+		"ko" 		"명사수 맥주! 무기 명중률이 1.2배 증가하고 헤드샷과 백스탭 피해량이 1.25배만큼 추가로 증가\n 투사체 속도 1.4배 증가."
 	}
 	"Marksman Beer X Received"
 	{
-		"en" 		"Marksman Beer X! 1.2x Weapon accuracy and 1.35x Extra Headshot and backstab damage\n 1.2x Projectile Speed."
-		"ru"		"Снайпер-лайм X! 1.2x точности оружия и 1.35x урона по голове и удара в спину\n 1.2x скорости снарядов."
-		"it"		"Birra del Tiratore sceltov! 1.2xprecisione dell'arma 2x e danni extra da colpo alla testa e da pugnalata alle spalle 1,35x e velocità del proiettile 1,2x."
-		"ko" 		"명사수 맥주 X! 무기 명중률이 1.2배 증가하고 헤드샷과 백스탭 피해량이 1.35배만큼 추가로 증가\n 투사체 속도 1.2배 증가."
+		"en" 		"Marksman Beer X! 1.2x Weapon accuracy and 1.35x Extra Headshot and backstab damage\n 1.4x Projectile Speed."
+		"ru"		"Снайпер-лайм X! 1.2x точности оружия и 1.35x урона по голове и удара в спину\n 1.4x скорости снарядов."
+		"it"		"Birra del Tiratore sceltov! 1.2xprecisione dell'arma 2x e danni extra da colpo alla testa e da pugnalata alle spalle 1,35x e velocità del proiettile 1,4x."
+		"ko" 		"명사수 맥주 X! 무기 명중률이 1.2배 증가하고 헤드샷과 백스탭 피해량이 1.35배만큼 추가로 증가\n 투사체 속도 1.4배 증가."
 	}
 	"Teslar Mule Received"
 	{
@@ -1579,6 +1584,16 @@
 		"ru"		"Энергетик! 15％ быстрее перезарядка способности Оружия & Расходников"
 		"it"		"Bevanda energetica! Riduzione del cooldown di 15％ per le armi e gli equipaggiamenti extra!"
 		"ko" 		"에너지 드링크! 무기와 추가 장비들의 능력 쿨타임 15％ 감소!"
+	}
+	"Symbiosis Shot"
+	{
+		"en" 		"Symbiosis Shot"
+		"ko" 		"공생 샷"
+	}
+	"Symbiosis Shot Received"
+	{
+		"en" 		"Symbiosis Shot!\nArmor now regens 3 seconds after being hurt\nMax Armor is 25％ less\nArmor protects only 50％ instead of 75％"
+		"ko" 		"공생 샷! 3초 동안 피해를 입지 않으면 아머 재생.\n최대 아머 -25％.\n아머의 피해 방어가 75％에서 50％로 감소."
 	}
 	"Energy Drink X Received"
 	{
@@ -2790,7 +2805,7 @@
 	{
 		"en"		"||| The store is here! |||\n||| Check below/around this text! |||"
 		"ko"		"||| 상점은 여기입니다! |||\n||| 이 텍스트 아래/주변을 확인하세요! |||" 
-		"ru"		"||| Магазин здесь! |||\n||| Check снизу/вокруг этого текста! |||
+		"ru"		"||| Магазин здесь! |||\n||| Check снизу/вокруг этого текста! |||"
 		"pl"		"||| Sklep jest tutaj! |||\n||| Sprawdź pod/wokół tego tekstu! |||"
 	}
 	"tutorial_storeclosed_warning"
@@ -6058,12 +6073,12 @@
 	"Vengeance"
 	{
 		"en"	"Vengeance:\nIf max HP is at 75％/55％/40％ or lower, \ngain stacking 1/2/4 Strength\n[M2]"
-		"ko"	"복수:\n체력이 50％/33％/25％ 이하라면,\n중첩되는 힘 1/2/4 획득\n[M2]"
+		"ko"	"복수:\n체력이 75％/55％/40％ 이하라면,\n중첩되는 힘 1/2/4 획득\n[M2]"
 	}
 	"Claws of Savagery"
 	{
 		"en"	"Claws of Savagery:\nWhen taking over 50％ max hp in 3 seconds \ngain 75％ damage resistance for 4 seconds\n[M1]"
-		"ko"	"흉악한 발톱:\n2초 안에 최대 체력의 50％의 피해를 입을 시\n4초 동안 피해 저항력 75％ 증가\n[M1]"
+		"ko"	"흉악한 발톱:\n3초 안에 최대 체력의 50％의 피해를 입을 시\n4초 동안 피해 저항력 75％ 증가\n[M1]"
 	}
 	"The Role of the Wolf"
 	{
@@ -6148,5 +6163,45 @@
 	{
 		"en" 		"And the many shells cried out one word, ''Manager''"
 		"ko"		"그리고 많은 껍데기들은 '관리자님' 만을 부르짖었다."
+	}
+	"Arena Team PvP"
+	{
+		"en"	"Arena Team PvP"
+		"ko"	"아레나 팀 PvP"
+	}
+	"Arena Team PvP Desc"
+	{
+		"en"	"Two teams fight it out, best of 3.\nSpending budget increases every round."
+		"ko"	"두 팀이 3라운드 동안 대결을 펼칩니다.\n라운드 회차가 지날 때마다 자금이 증가합니다."
+	}
+	"Control Points PvP"
+	{
+		"en"	"Control Points PvP"
+		"ko"	"점령 지점 PvP"
+	}
+	"Control Points PvP Desc"
+	{
+		"en"	"Capture all control points to win.\nSpending budget increases every kill."
+		"ko"	"모든 점령 지점을 점령하여 승리하세요.\n적 처치 시마다 자금이 증가합니다."
+	}
+	"All Special Rounds"
+	{
+		"en"	"All Special Rounds"
+		"ko"	"모든 스페셜 라운드"
+	}
+	"All Special Rounds Desc"
+	{
+		"en"	"A round modifier always happens."
+		"ko"	"라운드 모디파이어가 반드시 발생합니다."
+	}
+	"Turbulance PvP"
+	{
+		"en"	"Turbulance PvP"
+		"ko"	"난기류 PvP"
+	}
+	"Turbulance PvP Desc"
+	{
+		"en"	"The Ultra Rapid Fire mode.\nEverybody gains the ''Dimensional Turbulance'' buff and massive budget."
+		"ko"	"초고속 연사 모드.\n전원이 ''차원 난기류'' 버프를 얻고 대량의 자금을 획득합니다."
 	}
 }

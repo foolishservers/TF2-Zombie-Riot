@@ -49,7 +49,7 @@ enum struct BasicTraceLogic {
 		{
 			delete trace;
 		}
-		FinishLagCompensation_Base_boss();
+		FinishLagCompensation_Base_boss(.client = this.Client);
 	}
 }
 

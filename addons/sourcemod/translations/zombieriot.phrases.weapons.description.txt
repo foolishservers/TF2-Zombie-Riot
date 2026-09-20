@@ -603,8 +603,8 @@
 	}
 	"Elite Sniper Pap 2"
 	{
-		"en"		"-Increased damage\n-Consumes less ammo\n-Calls in supply drops that deploy ammo pickups over teammates."
-		"ko"		"-피해량 증가\n-탄약 소모량 감소\n-아군의 위로 탄약 상자를 전달하는 보급품 투하를 호출할 수 있습니다."
+		"en"		"-Increased damage\n-Consumes less ammo\n-Can move at full speed while scoped\n-Calls in supply drops that deploy ammo pickups over teammates"
+		"ko"		"-피해량 증가\n-탄약 소모량 감소\n-조준 상태에서도 원래 이동 속도로 움직일 수 있음\n-아군의 위로 탄약 상자를 전달하는 보급품 투하를 호출할 수 있습니다"
 	}
 	"Elite Sniper Pap 3"
 	{
@@ -873,11 +873,8 @@
 	
 	"Knife Desc"
 	{
-		"en"	"-Backstabs enemies under correct conditions\n-Bleeds enemies on hit\n-If enemy attacks you, and you backstab them, you deal 2x damage\n-Raids take 2x backstab damage."
-		"fr"	"Le poignardage cause un long saignement.\nDégats du poignardage doublé contre les Raids."
-		"chi"	"可背刺造成大量流血。\n对boss造成*2伤害。"
-		"it"	"Può eseguire il backstab e infliggere emorragie per un lungo periodo di tempo."
-		"ko"	"-백스탭이 가능\n-적중 시 출혈 부여\n-자신을 목표로 하는 적을 백스탭 시 피해량 2배\n레이드 보스에게 주는 피해량 2배"
+		"en"	"-Backstabs enemies under correct conditions\n-Bleeds enemies on hit\n-If enemy attacks you, and you backstab them, you deal 2x damage\n-Raids take 2x backstab damage.\nBackstabs give a speedbonus, raid for longer"
+		"ko"	"-백스탭이 가능\n-적중 시 출혈 부여\n-자신을 목표로 하는 적을 백스탭 시 피해량 2배\n-레이드 보스에게 주는 피해량 2배\-n백스탭 시 잠시 동안 속도 증가, 레이드 보스라면 버프 시간 증가"
 	}
 	"Knife Pap 1"
 	{
@@ -1924,6 +1921,7 @@
 	"Grigori's Blessing Desc"
 	{
 		"en"	"-Gain +300 Health\n-Life regen 1％ of your max hp per second up to 75％ max hp\n-During bleedout, you also will survive for longer.\n-Out of battle, heals extra with more melee upgrades."
+		"ko"	"-최대 체력 +300\n-초당 최대 체력의 1％만큼 체력을 회복하며 최대 체력의 75％까지 회복\n-다운시 더 오래 생존\n-비전투 상태라면 보유한 근접 개선에 따라 추가 회복"
 	}
 	
 	"Full Riot Gear Desc"
@@ -5585,6 +5583,7 @@
 	"The Red Mist Desc 5"
 	{
 		"en"	"-Gain an upgrade point\nUnlocks new special card\n-Overall Stat Increases\n-Special card CD reduced on hit with any ability or melee."
+		"ko"	"-개선 포인트 획득\n-새로운 특별 책장 해금\n-전반적인 능력치 증가\n-능력 혹은 근접 적중 시 특별 책장의 쿨타임 감소"
 	}
 	"The Red Mist Desc 6"
 	{
@@ -5794,7 +5793,7 @@
 	"Gunsaw Mercenary Desc"
 	{
 		"en"	"-Shotgun and pistol, build cheap buildings, but no repairing\n-Able to body swap you to an enemy's body\n  -Takes the stats and weapons of the enemy\n  -Swap by melee hitting a nearby enemy while downed or crouched"
-		"ko"	"-산탄총과 권총 보유, 저렴한 구조물을 건설할 수 있으나 수리 불가\n-적의 몸으로 육체를 치환 할 수 있음:\n   적의 능력치와 무기를 탈취\n   다운 상태일 때 적을 처치하여 치환"
+		"ko"	"-산탄총과 권총 보유, 저렴한 구조물을 건설할 수 있으나 수리 불가\n-적의 몸으로 육체를 치환 할 수 있음:\n   적의 능력치와 무기를 탈취\n   다운 상태, 혹은 웅크리고 있을 때 적을 근접 무기로 적중하여 치환"
 	}
 	"Gunsaw Mercenary Pap 1"
 	{

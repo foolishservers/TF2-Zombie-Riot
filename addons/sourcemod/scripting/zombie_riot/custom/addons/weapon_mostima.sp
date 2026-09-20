@@ -245,7 +245,7 @@ public void LockDown_Wand_Primary_Attack(int client, int weapon, bool crit, int 
 			DoSwingTrace_Custom(swingTrace, client, vecSwingForward, Range, false, 45.0, true,MaxTargethit); //infinite range, and ignore walls!
 			TR_GetEndPosition(vec, swingTrace);
 		}
-		FinishLagCompensation_Base_boss();
+		FinishLagCompensation_Base_boss(.client = client);
 		delete swingTrace;
 
 		float distance = GetVectorDistance(f3_LastGravitonHitLoc[client], vec);

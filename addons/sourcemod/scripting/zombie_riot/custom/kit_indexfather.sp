@@ -473,6 +473,10 @@ static Action Timer_Base(Handle timer, DataPack pack)
 		if(WeaponLevel[client] >= 4)
 			UnlockedShin[client] = true;
 	}
+	if(Arena_Mode())
+	{
+		GraceOfPrescript[client] = MaxPrescriptGrace(client);
+	}
 	if(UnlockedShin[client])
 		ApplyStatusEffect(client, client, "Shin - Rien", 1.0);
 	if(GraceOfPrescript[client])
@@ -637,7 +641,7 @@ void IndexFather_GeneratePrescript(int client, bool ForceNew, int PrescriptForce
 			return;
 		}
 	}
-	if(RaidbossIgnoreBuildingsLogic())
+	if(RaidbossIgnoreBuildingsLogic() || Arena_Mode())
 	{
 		PrescriptForce = 4;
 	}
@@ -801,6 +805,10 @@ void IndexFather_SelectRandomGoal(int client, Prescript data, int PrescriptForce
 		{
 			//todo, add damage scaling
 			data.Goal = IndexFather_DamageDealTreshhold();
+			if(Arena_Mode())
+			{
+				data.Goal = 100.0;
+			}
 		}
 		case PT_TakeDamage:
 		{
@@ -1330,7 +1338,10 @@ public void IndexFather_TakeDamageDeal(int victim, int &attacker, int &inflictor
 	damage *= (float(GraceOfPrescript[attacker]) * 0.01) + 1.0;
 	if(f_FuriosoInUse[attacker] > GetGameTime())
 	{
-		damage *= 2.0;
+		if(Arena_Mode())
+			damage *= 1.5;
+		else
+			damage *= 1.75;
 	}
 	if(CheckInHud())
 		return;
@@ -1379,7 +1390,7 @@ public void IndexFather_TakeDamageDeal(int victim, int &attacker, int &inflictor
 		}
 		ResetFurioso = true;
 		f_DodgeCooldown[attacker] = GetGameTime() + IndexFather_DashCooldown(attacker);
-		if(i_DodgesAvailable[attacker] <= (IndexFather_DodgeMaxReturn(attacker) / 2))
+		if(!Arena_Mode() && i_DodgesAvailable[attacker] <= (IndexFather_DodgeMaxReturn(attacker) / 2))
 			i_DodgesAvailable[attacker] = IndexFather_DodgeMaxReturn(attacker) / 2;
 			
 	}
@@ -1432,6 +1443,8 @@ public void IndexFather_TakeDamageDeal(int victim, int &attacker, int &inflictor
 		AddWeaponToFurioso(attacker, 1);
 		if(WasARaidboss[attacker])
 			AddWeaponToFurioso(attacker, 1);
+		if(Arena_Mode())
+			AddWeaponToFurioso(attacker, 4);
 	}
 	if(ResetFurioso)
 	{

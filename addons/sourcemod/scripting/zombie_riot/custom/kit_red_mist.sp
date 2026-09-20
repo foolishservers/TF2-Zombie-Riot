@@ -889,6 +889,8 @@ public void Red_Mist_OnTakeDamage_Deal(int victim, int &attacker, int &inflictor
 	if(Abno_Pages[attacker] & ABNORMPAGE_VAMPIRISM)
 	{
 		float HealByThis = (7.5 * WeaponLevel[attacker]);
+		if(Arena_Mode())
+			HealByThis *= 0.5;
 		HealEntityGlobal(attacker, attacker, HealByThis, 1.0, 2.0, HEAL_SELFHEAL);
 	}
 	if(Abno_Pages[attacker] & ABNORMPAGE_PREY)
@@ -970,11 +972,15 @@ public void Red_Mist_OnTakeDamage_Deal(int victim, int &attacker, int &inflictor
 					}
 				}
 			}
+			if(Arena_Mode())
+				damage *= 0.65;
 		}
 	}
 	if(Special_Damage_Boost[attacker]) //Horrizontal Slash, multi target, m2 ability
 	{
 		damage *= 6.0;
+		if(Arena_Mode())
+			damage *= 0.75;
 		if(!Hori_Sound_Played[attacker])//only play once!!!!111!
 		{
 			for(int listener=1; listener<=MaxClients; listener++)//for special manual download sounds
@@ -1017,6 +1023,8 @@ public void Red_Mist_On_Kill(int victim, int killer, int weapon)
 		//PrintToChatAll("absorption works");
 		float MaxHealth = float(SDKCall_GetMaxHealth(killer));
 		float HealByThis = (MaxHealth * 0.05);
+		if(Arena_Mode())	
+			HealByThis *= 5.0;
 		HealEntityGlobal(killer, killer, HealByThis, 1.0, 2.0, HEAL_SELFHEAL);
 		absorption_counter[killer] += 1;
 		//PrintToChat(killer, "Absorption heal triggered");
@@ -1221,7 +1229,7 @@ public void Red_Mist_Onrush(int client, int weapon)
 	float vecSwingForward[3];
 	StartLagCompensation_Base_Boss(client);
 	DoSwingTrace_Custom(swingTrace, client, vecSwingForward, 300.0, false, 35.0, true); //infinite range, and ignore walls!
-	FinishLagCompensation_Base_boss();
+	FinishLagCompensation_Base_boss(.client = client);
 
 	int target = TR_GetEntityIndex(swingTrace);
 	delete swingTrace;
@@ -1324,6 +1332,8 @@ public Action Onrush_Check_Distance(Handle timer, DataPack Onrush_pack)
 		Strenght_boost = 1.0 + (0.05 * Strenght_Amount[client]);
 		OnrushDamage *= Strenght_boost;
 		OnrushDamage *= 2.5; //yes
+		if(Arena_Mode())
+			OnrushDamage *= 0.5;
 		RedMistReduceCD(client, 1.5);
 		static float angles[3];
 		GetEntPropVector(client, Prop_Send, "m_angRotation", angles);

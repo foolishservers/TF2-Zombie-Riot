@@ -311,6 +311,7 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 		enemy.Is_Immune_To_Nuke = true;
 		enemy.Is_Boss = 2;
 		enemy.ExtraDamage = 1.0;
+		enemy.CustomName = "";
 
 		switch(RaidFight)
 		{
@@ -938,7 +939,7 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 
 			if(postWaves+1 < 89)
 			{
-				switch(GetRandomInt(1, 4))
+				switch(GetRandomInt(1, 6))
 				{
 					case 1:
 					{
@@ -952,6 +953,14 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 					{
 						CPrintToChatAll("{gold}음... 뭔가 잘못되어가고 있나본데...");		
 					}
+					case 4:
+					{
+						CPrintToChatAll("{lightcyan}Umm... The heck is that?!");		
+					}
+					case 5:
+					{
+						CPrintToChatAll("{lightcyan}Wait is that a Umbral in there??");		
+					}
 					default:
 					{
 						CPrintToChatAll("{gold}어... 이런, 조심해!!");
@@ -960,7 +969,7 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 			}	
 			else
 			{	
-				switch(GetRandomInt(1, 4))
+				switch(GetRandomInt(1, 6))
 				{
 					case 1:
 					{
@@ -974,6 +983,14 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 					{
 						CPrintToChatAll("{gold}이런... 저 놈들이 계속 몰려오고 있어!");		
 					}
+					case 4:
+					{
+						CPrintToChatAll("{lightcyan}More Umbrals are comming, get rid of them.");		
+					}
+					case 5:
+					{
+						CPrintToChatAll("{lightcyan}Watch out, more Umbrals are approaching.");		
+					}
 					default:
 					{
 						CPrintToChatAll("{gold}그리고... 이런 제길.");
@@ -984,16 +1001,7 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 		else
 		{
 			if(enemy.Health)
-			{
-				if(StrContains(enemy.CustomName, "First ") != -1)
-				{
-					enemy.Health = RoundToCeil((HealthBonus + (enemy.Health * MultiGlobalHealth * HealthMulti * (((postWaves * 3) + 99) * 0.009))) * 0.5);
-				}
-				else
-				{
-					enemy.Health = RoundToCeil((enemy.Health * MultiGlobalHealth * HealthMulti * (((postWaves * 3) + 99) * 0.009)) * 0.5);
-				}
-			}
+				enemy.Health = RoundToCeil((enemy.Health * MultiGlobalHealth * HealthMulti * (((postWaves * 3) + 99) * 0.009)) * 0.5);
 	
 			count = RoundToFloor((count * (((postWaves * 1.5) + 80) * 0.03)) * 0.112);
 		}
