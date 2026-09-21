@@ -5727,7 +5727,7 @@ void Store_ApplyAttribs(int client)
 	map.SetValue("49", 1);	// no doublejumps
 	if(i_CurrentEquippedPerk[client] & PERK_SYMBIOSOS_SHOT) //living armor
 	{
-		map.SetValue("4058", 1);	// regen armor
+		map.SetValue("4058", 1.0);	// regen armor
 	}
 
 	if(b_IsAloneOnServer)
