@@ -806,14 +806,14 @@ static void DisplayHintVote()
 
 		if(top[0] != -1)
 		{
-			Vote vote;
-			Voting.GetArray(top[0], vote);
-			
 			for(int client = 1; client <= MaxClients; client++)
 			{
 				if(IsClientInGame(client))
 				{
 					SetGlobalTransTarget(client);
+					
+					Vote vote;
+					Voting.GetArray(top[0], vote);
 					
 					char buffer[256];
 					FormatEx(buffer, sizeof(buffer), "Votes: %d/%d, %ds left\n1. %t%s: (%d)", count, total, RoundFloat(VoteEndTime - GetGameTime()), vote.Name, vote.Append, votes[top[0]]);
