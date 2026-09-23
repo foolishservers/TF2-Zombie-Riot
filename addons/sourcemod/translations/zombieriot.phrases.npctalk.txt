@@ -4332,6 +4332,28 @@
 		"ko"		"지옥에나 가라."
 	}
 	
+	// Pregnant.
+	"Pregnant_Enter_Phase_1"
+	{
+		"en"		""
+		"ko"		"그것의 방어가 약해졌다."
+	}
+	"Pregnant_Enter_Phase_2"
+	{
+		"en"		""
+		"ko"		"그것이 고통 속에 몸부림치고 있다."
+	}
+	"Pregnant_Enter_Phase_3"
+	{
+		"en"		""
+		"ko"		"그것이 울부짖는다."
+	}
+	"Pregnant_Enter_Phase_4"
+	{
+		"en"		""
+		"ko"		"그것이 분노한다."
+	}
+	
 	// OverHeater.
 	"OverHeater_Encounter_1"
 	{
@@ -4345,7 +4367,7 @@
 	}
 	"OverHeater_Encounter_3"
 	{
-		"en"		"네놈을 삼켜주마."
+		"en"		"I’ll devour you."
 		"ko"		"네놈을 삼켜주마."
 	}
 	
@@ -4378,7 +4400,7 @@
 	
 	"OverHeater_Death"
 	{
-		"en"		"겨우 그까짓 힘으로 감히!"
+		"en"		"How dare you with power so pitiful as that!"
 		"ko"		"겨우 그까짓 힘으로 감히!"
 	}
 	
@@ -4422,7 +4444,7 @@
 	"CaptainQuetz_LastMann_1"
 	{
 		"en"		"You can’t do anything!"
-		"ko"		"발악해보아라 이곳이 너희의 마지막이 될 것이니."
+		"ko"		"발악해보아라. 이곳이 너희의 마지막이 될 것이니."
 	}
 	"CaptainQuetz_LastMann_2"
 	{

@@ -446,7 +446,7 @@
 		"en"	"''I know who it is that you seek, outsider,'' says a slender, stooped woman with a strange laugh.\n''You don't understand that Mazeaten, do you? You seem to trust him, though.''\nThe strange woman looks at you through her helmet and scarf.\n''I can tell you all about his past. Are you interested?''\nShe reaches out her shriveled hands, seemingly asking for something."
 		"ru"	"«Я знаю, кого ты ищешь, чужак,» - говорит стройная, сутулая женщина со странным смехом.\n«Ты не понимаешь этого комбайна, не так ли? Но, похоже, вы ему доверяете.»\nСтранная женщина смотрит на вас через шлем и шарф.\n«Я могу рассказать вам всё о его прошлом. Вы заинтересованы?»\nОна протягивает свои сморщенные руки, как бы прося о чём-то."
 		"it"	"''So chi è che cerchi, forestiero'', dice una donna esile e china con una strana risata.\n''Tu non capisci quel Mazeaten, vero? Sembra che vi fidiate di lui''.\nLa strana donna vi guarda attraverso l'elmo e la sciarpa.\n Posso dirvi tutto sul suo passato. Ti interessa?''\nAllunga le mani raggrinzite, sembra chiedere qualcosa."
-		"ko"	"''자네가 누굴 찾는지 난 알고 있어, 외부인.'' 한 곱사등에 수척하게 야윈 사람이 괴상한 웃음소리를 내며 말을 건넸다.\n''하지만 자넨 저 마제트인을 모르지. 안 그래? 자네가 그를 신뢰한다 해도.''\n괴인은 후드와 목도리 사이로 당신을 바라보며 웃고 있었다.\n''내가 녀석의 과거를 알려줄 수 있는데. 궁금하지 않아?''\n그녀는 메마른 두 손을 내밀었고, 당신에게 무언가 요구하는 것 같았다."
+		"ko"	"''자네가 누굴 찾는지 난 알고 있어, 외부인.'' 허리 굽은 야윈 노파가 괴상하게 웃으며 말했다.\n''하지만 자넨 그 마제트인을 모르잖아. 안 그래? 자네가 그를 신뢰한다 해도.''\n''내가 녀석의 과거를 알려줄 수 있는데. 궁금하지 않아?''\n그녀는 메마른 두 손을 내밀면서 무언가 요구하는 것 같았다."
 	}
 	"Eccentric Option 1"
 	{
@@ -497,9 +497,9 @@
 	}
 	"Eccentric Lore 1-1a"
 	{
-		"en"	"''Ah, 'Shadow.' Lurks in the shadows, never knowing when to strike. If you ever feel like you disconnected from the world, that's her striking. Luckily it's small pranks to keep her amused for now. When he does come out, let's just say it's as we vanished, shut down.''"
-		"it"	"''ah, 'Ombra' Si nasconde nell'ombra, senza sapere quando colpire. Se vi sentite come scollegati dal mondo, è lei che colpisce. Per fortuna per ora si tratta di piccoli scherzi che la fanno divertire. Quando uscirà, diciamo che sarà come se fossimo spariti, spenti''"
-		"ko"	"''아, '그림자' 말인가. 언제 나타날지 모르게 그림자 속을 맴도는 존재. 가끔 세상과 단절된 느낌이 들지? 그게 그녀가 널 슬쩍 건드린 증거야. 지금은 그저 심심풀이로 장난만 치고 있지만, 만약 진짜 모습을 드러내게 된다면... 모든 게 멈추고, 우린 그녀에게 집어삼켜지겠지.''"
+		"en"	"''Ah, 'Shadow.' Lurks in the shadows, never knowing when to strike. If you ever feel like you disconnected from the world, that's her striking."
+		"it"	"''ah, 'Ombra' Si nasconde nell'ombra, senza sapere quando colpire. Se vi sentite come scollegati dal mondo, è lei che colpisce."
+		"ko"	"''아, '그림자' 말인가. 언제 나타날지 모르게 그림자 속을 맴도는 존재. 가끔 세상과 단절된 느낌이 들지? 그게 그녀가 널 슬쩍 건드린 증거야."
 	}
 	"Eccentric Lore 1-1b"
 	{
@@ -518,7 +518,7 @@
 	{
 		"en"	"''Ah, he's locked away. Your Mazeat friend locked 'Bladedance' away, how he did it is still questions me. Let's just say he'll never see the light of day as long the cage remains.''"
 		"it"	"''ah, è stato rinchiuso. Il tuo amico Mazeat ha rinchiuso 'Bladedance', come abbia fatto mi è ancora ignoto. Diciamo solo che non vedrà mai la luce del giorno finché la gabbia rimarrà''"
-		"ko"	"''아, 그는 봉인 당했어. 네 마제트인 친구가 저 멀리에 '칼춤' 을 봉인했지. 그가 도대체 어떻게 봉인해둔 건지는 아직도 이해가 안 가지만 말이야. 하지만 말이지, 그 봉인이 존재하는 한, 그는 결코 다시 세상의 빛을 보지 못할 거야.''"
+		"ko"	"''아, 그는 봉인 당했어. 네 마제트인 친구가 저 멀리에 '칼춤'을 봉인했지. 그가 도대체 어떻게 봉인해둔 건지는 아직도 이해가 안 가지만 말이야. 하지만 말이지, 그 봉인이 존재하는 한, 그는 결코 다시 세상의 빛을 보지 못할 거야.''"
 	}
 	"Eccentric Option 1-3"
 	{
@@ -531,7 +531,7 @@
 	{
 		"en"	"''Hahaha, 'Whiteflower' has no idea how to even pull it off. Betraying every other lord, only himself and 'Shadow' left together.''"
 		"it"	"''Hahaha, 'Whiteflower' non ha la minima idea di come fare. Tradendo tutti gli altri lord, sono rimasti solo lui e 'Shadow' insieme''"
-		"ko"	"''하하하, '배풍등' 은 그 '일'을 어떻게 시작해야 할지 전혀 감도 못 잡고 있어. 다른 군주들까지 배신했으니 말이지. 오직 그와 '그림자'만 남았어."
+		"ko"	"''하하하, '배풍등' 은 그 '일'을 어떻게 시작해야 할지 전혀 감도 못 잡고 있어. 다른 군주들까지 배신했으니 말이지. 그의 편에는 '그림자'만 남았어."
 	}
 	"Eccentric Option 1-4"
 	{
@@ -615,7 +615,7 @@
 		"en"	"By the time you open your eyes again, your anxiety and exhaustion have long departed your body. You gather up your bags and continue exploring the unknown with your teammates."
 		"ru"	"Когда вы снова открываете глаза, беспокойство и усталость уже давно покинули ваше тело. Вы собираете свои вещи и продолжаете исследовать неизвестность вместе со своими товарищами."
 		"it"	"Quando riaprite gli occhi, l'ansia e la stanchezza hanno abbandonato da tempo il vostro corpo. Raccogliete i vostri bagagli e continuate a esplorare l'ignoto con i vostri compagni di squadra."
-		"ko"	"눈을 떠 보니, 긴장감과 피로감은 이미 사라진 지 오래됐다. 행낭을 정리하곤 당신은 동료들과 함께 계속해서 미지의 앞길을 탐색해나갔다."
+		"ko"	"눈을 떠 보니, 긴장감과 피로감은 이미 사라진 지 오래됐다. 배낭을 정리하곤 당신은 동료들과 함께 계속해서 미지의 앞길을 탐색해나갔다."
 	}
 	"Coffin of Evil Lore"
 	{
@@ -932,7 +932,7 @@
 	"Broken Bridge Desc 1"
 	{
 		"en"	"{yellow}Receive an unknown artifact {crimson}but lose 4 Australium Ingots"
-		"it"	"{yellow}알 수 없는 소장품을 얻습니다. {red}오스트레일륨 주괴를 4 잃습니다."
+		"ko"	"{yellow}알 수 없는 소장품을 얻습니다. {red}오스트레일륨 주괴를 4 잃습니다."
 	}
 	"Broken Bridge Lore 1"
 	{
