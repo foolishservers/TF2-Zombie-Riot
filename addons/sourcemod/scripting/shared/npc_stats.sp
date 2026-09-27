@@ -4040,7 +4040,6 @@ public void NPC_Base_InitGamedata()
 		.DefineFloatField("m_flAimTargetSetTime")
 		.DefineBoolField("m_bYawHandedOff")
 		.DefineBoolField("m_bPitchHandedOff")
-		.DefineVectorField("m_vecAimTarget")
 #endif
 	.EndDataMapDesc();
 	EntityFactory.Install();
