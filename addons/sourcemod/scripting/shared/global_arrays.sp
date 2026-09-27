@@ -988,3 +988,4 @@ ArrayList CurrentCollection;
 ArrayList Artifacts;
 ArrayList E_AL_StatusEffects[MAXENTITIES];
 #endif
+bool CanUseBuilding[MAXENTITIES][MAXPLAYERS];
