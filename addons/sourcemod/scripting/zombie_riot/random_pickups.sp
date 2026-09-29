@@ -220,6 +220,8 @@ public void RandomPickup_TouchPickup(int entity, int other)
 	{
 		CurrentAmmo[other][i] = GetAmmo(other, i);
 	}
+	if(Arena_Mode())
+		RemoveEntity(entity);
 }
 
 static int RandomPickup_GetRandomPlayer()

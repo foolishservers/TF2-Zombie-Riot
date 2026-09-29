@@ -1486,6 +1486,7 @@ public void DeleteBuildingLookedAt(int client)
 							entity = objstats.m_iMasterBuilding;
 							
 							//change to master entity.
+						VestanAssaultVehicle_ResetObject(entity);
 						i_BuildingSelectedToBeDeleted[client] = EntIndexToEntRef(entity);
 						DataPack pack;
 						CreateDataTimer(0.1, DeleteBuildingTimer, pack, TIMER_FLAG_NO_MAPCHANGE|TIMER_REPEAT);
