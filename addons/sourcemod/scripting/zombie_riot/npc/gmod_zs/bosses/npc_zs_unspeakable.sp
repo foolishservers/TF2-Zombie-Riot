@@ -626,7 +626,7 @@ static Action ZsUnspeakable_OnTakeDamage(int victim, int &attacker, int &inflict
 	if((ReturnEntityMaxHealth(npc.index)/4) >= GetEntProp(npc.index, Prop_Data, "m_iHealth") && !npc.Anger) 
 	{
 		npc.Anger = true;
-		SensalGiveShield(npc.index, CountPlayersOnRed(1) * 24);
+		SensalGiveShield(npc.index, CountPlayersOnRed(1) * 48);
 		if(!npc.m_bAlliesSummoned)
 		{
 			npc.m_bAlliesSummoned = true;

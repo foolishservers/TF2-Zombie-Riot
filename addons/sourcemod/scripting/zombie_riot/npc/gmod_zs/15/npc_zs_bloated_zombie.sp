@@ -107,7 +107,7 @@ methodmap BloatedZombie < CClotBody
 	
 	public BloatedZombie(float vecPos[3], float vecAng[3], int ally, bool Alt)
 	{
-		BloatedZombie npc = view_as<BloatedZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.25", "1600", ally, false));
+		BloatedZombie npc = view_as<BloatedZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.25", (Alt ? "3200" : "800"), ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		

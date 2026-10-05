@@ -33,7 +33,7 @@ void AllySniper_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_MeleeAttackSounds)); i++) { PrecacheSound(g_MeleeAttackSounds[i]); }
 	PrecacheModel("models/player/medic.mdl");
 	NPCData data;
-	strcopy(data.Name, sizeof(data.Name), "Sir Shootsalot");
+	strcopy(data.Name, sizeof(data.Name), "ZS Worldchi");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_ally_sniper");
 	strcopy(data.Icon, sizeof(data.Icon), "sniper");
 	data.IconCustom = false;
@@ -124,6 +124,12 @@ methodmap AllySniper < CClotBody
 		SetVariantColor(view_as<int>({255, 0, 0, 0}));
 		AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
 		
+		float wave = float(Waves_GetRoundScale()+1); //Wave scaling
+		
+		wave *= 0.5;
+
+		npc.m_flWaveScale = wave;
+		
 		if(npc.m_bScalesWithWaves)
 		{
 			SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
@@ -136,11 +142,15 @@ methodmap AllySniper < CClotBody
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
 
 		npc.m_iWearable1 = npc.EquipItem("head", "models/weapons/c_models/c_sniperrifle/c_sniperrifle.mdl");
-		npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/player/items/sniper/hw2013_sir_shootsalot/hw2013_sir_shootsalot.mdl");
+		npc.m_iWearable2 = npc.EquipItem("head", "models/workshop_partner/player/items/sniper/thief_sniper_cape/thief_sniper_cape.mdl");
 		npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/player/items/sniper/xms_sniper_commandobackpack/xms_sniper_commandobackpack.mdl");
+		npc.m_iWearable4 = npc.EquipItem("head", "models/workshop_partner/player/items/sniper/thief_sniper_hood/thief_sniper_hood.mdl");
+		npc.m_iWearable5 = npc.EquipItem("head", "models/workshop/player/items/sniper/hwn2022_hunting_cloak/hwn2022_hunting_cloak.mdl");
 		SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", skin);
 		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", skin);
 		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 0);
+		SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", skin);
+		SetEntProp(npc.m_iWearable5, Prop_Send, "m_nSkin", skin);
 
 		TeleportDiversioToRandLocation(npc.index,_,1750.0, 1250.0);
 		
@@ -401,10 +411,13 @@ int AllySniperSelfDefense(AllySniper npc, float gameTime)
 				if(ShouldNpcDealBonusDamage(target))
 					damageDealt *= 3.0;
 				
-				SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt, DMG_BULLET, -1, _, ThrowPos[npc.index]);
+				SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt * npc.m_flWaveScale, DMG_BULLET, -1, _, ThrowPos[npc.index]);
 				if (!IsInvuln(target) && !i_IsABuilding[target])
 				{
 					ApplyStatusEffect(npc.index, target, "Silenced", 3.0);
+					ApplyStatusEffect(npc.index, target, "Hypodermic Toxin Injection", 3.0);
+					if(!HasSpecificBuff(target, "Fluid Movement"))
+							ApplyStatusEffect(npc.index, target, "Slowdown", 3.0);
 				}
 			} 
 		}

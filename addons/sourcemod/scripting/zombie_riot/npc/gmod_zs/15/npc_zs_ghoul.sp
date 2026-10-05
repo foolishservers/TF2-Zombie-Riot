@@ -99,7 +99,7 @@ methodmap Ghoul < CClotBody
 	
 	public Ghoul(float vecPos[3], float vecAng[3], int ally, bool Alt)
 	{
-		Ghoul npc = view_as<Ghoul>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", (Alt ? "3200" : "800"), ally, false));
+		Ghoul npc = view_as<Ghoul>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", (Alt ? "1600" : "400"), ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		

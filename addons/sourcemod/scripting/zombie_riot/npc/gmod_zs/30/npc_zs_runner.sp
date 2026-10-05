@@ -97,7 +97,7 @@ methodmap Zsrunner < CSeaBody
 	
 	public Zsrunner(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
-		Zsrunner npc = view_as<Zsrunner>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "800", ally, false));
+		Zsrunner npc = view_as<Zsrunner>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "400", ally, false));
 		// 2800 x 0.15
 		// 3600 x 0.15
 

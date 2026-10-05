@@ -22,7 +22,6 @@ static const char g_IdleSounds[][] = {
 	"vo/taunts/soldier_taunts01.mp3",
 	"vo/taunts/soldier_taunts09.mp3",
 	"vo/taunts/soldier_taunts14.mp3",
-	
 };
 
 static const char g_IdleAlertedSounds[][] = {
@@ -43,7 +42,7 @@ void Allysoldier_OnMapStart_NPC()
 	for (int i = 0; i < (sizeof(g_SelfRevive)); i++) { PrecacheSound(g_SelfRevive[i]); }
 	
 	NPCData data;
-	strcopy(data.Name, sizeof(data.Name), "Freedom Feathers");
+	strcopy(data.Name, sizeof(data.Name), "ZS Kranz");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_ally_soldier");
 	strcopy(data.Icon, sizeof(data.Icon), "soldier");
 	data.IconCustom = false;
@@ -68,6 +67,7 @@ static any ClotSummon(int client, float vecPos[3], float vecAng[3], int team)
 {
 	return Allysoldier(vecPos, vecAng, team);
 }
+
 methodmap Allysoldier < CClotBody
 {
 	public void PlayIdleSound() {
@@ -113,6 +113,11 @@ methodmap Allysoldier < CClotBody
 		public get()							{ return fl_AbilityOrAttack[this.index][7]; }
 		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][7] = TempValueForProperty; }
 	}
+	property float m_flNextGroupHeal
+	{
+		public get()							{ return fl_AbilityOrAttack[this.index][5]; }
+		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][5] = TempValueForProperty; }
+	}
 	
 	public Allysoldier(float vecPos[3], float vecAng[3], int ally)
 	{
@@ -122,7 +127,7 @@ methodmap Allysoldier < CClotBody
 		
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
-		int iActivity = npc.LookupActivity("ACT_MP_RUN_PRIMARY");
+		int iActivity = npc.LookupActivity("ACT_MP_RUN_SECONDARY");
 		if(iActivity > 0) npc.StartActivity(iActivity);
 		
 		SetVariantInt(2);
@@ -138,7 +143,7 @@ methodmap Allysoldier < CClotBody
 		func_NPCOnTakeDamage[npc.index] = Allysoldier_OnTakeDamage;
 		func_NPCThink[npc.index] = Allysoldier_ClotThink;		
 		
-		//IDLE
+		// IDLE
 		npc.m_flSpeed = 330.0;
 		npc.m_iMaxAmmo = 1;
 		npc.m_iAmmo = 1;
@@ -152,16 +157,24 @@ methodmap Allysoldier < CClotBody
 		SetVariantColor(view_as<int>({255, 0, 0, 0}));
 		AcceptEntityInput(npc.m_iTeamGlow, "SetGlowColor");
 		
+		float wave = float(Waves_GetRoundScale()+1); //Wave scaling
+		
+		wave *= 0.5;
+
+		npc.m_flWaveScale = wave;
+		
 		int skin = 0;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
 		
-		npc.m_iWearable1 = npc.EquipItem("head", "models/weapons/c_models/c_rocketlauncher/c_rocketlauncher.mdl");
+		npc.m_iWearable1 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_russian_riot/c_russian_riot.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
 		
-		npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/player/items/soldier/hw2013_feathered_freedom/hw2013_feathered_freedom.mdl");
+		npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/player/items/all_class/xms2013_soviet_stache/xms2013_soviet_stache_soldier.mdl");
 		npc.m_iWearable3 = npc.EquipItem("head", "models/weapons/c_models/c_buffpack/c_buffpack.mdl");
 		npc.m_iWearable4 = npc.EquipItem("head", "models/weapons/c_models/c_buffbanner/c_buffbanner.mdl");
+		npc.m_iWearable5 = npc.EquipItem("head", "models/workshop/player/items/soldier/spr17_flakcatcher/spr17_flakcatcher.mdl");
+		npc.m_iWearable6 = npc.EquipItem("head", "models/workshop/player/items/all_class/fall17_jungle_ops/fall17_jungle_ops_soldier.mdl");
 		SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", 0);
 		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", 0);
 		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 0);
@@ -177,228 +190,218 @@ methodmap Allysoldier < CClotBody
 
 static void Allysoldier_ClotThink(int iNPC)
 {
-    Allysoldier npc = view_as<Allysoldier>(iNPC);
-    float gametime = GetGameTime(npc.index);
-
-    if(npc.m_flNextDelayTime > gametime)
-        return;
-    npc.m_flNextDelayTime = gametime + DEFAULT_UPDATE_DELAY_FLOAT;
-    
-    npc.Update();
+	Allysoldier npc = view_as<Allysoldier>(iNPC);
+	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
 	
-	if(npc.m_flNextThinkTime > gametime)
+	float GameTime = GetGameTime(npc.index);
+
+	// 다운(Stun/SelfRevive) 상태 처리
+	if(npc.m_flWasIdleState > 0.0)
 	{
-        return;
-	}
-    npc.m_flNextThinkTime = gametime + 0.1;
-    if(!b_ShowNpcHealthbar[iNPC])
-	{
-		if(npc.m_flSelfRevival && npc.m_flSelfRevival < GetGameTime())
+		npc.StopPathing();
+		if(npc.m_flSelfRevival > 0.0 && GameTime >= npc.m_flSelfRevival)
 		{
 			npc.PlaySelfRevive();
-			DesertYadeamDoHealEffect(iNPC, 200.0);
 			SetDownedState_Allysoldier(iNPC, false);
 		}
-		//stunned
 		return;
 	}
-    float VecSelfNpcabs[3]; 
-    GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", VecSelfNpcabs);
-    Allysoldier_ApplyBuffInLocation_Optimized(VecSelfNpcabs, GetTeam(npc.index), npc.index);
-    
-    if(npc.m_blPlayHurtAnimation)
-    {
-        npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
-        npc.m_blPlayHurtAnimation = false;
-        npc.PlayHurtSound();
-    }
-    
-    int ally = npc.m_iTargetWalkTo;
-    
-    if(i_Target[npc.index] == -1 || npc.m_flGetClosestTargetTime < gametime)
-    {
-        npc.m_iTarget = GetClosestTarget(npc.index, _, _, _, _, _, _, _, 99999.9);
-        npc.m_flGetClosestTargetTime = gametime + 1.0;
 
-        ally = GetClosestAllyPlayer(npc.index);
-        npc.m_iTargetWalkTo = ally;
-    }
-    
-    if(IsValidEnemy(npc.index, npc.m_iTarget))
-    {
-        float vecTarget[3]; WorldSpaceCenter(npc.m_iTarget, vecTarget);
-        float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
-        float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
+	if(npc.m_flNextRangedAttackHappening < GetGameTime())
+	{
+		npc.m_flNextRangedAttackHappening = GetGameTime() + 4;
+		DesertYadeamDoHealEffect(npc.index, 200.0);
+	}
+	if(npc.m_flNextDelayTime > GameTime)
+		return;
+	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
+	npc.Update();
+	if(npc.m_blPlayHurtAnimation)
+	{
+		npc.m_blPlayHurtAnimation = false;
+		npc.PlayHurtSound();
+	}
+	if(npc.m_flNextThinkTime > GameTime)
+		return;
+	npc.m_flNextThinkTime = GameTime + 0.1;
+	
+	float VecSelfNpcabs[3]; 
+	GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", VecSelfNpcabs);
+	Allysoldier_ApplyBuffInLocation_Optimized(VecSelfNpcabs, GetTeam(npc.index), npc.index);
 
-        switch(Allysoldier_Work(npc, gametime, npc.m_iTarget, flDistanceToTarget, vecTarget))
-        {
-            case 0: // 추격 상태
-            {
-                if(npc.m_iChanged_WalkCycle != 0)
-                {
-                    npc.m_bisWalking = true;
-                    npc.m_bAllowBackWalking = false;
-                    npc.m_iChanged_WalkCycle = 0;
-                    npc.SetActivity("ACT_MP_RUN_PRIMARY");
-                    npc.m_flSpeed = 330.0;
-                    npc.StartPathing();
-                }
-                
-                if(flDistanceToTarget < npc.GetLeadRadius()) 
-                {
-                    float vPredictedPos[3];
-                    PredictSubjectPosition(npc, npc.m_iTarget, _, _, vPredictedPos);
-                    npc.SetGoalVector(vPredictedPos);
-                }
-                else 
-                {
-                    npc.SetGoalEntity(npc.m_iTarget);
-                    npc.StartPathing();
-                }
-            }
-            case 1: // 정지/사격 상태
-            {
-                if(npc.m_iChanged_WalkCycle != 1)
-                {
-                    npc.m_bisWalking = false;
-                    npc.m_iChanged_WalkCycle = 1;
-                    npc.SetActivity("ACT_MP_STAND_PRIMARY");
-                    npc.m_flSpeed = 0.0;
-                    npc.StopPathing();
-                }
-            }
-            case 2: // 후퇴 상태
-            {
-                if(npc.m_iChanged_WalkCycle != 2)
-                {
-                    npc.m_bisWalking = true;
-                    npc.m_bAllowBackWalking = true;
-                    npc.m_iChanged_WalkCycle = 2;
-                    npc.SetActivity("ACT_MP_RUN_PRIMARY");
-                    npc.m_flSpeed = 330.0;
-                    npc.StartPathing();
-                }
-                float vBackoffPos[3];
-                BackoffFromOwnPositionAndAwayFromEnemy(npc, npc.m_iTarget, _, vBackoffPos);
-                npc.SetGoalVector(vBackoffPos, true);
-            }
-        }
-    }
-    else // 적이 없을 때 (아군 추적)
-    {
-        if(ally > 0)
-        {
-            float vecTarget[3]; WorldSpaceCenter(ally, vecTarget);
-            float vecSelf[3]; WorldSpaceCenter(npc.index, vecSelf);
-            float flDistanceToTarget = GetVectorDistance(vecTarget, vecSelf, true);
+	// 1. 적 타겟 유효성 검사 및 탐색
+	if(!npc.m_iTarget || !IsValidEnemy(npc.index, npc.m_iTarget) || npc.m_flGetClosestTargetTime < GameTime)
+	{
+		npc.m_iTarget = GetClosestTarget(npc.index);
+		npc.m_flGetClosestTargetTime = GameTime + 1.0;
+	}
 
-            // 아군과 200 유닛 이상 떨어지면 추적 실행 (제곱값 40000.0)
-            if(flDistanceToTarget > 40000.0)
-            {
-                npc.m_iChanged_WalkCycle = 0;
-                npc.m_flSpeed = 330.0;
-                npc.SetActivity("ACT_MP_RUN_PRIMARY");
-				npc.FaceTowards(vecTarget, 20000.0);
-                npc.SetGoalEntity(ally);
-                npc.StartPathing();
-                return; // 중요: 이동 명령을 내렸으므로 아래의 StopPathing을 건너뜀
-            }
-        }
+	// 2. 아군 타겟 유효성 검사 및 가장 가까운 아군 거리 계산
+	if(npc.m_iTargetAlly && !IsValidAlly(npc.index, npc.m_iTargetAlly))
+		npc.m_iTargetAlly = 0;
+	
+	npc.m_iTargetAlly = GetClosestAlly(npc.index);
+	float flDistanceToAlly = 999999.0;
+	if(npc.m_iTargetAlly > 0)
+	{
+		float vecTarget[3]; WorldSpaceCenter(npc.m_iTargetAlly, vecTarget);
+		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
+		flDistanceToAlly = GetVectorDistance(vecTarget, VecSelfNpc, true);
+	}
 
-        // 목적지에 도착했거나 대상이 없으면 정지
-        npc.StopPathing();
-        npc.m_iChanged_WalkCycle = -1; // 상태 초기화
-        npc.m_flGetClosestTargetTime = 0.0;
-    }
-    npc.PlayIdleAlertSound();
+	float flDistanceToEnemy = 999999.0;
+	if(npc.m_iTarget > 0 && IsValidEnemy(npc.index, npc.m_iTarget))
+	{
+		float vecEnemy[3]; WorldSpaceCenter(npc.m_iTarget, vecEnemy);
+		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
+		flDistanceToEnemy = GetVectorDistance(vecEnemy, VecSelfNpc, true);
+	}
+
+	// [핵심 로직] 주변 아군이 너무 멀리 있다면(예: 600유닛 이상, 제곱 거리 기준 360000.0) 공격을 멈추고 아군을 추적
+	// 기준 거리: 600.0 유닛 (600.0 * 600.0 = 360000.0)
+	bool bHasAllyNearby = (npc.m_iTargetAlly > 0 && flDistanceToAlly <= (600.0 * 600.0));
+
+	if(!bHasAllyNearby && npc.m_iTargetAlly > 0)
+	{
+		// 주변에 아군이 없으면 무조건 아군에게 이동
+		npc.StartPathing();
+		npc.SetGoalEntity(npc.m_iTargetAlly);
+	}
+	else
+	{
+		// 아군이 주변에 있다면 기존 적 추적/전투 로직 수행
+		if(npc.m_iTarget > 0 && IsValidEnemy(npc.index, npc.m_iTarget) && flDistanceToEnemy < (800.0 * 800.0))
+		{
+			npc.StartPathing();
+			if(flDistanceToEnemy < (300.0 * 300.0))
+			{
+				npc.StopPathing();
+			}
+			else
+			{
+				npc.SetGoalEntity(npc.m_iTarget);
+			}
+		}
+		else if(npc.m_iTargetAlly > 0)
+		{
+			if(flDistanceToAlly > (100.0 * 100.0))
+			{
+				npc.StartPathing();
+				npc.SetGoalEntity(npc.m_iTargetAlly);
+			}
+			else
+			{
+				npc.StopPathing();
+			}
+		}
+	}
+
+	if(npc.m_flNextGroupHeal < GameTime)
+	{
+		npc.m_flNextGroupHeal = GameTime + 1.0;
+		ExpidonsaGroupHeal(npc.index, 200.0, 14, 10.0, 1.0, true, Expidonsa_DontHealSameIndex);
+	}
+	
+	// 5. 최종 공격 함수 호출 (주변에 아군이 있을 때만 공격 실행)
+	if(bHasAllyNearby)
+	{
+		AllysoldierSelfDefense(npc, GameTime, npc.m_iTarget, flDistanceToEnemy); 
+	}
 }
 
-static int Allysoldier_Work(Allysoldier npc, float gameTime, int target, float distance, float vecTarget[3])
+static int AllysoldierSelfDefense(Allysoldier npc, float gameTime, int target, float distance)
 {
-	if(npc.m_flAttackHappens || !npc.m_iAmmo)
-	{
-		if(!npc.m_flAttackHappens)
-		{
-			npc.m_flAttackHappens=gameTime+1.0;
-			npc.AddGesture("ACT_MP_RELOAD_STAND_PRIMARY", true,_,_,1.1);
-			npc.m_flAttackHappenswillhappen=false;
-			//npc.PlayReloadSound();
-		}
-		if(gameTime > npc.m_flAttackHappens)
-		{
-			npc.m_iAmmo = npc.m_iMaxAmmo;
-			npc.m_flAttackHappens=0.0;
-		}
-	}
-	if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 25.0) || npc.m_flAttackHappenswillhappen)
-	{
-		int Enemy_I_See = Can_I_See_Enemy(npc.index, target);
-		if((gameTime > npc.m_flNextRangedAttack && IsValidEnemy(npc.index, Enemy_I_See)) || npc.m_flAttackHappenswillhappen)
-		{
-			npc.AddGesture("ACT_MP_ATTACK_STAND_PRIMARY", true);
-			float ProjectileSpeed = 700.0;
-			WorldSpaceCenter(Enemy_I_See, vecTarget);
-			PredictSubjectPositionForProjectiles(npc, target, ProjectileSpeed, _,vecTarget);
-			npc.FaceTowards(vecTarget, 20000.0);
-			npc.FireRocket(vecTarget, 270.0, ProjectileSpeed);
-			npc.PlayRangeSound();
-
-			npc.m_flNextRangedAttack=gameTime + 2.0;
-			npc.m_flAttackHappenswillhappen = true;
-			npc.m_iAmmo--;
-		}
-	}
-	if(distance > (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 9.0)||ShouldNpcDealBonusDamage(target))
-	{
+	if(!IsValidEnemy(npc.index, target))
 		return 0;
-	}
-	else if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 8.0))
+
+	if(gameTime < npc.m_flNextRangedAttack)
+		return 0;
+
+	if(distance > (1200.0 * 1200.0))
+		return 0;
+
+	int Enemy_I_See = Can_I_See_Enemy(npc.index, target);
+	if(IsValidEnemy(npc.index, Enemy_I_See))
 	{
-		if(Can_I_See_Enemy_Only(npc.index, target))
+		npc.m_iTarget = Enemy_I_See;
+		target = Enemy_I_See;
+
+		npc.AddGesture("ACT_MP_ATTACK_STAND_SECONDARY");
+		
+		float vecTarget[3]; 
+		WorldSpaceCenter(target, vecTarget);
+		npc.FaceTowards(vecTarget, 20000.0);
+		
+		Handle swingTrace;
+		if(npc.DoSwingTrace(swingTrace, target, { 1200.0, 1200.0, 1200.0 }))
 		{
-			return 2;
+			if(!NpcStats_VestanCallToArms(npc.index))
+				npc.m_iAmmo--;
+				
+			target = TR_GetEntityIndex(swingTrace);
+			float vecHit[3];
+			TR_GetEndPosition(vecHit, swingTrace);
+			
+			float origin[3], angles[3];
+			if(IsValidEntity(npc.m_iWearable5))
+			{
+				view_as<CClotBody>(npc.m_iWearable5).GetAttachment("muzzle", origin, angles);
+			}
+			else
+			{
+				WorldSpaceCenter(npc.index, origin);
+			}
+			
+			ShootLaser(npc.m_iWearable1, "bullet_tracer02_blue", origin, vecHit, false);
+			npc.m_flNextRangedAttack = gameTime + 1.0;
+
+			if(IsValidEnemy(npc.index, target))
+			{
+				float damageDealt = 100.0;
+				if(ShouldNpcDealBonusDamage(target))
+					damageDealt *= 8.0;
+				SDKHooks_TakeDamage(target, npc.index, npc.index, damageDealt  * npc.m_flWaveScale, DMG_BULLET, -1, _, vecHit);
+			}
 		}
+		delete swingTrace;
+		return 1;
 	}
-	return 1;
+	
+	return 0;
 }
 
 void Allysoldier_ApplyBuffInLocation_Optimized(float BannerPos[3], int Team, int iMe = 0)
 {
-    // 거리 제곱값을 미리 상수로 계산 (루프 밖에서 1번만)
-    float rangeSq = ALLYSOLDIER_RANGE * ALLYSOLDIER_RANGE; 
-    float targPos[3];
+	float rangeSq = ALLYSOLDIER_RANGE * ALLYSOLDIER_RANGE; 
+	float targPos[3];
 
-    // 1. 플레이어 루프
-    for(int ally=1; ally<=MaxClients; ally++)
-    {
-        if(IsClientInGame(ally) && IsPlayerAlive(ally) && GetTeam(ally) == Team)
-        {
-            GetClientAbsOrigin(ally, targPos);
-            // 단순 X, Y 거리 필터링 (선택 사항)
-            if (FloatAbs(BannerPos[0] - targPos[0]) > ALLYSOLDIER_RANGE) continue; 
-            
-            if (GetVectorDistance(BannerPos, targPos, true) <= rangeSq)
-            {
-                ApplyStatusEffect(ally, ally, "Ally Empowerment", 1.0);
-            }
-        }
-    }
+	for(int ally=1; ally<=MaxClients; ally++)
+	{
+		if(IsClientInGame(ally) && IsPlayerAlive(ally) && GetTeam(ally) == Team)
+		{
+			GetClientAbsOrigin(ally, targPos);
+			if (FloatAbs(BannerPos[0] - targPos[0]) > ALLYSOLDIER_RANGE) continue; 
+			
+			if (GetVectorDistance(BannerPos, targPos, true) <= rangeSq)
+			{
+				ApplyStatusEffect(ally, ally, "Ally Empowerment", 1.0);
+			}
+		}
+	}
 
-    // 2. NPC 루프 (초기화 및 활성 카운트 적용)
-    for(int i = 0; i < i_MaxcountNpcTotal; i++) // 0으로 명확히 초기화
-    {
-        int ally = EntRefToEntIndexFast(i_ObjectsNpcsTotal[i]);
-        
-        // 유효성 검사를 먼저 수행하여 무거운 연산을 피함
-        if (ally != -1 && IsValidEntity(ally) && !b_NpcHasDied[ally] && GetTeam(ally) == Team && iMe != ally)
-        {
-            GetEntPropVector(ally, Prop_Data, "m_vecAbsOrigin", targPos);
-            if (GetVectorDistance(BannerPos, targPos, true) <= rangeSq)
-            {
-                ApplyStatusEffect(ally, ally, "Ally Empowerment", 1.0);
-            }
-        }
-    }
+	for(int i = 0; i < i_MaxcountNpcTotal; i++)
+	{
+		int ally = EntRefToEntIndexFast(i_ObjectsNpcsTotal[i]);
+		
+		if (ally != -1 && IsValidEntity(ally) && !b_NpcHasDied[ally] && GetTeam(ally) == Team && iMe != ally)
+		{
+			GetEntPropVector(ally, Prop_Data, "m_vecAbsOrigin", targPos);
+			if (GetVectorDistance(BannerPos, targPos, true) <= rangeSq)
+			{
+				ApplyStatusEffect(ally, ally, "Ally Empowerment", 1.0);
+			}
+		}
+	}
 }
 
 static Action Allysoldier_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
@@ -419,13 +422,13 @@ static Action Allysoldier_OnTakeDamage(int victim, int &attacker, int &inflictor
 
 	SetDownedState_Allysoldier(victim, true);
 	damage = 0.0;
-	//we died.
 	return Plugin_Changed;
 }
+
 void SetDownedState_Allysoldier(int iNpc, bool StateDo)
 {
 	Allysoldier npc = view_as<Allysoldier>(iNpc);
-	if(StateDo) //downed
+	if(StateDo)
 	{
 		npc.m_flSelfRevival = GetGameTime() + 30.0;
 		b_ShowNpcHealthbar[iNpc] = false;	
@@ -441,29 +444,19 @@ void SetDownedState_Allysoldier(int iNpc, bool StateDo)
 			npc.SetActivity("ACT_MP_STUN_MIDDLE");
 		}
 		SetEntityRenderMode(npc.index, RENDER_TRANSALPHA);
-		if(IsValidEntity(npc.m_iWearable1))
-		{
-			SetEntityRenderMode(npc.m_iWearable1, RENDER_TRANSALPHA);
-		}
-		if(IsValidEntity(npc.m_iWearable2))
-		{
-			SetEntityRenderMode(npc.m_iWearable2, RENDER_TRANSALPHA);
-		}
-		if(IsValidEntity(npc.m_iWearable3))
-		{
-			SetEntityRenderMode(npc.m_iWearable3, RENDER_TRANSALPHA);
-		}
-		if(IsValidEntity(npc.m_iWearable4))
-		{
-			SetEntityRenderMode(npc.m_iWearable4, RENDER_TRANSALPHA);
-		}
+		if(IsValidEntity(npc.m_iWearable1)) SetEntityRenderMode(npc.m_iWearable1, RENDER_TRANSALPHA);
+		if(IsValidEntity(npc.m_iWearable2)) SetEntityRenderMode(npc.m_iWearable2, RENDER_TRANSALPHA);
+		if(IsValidEntity(npc.m_iWearable3)) SetEntityRenderMode(npc.m_iWearable3, RENDER_TRANSALPHA);
+		if(IsValidEntity(npc.m_iWearable4)) SetEntityRenderMode(npc.m_iWearable4, RENDER_TRANSALPHA);
+		if(IsValidEntity(npc.m_iWearable5)) SetEntityRenderMode(npc.m_iWearable5, RENDER_TRANSALPHA);
+		if(IsValidEntity(npc.m_iWearable6)) SetEntityRenderMode(npc.m_iWearable6, RENDER_TRANSALPHA);
 	}
 	else
 	{
 		if(npc.m_flWasIdleState)
 		{
 			npc.m_flWasIdleState = 0.0;
-			npc.SetActivity("ACT_MP_RUN_PRIMARY");
+			npc.SetActivity("ACT_MP_RUN_SECONDARY");
 		}
 		npc.m_flSelfRevival = 0.0;
 		b_ShowNpcHealthbar[iNpc] = true;
@@ -471,37 +464,25 @@ void SetDownedState_Allysoldier(int iNpc, bool StateDo)
 		b_NpcIsInvulnerable[iNpc] = false;
 		SetEntProp(iNpc, Prop_Data, "m_iHealth", ReturnEntityMaxHealth(iNpc));
 		SetEntityRenderMode(npc.index, RENDER_NORMAL);
-		if(IsValidEntity(npc.m_iWearable1))
-		{
-			SetEntityRenderMode(npc.m_iWearable1, RENDER_NORMAL);
-		}
-		if(IsValidEntity(npc.m_iWearable2))
-		{
-			SetEntityRenderMode(npc.m_iWearable2, RENDER_NORMAL);
-		}
-		if(IsValidEntity(npc.m_iWearable3))
-		{
-			SetEntityRenderMode(npc.m_iWearable3, RENDER_NORMAL);
-		}
-		if(IsValidEntity(npc.m_iWearable4))
-		{
-			SetEntityRenderMode(npc.m_iWearable4, RENDER_NORMAL);
-		}
+		if(IsValidEntity(npc.m_iWearable1)) SetEntityRenderMode(npc.m_iWearable1, RENDER_NORMAL);
+		if(IsValidEntity(npc.m_iWearable2)) SetEntityRenderMode(npc.m_iWearable2, RENDER_NORMAL);
+		if(IsValidEntity(npc.m_iWearable3)) SetEntityRenderMode(npc.m_iWearable3, RENDER_NORMAL);
+		if(IsValidEntity(npc.m_iWearable4)) SetEntityRenderMode(npc.m_iWearable4, RENDER_NORMAL);
+		if(IsValidEntity(npc.m_iWearable5)) SetEntityRenderMode(npc.m_iWearable5, RENDER_NORMAL);
+		if(IsValidEntity(npc.m_iWearable6)) SetEntityRenderMode(npc.m_iWearable6, RENDER_NORMAL);
 	}
-	
 }
+
 static void Allysoldier_NPCDeath(int entity)
 {
 	Allysoldier npc = view_as<Allysoldier>(entity);
 	if(!npc.m_bGib)
 		npc.PlayDeathSound();	
 	
-	if(IsValidEntity(npc.m_iWearable4))
-		RemoveEntity(npc.m_iWearable4);
-	if(IsValidEntity(npc.m_iWearable3))
-		RemoveEntity(npc.m_iWearable3);
-	if(IsValidEntity(npc.m_iWearable2))
-		RemoveEntity(npc.m_iWearable2);
-	if(IsValidEntity(npc.m_iWearable1))
-		RemoveEntity(npc.m_iWearable1);
+	if(IsValidEntity(npc.m_iWearable6)) RemoveEntity(npc.m_iWearable6);
+	if(IsValidEntity(npc.m_iWearable5)) RemoveEntity(npc.m_iWearable5);
+	if(IsValidEntity(npc.m_iWearable4)) RemoveEntity(npc.m_iWearable4);
+	if(IsValidEntity(npc.m_iWearable3)) RemoveEntity(npc.m_iWearable3);
+	if(IsValidEntity(npc.m_iWearable2)) RemoveEntity(npc.m_iWearable2);
+	if(IsValidEntity(npc.m_iWearable1)) RemoveEntity(npc.m_iWearable1);
 }

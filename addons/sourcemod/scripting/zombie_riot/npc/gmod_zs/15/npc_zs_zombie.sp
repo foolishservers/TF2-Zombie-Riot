@@ -122,7 +122,7 @@ methodmap ZSZombie < CClotBody
 	
 	public ZSZombie(float vecPos[3], float vecAng[3], int ally, bool Alt)
 	{
-		ZSZombie npc = view_as<ZSZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", (Alt ? "2800" : "800"), ally, false));
+		ZSZombie npc = view_as<ZSZombie>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", (Alt ? "1600" : "400"), ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		
