@@ -179,8 +179,8 @@ static void AltExtra_Sensal_Clone_Perfected_ClotThink(int iNPC) {
 		if (npc.m_flAttackHappenswillhappen) {
 			if (npc.m_flAttackHappens < gameTime && npc.m_flAttackHappens_bullshit >= gameTime) {
 				Handle swingTrace;
-				if (npc.DoSwingTrace(swingTrace, target)) {
-					int targetHit = TR_GetEntityIndex(swingTrace);	
+				if (npc.DoSwingTrace(swingTrace, target, .Npc_type = 1)) {
+					int targetHit = TR_GetEntityIndex(swingTrace);
 					
 					float vecHit[3];
 					TR_GetEndPosition(vecHit, swingTrace);
@@ -194,6 +194,8 @@ static void AltExtra_Sensal_Clone_Perfected_ClotThink(int iNPC) {
 							damage *= 5.0;
 						
 						SDKHooks_TakeDamage(targetHit, npc.index, npc.index, damage, DMG_CLUB, -1, _, vecHit);
+						
+						Custom_Knockback(npc.index, targetHit, 450.0, true); 
 						
 						// Hit sound
 						npc.PlayExpidonsanSwordMeleeHitSounds();
@@ -292,7 +294,20 @@ static void AltExtra_Sensal_Clone_Perfected_ClotThink(int iNPC) {
 					if (layer != -1)
 						npc.SetLayerPlaybackRate(layer, (2.0 / (ReturnEntityAttackspeed(npc.index))));
 					
-					npc.InitiateLaserAttack(vecTarget, vecMe, 1000.0, _, 0.75);
+					UnderTides npcGetInfo = view_as<UnderTides>(npc.index);
+					int enemies[10]; 
+					//It should target upto 20 people only, if its anymore it starts becomming un dodgeable due to the nature of AOE laser attacks
+					GetHighDefTargets(npcGetInfo, enemies, sizeof(enemies), true, 0, npc.index, _, _, AltExtra_Sensal_Clone_Perfected_CheckLaserVaildity);
+					
+					for (int i; i < sizeof(enemies); i++) {
+						if (enemies[i]) {
+							int enemy = enemies[i];
+							
+							WorldSpaceCenter(enemy, vecTarget);
+							
+							npc.InitiateLaserAttack(vecTarget, vecMe, 1000.0, _, 0.75);
+						}
+					}
 					
 					npc.m_bFUCKYOU = true;
 					npc.m_flRangedSpecialAttackHappens = gameTime + 0.75;
@@ -323,6 +338,8 @@ static Action AltExtra_Sensal_Clone_Perfected_OnTakeDamage(int victim, int &atta
 		npc.Anger = true;
 		npc.m_flSpeed = 320.0;
 		npc.PlayAngerSound();
+		
+		npc.m_flNextRangedSpecialAttack = GetGameTime(npc.index) + 2.0;
 		
 		if (IsValidEntity(npc.m_iWearable1)) {
 			RemoveEntity(npc.m_iWearable1);
@@ -355,4 +372,8 @@ static Action AltExtra_Sensal_Clone_Perfected_OnTakeDamage(int victim, int &atta
 	}
 	
 	return Plugin_Continue;
+}
+
+static bool AltExtra_Sensal_Clone_Perfected_CheckLaserVaildity(int entity, int target) {
+	return view_as<AltExtra_Base>(entity).IsTargetInFiringCone(target, 90.0, 90.0);
 }

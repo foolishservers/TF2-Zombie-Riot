@@ -134,6 +134,9 @@ methodmap SoldierGiant < CClotBody
 		
 		i_NpcWeight[npc.index] = 3;
 		
+		SetVariantInt(2);
+		AcceptEntityInput(npc.index, "SetBodyGroup");
+		
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
 		int iActivity = npc.LookupActivity("ACT_MP_RUN_MELEE_ALLCLASS");

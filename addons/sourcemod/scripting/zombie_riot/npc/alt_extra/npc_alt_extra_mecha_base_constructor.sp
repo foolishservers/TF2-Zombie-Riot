@@ -8,9 +8,9 @@
 
 void AltExtra_Mecha_Base_Constructor_MapStart() {
 	NPCData data;
-	strcopy(data.Name, sizeof(data.Name), "Mecha Heavy Particle Rifle");
-	strcopy(data.Plugin, sizeof(data.Plugin), "npc_alt_extra_mecha_heavy_particle_rifle");
-	strcopy(data.Icon, sizeof(data.Icon), "medic");
+	strcopy(data.Name, sizeof(data.Name), "Mecha Base Constructor");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_alt_extra_mecha_base_constructor");
+	strcopy(data.Icon, sizeof(data.Icon), "engineer");
 	data.IconCustom = false;
 	data.Flags = 0;
 	data.Category = Type_Alt;

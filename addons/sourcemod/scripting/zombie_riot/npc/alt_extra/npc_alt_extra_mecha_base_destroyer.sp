@@ -353,7 +353,7 @@ static void AltExtra_Mecha_Base_Destroyer_ApplyBuffInLocation(AltExtra_Mecha_Bas
 	if (!buffName[0])
 		return;
 	
-	if (!npc.m_iState)
+	if (npc.m_iState == 0)
 		spawnRing_Vectors(pos, range * 2.0, 0.0, 0.0, 15.0, "materials/sprites/laserbeam.vmt", color[0], color[1], color[2], color[3], 1, /*duration*/ 0.11, 10.0, 2.0, 1);
 	
 	float targetPos[3];

@@ -69,6 +69,8 @@ methodmap AltExtra_Mecha_Duelist < AltExtra_Base {
 		
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
+		npc.SetActivity("ACT_MP_RUN_MELEE");
+		
 		npc.m_iBleedType = BLEEDTYPE_METAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;
 		npc.m_iNpcStepVariation = STEPTYPE_NONE;
@@ -91,7 +93,7 @@ methodmap AltExtra_Mecha_Duelist < AltExtra_Base {
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.StartPathing();
 		
-		npc.SetActivity("ACT_MP_RUN_MELEE");
+		ApplyStatusEffect(npc.index, npc.index, "Alt Extra Machine", 999999.0);
 		
 		int skin = (team == TFTeam_Red) ? 0 : 1;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);

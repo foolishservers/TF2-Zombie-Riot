@@ -60,7 +60,6 @@ void AltExtra_Mecha_Elite_Sniper_OnMapStart() {
 	data.Func = ClotSummon_Supply;
 	NPC_Add(data);
 	
-	/*
 	strcopy(data.Name, sizeof(data.Name), "Mecha Elite Sniper");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_alt_extra_mecha_maim_moab");
 	strcopy(data.Icon, sizeof(data.Icon), "sniper_sydneysleeper");
@@ -69,18 +68,28 @@ void AltExtra_Mecha_Elite_Sniper_OnMapStart() {
 	data.Category = Type_Alt;
 	data.Func = ClotSummon_MOAB;
 	NPC_Add(data);
-	*/
+	
+	strcopy(data.Name, sizeof(data.Name), "Mecha Elite Sniper");
+	strcopy(data.Plugin, sizeof(data.Plugin), "npc_alt_extra_mecha_maim_cripple");
+	strcopy(data.Icon, sizeof(data.Icon), "sniper_sydneysleeper");
+	data.IconCustom = false;
+	data.Flags = MVM_CLASS_FLAG_ALWAYSCRIT;
+	data.Category = Type_Alt;
+	data.Func = ClotSummon_Cripple;
+	NPC_Add(data);
 }
 
 static any ClotSummon_Supply(int client, float vecPos[3], float vecAng[3], int team) {
-	return AltExtra_Mecha_Elite_Sniper(vecPos, vecAng, team, false);
+	return AltExtra_Mecha_Elite_Sniper(vecPos, vecAng, team, 0);
 }
 
-/*
 static any ClotSummon_MOAB(int client, float vecPos[3], float vecAng[3], int team) {
-	return AltExtra_Mecha_Elite_Sniper(vecPos, vecAng, team, true);
+	return AltExtra_Mecha_Elite_Sniper(vecPos, vecAng, team, 1);
 }
-*/
+
+static any ClotSummon_Cripple(int client, float vecPos[3], float vecAng[3], int team) {
+	return AltExtra_Mecha_Elite_Sniper(vecPos, vecAng, team, 2);
+}
 
 methodmap AltExtra_Mecha_Elite_Sniper < AltExtra_Base {
 	public void PlayIdleAlertSound() {
@@ -122,34 +131,7 @@ methodmap AltExtra_Mecha_Elite_Sniper < AltExtra_Base {
 		
 		bool bCantSeeTarget = !IsValidEnemy(this.index, this.m_iTarget) || !Can_I_See_Enemy_Only(this.index, this.m_iTarget);
 		if (bCantSeeTarget) {
-			if (!this.m_bYawHandedOff && this.m_iBodyYawPoseParameter > -1) {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
-				if (FloatAbs(flYaw) > 0.1) {
-					this.SetPoseParameter(
-						this.m_iBodyYawPoseParameter,
-						ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
-					);
-				}
-				else {
-					this.m_bYawHandedOff = true;
-				}
-			}
-			
-			if (!this.m_bPitchHandedOff && this.m_iBodyPitchPoseParameter > -1) {
-				float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
-				
-				if (FloatAbs(flPitch) > 0.1) {
-					this.SetPoseParameter(
-						this.m_iBodyPitchPoseParameter,
-						ApproachAngle(0.0, flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
-					);
-				}
-				else {
-					this.m_bPitchHandedOff = true;
-				}
-			}
-			
+			this.UntwistBody(flDeltaTime);
 			return;
 		}
 		
@@ -159,68 +141,7 @@ methodmap AltExtra_Mecha_Elite_Sniper < AltExtra_Base {
 		if (this.m_iBodyPitchPoseParameter < 0 && this.m_iBodyYawPoseParameter < 0)
 			return;
 		
-		float vecMe[3], vecTarget[3];
-		WorldSpaceCenter(this.index, vecMe);
-		WorldSpaceCenter(this.m_iTarget, vecTarget);
-		
-		float vecDir[3], vecAng[3];
-		if (this.m_iBodyPitchPoseParameter > -1) {
-			SubtractVectors(vecMe, vecTarget, vecDir);
-			NormalizeVector(vecDir, vecDir);
-			GetVectorAngles(vecDir, vecAng);
-			
-			vecAng[0] = UTIL_AngleNormalize(vecAng[0]);
-			
-			float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
-			
-			this.SetPoseParameter(
-				this.m_iBodyPitchPoseParameter,
-				ApproachAngle(vecAng[0], flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
-			);
-			
-			this.m_bPitchHandedOff = false;
-		}
-		
-		if (this.m_iBodyYawPoseParameter > -1) {
-			SubtractVectors(vecTarget, vecMe, vecDir);
-			NormalizeVector(vecDir, vecDir);
-			GetVectorAngles(vecDir, vecAng);
-			
-			float angRotation[3];
-			GetEntPropVector(this.index, Prop_Data, "m_angRotation", angRotation);
-			
-			float relativeYaw = -MyAngleDiff(vecAng[1], angRotation[1]);
-			
-			if (relativeYaw > 44.0 || relativeYaw < -44.0) {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
-				if (FloatAbs(flYaw) > 0.1) {
-					this.SetPoseParameter(
-						this.m_iBodyYawPoseParameter,
-						ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
-					);
-				}
-				
-				if (!this.m_bPathing)
-					this.GetLocomotionInterface().FaceTowards(vecTarget);
-			}
-			else {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
-				float bodyYaw = clamp(relativeYaw, -44.9, 44.9);
-				
-				this.SetPoseParameter(
-					this.m_iBodyYawPoseParameter,
-					ApproachAngle(bodyYaw, flYaw, ALT_EXTRA_BODY_YAW_TRACK_SPEED * flDeltaTime)
-				);
-			}
-			
-			this.m_bYawHandedOff = false;
-		}
-		else {
-			if (!this.m_bPathing)
-				this.GetLocomotionInterface().FaceTowards(vecTarget);
-		}
+		this.UpkeepBody(flDeltaTime);
 	}
 	
 	public void DoRangeAttack(float vecTarget[3]) {
@@ -242,38 +163,101 @@ methodmap AltExtra_Mecha_Elite_Sniper < AltExtra_Base {
 		
 		NormalizeVector(vecDirShooting, vecDirShooting);
 		
-		FireBullet(this.index, this.m_iWearable1, vecMe, vecDirShooting, 100.0, 9000.0, DMG_BULLET, "bullet_tracer01_red");
+		int target = FireBullet(this.index, this.m_iWearable1, vecMe, vecDirShooting, 0.0, 9000.0, DMG_BULLET, "bullet_tracer01_red");
+		if (target > 0) {
+			WorldSpaceCenter(target, vecEnd);
+			Explode_Logic_Custom(250.0, this.index, this.index, -1, vecEnd, 250.0, EXPLOSION_AOE_DAMAGE_FALLOFF, _, true, 4, .FunctionToCallOnHit = AltExtra_Mecha_Elite_Sniper_OnExplodeHit);
+		}
 		
-		this.AddGesture("ACT_MP_ATTACK_STAND_PRIMARY");
+		if (this.m_iState > 0) {
+			this.AddGesture("ACT_MP_ATTACK_STAND_PRIMARY_DEPLOYED");
+		}
+		else {
+			this.AddGesture("ACT_MP_ATTACK_STAND_PRIMARY");
+		}
 		this.PlayRangedSound();
 	}
 	
-	public void DoRangeAttackAlt(float vecTarget[3]) {
-		float vecMe[3];
-		WorldSpaceCenter(this.index, vecMe);
-		
-		float vecDirShooting[3], vecRight[3], vecUp[3];
-		
-		MakeVectorFromPoints(vecMe, vecTarget, vecDirShooting);
-		GetVectorAngles(vecDirShooting, vecDirShooting);
-		GetAngleVectors(vecDirShooting, vecDirShooting, vecRight, vecUp);
-		
-		float vecEnd[3];
-		vecEnd[0] = vecMe[0] + vecDirShooting[0] * 9000.0; 
-		vecEnd[1] = vecMe[1] + vecDirShooting[1] * 9000.0;
-		vecEnd[2] = vecMe[2] + vecDirShooting[2] * 9000.0;
-		
-		NormalizeVector(vecDirShooting, vecDirShooting);
-		
-		float damage = 100.0;
-		int target = FireBullet(this.index, this.m_iWearable1, vecMe, vecDirShooting, damage, 9000.0, DMG_BULLET, "bullet_tracer01_red");
-		if (target > 0) {
-			WorldSpaceCenter(target, vecEnd);
-			Explode_Logic_Custom(damage, this.index, this.index, -1, vecEnd, 250.0, EXPLOSION_AOE_DAMAGE_FALLOFF, _, true, 4);
+	public void AdjustWalkCycle(int walkcycle = 0) {
+		if (this.m_iState > 0) {
+			switch (walkcycle) {
+				case 0: {
+					if (this.m_iChanged_WalkCycle != 0) {
+						this.m_iChanged_WalkCycle = 0;
+						this.m_bisWalking = true;
+						this.m_bAllowBackWalking = false;
+						this.m_flSpeed = 180.0;
+						this.StartPathing();
+						
+						this.SetActivity("ACT_MP_RUN_PRIMARY");
+					}
+				}
+				case 1: {
+					if (this.m_iChanged_WalkCycle != 1) {
+						this.m_iChanged_WalkCycle = 1;
+						this.m_bisWalking = true;
+						this.m_bAllowBackWalking = true;
+						this.m_flSpeed = 150.0;
+						this.StartPathing();
+						
+						this.SetActivity("ACT_MP_DEPLOYED_PRIMARY");
+					}
+					
+					float vecBackoffPos[3];
+					BackoffFromOwnPositionAndAwayFromEnemy(this, this.m_iTarget, _, vecBackoffPos);
+					this.SetGoalVector(vecBackoffPos, true);
+				}
+				case 2: {
+					if (this.m_iChanged_WalkCycle != 2) {
+						this.m_iChanged_WalkCycle = 2;
+						this.m_bisWalking = false;
+						this.m_bAllowBackWalking = false;
+						this.m_flSpeed = 0.0;
+						this.StopPathing();
+						
+						this.SetActivity("ACT_MP_DEPLOYED_PRIMARY");
+					}
+				}
+			}
 		}
-		
-		this.AddGesture("ACT_MP_ATTACK_STAND_PRIMARY");
-		this.PlayRangedSound();
+		else {
+			switch (walkcycle) {
+				case 0: {
+					if (this.m_iChanged_WalkCycle != 0) {
+						this.m_iChanged_WalkCycle = 0;
+						this.m_bisWalking = true;
+						this.m_flSpeed = 280.0;
+						this.StartPathing();
+						
+						this.SetActivity("ACT_MP_RUN_PRIMARY");
+					}
+				}
+				case 1: {
+					if (this.m_iChanged_WalkCycle != 1) {
+						this.m_iChanged_WalkCycle = 1;
+						this.m_bisWalking = true;
+						this.m_flSpeed = 250.0;
+						this.StartPathing();
+						
+						this.SetActivity("ACT_MP_RUN_PRIMARY");
+					}
+					
+					float vecBackoffPos[3];
+					BackoffFromOwnPositionAndAwayFromEnemy(this, this.m_iTarget, _, vecBackoffPos);
+					this.SetGoalVector(vecBackoffPos, true);
+				}
+				case 2: {
+					if (this.m_iChanged_WalkCycle != 2) {
+						this.m_iChanged_WalkCycle = 2;
+						this.m_bisWalking = false;
+						this.m_flSpeed = 0.0;
+						this.StopPathing();
+						
+						this.SetActivity("ACT_MP_STAND_PRIMARY");
+					}
+				}
+			}
+		}
 	}
 	
 	public void SetTargetPos(const float vecPos[3]) {
@@ -293,12 +277,12 @@ methodmap AltExtra_Mecha_Elite_Sniper < AltExtra_Base {
 		public set(float value) { fl_AbilityOrAttack[this.index][0] = value; }
 	}
 	
-	public AltExtra_Mecha_Elite_Sniper(float vecPos[3], float vecAng[3], int team, bool alt) {
+	public AltExtra_Mecha_Elite_Sniper(float vecPos[3], float vecAng[3], int team, int state) {
 		AltExtra_Mecha_Elite_Sniper npc = view_as<AltExtra_Mecha_Elite_Sniper>(CClotBody(vecPos, vecAng, "models/bots/sniper/bot_sniper.mdl", "1.0", "12500", team));
 		
 		i_NpcWeight[npc.index] = 1;
 		
-		int iActivity = npc.LookupActivity(alt ? "ACT_MP_DEPLOYED_PRIMARY" : "ACT_MP_RUN_PRIMARY");
+		int iActivity = npc.LookupActivity("ACT_MP_RUN_PRIMARY");
 		if (iActivity > 0)
 			npc.StartActivity(iActivity);
 		
@@ -313,7 +297,6 @@ methodmap AltExtra_Mecha_Elite_Sniper < AltExtra_Base {
 		func_NPCThink[npc.index] = AltExtra_Mecha_Elite_Sniper_ClotThink;
 		
 		//IDLE
-		npc.m_flSpeed = 280.0;
 		npc.m_flDoingAnimation = 0.0;
 		npc.m_flAttackHappens = 0.0;
 		npc.m_flAttackHappens_bullshit = 0.0;
@@ -330,18 +313,26 @@ methodmap AltExtra_Mecha_Elite_Sniper < AltExtra_Base {
 		int skin = (team == TFTeam_Red) ? 0 : 1;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
 		
-		if (!alt) {
+		npc.m_iState = state;
+		if (state == 0) {
+			npc.m_flSpeed = 280.0;
+			
 			npc.m_iWearable1 = npc.EquipItem("head", "models/weapons/c_models/c_sniperrifle/c_sniperrifle.mdl");
 			SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", skin);
 			
 			npc.m_iWearable2 = npc.EquipItem("head", "models/player/items/all_class/bdayhat_sniper.mdl");
-			SetVariantString("1.0");
-			AcceptEntityInput(npc.m_iWearable2, "SetModelScale");
 			SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", skin);
 		}
 		else {
+			npc.m_flSpeed = 180.0;
+			
 			npc.m_iWearable1 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_sydney_sleeper/c_sydney_sleeper.mdl");
 			SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", skin);
+			
+			if (state > 1) {
+				npc.m_iWearable2 = npc.EquipItem("head", "models/player/items/sniper/sniper_applebite.mdl");
+				SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", skin);
+			}
 		}
 		
 		return npc;
@@ -359,7 +350,15 @@ static void AltExtra_Mecha_Elite_Sniper_ClotThink(int entity) {
 	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	
 	npc.Update();
-	npc.UpdateBody();
+	
+	if (npc.m_iState > 0) {
+		npc.HackMaxYawRate(false);
+		npc.UpdateBody();
+		npc.HackMaxYawRate(true);
+	}
+	else {
+		npc.UpdateBody();
+	}
 	
 	if (npc.m_blPlayHurtAnimation) {
 		npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
@@ -380,52 +379,11 @@ static void AltExtra_Mecha_Elite_Sniper_ClotThink(int entity) {
 	int target = npc.m_iTarget;
 	if (IsValidEnemy(npc.index, target)) {
 		int behavior = AltExtra_Mecha_Elite_Sniper_SelfDefense(npc, gameTime);
-		switch (behavior) {
-			case 0: {
-				if (npc.m_iChanged_WalkCycle != 0) {
-					npc.m_iChanged_WalkCycle = 0;
-					npc.m_bisWalking = true;
-					npc.m_flSpeed = 280.0;
-					npc.StartPathing();
-					
-					npc.SetActivity("ACT_MP_RUN_PRIMARY");
-				}
-			}
-			case 1: {
-				if (npc.m_iChanged_WalkCycle != 1) {
-					npc.m_iChanged_WalkCycle = 1;
-					npc.m_bisWalking = true;
-					npc.m_flSpeed = 250.0;
-					npc.StartPathing();
-					
-					npc.SetActivity("ACT_MP_RUN_PRIMARY");
-				}
-				
-				float vecBackoffPos[3];
-				BackoffFromOwnPositionAndAwayFromEnemy(npc, npc.m_iTarget, _, vecBackoffPos);
-				npc.SetGoalVector(vecBackoffPos, true);
-			}
-			case 2: {
-				if (npc.m_iChanged_WalkCycle != 2) {
-					npc.m_iChanged_WalkCycle = 2;
-					npc.m_bisWalking = false;
-					npc.m_flSpeed = 0.0;
-					npc.StopPathing();
-					
-					npc.SetActivity("ACT_MP_STAND_PRIMARY");
-				}
-			}
-		}
+		npc.AdjustWalkCycle(behavior);
 	}
 	else {
-		if (npc.m_iChanged_WalkCycle != 2) {
-			npc.m_iChanged_WalkCycle = 2;
-			npc.m_bisWalking = false;
-			npc.m_flSpeed = 0.0;
-			npc.StopPathing();
-			
-			npc.SetActivity("ACT_MP_STAND_PRIMARY");
-		}
+		// 2 for stand still.
+		npc.AdjustWalkCycle(2);
 		
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_iTarget = GetClosestTarget(npc.index);
@@ -498,15 +456,18 @@ static bool AltExtra_Mecha_Elite_Sniper_AimThink(AltExtra_Mecha_Elite_Sniper npc
 			delete trace;
 		}
 		
-		int team = GetTeam(npc.index);
-		int TeamColor[4] = {0, 0, 255, 255};
-		if (team == TFTeam_Red)
-			TeamColor = {255, 50, 50, 255};
-		
 		npc.GetTargetPos(vecPos);
 		
-		TE_SetupBeamPoints(origin, vecPos, Shared_BEAM_Laser, 0, 0, 0, 0.11, 5.0, 5.0, 0, 0.0, TeamColor, 3);
-		TE_SendToAll(0.0);
+		if (npc.m_flAttackHappens_bullshit >= gameTime || npc.m_flNextRangedAttack <= gameTime) {
+			int team = GetTeam(npc.index);
+			
+			int TeamColor[4] = {0, 0, 255, 255};
+			if (team == TFTeam_Red)
+				TeamColor = {255, 50, 50, 255};
+			
+			TE_SetupBeamPoints(origin, vecPos, Shared_BEAM_Laser, 0, 0, 0, 0.11, 5.0, 5.0, 0, 0.0, TeamColor, 3);
+			TE_SendToAll(0.0);
+		}
 		
 		if (npc.m_flAttackHappens_bullshit < gameTime) {
 			npc.m_flAttackHappens_bullshit = 0.0;
@@ -516,7 +477,7 @@ static bool AltExtra_Mecha_Elite_Sniper_AimThink(AltExtra_Mecha_Elite_Sniper npc
 	else {
 		npc.m_flAttackHappens = 0.0;
 		npc.m_flAttackHappens_bullshit = 0.0;
-		npc.m_flNextRangedAttack = gameTime + 1.75;
+		npc.m_flNextRangedAttack = gameTime + 1.5;
 		
 		return false;
 	}
@@ -541,7 +502,7 @@ static int AltExtra_Mecha_Elite_Sniper_SelfDefense(AltExtra_Mecha_Elite_Sniper n
 		return 2;
 	}
 	
-	if (npc.m_flNextSupplyDropTime < gameTime) {
+	if (npc.m_iState == 0 && npc.m_flNextSupplyDropTime < gameTime) {
 		npc.AddGestureViaSequence("taunt01");
 		npc.m_flDoingAnimation = gameTime + 2.67;
 		
@@ -607,7 +568,7 @@ static int AltExtra_Mecha_Elite_Sniper_SelfDefense(AltExtra_Mecha_Elite_Sniper n
 			if (npc.IsTargetInFiringCone(npc.m_iTarget, 15.0, 15.0)) {
 				npc.m_flAttackHappens = gameTime + 1.0;
 				npc.m_flAttackHappens_bullshit = gameTime + 1.25;
-				npc.m_flNextRangedAttack = gameTime + 1.75;
+				npc.m_flNextRangedAttack = gameTime + 2.75;
 			}
 		}
 	}
@@ -762,4 +723,14 @@ static void AltExtra_Mecha_Elite_Sniper_Supply_StartTouch(int entity, int target
 	EmitSoundToAll("weapons/air_burster_explode3.wav", entity, SNDCHAN_STATIC);
 	
 	RemoveEntity(entity);
+}
+
+static void AltExtra_Mecha_Elite_Sniper_OnExplodeHit(int entity, int victim, float damage, int weapon) {
+	AltExtra_Mecha_Elite_Sniper npc = view_as<AltExtra_Mecha_Elite_Sniper>(entity);
+	
+	if (npc.m_iState > 0)
+		ApplyStatusEffect(entity, victim, "Maimed", 4.0);
+	
+	if (npc.m_iState > 1)
+		ApplyStatusEffect(entity, victim, "Cripple", 4.0);
 }

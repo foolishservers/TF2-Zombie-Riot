@@ -1,9 +1,9 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-#define ALT_EXTRA_BODY_YAW_UNTWIST_SPEED   90.0   // 큰 각도일 때 트위스트를 0으로 풀어주는 속도 (도/초)
-#define ALT_EXTRA_BODY_YAW_TRACK_SPEED     180.0  // 작은 각도일 때 relativeYaw를 따라가는 속도 (도/초)
-#define ALT_EXTRA_BODY_PITCH_TRACK_SPEED   150.0  // pitch가 타겟 방향을 따라가는 속도 (도/초)
+#define ALT_EXTRA_BODY_YAW_UNTWIST_SPEED   60.0   // 큰 각도일 때 트위스트를 0으로 풀어주는 속도 (도/초)
+#define ALT_EXTRA_BODY_YAW_TRACK_SPEED     120.0  // 작은 각도일 때 relativeYaw를 따라가는 속도 (도/초)
+#define ALT_EXTRA_BODY_PITCH_TRACK_SPEED   90.0   // pitch가 타겟 방향을 따라가는 속도 (도/초)
 
 static const char g_RobotHeavy_MeleeHitSounds[][] = {
 	"weapons/metal_gloves_hit_flesh1.wav",
@@ -36,6 +36,18 @@ static const char g_ExpidonsanSword_MeleeHitSounds[][] = {
 	"weapons/neon_sign_hit_04.wav"
 };
 
+static const char g_DemoSword_MeleeAttackSounds[][] = {
+	"weapons/demo_sword_swing1.wav",
+	"weapons/demo_sword_swing2.wav",
+	"weapons/demo_sword_swing3.wav",
+};
+
+static const char g_DemoSword_MeleeHitSounds[][] = {
+	"weapons/blade_slice_2.wav",
+	"weapons/blade_slice_3.wav",
+	"weapons/blade_slice_4.wav",
+};
+
 void AltExtra_Base_MapStart()
 {
 	PrecacheModel("models/bots/heavy/bot_heavy.mdl");
@@ -65,11 +77,15 @@ void AltExtra_Base_MapStart()
 	PrecacheSoundArray(g_RobotDemo_HurtSounds);
 	PrecacheSoundArray(g_RobotDemo_IdleAlertedSounds);
 	PrecacheSoundArray(g_RobotDemo_AngerSounds);
+	PrecacheSoundArray(g_RobotDemo_LaughSounds);
 	
 	PrecacheSound(g_RocketLaucher_ShootSounds);
 	
 	PrecacheSoundArray(g_ExpidonsanSword_MeleeAttackSounds);
 	PrecacheSoundArray(g_ExpidonsanSword_MeleeHitSounds);
+	
+	PrecacheSoundArray(g_DemoSword_MeleeAttackSounds);
+	PrecacheSoundArray(g_DemoSword_MeleeHitSounds);
 }
 
 methodmap AltExtra_Base < CClotBody {
@@ -95,6 +111,14 @@ methodmap AltExtra_Base < CClotBody {
 	
 	public void PlayExpidonsanSwordMeleeHitSounds() {
 		EmitSoundToAll(g_ExpidonsanSword_MeleeHitSounds[GetRandomInt(0, sizeof(g_ExpidonsanSword_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, GetRandomInt(80, 85));
+	}
+	
+	public void PlayDemoSwordMeleeAttackSounds() {
+		EmitSoundToAll(g_DemoSword_MeleeAttackSounds[GetRandomInt(0, sizeof(g_DemoSword_MeleeAttackSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+	}
+	
+	public void PlayDemoSwordMeleeHitSounds() {
+		EmitSoundToAll(g_DemoSword_MeleeHitSounds[GetRandomInt(0, sizeof(g_DemoSword_MeleeHitSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	
 	public void ModifyBodyPitch(float vecMe[3], float vecTarget[3]) {
@@ -245,17 +269,8 @@ methodmap AltExtra_Base < CClotBody {
 		this.m_bYawHandedOff = true;
 	}
 	
-	public void UpdateBody() {
-		float gameTime = GetGameTime(this.index);
-		float flDeltaTime = (this.m_flLastBodyUpdateTime > 0.0) ? (gameTime - this.m_flLastBodyUpdateTime) : 0.05;
-		this.m_flLastBodyUpdateTime = gameTime;
-		
-		if (flDeltaTime <= 0.0 || flDeltaTime > 0.5)
-			flDeltaTime = 0.05;
-		
-		bool bHasValidTarget = IsValidEnemy(this.index, this.m_iTarget) && Can_I_See_Enemy_Only(this.index, this.m_iTarget);
-		
-		if (this.m_bPathing || !bHasValidTarget) {
+	public void UntwistBody(float flDeltaTime = 0.05) {
+		if (this.m_bPathing) {
 			if (!this.m_bYawHandedOff && this.m_iBodyYawPoseParameter > -1) {
 				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
 				
@@ -283,13 +298,10 @@ methodmap AltExtra_Base < CClotBody {
 					this.m_bPitchHandedOff = true;
 				}
 			}
-			
-			return;
 		}
-		
-		if (this.m_iBodyPitchPoseParameter < 0 && this.m_iBodyYawPoseParameter < 0)
-			return;
-		
+	}
+	
+	public void UpkeepBody(float flDeltaTime = 0.05) {
 		float vecMe[3], vecTarget[3];
 		WorldSpaceCenter(this.index, vecMe);
 		WorldSpaceCenter(this.m_iTarget, vecTarget);
@@ -300,11 +312,15 @@ methodmap AltExtra_Base < CClotBody {
 			NormalizeVector(vecDir, vecDir);
 			GetVectorAngles(vecDir, vecAng);
 			
+			vecAng[0] = UTIL_AngleNormalize(vecAng[0]);
+			
 			float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
+			
+			float flBodyPitch = clamp(vecAng[0], -45.0, 90.0);
 			
 			this.SetPoseParameter(
 				this.m_iBodyPitchPoseParameter,
-				ApproachAngle(vecAng[0], flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
+				ApproachAngle(flBodyPitch, flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
 			);
 			
 			this.m_bPitchHandedOff = false;
@@ -320,9 +336,9 @@ methodmap AltExtra_Base < CClotBody {
 			
 			float relativeYaw = -MyAngleDiff(vecAng[1], angRotation[1]);
 			
-			if (relativeYaw > 44.0 || relativeYaw < -44.0) {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
+			float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
+			
+			if (relativeYaw > 45.0 || relativeYaw < -45.0) {
 				if (FloatAbs(flYaw) > 0.1) {
 					this.SetPoseParameter(
 						this.m_iBodyYawPoseParameter,
@@ -330,11 +346,11 @@ methodmap AltExtra_Base < CClotBody {
 					);
 				}
 				
-				this.GetLocomotionInterface().FaceTowards(vecTarget);
+				if (!this.m_bPathing || this.m_bAllowBackWalking) {
+					this.GetLocomotionInterface().FaceTowards(vecTarget);
+				}
 			}
 			else {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
 				float bodyYaw = clamp(relativeYaw, -44.9, 44.9);
 				
 				this.SetPoseParameter(
@@ -346,7 +362,40 @@ methodmap AltExtra_Base < CClotBody {
 			this.m_bYawHandedOff = false;
 		}
 		else {
-			this.GetLocomotionInterface().FaceTowards(vecTarget);
+			if (!this.m_bPathing || this.m_bAllowBackWalking) {
+				this.GetLocomotionInterface().FaceTowards(vecTarget);
+			}
+		}
+	}
+	
+	public void UpdateBody() {
+		float gameTime = GetGameTime(this.index);
+		float flDeltaTime = (this.m_flLastBodyUpdateTime > 0.0) ? (gameTime - this.m_flLastBodyUpdateTime) : 0.05;
+		this.m_flLastBodyUpdateTime = gameTime;
+		
+		if (flDeltaTime <= 0.0 || flDeltaTime > 0.5)
+			flDeltaTime = 0.05;
+		
+		bool bCantSeeTarget = !IsValidEnemy(this.index, this.m_iTarget) || !Can_I_See_Enemy_Only(this.index, this.m_iTarget);
+		if (bCantSeeTarget) {
+			this.UntwistBody(flDeltaTime);
+			return;
+		}
+		
+		if (this.m_iBodyPitchPoseParameter < 0 && this.m_iBodyYawPoseParameter < 0)
+			return;
+		
+		this.UpkeepBody(flDeltaTime);
+	}
+	
+	public void HackMaxYawRate(bool reset) {
+		if (this.m_bAllowBackWalking) {
+			if (reset) {
+				this.GetBaseNPC().flMaxYawRate = 0.0;
+			}
+			else {
+				this.GetBaseNPC().flMaxYawRate = (NPC_DEFAULT_YAWRATE * this.GetDebuffPercentage() * f_NpcTurnPenalty[this.index]);
+			}
 		}
 	}
 	
@@ -375,6 +424,37 @@ methodmap AltExtra_Base < CClotBody {
 		public set(bool value)	{ this.SetProp(Prop_Data, "m_bPitchHandedOff", value); }
 	}
 }
+
+/*
+methodmap AltExtra_Medic_Base < AltExtra_Base {
+	public void UpdateBody() {
+		float gameTime = GetGameTime(this.index);
+		float flDeltaTime = (this.m_flLastBodyUpdateTime > 0.0) ? (gameTime - this.m_flLastBodyUpdateTime) : 0.05;
+		this.m_flLastBodyUpdateTime = gameTime;
+		
+		if (flDeltaTime <= 0.0 || flDeltaTime > 0.5)
+			flDeltaTime = 0.05;
+		
+		bool bCantSeeTarget;
+		if (this.Anger) {
+			bCantSeeTarget = !IsValidEnemy(this.index, this.m_iTarget) || !Can_I_See_Enemy_Only(this.index, this.m_iTarget);
+		}
+		else {
+			bCantSeeTarget = !IsValidAlly(this.index, this.m_iTarget) || (Can_I_See_Ally(this.index, this.m_iTarget) != this.m_iTarget);
+		}
+		
+		if (bCantSeeTarget) {
+			this.UntwistBody(flDeltaTime);
+			return;
+		}
+		
+		if (this.m_iBodyPitchPoseParameter < 0 && this.m_iBodyYawPoseParameter < 0)
+			return;
+		
+		this.UpkeepBody(flDeltaTime);
+	}
+}
+*/
 
 public Action AltExtra_Shared_RemoveHoming(Handle timer, int ref) {
 	int entity = EntRefToEntIndex(ref);
@@ -433,312 +513,3 @@ stock bool CanFireProjectileAtTarget(int shooter, int target, const float vecFir
 stock float Myfmodf(float num, float denom) {
     return num - denom * float(RoundToZero(num / denom));
 }
-
-/*
-public void ModifyBody(int target) {
-		// I can't see target. so reset poseparameter to 0.
-		bool bCanISee = Can_I_See_Enemy_Only(this.index, target);
-		if (this.m_bPathing || !bCanISee) {
-			if (this.m_iPoseBodyYaw > -1) {
-				float flYaw = this.GetPoseParameter(this.m_iPoseBodyYaw);
-				
-				this.SetPoseParameter(
-					this.m_iPoseBodyYaw,
-					ApproachAngle(0.0, flYaw, 1.0)
-				);
-			}
-			
-			if (this.m_iPoseBodyPitch > -1) {
-				float flPitch = this.GetPoseParameter(this.m_iPoseBodyPitch);
-				
-				this.SetPoseParameter(
-					this.m_iPoseBodyPitch,
-					ApproachAngle(0.0, flPitch, 1.0)
-				);
-			}
-			
-			return;
-		}
-		
-		if (this.m_iPoseBodyPitch < 0 && this.m_iPoseBodyYaw < 0)
-			return;
-		
-		float vecMe[3], vecTarget[3];
-		WorldSpaceCenter(this.index, vecMe);
-		WorldSpaceCenter(target, vecTarget);
-		
-		float vecDir[3], vecAng[3];
-		if (this.m_iPoseBodyPitch > -1) {
-			SubtractVectors(vecMe, vecTarget, vecDir);
-			NormalizeVector(vecDir, vecDir);
-			GetVectorAngles(vecDir, vecAng);
-			
-			float flPitch = this.GetPoseParameter(this.m_iPoseBodyPitch);
-			
-			this.SetPoseParameter(
-				this.m_iPoseBodyPitch,
-				ApproachAngle(vecAng[0], flPitch, 1.0)
-			);
-		}
-		
-		if (this.m_iPoseBodyYaw > -1) {
-			SubtractVectors(vecTarget, vecMe, vecDir);
-			NormalizeVector(vecDir, vecDir);
-			GetVectorAngles(vecDir, vecAng);
-			
-			float angRotation[3];
-			GetEntPropVector(this.index, Prop_Data, "m_angRotation", angRotation);
-			
-			float relativeYaw = -UTIL_AngleDiff(vecAng[1], angRotation[1]);
-			
-			// relativeYaw = -relativeYaw;
-			
-			if (relativeYaw > 15.0 || relativeYaw < -15.0) {
-				//this.FaceTowards(vecTarget);
-				
-				float flYaw = this.GetPoseParameter(this.m_iPoseBodyYaw);
-				
-				this.SetPoseParameter(
-					this.m_iPoseBodyYaw,
-					ApproachAngle(0.0, flYaw, 1.0)
-				);
-				
-				this.GetLocomotionInterface().FaceTowards(vecTarget);
-			}
-			else {
-				float flYaw = this.GetPoseParameter(this.m_iPoseBodyYaw);
-			
-				float bodyYaw = clamp(relativeYaw, -44.0, 44.0);
-				
-				this.SetPoseParameter(
-					this.m_iPoseBodyYaw,
-					ApproachAngle(bodyYaw, flYaw, 1.0)
-				);
-			}
-			
-			//PrintToServer("[DEBUG] angRotation.yaw=%.1f targetAngle=%.1f relativeYaw=%.1f poseYaw(before)=%.1f",
-			//	angRotation[1], vecAng[1], relativeYaw, flYaw);
-		}
-		else {
-			this.GetLocomotionInterface().FaceTowards(vecTarget);
-		}
-	}
-*/
-
-/*
-public void ComputePoseParam_BodyYaw(float vecTarget[3]) {
-		float m_flGroundSpeed = GetEntPropFloat(this.index, Prop_Data, "m_flGroundSpeed");
-		if (this.m_bisWalking && m_flGroundSpeed != 0.0) {
-			this.m_flGoalFeetYaw = this.m_flEyeYaw;
-		}
-		else {
-			if ( this.m_flLastAimTurnTime <= 0.0 ) {
-				this.m_flGoalFeetYaw	= this.m_flEyeYaw;
-				this.m_flCurrentFeetYaw = this.m_flEyeYaw;
-				this.m_flLastAimTurnTime = GetGameTime(this.index);
-			}
-			// Make sure the feet yaw isn't too far out of sync with the eye yaw.
-			else {
-				float flYawDelta = UTIL_AngleNormalize( this.m_flGoalFeetYaw - this.m_flEyeYaw );
-				
-				if ( FloatAbs( flYawDelta ) > 45.0 ) {
-					float flSide = ( flYawDelta > 0.0 ) ? -1.0 : 1.0;
-					this.m_flGoalFeetYaw += ( 45.0 * flSide );
-				}
-			}
-		}
-		
-		// Fix up the feet yaw.
-		this.m_flGoalFeetYaw = AngleNormalize( this.m_flGoalFeetYaw );
-		if ( this.m_flGoalFeetYaw != this.m_flCurrentFeetYaw ) {
-			float temp = this.m_flCurrentFeetYaw;
-			ConvergeYawAngles( this.m_flGoalFeetYaw, 720.0, GetGameFrameTime(), temp );
-			this.m_flCurrentFeetYaw = temp;
-			this.m_flLastAimTurnTime = GetGameTime(this.index);
-		}
-		
-		// Find the aim(torso) yaw base on the eye and feet yaws.
-		float flAimYaw = this.m_flEyeYaw - this.m_flCurrentFeetYaw;
-		flAimYaw = clamp(AngleNormalize( flAimYaw ), -44.9, 44.9);
-		
-		if (!this.m_bPathing && ( flAimYaw > 20.0 || flAimYaw < -20.0 ))
-			this.GetLocomotionInterface().FaceTowards(vecTarget);
-		
-		if ( this.m_iPoseBodyYaw < 0 )
-			return;
-		
-		// Set the aim yaw and save.
-		this.SetPoseParameter( this.m_iPoseBodyYaw, -flAimYaw );
-	}
-	
-	public void Upkeep() {
-		float frametime = GetGameFrameTime();
-		if (frametime < (1.0 * 10.0 ^ -5.0))
-			return;
-		
-		float eye_ang[3];
-		eye_ang[0] = this.m_flEyePitch;
-		eye_ang[1] = this.m_flEyeYaw;
-		
-		float m_angLastEyeAngles[3];
-		this.GetLastEyeAngles(m_angLastEyeAngles);
-		
-		float gameTime = GetGameTime(this.index);
-		
-		if (FloatAbs(float(RoundToFloor(AngleDiff(eye_ang[0], m_angLastEyeAngles[0])))) > (frametime * 100.0)
-			|| FloatAbs(float(RoundToFloor(AngleDiff(eye_ang[1], m_angLastEyeAngles[1])))) > (frametime * 100.0)) {
-			this.m_flHeadSteady = -1.0;
-		}
-		else {
-			if (this.m_flHeadSteady == -1.0) {
-				this.m_flHeadSteady = gameTime;
-			}
-		}
-		
-		this.SetLastEyeAngles(eye_ang);
-		
-		if (this.m_bSightedIn && this.m_flAimDuration <= gameTime) {
-			return;
-		}
-		
-		float eye_vec[3];
-		GetAngleVectors(eye_ang, eye_vec, NULL_VECTOR, NULL_VECTOR);
-		
-		float m_vecLastEyeVectors[3];
-		this.GetLastEyeVectors(m_vecLastEyeVectors);
-		
-		if (ArcCosine(GetVectorDotProduct(m_vecLastEyeVectors, eye_vec)) * (180.0 / FLOAT_PI) > 100.0) {
-			this.m_flResettle = gameTime + 0.3 * GetRandomFloat(0.9, 1.1);
-			this.SetLastEyeVectors(eye_vec);
-		}
-		else if (this.m_flResettle == -1.0 || this.m_flResettle <= gameTime) {
-			this.m_flResettle = -1.0;
-			
-			int target = this.m_iTarget;
-			if (IsValidEnemy(this.index, target)) {
-				float vecTarget[3];
-				WorldSpaceCenter(target, vecTarget);
-				
-				float vecTargetVelocity[3];
-				GetEntPropVector(target, Prop_Data, "m_vecAbsVelocity", vecTargetVelocity);
-				
-				float m_vecAimTarget[3];
-				this.GetVecAimTarget(m_vecAimTarget);
-				
-				if (this.m_flAimTracking <= gameTime) 
-				{
-					float delta[3];
-					SubtractVectors(vecTarget, m_vecAimTarget, delta);
-					
-					float flLeadTime = 0.0;
-					delta[0] += (flLeadTime * vecTargetVelocity[0]);
-					delta[1] += (flLeadTime * vecTargetVelocity[1]);
-					delta[2] += (flLeadTime * vecTargetVelocity[2]);
-					
-					float track_interval = fmax(frametime, 0.25);
-					
-					float scale = GetVectorLength(delta) / track_interval;
-					NormalizeVector(delta, delta);
-					
-					float m_vecTargetVelocity[3];
-					m_vecTargetVelocity[0] = (scale * delta[0]) + vecTargetVelocity[0];
-					m_vecTargetVelocity[1] = (scale * delta[1]) + vecTargetVelocity[1];
-					m_vecTargetVelocity[2] = (scale * delta[2]) + vecTargetVelocity[2];
-					this.SetVecTargetVelocity(m_vecTargetVelocity);
-					
-					this.m_flAimTracking = gameTime + (track_interval * GetRandomFloat(0.8, 1.2));
-				}
-				
-				float m_vecTargetVelocity[3];
-				this.GetVecTargetVelocity(m_vecTargetVelocity);
-				
-				m_vecAimTarget[0] += frametime * m_vecTargetVelocity[0];
-				m_vecAimTarget[1] += frametime * m_vecTargetVelocity[1];
-				m_vecAimTarget[2] += frametime * m_vecTargetVelocity[2];
-				
-				this.SetVecAimTarget(m_vecAimTarget);
-			}
-		}
-		
-		float eye_to_target[3], myEyePosition[3];
-		WorldSpaceCenter(this.index, myEyePosition);
-		
-		float m_vecAimTarget[3]; this.GetVecAimTarget(m_vecAimTarget);		
-		SubtractVectors(m_vecAimTarget, myEyePosition, eye_to_target);
-		NormalizeVector(eye_to_target, eye_to_target);
-		
-		float ang_to_target[3];
-		GetVectorAngles(eye_to_target, ang_to_target);
-		
-		float cos_error = GetVectorDotProduct(eye_to_target, eye_vec);
-		
-		if (cos_error <= 0.98) {
-			this.m_bHeadOnTarget = false;
-		}
-		else {
-			this.m_bHeadOnTarget = true;
-			
-			if (!this.m_bSightedIn) {
-				this.m_bSightedIn = true;
-			}
-		}
-		
-		float max_angvel = 1000.0;
-		
-		if (cos_error > 0.7){
-			max_angvel *= Sine((3.14 / 2.0) * (1.0 + ((-49.0 / 15.0) * (cos_error - 0.7))));
-		}
-	
-		if(this.m_flAimStart != -1 && (gameTime - this.m_flAimStart < 0.25)){
-			max_angvel *= 4.0 * (gameTime - this.m_flAimStart);
-		}
-		
-		float new_eye_angle[3];
-		new_eye_angle[0] = ApproachAngle(ang_to_target[0], eye_ang[0], (max_angvel * frametime) * 0.5);
-		new_eye_angle[1] = ApproachAngle(ang_to_target[1], eye_ang[1], (max_angvel * frametime));
-		new_eye_angle[2] = 0.0;
-		
-		this.m_flEyeYaw = new_eye_angle[1];
-		this.m_flEyePitch = new_eye_angle[0];
-	}
-	
-	public void AimHeadTowards(const float vec[3], int priority, float duration = 0.0) {
-		if (duration <= 0.0) {
-			duration = 0.1;
-		}
-		
-		float gameTime = GetGameTime(this.index);
-		if (priority > this.m_iAimPriority || this.m_flAimDuration <= gameTime) {
-			this.m_flAimDuration = gameTime + duration;
-			this.m_iAimPriority = priority;
-			
-			float m_vecAimTarget[3]; this.GetVecAimTarget(m_vecAimTarget);
-			if (GetVectorDistance(vec, m_vecAimTarget, true) >= 1.0) {
-				this.m_iTarget = -1;
-				this.SetVecAimTarget(vec);
-				this.m_flAimStart = gameTime;
-				this.m_bHeadOnTarget = false;
-			}
-		}
-	}
-	
-	public void AimHeadTowardsEntity(int ent, int priority, float duration = 0.0) {
-		if (duration <= 0.0) {
-			duration = 0.1;
-		}
-		
-		float gameTime = GetGameTime(this.index);
-		if (priority > this.m_iAimPriority || this.m_flAimDuration <= gameTime) {
-			this.m_flAimDuration = gameTime + duration;
-			this.m_iAimPriority = priority;
-			
-			int prev_target = this.m_iTarget;
-			if (prev_target == -1 || ent != prev_target) 
-			{
-				this.m_iTarget = ent;
-				this.m_flAimStart = gameTime;
-				this.m_bHeadOnTarget = false;
-			}
-		}
-	}
-*/

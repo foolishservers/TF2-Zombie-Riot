@@ -24,17 +24,17 @@ methodmap KommandantStahlherz < AltExtra_Base {
 		if (this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
 		
-		EmitSoundToAll(g_RobotDemo_IdleAlertedSounds[GetRandomInt(0, sizeof(g_RobotDemo_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_RobotDemo_IdleAlertedSounds[GetRandomInt(0, sizeof(g_RobotDemo_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 		
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 	}
 	
 	public void PlayHurtSound() {
-		EmitSoundToAll(g_RobotDemo_HurtSounds[GetRandomInt(0, sizeof(g_RobotDemo_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_RobotDemo_HurtSounds[GetRandomInt(0, sizeof(g_RobotDemo_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
 	
 	public void PlayDeathSound() {
-		EmitSoundToAll(g_RobotDemo_DeathSounds[GetRandomInt(0, sizeof(g_RobotDemo_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
+		EmitSoundToAll(g_RobotDemo_DeathSounds[GetRandomInt(0, sizeof(g_RobotDemo_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
 	}
 	
 	public void PlayAngerSound() {
@@ -83,7 +83,8 @@ methodmap KommandantStahlherz < AltExtra_Base {
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.StartPathing();
 		
-		ApplyStatusEffect(npc.index, npc.index, "Extra Damage Indicator", 999.0);
+		ApplyStatusEffect(npc.index, npc.index, "Extra Damage Indicator", 999999.0);
+		ApplyStatusEffect(npc.index, npc.index, "Alt Extra Machine", 999999.0);
 		
 		int skin = 1;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);

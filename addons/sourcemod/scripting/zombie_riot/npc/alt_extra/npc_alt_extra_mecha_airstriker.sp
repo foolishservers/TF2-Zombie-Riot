@@ -90,6 +90,8 @@ methodmap AltExtra_Mecha_AirStriker < AltExtra_Base {
 		npc.m_flSpeed = 280.0;
 		npc.StartPathing();
 		
+		ApplyStatusEffect(npc.index, npc.index, "Alt Extra Machine", 999999.0);
+		
 		int skin = 1;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
 		SetEntityRenderColor(npc.index, 125, 100, 100, 255);

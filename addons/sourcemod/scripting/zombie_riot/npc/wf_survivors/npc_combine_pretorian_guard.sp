@@ -57,6 +57,8 @@ static const char g_RangedAttackSoundsSecondary[][] = {
 };
 
 void Combine_Pretorian_Guard_OnMapStart() {
+	// PrecacheParticleEffect("combineball");
+	
 	NPCData data;
 	strcopy(data.Name, sizeof(data.Name), "W.F. Pretorian Guard");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_combine_pretorian_guard");
@@ -326,7 +328,7 @@ static void Combine_Pretorian_Guard_ClotThink(int iNPC) {
 	npc.m_flNextThinkTime = gameTime + 0.1;
 	
 	if (npc.m_flGetClosestTargetTime < gameTime) {
-		npc.m_iTarget = GetClosestTarget(npc.index);
+		npc.m_iTarget = GetClosestTarget(npc.index, .fldistancelimitAllyNPC = 9999.9);
 		npc.m_flGetClosestTargetTime = gameTime + GetRandomRetargetTime();
 	}
 	
@@ -387,18 +389,51 @@ static void Combine_Pretorian_Guard_ClotThink(int iNPC) {
 		}
 	}
 	else {
-		if (npc.m_iChanged_WalkCycle != 2) {
-			npc.m_iChanged_WalkCycle = 2;
-			npc.m_bAllowBackWalking = false;
-			npc.m_bisWalking = false;
-			npc.m_flSpeed = 0.0;
-			npc.StopPathing();
-			
-			npc.SetActivity("ACT_IDLE_ANGRY_AR2");
-		}
+		npc.m_flGetClosestTargetTime = gameTime + GetRandomRetargetTime();
+		// PrintToChatAll("Target Invalid. Last Target = %d", npc.m_iTarget);
+		int closest = GetClosestTarget(npc.index, .fldistancelimitAllyNPC = 9999.9);
+		// PrintToChatAll("Changed to closest Target. Target = %d", closest);
+		npc.m_iTarget = closest;
 		
-		npc.m_flGetClosestTargetTime = 0.0;
-		npc.m_iTarget = GetClosestTarget(npc.index);
+		if (IsValidEnemy(npc.index, npc.m_iTarget)) {
+			float vecTarget[3], vecMe[3];
+			WorldSpaceCenter(npc.m_iTarget, vecTarget);
+			WorldSpaceCenter(npc.index, vecMe);
+			
+			float flDistanceToTarget = GetVectorDistance(vecTarget, vecMe, true);
+			
+			// Predict their pos.
+			if (flDistanceToTarget < npc.GetLeadRadius()) {
+				float vPredictedPos[3];
+				PredictSubjectPosition(npc, npc.m_iTarget, _, _, vPredictedPos);
+				npc.SetGoalVector(vPredictedPos);
+			}
+			else {
+				npc.SetGoalEntity(npc.m_iTarget);
+			}
+			
+			if (npc.m_iChanged_WalkCycle != 0) {
+				npc.m_iChanged_WalkCycle = 0;
+				npc.m_bAllowBackWalking = false;
+				npc.m_bisWalking = true;
+				// npc.m_flSpeed = 280.0;
+				npc.m_flSpeed = 200.0;
+				npc.StartPathing();
+				
+				npc.SetActivity("ACT_RUN_AIM_AR2_STIMULATED");
+			}
+		}
+		else {
+			if (npc.m_iChanged_WalkCycle != 2) {
+				npc.m_iChanged_WalkCycle = 2;
+				npc.m_bAllowBackWalking = false;
+				npc.m_bisWalking = false;
+				npc.m_flSpeed = 0.0;
+				npc.StopPathing();
+				
+				npc.SetActivity("ACT_IDLE_ANGRY_AR2");
+			}
+		}
 	}
 }
 

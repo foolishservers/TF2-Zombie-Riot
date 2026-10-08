@@ -1358,7 +1358,7 @@ void NPC_ConfigSetup()
 	AltExtra_Mecha_Plunderer_Pyro_OnMapStart();
 	AltExtra_Intruso_OnMapStart();
 	AltExtra_Sensal_Clone_OnMapStart();
-	AltExtra_Mecha_Field_Medic_OnMapStart();
+	AltExtra_Mecha_Overclocker_OnMapStart();
 	AltExtra_CombineDDT_OnMapStart();
 	AltExtra_Mecha_Sniper_Railgunner_OnMapStart();
 	AltExtra_Mecha_Conqueror_OnMapStart();
@@ -1373,6 +1373,7 @@ void NPC_ConfigSetup()
 	AltExtra_Mecha_Wizard_Heavy_MapStart();
 	AltExtra_Mecha_Flametail_Scout_OnMapStart();
 	AltExtra_Mecha_Elite_Sniper_OnMapStart();
+	AltExtra_Mecha_Berserker_Demo_OnMapStart();
 	
 	Combine_Base_OnMapStart();
 	//Whiteflower_CombineSmg_OnMapStart_NPC();
@@ -1453,7 +1454,7 @@ stock void NPC_GetById(int id, NPCData data)
 	NPCList.GetArray(id, data);
 }
 
-stock int NPC_GetByPlugin(const char[] name, NPCData data = {}, const char[] chardata = "")
+stock int NPC_GetByPlugin(const char[] name, NPCData data = {""}, const char[] chardata = "")
 {
 	int index = NPCList.FindString(name, NPCData::Plugin);
 	if(index != -1)
@@ -2996,6 +2997,10 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/npc_zs_ally_heavy.sp"
 #include "npc/gmod_zs/npc_zs_ally_sniper.sp"
 
+// Ruina Barracks
+// #include "npc/ally/ruina_barracks/npc_barrack_iana.sp"
+// #include "npc/ally/ruina_barracks/npc_barrack_ruliana.sp"
+
 // Dimension ripper
 #include "npc/ally/dimension_ripper/npc_dimension_ripper_base.sp"
 
@@ -3015,7 +3020,7 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/alt_extra/npc_alt_extra_mecha_pyro_chef.sp"
 #include "npc/alt_extra/npc_alt_extra_mecha_plunderer_pyro.sp"
 #include "npc/alt_extra/npc_alt_extra_sensal_clone.sp"
-#include "npc/alt_extra/npc_alt_extra_mecha_field_medic.sp"
+#include "npc/alt_extra/npc_alt_extra_mecha_overclocker.sp"
 #include "npc/alt_extra/npc_alt_extra_combine_swordsman_ddt.sp"
 #include "npc/alt_extra/npc_alt_extra_mecha_sniper_railgunner.sp"
 #include "npc/alt_extra/npc_alt_extra_mecha_berserker_demo.sp"
@@ -3033,6 +3038,8 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/alt_extra/npc_alt_extra_mecha_wizard_heavy.sp"
 #include "npc/alt_extra/npc_alt_extra_mecha_flametail_scout.sp"
 #include "npc/alt_extra/npc_alt_extra_mecha_elite_sniper.sp"
+//#include "npc/alt_extra/npc_alt_extra_mecha_immortalizer.sp"
+//#include "npc/alt_extra/npc_alt_extra_mecha_shotgun_main.sp"
 //#include "npc/alt_extra/npc_alt_extra_mega_mecha_loader.sp"
 
 // Whiteflower survivors

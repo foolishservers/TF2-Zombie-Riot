@@ -156,12 +156,12 @@ static void AltExtra_Mecha_Kamikaze_Demo_ClotThink(int iNPC) {
 					if (npc.DoSwingTrace(swingTrace, target)) {
 						int targetHit = TR_GetEntityIndex(swingTrace);	
 						if (targetHit > 0) {
-							float vecHit[3];
-							TR_GetEndPosition(vecHit, swingTrace);
+							Explode_Logic_Custom(200.0, npc.index, npc.index, -1, vecMe, 150.0, _, _, true, 10);
+							TE_Particle("ExplosionCore_MidAir", vecMe, NULL_VECTOR, {-90.0, 0.0, 0.0}, _, _, _, _, _, _, _, _, _, _, 0.0);
+							EmitSoundToAll(SOUND_WAND_LIGHTNING_ABILITY_PAP_SMITE, 0, SNDCHAN_AUTO, 100, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, vecMe);
 							
-							Explode_Logic_Custom(100.0, npc.index, npc.index, -1, vecHit, 150.0, _, _, true, 10);
-							TE_Particle("ExplosionCore_MidAir", vecHit, NULL_VECTOR, {-90.0, 0.0, 0.0}, _, _, _, _, _, _, _, _, _, _, 0.0);
-							EmitSoundToAll(SOUND_WAND_LIGHTNING_ABILITY_PAP_SMITE, 0, SNDCHAN_AUTO, 100, SND_NOFLAGS, SNDVOL_NORMAL, SNDPITCH_NORMAL, -1, vecHit);
+							npc.Anger = true;
+							SDKHooks_TakeDamage(npc.index, 0, 0, 999999999.0, DMG_GENERIC);
 						}
 					}
 					delete swingTrace;
@@ -192,7 +192,7 @@ static void AltExtra_Mecha_Kamikaze_Demo_ClotThink(int iNPC) {
 static void AltExtra_Mecha_Kamikaze_Demo_NPCDeath(int entity) {
 	AltExtra_Mecha_Kamikaze_Demo npc = view_as<AltExtra_Mecha_Kamikaze_Demo>(entity);
 	
-	if (!NpcStats_IsEnemySilenced(npc.index)) {
+	if (!npc.Anger) {
 		float vecMe[3];
 		WorldSpaceCenter(npc.index, vecMe);
 		
@@ -205,9 +205,6 @@ static void AltExtra_Mecha_Kamikaze_Demo_NPCDeath(int entity) {
 		RequestFrame(MakeExplosionFrameLater, pack_boom);
 		
 		Explode_Logic_Custom(100.0, npc.index, npc.index, -1, vecMe, 150.0, _, _, true, 10);
-	}
-	else {
-		npc.m_bDissapearOnDeath = false;
 	}
 	
 	if (IsValidEntity(npc.m_iWearable3))

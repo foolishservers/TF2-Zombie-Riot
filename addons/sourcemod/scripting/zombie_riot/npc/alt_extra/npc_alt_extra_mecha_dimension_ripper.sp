@@ -102,6 +102,8 @@ methodmap AltExtra_Mecha_Dimension_Ripper < AltExtra_Base {
 		npc.m_bThisNpcIsABoss = true;
 		GiveNpcOutLineLastOrBoss(npc.index, true);
 		
+		ApplyStatusEffect(npc.index, npc.index, "Alt Extra Machine", 999999.0);
+		
 		int skin = 1;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
 		

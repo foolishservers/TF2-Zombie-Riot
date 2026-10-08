@@ -460,32 +460,34 @@ methodmap Combine_Base < CClotBody {
 			flDeltaTime = 0.05;
 		
 		bool bCantSeeTarget = !IsValidEnemy(this.index, this.m_iTarget) || !Can_I_See_Enemy_Only(this.index, this.m_iTarget);
-		if (this.m_bPathing && bCantSeeTarget) {
-			if (!this.m_bYawHandedOff && this.m_iBodyYawPoseParameter > -1) {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
+		if (bCantSeeTarget) {
+			if (this.m_bPathing) {
+				if (!this.m_bYawHandedOff && this.m_iBodyYawPoseParameter > -1) {
+					float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
+					
+					if (FloatAbs(flYaw) > 0.1) {
+						this.SetPoseParameter(
+							this.m_iBodyYawPoseParameter,
+							ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
+						);
+					}
+					else {
+						this.m_bYawHandedOff = true;
+					}
+				}
 				
-				if (FloatAbs(flYaw) > 0.1) {
-					this.SetPoseParameter(
-						this.m_iBodyYawPoseParameter,
-						ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
-					);
-				}
-				else {
-					this.m_bYawHandedOff = true;
-				}
-			}
-			
-			if (!this.m_bPitchHandedOff && this.m_iBodyPitchPoseParameter > -1) {
-				float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
-				
-				if (FloatAbs(flPitch) > 0.1) {
-					this.SetPoseParameter(
-						this.m_iBodyPitchPoseParameter,
-						ApproachAngle(0.0, flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
-					);
-				}
-				else {
-					this.m_bPitchHandedOff = true;
+				if (!this.m_bPitchHandedOff && this.m_iBodyPitchPoseParameter > -1) {
+					float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
+					
+					if (FloatAbs(flPitch) > 0.1) {
+						this.SetPoseParameter(
+							this.m_iBodyPitchPoseParameter,
+							ApproachAngle(0.0, flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
+						);
+					}
+					else {
+						this.m_bPitchHandedOff = true;
+					}
 				}
 			}
 			
@@ -530,58 +532,23 @@ methodmap Combine_Base < CClotBody {
 			// Yeah. combine pose param is inverted.
 			float relativeYaw = MyAngleDiff(vecAng[1], angRotation[1]);
 			
-			// 돌아야 할 각도가 40도를 넘으면 body_yaw 포즈파라미터를 0으로 풀어준다.
-			if (relativeYaw > 40.0 || relativeYaw < -40.0) {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
-				if (FloatAbs(flYaw) > 0.1) {					
-					float flCurrentFacingYaw = angRotation[1] - flYaw;
-					
-					float flMaxYawRate = this.GetBaseNPC().flMaxYawRate;
-					float flMaxTurnThisFrame = flMaxYawRate * flDeltaTime;
-					
-					float flReleaseAmount;
-					
-					bool bAimTargetFresh = (gameTime - this.m_flAimTargetSetTime) <= 0.25;
-					
-					if (!IsValidEntity(this.m_iTarget) || !bAimTargetFresh) {
-						flReleaseAmount = fmin(FloatAbs(flYaw), flMaxTurnThisFrame);
-					}
-					else {
-						float vecAimTarget[3];
-						this.GetAimTarget(vecAimTarget);
-						
-						float vecAimDir[3], vecAimAng[3];
-						SubtractVectors(vecAimTarget, vecMe, vecAimDir);
-						NormalizeVector(vecAimDir, vecAimDir);
-						GetVectorAngles(vecAimDir, vecAimAng);
-						
-						// pose param으로 추정한 "현재 실제 방향" 기준, 조준 목표까지 얼마나 남았는지
-						float flAimRelativeYaw = MyAngleDiff(vecAimAng[1], flCurrentFacingYaw);
-						
-						flReleaseAmount = fmin(FloatAbs(flYaw), fmin(flMaxTurnThisFrame, FloatAbs(flAimRelativeYaw)));
-					}
-					
-					if (flReleaseAmount < 0.1)
-						flReleaseAmount = 0.1; // 완전히 멈춰버리지 않도록 최소 진행 보장
-					
+			float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
+			
+			if (relativeYaw > 45.0 || relativeYaw < -45.0) {
+				if (FloatAbs(flYaw) > 0.1) {
 					this.SetPoseParameter(
 						this.m_iBodyYawPoseParameter,
-						ApproachAngle(0.0, flYaw, flReleaseAmount)
+						ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
 					);
 				}
 				
 				// We don't wanna set aim target while moving.
 				if (!this.m_bPathing || this.m_bAllowBackWalking) {
-					this.SetAimTarget(vecTarget);
-					this.m_flAimTargetSetTime = gameTime; // 타임스탬프 갱신
 					this.GetLocomotionInterface().FaceTowards(vecTarget);
 				}
 			}
 			else {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
-				float bodyYaw = clamp(relativeYaw, -39.9, 39.9);
+				float bodyYaw = clamp(relativeYaw, -44.9, 44.9);
 				
 				this.SetPoseParameter(
 					this.m_iBodyYawPoseParameter,
@@ -590,11 +557,47 @@ methodmap Combine_Base < CClotBody {
 			}
 			
 			this.m_bYawHandedOff = false;
+			
+			/*
+			if (this.m_bPathing && !this.m_bAllowBackWalking) {
+				if (-60.0 < relativeYaw && relativeYaw < 60.0) {
+					this.SetPoseParameter(
+						this.m_iBodyYawPoseParameter,
+						ApproachAngle(relativeYaw, flYaw, ALT_EXTRA_BODY_YAW_TRACK_SPEED * flDeltaTime)
+					);
+					
+					this.m_bYawHandedOff = false;
+					this.m_flAimTargetSetTime = gameTime + 0.2;
+				}
+				else if (this.m_flAimTargetSetTime < gameTime) {
+					if (FloatAbs(flYaw) > 0.1) {
+						this.SetPoseParameter(
+							this.m_iBodyYawPoseParameter,
+							ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
+						);
+					}
+					else {
+						this.m_bYawHandedOff = true;
+					}
+				}
+			}
+			else {
+				float bodyYaw = clamp(relativeYaw, -60.0, 60.0);
+				
+				this.SetPoseParameter(
+					this.m_iBodyYawPoseParameter,
+					ApproachAngle(bodyYaw, flYaw, ALT_EXTRA_BODY_YAW_TRACK_SPEED * flDeltaTime)
+				);
+				
+				this.m_bYawHandedOff = false;
+				this.m_flAimTargetSetTime = gameTime + 0.2;
+				
+				this.GetLocomotionInterface().FaceTowards(vecTarget);
+			}
+			*/
 		}
 		else {
 			if (!this.m_bPathing || this.m_bAllowBackWalking) {
-				this.SetAimTarget(vecTarget);
-				this.m_flAimTargetSetTime = gameTime; // 타임스탬프 갱신
 				this.GetLocomotionInterface().FaceTowards(vecTarget);
 			}
 		}
@@ -729,14 +732,6 @@ methodmap Combine_Base < CClotBody {
 		}
 	}
 	
-	public void SetAimTarget(const float vec[3]) {
-		this.SetPropVector(Prop_Data, "m_vecAimTarget", vec);
-	}
-	
-	public void GetAimTarget(float vec[3]) {
-		this.GetPropVector(Prop_Data, "m_vecAimTarget", vec);
-	}
-	
 	property int m_iBodyYawPoseParameter {
 		public get()			{ return this.GetProp(Prop_Data, "m_iBodyYawPoseParameter"); }
 		public set(int value)	{ this.SetProp(Prop_Data, "m_iBodyYawPoseParameter", value); }
@@ -819,3 +814,74 @@ stock void ArcToLocationViaSpeedSimulation(const float vecStart[3], float vecEnd
 	
 	vecVelocity = vecJumpVel;
 }
+
+/*
+			SubtractVectors(vecTarget, vecMe, vecDir);
+			NormalizeVector(vecDir, vecDir);
+			GetVectorAngles(vecDir, vecAng);
+			
+			float angRotation[3];
+			GetEntPropVector(this.index, Prop_Data, "m_angRotation", angRotation);
+			
+			// Yeah. combine pose param is inverted.
+			float relativeYaw = MyAngleDiff(vecAng[1], angRotation[1]);
+			
+			// 돌아야 할 각도가 40도를 넘으면 body_yaw 포즈파라미터를 0으로 풀어준다.
+			if (relativeYaw > 40.0 || relativeYaw < -40.0) {
+				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
+				
+				if (FloatAbs(flYaw) > 0.1) {					
+					float flCurrentFacingYaw = angRotation[1] - flYaw;
+					
+					float flMaxYawRate = this.GetBaseNPC().flMaxYawRate;
+					float flMaxTurnThisFrame = flMaxYawRate * flDeltaTime;
+					
+					float flReleaseAmount;
+					
+					bool bAimTargetFresh = (gameTime - this.m_flAimTargetSetTime) <= 0.25;
+					
+					if (!IsValidEntity(this.m_iTarget) || !bAimTargetFresh) {
+						flReleaseAmount = fmin(FloatAbs(flYaw), flMaxTurnThisFrame);
+					}
+					else {
+						float vecAimTarget[3];
+						this.GetAimTarget(vecAimTarget);
+						
+						float vecAimDir[3], vecAimAng[3];
+						SubtractVectors(vecAimTarget, vecMe, vecAimDir);
+						NormalizeVector(vecAimDir, vecAimDir);
+						GetVectorAngles(vecAimDir, vecAimAng);
+						
+						// pose param으로 추정한 "현재 실제 방향" 기준, 조준 목표까지 얼마나 남았는지
+						float flAimRelativeYaw = MyAngleDiff(vecAimAng[1], flCurrentFacingYaw);
+						
+						flReleaseAmount = fmin(FloatAbs(flYaw), fmin(flMaxTurnThisFrame, FloatAbs(flAimRelativeYaw)));
+					}
+					
+					if (flReleaseAmount < 0.1)
+						flReleaseAmount = 0.1; // 완전히 멈춰버리지 않도록 최소 진행 보장
+					
+					this.SetPoseParameter(
+						this.m_iBodyYawPoseParameter,
+						ApproachAngle(0.0, flYaw, flReleaseAmount)
+					);
+				}
+				
+				// We don't wanna set aim target while moving.
+				if (!this.m_bPathing || this.m_bAllowBackWalking) {
+					this.SetAimTarget(vecTarget);
+					this.m_flAimTargetSetTime = gameTime; // 타임스탬프 갱신
+					this.GetLocomotionInterface().FaceTowards(vecTarget);
+				}
+			}
+			else {
+				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
+				
+				float bodyYaw = clamp(relativeYaw, -39.9, 39.9);
+				
+				this.SetPoseParameter(
+					this.m_iBodyYawPoseParameter,
+					ApproachAngle(bodyYaw, flYaw, ALT_EXTRA_BODY_YAW_TRACK_SPEED * flDeltaTime)
+				);
+			}
+*/
