@@ -1298,9 +1298,14 @@
 		"de"		"Nekromantie Stab"
 		"pt"		"Cajado Necromante"
 		"nl"		"Necromantie staf"
-		"chi"       	"亡灵神杖"
+		"chi"		"亡灵神杖"
 		"it"		"Bastone della negromanzia"
-		"ko"		"부두술 스태프"
+		"ko"		"강령술 스태프"
+	}
+	"Spookmaster's Hammer"
+	{
+		"en"		"Spookmaster's Hammer"
+		"ko"		"스푸크마스터의 망치"
 	}
 	"Homing Staff"
 	{
