@@ -87,7 +87,7 @@ methodmap ZS_Pukepus < CClotBody
 	
 	public ZS_Pukepus(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZS_Pukepus npc = view_as<ZS_Pukepus>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.0", "5800", ally, false));
+		ZS_Pukepus npc = view_as<ZS_Pukepus>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "2.0", "19500", ally, false));
 		
 		i_NpcWeight[npc.index] = 4;
 		

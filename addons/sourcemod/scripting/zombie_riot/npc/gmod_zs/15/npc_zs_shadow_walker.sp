@@ -95,7 +95,7 @@ methodmap ShadowWalker < CClotBody
 	
 	public ShadowWalker(float vecPos[3], float vecAng[3], int ally)
 	{
-		ShadowWalker npc = view_as<ShadowWalker>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "800", ally, false));
+		ShadowWalker npc = view_as<ShadowWalker>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "400", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		

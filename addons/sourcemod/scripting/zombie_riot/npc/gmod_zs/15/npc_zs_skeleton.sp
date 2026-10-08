@@ -94,7 +94,7 @@ methodmap Skeleton < CClotBody
 	
 	public Skeleton(float vecPos[3], float vecAng[3], int ally)
 	{
-		Skeleton npc = view_as<Skeleton>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "800", ally, false));
+		Skeleton npc = view_as<Skeleton>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "400", ally, false));
 		
 		i_NpcWeight[npc.index] = 1;
 		

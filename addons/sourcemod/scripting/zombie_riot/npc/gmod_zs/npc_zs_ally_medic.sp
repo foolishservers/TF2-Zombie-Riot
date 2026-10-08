@@ -15,7 +15,7 @@ static const char g_UseUberSounds[][] = {
 void Allymedic_OnMapStart_NPC()
 {
 	NPCData data;
-	strcopy(data.Name, sizeof(data.Name), "Medimedes");
+	strcopy(data.Name, sizeof(data.Name), "Kamrstein");
 	strcopy(data.Plugin, sizeof(data.Plugin), "npc_zs_ally_medic");
 	strcopy(data.Icon, sizeof(data.Icon), "medic_uber");
 	data.IconCustom = false;
@@ -148,7 +148,7 @@ methodmap Allymedic < CClotBody
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
 		
-		npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/player/items/medic/hw2013_medicmedes/hw2013_medicmedes.mdl");
+		npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/player/items/all_class/cc_summer2015_the_rotation_sensation/cc_summer2015_the_rotation_sensation_medic.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable3, "SetModelScale");
 		
@@ -156,15 +156,20 @@ methodmap Allymedic < CClotBody
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable3, "SetModelScale");
 		
-		npc.m_iWearable4 = npc.EquipItem("head", "models/workshop/player/items/medic/sum23_medical_emergency/sum23_medical_emergency.mdl");
+		npc.m_iWearable4 = npc.EquipItem("head", "models/workshop/player/items/medic/fall17_vitals_vest/fall17_vitals_vest.mdl.mdl");
 		SetVariantString("1.0");
 		AcceptEntityInput(npc.m_iWearable4, "SetModelScale");
+		
+		npc.m_iWearable5 = npc.EquipItem("head", "models/workshop/player/items/medic/jul13_emergency_supplies/jul13_emergency_supplies.mdl");
+		SetVariantString("1.0");
+		AcceptEntityInput(npc.m_iWearable5, "SetModelScale");
 		
 		
 		SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", 0);
 		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", 0);
 		SetEntProp(npc.m_iWearable3, Prop_Send, "m_nSkin", 0);
 		SetEntProp(npc.m_iWearable4, Prop_Send, "m_nSkin", 0);
+		SetEntProp(npc.m_iWearable5, Prop_Send, "m_nSkin", 0);
 		npc.StartPathing();
 		
 		if(npc.m_bScalesWithWaves)
