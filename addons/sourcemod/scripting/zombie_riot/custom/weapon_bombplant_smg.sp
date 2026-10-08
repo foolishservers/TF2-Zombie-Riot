@@ -982,20 +982,12 @@ static void Firebullet(int client, int weapon, int Overheat, int GetPap)
 		damage -= (float(Overheat)/(GetPap==2 ? 130.0 : 100.0))*(damage/2.4);
 
 	float time = 5000.0/speed;
-	int Projectile = Wand_Projectile_Spawn(client, speed, time, damage, 0, weapon, "raygun_projectile_blue_trail");
+	int Projectile = Wand_Projectile_Spawn(client, speed, time, damage, 0, weapon, Overheat > 64 ? "raygun_projectile_red_trail" : "raygun_projectile_blue_trail");
 	
 	i_AttacksTillReload[Projectile]=0;	
 	static float EntLoc[3];
 	GetEntPropVector(Projectile, Prop_Data, "m_vecAbsOrigin", EntLoc);
-	if(Overheat>64)
-	{
-		int particle = EntRefToEntIndex(i_WandParticle[Projectile]);
-		if(IsValidEntity(particle))
-			RemoveEntity(particle);
-		particle = ParticleEffectAt(EntLoc, "raygun_projectile_red_trail", time);
-		SetParent(Projectile, particle);
-		i_WandParticle[Projectile] = EntIndexToEntRef(particle);
-	}
+	
 	int Robot = EntRefToEntIndex(ExploAR_Robot[client]);
 	if(ExploAR_WeaponPap[client]>3 && IsValidEntity(Robot))
 		ExploAR_Charging[client]++;

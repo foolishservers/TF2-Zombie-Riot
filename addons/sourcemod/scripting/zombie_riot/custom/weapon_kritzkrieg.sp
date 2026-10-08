@@ -59,13 +59,16 @@ static void OnKritzkriegDeployed(Event event, const char[] name, bool dontBroadc
 				else
 					HealEntityGlobal(client, target, (float(SDKCall_GetMaxHealth(target))*0.2)+Healing_Value, 1.25*Attributes_Get(medigun, 4002, 1.0), 1.0, HEAL_ABSOLUTE);
 			}
+			
 			if(dieingstate[client] > 0)
 			{
-				SetEntityHealth(client,  GetClientHealth(client) + 200);
-				dieingstate[client] -= 20;
+				SetEntityHealth(client, GetClientHealth(client) + 200);
+				if (dieingstate[client] > 1)
+					dieingstate[client] = 1;
 			}
 			else
 				HealEntityGlobal(client, client, (float(SDKCall_GetMaxHealth(client))*0.2)+Healing_Value, 1.25*Attributes_Get(medigun, 4002, 1.0), 1.0, HEAL_SELFHEAL);
+			
 			float position[3]; WorldSpaceCenter(client, position);
 			for(int entitycount; entitycount<i_MaxcountNpcTotal; entitycount++)
 			{

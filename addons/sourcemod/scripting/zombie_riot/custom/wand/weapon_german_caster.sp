@@ -142,7 +142,7 @@ public void Weapon_German_Frame(DataPack pack)
 }
 
 public Action Weapon_German_Timer(Handle timer, int client)
-{
+{	
 	if(IsClientInGame(client) && IsPlayerAlive(client))
 	{
 		int weapon = EntRefToEntIndex(GermanWeapon[client]);
@@ -329,7 +329,14 @@ public void Weapon_German_M2(int client, int weapon, bool &result, int slot)
 	if(GermanSilence[client])
 	{
 		TriggerTimer(GermanSilence[client]);
-		Ability_Apply_Cooldown(client, slot, 20.0);
+		
+		// If the cooldown is 20 seconds or less, it will not apply.
+		float cooldown = Ability_Check_Cooldown(client, slot);
+		if(cooldown > (20.0 * CooldownReductionAmount(client)))
+		{
+			Ability_Apply_Cooldown(client, slot, 20.0);
+		}
+		
 		TF2_RemoveCondition(client, TFCond_FocusBuff);
 	}
 	else

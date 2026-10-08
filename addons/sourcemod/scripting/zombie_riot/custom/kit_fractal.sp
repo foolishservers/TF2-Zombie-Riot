@@ -1376,6 +1376,7 @@ public void Kit_Fractal_Primary_Cannon(int client, int weapon, bool &result, int
 		ShowSyncHudText(client,  SyncHud_Notifaction, "The Laser Cannon is Recharging [%.1fs]", fl_animation_cooldown[client]-GetGameTime());
 		return;
 	}
+	
 	int mana_cost;
 	mana_cost = RoundToCeil(Attributes_Get(weapon, 733, 1.0));
 

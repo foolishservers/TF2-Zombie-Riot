@@ -922,7 +922,8 @@ static void StealBodyFrame(DataPack pack)
 		f_WasRecentlyRevivedViaNonWaveClassChange[client] = GetGameTime() + 0.5;
 		f_WasRecentlyRevivedViaNonWave[client] = GetGameTime() + 0.5;
 
-		TeleportEntity(client, pos, ang);
+		Player_Teleport_Safe(client, pos, true, false);
+		TeleportEntity(client, _, ang);
 
 		Monologue_BodySwap(client);
 	}
