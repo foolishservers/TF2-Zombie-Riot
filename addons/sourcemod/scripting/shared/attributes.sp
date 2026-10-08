@@ -75,10 +75,15 @@ enum
 	Attrib_MaxArmor_Multiplier = 5000,
 	Attrib_MaxArmor_BaseAdditive = 5001,
 	Attrib_MaxArmor_FinalAdditive = 5002,
+	
 	Attrib_IsSniperRifle = 5003,
 	Attrib_ExplosiveHeadshot = 5004,
+	
 	Attrib_MaxHealthMulti = 5005,
+	
 	Attrib_DamageBonusFullCharge = 5006,
+	
+	Attrib_MaxHealthForNecro = 5007,
 };
 
 StringMap WeaponAttributes[MAXENTITIES + 1];

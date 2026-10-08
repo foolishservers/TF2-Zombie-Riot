@@ -33,15 +33,14 @@ public void Weapon_Calcium_Wand(int client, int weapon, bool crit, int slot)
 		speed *= Attributes_Get(weapon, 104, 1.0);
 		
 		speed *= Attributes_Get(weapon, 475, 1.0);
-	
-	
+		
 		float time = 500.0/speed;
 		time *= Attributes_Get(weapon, 101, 1.0);
 		
 		time *= Attributes_Get(weapon, 102, 1.0);
-
+		
 		EmitSoundToAll(SOUND_WAND_SHOT_CALCIUM, client, SNDCHAN_WEAPON, 65, _, 0.45, 100);
-		Wand_Projectile_Spawn(client, speed, time, damage, 10/*Default wand*/, weapon, "unusual_breaker_purple_parent");
+		Wand_Projectile_Spawn(client, speed, time, damage, 10, weapon, "unusual_breaker_purple_parent");
 	}
 	else
 	{
@@ -72,19 +71,14 @@ public void Want_CalciumWandTouch(int entity, int target)
 		SDKHooks_TakeDamage(target, owner, owner, f_WandDamage[entity], DMG_PLASMA, weapon, Dmg_Force, Entity_Position, _ , ZR_DAMAGE_LASER_NO_BLAST);	// 2048 is DMG_NOGIB?
 		ApplyStatusEffect(owner, target, "Marked", 5.0);
 		if(IsValidEntity(particle))
-		{
 			RemoveEntity(particle);
-		}
-		EmitSoundToAll(SOUND_ZAP, entity, SNDCHAN_STATIC, 65, _, 0.65);
-		RemoveEntity(entity);
 	}
 	else if(target == 0)
 	{
 		if(IsValidEntity(particle))
-		{
 			RemoveEntity(particle);
-		}
-		EmitSoundToAll(SOUND_ZAP, entity, SNDCHAN_STATIC, 65, _, 0.65);
-		RemoveEntity(entity);
 	}
+	
+	EmitSoundToAll(SOUND_ZAP, entity, SNDCHAN_STATIC, 65, _, 0.65);
+	RemoveEntity(entity);
 }

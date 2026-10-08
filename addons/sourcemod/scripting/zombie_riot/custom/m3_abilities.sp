@@ -807,6 +807,18 @@ public void ReconstructiveTeleporter(int client)
 					WorldSpaceCenter(client, WorldSpaceVec);
 					TeleportEntity(ally, WorldSpaceVec, NULL_VECTOR, NULL_VECTOR);
 				}
+				else if(i_NpcInternalId[ally] == NecroCombine_GetID()
+					&& IsEntityAlive(ally, true)
+					&& GetEntPropEnt(ally, Prop_Send, "m_hOwnerEntity") == client)
+				{
+					IsLiveBarrackUnits=true;
+					WorldSpaceCenter(ally, WorldSpaceVec);
+					ParticleEffectAt(WorldSpaceVec, "teleported_red", 0.5);
+					SetEntProp(ally, Prop_Data, "m_iHealth", RoundToCeil(float(ReturnEntityMaxHealth(ally)) * 1.5));
+					IncreaseEntityDamageTakenBy(ally, 0.05, 2.0);
+					WorldSpaceCenter(client, WorldSpaceVec);
+					TeleportEntity(ally, WorldSpaceVec, NULL_VECTOR, NULL_VECTOR);
+				}
 			}
 		}
 		if(!IsLiveBarrackUnits)

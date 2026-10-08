@@ -1,12 +1,12 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-static float ability_cooldown[MAXPLAYERS+1]={0.0, ...};
 static float Necro_Damage[MAXPLAYERS+1]={0.0, ...};
+static bool Delete_Flame[MAXPLAYERS + 1];
 
 public void Wand_Calcium_Spell_ClearAll()
 {
-	Zero(ability_cooldown);
+	Zero(Delete_Flame);
 }
 
 #define SOUND_WAND_CALCIUM_ABILITY "misc/halloween/spell_skeleton_horde_rise.wav"

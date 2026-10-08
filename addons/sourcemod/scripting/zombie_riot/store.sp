@@ -5904,6 +5904,7 @@ void Store_ApplyAttribs(int client)
 	Rogue_ApplyAttribs(client, map);
 	Waves_ApplyAttribs(client, map);
 	FullMoonDoubleHp(client, map);
+	NecroStaffHp(client, map);
 
 	StringMapSnapshot snapshot = map.Snapshot();
 //	entity = client;

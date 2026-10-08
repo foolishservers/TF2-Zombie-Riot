@@ -2853,7 +2853,6 @@ public void OnEntityCreated(int entity, const char[] classname)
 		{
 			SDKHook(entity, SDKHook_SpawnPost, ApplyExplosionDhook_Fireball);
 #if defined ZR
-			SDKHook(entity, SDKHook_SpawnPost, Wand_Necro_Spell);
 			SDKHook(entity, SDKHook_SpawnPost, Wand_Calcium_Spell);
 #endif
 			npc.bCantCollidie = true;

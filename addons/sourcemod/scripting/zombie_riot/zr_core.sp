@@ -1007,7 +1007,6 @@ void ZR_MapStart()
 	Wand_Calcium_Spell_ClearAll();
 	Wand_Fire_Spell_ClearAll();
 	Wand_Default_Spell_ClearAll();
-	Wand_Necro_Spell_ClearAll();
 	Wand_Skull_Summon_ClearAll();
 	Rusty_Rifle_ResetAll();
 	ShieldLogic_OnMapStart();
