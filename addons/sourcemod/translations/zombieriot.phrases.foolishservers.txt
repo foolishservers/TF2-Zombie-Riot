@@ -620,6 +620,16 @@
 		"en"	"Only specific machines can receive this effect.\nAttack speed doubles and movement speed increases by 25％."
 		"ko"	"특정 기계만 이 효과를 부여받을 수 있습니다.\n공격 속도가 2배가 되고, 이동 속도도 25％ 증가합니다."
 	}
+	"Alt Extra Machine"
+	{
+		"en"	"Lunatic Powered Machine"
+		"ko"	"달의 힘으로 움직이는 기계들"
+	}
+	"Alt Extra Machine Desc"
+	{
+		"en"	""
+		"ko"	"이 효과를 받는 적은 특수한 버프를 받을 수 있습니다."
+	}
 	
 	//무기 이름
 	"Chaos Infected Launcher"

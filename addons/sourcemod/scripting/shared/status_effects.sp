@@ -1105,6 +1105,7 @@ float Cybergrind_EX_Hard_SpeedFunc(int victim, StatusEffect Apply_MasterStatusEf
 	return f_Speed;
 }
 
+static int AltExtraMachineStatusID;
 void StatusEffects_BlackOak()
 {
 	StatusEffect data;
@@ -1136,6 +1137,33 @@ void StatusEffects_BlackOak()
 	data.SlotPriority				= 0;
 	data.HudDisplay_Func			= ExtraDamage_Indicator_Hud_Func;
 	StatusEffect_AddGlobal(data);
+	
+	strcopy(data.BuffName, sizeof(data.BuffName), "Machine Overclock");
+	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "Ω");
+	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
+	data.DamageTakenMulti 			= -1.0;
+	data.DamageDealMulti			= -1.0;
+	data.AttackspeedBuff			= 0.5;
+	data.MovementspeedModif			= 1.25;
+	data.Positive 					= true;
+	data.ShouldScaleWithPlayerCount = false;
+	data.Slot						= 0;
+	data.SlotPriority				= 0;
+	StatusEffect_AddGlobal(data);
+	
+	strcopy(data.BuffName, sizeof(data.BuffName), "Alt Extra Machine");
+	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "");
+	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
+	data.DamageTakenMulti 			= -1.0;
+	data.DamageDealMulti			= -1.0;
+	data.AttackspeedBuff			= -1.0;
+	data.MovementspeedModif			= -1.0;
+	data.Positive 					= true;
+	data.ShouldScaleWithPlayerCount = false;
+	data.ElementalLogic				= true;
+	data.Slot						= 0;
+	data.SlotPriority				= 0;
+	AltExtraMachineStatusID = StatusEffect_AddGlobal(data);
 }
 
 void ExtraDamage_Indicator_Hud_Func(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int SizeOfChar, char[] HudToDisplay)
@@ -1145,6 +1173,10 @@ void ExtraDamage_Indicator_Hud_Func(int attacker, int victim, StatusEffect Apply
 		ratio = 0.0;
 	
 	Format(HudToDisplay, SizeOfChar, "[⚔ %.0f％]", ratio);
+}
+
+bool NpcStats_AltExtraMachine(int entity) {
+	return CheckBuffIndex(victim, AltExtraMachineStatusID);
 }
 #endif
 
