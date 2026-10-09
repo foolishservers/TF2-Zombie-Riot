@@ -3536,6 +3536,209 @@
 		"ko"	"베스타 화학대대의 수비를 위해 제작된 거대한 지원 병력입니다.\n-치료 대상은 막대한 버프를 얻고, 매우 높은 피해를 받지 않는 한 죽지 않습니다.\n-이동 속도가 매우 느립니다.\n=(전령병 버프가 있을 경우) 치료 대상에게 타우린 버프를 부여합니다."
 	}
 	
+	"Intruso Spawn"
+	{
+		"en"	"Intruso are invaded."
+		"ko"	"인트루소가 침입했습니다."
+	}
+	
+	"Mecha Loader Desc"
+	{
+		"en"	"-"
+		"ko"	"배럭으로 뽑을 땐 행복하셨죠?\n-이 적은 죽을 때 주변에 폭발 피해를 줍니다.\n-당연히 죽을 때 산산조각납니다."
+	}
+	"Mecha Duelist Desc"
+	{
+		"en"	"-"
+		"ko"	"이레이서스에 이런저런 조치를 하면 이런 결과를 얻을 수 있죠.\n-2개의 목숨을 가지고 있습니다. 저항은 목숨을 잃으면 사라집니다.\n-목숨을 잃었을 때 공격 속도가 2배로 빨라집니다."
+	}
+	"Mecha Heavy Particle Rifle Desc"
+	{
+		"en"	"-"
+		"ko"	"비용을 위해 엑스피돈사인들의 뇌를 적출해 기계에 이식했습니다.\n-발사할 수록 피해량과 공격 속도가 증가하는 중입자 소총을 가지고 있습니다.\n-이 적은 사거리가 기므로 주의하십시오."
+	}
+	"Mecha Airstriker Desc"
+	{
+		"en"	"-"
+		"ko"	"솔딘에서 불필요한 털을 제거해서 무게를 줄였습니다.\n-좀 더 자주 로켓 점프를 합니다.\n-폭발 펀치는 제거되었으니 안심하세요."
+	}
+	"Kommandant Stahlherz Desc"
+	{
+		"en"	"-"
+		"ko"	"아이젠하르트 원수는 기계가 되어서도 본분을 다하고 있습니다.\n-주변의 아군이 죽으면 최대 체력의 10분의 1을 회복합니다.\n-또한 공격력이 12.5％ 증가합니다. (최대 300％까지)\n-목숨을 잃으면, 저항을 잃고 피해량과 이동 속도가 증가합니다."
+	}
+	"Mecha Dimension Ripper Desc"
+	{
+		"en"	"-"
+		"ko"	"이런. 차원 찢개가 블리츠크리그의 손에 넘어가버렸군요.\n-주기적으로 본인 소속의 무작위 아군을 소환합니다.\n-근접 공격이 불가능할 때는 유도 투사체를 발사합니다."
+	}
+	"Mecha Base Destroyer Buff Desc"
+	{
+		"en"	"-"
+		"ko"	"이 기계들은 기지를 효율적으로 파괴하기 위해 고안되었습니다.\n-주변의 아군에게 전투 함성 버프를 부여합니다.\n-4발을 다 발사하면 전부 재장전할 때까지 공격하지 않습니다."
+	}
+	"Mecha Base Destroyer Backup Desc"
+	{
+		"en"	"-"
+		"ko"	"이 기계들은 기지를 효율적으로 파괴하기 위해 고안되었습니다.\n-주변의 아군에게 수비 지원 버프를 부여합니다.\n-4발을 다 발사하면 전부 재장전할 때까지 공격하지 않습니다."
+	}
+	"Mecha Base Destroyer Conch Desc"
+	{
+		"en"	"-"
+		"ko"	"이 기계들은 기지를 효율적으로 파괴하기 위해 고안되었습니다.\n-주변의 아군에게 고대의 멜로디 버프를 부여합니다.\n-4발을 다 발사하면 전부 재장전할 때까지 공격하지 않습니다."
+	}
+	"Holy Overlord Desc"
+	{
+		"en"	"-"
+		"ko"	"마나의 사용법을 익힌 대군주입니다.\n-적에게 주기적으로 5갈래의 투사체를 발사합니다.\n-분노의 지속 시간이 더 오래 갑니다."
+	}
+	"Holy Golden Collos Desc"
+	{
+		"en"	"-"
+		"ko"	"구조물에서 체력을 회복하는 능력은 없지만, 번개의 힘이 주어졌습니다.\n-정면으로 몰아치는 번개 공격을 시전합니다.\n-시전 후에는 영구적으로 카페인 버프를 받습니다."
+	}
+	"Mecha Father Grigori Desc"
+	{
+		"en"	"-"
+		"ko"	"신부님?\n-투사체 대신 히트스캔 총알을 발사합니다.\n-2번의 이온 캐논을 전개합니다.\n-첫 번째 이온 캐논이 터질 때 주변의 적을 주위로 끌어옵니다."
+	}
+	"Mecha Pyro Chef Desc"
+	{
+		"en"	"-"
+		"ko"	"흉물..은 아닙니다.\n-그저 앞의 대상에게 불을 뿜습니다.\n-체력이 감소할수록 이동 속도가 빨라집니다."
+	}
+	"Mecha Plunderer Pyro Desc"
+	{
+		"en"	"-"
+		"ko"	"프랙무비라도 찍나보군요.\n-불이 붙은 대상에게 트루 대미지를 가합니다.\n-적이랑 떨어져 있을 땐 앞으로 돌진합니다."
+	}
+	"Intruso Desc"
+	{
+		"en"	"-"
+		"ko"	"다이버저니스티코를 기계로 만든다면 어떨까요?\n-적 처치 시 복제본이 하나 생성됩니다."
+	}
+	"Sensal? Desc"
+	{
+		"en"	"-"
+		"ko"	"센살?\n-주기적으로 낫 2개를 날립니다.\n-특정 개체는 낫 대신 레이저를 날리지만, 그 출력을 버티지 못하고 죽습니다."
+	}
+	"Mecha Overclocker Desc"
+	{
+		"en"	"-"
+		"ko"	"또 다른 메딕 로봇입니다.\n-아군이 살아있는 동안, 가까운 아군을 치료합니다.\n-특정 아군한테는 '기계 오버클럭' 효과를 부여합니다.\n-아군이 모두 죽었다면 가까운 적을 공격하고 세포 파괴를 부여합니다."
+	}
+	"Holy DDT Desc"
+	{
+		"en"	"-"
+		"ko"	"DDT에게도 기회가 주어졌습니다.\n-타격 시 근처의 적을 함께 타격합니다."
+	}
+	"Mecha Sniper Railgunner Desc"
+	{
+		"en"	"-"
+		"ko"	"레일건 스나이퍼의 나약한 육신을 기계로 대체했습니다.\n-6번째 공격은 4배의 피해를 가합니다."
+	}
+	"Mecha Conqueror Desc"
+	{
+		"en"	"-"
+		"ko"	"이 무자비한 적은 기지를 파괴하기 위해 고안되었습니다.\n-구조물에 높은 피해를 가하고 폭발을 일으킵니다.\n-적이 적절한 거리에 있는 경우, 도약을 시도합니다."
+	}
+	"Medic Master Mage Desc"
+	{
+		"en"	"-"
+		"ko"	"마나의 잠재력을 끌어내기 위해 육신을 기계로 바꾼 자들입니다.\n비록 루이나에서 쫓겨났지만, 그래도 강해졌죠.\n-상급 마법사보다 피해량이 높고 사거리가 깁니다. 주의하세요."
+	}
+	"Mecha Sniper Main Desc"
+	{
+		"en"	"-"
+		"ko"	"평범한 스나이퍼 로봇입니다.\n-평상 시에는 기관단총을 사용합니다.\n-체력이 절반 이하로 감소할 경우, 칼을 들고 달려듭니다."
+	}
+	"Sergeant Charbomb Desc"
+	{
+		"en"	"-"
+		"ko"	"폭발물 취급 주의.\n-평상 시에는 주기적으로 적에게 돌격합니다.\n-체력이 일정 수치 이하로 감소할 경우, 이동 속도가 빨라지며 5초 뒤에 자폭합니다."
+	}
+	"Mecha Flaregun Main Desc"
+	{
+		"en"	"-"
+		"ko"	"평범한 조명탄 파이로 로봇입니다.\n-불이 붙은 대상에게는 피해량 증가"
+	}
+	"Mecha Killing Order Pyro Desc"
+	{
+		"en"	"-"
+		"ko"	"정말로 사악한 로봇입니다.\n-피격 시 불이 붙고, 받는 피해를 높이는 '타겟 식별' 상태 이상을 받습니다.\n-긴 사거리를 가지고 있습니다."
+	}
+	"Mecha Kamikaze Demo Desc"
+	{
+		"en"	"-"
+		"ko"	"-"
+	}
+	"Perfected Sensal Clone Desc"
+	{
+		"en"	"-"
+		"ko"	"센살과 거의 유사해졌습니다. 누가 이런 걸 만들었을까요?\n-낫 투척 공격과 레이저 공격을 사용합니다.\n-기존 센살 클론보다 이동 속도가 빠릅니다."
+	}
+	"Mecha Tornado Blitz Desc"
+	{
+		"en"	"-"
+		"ko"	"특별한 투사체를 사용하는 이 기계는 타겟이 쓰러질 때까지 발사를 멈추지 않을 겁니다."
+	}
+	"Mecha Wizard Heavy Desc"
+	{
+		"en"	"-"
+		"ko"	"이 다소 게으른 로봇은 4개의 화염구를 연속으로 발사합니다."
+	}
+	"Mecha Flametail Scout Desc"
+	{
+		"en"	"-"
+		"ko"	"주기적으로 4초마다 모든 공격을 회피합니다.\n어쩌면 그가 모은 돈을 뺏을 수 있을 지도?"
+	}
+	"Mecha Elite Sniper Desc"
+	{
+		"en"	"-"
+		"ko"	"다소 문제가 많은 스나이퍼 로봇입니다.\n탄환에 맞으면 주변의 아군에게 튕겨나갑니다.\n주기적으로 특별한 보급품을 투하합니다."
+	}
+	"Mecha Berserker Demo Desc"
+	{
+		"en"	"-"
+		"ko"	"공포를 느끼는 모듈을 제거한 데모맨 로봇입니다.\n-목숨 2개\n-목숨을 잃을 경우, 머리가 파괴되며 공격 속도가 크게 증가합니다."
+	}
+	
+	"W.F. Suppressor Desc"
+	{
+		"en"	"-"
+		"ko"	"특별한 업그레이드가 추가된 기관단총을 사용하는 콤바인입니다.\n주기적으로 유탄을 발사합니다."
+	}
+	"W.F. Rocketeer Desc"
+	{
+		"en"	"-"
+		"ko"	"지휘부에서는 효과적인 기지 파괴를 위해서 폭발성 무기가 필요하다는 결론을 냈습니다.\n-조준이 완료되면 로켓을 발사합니다.\n-무작위 위치에서 등장합니다."
+	}
+	"W.F. Pretorian Guard Desc"
+	{
+		"en"	"-"
+		"ko"	"한때 굴른의 부대원이었으나, 프레스콧의 지휘 하에 더욱 강력해졌습니다.\n-원거리에서 가하는 기본 공격은 침묵을 부여합니다.\n-주기적으로 로켓을 직사로 발사합니다.\n-근접 공격에 맞으면 뇌진탕 충격에 빠집니다."
+	}
+	"W.F. Supreme Overlord Desc"
+	{
+		"en"	"-"
+		"ko"	"기존의 대군주가 권력에 눈이 먼 것과 달리, 이 대군주는 자신의 아군을 극히 아낍니다.\n-평소엔 높은 저항을 가지고 선두에 섭니다.\n-현재 남아있는 아군이 모두 죽거나, 10명 이상 잃으면 저항을 잃고 분노 상태에 돌입합니다."
+	}
+	"Anti Chaos Robot Desc"
+	{
+		"en"	"-"
+		"ko"	"굴른을 기리기 위해 알미나인들이 만든 로봇입니다.\n비록 빼앗겼지만요.\n-가까이에 있는 적에게 중압감 디버프를 부여합니다."
+	}
+	"W.F. Tank Commander Desc"
+	{
+		"en"	"-"
+		"ko"	"W.F. 전차의 지휘를 담당하는 승무원입니다.\n-강력한 기관단총을 주무기로 사용합니다.\n-수류탄과 유탄을 사용합니다."
+	}
+	"W.F. Heavy Armored Titan Desc"
+	{
+		"en"	"-"
+		"ko"	"중장갑으로 무장한 거대 콤바인입니다.\n-높은 저항을 가지고 있습니다.\n-목숨을 잃으면 라이플을 꺼냅니다.\n-검을 들고 있을 땐 주변의 투사체를 막아냅니다."
+	}
+	
 	// Trophies goes here.
 	"Magia Wings Desc"
 	{
@@ -4002,6 +4205,16 @@
 	}
 	
 	// Survival.
+	"Grigori's Cross"
+	{
+		"en"		"Grigori's Cross"
+		"ko"		"그리고리 신부의 십자가"
+	}
+	"Grigori's Cross Desc"
+	{
+		"en"		"Grigori gives this to us as thanks for helping him out with the zombies."
+		"ko"		"좀비를 몰아내는 걸 도운 것에 대한 감사 표시로 그리고리가 주는 선물입니다."
+	}
 	"Dropped Secret Letter"
 	{
 		"en"		"Dropped Secret Letter"
@@ -4009,7 +4222,7 @@
 	}
 	"Dropped Secret Letter Desc"
 	{
-		"en"		"Dropped on the floor after beating Blitz’s army. \nWritten on it is someone pleading for help from this machine? \nAnd it’s signed by someone named Karlas?"
+		"en"		"Dropped on the floor after fending off Blitz’s army. \nWritten on it is someone pleading for help from this machine? \nAnd it’s signed by someone named Karlas?"
 		"ko"		"블리츠크리그의 군단을 막아낸 후 바닥에서 발견했습니다.\n이 기계에게서 구해달라고 쓰여져있는데...\n''카를라스''란 인물의 서명이 있군요?"
 	}
 	"Xeno Virus Sample"
@@ -4019,17 +4232,17 @@
 	}
 	"Xeno Virus Sample Desc"
 	{
-		"en"		"A sample of the Xeno virus after we beat them in Xeno Survival. \nMaybe this will help us find the source of the infection."
+		"en"		"A while after the Xeno army left victorious, we find the aftermath of their battle. \nCorpses of Xeno infecteds and other mercs lay across a ruined camp. \nBob the Second takes a piece of the infected's flesh. \nHe then tells us we need to get rid of this infection fast!"
 		"ko"		"제노 위협을 몰아낸 후 얻은 제노 바이러스의 샘플입니다.\n감염의 근원을 찾아내는데 도움이 될 수 있을 것 같습니다."
 	}
-	"Son of Osiris’s Gift"
+	"Son of Osiris's Gift"
 	{
 		"en"		"Son of Osiris’s Gift"
 		"ko"		"오시리스의 아들의 선물"
 	}
-	"Son of Osiris’s Gift Desc"
+	"Son of Osiris's Gift Desc"
 	{
-		"en"		"Osiris gives us this for helping him and the rest of Alaxios’s army train. \nIt’s a book on how to become a Brawler…"
+		"en"		"Osiris gives us this for helping him and the rest of Alaxios’s army train. \nIt’s a book on how to become a Brawler…… \nThanks, Osiris…"
 		"ko"		"오시리스가 남은 알락시오스의 군단과 그의 훈련을 도운 보답으로 이것을 주었습니다.\n어떻게 난투꾼이 되는지에 대해 쓰여져있는 책이군요..."
 	}
 	"Broken Expidonsan Tech"
@@ -4039,7 +4252,7 @@
 	}
 	"Broken Expidonsan Tech Desc"
 	{
-		"en"		"Broken off one of the elite rogue expidonsans. \nIt appears to be stronger than Sensal's tech, at least by the look of it."
+		"en"		"As we're heading to the Expidonsan small base, one of us accidentally steps on this, breaking it. \nWe think it's Sensal's tech, so we bring it with us. \nWe are unaware of the mercs who got killed by a rogue Expidonsan group."
 		"ko"		"정예 이탈자 엑스피돈사인들 중 하나에게서 떨어져 나온 것입니다.\n보아하니 센살의 기술력보다 더욱 강력한 것 같군요. 최소한 보이는 것으로는요."
 	}
 	"Almina's Last Hope..."
@@ -4047,10 +4260,10 @@
 		"en"		"Almina's Last Hope..."
 		"ko"		"알미나의 마지막 희망..."
 	}
-	"Almina's Last Hope Trophy Desc"
+	"Almina's Last Hope Trophy Desc"  
 	{
-		"en"		"You saved Almina from Whiteflower rule.\nBut can you save what’s left of Almina from the Dweller."
-		"ko"		"당신은 알미나를 배풍등의 지배에서 자유롭게 했습니다.\n하지만 드웰러에게서 알미나의 남은 도시를 구해낼 수 있을까요?"
+		"en"		"You previously saved Almina from Whiteflower's rule. Now you save it from the Dweller's attempt to advance further into it. \nBut can you save what’s left of Almina from the full Dweller army?"
+		"ko"		"당신은 이전에 알미나를 배풍등의 지배에서 구해냈습니다. 이번엔 드웰러의 내부 진격 시도를 저지했군요.\n하지만 드웰러의 대규모 군세를 상대로 남은 도시를 구해낼 수 있을까요?"
 	}
 	"Alminan Badge of Honor"
 	{
@@ -4059,15 +4272,15 @@
 	}
 	"Alminan Badge of Honor Desc"
 	{
-		"en"		"Amphi gives you this for all you have done for Almina, \ndating back to before you were employed by Bob the Second."
-		"ko"		"암피가 당신이 알미나를 위해 행한 모든 것에 대한 감사로 이것을 주었습니다.\n당신이 밥 2세에게 고용되기 전의 날짜까지 거슬러 올라가네요."
+		"en"		"Amphi gives us these for all we've done for Almina. Dating back to before you were employed by Bob the Second. \nShe tells us to make sure to give the main mercs their badge."
+		"ko"		"암피가 당신이 알미나를 위해 행한 모든 것에 대한 감사로 이것을 주었습니다.\n당신이 밥 2세에게 고용되기 전의 날짜까지 거슬러 올라가네요.\n주력 용병 부대에게도 배지를 꼭 전해달라는 군요."
 	}
-	"Collector’s Backpack"
+	"Collector's Backpack"
 	{
 		"en"		"Collector’s Backpack"
 		"ko"		"수집가의 가방"
 	}
-	"Collector’s Backpack Desc"
+	"Collector's Backpack Desc"
 	{
 		"en"		"The backpack worn by the Aperture Collector. \nThe tech within looks extremely advanced."
 		"ko"		"애퍼처 수집가가 매고 있던 가방입니다.\n안에 들어있는 기술은 극도로 진보된 것 같습니다."
@@ -4089,8 +4302,8 @@
 	}
 	"Major Voided’s Hat Desc"
 	{
-		"en"		"Somehow still intact after the explosion. A bit big but still usable."
-		"ko"		"어떻게인지 몰라도 폭발 이후에도 멀쩡하게 남아있습니다.\n좀 크긴 하지만 쓸 수는 있네요."
+		"en"		"Zeina gives us this after one of our Umbral Incursion runs. \nShe says she got it from encountering Voided Major Steams while saving a group of mercs from a void outbreak."
+		"ko"		"제이나가 움브랄 인커션이 끝나고 이걸 건네주었습니다.\n공허 재앙에서 용병을 구해내던 중 마주친 공허화된 소령에게서 얻었다는군요."
 	}
 	"Avangard's Processing Core-B"
 	{
@@ -4099,8 +4312,8 @@
 	}
 	"Avangard's Processing Core-B Desc"
 	{
-		"en"		"After destroying the Radiomast at the Vestan outpost, along with the soldiers there, you find this on the ground. drop by one of the Avanguards we killed."
-		"ko"		"베스타 전초기지의 방송탑을 파괴한 후, 땅에 널부러진 병사들 사이에서 발견했습니다.\n쓰러뜨린 아방가르드 중 하나에게서 떨어져 나온 것 같습니다."
+		"en"		"As we head to meet up with Bob the First to deal with chaos problems, we hear a large explosion at a Vestan outpost. From the sky, this drops down in front of us, and we take it with us. Maybe I'll have some use for it"
+		"ko"		"혼돈 문제로 밥 1세와 만나기 전에 베스타 전초기지에서 거대한 폭발이 일어나는 걸 보았습니다.\n폭발과 함께 하늘에서 떨어진 이 물건을 집었습니다. 아마도 쓸 데가 있을 겁니다."
 	}
 	"Ancient Demon Horn"
 	{
@@ -4109,18 +4322,18 @@
 	}
 	"Ancient Demon Horn Desc"
 	{
-		"en"		"Broken off an Ancient Demon we killed. \nWe have no idea what to use it for…"
-		"ko"		"처치한 고대 악마에게서 부러져 나온 뿔입니다.\n어디에 써야할지 도통 모르겠군요..."
-	}
-	"Warped Crystal"
+		"en"		"Broken off an Ancient Demon we killed. \nWe bring it back with us to understand these demons."
+		"ko"		"처치한 고대 악마에게서 부러져 나온 뿔입니다.\n이 악마들을 알아내기 위해 이 뿔을 챙겨왔습니다."
+	} 
+	"Crystallized Hand"
 	{
 		"en"		"Warped Crystal"
 		"ko"		"왜곡된 수정"
 	}
-	"Warped Crystal Desc"
+	"Crystallized Hand Desc"
 	{
-		"en"		"Made from the combination of Chaos and Void. \nLet's hope none of us crystallizes so we don’t get encased in one of these."
-		"ko"		"혼돈과 공허가 융화되어 만들어진 수정입니다.\n우리 중 누군가 결정화 되어 이런 수정에 갇히지 않길 바라야겠죠."
+		"en"		"On our way to meet up with Bob and Twirl, we see a rift closing. This comes flying out of it. \nIt looks like it was blown off the person after they got crystallized. \nThe crystals partially encase a pistol the person was using."
+		"ko"		"밥과 트윌을 만나러 가는 길에 균열이 닫히면서 이것이 날라오는 걸 보았습니다.\n사람들이 결정화된 후에 날려보내진 것처럼 보이는 군요.\n그 사람이 사용하던 권총을 결정이 부분적으로 덮고 있습니다."
 	}
 	"Tiny Flower"
 	{
