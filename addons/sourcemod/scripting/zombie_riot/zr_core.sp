@@ -2957,10 +2957,10 @@ stock void GiveArmorViaPercentage(int client, float multiplyier, float MaxMulti,
 
 	if(ArmorGiver > 0 && ArmorToGive > 0.0)
 	{
-		ApplyArmorEvent(client, RoundToNearest(ArmorToGive), ArmorGiver);
+		ApplyArmorEvent(client, RoundToCeil(ArmorToGive), ArmorGiver);
 	}
-	
 }
+
 stock void AddAmmoClient(int client, int AmmoType, int AmmoCount = 0, float Multi = 1.0, bool ignoreperk = false)
 {
 	int AmmoToAdd;
