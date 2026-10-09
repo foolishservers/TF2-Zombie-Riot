@@ -4237,7 +4237,7 @@
 	}
 	"Son of Osiris's Gift"
 	{
-		"en"		"Son of Osiris’s Gift"
+		"en"		"Son of Osiris's Gift"
 		"ko"		"오시리스의 아들의 선물"
 	}
 	"Son of Osiris's Gift Desc"
@@ -4277,7 +4277,7 @@
 	}
 	"Collector's Backpack"
 	{
-		"en"		"Collector’s Backpack"
+		"en"		"Collector's Backpack"
 		"ko"		"수집가의 가방"
 	}
 	"Collector's Backpack Desc"
@@ -4295,12 +4295,12 @@
 		"en"		"A golden necklace with a gem at the end of it. \nRuliana gives it to us as a gift from Twirl."
 		"ko"		"끝부분에 보석이 달려있는 황금 목걸이입니다.\n루리아나가 트윌의 선물이라며 건네주었습니다."
 	}
-	"Major Voided’s Hat"
+	"Major Voided's Hat"
 	{
-		"en"		"Major Voided’s Hat"
+		"en"		"Major Voided's Hat"
 		"ko"		"공허화된 소령의 모자"
 	}
-	"Major Voided’s Hat Desc"
+	"Major Voided's Hat Desc"
 	{
 		"en"		"Zeina gives us this after one of our Umbral Incursion runs. \nShe says she got it from encountering Voided Major Steams while saving a group of mercs from a void outbreak."
 		"ko"		"제이나가 움브랄 인커션이 끝나고 이걸 건네주었습니다.\n공허 재앙에서 용병을 구해내던 중 마주친 공허화된 소령에게서 얻었다는군요."
