@@ -93,7 +93,7 @@ enum struct Round
 
 enum struct Vote
 {
-	char Name[64];
+	char Name[128];
 	char Config[256];
 	int Level;
 	char Desc[256];
@@ -101,6 +101,7 @@ enum struct Vote
 	char Unlock1[64];
 	char Unlock2[64];
 	bool Locked;
+	char DisplayFormat[128];
 }
 
 

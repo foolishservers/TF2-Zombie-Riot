@@ -693,7 +693,7 @@ bool Rogue_CallVote(int client, bool force = false)	// Waves_CallVote
 						}
 					}
 				}
-
+				
 				Format(vote.Config, sizeof(vote.Config), "%t%s", vote.Name, locked ? " (Locked)" : "");
 				menu.AddItem(vote.Name, vote.Config, locked ? ITEMDRAW_DISABLED : ITEMDRAW_DEFAULT);
 			}
@@ -815,41 +815,37 @@ static void DisplayHintVote()
 					Vote vote;
 					Voting.GetArray(top[0], vote);
 					
-					char buffer[256];
-					FormatEx(buffer, sizeof(buffer), "Votes: %d/%d, %ds left\n1. %t%s: (%d)", count, total, RoundFloat(VoteEndTime - GetGameTime()), vote.Name, vote.Append, votes[top[0]]);
+					char buffer[256], buffer2[128];
+					if(vote.DisplayFormat[0])
+					{
+						FormatEx(buffer2, sizeof(buffer2), vote.DisplayFormat, vote.Name, vote.Append);
+						FormatEx(buffer, sizeof(buffer), "Votes: %d/%d, %ds left\n1. %s: (%d)", count, total, RoundFloat(VoteEndTime - GetGameTime()), buffer2, votes[top[0]]);
+					}
+					else
+					{
+						FormatEx(buffer, sizeof(buffer), "Votes: %d/%d, %ds left\n1. %t%s: (%d)", count, total, RoundFloat(VoteEndTime - GetGameTime()), vote.Name, vote.Append, votes[top[0]]);
+					}
 					
 					for(int i = 1; i < sizeof(top); i++)
 					{
 						if(top[i] != -1)
 						{
 							Voting.GetArray(top[i], vote);
-
-							Format(buffer, sizeof(buffer), "%s\n%d. %t%s: (%d)", buffer, i + 1, vote.Name, vote.Append, votes[top[i]]);
+							if(vote.DisplayFormat[0])
+							{
+								FormatEx(buffer2, sizeof(buffer2), vote.DisplayFormat, vote.Name, vote.Append);
+								Format(buffer, sizeof(buffer), "%s\n%d. %s: (%d)", buffer, i + 1, buffer2, votes[top[i]]);
+							}
+							else
+							{
+								Format(buffer, sizeof(buffer), "%s\n%d. %t%s: (%d)", buffer, i + 1, vote.Name, vote.Append, votes[top[i]]);
+							}
 						}
 					}
 					
 					PrintHintText(client, "%s", buffer);
 				}
 			}
-			
-			/*
-			SetGlobalTransTarget(LANG_SERVER);
-
-			char buffer[256];
-			FormatEx(buffer, sizeof(buffer), "Votes: %d/%d, %ds left\n1. %t: (%d)", count, total, RoundFloat(VoteEndTime - GetGameTime()), vote.Name, votes[top[0]]);
-
-			for(int i = 1; i < sizeof(top); i++)
-			{
-				if(top[i] != -1)
-				{
-					Voting.GetArray(top[i], vote);
-
-					Format(buffer, sizeof(buffer), "%s\n%d. %t: (%d)", buffer, i + 1, vote.Name, votes[top[i]]);
-				}
-			}
-
-			PrintHintTextToAll(buffer);
-			*/
 		}
 	}
 	else
@@ -1673,6 +1669,9 @@ void Rogue_NextProgress()
 				Vote vote;
 				for(int i; i < count; i++)
 				{
+					// Reset Display Format.
+					strcopy(vote.DisplayFormat, sizeof(vote.DisplayFormat), "");
+					
 					int id = GetRandomStage(floor, stage, 0, ForcedVoteSeed, CurrentCount + 2, maxRooms + 2);
 					if(id != -1)
 					{
@@ -1728,11 +1727,15 @@ void Rogue_NextProgress()
 								{
 									if(stage.Hidden)
 									{
-										strcopy(vote.Append, sizeof(vote.Append), "  (→ Encounter)");
+										Format(vote.DisplayFormat, sizeof(vote.DisplayFormat), "%s  (→ %s)", "%t", "%t");
+										strcopy(vote.Append, sizeof(vote.Append), "Encounter");
+										//strcopy(vote.Append, sizeof(vote.Append), "  (→ Encounter)");
 									}
 									else
 									{
-										Format(vote.Append, sizeof(vote.Append), "  (→ %T)", stage.Name, LANG_SERVER);
+										Format(vote.DisplayFormat, sizeof(vote.DisplayFormat), "%s  (→ %s)", "%t", "%t");
+										strcopy(vote.Append, sizeof(vote.Append), stage.Name);
+										//Format(vote.Append, sizeof(vote.Append), "  (→ %T)", stage.Name, LANG_SERVER);
 									}
 								}
 							}
@@ -2034,7 +2037,14 @@ static bool CallGenericVote(int client)
 	for(int i; i < length; i++)
 	{
 		Voting.GetArray(i, vote);
-		Format(vote.Name, sizeof(vote.Name), "%t%s", vote.Name, vote.Append);
+		if(vote.DisplayFormat[0])
+		{
+			Format(vote.Name, sizeof(vote.Name), vote.DisplayFormat, vote.Name, vote.Append);
+		}
+		else
+		{
+			Format(vote.Name, sizeof(vote.Name), "%t%s", vote.Name, vote.Append);
+		}
 		menu.AddItem(vote.Config, vote.Name, vote.Locked ? ITEMDRAW_DISABLED : ITEMDRAW_DEFAULT);
 	}
 
