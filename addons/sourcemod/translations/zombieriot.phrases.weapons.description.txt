@@ -5984,7 +5984,7 @@
 	"Opera of the Mute"
 	{
 		"en"	"Opera of the Mute"
-		"ko"	"침묵하는 자들의 오페라"
+		"ko"	"고요한 오페라"
 	}
 	"Opera of the Mute Desc"
 	{
