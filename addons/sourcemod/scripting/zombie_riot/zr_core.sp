@@ -343,6 +343,7 @@ enum
 	WEAPON_BURNINGTHUMB = 166,
 	WEAPON_RED_MIST = 167,
 	WEAPON_GUNSAW = 168,
+	WEAPON_OPERAMUTE = 169
 }
 
 enum
@@ -793,6 +794,7 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "custom/kit_gunsaw.sp"
 #include "custom/weapon_flare.sp"
 #include "custom/kit_survivalist.sp"
+#include "custom/weapon_operamute.sp"
 
 void ZR_PluginLoad()
 {

@@ -660,7 +660,7 @@ public void OnPostThink(int client)
 				{
 					mana_regen[client] = 0.0;
 				}
-				if(HasSpecificBuff(client, "Dimensional Turbulence"))
+				if(HasSpecificBuff(client, "Dimensional Turbulence") && !OperaMute_WeaponHas(client))
 				{
 					Current_Mana[client] = 9999999;
 					mana_regen[client] = 9999999.9;
@@ -1297,7 +1297,7 @@ public void OnPostThink(int client)
 						red = 0;
 						
 					if(blue < 0)
-						blue = 0;		
+						blue = 0;	
 				}
 				else
 				{
@@ -1334,9 +1334,9 @@ public void OnPostThink(int client)
 
 				}
 	#endif
-
+				OperaMute_ManaHud(client,red, green, blue);
 				bool InfMana = false;
-				if(HasSpecificBuff(client, "Dimensional Turbulence"))
+				if(HasSpecificBuff(client, "Dimensional Turbulence") && !OperaMute_WeaponHas(client))
 					InfMana = true;
 
 				if(!InfMana)
