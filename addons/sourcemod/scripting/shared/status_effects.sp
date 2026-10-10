@@ -1176,7 +1176,7 @@ void ExtraDamage_Indicator_Hud_Func(int attacker, int victim, StatusEffect Apply
 }
 
 bool NpcStats_AltExtraMachine(int entity) {
-	return CheckBuffIndex(victim, AltExtraMachineStatusID);
+	return CheckBuffIndex(entity, AltExtraMachineStatusID);
 }
 #endif
 
