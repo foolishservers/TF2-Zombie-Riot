@@ -201,9 +201,10 @@ void M3_AbilitiesWaveEnd()
 	Addon_M3_WaveEnd();
 }
 
+#define MAX_MORPHINE_USES 9999
 bool MorphineMaxed(int client)
 {
-	return (i_MaxMorhpinesThisRound[client] >= 2);
+	return (i_MaxMorhpinesThisRound[client] >= MAX_MORPHINE_USES);
 }
 
 float MorphineChargeFunc(int client)
@@ -248,6 +249,7 @@ stock void GiveMorphineOnDamage(int client, int victim, float damage, int damage
 	float DamageForMaxCharge = (Pow(2.0 * MinCashMaxGain, 1.2) + MinCashMaxGain * 3.0);
 	
 	DamageForMaxCharge *= 0.5;
+	DamageForMaxCharge *= 0.9;
 	
 	if(b_thisNpcIsARaid[victim])
 		DamageForMaxCharge *= 0.85;
@@ -305,6 +307,7 @@ public void WeakDash(int client)
 	{
 		if (ability_cooldown[client] < GetGameTime())
 		{
+			/*
 			if(i_BurstpackUsedThisRound[client] >= 2)
 			{
 				ClientCommand(client, "playgamesound items/medshotno1.wav");
@@ -313,14 +316,22 @@ public void WeakDash(int client)
 				ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Burstpack Already Used This Round, Recharging");	
 				return;
 			}
+			*/
 			if (!Raigeki_OnBurstPack(client))	//Block Burst Pack while charging Raigeki. I intentionally did not copy/paste this to the downed version of Burst Pack, because Raigeki cannot even be charged while downed.
 			{
 				Utility_HUDNotification_Translation(client, "Raigeki Gear Blocked By Charge", true);
 				return;
 			}
+			float BurstpackCooldown = 60.0;
+			if(i_BurstpackUsedThisRound[client] >= 2)
+			{
+				BurstpackCooldown *= float(i_BurstpackUsedThisRound[client]);
+			}
 
-			i_BurstpackUsedThisRound[client] += 1;
-			ability_cooldown[client] = GetGameTime() + (60.0 * CooldownReductionAmount(client));
+			if(!Arena_Mode())
+				i_BurstpackUsedThisRound[client] += 1;
+
+			ability_cooldown[client] = GetGameTime() + (BurstpackCooldown * CooldownReductionAmount(client));
 			WeakDashLogic(client);
 		}
 		else
@@ -1630,15 +1641,15 @@ public void GearTesting(int client)
 	{
 		if (ability_cooldown[client] < GetGameTime())
 		{
-			ability_cooldown[client] = GetGameTime() + (350.0 * CooldownReductionAmount(client));
+			ability_cooldown[client] = GetGameTime() + (300.0 * CooldownReductionAmount(client));
 
 			SetEntityMoveType(client, MOVETYPE_NONE);
 
 			i_ClientHasCustomGearEquipped[client] = CUSTOMGEAR_QUANTUM_SUIT;
 
-			IncreaseEntityDamageTakenBy(client, 0.5, 3.0);
+			IncreaseEntityDamageTakenBy(client, 0.5, 2.0);
 			
-			CreateTimer(3.0, QuantumActivate, EntIndexToEntRef(client), TIMER_FLAG_NO_MAPCHANGE);
+			CreateTimer(2.0, QuantumActivate, EntIndexToEntRef(client), TIMER_FLAG_NO_MAPCHANGE);
 		//	ClientCommand(client, "playgamesound mvm/mvm_tank_start.wav");
 
 			EmitSoundToAll("mvm/mvm_tank_start.wav", client, SNDCHAN_STATIC, 70, _, 0.9);
@@ -1699,6 +1710,8 @@ public Action QuantumActivate(Handle cut_timer, int ref)
 			HealthMulti *= 0.025;
 
 			HealthMulti *= 1.1;
+
+			HealthMulti *= 0.5;
 				
 			SetEntityHealth(client, RoundToCeil(HealthMulti));
 
