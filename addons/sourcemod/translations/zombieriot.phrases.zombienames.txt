@@ -8726,6 +8726,28 @@
 		"ko"	"되살아난 기사"
 	}
 	
+	"Galahad"
+	{
+		"en"	"Galahad"
+		"ko"	"갤러해드"
+	}
+	
+	"Barracks Lab Combatant"
+	{
+		"en"	"Barracks Lab Combatant"
+		"ko"	"배럭 연구소 투사"
+	}
+	"Barracks Lab Huntsman"
+	{
+		"en"	"Barracks Lab Huntsman"
+		"ko"	"배럭 연구소 헌츠맨"
+	}
+	"Barracks Lab Crusher"
+	{
+		"en"	"Barracks Lab Crusher"
+		"ko"	"배럭 연구소 분쇄자"
+	}
+	
 	"Nothing There"
 	{
 		"en"	"Nothing There"
