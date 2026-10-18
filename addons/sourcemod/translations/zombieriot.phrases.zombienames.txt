@@ -8301,20 +8301,20 @@
 		"en"	"The Chicken Kiev"
 		"ko"	"치킨 키예프"
 	}
-	"Medimedes"
+	"ZS Kamrstein"
 	{
-		"en"	"Medimedes"
-		"ko"	"메디메데스"
+		"en"	"Kamrstein"
+		"ko"	"캄르스타인"
 	}
-	"Sir Shootsalot"
+	"ZS Worldchi"
 	{
-		"en"	"Sir Shootsalot"
-		"ko"	"사격의 기사"
+		"en"	"Worldchi"
+		"ko"	"월드치"
 	}
-	"Freedom Feathers"
+	"ZS Kranz"
 	{
-		"en"	"Freedom Feathers"
-		"ko"	"자유의 깃털"
+		"en"	"Kranz"
+		"ko"	"크란츠"
 	}
 	"ZS Unspeakable"
 	{
