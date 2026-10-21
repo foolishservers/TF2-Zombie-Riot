@@ -16,120 +16,180 @@ enum struct TinkerEnum
 	int CustomMode[TINKER_LIMIT];
 }
 
-static const char Enchant_Mage[][] =
-{
-	"1",
-	"2",
-	"3",
-	"4"
+enum {
+	IS_SNIPERRIFLE = 1,
+	IS_DMR,
 };
-static const char Enchant_Mediguns[][] =
-{
-	"5",
-	"6",
-	"7",
+
+enum {
+	TinkerEnchant_HastyMage = 0,
+	TinkerEnchant_HeavyMage,
+	TinkerEnchant_ConcentratedMagic,
+	TinkerEnchant_TankMage,
+	TinkerEnchant_FrugalityMage,
+	TinkerEnchant_MageFragility,
+	TinkerEnchant_HoardingDisorder,
+	
+	TinkerEnchant_MeleeRapidSwing,
+	TinkerEnchant_MeleeHeavySwing,
+	TinkerEnchant_MeleeLongSwing,
+	TinkerEnchant_MeleeGlassy,
+	TinkerEnchant_MeleePlateArmor,
+	
+	TinkerEnchant_FastHeal,
+	TinkerEnchant_Overhealer,
+	TinkerEnchant_Uberer,
+	TinkerEnchant_BurstHeal,
+	TinkerEnchant_GlassyMedic,
+	
+	TinkerEnchant_BuildingExtension,
+	TinkerEnchant_RepairMaster,
+	
+	TinkerEnchant_SlowHeavyProjectile,
+	TinkerEnchant_FastProjectile,
+	
+	TinkerEnchant_IntensiveClip,
+	TinkerEnchant_ConcentratedClip,
+	TinkerEnchant_HeavyTrigger,
+	TinkerEnchant_SmallerSmarterBullet,
+	
+	TinkerEnchant_SprayAndPray,
+	
+	TinkerEnchant_ConcentratedClip_Infinite,
+	TinkerEnchant_HasteNonMage,
+	
+	TinkerEnchant_MS_Sharpness,
+	TinkerEnchant_MS_Smite,
+	TinkerEnchant_MS_SweepingEdge,
+	TinkerEnchant_MS_QuickCharge,
+	TinkerEnchant_MS_BaneOfArthropods,
+	TinkerEnchant_MS_FireAspect,
+	TinkerEnchant_MS_CurseOfGlassy,
+	
+	TinkerEnchant_SR_ExplosiveHeadshot,
+	TinkerEnchant_SR_KillerFocus,
+	TinkerEnchant_SR_SuperCoolingChamber,
+	TinkerEnchant_SR_DepletedUranium,
+	TinkerEnchant_SR_HighSpeedFeedMechanism,
+	TinkerEnchant_SR_HollowPointBullets,
 };
-static const char Enchant_Healings[][] =
-{
-	"8",
-	"9"
+
+static const int Enchant_Mage[] = {
+	TinkerEnchant_HastyMage,
+	TinkerEnchant_HeavyMage,
+	TinkerEnchant_ConcentratedMagic,
+	TinkerEnchant_TankMage,
+	//TinkerEnchant_FrugalityMage,
+	//TinkerEnchant_MageFragility,
+	//TinkerEnchant_HoardingDisorder
 };
-static const char Enchant_Wrench[][] =
-{
-	"10",
-	"11"
+
+static const int Enchant_Melee[] = {
+	TinkerEnchant_MeleeRapidSwing,
+	TinkerEnchant_MeleeHeavySwing,
+	TinkerEnchant_MeleeLongSwing,
+	TinkerEnchant_MeleeGlassy,
+	//TinkerEnchant_MeleePlateArmor
 };
-static const char Enchant_Melee[][] =
-{
-	"12",
-	"13",
-	"14",
-	"15"
+
+static const int Enchant_Medigun[] = {
+	TinkerEnchant_FastHeal,
+	TinkerEnchant_Overhealer,
+	TinkerEnchant_Uberer,
 };
-static const char Enchant_Melee_InfiniteFire[][] =
-{
-	"13",
-	"16",
-	"17",
-	"18"
+
+static const int Enchant_Healing[] = {
+	TinkerEnchant_BurstHeal,
+	TinkerEnchant_GlassyMedic
 };
-static const char Enchant_Melee_Fire[][] =
-{
-	"13",
-	"16",
-	"17",
-	"19",
-	"20",
-	"18",
-	"21"
+
+static const int Enchant_Wrench[] = {
+	TinkerEnchant_BuildingExtension,
+	TinkerEnchant_RepairMaster
 };
-static const char Enchant_Range_InfiniteFire[][] =
-{
-	"13",
-	"18",
-	"22"
+
+static const int Enchant_Range[] = {
+	TinkerEnchant_IntensiveClip,
+	TinkerEnchant_ConcentratedClip,
+	TinkerEnchant_HeavyTrigger,
+	TinkerEnchant_SmallerSmarterBullet,
+	TinkerEnchant_HasteNonMage
 };
-static const char Enchant_Flamethrower[][] =
-{
-	"13",
-	"18",
-	"21"
+
+static const int Enchant_RangeInfinite[] = {
+	TinkerEnchant_ConcentratedClip_Infinite,
+	TinkerEnchant_HasteNonMage
 };
-static const char Enchant_Range[][] =
-{
-	"13",
-	"19",
-	"20",
-	"18",
-	"21",
-	"22"
+
+static const int Enchant_ProjInfinite[] = {
+	TinkerEnchant_ConcentratedClip_Infinite,
+	TinkerEnchant_HasteNonMage,
+	TinkerEnchant_SlowHeavyProjectile,
+	TinkerEnchant_FastProjectile
 };
-static const char Enchant_Boomerang[][] =
-{
-	"13",
-	"18",
-	"16",
-	"17"
+
+static const int Enchant_Proj[] = {
+	TinkerEnchant_IntensiveClip,
+	TinkerEnchant_ConcentratedClip,
+	TinkerEnchant_HeavyTrigger,
+	TinkerEnchant_SmallerSmarterBullet,
+	TinkerEnchant_HasteNonMage,
+	TinkerEnchant_SlowHeavyProjectile,
+	TinkerEnchant_FastProjectile
 };
-static const char Enchant_SigilBlade[][] =
-{
-	"1",
-	"2",
-	"4"
+
+static const int Enchant_MultiBullet[] = {
+	TinkerEnchant_IntensiveClip,
+	TinkerEnchant_ConcentratedClip,
+	TinkerEnchant_HeavyTrigger,
+	TinkerEnchant_SmallerSmarterBullet,
+	TinkerEnchant_HasteNonMage,
+	TinkerEnchant_SprayAndPray,
 };
-static const char Enchant_MinecraftSword[][] =
-{
-	"23",
-	"24",
-	"25",
-	"26",
-	"27",
-	"28",
-	"29"
+
+static const int Enchant_MultiBulletInfinite[] = {
+	TinkerEnchant_ConcentratedClip_Infinite,
+	TinkerEnchant_HasteNonMage,
+	TinkerEnchant_SprayAndPray
 };
-static const char Enchant_SniperRifle[][] =
-{
-	"30",
-	"31",
-	"32",
-	"33",
-	"34",
-	"35"
+
+static const int Enchant_Sigil_Blade[] = {
+	TinkerEnchant_HastyMage,
+	TinkerEnchant_HeavyMage,
+	TinkerEnchant_TankMage
 };
-static const char Enchant_DMR[][] =
-{
-	"30",
-	"31",
-	"19",
-	"20",
-	"34",
-	"35",
-	"21"
+
+static const int Enchant_MSSword[] = {
+	TinkerEnchant_MS_Sharpness,
+	TinkerEnchant_MS_Smite,
+	TinkerEnchant_MS_SweepingEdge,
+	TinkerEnchant_MS_QuickCharge,
+	TinkerEnchant_MS_BaneOfArthropods,
+	TinkerEnchant_MS_FireAspect,
+	TinkerEnchant_MS_CurseOfGlassy
+};
+
+static const int Enchant_SniperRifle[] = {
+	TinkerEnchant_SR_ExplosiveHeadshot,
+	TinkerEnchant_SR_KillerFocus,
+	TinkerEnchant_SR_SuperCoolingChamber,
+	TinkerEnchant_SR_DepletedUranium,
+	TinkerEnchant_SR_HighSpeedFeedMechanism,
+	TinkerEnchant_SR_HollowPointBullets
+};
+
+static const int Enchant_DMR[] = {
+	TinkerEnchant_IntensiveClip,
+	TinkerEnchant_ConcentratedClip,
+	TinkerEnchant_HeavyTrigger,
+	TinkerEnchant_SR_ExplosiveHeadshot,
+	TinkerEnchant_SR_HighSpeedFeedMechanism,
+	TinkerEnchant_SR_HollowPointBullets
 };
 
 static bool EnchantRefresh[MAXENTITIES];
 static int SaveRarity[MAXENTITIES][TINKER_LIMIT];
-static char Enchant[MAXENTITIES][TINKER_LIMIT][64];
+static int Enchant[MAXENTITIES][TINKER_LIMIT];
 
 static const int SupportBuildings[] = { 2, 2, 5, 9, 14, 14, 15 };
 static const int MetalGain[] = { 0, 5, 8, 11, 15, 20, 35 };
@@ -530,135 +590,6 @@ static void Weapon_Blacksmith_ShootBullet(int client, int weapon)
 	TE_SendToAll(0.0);
 }
 
-/*
-public void Weapon_Blacksmith_ShootBullet(int client, int weapon, bool crit, int slot)
-{
-	float pos[3], ang[3];
-	GetClientEyePosition(client, pos);
-	GetClientEyeAngles(client, ang);
-	
-	float hitPos[3];
-	
-	bool headshot;
-	int target = -1;
-	
-	b_LagCompNPC_ExtendBoundingBox = true;
-	StartLagCompensation_Base_Boss(client);
-	
-	Handle trace = TR_TraceRayFilterEx(pos, ang, MASK_SHOT, RayType_Infinite, Blacksmith_BulletTrace, client);
-	
-	TR_GetEndPosition(hitPos, trace);
-	
-	if(TR_DidHit(trace))
-	{
-		target = TR_GetEntityIndex(trace);
-		if(target > 0)
-		{
-			headshot = (TR_GetHitGroup(trace) == HITGROUP_HEAD && !b_CannotBeHeadshot[target]);
-		}
-	}
-	delete trace;
-	
-	FinishLagCompensation_Base_boss();
-	
-	CalcCorrectWeaponShootPosition({ 60.9, 13.1, -15.1 }, pos, ang);
-	TE_SetupBeamPoints(pos, hitPos, i_TinkerTracerIndex, 0, 0, 0, 0.3, 3.0, 3.0, 0, 0.0, {255, 255, 255, 255}, 3);
-	TE_SendToAll(0.0);
-	
-	if(target < 0)
-		return;
-	
-	if(target == 0)
-	{
-		switch(GetRandomInt(1,3))
-		{
-			case 1:
-				EmitSoundToAll("weapons/fx/rics/arrow_impact_metal.wav", 0, SNDCHAN_STATIC, 70, _, 0.8, .origin = hitPos);
-			
-			case 2:
-				EmitSoundToAll("weapons/fx/rics/arrow_impact_metal2.wav", 0, SNDCHAN_STATIC, 70, _, 0.8, .origin = hitPos);
-			
-			case 3:
-				EmitSoundToAll("weapons/fx/rics/arrow_impact_metal4.wav", 0, SNDCHAN_STATIC, 70, _, 0.8, .origin = hitPos);
-		}
-		return;
-	}
-	else if(GetTeam(client) != GetTeam(target))
-	{
-		float damage = 50.0;
-		damage *= Attributes_Get(weapon, 2, 1.0);
-		
-		if (headshot)
-		{
-			DisplayCritAboveNpc(target, client, true);
-			
-			if(i_HeadshotAffinity[client] == 1)
-			{
-				damage *= 1.42;
-			}
-			else
-			{
-				damage *= 1.185;
-			}
-			
-			if(i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER)
-			{
-				damage *= 1.25;
-			}
-			if(i_CurrentEquippedPerk[client] & PERK_MARKSMAN_BEER_X)
-			{
-				damage *= 1.35;
-			}
-		}
-		else
-		{
-			if(i_HeadshotAffinity[client] == 1)
-			{
-				damage *= 0.75;
-			}
-		}
-		
-		float vecForward[3];
-		GetAngleVectors(ang, vecForward, NULL_VECTOR, NULL_VECTOR);
-		
-		float PushforceDamage[3];
-		CalculateDamageForce(vecForward, 10000.0, PushforceDamage);
-		
-		float targetPos[3];
-		WorldSpaceCenter(target, targetPos);
-		
-		SDKHooks_TakeDamage(target, client, client, damage, DMG_BULLET, weapon, PushforceDamage, targetPos);
-	}
-	else
-	{
-		if(i_NpcIsABuilding[target])
-		{
-			if(view_as<ObjectGeneric>(target).m_bConstructBuilding && IsValidEntity(view_as<ObjectGeneric>(target).m_iConstructDeathModel))
-				return;
-			
-			//heal building?
-			bool RepairDone = false;
-			if(IsValidEntity(weapon) && IsValidClient(client))
-				RepairDone = Building_RepairObject(client, target, weapon, {0.0,0.0,0.0}, -1, 0.5);
-			
-			if(!RepairDone)
-				return;
-			
-			int count;
-			int[] players = new int[MaxClients];
-			for(int i = 1; i <= MaxClients; i++)
-			{
-				if(i != client && IsClientInGame(i))
-					players[count++] = i;
-			}
-			
-			EmitSoundToClient(client, SOUND_HOSE_HEALED, client, SNDCHAN_STATIC, 70, _, 0.8);
-			EmitSound(players, count, SOUND_HOSE_HEALED, 0, SNDCHAN_STATIC, 70, _, 0.8, .origin = hitPos);
-		}
-	}
-}
-*/
-
 public void Weapon_BlacksmithMelee_M2(int client, int weapon, bool crit, int slot)
 {
 	if(dieingstate[client] != 0 || Ability_Check_Cooldown(client, slot) > 0.0)
@@ -709,6 +640,7 @@ static void Blacksmith_BuildingUsed_Internal_Custom(int weapon, int entity, int 
 		SPrintToChat(client, "%t", "The Blacksmith Failed!");
 		return;
 	}
+	
 	int account = GetSteamAccountID(client, false);
 	if(!account)
 	{
@@ -717,6 +649,7 @@ static void Blacksmith_BuildingUsed_Internal_Custom(int weapon, int entity, int 
 			ApplyBuildingCollectCooldown(entity, client, 3.0);
 		return;
 	}
+	
 	if(Attributes_Get(weapon, Attrib_DisallowTinker, 0.0) != 0.0)
 	{
 		ClientCommand(client, "playgamesound items/medshotno1.wav");
@@ -727,36 +660,36 @@ static void Blacksmith_BuildingUsed_Internal_Custom(int weapon, int entity, int 
 			ApplyBuildingCollectCooldown(entity, client, 2.0);
 		return;
 	}
+	
 	if(dieingstate[client] == 0)
 	{	
 		CancelClientMenu(client);
 		SetStoreMenuLogic(client, false);
-		static char buffer[128];
-		static char EnchantName[128];
+		
+		char buffer[128], buffer2[128];
 		Menu menu = new Menu(UsedAnvil_MenuH);
 		AnyMenuOpen[client] = 1;
-
+		
 		SetGlobalTransTarget(client);
 		menu.SetTitle("%t", "Custom Anvil Menu Main");
-		for(int RetryTillWin; RetryTillWin < 4; RetryTillWin++)
-		{
-			if(!EnchantRefresh[weapon])
-				Query_Enchantment_List(weapon, account, owner, RetryTillWin);
-			
-			int i_QueryEnchant = StringToInt(Enchant[weapon][RetryTillWin]);
-			FormatEx(buffer, sizeof(buffer), "%s", Query_GetTransList(i_QueryEnchant));
-			if(TranslationPhraseExists(buffer))
-			{
-				FormatEx(EnchantName, sizeof(EnchantName), "%s;%i", Enchant[weapon][RetryTillWin], RetryTillWin);
-				FormatEx(buffer, sizeof(buffer), "%t: Lv%i", buffer, SaveRarity[weapon][RetryTillWin]+1);
-				menu.AddItem(EnchantName, buffer);
+		
+		for (int RetryTillWin; RetryTillWin < 4; RetryTillWin++) {
+			if (!EnchantRefresh[weapon]) {
+				SaveRarity[weapon][RetryTillWin] = GetWeaponRarity(weapon, SmithLevel[owner]);
+				Enchant[weapon][RetryTillWin] = Query_Enchantment(weapon);
 			}
-			else
-			{
+			
+			FormatEx(buffer, sizeof(buffer), "%s", Query_GetTransList(Enchant[weapon][RetryTillWin]));
+			if (TranslationPhraseExists(buffer)) {
+				FormatEx(buffer2, sizeof(buffer2), "%d;%d", Enchant[weapon][RetryTillWin], RetryTillWin);
+				FormatEx(buffer, sizeof(buffer), "%t: Lv%d", buffer, SaveRarity[weapon][RetryTillWin] + 1);
+				menu.AddItem(buffer2, buffer);
+			}
+			else {
 				menu.AddItem("-1", "Dev WTF", ITEMDRAW_DISABLED);
 			}
-			
 		}
+		
 		EnchantRefresh[weapon]=true;
 		
 		FormatEx(buffer, sizeof(buffer), "%t", "Custom Anvil Enchant Refresh");
@@ -767,364 +700,327 @@ static void Blacksmith_BuildingUsed_Internal_Custom(int weapon, int entity, int 
 	}
 }
 
-static char[] Query_GetTransList(int SelectInt)
-{
-	char buffer[256];
-	switch(SelectInt)
-	{
-		case 1:FormatEx(buffer, sizeof(buffer), "Tinker_HasteMage");
-		case 2:FormatEx(buffer, sizeof(buffer), "Tinker_HeavyMage");
-		case 3:FormatEx(buffer, sizeof(buffer), "Tinker_ConcentratedMagic");
-		case 4:FormatEx(buffer, sizeof(buffer), "Tinker_TankMage");
-		case 5:FormatEx(buffer, sizeof(buffer), "Tinker_FastHeal");
-		case 6:FormatEx(buffer, sizeof(buffer), "Tinker_Overhealer");
-		case 7:FormatEx(buffer, sizeof(buffer), "Tinker_Uberer");
-		case 8:FormatEx(buffer, sizeof(buffer), "Tinker_SharedGlassy");
-		case 9:FormatEx(buffer, sizeof(buffer), "Tinker_BurstHeal");
-		case 10:FormatEx(buffer, sizeof(buffer), "Tinker_BuilderRepairMaster");
-		case 11:FormatEx(buffer, sizeof(buffer), "Tinker_BuilderLongSwing");
-		case 12:FormatEx(buffer, sizeof(buffer), "Tinker_SharedGlassy");
-		case 13:FormatEx(buffer, sizeof(buffer), "Tinker_MeleeRapidSwing");
-		case 14:FormatEx(buffer, sizeof(buffer), "Tinker_MeleeHeavySwing");
-		case 15:FormatEx(buffer, sizeof(buffer), "Tinker_MeleeLongSwing");
-		case 16:FormatEx(buffer, sizeof(buffer), "Tinker_SlowHeavyProj");
-		case 17:FormatEx(buffer, sizeof(buffer), "Tinker_FastProj");
-		case 18:FormatEx(buffer, sizeof(buffer), "Tinker_HeavyTrigger");
-		case 19:FormatEx(buffer, sizeof(buffer), "Tinker_IntensiveClip");
-		case 20:FormatEx(buffer, sizeof(buffer), "Tinker_ConcentratedClip");
-		case 21:FormatEx(buffer, sizeof(buffer), "Tinker_SmallerSmarterBullets");
-		case 22:FormatEx(buffer, sizeof(buffer), "Tinker_SprayAndPray");
-		
-		case 23:FormatEx(buffer, sizeof(buffer), "Tinker_MS_Sharpness");
-		case 24:FormatEx(buffer, sizeof(buffer), "Tinker_MS_Smite");
-		case 25:FormatEx(buffer, sizeof(buffer), "Tinker_MS_SweepingEdge");
-		case 26:FormatEx(buffer, sizeof(buffer), "Tinker_MS_QuickCharge");
-		case 27:FormatEx(buffer, sizeof(buffer), "Tinker_MS_BaneofArthropods");
-		case 28:FormatEx(buffer, sizeof(buffer), "Tinker_MS_FireAspect");
-		case 29:FormatEx(buffer, sizeof(buffer), "Tinker_MS_CurseOfGlassy");
-		
-		case 30:FormatEx(buffer, sizeof(buffer), "Tinker_SR_ExplosiveHeadshot");
-		case 31:FormatEx(buffer, sizeof(buffer), "Tinker_SR_KillerFocus");
-		case 32:FormatEx(buffer, sizeof(buffer), "Tinker_SR_SuperCoolingChamber");
-		case 33:FormatEx(buffer, sizeof(buffer), "Tinker_SR_DepletedUranium");
-		case 34:FormatEx(buffer, sizeof(buffer), "Tinker_SR_HighSpeedFeedMechanism");
-		case 35:FormatEx(buffer, sizeof(buffer), "Tinker_SR_HollowPointBullets");
-	}
-	return buffer;
-}
-
-static void Query_Enchantment_List(int weapon, int account, int owner, int Count=0)
-{
+static int Query_Enchantment(int weapon) {
 	char classname[64];
 	GetEntityClassname(weapon, classname, sizeof(classname));
 	int slot = TF2_GetClassnameSlot(classname, weapon);
-
-	TinkerEnum tinker;
-	int found = -1;
-	if(Tinkers)
-	{
-		int length = Tinkers.Length;
-		for(int a; a < length; a++)
-		{
-			Tinkers.GetArray(a, tinker);
-			if(tinker.AccountId == account && tinker.StoreIndex == StoreWeapon[weapon])
-			{
-				found = a;
-				break;
-			}
+	
+	switch (i_CustomWeaponEquipLogic[weapon]) {
+		case WEAPON_BOOMERANG: {
+			return Enchant_ProjInfinite[GetURandomInt() % sizeof(Enchant_ProjInfinite)];
 		}
-	}
-
-	if(found == -1)
-	{
-		tinker.AccountId = account;
-		tinker.StoreIndex = StoreWeapon[weapon];
+		case WEAPON_SIGIL_BLADE: {
+			return Enchant_MSSword[GetURandomInt() % sizeof(Enchant_MSSword)];
+		}
+		case WEAPON_MINECRAFT_SWORD: {
+			return Enchant_Sigil_Blade[GetURandomInt() % sizeof(Enchant_Sigil_Blade)];
+		}
 	}
 	
-	Zero(tinker.Attrib);
-	Zero(tinker.CustomMode);
-	Zero(tinker.Addition);
-	tinker.Rarity = 0;
-
-	switch(SmithLevel[owner])
-	{
-		case 0, 1:
-		{
-			
+	if (i_IsWandWeapon[weapon]) {
+		return Enchant_Mage[GetURandomInt() % sizeof(Enchant_Mage)];
+	}
+	
+	if (Attributes_Get(weapon, 8, 0.0) != 0.0) {
+		if (StrEqual(classname, "tf_weapon_medigun")) {
+			return Enchant_Medigun[GetURandomInt() % sizeof(Enchant_Medigun)];
 		}
-		case 2:
-		{
-			if((GetURandomInt() % 4) == 0)
-				tinker.Rarity = 1;
-		}
-		case 3:
-		{
-			int rand = GetURandomInt();
-			if((rand % 7) == 0)
-			{
-				tinker.Rarity = 2;
+		else {
+			if (slot == TFWeaponSlot_Melee) {
+				return TinkerEnchant_GlassyMedic;
 			}
-			else if((rand % 3) == 0)
-			{
-				tinker.Rarity = 1;
-			}
-		}
-		case 4:
-		{
-			int rand = GetURandomInt();
-			if((rand % 5) == 0)
-			{
-				tinker.Rarity = 2;
-			}
-			else if((rand % 2) == 0)
-			{
-				tinker.Rarity = 1;
-			}
-		}
-		default:
-		{
-			if((GetURandomInt() % 3) == 0)
-			{
-				tinker.Rarity = 2;
-			}
-			else
-			{
-				tinker.Rarity = 1;
+			else {
+				return Enchant_Healing[GetURandomInt() % sizeof(Enchant_Healing)];
 			}
 		}
 	}
-
-	if(i_OverrideWeaponSlot[weapon] != -1)
-	{
-		slot = i_OverrideWeaponSlot[weapon];
+	
+	int Attrib = RoundToCeil(Attributes_Get(weapon, Attrib_IsSniperRifle, 0.0));
+	if (Attrib == IS_SNIPERRIFLE) {
+		return Enchant_SniperRifle[GetURandomInt() % sizeof(Enchant_SniperRifle)];
 	}
-	switch(i_CustomWeaponEquipLogic[weapon])
-	{
-		case WEAPON_BOOMERANG:
-		{
-			SaveRarity[weapon][Count] = tinker.Rarity;
-			strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Boomerang[GetURandomInt() % sizeof(Enchant_Boomerang)]);
-			return;
+	else if (Attrib == IS_DMR) {
+		return Enchant_DMR[GetURandomInt() % sizeof(Enchant_DMR)];
+	}
+	
+	if (i_IsWrench[weapon]) {
+		if (slot != TFWeaponSlot_Melee) {
+			return TinkerEnchant_RepairMaster;
 		}
-		case WEAPON_SIGIL_BLADE:
-		{
-			SaveRarity[weapon][Count] = tinker.Rarity;
-			strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_SigilBlade[GetURandomInt() % sizeof(Enchant_SigilBlade)]);
-			return;
+		else {
+			return Enchant_Wrench[GetURandomInt() % sizeof(Enchant_Wrench)];
 		}
+	}
+	
+	if (slot == TFWeaponSlot_Melee) {
+		return Enchant_Melee[GetURandomInt() % sizeof(Enchant_Melee)];
+	}
+	else if (slot < TFWeaponSlot_Melee) {
+		// Projectile Weapon
+		if (Attributes_Has(weapon, 101) || Attributes_Has(weapon, 102) || Attributes_Has(weapon, 103) || Attributes_Has(weapon, 104)) {
+			//infinite fire
+			if (Attributes_Has(weapon, 303)) {
+				return Enchant_ProjInfinite[GetURandomInt() % sizeof(Enchant_ProjInfinite)];
+			}
+			else {
+				return Enchant_Proj[GetURandomInt() % sizeof(Enchant_Proj)];
+			}
+		}
+		else {
+			if (Attributes_Has(weapon, 303)) {
+				if (Attributes_Get(weapon, 45, 0.0) > 0.0)
+					return Enchant_MultiBulletInfinite[GetURandomInt() % sizeof(Enchant_MultiBulletInfinite)];
+				else
+					return Enchant_RangeInfinite[GetURandomInt() % sizeof(Enchant_RangeInfinite)];
+			}
+			else if(StrEqual(classname, "tf_weapon_flamethrower")) {
+				//flamethrowers get different logic.
+				return Enchant_RangeInfinite[GetURandomInt() % sizeof(Enchant_RangeInfinite)];
+			}
+			else {
+				if (Attributes_Get(weapon, 45, 0.0) > 0.0)
+					return Enchant_MultiBullet[GetURandomInt() % sizeof(Enchant_MultiBullet)];
+				else
+					return Enchant_Range[GetURandomInt() % sizeof(Enchant_Range)];
+			}
+		}
+	}
+	
+	return -1;
+}
+
+static int GetWeaponRarity(int weapon, int level) {
+	int rarity = 0;
+	
+	switch (i_CustomWeaponEquipLogic[weapon]) {
 		case WEAPON_MINECRAFT_SWORD:
 		{
-			switch(SmithLevel[owner])
+			switch(level)
 			{
 				case 0:
 				{
-					tinker.Rarity = 0;
 				}
 				case 1:
 				{
 					if((GetURandomInt() % 4) == 0)
-						tinker.Rarity = 1;
-					else tinker.Rarity = 0;
+					{
+						rarity = 1;
+					}
 				}
 				case 2:
 				{
 					int rand = GetURandomInt();
 					if((rand % 7) == 0)
 					{
-						tinker.Rarity = 2;
+						rarity = 2;
 					}
 					else if((rand % 3) == 0)
 					{
-						tinker.Rarity = 1;
+						rarity = 1;
 					}
-					else tinker.Rarity = 0;
 				}
 				case 3:
 				{
 					int rand = GetURandomInt();
 					if((rand % 12) == 0)
 					{
-						tinker.Rarity = 3;
+						rarity = 3;
 					}
 					else if((rand % 7) == 0)
 					{
-						tinker.Rarity = 2;
+						rarity = 2;
 					}
 					else if((rand % 3) == 0)
 					{
-						tinker.Rarity = 1;
+						rarity = 1;
 					}
-					else tinker.Rarity = 0;
 				}
 				case 4:
 				{
 					int rand = GetURandomInt();
 					if((rand % 12) == 0)
 					{
-						tinker.Rarity = 4;
+						rarity = 4;
 					}
 					if((rand % 7) == 0)
 					{
-						tinker.Rarity = 3;
+						rarity = 3;
 					}
 					else if((rand % 5) == 0)
 					{
-						tinker.Rarity = 2;
+						rarity = 2;
 					}
 					else if((rand % 2) == 0)
 					{
-						tinker.Rarity = 1;
+						rarity = 1;
 					}
-					else tinker.Rarity = 0;
 				}
 				default:
 				{
 					int rand = GetURandomInt();
 					if((rand % 7) == 0)
 					{
-						tinker.Rarity = 4;
+						rarity = 4;
 					}
 					else if((rand % 5) == 0)
 					{
-						tinker.Rarity = 3;
+						rarity = 3;
 					}
 					else if((rand % 3) == 0)
 					{
-						tinker.Rarity = 2;
+						rarity = 2;
 					}
 					else if((rand % 2) == 0)
 					{
-						tinker.Rarity = 1;
+						rarity = 1;
 					}
-					else tinker.Rarity = 0;
 				}
 			}
-			SaveRarity[weapon][Count] = tinker.Rarity;
-			strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_MinecraftSword[GetURandomInt() % sizeof(Enchant_MinecraftSword)]);
-			return;
 		}
 		default:
 		{
-			int Attrib = RoundToCeil(Attributes_Get(weapon, Attrib_IsSniperRifle, 0.0));
-			if(Attrib==1)
+			switch(level)
 			{
-				SaveRarity[weapon][Count] = tinker.Rarity;
-				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_SniperRifle[GetURandomInt() % sizeof(Enchant_SniperRifle)]);
-				return;
-			}
-			else if(Attrib==2)
-			{
-				SaveRarity[weapon][Count] = tinker.Rarity;
-				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_DMR[GetURandomInt() % sizeof(Enchant_DMR)]);
-				return;
+				case 0, 1:
+				{
+				}
+				case 2:
+				{
+					if((GetURandomInt() % 4) == 0)
+						rarity = 1;
+				}
+				case 3:
+				{
+					int rand = GetURandomInt();
+					if((rand % 7) == 0)
+					{
+						rarity = 2;
+					}
+					else if((rand % 3) == 0)
+					{
+						rarity = 1;
+					}
+				}
+				case 4:
+				{
+					int rand = GetURandomInt();
+					if((rand % 5) == 0)
+					{
+						rarity = 2;
+					}
+					else if((rand % 2) == 0)
+					{
+						rarity = 1;
+					}
+				}
+				default:
+				{
+					if((GetURandomInt() % 3) == 0)
+					{
+						rarity = 2;
+					}
+					else
+					{
+						rarity = 1;
+					}
+				}
 			}
 		}
 	}
-	if(i_IsWandWeapon[weapon])
-	{
-		// Mage Weapon
-		SaveRarity[weapon][Count] = tinker.Rarity;
-		strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Mage[GetURandomInt() % sizeof(Enchant_Mage)]);
-		return;
+	
+	return rarity;
+}
+
+static char[] Query_GetTransList(int SelectInt) {
+	char buffer[256];
+	switch (SelectInt) {
+		case TinkerEnchant_HastyMage:
+			FormatEx(buffer, sizeof(buffer), "Tinker_HasteMage");
+		case TinkerEnchant_HeavyMage:
+			FormatEx(buffer, sizeof(buffer), "Tinker_HeavyMage");
+		case TinkerEnchant_ConcentratedMagic:
+			FormatEx(buffer, sizeof(buffer), "Tinker_ConcentratedMagic");
+		case TinkerEnchant_TankMage:
+			FormatEx(buffer, sizeof(buffer), "Tinker_TankMage");
+		case TinkerEnchant_FrugalityMage:
+			FormatEx(buffer, sizeof(buffer), "Tinker_FrugalityMage");
+		case TinkerEnchant_MageFragility:
+			FormatEx(buffer, sizeof(buffer), "Tinker_MageFragility");
+		case TinkerEnchant_HoardingDisorder:
+			FormatEx(buffer, sizeof(buffer), "Tinker_HoardingDisorder");
+		
+		case TinkerEnchant_MeleeRapidSwing, TinkerEnchant_HasteNonMage:
+			FormatEx(buffer, sizeof(buffer), "Tinker_MeleeRapidSwing");
+		case TinkerEnchant_MeleeHeavySwing:
+			FormatEx(buffer, sizeof(buffer), "Tinker_MeleeHeavySwing");
+		case TinkerEnchant_MeleeLongSwing:
+			FormatEx(buffer, sizeof(buffer), "Tinker_MeleeLongSwing");
+		case TinkerEnchant_MeleeGlassy:
+			FormatEx(buffer, sizeof(buffer), "Tinker_SharedGlassy");
+		case TinkerEnchant_MeleePlateArmor:
+			FormatEx(buffer, sizeof(buffer), "Tinker_MeleePlateArmor");
+		
+		case TinkerEnchant_FastHeal:
+			FormatEx(buffer, sizeof(buffer), "Tinker_FastHeal");
+		case TinkerEnchant_Overhealer:
+			FormatEx(buffer, sizeof(buffer), "Tinker_Overhealer");
+		case TinkerEnchant_Uberer:
+			FormatEx(buffer, sizeof(buffer), "Tinker_Uberer");
+		case TinkerEnchant_BurstHeal:
+			FormatEx(buffer, sizeof(buffer), "Tinker_BurstHeal");
+		case TinkerEnchant_GlassyMedic:
+			FormatEx(buffer, sizeof(buffer), "Tinker_SharedGlassy");
+		
+		case TinkerEnchant_BuildingExtension:
+			FormatEx(buffer, sizeof(buffer), "Tinker_BuilderLongSwing");
+		case TinkerEnchant_RepairMaster:
+			FormatEx(buffer, sizeof(buffer), "Tinker_BuilderRepairMaster");
+		
+		case TinkerEnchant_SlowHeavyProjectile:
+			FormatEx(buffer, sizeof(buffer), "Tinker_SlowHeavyProj");
+		case TinkerEnchant_FastProjectile:
+			FormatEx(buffer, sizeof(buffer), "Tinker_FastProj");
+		case TinkerEnchant_IntensiveClip:
+			FormatEx(buffer, sizeof(buffer), "Tinker_IntensiveClip");
+		case TinkerEnchant_ConcentratedClip, TinkerEnchant_ConcentratedClip_Infinite:
+			FormatEx(buffer, sizeof(buffer), "Tinker_ConcentratedClip");
+		case TinkerEnchant_HeavyTrigger:
+			FormatEx(buffer, sizeof(buffer), "Tinker_HeavyTrigger");
+		case TinkerEnchant_SmallerSmarterBullet:
+			FormatEx(buffer, sizeof(buffer), "Tinker_SmallerSmarterBullets");
+		case TinkerEnchant_SprayAndPray:
+			FormatEx(buffer, sizeof(buffer), "Tinker_SprayAndPray");
+		
+		case TinkerEnchant_MS_Sharpness:
+			FormatEx(buffer, sizeof(buffer), "Tinker_MS_Sharpness");
+		case TinkerEnchant_MS_Smite:
+			FormatEx(buffer, sizeof(buffer), "Tinker_MS_Smite");
+		case TinkerEnchant_MS_SweepingEdge:
+			FormatEx(buffer, sizeof(buffer), "Tinker_MS_SweepingEdge");
+		case TinkerEnchant_MS_QuickCharge:
+			FormatEx(buffer, sizeof(buffer), "Tinker_MS_QuickCharge");
+		case TinkerEnchant_MS_BaneOfArthropods:
+			FormatEx(buffer, sizeof(buffer), "Tinker_MS_BaneofArthropods");
+		case TinkerEnchant_MS_FireAspect:
+			FormatEx(buffer, sizeof(buffer), "Tinker_MS_FireAspect");
+		case TinkerEnchant_MS_CurseOfGlassy:
+			FormatEx(buffer, sizeof(buffer), "Tinker_MS_CurseOfGlassy");
+		
+		case TinkerEnchant_SR_ExplosiveHeadshot:
+			FormatEx(buffer, sizeof(buffer), "Tinker_SR_ExplosiveHeadshot");
+		case TinkerEnchant_SR_KillerFocus:
+			FormatEx(buffer, sizeof(buffer), "Tinker_SR_KillerFocus");
+		case TinkerEnchant_SR_SuperCoolingChamber:
+			FormatEx(buffer, sizeof(buffer), "Tinker_SR_SuperCoolingChamber");
+		case TinkerEnchant_SR_DepletedUranium:
+			FormatEx(buffer, sizeof(buffer), "Tinker_SR_DepletedUranium");
+		case TinkerEnchant_SR_HighSpeedFeedMechanism:
+			FormatEx(buffer, sizeof(buffer), "Tinker_SR_HighSpeedFeedMechanism");
+		case TinkerEnchant_SR_HollowPointBullets:
+			FormatEx(buffer, sizeof(buffer), "Tinker_SR_HollowPointBullets");
 	}
-	else if(Attributes_Get(weapon, 8, 0.0) != 0.0)
-	{
-		//mediguns, they work uniqurely
-		if(StrEqual(classname, "tf_weapon_medigun"))
-		{
-			SaveRarity[weapon][Count] = tinker.Rarity;
-			strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Mediguns[GetURandomInt() % sizeof(Enchant_Mediguns)]);
-			return;
-		}
-		else
-		{
-			if(slot == TFWeaponSlot_Melee)
-			{
-				SaveRarity[weapon][Count] = tinker.Rarity;
-				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), "8");
-				return;
-			}
-			else
-			{
-				SaveRarity[weapon][Count] = tinker.Rarity;
-				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Healings[GetURandomInt() % sizeof(Enchant_Healings)]);
-				return;
-			}
-		}
-	}
-	else if(i_IsWrench[weapon] && slot != TFWeaponSlot_Melee)
-	{
-		SaveRarity[weapon][Count] = tinker.Rarity;
-		strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), "10");
-		return;
-	}
-	else if(slot == TFWeaponSlot_Melee)
-	{
-		if(i_IsWrench[weapon])
-		{
-			// Wrench Weapon
-			SaveRarity[weapon][Count] = tinker.Rarity;
-			strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Wrench[GetURandomInt() % sizeof(Enchant_Wrench)]);
-			return;
-		}
-		else
-		{
-			// Melee Weapon
-			SaveRarity[weapon][Count] = tinker.Rarity;
-			strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Melee[GetURandomInt() % sizeof(Enchant_Melee)]);
-			return;
-		}
-	}
-	else if(slot < TFWeaponSlot_Melee)
-	{
-		if(Attributes_Has(weapon, 101) || Attributes_Has(weapon, 102) || Attributes_Has(weapon, 103) || Attributes_Has(weapon, 104))
-		{
-			//infinite fire
-			if(Attributes_Has(weapon, 303))
-			{
-				SaveRarity[weapon][Count] = tinker.Rarity;
-				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Melee_InfiniteFire[GetURandomInt() % sizeof(Enchant_Melee_InfiniteFire)]);
-				return;
-			}
-			else
-			{
-				SaveRarity[weapon][Count] = tinker.Rarity;
-				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Melee_Fire[GetURandomInt() % sizeof(Enchant_Melee_Fire)]);
-				return;
-			}
-			// Projectile Weapon
-		}
-		else
-		{
-			//infinite fire
-			if(Attributes_Has(weapon, 303))
-			{
-				SaveRarity[weapon][Count] = tinker.Rarity;
-				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Range_InfiniteFire[GetURandomInt() % (sizeof(Enchant_Range_InfiniteFire)-((Attributes_Get(weapon, 45, 0.0) > 0.0) ? 0 : 1))]);
-				return;
-			}
-			else if(StrEqual(classname, "tf_weapon_flamethrower"))
-			{
-				//flamethrowers get different logic.
-				SaveRarity[weapon][Count] = tinker.Rarity;
-				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Flamethrower[GetURandomInt() % sizeof(Enchant_Flamethrower)]);
-				return;
-			}
-			else
-			{
-				SaveRarity[weapon][Count] = tinker.Rarity;
-				strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), Enchant_Range[GetURandomInt() % (sizeof(Enchant_Range)-(Attributes_Get(weapon, 45, 0.0) > 0.1 ? 0 : 1))]);
-				return;
-			}
-			// Hitscan Weapon
-		}
-	}
-	else
-	{
-		SaveRarity[weapon][Count] = tinker.Rarity;
-		strcopy(Enchant[weapon][Count], sizeof(Enchant[weapon][]), "-1");
-	}
-	return;
+	
+	return buffer;
 }
 
 static int UsedAnvil_MenuH(Menu menu, MenuAction action, int client, int choice)
@@ -1134,49 +1030,48 @@ static int UsedAnvil_MenuH(Menu menu, MenuAction action, int client, int choice)
 		case MenuAction_End:
 		{
 			delete menu;
-			if(IsValidClient(client))
+			if (IsValidClient(client))
 				AnyMenuOpen[client] = 0;
 		}
 		case MenuAction_Select:
 		{
 			AnyMenuOpen[client] = 0;
 			ResetStoreMenuLogic(client);
-			static char buffer[128];
+			
+			char buffer[128];
 			menu.GetItem(choice, buffer, sizeof(buffer));
-			static char countext[2][24];
+			
+			char countext[2][24];
 			ExplodeString(buffer, ";", countext, sizeof(countext), sizeof(countext[]));
 			int id = StringToInt(countext[0]);
 			int Count = StringToInt(countext[1]);
+			
 			int weapon;
 			int anvil;
 			int owner;
 			
-			if(IsValidClient(client))
-			{
+			if (IsValidClient(client)) {
 				weapon = EntRefToEntIndex(ClickedWithWeapon[client]);
 				anvil = EntRefToEntIndex(AnvilClickedOn[client]);
 			}
 			else
 				return 0;
-
-			if(!IsValidEntity(weapon) || !IsValidEntity(anvil))
+			
+			if (!IsValidEntity(weapon) || !IsValidEntity(anvil))
 				return 0;
-			else
-			{
+			else {
 				owner = GetEntPropEnt(anvil, Prop_Send, "m_hOwnerEntity");
 			}
 			
 			int account = GetSteamAccountID(client, false);
-			if(!account)
-			{
+			if (!account) {
 				ClientCommand(client, "playgamesound items/medshotno1.wav");
 				if(IsValidEntity(anvil))
 					ApplyBuildingCollectCooldown(anvil, client, 3.0);
 				return 0;
 			}
 			
-			if(id==-1557)
-			{
+			if (id == -1557) {
 				ApplyBuildingCollectCooldown(anvil, client, (owner == client ? 2.5 : 10.0));
 				EnchantRefresh[weapon]=false;
 				ClientCommand(client, "playgamesound ui/quest_decode.wav");
@@ -1185,151 +1080,29 @@ static int UsedAnvil_MenuH(Menu menu, MenuAction action, int client, int choice)
 			
 			TinkerEnum tinker;
 			int found = -1;
-			if(Tinkers)
-			{
+			if (Tinkers) {
 				int length = Tinkers.Length;
-				for(int a; a < length; a++)
-				{
+				for (int a; a < length; a++) {
 					Tinkers.GetArray(a, tinker);
-					if(tinker.AccountId == account && tinker.StoreIndex == StoreWeapon[weapon])
-					{
+					if (tinker.AccountId == account && tinker.StoreIndex == StoreWeapon[weapon]) {
 						found = a;
 						break;
 					}
 				}
 			}
-
-			if(found == -1)
-			{
+			
+			if (found == -1) {
 				tinker.AccountId = account;
 				tinker.StoreIndex = StoreWeapon[weapon];
 			}
-			for(int i; i < sizeof(tinker.Luck); i++)
-			{
+			
+			for (int i; i < sizeof(tinker.Luck); i++) {
 				tinker.Luck[i] = GetURandomFloat();
 			}
-			tinker.Rarity = SaveRarity[weapon][Count];
-			switch(id)
-			{
-				case 1:TinkerHastyMage(tinker.Rarity, tinker);
-				case 2:TinkerHeavyMage(tinker.Rarity, tinker);
-				case 3:TinkerConcentrationMage(tinker.Rarity, tinker);
-				case 4:TinkerTankMage(tinker.Rarity, tinker);
-				case 5:TinkerMedigun_FastHeal(tinker.Rarity, tinker);
-				case 6:TinkerMedigun_Overhealer(tinker.Rarity, tinker);
-				case 7:TinkerMedigun_Uberer(tinker.Rarity, tinker);
-				case 8:TinkerMedicWeapon_GlassyMedic(tinker.Rarity, tinker);
-				case 9:TinkerMedicWeapon_BurstHealMedic(tinker.Rarity, tinker);
-				case 10:TinkerBuilderRepairMaster(tinker.Rarity, tinker);
-				case 11:TinkerBuilderLongSwing(tinker.Rarity, tinker);
-				case 12:TinkerMeleeGlassy(tinker.Rarity, tinker);
-				case 13:TinkerMeleeRapidSwing(tinker.Rarity, tinker);
-				case 14:TinkerMeleeHeavySwing(tinker.Rarity, tinker);
-				case 15:TinkerMeleeLongSwing(tinker.Rarity, tinker);
-				case 16:TinkerRangedSlowHeavyProj(tinker.Rarity, tinker);
-				case 17:TinkerRangedFastProj(tinker.Rarity, tinker);
-				case 18:TinkerHeavyTrigger(tinker.Rarity, tinker);
-				case 19:TinkerIntensiveClip(tinker.Rarity, tinker);
-				case 20:TinkerConcentratedClip(tinker.Rarity, tinker);
-				case 21:TinkerSmallerSmarterBullets(tinker.Rarity, tinker);
-				case 22:TinkerSprayAndPray(tinker.Rarity, tinker);
-				
-				case 23:Tinker_MS_Sharpness(tinker.Rarity, tinker);
-				case 24:Tinker_MS_Smite(tinker.Rarity, tinker);
-				case 25:Tinker_MS_SweepingEdge(tinker.Rarity, tinker);
-				case 26:Tinker_MS_BaneofArthropods(tinker.Rarity, tinker);
-				case 27:Tinker_MS_FireAspect(tinker.Rarity, tinker);
-				case 28:Tinker_MS_QuickCharge(tinker.Rarity, tinker);
-				case 29:Tinker_MS_CurseofGlassy(tinker.Rarity, tinker);
-				
-				case 30:Tinker_SR_ExplosiveHeadshot(tinker.Rarity, tinker);
-				case 31:Tinker_SR_KillerFocus(tinker.Rarity, tinker);
-				case 32:Tinker_SR_SuperCoolingChamber(tinker.Rarity, tinker);
-				case 33:Tinker_SR_DepletedUranium(tinker.Rarity, tinker);
-				case 34:Tinker_SR_HighSpeedFeedMechanism(tinker.Rarity, tinker);
-				case 35:Tinker_SR_HollowPointBullets(tinker.Rarity, tinker);
-			}
 			
-			SetGlobalTransTarget(client);
-			FormatEx(buffer, sizeof(buffer), "%s", tinker.Name);
-			if(TranslationPhraseExists(buffer))
-				CPrintToChat(client, "{yellow}%t (Tier %d)", buffer, tinker.Rarity + 1);
-			else
-			{
-				CPrintToChat(client, "{yellow}%s (Tier %d)", buffer, tinker.Rarity + 1);
-				CPrintToChat(client, "{crimson}[Dev Warning] Translation not found");
-			}
-
-			for(int i; i < sizeof(tinker.Attrib); i++)
-			{
-				if(!tinker.Attrib[i])
-					break;
-				
-				Blacksmith_PrintAttribValue(client, tinker.Attrib[i], tinker.Value[i], tinker.Luck[i],  tinker.Addition[i], tinker.CustomMode[i]);
-			}
-
-			if(found == -1)
-			{
-				if(!Tinkers)
-					Tinkers = new ArrayList(sizeof(TinkerEnum));
-				
-				Tinkers.PushArray(tinker);
-			}
-			else
-			{
-				Tinkers.SetArray(found, tinker);
-			}
-
-			Building_GiveRewardsUse(client, owner, 25, true, 0.6, true);
-			Store_ApplyAttribs(client);
-			Store_GiveAll(client, GetClientHealth(client));	
-
-			switch(tinker.Rarity)
-			{
-				case -1:
-				{
-					ClientCommand(client, "playgamesound ui/quest_decode.wav");
-				}
-				case 0:
-				{
-					ClientCommand(client, "playgamesound ui/quest_status_tick_novice.wav");
-				}
-				case 1:
-				{
-					ClientCommand(client, "playgamesound ui/quest_status_tick_advanced.wav");
-				}
-				case 2:
-				{
-					ClientCommand(client, "playgamesound ui/quest_status_tick_expert.wav");
-				}
-			}
-
-			float cooldown = Cooldowns[SmithLevel[owner]];
-			if(client != owner && Store_HasWeaponKit(client))
-				cooldown *= 0.5;
-			if(owner == client)
-				cooldown /= 4.0;
-			if(IsValidEntity(anvil))
-				ApplyBuildingCollectCooldown(anvil, client, cooldown);
-
-			if(!Rogue_Mode() && owner != client)
-			{
-				switch(tinker.Rarity)
-				{
-					case 0:
-					{
-						ClientCommand(owner, "playgamesound ui/quest_status_tick_novice_friend.wav");
-					}
-					case 1:
-					{
-						ClientCommand(owner, "playgamesound ui/quest_status_tick_advanced_friend.wav");
-					}
-					default:
-					{
-						ClientCommand(owner, "playgamesound ui/quest_status_tick_expert_friend.wav");
-					}
-				}
-			}
+			tinker.Rarity = SaveRarity[weapon][Count];
+			
+			OnTinkerAnvilUsed(client, owner, anvil, id, tinker, found);
 		}
 		case MenuAction_Cancel:
 		{
@@ -1339,7 +1112,7 @@ static int UsedAnvil_MenuH(Menu menu, MenuAction action, int client, int choice)
 	return 0;
 }
 
-void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int owner, bool reset)
+void Blacksmith_BuildingUsed_Internal(int weapon, int entity, int client, int owner, bool reset)
 {
 	if(owner == -1 || SmithLevel[owner] < 0)
 	{
@@ -1385,560 +1158,182 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 	Zero(tinker.CustomMode);
 	Zero(tinker.Addition);
 	tinker.Rarity = 0;
-	if(reset)
-	{
+	
+	if (reset) {
 		SetGlobalTransTarget(client);
 		
-		if(found == -1)
-		{
+		if (found == -1) {
 			ClientCommand(client, "playgamesound items/medshotno1.wav");
 			SetDefaultHudPosition(client);
 			ShowSyncHudText(client, SyncHud_Notifaction, "%t", "Blacksmith No Attribs");
 			if(IsValidEntity(entity))
 				ApplyBuildingCollectCooldown(entity, client, 2.0);
+			
 			return;
 		}
 
 		tinker.Rarity = -1;
 		Tinkers.Erase(found);
 		PrintToChat(client, "%t", "Removed Tinker Attributes");
+		
+		OnTinkerAnvilUsed(client, owner, entity, -1, tinker, found);
 	}
-	else
-	{
-		switch(SmithLevel[owner])
-		{
-			case 0, 1:
-			{
-				
-			}
-			case 2:
-			{
-				if((GetURandomInt() % 4) == 0)
-					tinker.Rarity = 1;
-			}
-			case 3:
-			{
-				int rand = GetURandomInt();
-				if((rand % 7) == 0)
-				{
-					tinker.Rarity = 2;
-				}
-				else if((rand % 3) == 0)
-				{
-					tinker.Rarity = 1;
-				}
-			}
-			case 4:
-			{
-				int rand = GetURandomInt();
-				if((rand % 5) == 0)
-				{
-					tinker.Rarity = 2;
-				}
-				else if((rand % 2) == 0)
-				{
-					tinker.Rarity = 1;
-				}
-			}
-			default:
-			{
-				if((GetURandomInt() % 3) == 0)
-				{
-					tinker.Rarity = 2;
-				}
-				else
-				{
-					tinker.Rarity = 1;
-				}
-			}
-		}
-
-		for(int i; i < sizeof(tinker.Luck); i++)
-		{
-			tinker.Luck[i] = GetURandomFloat();
-		}
-
-		char classname[64];
-		GetEntityClassname(weapon, classname, sizeof(classname));
-		int slot = TF2_GetClassnameSlot(classname, weapon);
-
-		if(i_OverrideWeaponSlot[weapon] != -1)
-		{
-			slot = i_OverrideWeaponSlot[weapon];
-		}
-		bool BlockNormal = false;
-		switch(i_CustomWeaponEquipLogic[weapon])
-		{
-			case WEAPON_BOOMERANG:
-			{
-				BlockNormal = true;
-				//boomerang is very special.
-				switch(GetURandomInt() % 4)
-				{
-					case 0:
-						TinkerMeleeRapidSwing(tinker.Rarity, tinker);
-					case 1:
-						TinkerHeavyTrigger(tinker.Rarity, tinker);
-					case 2:
-						TinkerRangedSlowHeavyProj(tinker.Rarity, tinker);
-					case 3:
-						TinkerRangedFastProj(tinker.Rarity, tinker);
-				}
-			}
-			case WEAPON_SIGIL_BLADE:
-			{
-				BlockNormal = true;
-				// Mage Weapon
-				switch(GetURandomInt() % 3)
-				{
-					case 0:
-						TinkerHastyMage(tinker.Rarity, tinker);
-					case 1:
-						TinkerHeavyMage(tinker.Rarity, tinker);
-					case 2:
-						TinkerTankMage(tinker.Rarity, tinker);
-				}
-			}
-			case WEAPON_MINECRAFT_SWORD:
-			{
-				BlockNormal = true;
-				switch(SmithLevel[owner])
-				{
-					case 0:
-					{
-						tinker.Rarity = 0;
-					}
-					case 1:
-					{
-						if((GetURandomInt() % 4) == 0)
-							tinker.Rarity = 1;
-						else tinker.Rarity = 0;
-					}
-					case 2:
-					{
-						int rand = GetURandomInt();
-						if((rand % 7) == 0)
-						{
-							tinker.Rarity = 2;
-						}
-						else if((rand % 3) == 0)
-						{
-							tinker.Rarity = 1;
-						}
-						else tinker.Rarity = 0;
-					}
-					case 3:
-					{
-						int rand = GetURandomInt();
-						if((rand % 12) == 0)
-						{
-							tinker.Rarity = 3;
-						}
-						else if((rand % 7) == 0)
-						{
-							tinker.Rarity = 2;
-						}
-						else if((rand % 3) == 0)
-						{
-							tinker.Rarity = 1;
-						}
-						else tinker.Rarity = 0;
-					}
-					case 4:
-					{
-						int rand = GetURandomInt();
-						if((rand % 12) == 0)
-						{
-							tinker.Rarity = 4;
-						}
-						if((rand % 7) == 0)
-						{
-							tinker.Rarity = 3;
-						}
-						else if((rand % 5) == 0)
-						{
-							tinker.Rarity = 2;
-						}
-						else if((rand % 2) == 0)
-						{
-							tinker.Rarity = 1;
-						}
-						else tinker.Rarity = 0;
-					}
-					default:
-					{
-						int rand = GetURandomInt();
-						if((rand % 7) == 0)
-						{
-							tinker.Rarity = 4;
-						}
-						else if((rand % 5) == 0)
-						{
-							tinker.Rarity = 3;
-						}
-						else if((rand % 3) == 0)
-						{
-							tinker.Rarity = 2;
-						}
-						else if((rand % 2) == 0)
-						{
-							tinker.Rarity = 1;
-						}
-						else tinker.Rarity = 0;
-					}
-				}
-				switch(GetURandomInt() % 7)
-				{
-					case 0:Tinker_MS_Sharpness(tinker.Rarity, tinker);
-					case 1:Tinker_MS_Smite(tinker.Rarity, tinker);
-					case 2:Tinker_MS_SweepingEdge(tinker.Rarity, tinker);
-					case 3:Tinker_MS_BaneofArthropods(tinker.Rarity, tinker);
-					case 4:Tinker_MS_FireAspect(tinker.Rarity, tinker);
-					case 5:Tinker_MS_QuickCharge(tinker.Rarity, tinker);
-					case 6:Tinker_MS_CurseofGlassy(tinker.Rarity, tinker);
-					default:Tinker_MS_Sharpness(tinker.Rarity, tinker);
-				}
-			}
-			default:
-			{
-				int Attrib = RoundToCeil(Attributes_Get(weapon, Attrib_IsSniperRifle, 0.0));
-				if(Attrib==1)
-				{
-					BlockNormal = true;
-					switch(GetURandomInt() % 6)
-					{
-						case 0:
-							Tinker_SR_ExplosiveHeadshot(tinker.Rarity, tinker);
-						case 1:
-							Tinker_SR_KillerFocus(tinker.Rarity, tinker);
-						case 2:
-							Tinker_SR_SuperCoolingChamber(tinker.Rarity, tinker);
-						case 3:
-							Tinker_SR_DepletedUranium(tinker.Rarity, tinker);
-						case 4:
-							Tinker_SR_HighSpeedFeedMechanism(tinker.Rarity, tinker);
-						case 5:
-							Tinker_SR_HollowPointBullets(tinker.Rarity, tinker);
-						default:
-							Tinker_SR_ExplosiveHeadshot(tinker.Rarity, tinker);
-					}
-				}
-				else if(Attrib==2)
-				{
-					BlockNormal = true;
-					switch(GetURandomInt() % 7)
-					{
-						case 0:
-							Tinker_SR_ExplosiveHeadshot(tinker.Rarity, tinker);
-						case 1:
-							Tinker_SR_KillerFocus(tinker.Rarity, tinker);
-						case 2:
-							TinkerIntensiveClip(tinker.Rarity, tinker);
-						case 3:
-							TinkerConcentratedClip(tinker.Rarity, tinker);
-						case 4:
-							Tinker_SR_HighSpeedFeedMechanism(tinker.Rarity, tinker);
-						case 5:
-							Tinker_SR_HollowPointBullets(tinker.Rarity, tinker);
-						case 6:
-							TinkerSmallerSmarterBullets(tinker.Rarity, tinker);
-						default:
-							Tinker_SR_ExplosiveHeadshot(tinker.Rarity, tinker);
-					}
-				}
-			}
-		}
-		if(Attributes_Get(weapon, Attrib_DisallowTinker, 0.0) != 0.0)
+	else {
+		if (Attributes_Get(weapon, Attrib_DisallowTinker, 0.0) != 0.0)
 		{
 			ClientCommand(client, "playgamesound items/medshotno1.wav");
 			SetDefaultHudPosition(client);
 			SetGlobalTransTarget(client);
 			ShowSyncHudText(client, SyncHud_Notifaction, "%t", "Blacksmith Underleveled");
-			if(IsValidEntity(entity))
+			
+			if (IsValidEntity(entity))
+				ApplyBuildingCollectCooldown(entity, client, 2.0);
+			
+			return;
+		}
+		
+		tinker.Rarity = GetWeaponRarity(weapon, SmithLevel[owner]);
+		
+		for(int i; i < sizeof(tinker.Luck); i++)
+		{
+			tinker.Luck[i] = GetURandomFloat();
+		}
+		
+		int id = Query_Enchantment(weapon);
+		if (id == 0) {
+			ClientCommand(client, "playgamesound items/medshotno1.wav");
+			SetDefaultHudPosition(client);
+			SetGlobalTransTarget(client);
+			ShowSyncHudText(client, SyncHud_Notifaction, "%t", "Blacksmith Underleveled");
+			if (IsValidEntity(entity))
 				ApplyBuildingCollectCooldown(entity, client, 2.0);
 			return;
 		}
-		if(!BlockNormal)
-		{
-			if(i_IsWandWeapon[weapon])
-			{
-				// Mage Weapon
-				switch(GetURandomInt() % 4)
-				{
-					case 0:
-						TinkerHastyMage(tinker.Rarity, tinker);
-					case 1:
-						TinkerHeavyMage(tinker.Rarity, tinker);
-					case 2:
-						TinkerConcentrationMage(tinker.Rarity, tinker);
-					case 3:
-						TinkerTankMage(tinker.Rarity, tinker);
-				}
-			}
-			else if(Attributes_Get(weapon, 8, 0.0) != 0.0)
-			{
-				//mediguns, they work uniqurely
-				if(StrEqual(classname, "tf_weapon_medigun"))
-				{
-					switch(GetURandomInt() % 3)
-					{
-						case 0:
-							TinkerMedigun_FastHeal(tinker.Rarity, tinker);
-						case 1:
-							TinkerMedigun_Overhealer(tinker.Rarity, tinker);
-						case 2:
-							TinkerMedigun_Uberer(tinker.Rarity, tinker);
-					}
-				}
-				else
-				{
-					if(slot == TFWeaponSlot_Melee)
-					{
-						TinkerMedicWeapon_GlassyMedic(tinker.Rarity, tinker);
-					}
-					else
-					{
-						switch(GetURandomInt() % 2)
-						{
-							case 0:
-								TinkerMedicWeapon_GlassyMedic(tinker.Rarity, tinker);
-							case 1:
-								TinkerMedicWeapon_BurstHealMedic(tinker.Rarity, tinker);
-						}					
-					}
+		
+		OnTinkerAnvilUsed(client, owner, entity, id, tinker, found);
+	}
+}
 
-					//anything else.
-				}
-			}
-			else if(i_IsWrench[weapon] && slot != TFWeaponSlot_Melee)
-			{
-				//any wrench weapon that isnt melee?
+static void OnTinkerAnvilUsed(int client, int owner, int anvil, int id, TinkerEnum tinker, int found) {
+	if (id >= 0) {
+		switch (id) {
+			case TinkerEnchant_HastyMage:
+				TinkerHastyMage(tinker.Rarity, tinker);
+			case TinkerEnchant_HeavyMage:
+				TinkerHeavyMage(tinker.Rarity, tinker);
+			case TinkerEnchant_ConcentratedMagic:
+				TinkerConcentrationMage(tinker.Rarity, tinker);
+			case TinkerEnchant_TankMage:
+				TinkerTankMage(tinker.Rarity, tinker);
+			//case TinkerEnchant_FrugalityMage:
+			//	TinkerFrugalityMage(tinker.Rarity, tinker);
+			//case TinkerEnchant_MageFragility:
+			//	TinkerMageFragility(tinker.Rarity, tinker);
+			
+			case TinkerEnchant_MeleeRapidSwing, TinkerEnchant_HasteNonMage:
+				TinkerMeleeRapidSwing(tinker.Rarity, tinker);
+			case TinkerEnchant_MeleeHeavySwing:
+				TinkerMeleeHeavySwing(tinker.Rarity, tinker);
+			case TinkerEnchant_MeleeLongSwing:
+				TinkerMeleeLongSwing(tinker.Rarity, tinker);
+			case TinkerEnchant_MeleeGlassy:
+				TinkerMeleeGlassy(tinker.Rarity, tinker);
+			
+			case TinkerEnchant_FastHeal:
+				TinkerMedigun_FastHeal(tinker.Rarity, tinker);
+			case TinkerEnchant_Overhealer:
+				TinkerMedigun_Overhealer(tinker.Rarity, tinker);
+			case TinkerEnchant_Uberer:
+				TinkerMedigun_Uberer(tinker.Rarity, tinker);
+			case TinkerEnchant_BurstHeal:
+				TinkerMedicWeapon_BurstHealMedic(tinker.Rarity, tinker);
+			case TinkerEnchant_GlassyMedic:
+				TinkerMedicWeapon_GlassyMedic(tinker.Rarity, tinker);
+			
+			case TinkerEnchant_BuildingExtension:
+				TinkerBuilderLongSwing(tinker.Rarity, tinker);
+			case TinkerEnchant_RepairMaster:
 				TinkerBuilderRepairMaster(tinker.Rarity, tinker);
-			}
-			else if(slot == TFWeaponSlot_Melee)
-			{
-				if(i_IsWrench[weapon])
-				{
-					if(Attributes_Get(weapon, 264, 0.0) != 0.0)
-					{
-						switch(GetURandomInt() % 2)
-						{
-							case 0:
-								TinkerBuilderRepairMaster(tinker.Rarity, tinker);
-							case 1:
-								TinkerBuilderLongSwing(tinker.Rarity, tinker);
-						}
-					}
-					else
-					{
-						switch(GetURandomInt() % 2)
-						{
-							case 0:
-								TinkerBuilderRepairMaster(tinker.Rarity, tinker);
-							case 1:
-								TinkerBuilderLongSwing(tinker.Rarity, tinker);
-						}					
-					}
-					// Wrench Weapon
-				}
-				else
-				{
-					// Melee Weapon
-					switch(GetURandomInt() % 4)
-					{
-						case 0:
-							TinkerMeleeGlassy(tinker.Rarity, tinker);
-						case 1:
-							TinkerMeleeRapidSwing(tinker.Rarity, tinker);
-						case 2:
-							TinkerMeleeHeavySwing(tinker.Rarity, tinker);
-						case 3:
-							TinkerMeleeLongSwing(tinker.Rarity, tinker);
-					}
-				}
-			}
-			else if(slot < TFWeaponSlot_Melee)
-			{
-				if(Attributes_Has(weapon, 101) || Attributes_Has(weapon, 102) || Attributes_Has(weapon, 103) || Attributes_Has(weapon, 104))
-				{
-					//infinite fire
-					if(Attributes_Has(weapon, 303))
-					{
-						switch(GetURandomInt() % 4)
-						{
-							case 0:
-								TinkerMeleeRapidSwing(tinker.Rarity, tinker);
-							case 1:
-								TinkerRangedSlowHeavyProj(tinker.Rarity, tinker);
-							case 2:
-								TinkerRangedFastProj(tinker.Rarity, tinker);
-							case 3:
-								TinkerHeavyTrigger(tinker.Rarity, tinker);
-						}
-					}
-					else
-					{
-						switch(GetURandomInt() % 6)
-						{
-							case 0:
-								TinkerMeleeRapidSwing(tinker.Rarity, tinker);
-							case 1:
-								TinkerRangedSlowHeavyProj(tinker.Rarity, tinker);
-							case 2:
-								TinkerRangedFastProj(tinker.Rarity, tinker);
-							case 3:
-								TinkerIntensiveClip(tinker.Rarity, tinker);
-							case 4:
-								TinkerConcentratedClip(tinker.Rarity, tinker);
-							case 5:
-								TinkerHeavyTrigger(tinker.Rarity, tinker);
-							case 6:
-								TinkerSmallerSmarterBullets(tinker.Rarity, tinker);
-						}
-					}
-					// Projectile Weapon
-				}
-				else
-				{
-					//infinite fire
-					if(Attributes_Has(weapon, 303))
-					{
-						for(int RetryTillWin; RetryTillWin < 10; RetryTillWin++)
-						{
-							switch(GetURandomInt() % 3)
-							{
-								case 0:
-								{
-									TinkerMeleeRapidSwing(tinker.Rarity, tinker);
-									RetryTillWin = 11;
-								}
-								case 1:
-								{
-									TinkerHeavyTrigger(tinker.Rarity, tinker);
-									RetryTillWin = 11;
-								}
-								case 2:
-								{
-									if(Attributes_Get(weapon, 45, 0.0) > 0.0)
-									{
-										RetryTillWin = 11;
-										TinkerSprayAndPray(tinker.Rarity, tinker);
-									}
-								}
-							}	
-						}
-					}
-					else if(StrEqual(classname, "tf_weapon_flamethrower"))
-					{
-						//flamethrowers get different logic.
-						switch(GetURandomInt() % 3)
-						{
-							case 0:
-							{
-								TinkerMeleeRapidSwing(tinker.Rarity, tinker);
-							}
-							case 1:
-							{
-								TinkerHeavyTrigger(tinker.Rarity, tinker);
-							}
-							case 2:
-							{
-								TinkerSmallerSmarterBullets(tinker.Rarity, tinker);
-							}
-						}	
-					}
-					else
-					{
-						for(int RetryTillWin; RetryTillWin < 10; RetryTillWin++)
-						{
-							switch(GetURandomInt() % 6)
-							{
-								case 0:
-								{
-									TinkerMeleeRapidSwing(tinker.Rarity, tinker);
-									RetryTillWin = 11;
-								}
-								case 1:
-								{
-									TinkerIntensiveClip(tinker.Rarity, tinker);
-									RetryTillWin = 11;
-								}
-								case 2:
-								{
-									TinkerConcentratedClip(tinker.Rarity, tinker);
-									RetryTillWin = 11;
-								}
-								case 3:
-								{
-									TinkerHeavyTrigger(tinker.Rarity, tinker);
-									RetryTillWin = 11;
-								}
-								case 4:
-								{
-									TinkerSmallerSmarterBullets(tinker.Rarity, tinker);
-									RetryTillWin = 11;
-								}
-								case 5:
-								{
-									if(Attributes_Get(weapon, 45, 0.0) > 0.1)
-									{
-										RetryTillWin = 11;
-										TinkerSprayAndPray(tinker.Rarity, tinker);
-									}
-								}
-							}	
-						}
-					}
-					// Hitscan Weapon
-				}
-			}
-			else
-			{
-				ClientCommand(client, "playgamesound items/medshotno1.wav");
-				SetDefaultHudPosition(client);
-				SetGlobalTransTarget(client);
-				ShowSyncHudText(client, SyncHud_Notifaction, "%t", "Blacksmith Underleveled");
-				if(IsValidEntity(entity))
-					ApplyBuildingCollectCooldown(entity, client, 2.0);
-				return;
-			}
+			
+			case TinkerEnchant_SlowHeavyProjectile:
+				TinkerRangedSlowHeavyProj(tinker.Rarity, tinker);
+			case TinkerEnchant_FastProjectile:
+				TinkerRangedFastProj(tinker.Rarity, tinker);
+			case TinkerEnchant_IntensiveClip:
+				TinkerIntensiveClip(tinker.Rarity, tinker);
+			case TinkerEnchant_ConcentratedClip:
+				TinkerConcentratedClip(tinker.Rarity, tinker);
+			case TinkerEnchant_HeavyTrigger:
+				TinkerHeavyTrigger(tinker.Rarity, tinker);
+			case TinkerEnchant_SmallerSmarterBullet:
+				TinkerSmallerSmarterBullets(tinker.Rarity, tinker);
+			case TinkerEnchant_SprayAndPray:
+				TinkerSprayAndPray(tinker.Rarity, tinker);
+			case TinkerEnchant_ConcentratedClip_Infinite:
+				TinkerConcentratedClipInfinite(tinker.Rarity, tinker);
+			
+			case TinkerEnchant_MS_Sharpness:
+				Tinker_MS_Sharpness(tinker.Rarity, tinker);
+			case TinkerEnchant_MS_Smite:
+				Tinker_MS_Smite(tinker.Rarity, tinker);
+			case TinkerEnchant_MS_SweepingEdge:
+				Tinker_MS_SweepingEdge(tinker.Rarity, tinker);
+			case TinkerEnchant_MS_QuickCharge:
+				Tinker_MS_QuickCharge(tinker.Rarity, tinker);
+			case TinkerEnchant_MS_BaneOfArthropods:
+				Tinker_MS_BaneofArthropods(tinker.Rarity, tinker);
+			case TinkerEnchant_MS_FireAspect:
+				Tinker_MS_FireAspect(tinker.Rarity, tinker);
+			case TinkerEnchant_MS_CurseOfGlassy:
+				Tinker_MS_CurseofGlassy(tinker.Rarity, tinker);
+			
+			case TinkerEnchant_SR_ExplosiveHeadshot:
+				Tinker_SR_ExplosiveHeadshot(tinker.Rarity, tinker);
+			case TinkerEnchant_SR_KillerFocus:
+				Tinker_SR_KillerFocus(tinker.Rarity, tinker);
+			case TinkerEnchant_SR_SuperCoolingChamber:
+				Tinker_SR_SuperCoolingChamber(tinker.Rarity, tinker);
+			case TinkerEnchant_SR_DepletedUranium:
+				Tinker_SR_DepletedUranium(tinker.Rarity, tinker);
+			case TinkerEnchant_SR_HighSpeedFeedMechanism:
+				Tinker_SR_HighSpeedFeedMechanism(tinker.Rarity, tinker);
+			case TinkerEnchant_SR_HollowPointBullets:
+				Tinker_SR_HollowPointBullets(tinker.Rarity, tinker);
 		}
 		
 		SetGlobalTransTarget(client);
-		char buffer[128];
+		
+		char buffer[PLATFORM_MAX_PATH];
 		FormatEx(buffer, sizeof(buffer), "%s", tinker.Name);
-		if(TranslationPhraseExists(buffer))
+		if (TranslationPhraseExists(buffer))
 			CPrintToChat(client, "{yellow}%t (Tier %d)", buffer, tinker.Rarity + 1);
-		else
-		{
+		else {
 			CPrintToChat(client, "{yellow}%s (Tier %d)", buffer, tinker.Rarity + 1);
 			CPrintToChat(client, "{crimson}[Dev Warning] Translation not found");
 		}
-		for(int i; i < sizeof(tinker.Attrib); i++)
-		{
-			if(!tinker.Attrib[i])
+		
+		for (int i; i < sizeof(tinker.Attrib); i++) {
+			if (!tinker.Attrib[i])
 				break;
 			
-			Blacksmith_PrintAttribValue(client, tinker.Attrib[i], tinker.Value[i], tinker.Luck[i],  tinker.Addition[i], tinker.CustomMode[i]);
+			Blacksmith_PrintAttribValue(client, tinker.Attrib[i], tinker.Value[i], tinker.Luck[i], tinker.Addition[i], tinker.CustomMode[i]);
 		}
-
-		if(found == -1)
-		{
+		
+		if (found == -1) {
 			if(!Tinkers)
 				Tinkers = new ArrayList(sizeof(TinkerEnum));
 			
 			Tinkers.PushArray(tinker);
 		}
-		else
-		{
+		else {
 			Tinkers.SetArray(found, tinker);
 		}
 	}
-
+	
 	Building_GiveRewardsUse(client, owner, 25, true, 0.6, true);
 	Store_ApplyAttribs(client);
-	Store_GiveAll(client, GetClientHealth(client));	
-
+	Store_GiveAll(client, GetClientHealth(client));
+	
 	switch(tinker.Rarity)
 	{
 		case -1:
@@ -1960,15 +1355,16 @@ void Blacksmith_BuildingUsed_Internal(int weapon ,int entity, int client, int ow
 	}
 
 	float cooldown = Cooldowns[SmithLevel[owner]];
-	if(client != owner && Store_HasWeaponKit(client))
+	if (client != owner && Store_HasWeaponKit(client))
 		cooldown *= 0.5;
-	if(tinker.Rarity == -1)
-		cooldown /= 5.0;
-	if(IsValidEntity(entity))
-		ApplyBuildingCollectCooldown(entity, client, cooldown);
-
-	if(!Rogue_Mode() && owner != client)
-	{
+	
+	if (owner == client)
+		cooldown /= 4.0;
+	
+	if (IsValidEntity(anvil))
+		ApplyBuildingCollectCooldown(anvil, client, cooldown);
+	
+	if (!Rogue_Mode() && owner != client) {
 		switch(tinker.Rarity)
 		{
 			case 0:
@@ -2094,7 +1490,6 @@ static void TinkerMeleeGlassy(int rarity, TinkerEnum tinker)
 	}
 }
 
-
 static void TinkerMeleeRapidSwing(int rarity, TinkerEnum tinker)
 {
 	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MeleeRapidSwing");
@@ -2105,7 +1500,7 @@ static void TinkerMeleeRapidSwing(int rarity, TinkerEnum tinker)
 	//inverts the luck
 	float DamageLuck = (0.1 * (1.0 + (-1.0*(tinker.Luck[0]))));
 	float AttackspeedLuck = (0.1 * (tinker.Luck[1]));
-
+	
 	switch(rarity)
 	{
 		case 0:
@@ -2318,6 +1713,75 @@ static void TinkerTankMage(int rarity, TinkerEnum tinker)
 	}
 }
 
+/*
+static void TinkerFrugalityMage(int rarity, TinkerEnum tinker)
+{
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_FrugalityMage");
+	tinker.Attrib[0] = 6;
+	tinker.Attrib[1] = 410;
+	tinker.Attrib[2] = 733;
+	float AttackspeedLuck = (0.05 * (tinker.Luck[0]));
+	float DamageLuck = (0.1 * (tinker.Luck[1]));
+	float MageShootDiscount = (0.15 * (1.0 + (-1.0*(tinker.Luck[1]))));
+	
+	switch(rarity)
+	{
+		case 0:
+		{
+			tinker.Value[0] = 0.95 + AttackspeedLuck;
+			tinker.Value[1] = 0.95 + DamageLuck;
+		}
+		case 1:
+		{
+			tinker.Value[0] = 0.9 + AttackspeedLuck;
+			tinker.Value[1] = 0.9 + DamageLuck;
+		}
+		case 2:
+		{
+			tinker.Value[0] = 0.8 + AttackspeedLuck;
+			tinker.Value[1] = 0.85 + DamageLuck;
+		}
+	}
+}
+*/
+
+/**
+ * Thinking about multiple mage weapon have this upgrades..
+ */
+/*
+static void TinkerMageFragility(int rarity, TinkerEnum tinker)
+{
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MageFragility");
+	tinker.Attrib[0] = 2;
+	tinker.Attrib[1] = 405;
+	tinker.Attrib[2] = 5005;
+	float DamageLuck = (0.05 * tinker.Luck[0]);
+	float MaxManaLuck = (0.05 * tinker.Luck[1]);
+	float MaxHealthLuck = (0.05 * (1.0 - tinker.Luck[2]));
+	
+	switch(rarity)
+	{
+		case 0:
+		{
+			tinker.Value[0] = 1.05 + DamageLuck;
+			tinker.Value[1] = 1.05 + MaxManaLuck;
+			tinker.Value[2] = 0.9 - MaxHealthLuck;
+		}
+		case 1:
+		{
+			tinker.Value[0] = 1.1 + DamageLuck;
+			tinker.Value[1] = 1.1 + MaxManaLuck;
+			tinker.Value[2] = 0.8 - MaxHealthLuck;
+		}
+		case 2:
+		{
+			tinker.Value[0] = 1.15 + DamageLuck;
+			tinker.Value[1] = 1.15 + MaxManaLuck;
+			tinker.Value[2] = 0.75 - MaxHealthLuck;
+		}
+	}
+}
+*/
 
 static void TinkerMedigun_FastHeal(int rarity, TinkerEnum tinker)
 {
@@ -2681,6 +2145,34 @@ static void TinkerConcentratedClip(int rarity, TinkerEnum tinker)
 	}
 }
 
+static void TinkerConcentratedClipInfinite(int rarity, TinkerEnum tinker)
+{
+	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_ConcentratedClip");
+	tinker.Attrib[0] = 2; //Damage
+	tinker.Attrib[1] = 6; //attackspeed
+	
+	float ExtraDamage = (0.1 * (tinker.Luck[0]));
+	float AttackspeedLuck = (0.1 * (1.0 + (-1.0*(tinker.Luck[1]))));
+	
+	switch(rarity)
+	{
+		case 0:
+		{
+			tinker.Value[0] = 1.2 + ExtraDamage;
+			tinker.Value[1] = 1.15 + AttackspeedLuck;
+		}
+		case 1:
+		{
+			tinker.Value[0] = 1.25 + ExtraDamage;
+			tinker.Value[1] = 1.2 + AttackspeedLuck;
+		}
+		case 2:
+		{
+			tinker.Value[0] = 1.35 + ExtraDamage;
+			tinker.Value[1] = 1.25 + AttackspeedLuck;
+		}
+	}
+}
 
 static void TinkerHeavyTrigger(int rarity, TinkerEnum tinker)
 {

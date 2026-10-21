@@ -73,15 +73,15 @@ methodmap AltExtra_Mecha_Sniper_Main < AltExtra_Base {
 		
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
 		
-		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	
 	public void PlayHurtSound() {
-		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	
 	public void PlayDeathSound() {
-		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
+		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)], this.index, SNDCHAN_VOICE, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME);
 	}
 	
 	public void PlayMeleeSound() {
@@ -104,14 +104,153 @@ methodmap AltExtra_Mecha_Sniper_Main < AltExtra_Base {
 		EmitSoundToAll(g_DefaultMeleeMissSounds[GetRandomInt(0, sizeof(g_DefaultMeleeMissSounds) - 1)], this.index, SNDCHAN_STATIC, NORMAL_ZOMBIE_SOUNDLEVEL, _, NORMAL_ZOMBIE_VOLUME, 80);
 	}
 	
+	public void GetEyeAngles(float vecAng[3]) {
+		GetEntPropVector(this.index, Prop_Data, "m_angRotation", vecAng);
+		
+		if (this.m_iBodyYawPoseParameter > -1) {
+			vecAng[1] -= this.GetPoseParameter(this.m_iBodyYawPoseParameter);
+		}
+		
+		if (this.m_iBodyPitchPoseParameter > -1) {
+			vecAng[0] = MyAngleDiff(vecAng[0], this.GetPoseParameter(this.m_iBodyPitchPoseParameter));
+		}
+		
+		vecAng[1] = UTIL_AngleNormalize(vecAng[1]);
+		vecAng[0] = UTIL_AngleNormalize(vecAng[0]);
+	}
+	
+	public bool IsTargetInFiringCone(int target, float maxYawAngle = 20.0, float maxPitchAngle = 20.0) {
+		float vecMe[3], vecTarget[3], vecToTarget[3];
+		float angEye[3], angTarget[3];
+		
+		WorldSpaceCenter(this.index, vecMe);
+		WorldSpaceCenter(target, vecTarget);
+		
+		SubtractVectors(vecTarget, vecMe, vecToTarget);
+		GetVectorAngles(vecToTarget, angTarget);
+		
+		this.GetEyeAngles(angEye);
+		
+		// Yaw
+		float flYawDiff = MyAngleDiff(angTarget[1], angEye[1]);
+		
+		if (FloatAbs(flYawDiff) > maxYawAngle) {
+			return false;
+		}
+		
+		// Pitch
+		if (this.m_iBodyPitchPoseParameter > -1) {
+			float flPitchDiff = MyAngleDiff(angTarget[0], angEye[0]);
+			if (FloatAbs(flPitchDiff) > maxPitchAngle) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public void RangeAttack() {
+		// WorldSpaceCenter(target, vecTarget);
+		
+		this.m_flNextRangedAttack = GetGameTime(this.index) + 0.125;
+		this.m_iAttacksTillReload--;
+		
+		float vecSpread = 0.1;
+		
+		float x, y;
+		x = GetRandomFloat( -0.15, 0.15 ) + GetRandomFloat( -0.15, 0.15 );
+		y = GetRandomFloat( -0.15, 0.15 ) + GetRandomFloat( -0.15, 0.15 );
+		
+		float vecDirShooting[3], vecRight[3], vecUp[3];
+		
+		float vecMe[3];
+		WorldSpaceCenter(this.index, vecMe);
+		// MakeVectorFromPoints(vecMe, vecTarget, vecDirShooting);
+		this.GetEyeAngles(vecDirShooting);
+		
+		// GetVectorAngles(vecDirShooting, vecDirShooting);
+		GetAngleVectors(vecDirShooting, vecDirShooting, vecRight, vecUp);
+		
+		this.AddGesture("ACT_MP_ATTACK_STAND_SECONDARY");
+		
+		float vecDir[3];
+		vecDir[0] = vecDirShooting[0] + x * vecSpread * vecRight[0] + y * vecSpread * vecUp[0]; 
+		vecDir[1] = vecDirShooting[1] + x * vecSpread * vecRight[1] + y * vecSpread * vecUp[1]; 
+		vecDir[2] = vecDirShooting[2] + x * vecSpread * vecRight[2] + y * vecSpread * vecUp[2]; 
+		NormalizeVector(vecDir, vecDir);
+		
+		FireBullet(this.index, this.m_iWearable1, vecMe, vecDir, 10.0, 9000.0, DMG_BULLET, "bullet_tracer01_blue");
+		
+		this.PlayRangedSound();
+	}
+	
+	public void Reload() {
+		this.AddGesture("ACT_MP_RELOAD_STAND_SECONDARY");
+		this.m_flReloadDelay = GetGameTime(this.index) + 1.4;
+		this.m_iAttacksTillReload = 10;
+		this.PlayRangedReloadSound();
+	}
+	
+	public void ProcessAnger() {
+		if (IsValidEntity(this.m_iWearable1))
+			RemoveEntity(this.m_iWearable1);
+		
+		this.m_iWearable1 = this.EquipItem("weapon_bone", "models/workshop/weapons/c_models/c_scimitar/c_scimitar.mdl");
+		
+		this.AdjustWalkCycle(3);
+	}
+	
+	public void AdjustWalkCycle(int walkCycle) {
+		if (this.m_iChanged_WalkCycle == walkCycle)
+			return;
+		
+		this.m_iChanged_WalkCycle = walkCycle;
+		
+		switch (walkCycle) {
+			case 0: {
+				this.SetActivity("ACT_MP_RUN_SECONDARY");
+				this.m_bisWalking = true;
+				this.m_bAllowBackWalking = false;
+				this.m_flSpeed = 250.0;
+				this.StartPathing();
+			}
+			case 1: {
+				this.SetActivity("ACT_MP_STAND_SECONDARY");
+				this.m_bisWalking = false;
+				this.m_bAllowBackWalking = false;
+				this.m_flSpeed = 0.0;
+				this.StopPathing();
+			}
+			case 2: {
+				this.SetActivity("ACT_MP_RUN_SECONDARY");
+				this.m_bisWalking = true;
+				this.m_bAllowBackWalking = true;
+				this.m_flSpeed = 210.0;
+				this.StartPathing();
+			}
+			case 3: {
+				this.SetActivity("ACT_MP_RUN_MELEE");
+				this.m_bisWalking = true;
+				this.m_bAllowBackWalking = false;
+				this.m_flSpeed = 300.0;
+				this.StartPathing();
+			}
+			case 4: {
+				this.SetActivity("ACT_MP_STAND_MELEE");
+				this.m_bisWalking = false;
+				this.m_bAllowBackWalking = false;
+				this.m_flSpeed = 0.0;
+				this.StopPathing();
+			}
+		}
+	}
+	
 	public AltExtra_Mecha_Sniper_Main(float vecPos[3], float vecAng[3], int team) {
 		AltExtra_Mecha_Sniper_Main npc = view_as<AltExtra_Mecha_Sniper_Main>(CClotBody(vecPos, vecAng, "models/bots/sniper/bot_sniper.mdl", "1.0", "12500", team));
 		
 		i_NpcWeight[npc.index] = 1;
 		
-		int iActivity = npc.LookupActivity("ACT_MP_RUN_SECONDARY");
-		if (iActivity > 0)
-			npc.StartActivity(iActivity);
+		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
 		npc.m_iBleedType = BLEEDTYPE_METAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;
@@ -124,11 +263,10 @@ methodmap AltExtra_Mecha_Sniper_Main < AltExtra_Base {
 		func_NPCThink[npc.index] = AltExtra_Mecha_Sniper_Main_ClotThink;
 		
 		//IDLE
-		npc.m_flSpeed = 250.0;
 		npc.m_flNextRangedAttack = 0.0;
-		
 		npc.m_flGetClosestTargetTime = 0.0;
-		npc.StartPathing();
+		
+		npc.AdjustWalkCycle(0);
 		
 		npc.m_iAttacksTillReload = 10;
 		
@@ -137,13 +275,9 @@ methodmap AltExtra_Mecha_Sniper_Main < AltExtra_Base {
 		SetEntityRenderColor(npc.index, 125, 100, 100, 255);
 		
 		npc.m_iWearable1 = npc.EquipItem("head", "models/weapons/c_models/c_smg/c_smg.mdl");
-		SetVariantString("1.0");
-		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
 		SetEntProp(npc.m_iWearable1, Prop_Send, "m_nSkin", skin);
 		
 		npc.m_iWearable2 = npc.EquipItem("head", "models/player/items/sniper/grfs_sniper.mdl");
-		SetVariantString("1.0");
-		AcceptEntityInput(npc.m_iWearable2, "SetModelScale");
 		SetEntProp(npc.m_iWearable2, Prop_Send, "m_nSkin", skin);
 		SetEntityRenderColor(npc.m_iWearable2, 125, 100, 100, 255);
 		
@@ -162,7 +296,10 @@ static void AltExtra_Mecha_Sniper_Main_ClotThink(int entity) {
 	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	
 	npc.Update();
+	
+	npc.HackMaxYawRate(false);
 	npc.UpdateBody();
+	npc.HackMaxYawRate(true);
 	
 	if (npc.m_blPlayHurtAnimation) {
 		npc.AddGesture("ACT_MP_GESTURE_FLINCH_CHEST", false);
@@ -181,146 +318,114 @@ static void AltExtra_Mecha_Sniper_Main_ClotThink(int entity) {
 		WorldSpaceCenter(target, vecTarget);
 		WorldSpaceCenter(npc.index, vecMe);
 		
-		// npc.ModifyBodyPitch(vecMe, vecTarget);
-		
 		float flDistanceToTarget = GetVectorDistance(vecTarget, vecMe, true);
 		
-		if (flDistanceToTarget < npc.GetLeadRadius()) {
-			float vecPredictedPos[3];
-			PredictSubjectPosition(npc, target, _, _, vecPredictedPos);
-			npc.SetGoalVector(vecPredictedPos);
-		}
-		else {
-			npc.SetGoalEntity(target);
-		}
-		
 		if (npc.Anger) {
-			if (npc.m_iChanged_WalkCycle != 2) {
-				if (IsValidEntity(npc.m_iWearable1))
-					RemoveEntity(npc.m_iWearable1);
-			
-				npc.m_iChanged_WalkCycle = 2;
-				
-				int iActivity_melee = npc.LookupActivity("ACT_MP_RUN_MELEE");
-				if (iActivity_melee > 0)
-					npc.StartActivity(iActivity_melee);
-				
-				npc.m_iWearable1 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_scimitar/c_scimitar.mdl");
-				SetVariantString("1.0");
-				AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
-			}
-			
-			if (flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED || npc.m_flAttackHappenswillhappen) {
-				if (npc.m_flNextMeleeAttack < gameTime || npc.m_flAttackHappenswillhappen) {
-					// Play attack anim
-					if (!npc.m_flAttackHappenswillhappen) {
-						npc.AddGesture("ACT_MP_ATTACK_STAND_MELEE");
-						npc.PlayMeleeSound();
-						npc.m_flAttackHappens = gameTime + 0.4;
-						npc.m_flAttackHappens_bullshit = gameTime + 0.54;
-						npc.m_flAttackHappenswillhappen = true;
-					}
+			if (npc.m_flAttackHappenswillhappen) {
+				if (npc.m_flAttackHappens < gameTime) {
+					npc.FaceTowards(vecTarget, 20000.0);
 					
-					if (npc.m_flAttackHappens < gameTime && npc.m_flAttackHappens_bullshit >= gameTime && npc.m_flAttackHappenswillhappen) {
-						Handle swingTrace;
-						npc.FaceTowards(vecTarget, 20000.0);
-						if (npc.DoSwingTrace(swingTrace, target)) {
-							int targetHit = TR_GetEntityIndex(swingTrace);
+					Handle swingTrace;
+					if (npc.DoSwingTrace(swingTrace, target)) {
+						int targetHit = TR_GetEntityIndex(swingTrace);
+						
+						float vecHit[3];
+						TR_GetEndPosition(vecHit, swingTrace);
+						
+						if (targetHit > 0) {
+							float damage = 35.0;
+							if (ShouldNpcDealBonusDamage(targetHit))
+								damage *= 2.0;
 							
-							float vecHit[3];
-							TR_GetEndPosition(vecHit, swingTrace);
+							SDKHooks_TakeDamage(targetHit, npc.index, npc.index, damage, DMG_CLUB, -1, _, vecHit);
 							
-							if (targetHit > 0) {
-								float damage = 35.0;
-								if (ShouldNpcDealBonusDamage(targetHit))
-									damage *= 2.0;
-								
-								SDKHooks_TakeDamage(targetHit, npc.index, npc.index, damage, DMG_CLUB, -1, _, vecHit);
-								
-								// Hit sound
-								npc.PlayMeleeHitSound();
-							}
+							// Hit sound
+							npc.PlayMeleeHitSound();
 						}
-						delete swingTrace;
-						npc.m_flNextMeleeAttack = gameTime + 0.1;
-						npc.m_flAttackHappenswillhappen = false;
 					}
-					else if (npc.m_flAttackHappens_bullshit < gameTime && npc.m_flAttackHappenswillhappen) {
-						npc.m_flAttackHappenswillhappen = false;
-						npc.m_flNextMeleeAttack = gameTime + 0.1;
-					}
+					delete swingTrace;
+					
+					npc.m_flNextMeleeAttack = gameTime + 0.1;
+					npc.m_flAttackHappenswillhappen = false;
 				}
 			}
 			else {
-				npc.StartPathing();
+				if (flDistanceToTarget < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED
+					&& npc.m_flNextMeleeAttack < gameTime) {
+					npc.AddGesture("ACT_MP_ATTACK_STAND_MELEE");
+					npc.PlayMeleeSound();
+					npc.m_flAttackHappens = gameTime + 0.4;
+					npc.m_flAttackHappenswillhappen = true;
+				}
+			}
+			
+			npc.AdjustWalkCycle(3);
+			
+			if (flDistanceToTarget < npc.GetLeadRadius()) {
+				float vecPredictedPos[3];
+				PredictSubjectPosition(npc, target, _, _, vecPredictedPos);
+				npc.SetGoalVector(vecPredictedPos);
+			}
+			else {
+				npc.SetGoalEntity(target);
 			}
 		}
 		else {
 			// 350 * 350 = 122500
-			if (npc.m_flNextRangedAttack < gameTime && flDistanceToTarget < 122500.0 && npc.m_flReloadDelay < gameTime) {
-				if (!Can_I_See_Enemy_Only(npc.index, target)) {
-					npc.StartPathing();
-				}
-				else {
-					npc.StopPathing();
+			if (npc.m_flNextRangedAttack < gameTime && flDistanceToTarget <= 250000.0 && npc.m_flReloadDelay < gameTime) {
+				if (Can_I_See_Enemy_Only(npc.index, target) && npc.IsTargetInFiringCone(target)) {
+					npc.RangeAttack();
 					
-					if (npc.IsTargetInFiringCone(target)) {
-						WorldSpaceCenter(target, vecTarget);
-						
-						npc.m_flNextRangedAttack = GetGameTime(npc.index) + 0.125;
-						npc.m_iAttacksTillReload--;
-						
-						float vecSpread = 0.1;
-						
-						float eyePitch[3];
-						GetEntPropVector(npc.index, Prop_Data, "m_angRotation", eyePitch);
-						
-						float x, y;
-						x = GetRandomFloat( -0.15, 0.15 ) + GetRandomFloat( -0.15, 0.15 );
-						y = GetRandomFloat( -0.15, 0.15 ) + GetRandomFloat( -0.15, 0.15 );
-						
-						float vecDirShooting[3], vecRight[3], vecUp[3];
-						
-						vecTarget[2] += 15.0;
-						float SelfVecPos[3];
-						WorldSpaceCenter(npc.index, SelfVecPos);
-						MakeVectorFromPoints(SelfVecPos, vecTarget, vecDirShooting);
-						GetVectorAngles(vecDirShooting, vecDirShooting);
-						// vecDirShooting[1] = eyePitch[1];
-						GetAngleVectors(vecDirShooting, vecDirShooting, vecRight, vecUp);
-						
-						npc.AddGesture("ACT_MP_ATTACK_STAND_SECONDARY");
-						
-						float vecDir[3];
-						vecDir[0] = vecDirShooting[0] + x * vecSpread * vecRight[0] + y * vecSpread * vecUp[0]; 
-						vecDir[1] = vecDirShooting[1] + x * vecSpread * vecRight[1] + y * vecSpread * vecUp[1]; 
-						vecDir[2] = vecDirShooting[2] + x * vecSpread * vecRight[2] + y * vecSpread * vecUp[2]; 
-						NormalizeVector(vecDir, vecDir);
-						
-						float WorldSpaceVec[3];
-						WorldSpaceCenter(npc.index, WorldSpaceVec);
-						
-						FireBullet(npc.index, npc.m_iWearable1, WorldSpaceVec, vecDir, 10.0, 9000.0, DMG_BULLET, "bullet_tracer01_blue");
-						
-						npc.PlayRangedSound();
-						
-						if (npc.m_iAttacksTillReload == 0) {
-							npc.AddGesture("ACT_MP_RELOAD_STAND_SECONDARY");
-							npc.m_flReloadDelay = gameTime + 1.4;
-							npc.m_iAttacksTillReload = 10;
-							npc.PlayRangedReloadSound();
-						}
+					if (npc.m_iAttacksTillReload == 0) {
+						npc.Reload();
 					}
 				}
 			}
 			
-			if (flDistanceToTarget > 90000.0) {
-				npc.StartPathing();
+			if (flDistanceToTarget > 160000.0) {
+				npc.AdjustWalkCycle(0);
+				
+				if (flDistanceToTarget < npc.GetLeadRadius()) {
+					float vecPredictedPos[3];
+					PredictSubjectPosition(npc, target, _, _, vecPredictedPos);
+					npc.SetGoalVector(vecPredictedPos);
+				}
+				else {
+					npc.SetGoalEntity(target);
+				}
+			}
+			else if (flDistanceToTarget > 90000.0) {
+				if (Can_I_See_Enemy_Only(npc.index, target)) {
+					npc.AdjustWalkCycle(2);
+					
+					float vBackoffPos[3];
+					BackoffFromOwnPositionAndAwayFromEnemy(npc, target, _, vBackoffPos, 1);
+					npc.SetGoalVector(vBackoffPos, true);
+				}
+				else {
+					npc.AdjustWalkCycle(0);
+					
+					if (flDistanceToTarget < npc.GetLeadRadius()) {
+						float vecPredictedPos[3];
+						PredictSubjectPosition(npc, target, _, _, vecPredictedPos);
+						npc.SetGoalVector(vecPredictedPos);
+					}
+					else {
+						npc.SetGoalEntity(target);
+					}
+				}
+			}
+			else {
+				npc.AdjustWalkCycle(2);
+				
+				float vBackoffPos[3];
+				BackoffFromOwnPositionAndAwayFromEnemy(npc, target, _, vBackoffPos);
+				npc.SetGoalVector(vBackoffPos, true);
 			}
 		}
 	}
 	else {
-		npc.StopPathing();
+		npc.AdjustWalkCycle(npc.Anger ? 4 : 1);
 		
 		npc.m_flGetClosestTargetTime = 0.0;
 		// npc.m_iTarget = GetClosestTarget(npc.index);
@@ -345,11 +450,10 @@ static Action AltExtra_Mecha_Sniper_Main_OnTakeDamage(int victim, int &attacker,
 		npc.m_blPlayHurtAnimation = true;
 	}
 	
-	if (!NpcStats_IsEnemySilenced(npc.index)) {
-		if (!npc.Anger && ((ReturnEntityMaxHealth(npc.index) / 2) >= GetEntProp(npc.index, Prop_Data, "m_iHealth"))) {
-			npc.Anger = true;
-			npc.m_flSpeed = 300.0;
-		}
+	if (!npc.Anger && ((ReturnEntityMaxHealth(npc.index) / 2) >= GetEntProp(npc.index, Prop_Data, "m_iHealth"))) {
+		npc.Anger = true;
+		npc.m_flSpeed = 300.0;
+		npc.ProcessAnger();
 	}
 	
 	return Plugin_Continue;

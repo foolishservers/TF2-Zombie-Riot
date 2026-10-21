@@ -1030,32 +1030,32 @@ static bool Vincent_LoseConditions(int iNPC)
 					case 0:
 					{
 						npc.m_flTalkRepeat = GetGameTime() + 3.0;
-						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_1", true);
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_1", true);
 					}
 					case 1:
 					{
 						npc.m_flTalkRepeat = GetGameTime() + 3.0;
-						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_2", true);
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_2", true);
 					}
 					case 2:
 					{
 						npc.m_flTalkRepeat = GetGameTime() + 3.0;
-						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_3", true);
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_3", true);
 					}
 					case 3:
 					{
 						npc.m_flTalkRepeat = GetGameTime() + 3.0;
-						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_4", true);
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_4", true);
 					}
 					case 4:
 					{
 						npc.m_flTalkRepeat = GetGameTime() + 3.0;
-						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_5", true);
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_5", true);
 					}
 					case 5:
 					{
 						npc.m_flTalkRepeat = GetGameTime() + 3.0;
-						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_Anger_6", true);
+						Vincent_NPCTalkMessage(npc.index, "Vincent_Win_6", true);
 					}
 					case 6:
 					{

@@ -86,7 +86,7 @@ public void KitSurvivalist_Enable(int client, int weapon)
 		WeaponLevel[client] = 0;
 	}
 	
-	if (WeaponTimer[client] != null)
+	if (WeaponTimer[client])
 	{
 		delete WeaponTimer[client];
 		WeaponTimer[client] = null;

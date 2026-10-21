@@ -1375,6 +1375,12 @@ void NPC_ConfigSetup()
 	AltExtra_Mecha_Elite_Sniper_OnMapStart();
 	AltExtra_Mecha_Berserker_Demo_OnMapStart();
 	
+	Ruina_Galahad_MapStart();
+	
+	//Barrack_Lab_Combatant_MapStart();
+	//Barrack_Lab_Huntsman_MapStart();
+	//Barrack_Lab_Crusher_MapStart();
+	
 	Combine_Base_OnMapStart();
 	//Whiteflower_CombineSmg_OnMapStart_NPC();
 	//WFCombineRevolver_OnMapStart_NPC();
@@ -3041,6 +3047,14 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 //#include "npc/alt_extra/npc_alt_extra_mecha_immortalizer.sp"
 //#include "npc/alt_extra/npc_alt_extra_mecha_shotgun_main.sp"
 //#include "npc/alt_extra/npc_alt_extra_mega_mecha_loader.sp"
+
+// Lab barracks.
+// #include "npc/ally/lab_barracks/npc_barrack_lab_combatant.sp"
+// #include "npc/ally/lab_barracks/npc_barrack_lab_huntsman.sp"
+// #include "npc/ally/lab_barracks/npc_barrack_lab_crusher.sp"
+
+// Test.
+#include "npc/blackoak/npc_ruina_galahad.sp"
 
 // Whiteflower survivors
 #include "npc/wf_survivors/npc_combine_base.sp"

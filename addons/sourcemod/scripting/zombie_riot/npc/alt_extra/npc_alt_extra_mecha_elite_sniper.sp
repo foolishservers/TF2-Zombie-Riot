@@ -717,7 +717,7 @@ static void AltExtra_Mecha_Elite_Sniper_Supply_StartTouch(int entity, int target
 	
 	if (GetRandomInt(0, 9) == 0) {
 		WorldSpaceCenter(entity, pos);
-		RandomPickup_SpawnPickup(pos, 60.0);
+		RandomPickup_SpawnPickup(pos, true, 60.0);
 	}
 	
 	EmitSoundToAll("weapons/air_burster_explode3.wav", entity, SNDCHAN_STATIC);

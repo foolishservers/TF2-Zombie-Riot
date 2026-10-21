@@ -164,8 +164,8 @@ methodmap Combine_Tank_Commander < Combine_Base {
 		AcceptEntityInput(npc.m_iWearable1, "SetModelScale");
 		
 		npc.m_iWearable2 = npc.EquipItem("head", "models/player/items/soldier/armored_authority.mdl");
-		SetVariantString("1.25");
-		AcceptEntityInput(npc.m_iWearable2, "SetModelScale");
+		
+		// npc.m_iWearable3 = view_as<CClotBody>(npc.m_iWearable2).EquipItem("head", "models/player/items/soldier/armored_authority.mdl");
 		
 		npc.StartPathing();
 		
@@ -180,11 +180,14 @@ static void Combine_Tank_Commander_NPCDeath(int entity) {
 	
 	npc.ResetBody();
 	
-	if (IsValidEntity(npc.m_iWearable1))
-		RemoveEntity(npc.m_iWearable1);
+	if (IsValidEntity(npc.m_iWearable3))
+		RemoveEntity(npc.m_iWearable3);
 	
 	if (IsValidEntity(npc.m_iWearable2))
 		RemoveEntity(npc.m_iWearable2);
+	
+	if (IsValidEntity(npc.m_iWearable1))
+		RemoveEntity(npc.m_iWearable1);
 }
 
 static void Combine_Tank_Commander_ClotThink(int iNPC) {
