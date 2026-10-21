@@ -67,7 +67,8 @@ enum
 	
 	Attrib_ASPD_StatusCalc,	// Only used in status_effect to determine their current ASPD amount
 	Attrib_RegenElementalOutOfBattleScaling = 4061,
-	Attrib_MaxHpNerfForAbility = 4062
+	Attrib_MaxHpNerfForAbility = 4062,
+	Attrib_Elemental_DmgBoost = 4063
 }
 
 enum

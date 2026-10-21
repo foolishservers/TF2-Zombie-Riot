@@ -919,8 +919,8 @@ public Action NPC_TraceAttack(int victim, int& attacker, int& inflictor, float& 
 			//Buff bodyshot damage.
 			damage *= 1.4;
 
-#if defined ZR
 			bool Blitzed_By_Riot = false;
+#if defined ZR
 			if(i_CustomWeaponEquipLogic[weapon] == WEAPON_RIOT_SHIELD && f_TimeFrozenStill[victim] > GetGameTime(victim))
 			{
 				Blitzed_By_Riot = true;
@@ -1853,7 +1853,9 @@ stock bool Calculate_And_Display_HP_Hud(int attacker, bool ToAlternative = false
 		static char buffer[64];
 		GetClientName(victim, buffer, sizeof(buffer));
 		Format(c_NpcName[victim], sizeof(c_NpcName[]), buffer);
+#if defined ZR
 		b_NameNoTranslation[victim] = true;
+#endif
 	}
 	if(!c_NpcName[victim][0])
 		return true;
@@ -1892,14 +1894,16 @@ stock bool Calculate_And_Display_HP_Hud(int attacker, bool ToAlternative = false
 		}
 	}
 	else
+#endif
 	{
 		if(f_HudCooldownAntiSpam[attacker] >= GetGameTime())
 			return false;
 		
+#if defined ZR
 		f_CooldownForHurtHud_Ally[attacker] = GetGameTime() + 0.4;	
+#endif
 		f_HudCooldownAntiSpam[attacker] = GetGameTime() + 0.2;		
 	}
-#endif
 	SetGlobalTransTarget(attacker);
 
 	int Health = GetEntProp(victim, Prop_Data, "m_iHealth");
@@ -2171,6 +2175,7 @@ stock bool Calculate_And_Display_HP_Hud(int attacker, bool ToAlternative = false
 		ThousandString(c_Health[offset], sizeof(c_Health) - offset);
 		offset = MaxHealth < 0 ? 1 : 0;
 		ThousandString(c_MaxHealth[offset], sizeof(c_MaxHealth) - offset);
+#if defined ZR
 		if(npc.index <= MaxClients && Armor_Charge[npc.index] > 0)
 		{
 			int ArmorInt = Armor_Charge[npc.index];
@@ -2182,6 +2187,9 @@ stock bool Calculate_And_Display_HP_Hud(int attacker, bool ToAlternative = false
 			Format(c_Health, sizeof(c_Health), "%s+[%s]", c_Health, c_Armor);
 		}
 		else if(npc.m_flArmorCount > 0.0)
+#else
+		if(npc.m_flArmorCount > 0.0)
+#endif
 		{
 			int ArmorInt = RoundToNearest(npc.m_flArmorCount);
 			char c_Armor[255];
