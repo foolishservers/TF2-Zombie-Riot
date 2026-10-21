@@ -41,7 +41,7 @@
 		"pt"	"O Verdadeiro Guerreiro da Fusão chegou."
 		"nl"	"De Ware Fuziekrijger is gearriveerd"
 		"chi"	"真正的融合战士已经到来。"
-		"ko"	"The True Fusion Warrior has arrived."
+		"ko"	"트루 퓨전 워리어가 등장했습니다."
 	}
 	
 	//웨이브
@@ -53,7 +53,7 @@
 	"CyberGrind_Fast Desc"
 	{
 		"en"	"Fight all Bosses! without resting\nStarting Cash:85000\nStarting Supplies: 1557"
-		"ko"	"쉬는시간 없이 모든 보스를 만날수있습니다!\n시작 자금:85000\n시작 보급품: 1557"
+		"ko"	"쉬는 시간 없이 모든 보스를 만날 수 있습니다!\n시작 자금:85000\n시작 보급품: 1557"
 	}
 	"CyberGrind_EX_Fast"
 	{
@@ -63,7 +63,7 @@
 	"CyberGrind_EX_Fast Desc"
 	{
 		"en"	"Simulates the Final Round of EX Hard.\nStarting Cash:129800\nStarting Supplies: 220"
-		"ko"	"EX 하드 마지막 라운드를 시뮬레이션 합니다.\n시작 자금:189800\n시작 보급품: 220"
+		"ko"	"EX 하드 마지막 라운드를 시뮬레이션합니다.\n시작 자금:189800\n시작 보급품: 220"
 	}
 	"CyberGrind_Normal"
 	{
@@ -73,7 +73,7 @@
 	"CyberGrind_Normal Desc"
 	{
 		"en"	"Normal difficulty. Raid Boss only.\nStarting Cash:5706\nStarting Supplies: 100"
-		"ko"	"통상 난이도 입니다. 레이드 보스만 등장합니다.\n시작 자금:5706\n시작 보급품: 100"
+		"ko"	"통상 난이도입니다. 레이드 보스만 등장합니다.\n시작 자금:5706\n시작 보급품: 100"
 	}
 	"CyberGrind_Hard"
 	{
@@ -103,7 +103,7 @@
 	"CyberGrind_EX_Hard Desc"
 	{
 		"en"	"It's joever...\nStarting Cash:4100\nStarting Supplies: 25"
-		"ko"	"우린 ㅈ되고말거에요\n시작 자금:4100\n시작 보급품: 25"
+		"ko"	"우린 ㅈ되고 말거에요\n시작 자금:4100\n시작 보급품: 25"
 	}
 	"THE CYBER GRIND"
 	{
@@ -113,7 +113,7 @@
 	"CYBER GRIND Desc"
 	{
 		"en"	"This is a simulation prepared by Mr. V\nYou can face all bosses, and you can unlock items by clearing Normal - EX Hard\nStarting money and starting supplies vary depending on the selected difficulty."
-		"ko"	"Mr.V가 준비한 시뮬레이션 입니다.\n모든 보스를 상대해 볼 수 있습니다, 보통-EX 하드를 클리어하면 아이템을 해금할 수 있습니다.\n시작 자금 및 시작 보급품은 선택된 난이도에 따라 다름"
+		"ko"	"Mr.V가 준비한 시뮬레이션 입니다.\n모든 보스를 상대해 볼 수 있습니다, 보통-EX 하드를 클리어하면 아이템을 해금할 수 있습니다.\n시작 자금 및 시작 보급품은 선택된 난이도에 따라 다릅니다."
 	}
 	
 	"FishyLab_Lore_1"
@@ -201,7 +201,7 @@
 	"MrV Talk 12"
 	{
 		"en"	"Set non standard Difficulty, so it's going to be Really Hard."
-		"ko"	"스탠다드외 난이도가 설정되있던대, 많이 힘들꺼야."
+		"ko"	"기본보다 높은 난이도를 골랐던데, 많이 힘들꺼야."
 	}
 	
 	//트로피
@@ -2096,12 +2096,42 @@
 		"en"		"Headshot Damage"
 		"ko"		"헤드샷 피해량"
 	}
-	"TinkerAttrib_"
-	{
-		"en"		""
-		"ko"		""
-	}
 	
+	"Tinker_HasteMage"
+	{
+		"en"		"Hasty Mage"
+		"ko"		"성급한 마법사"
+	}
+	"Tinker_HeavyMage"
+	{
+		"en"		"Heavy Mage"
+		"ko"		"강격의 마법사"
+	}
+	"Tinker_ConcentratedMagic"
+	{
+		"en"		"Concentrated Magic"
+		"ko"		"집중형 마법"
+	}
+	"Tinker_TankMage"
+	{
+		"en"		"Resistive Mage"
+		"ko"		"튼튼한 마법사"
+	}
+	"Tinker_FrugalityMage"
+	{
+		"en"		"Frugality Mage"
+		"ko"		"근검절약의 마법사"
+	}
+	"Tinker_MageFragility"
+	{
+		"en"		"Mage Fragility"
+		"ko"		"마법사의 취약성"
+	}
+	"Tinker_HoardingDisorder"
+	{
+		"en"		"Hoarding Disorder Mage"
+		"ko"		"저장 강박의 마법사"
+	}
 	"Tinker_SharedGlassy"
 	{
 		"en"		"Glassy"
@@ -2122,25 +2152,10 @@
 		"en"		"Extended Hands"
 		"ko"		"늘어나는 팔"
 	}
-	"Tinker_HasteMage"
+	"Tinker_MeleePlateArmor"
 	{
-		"en"		"Hasty Mage"
-		"ko"		"성급한 마법사"
-	}
-	"Tinker_HeavyMage"
-	{
-		"en"		"Heavy Mage"
-		"ko"		"강격의 마법사"
-	}
-	"Tinker_ConcentratedMagic"
-	{
-		"en"		"Concentrated Magic"
-		"ko"		"집중형 마법"
-	}
-	"Tinker_TankMage"
-	{
-		"en"		"Resistive Mage"
-		"ko"		"튼튼한 마법사"
+		"en"		"Plate Armor"
+		"ko"		"판금 갑옷"
 	}
 	"Tinker_FastHeal"
 	{
