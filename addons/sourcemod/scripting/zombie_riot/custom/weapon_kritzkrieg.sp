@@ -109,13 +109,17 @@ static void OnKritzkriegDeployed(Event event, const char[] name, bool dontBroadc
 	else if(IsValidEntity(target) && !b_NpcHasDied[target])
 		GrantEntityArmor(target, false, 0.5, 0.7, 0);
 	GiveArmorViaPercentage(client, 0.5, 1.0,_,_,client);
+	
+	/*
 	if(RaidbossIgnoreBuildingsLogic(1))
 	{
 		float flChargeLevel = GetEntPropFloat(medigun, Prop_Send, "m_flChargeLevel");
 		flChargeLevel *= 0.65;
 		SetEntPropFloat(medigun, Prop_Send, "m_flChargeLevel", flChargeLevel);
 	}
+	*/
 }
+
 static int GetHealingTarget(int client)
 {
 	int medigun;
