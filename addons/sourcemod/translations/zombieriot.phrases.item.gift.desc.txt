@@ -4089,7 +4089,7 @@
 	"Overlords Final Wish Desc"
 	{
 		"en"		"Restore and protect Bob the first, that is his final wish..."
-		"ko"		"밥 1세를 구하고 지켜라. 그것이 그의 마지막 소원이었습니다..."
+		"ko"		"밥 1세를 구하고 보호해라. 그것이 그의 마지막 소원이었습니다..."
 	}
 	"Bob's true fear"
 	{
@@ -4099,7 +4099,7 @@
 	"Bob's true fear Desc"
 	{
 		"en"		"It is the loss of family and friends, of which has happened..."
-		"ko"		"그것은 가족과 친구의 상실, 그리고 이미 일어나버린 일..."
+		"ko"		"가족과 친구의 상실, 모두 이미 일어나버린 일..."
 	}
 	"Whiteflower's Elite Grenade"
 	{

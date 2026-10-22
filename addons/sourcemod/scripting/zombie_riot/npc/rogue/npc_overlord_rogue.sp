@@ -108,10 +108,10 @@ methodmap OverlordRogue < CClotBody
 	public void PlayIdleSound() {
 		if(this.m_flNextIdleSound > GetGameTime(this.index))
 			return;
-		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
-		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(24.0, 48.0);
 		
-
+		EmitSoundToAll(g_IdleSounds[GetRandomInt(0, sizeof(g_IdleSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
+		
+		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(24.0, 48.0);
 	}
 	
 	public void PlayIdleAlertSound() {
@@ -119,46 +119,30 @@ methodmap OverlordRogue < CClotBody
 			return;
 		
 		EmitSoundToAll(g_IdleAlertedSounds[GetRandomInt(0, sizeof(g_IdleAlertedSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
+		
 		this.m_flNextIdleSound = GetGameTime(this.index) + GetRandomFloat(12.0, 24.0);
-		
-		
 	}
 	
 	public void PlayHurtSound() {
-		if(this.m_flNextHurtSound > GetGameTime(this.index))
-			return;
-			
-		this.m_flNextHurtSound = GetGameTime(this.index) + 0.4;
-		
 		EmitSoundToAll(g_HurtSounds[GetRandomInt(0, sizeof(g_HurtSounds) - 1)], this.index, SNDCHAN_VOICE, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
-		
-		
-		
 	}
 	
 	public void PlayDeathSound() {
-	
 		EmitSoundToAll(g_DeathSounds[GetRandomInt(0, sizeof(g_DeathSounds) - 1)]);
-		
-		
 	}
 	
 	public void PlayMeleeSound() {
 		EmitSoundToAll(g_MeleeAttackSounds[GetRandomInt(0, sizeof(g_MeleeAttackSounds) - 1)], this.index, _, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
-		
-
 	}
 	
 	public void PlayRangedSound() {
 		EmitSoundToAll(g_RangedAttackSounds[GetRandomInt(0, sizeof(g_RangedAttackSounds) - 1)], this.index, _, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
-		
-
 	}
+	
 	public void PlayRangedReloadSound() {
 		EmitSoundToAll(g_RangedReloadSound[GetRandomInt(0, sizeof(g_RangedReloadSound) - 1)], this.index, _, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
-		
-
 	}
+	
 	public void PlayRangedAttackSecondarySound() {
 		
 		int rand = GetURandomInt() % sizeof(g_RangedAttackSoundsSecondary);
@@ -168,20 +152,14 @@ methodmap OverlordRogue < CClotBody
 	
 	public void PlayMeleeHitSound() {
 		EmitSoundToAll(g_MeleeHitSounds[GetRandomInt(0, sizeof(g_MeleeHitSounds) - 1)], this.index, _, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
-		
-
 	}
 	
 	public void PlaySpecialChargeSound() {
 		EmitSoundToAll(g_ChargeSounds[GetRandomInt(0, sizeof(g_ChargeSounds) - 1)], this.index, _, 110, _, BOSS_ZOMBIE_VOLUME);
-		
-
 	}
 
 	public void PlayMeleeMissSound() {
 		EmitSoundToAll(g_MeleeMissSounds[GetRandomInt(0, sizeof(g_MeleeMissSounds) - 1)], this.index, _, BOSS_ZOMBIE_SOUNDLEVEL, _, BOSS_ZOMBIE_VOLUME);
-		
-		
 	}
 	
 	public OverlordRogue(float vecPos[3], float vecAng[3], int ally, const char[] data)
@@ -231,11 +209,12 @@ methodmap OverlordRogue < CClotBody
 		}
 		npc.m_bDissapearOnDeath = true;
 		
-		CPrintToChatAll("{crimson}최후의 대군주{default}: 이 대군주들은 나의 자리를 차지하기 위해 찾아온 자들이다... 그리고 네 놈도 저 놈들과 별 다를게 없겠지...");
+		OverlordRogue_NPCTalkMessage(npc.index, "LastOverlord_Encounter", true);
+		
 		strcopy(SpawnPoint, sizeof(SpawnPoint), data);
 		ReplaceString(SpawnPoint, sizeof(SpawnPoint), "final_item ", "");
 		ReplaceString(SpawnPoint, sizeof(SpawnPoint), "final_item", "");
-
+		
 		npc.m_bThisNpcIsABoss = true;
 		npc.m_iState = 0;
 		npc.m_flSpeed = 250.0;
@@ -275,10 +254,13 @@ methodmap OverlordRogue < CClotBody
 		
 		return npc;
 	}
-	
-	
 }
 
+static void OverlordRogue_NPCTalkMessage(int iNPC, const char[] message, bool translated, any ...) {
+	char buffer[255];
+	VFormat(buffer, sizeof(buffer), message, 4);
+	PrintNPCMessageWithPrefixes(iNPC, "crimson", buffer, translated);
+}
 
 public void OverlordRogue_ClotThink(int iNPC)
 {
@@ -528,11 +510,10 @@ public void OverlordRogue_ClotThink(int iNPC)
 
 public Action OverlordRogue_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &weapon, float damageForce[3], float damagePosition[3], int damagecustom)
 {
-
 	//Valid attackers only.
 	if(attacker < 1)
 		return Plugin_Continue;
-
+	
 	OverlordRogue npc = view_as<OverlordRogue>(victim);
 	
 	if(npc.m_flHeadshotCooldown < GetGameTime(npc.index))
@@ -551,17 +532,18 @@ public void OverlordRogue_NPCDeath(int entity)
 
 	if(i_RaidGrantExtra[npc.index] == 1 && GameRules_GetRoundState() == RoundState_ZombieRiot)
 	{
-		CPrintToChatAll("{crimson}최후의 대군주{default}: 아... 아무래도 난 틀린것 같군... 절대로 배풍등이 목적을 이루게 해서는 안 돼 ... 그 놈을 끝내고 {black}이 어둠을 끝내야해.");
+		OverlordRogue_NPCTalkMessage(npc.index, "LastOverlord_Win", true);
 		for (int client = 1; client <= MaxClients; client++)
 		{
 			if(IsValidClient(client) && GetClientTeam(client) == 2 && TeutonType[client] != TEUTON_WAITING && PlayerPoints[client] > 500)
 			{
 				Items_GiveNamedItem(client, "Overlords Final Wish");
-				CPrintToChat(client,"{default}당신은 최후의 대군주를 퇴치했고, 그가 당신에게 준 것은...: {red}''대군주의 최후의 소원''{default}!");
+				CPrintToChat(client, "%T", "LastOverlord_Trophies", client);
 			}
 		}
 	}
-	CPrintToChatAll("{crimson}최후의 대군주{default}: 난 돌아간다... 네가 날 놓아준다면.");
+	
+	OverlordRogue_NPCTalkMessage(npc.index, "LastOverlord_Exit", true);
 	float WorldSpaceVec[3]; WorldSpaceCenter(npc.index, WorldSpaceVec);
 		
 	TE_Particle("pyro_blast", WorldSpaceVec, NULL_VECTOR, NULL_VECTOR, -1, _, _, _, _, _, _, _, _, _, 0.0);

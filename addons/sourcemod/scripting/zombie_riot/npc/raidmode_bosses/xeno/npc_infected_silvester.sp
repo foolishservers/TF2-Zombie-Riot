@@ -2388,7 +2388,8 @@ void SharedTimeLossSilvesterDuo(int entity)
 		}
 		SetEntProp(SensalSpawn, Prop_Data, "m_iHealth", 100000000);
 		SetEntProp(SensalSpawn, Prop_Data, "m_iMaxHealth", 100000000);
-		CPrintToChatAll("{blue}Sensal{default}: Cease this fighting. What is going on here?");
+		
+		CPrintToChatAll("%t", "Sensal_XenoDuo_TimeOver");
 	}
 }
 

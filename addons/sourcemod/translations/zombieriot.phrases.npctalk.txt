@@ -769,18 +769,18 @@
 	}
 	"Castellan_Talk_Lastman-2"
 	{
-		"en"	"Put up your best gear and fight me! I didn’t waste my time here to fight such maggots"
+		"en"	"Put up your best gear and fight me! I didn’t waste my time here to fight such maggots!"
 		"ko"	"너희들의 최고의 수단으로 상대해봐라! 나는 너희같은 졸병 따위를 상대하려고 여기서 시간을 낭비할 이유가 없단 말이다!"
 	}
 	"Castellan_Talk_Lastman-3"
 	{
-		"en"	"You were never ready for this {collectors}WAR"
-		"ko"	"너희들은 이 {collectors}전쟁{default}을 치룰 준비가 전혀 되어있지 않았다"
+		"en"	"You were never ready for this {collectors}WAR."
+		"ko"	"너희들은 이 {collectors}전쟁{default}을 치룰 준비가 전혀 되어있지 않다."
 	}
 	"Castellan_Talk_TimeUp-1"
 	{
 		"en"	"That’s enough! We see your plan to buy some time."
-		"ko"	"이제 충분하다! 시간을 질질 끌려는 너희들의 계획은 이미 파악되었다!"
+		"ko"	"이제 충분하다! 시간을 질질 끌려는 너희들의 계획은 이미 간파했다!"
 	}
 	"Castellan_Talk_TimeUp-2"
 	{
@@ -794,7 +794,7 @@
 	}
 	"Castellan_Talk_GameEnd-2"
 	{
-		"en"	"Back to frontline"
+		"en"	"Back to frontline."
 		"ko"	"다시 최전방으로 향하도록 하지."
 	}
 	"Castellan_Talk_Ability1-1"
@@ -855,11 +855,12 @@
 	"Castellan_Talk_Ability2-3"
 	{
 		"en"	"Alright boys, Fire all we got! We cannot waste any more time on here!"
-		"ko"	"좋아, 친구들. 우리가 가진 모든걸 쏟아부어라! 우리는 여기서 더이상 낭비할 시간이 없다!"
+		"ko"	"좋아, 친구들. 우리가 가진 모든걸 쏟아부어라! 우리는 여기서 더 이상 낭비할 시간이 없다!"
 	}
 	"Castellan_Talk_Ability2-4"
 	{
 		"en"	"Keep them coming boys! They are wasting too much of our time!"
+		"ko"	"계속 몰아붙여라, 제군들! 저놈들 때문에 우리의 시간이 너무 낭비되고 있다!"
 	}
 	"Castellan_Talk_Ability2-5"
 	{
@@ -970,6 +971,21 @@
 	{
 		"en"	"{crimson}Meanwhile, you realize Castellan was watching with mixed emotions as he was retreating…"
 		"ko"	"{crimson}그리고 여러분은 카스텔란이 퇴각하면서 이를 노려보고 있음을 깨닫습니다…"
+	}
+	"Castellan_Fuck_You_In_Specific_Talk-1"
+	{
+		"en"	"{crimson}You.{default} I recognize you. You are that bloody merc who ruthlessly trampled our Soldiers! I will glisten my hand with your {crimson}BLOOD{default}, Bolaven."
+		"ko"	"{crimson}너.{default} 난 너가 누군지 안다. 우리 병사들을 무참하게 짓밟고 유린한 그 빌어처먹을 용병 아니냐! 내 손을 너의 {crimson}피{default}로 적셔주마. Bolaven."
+	}
+	"Castellan_Fuck_You_In_Specific_Talk-2"
+	{
+		"en"	"Wait... I remember who you are. You are the bravest one amongst all to stop our army alone. I salute your Courage... It's a real shame that I can't have you as my man, Light."
+		"ko"	"잠시만... 난 너가 누군지 알 것 같다. 너는 우리의 군대를 홀로 막아선 용감한 자였지. 난 너의 용기에 경의를 표한다. 내 휘하에 너를 둘 수 없다는 게 정말 안타까울 따름이군. Light."
+	}
+	"Castellan_Fuck_You_In_Specific_Talk-3"
+	{
+		"en"	"If you declare yourself as {gold}Vestan{default}, help me out instead of fighting me Beep_G."
+		"ko"	"너를 {gold}베스타인{default}이라고 칭할 거라면 나와 싸우지 말고 날 도와라, Beep_G."
 	}
 	
 	"CaptinoMenius_Talk-1-1"
@@ -4060,24 +4076,24 @@
 	"LastOverlord_Encounter"
 	{
 		"en"		"All these overlords wish to take my place... You are one of them too, arent you..."
-		"ko"		"이 대군주들은 내 자리를 차지하기 위해 찾아온 자들이지... 너희들도 그들과 별반 다른 건 없어 보이는군..."
+		"ko"		"이 모든 오버로드들이 내 자리를 차지하려 하는군... 너희 역시 그중 하나겠지, 안 그런가?"
 	}
 	
 	"LastOverlord_Win"
 	{
 		"en"		"G-Guess i didnt make the cut, huh... Make sure that W.F. Wont get this... End him and {black}Shadowing Darkness."
-		"ko"		"아... 아무래도 난 틀린것 같군... 절대로 배풍등이 목적을 이루게 해서는 안 돼 ... 그 놈을 끝내고 {black}응달{default}을 막아야 해."
+		"ko"		"아-아무래도 나도 이 자리에 설 자격을 잃은 거 같군... 절대로 배풍등이 목적을 이루게 해서는 안 돼... 그 놈과 {black}응달{default}을 끝내야 해."
 	}
-	"LastOverlord_Lose"
+	"LastOverlord_Exit"
 	{
 		"en"		"I'll head back... if you let me."
-		"ko"		"난 돌아간다... 너희가 날 놓아준다면."
+		"ko"		"난 돌아가겠네... 자네들이 허락해 준다면."
 	}
 	
-	"LastOverlord_Win"
+	"LastOverlord_Trophies"
 	{
-		"en"		"You defeated the final overlord and thus he bestows you... {red}''His final wish''{default}."
-		"ko"		"최후의 오버로드를 쓰러뜨렸습니다. 그리고 그는 여러분에게... {red}''자신의 마지막 소원''{default}을 남깁니다."
+		"en"		"You defeated the final overlord and thus he bestows upon you... {red}''His final wish''{default}."
+		"ko"		"최후의 대군주를 쓰러뜨렸습니다. 물러나는 그는 여러분에게... {red}''자신의 마지막 소원''{default}을 남깁니다."
 	}
 	
 	// Bladedance.
@@ -4709,20 +4725,5 @@
 	{
 		"en"		""
 		"ko"		"그 누구도 우리의 권위에 도전할 순 없다. 우리의 힘은 끝이 없다."
-	}
-	"Castellan_Fuck_You_In_Specific_Talk-1"
-	{
-		"en"	"{crimson}You.{default} I recognize you. You are that bloody merc who ruthlessly trampled our Soldiers! I will glisten my hand with your {crimson}BLOOD{default} Bolaven"
-		"ko"	"{crimson}너.{default} 난 너가 누군지 안다. 우리 병사들을 무참하게 짓밟고 유린한 그 빌어처먹을 용병 아니냐! 내 손을 너의 {crimson}피{default} 로 적셔주마 Bolaven"
-	}
-	"Castellan_Fuck_You_In_Specific_Talk-2"
-	{
-		"en"	"Wait... I remember who you are. You are the bravest one amongst all to stop our army alone. I salute your Courage... It's a real shame that I can't have you as my man, Light"
-		"ko"	"잠시만... 난 너가 누군지 알 것 같다. 너는 우리의 군대를 홀로 막아선 용감한 자였지. 난 너의 용기에 경의를 표한다. 내 휘하에 너를 둘 수 없다는 게 정말 안타까울 따름이군 Light"
-	}
-	"Castellan_Fuck_You_In_Specific_Talk-3"
-	{
-		"en"	"If you declare yourself as {gold}Vestan{default}, help me out instead of fighting me Beep_G"
-		"ko"	"너가 너 자신을 {gold}베스타인{default} 이라고 칭한다면 나와 싸우지 말고 날 도와라, Beep_G"
 	}
 }

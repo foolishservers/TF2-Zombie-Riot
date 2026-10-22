@@ -873,6 +873,12 @@
 		"ko"		"그 랜스... {snow}루이나{default}와 {gold}엑스피돈사{default} 모두 사용하는 유일한 무기지."
 	}
 	
+	"Sensal_XenoDuo_TimeOver"
+	{
+		"en"		"{blue}Sensal{default}: Cease this fighting. What is going on here?"
+		"ko"		"{blue}센살{default}: 싸움을 멈춰라. 여기에서 무슨 일이 벌어지고 있던 거지?"
+	}
+	
 	// Nemal.
 	"Nemal_Encounter_Wave10_1"
 	{
