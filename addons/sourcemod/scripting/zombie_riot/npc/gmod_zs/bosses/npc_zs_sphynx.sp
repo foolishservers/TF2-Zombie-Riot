@@ -210,7 +210,7 @@ static void ZSSphynx_ClotThink(int iNPC)
 	if(!npc.m_bArmorGiven)
 	{
 		npc.m_bArmorGiven = true;
-		GrantEntityArmor(npc.index, false, 0.25, 0.6, 0);
+		GrantEntityArmor(npc.index, false, 0.2, 0.8, 0);
 	}
 	
 	if(npc.m_blPlayHurtAnimation)
@@ -304,8 +304,8 @@ static void ZSSphynx_ClotThink(int iNPC)
 	npc.PlayIdleAlertSound();
 }
 
-#define ZSSPHYNX_RANGE 350.0
-#define ZSSPHYNX_RANGE_SQ 122500.0
+#define ZSSPHYNX_RANGE 600.0
+#define ZSSPHYNX_RANGE_SQ 360000.0
 
 static void ZSSphynx_ApplyBuffInLocation_Optimized(int me, float myPos[3], int team, int ignoreEntity = 0, float duration = 10.0)
 {

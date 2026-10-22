@@ -161,7 +161,7 @@ static void MassShootingLover_ClotThink(int iNPC)
 			npc.m_flNextChargeSpecialAttack = GameTime + 2.6;
 			npc.m_bisWalking = true;
 			npc.m_iChanged_WalkCycle = 6;
-			npc.AddGesture("ACT_MP_RELOAD_STAND_PRIMARY", true,_,_,0.37);
+			npc.AddGesture("ACT_MP_RELOAD_STAND_SECONDARY", true,_,_,0.37);
 			npc.m_flSpeed = 0.0;
 			npc.StopPathing();
 			npc.PlayReloadSound();
@@ -237,7 +237,7 @@ static void MassShootingLoverSelfDefense(MassShootingLover npc, float gameTime)
 		{
 			npc.m_bisWalking = true;
 			npc.m_iChanged_WalkCycle = 4;
-			npc.SetActivity("ACT_MP_RUN_PRIMARY");
+			npc.SetActivity("ACT_MP_RUN_SECONDARY");
 			npc.m_flSpeed = 250.0;
 			npc.StartPathing();
 		}
@@ -255,7 +255,7 @@ static void MassShootingLoverSelfDefense(MassShootingLover npc, float gameTime)
 			{
 				npc.m_bisWalking = false;
 				npc.m_iChanged_WalkCycle = 5;
-				npc.SetActivity("ACT_MP_RUN_SECONDARY");
+				npc.SetActivity("ACT_MP_STAND_SECONDARY");
 				npc.m_flSpeed = 0.0;
 				npc.StopPathing();
 			}	

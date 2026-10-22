@@ -201,6 +201,8 @@ methodmap DasNaggenvatcher < CClotBody
 		npc.m_bFUCKYOU=false;
 		npc.m_flNPCTalkDelay=0.0;
 		
+		b_thisNpcIsARaid[npc.index] = true;
+		
 		RaidModeTime = GetGameTime(npc.index) + 60.0;
 		RaidBossActive = EntIndexToEntRef(npc.index);
 		RaidAllowsBuildings = true;
@@ -418,12 +420,12 @@ static void DasNaggenvatcher_ClotThink(int iNPC)
 	npc.m_flNextThinkTime = gameTime + 0.04;
 	npc.Update();
 	
-	if(npc.m_flNextRangedSpecialAttack < gameTime)
+	if((npc.g_TimesSummoned != 4 || !b_NpcIsInvulnerable[npc.index]) && npc.m_flNextRangedSpecialAttack < gameTime)
 	{
 		npc.m_flNextRangedSpecialAttack = gameTime + 0.25;
 		// 250.0*250.0 = 62500.0
 		int target = GetClosestAlly(npc.index, 62500.0, _,DasNaggenvatcherBuffAlly);
-		if(target && !HasSpecificBuff(target, "False Therapy"))
+		if (target && !HasSpecificBuff(target, "False Therapy"))
 		{
 			VausMagicaGiveShield(target, 20, true, 20);
 			ApplyStatusEffect(npc.index, target, "False Therapy", 30.0);
@@ -685,7 +687,6 @@ static void DasNaggenvatcher_ClotThink(int iNPC)
 			if(npc.m_bPathing)
 			{
 				npc.StopPathing();
-				
 			}
 			
 			npc.PlayReloadSound();

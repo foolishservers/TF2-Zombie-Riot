@@ -237,8 +237,11 @@ static void Allysoldier_ClotThink(int iNPC)
 	}
 
 	// 2. 아군 타겟 유효성 검사 및 가장 가까운 아군 거리 계산
-	if(npc.m_iTargetAlly && !IsValidAlly(npc.index, npc.m_iTargetAlly))
-		npc.m_iTargetAlly = 0;
+	if (!IsValidAlly(npc.index, npc.m_iTargetAlly))
+	{
+		npc.m_iTargetAlly = GetClosestAlly(npc.index);
+		
+	}
 	
 	npc.m_iTargetAlly = GetClosestAlly(npc.index);
 	float flDistanceToAlly = 999999.0;

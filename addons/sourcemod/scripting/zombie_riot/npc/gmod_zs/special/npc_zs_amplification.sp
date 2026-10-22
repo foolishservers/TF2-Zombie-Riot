@@ -179,7 +179,7 @@ static void Amplification_ClotThink(int iNPC)
 		if(npc.Anger)
 		{
 			KillFeed_SetKillIcon(npc.index, "saw_kill");
-			spawnRing_Vectors(vecMe, 100.0, 0.0, 0.0, 0.0, "materials/sprites/laserbeam.vmt", 255, 50, 50, 200, 1, 0.4, 6.0, 0.1, 1, 1000.0);
+			spawnRing_Vectors(vecMe, 100.0, 0.0, 0.0, 0.0, "materials/sprites/laserbeam.vmt", 50, 255, 50, 200, 1, 0.4, 6.0, 0.1, 1, 1000.0);
 			Explode_Logic_Custom(5.0, -1, npc.index, -1, vecMe, 400.0, _, _, true, _, false, _, Amplification_ExplodePost);
 		}
 	}
@@ -258,7 +258,7 @@ static void Amplification_ClotThink(int iNPC)
 static void Amplification_ExplodePost(int attacker, int victim, float damage, int weapon)
 {
 	float vic_vec[3]; WorldSpaceCenter(victim, vic_vec);
-	ParticleEffectAt(vic_vec, "water_bulletsplash01", 1.5);
+	ParticleEffectAt(vic_vec, "breadjar_impact_cloud", 1.5);
 	Elemental_AddPheromoneDamage(victim, attacker, view_as<Amplification>(attacker).m_bElite ? 15 : 12);
 	// 400 x 0.2 x 0.15
 	// 500 x 0.2 x 0.15

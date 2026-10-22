@@ -167,7 +167,7 @@ static void ZsSpitter_ClotThink(int iNPC)
 					WandProjectile_ApplyFunctionToEntity(entity, zs_spitter_StartTouch);
 					
 					WorldSpaceCenter(entity, vecTarget);
-					f_ArrowTrailParticle[entity] = ParticleEffectAt(vecTarget, "rockettrail_bubbles", 3.0);
+					f_ArrowTrailParticle[entity] = ParticleEffectAt(vecTarget, "peejar_trail_blu", 3.0);
 					SetParent(entity, f_ArrowTrailParticle[entity]);
 					f_ArrowTrailParticle[entity] = EntIndexToEntRef(f_ArrowTrailParticle[entity]);
 				}
