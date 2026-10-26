@@ -2295,6 +2295,17 @@
 		"ko"		"할로우 포인트 탄환"
 	}
 	
+	"Tinker_FT_FaceMelter"
+	{
+		"en"		"Face Melter"
+		"ko"		"안면 융해"
+	}
+	"Tinker_FT_StickyCompound"
+	{
+		"en"		"Sticky Compound"
+		"ko"		"끈적한 화합물"
+	}
+	
 	// Wave Vote.
 	"Vote Cooldown"
 	{
