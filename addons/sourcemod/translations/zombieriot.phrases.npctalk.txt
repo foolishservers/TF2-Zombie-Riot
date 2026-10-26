@@ -4076,7 +4076,7 @@
 	"LastOverlord_Encounter"
 	{
 		"en"		"All these overlords wish to take my place... You are one of them too, arent you..."
-		"ko"		"이 모든 오버로드들이 내 자리를 차지하려 하는군... 너희 역시 그중 하나겠지, 안 그런가?"
+		"ko"		"모든 대군주들이 내 자리를 차지하려 하는군... 너희 역시 그중 하나겠지, 안 그런가?"
 	}
 	
 	"LastOverlord_Win"

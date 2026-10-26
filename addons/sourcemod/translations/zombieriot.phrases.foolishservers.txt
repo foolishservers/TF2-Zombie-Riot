@@ -2096,6 +2096,11 @@
 		"en"		"Headshot Damage"
 		"ko"		"헤드샷 피해량"
 	}
+	"TinkerAttrib_FlamethrowerAmmoConsumed"
+	{
+		"en"		"Flamethrower Ammo Consumed"
+		"ko"		"화염방사기 탄약 소모량"
+	}
 	
 	"Tinker_HasteMage"
 	{

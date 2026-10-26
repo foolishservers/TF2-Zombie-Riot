@@ -465,33 +465,33 @@
 	"Twirl_Encounter_Wave10_2"
 	{
 		"en"		"Oh the joy I will get from {crimson}fighting{snow} you all"
-		"ko"		"흐음, 너희와의 {crimson}전투{snow}는 나한테 어떤 즐거움을 줄까?"
+		"ko"		"흐음, 너희와의 {crimson}전투{snow}가 나한테 어떤 즐거움을 줄 수 있을까?"
 	}
 	"Twirl_Encounter_Wave10_3"
 	{
 		"en"		"From what {aqua}Stella{snow}'s told, this should be great {purple}fun{snow}.."
-		"ko"		"{aqua}스텔라{snow}가 말한대로라면, 이건 좀 {purple}재밌겠네{snow}.."
+		"ko"		"{aqua}스텔라{snow}가 말한대로라면, 꽤 {purple}재미있겠어{snow}.."
 	}
 	"Twirl_Encounter_Wave10_4"
 	{
 		"en"		"Let's see who dies {crimson}first{snow}!"
-		"ko"		"자, 누가 먼저 {crimson}쓰러질 지{snow} 보자고!"
+		"ko"		"자, 누가 {crimson}먼저 쓰러질 지{snow} 보자고!"
 	}
 	"Twirl_Encounter_Wave10_5"
 	{
 		"en"		"Huh interesting, who might you be? no matter, you look strong, {crimson}ima fight you"
-		"ko"		"음, 흥미롭네. 너희는 과연 어떤 사람들일까? 척 보기엔 강해보이는데, 역시... {crimson}직접 붙어봐야 알겠는 걸?"
+		"ko"		"허, 흥미롭네. 너희는 과연 어떤 사람들일까? 보기엔 강해보이는데, 역시... {crimson}직접 붙어봐야 알겠네."
 	}
 	"Twirl_Encounter_Wave10_6"
 	{
-		"en"		"Its time to \"Twirl\" like a beyblade"
-		"ko"		"같이 돌아볼까? 끝없는 \"팽이\" 들의 회전처럼."
+		"en"		"Its time to \"Twirl\" like a beyblade."
+		"ko"		"같이 돌아볼까? 끝없는 팽이들의 \"회전\"처럼."
 	}
 	
 	"Twirl_Encounter_Wave20_1"
 	{
 		"en"		"Last time, it was a great workout, {crimson}Time to do it again{snow}!"
-		"ko"		"지난 번엔, 운동 좀 됐었어. {crimson}그러면 또 해보실까!"
+		"ko"		"지난번엔, 꽤나 훌륭한 운동이었어. {crimson}그러면 또 해보실까!"
 	}
 	"Twirl_Encounter_Wave20_2"
 	{
@@ -501,33 +501,33 @@
 	"Twirl_Encounter_Wave20_3"
 	{
 		"en"		"{aqua}Stella{snow} was right, you all ARE great fun to play with!"
-		"ko"		"{aqua}스텔라{snow}가 맞았어, 너희랑 싸우는 게 가장 재밌어!"
+		"ko"		"{aqua}스텔라{snow}가 맞았어. 너희랑 노는 게 제일 재밌다니까!"
 	}
 	"Twirl_Encounter_Wave20_4"
 	{
 		"en"		"Ehe, now who will die {crimson}last{snow}?"
-		"ko"		"으흠, 이제 누가 먼저 {crimson}죽을까{snow}?"
+		"ko"		"에헤, 이번엔 누가 {crimson}마지막까지{snow} 살아남을까?"
 	}
 	"Twirl_Encounter_Wave20_5"
 	{
 		"en"		"You spin me right round..."
-		"ko"		"당신들은 나를 빙빙 돌게 해요..."
+		"ko"		"날 빙글빙글 돌려 봐..."
 	}
 	
 	"Twirl_Encounter_Wave30_1"
 	{
 		"en"		"My Oh my, you're still here, {purple}how wonderful!"
-		"ko"		"어머나, 아직도 여기 있었구나! {purple}정말 대단해!"
+		"ko"		"어머나, 아직도 여기 있었구나! {purple}정말 멋진 걸!"
 	}
 	"Twirl_Encounter_Wave30_2"
 	{
 		"en"		"You must enjoy fighting as much as {purple}I do{snow}, considering you've made it this far!"
-		"ko"		"여기까지 온 걸 생각해보면, 너흰 {purple}나만큼{snow} 싸우는걸 좋아하는구나?"
+		"ko"		"여기까지 온 걸 생각해보면, 너희도 {purple}나만큼{snow} 싸움을 좋아하는구나!"
 	}
 	"Twirl_Encounter_Wave30_3"
 	{
 		"en"		"{aqua}Stella{snow}, you understated how {purple}fun{snow} this would be!"
-		"ko"		"{aqua}스텔라{snow}, 이 자들이 가진 {purple}재미{snow}를 너무 과소평가 한 것 같네!"
+		"ko"		"{aqua}스텔라{snow}, 이게 얼마나 {purple}재밌을지{snow} 너무 과소평가 한 것 같네!"
 	}
 	"Twirl_Encounter_Wave30_4"
 	{
@@ -558,7 +558,7 @@
 	"Twirl_Encounter_Final_4"
 	{
 		"en"		"Kuru Kuru~"
-		"ko"		"빙글빙글~"
+		"ko"		"쿠루쿠루~"
 	}
 	"Twirl_Encounter_Final_5"
 	{
@@ -568,64 +568,54 @@
 	"Twirl_Encounter_Final_Special_1"
 	{
 		"en"		"You know, there's something I've always wondered about, why do you people keep on calling me a masochist."
-		"ko"		"있잖아, 내가 항상 궁금해했던 게 있어, 왜 사람들이 나를 계속 마조히스트라고 부르는지."
+		"ko"		"있잖아. 늘 궁금했던 게 있는데, 왜 사람들이 나를 계속 마조히스트라고 부르는 걸까?"
 	}
 	"Twirl_Encounter_Final_Special_2"
 	{
 		"en"		"Since like, I'm not one for the record, and yet some of the \"people\" I've fought in the past keep calling me that."
-		"ko"		"그러니까, 나는 그런 사람이 아닌데, 과거에 나와 싸웠던 \"사람\" 들 중 일부가 날 그렇게 부르더라구."
+		"ko"		"분명히 말하자면, 나는 그런 사람이 아니야. 그런데 예전에 나와 싸웠던 \"사람\"들은 날 그렇게 부르더라구."
 	}
 	"Twirl_Encounter_Final_Special_3"
 	{
 		"en"		"And I'm at a loss as to WHY they say that, if anything it would be more accurate to call me a sadist, for the record, I'm not.."
-		"ko"		"그리고 걔들이 왜 그런 말을 하는지 이해할 수가 없어. 왜 그럴까? 정말로. 난 새디스트조차 아니란 말이야."
+		"ko"		"왜 그런 말을 하는지 도무지 이해할 수가 없어. 굳이 따지자면, 새디스트라고 부르는 게 더 정확하겠지만, 그것도 아니란 말이야."
 	}
 	"Twirl_Encounter_Final_Special_4"
 	{
 		"en"		"So yaknow, if you can, try and explain it, please?"
-		"ko"		"그래서... 음, 가능하다면 네가 그 이유를 좀 알려줄래?"
+		"ko"		"그래서... 음, 가능하다면 너희가 그 이유를 좀 알려줄래?"
 	}
 	
 	"Twirl_Encounter_Freeplay_1"
 	{
 		"en"		"So the flow of magic lead me here, {purple}how interesting{snow}..."
-		"ko"		"마법의 흐름을 따라 이끌려왔는데, 이 곳이라니. {purple}참 흥미롭네{snow}..."
+		"ko"		"마력의 흐름이 날 여기로 이끌었네. {purple}흥미로운 걸{snow}..."
 	}
 	"Twirl_Encounter_Freeplay_2"
 	{
 		"en"		"Oh, its you all, hey, wanna {crimson}fight{snow}? {purple}of course you do{snow}!"
-		"ko"		"아, 너희들이구나. 어때, {crimson}붙어볼까{snow}? {purple}너도 나랑 싸우는걸 원할테니까{snow}!"
+		"ko"		"아, 너희들이구나. 어때, {crimson}붙어볼래{snow}? {purple}너희도 나랑 싸우는걸 원할테니까{snow}!"
 	}
 	"Twirl_Encounter_Freeplay_3"
 	{
 		"en"		"I need to unwind, and you all look {crimson}perfect{snow} for that!"
-		"ko"		"긴장 좀 풀어야 했는데, {crimson}완벽한{snow} 타이밍이야!"
+		"ko"		"몸 좀 풀어야 했는데, 너희라면 {crimson}딱 좋겠어!"
 	}
 	
 	"Twirl_Encounter_Trio_1"
 	{
-		"en"	"Sorry, {blue}Sensal{default}! {gold}He's{default} comming a bit late."
-		"ko"	"미안, {blue}센살{default}! {gold}그{default}는 조금 늦게 올 거 같아."
+		"en"		"Oh my, looks like the expidonsans went easy on you, we sure wont my dears. Us ruanians work differently~"
+		"ko"		"어머, 엑스피돈사 친구들이 너희를 봐준 모양이네, 하지만 우리는 절대 안 그럴 거란다. 우리 루이나인들은 걔내랑 방식이 다르거든~"
 	}
 	"Twirl_Encounter_Trio_2"
 	{
-		"en"	"Hey {blue}Sensal{default}, I'm here."
-		"ko"	"아, 센살. 나 여기 있어."
-	}
-	"Twirl_Encounter_Trio_3"
-	{
-		"en"	"Isn't this overkill?"
-		"ko"	"이건 쟤네한테 좀 너무 심한거 아니야?"
-	}
-	"Twirl_Encounter_Trio_4"
-	{
-		"en"	"Sorry but thats all."
-		"ko"	"일단 너희에게 미안하고 어... 더 할 말이 없네."
+		"en"	"... Except Karlas but shhhh!"
+		"ko"	"... 아 참. 카를라스는 빼고, 쉿!"
 	}
 	
 	"Twirl_Lose_Rage"
 	{
-		"en"		"{crimson}Perish"
+		"en"		"{crimson}Perish..."
 		"ko"		"{crimson}스러져라..."
 	}
 	
@@ -637,41 +627,41 @@
 	"Twirl_Lose_2"
 	{
 		"en"		"This was quite fun, I thank you for the experience!"
-		"ko"		"재밌었어. 이런 느낌을 받은 건 참 오랜만이야!"
+		"ko"		"정말 재밌었어. 이런 경험을 하게 해줘서 고마워!"
 	}
 	"Twirl_Lose_3"
 	{
 		"en"		"Huh, I guess this was all you were capable of, a shame"
-		"ko"		"허, 이게 너희가 할 수 있는 전부였나봐. 안타깝네."
+		"ko"		"허, 너희 실력은 이 정도였나 보네. 아쉽게 됐어."
 	}
 	"Twirl_Lose_4"
 	{
 		"en"		"I, as the empress, thank you for this wonderful time."
-		"ko"		"여왕으로서, 이런 좋은 시간을 보내게 해줘서 정말 고마워."
+		"ko"		"여제로서, 이런 멋진 시간을 선사해 줘서 정말 고맙다는 말을 전하지."
 	}
 	"Twirl_Lose_5"
 	{
 		"en"		"Ahhh, that was a great workout, time to hit the showers."
-		"ko"		"아아, 정말 멋진 운동이었어. 이제 샤워해야겠네."
+		"ko"		"아아, 오늘 운동은 이 정도면 충분해. 이제 샤워해야 가야겠어."
 	}
 	"Twirl_Lose_6"
 	{
-		"en"		"You call this fighting? We call this resisting arrest"
+		"en"		"You call this fighting? We call this resisting arrest."
 		"ko"		"이건 싸움이 아니라 저항이라 부른단다."
 	}
 	"Twirl_Lose_7"
 	{
 		"en"		"Another one bites the dust."
-		"ko"		"또 한 명 쓰러져가네."
+		"ko"		"또 한 명 쓰러졌네."
 	}
 	"Twirl_Lose_8"
 	{
 		"en"		"Ah foolish Mercenaries, maybe next time think about a proper strategy."
-		"ko"		"아, 어리석은 용병들, 다음에는 적절한 전략을 생각해 보는 게 어떨까."
+		"ko"		"아, 어리석은 용병들, 다음에는 제대로 된 전략을 세워보는 게 어때?"
 	}
 	"Twirl_Lose_9"
 	{
-		"en"		"Raw power is good and all, but you know what's better? {crimson}Debuffs"
+		"en"		"Raw power is good and all, but you know what's better? {crimson}Debuffs."
 		"ko"		"그래, 순수한 힘도 좋지. 그런데 그것보다 좋은 게 뭔지 알아? {crimson}디버프지."
 	}
 	"Twirl_Lose_10"
@@ -681,8 +671,8 @@
 	}
 	"Twirl_Lose_11"
 	{
-		"en"		"{crimson}How Cute{snow}."
-		"ko"		"{crimson}정말 귀엽군{snow}."
+		"en"		"{crimson}How Cute."
+		"ko"		"{crimson}정말 귀엽군."
 	}
 	"Twirl_Lose_12"
 	{
@@ -708,27 +698,27 @@
 	"Twirl_Win_4"
 	{
 		"en"		"You beat several world ending infections, alongside that gained many allies."
-		"ko"		"넌 세계를 멸망시킬뻔 한 감염을 여러 차례 격퇴했고, 그 과정에서 많은 동맹을 얻었어."
+		"ko"		"넌 세계를 멸망시킬 뻔한 감염체들을 여러 차례 격퇴했고, 그 과정에서 많은 동맹을 얻었어."
 	}
 	"Twirl_Win_5"
 	{
 		"en"		"But the future holds many more hardships and dangers."
-		"ko"		"하지만 그 뒤에는 훨씬 더 많은 어려움과 위험이 도사리고 있어."
+		"ko"		"하지만 미래에는 훨씬 더 많은 어려움과 위험이 기다리고 있어."
 	}
 	"Twirl_Win_6"
 	{
-		"en"		"And so, it was decided that we the Ruanian's would test your skills."
+		"en"		"And so, it was decided that we the Ruinian's would test your skills."
 		"ko"		"그래서 우리 루이나인들이 너희의 실력을 시험해보기로 결정한 거야."
 	}
 	"Twirl_Win_7"
 	{
 		"en"		"To see if you’re all ready for what the future holds."
-		"ko"		"너희 모두가 그 미래에 대한 대비가 되어있는지를 확인해보기 위해서."
+		"ko"		"앞으로 닥칠 일에 맞설 준비가 되어있는지를 확인하기 위해서."
 	}
 	"Twirl_Win_8"
 	{
 		"en"		"And well, you do, you are certainly ready for the future."
-		"ko"		"그리고, 보아하니 너흰 전부 다 준비되어있는 것 같네."
+		"ko"		"그리고 결과는 합격이야. 너희는 분명 미래를 맞이할 준비가 됐어."
 	}
 	"Twirl_Win_9"
 	{
@@ -748,7 +738,7 @@
 	"Twirl_Win_12"
 	{
 		"en"		"Make sure to take good care of them... or else."
-		"ko"		"그거 소중히 다뤄야해. 알았지?"
+		"ko"		"잘 간수하도록 해... 안 그러면 혼날 줄 알아."
 	}
 	
 	"Twirl_Trophies"
@@ -760,7 +750,7 @@
 	"Twirl_LastMann_1"
 	{
 		"en"		"Oh my, quite the situation you’re in here"
-		"ko"		"저런, 지금 네가 처한 상황을 보렴."
+		"ko"		"어머나, 꽤 난처한 상황에 빠졌네."
 	}
 	"Twirl_LastMann_2"
 	{
@@ -780,410 +770,931 @@
 	"Twirl_LastMann_5"
 	{
 		"en"		"Interesting, perhaps I overestimated you all."
-		"ko"		"흥미로운데. 어쩌면 과대평가했을지도."
+		"ko"		"흥미로운데. 어쩌면 내가 너희를 과대평가했나봐."
 	}
 	"Twirl_LastMann_6"
 	{
 		"en"		"If you have some form of {purple}secret weapon{snow}, its best to use it now."
-		"ko"		"만약 지금 네가 {purple}숨겨둔 무기{snow}같은 걸 가지고 있다면, 지금 써야할 거야."
+		"ko"		"{purple}비장의 무기{snow}가 있다면, 지금 쓰는 게 좋을 거야."
 	}
 	"Twirl_LastMann_7"
 	{
 		"en"		"Such is the battlefield, {purple}they all die one by one{snow}, until there is but one standing..."
-		"ko"		"이런게 바로 전장이지. 한 명만 남을때까지 {purple}계속 죽어나가는 것..."
+		"ko"		"전장이란 그런 법이지. {purple}하나둘씩 쓰러지고{snow}, 결국 하나만 남게 돼..."
 	}
 	"Twirl_LastMann_8"
 	{
-		"en"		"{crimson}How Cute{snow}. You alone, its such a view"
+		"en"		"{crimson}How Cute{snow}. You alone, its such a view."
 		"ko"		"{crimson}정말 귀엽군{snow}. 너 혼자라니, 정말 멋진 광경이야."
 	}
 	
 	"Twirl_Second_Phase_1"
 	{
 		"en"		"Time to ramp up the {purple}heat"
-		"ko"		"슬슬 올려볼까? {purple}열기 말이야."
+		"ko"		"{purple}열기{snow}를 더 끌어올려 볼까."
 	}
 	"Twirl_Second_Phase_2"
 	{
-		"en"		"Come now, {purple}is this all you can do{snow}? Prove me wrong."
-		"ko"		"이것 봐, {purple}이게 너희가 할 수 있는 전부야{snow}? 아니라면 증명해봐."
+		"en"		"Ahhh, this is {purple}fun{snow}, lets step it up a notch"
+		"ko"		"아아, 정말 {purple}재밌어{snow}. 한 단계 더 올려 보자!"
 	}
 	"Twirl_Second_Phase_3"
 	{
-		"en"		"I know you're capable more than just this."
-		"ko"		"너희가 이 이상의 능력을 가지고 있다는 걸 알아."
+		"en"		"Round 2. Fight!"
+		"ko"		"2라운드, 시작!"
 	}
 	"Twirl_Second_Phase_4"
 	{
-		"en"		"You're the last one alive, {purple}but{snow} are you the strongest?"
-		"ko"		"혼자 남았네? 그럼 {purple}네가{snow} 제일 강하다는 뜻이겠지?"
+		"en"		"Ai, this is getting fun."
+		"ko"		"아, 점점 재밌어지는데."
 	}
 	"Twirl_Second_Phase_5"
 	{
-		"en"		"Interesting, perhaps I overestimated you all."
-		"ko"		"흥미로운데. 어쩌면 과대평가했을지도."
+		"en"		"I'm extremely curious to see how you fair {purple}against this."
+		"ko"		"이걸 상대로 얼마나 버틸지 {purple}정말 궁금하네{snow}."
 	}
 	"Twirl_Second_Phase_6"
 	{
-		"en"		"If you have some form of {purple}secret weapon{snow}, its best to use it now."
-		"ko"		"만약 지금 네가 {purple}숨겨둔 무기{snow}같은 걸 가지고 있다면, 지금 써야할 거야."
+		"en"		"Ahahahah, the joy of battle, don't act like you’re not enjoying this"
+		"ko"		"아하하하! 전투의 즐거움이라니. 너희도 즐기고 있잖아, 아닌 척하지 마."
 	}
 	"Twirl_Second_Phase_7"
 	{
-		"en"		"Such is the battlefield, {purple}they all die one by one{snow}, until there is but one standing..."
-		"ko"		"이런게 바로 전장이지. 한 명만 남을때까지 {purple}계속 죽어나가는 것..."
+		"en"		"The flow of {aqua}mana{snow} is so {purple}intense{snow}, I love this oh so much!"
+		"ko"		"{aqua}마나{snow}의 흐름이 정말 {purple}강렬해{snow}. 너무 좋아!"
 	}
 	
 	"Twirl_Second_Phase_Rage_1"
 	{
 		"en"		"You ain't getting a normal phase shift."
-		"ko"		"평범한 페이즈 전환은 기대하지 마."
+		"ko"		"평범한 페이즈 전환따위 기대하지 마."
 	}
 	"Twirl_Second_Phase_Rage_2"
 	{
 		"en"		"This time, I ain't waiting"
-		"ko"		"이번엔 기다리고 싶지 않은데."
+		"ko"		"이번엔 기다려 주지 않겠어."
 	}
 	"Twirl_Second_Phase_Rage_3"
 	{
 		"en"		"Its time to ramp the heater up to {crimson}max"
-		"ko"		"열을 더 올려보자고. {crimson}끝까지."
+		"ko"		"열기를 더 올려보자고. {crimson}끝까지."
+	}
+	
+	"Twirl_Final_Ivocation_Rage_1"
+	{
+		"en"		"I refuse to let you go beyond this point"
+		"ko"		"여기서 더 나아가게 둘 순 없어."
+	}
+	"Twirl_Final_Ivocation_Rage_2"
+	{
+		"en"		"{crimson}Perish."
+		"ko"		"{crimson}사라져라."
+	}
+	"Twirl_Final_Ivocation_Rage_3"	// Fetty Wap 3th track.
+	{
+		"en"		"{crimson}I Got a Glock in my rari."
+		"ko"		"{crimson}내 람보르기니에 글록을 싣고 있지."
+	}
+	"Twirl_Final_Ivocation_Rage_4"
+	{
+		"en"		"{crimson}I'm going to mount your heads on a staff as a warning for others not to fuck with me"
+		"ko"		"{crimson}다른 놈들이 감히 덤비지 못하도록 네 머리를 스태프에 꽂아둬야 겠어."
+	}
+	
+	"Twirl_Final_Ivocation_1"
+	{
+		"en"		"If you think I’m all you have to deal with, {crimson}well then..."
+		"ko"		"네가 상대해야 할 게 나뿐이라고 생각한다면, {crimson}글쎄..."
+	}
+	"Twirl_Final_Ivocation_2"
+	{
+		"en"		"Ahahah, I am a ruler Afterall, {purple}and a ruler usually has an army."
+		"ko"		"아하하, 난 이래뵈도 엄연히 지배자야. {purple}지배자에겐 보통 군대가 있기 마련이지."
+	}
+	"Twirl_Final_Ivocation_3"
+	{
+		"en"		"How's your aoe situation?"
+		"ko"		"광역 공격 대책은 좀 세워 뒀어?"
+	}
+	"Twirl_Final_Ivocation_4"
+	{
+		"en"		"Don't worry, the {aqua}Stellar Weaver{snow} won't be showing up from them"
+		"ko"		"걱정 마. 거기서 {aqua}스텔라 위버{snow}가 나오진 않을 테니까."
+	}
+	"Twirl_Final_Ivocation_5"
+	{
+		"en"		"Hmm, how about a bit of support, {crimson}for myself."
+		"ko"		"흠, 지원을 조금 받아 볼까? {crimson}물론 내 쪽으로 말이지."
+	}
+	"Twirl_Final_Ivocation_6"
+	{
+		"en"		"I refuse to let you go beyond this point"
+		"ko"		"여기서 더 나아가게 둘 순 없어."
+	}
+	"Twirl_Final_Ivocation_7"
+	{
+		"en"		"Aye, this’ll do, now go forth my minion’s {crimson}and crush them!"
+		"ko"		"좋아, 이 정도면 되겠어. 자, 내 하수인들아, {crimson}나아가서 놈들을 짓밟아라!"
+	}
+	"Twirl_Final_Ivocation_8"
+	{
+		"en"		"The Final Invocation!"
+		"ko"		"최종 소환!"
+	}
+	"Twirl_Final_Ivocation_9"
+	{
+		"en"		"{lightblue}Alaxios{default} Oh HIM, yeah I maaay have borrowed this from him, heh, just don't tell him or his ''god''lines might get hurt."
+		"ko"		"아. {lightblue}알락시오스{default}, 그 사람 말이지? 그래, 잠깐 빌려 왔어. 헤헤. 이르지는 말라고. 그의 심기를 불편하게 만들고 싶진 않거든."
+	}
+	
+	"Twirl_Adrenalive_1"
+	{
+		"en"		"Hm? Whats this? You seem eager?"
+		"ko"		"흠? 이게 뭐지? 꽤 의욕이 넘쳐 보이네?"
+	}
+	"Twirl_Adrenalive_2"
+	{
+		"en"		"Oh my, looks like this wont be as easy as i thought..."
+		"ko"		"어머, 생각만큼 쉽지는 않겠는데..."
+	}
+	"Twirl_Adrenalive_Desc"
+	{
+		"en"		"{green}Adrenalive rushes through your body, healing you and giving you an extra revive."
+		"ko"		"{green}아드레날린이 당신의 몸에 흐릅니다. 체력이 회복되고, 다운 가능 횟수가 1 증가합니다."
+	}
+	
+	"Twirl_Ion_Dance_1"
+	{
+		"en"		"These are just my own personal {crimson}ION{snow}'s. Ruina's ones are far scarier~"
+		"ko"		"이건 내 개인용 {crimson}이온{snow}이야. 루이나에 있는 건 훨씬 무섭다구~"
+	}
+	"Twirl_Ion_Dance_2"
+	{
+		"en"		"Watch your {crimson}Step{snow}!"
+		"ko"		"{crimson}발 밑 조심!"
+	}
+	"Twirl_Ion_Dance_3"
+	{
+		"en"		"Lookout {crimson}Above{snow}!"
+		"ko"		"{crimson}위를 봐야할 걸!"
+	}
+	"Twirl_Ion_Dance_4"
+	{
+		"en"		"I hope you're all split up, {crimson}Or else {snow}this won't end well."
+		"ko"		"너희가 흩어져 있길 바라. {crimson}안 그러면 끝이 좋지 않을 테니까."
+	}
+	"Twirl_Ion_Dance_5"
+	{
+		"en"		"Music is a core part of our {aqua}Magic{snow} too!"
+		"ko"		"음악도 우리 {aqua}마법{snow}의 핵심 요소거든!"
+	}
+	"Twirl_Ion_Dance_6"
+	{
+		"en"		"Dance little merc, dance..."
+		"ko"		"춤 출 시간이야, 꼬마 용병들..."
+	}
+	"Twirl_Ion_Dance_7"
+	{
+		"en"		"{crimson}Ehe{snow}."
+		"ko"		"{crimson}에헤{snow}."
+	}
+	"Twirl_Ion_Dance_8"
+	{
+		"en"		"Annihilation in {crimson}F# {snow}Minor"
+		"ko"		"{crimson}F# 단조의 전멸곡{snow}"
+	}
+	"Twirl_Ion_Dance_9"
+	{
+		"en"		"Oh, {crimson}poor{snow} you..."
+		"ko"		"아, {crimson}불쌍하기도 하지{snow}..."
+	}
+	
+	"Twirl_Retreat_1"
+	{
+		"en"		"{crimson}Twirly Wirly{snow}~"
+		"ko"		"{crimson}빙글빙글{snow}~"
+	}
+	"Twirl_Retreat_2"
+	{
+		"en"		"You really think you can {purple}catch {snow}me?"
+		"ko"		"정말 날 {purple}따라잡을{snow} 수 있다고 생각해?"
+	}
+	"Twirl_Retreat_3"
+	{
+		"en"		"Ahaaa, {crimson}bad."
+		"ko"		"어허, {crimson}나쁜 손{snow} 치워."
+	}
+	"Twirl_Retreat_4"
+	{
+		"en"		"So close, yet far"
+		"ko"		"거의 다 왔네. 근데 아직 멀었어."
+	}
+	"Twirl_Retreat_5"
+	{
+		"en"		"{crimson}Kururing{snow}~"
+		"ko"		"{crimson}쿠루링{snow}~"
+	}
+	"Twirl_Retreat_6"
+	{
+		"en"		"HEY, {purple}personal{snow} space buddy"
+		"ko"		"이봐, 친구. 여긴 내 {purple}사적 공간{snow}이라고."
+	}
+	"Twirl_Retreat_7"
+	{
+		"en"		"You think I'd let myself get {purple}surrounded{snow} like that?"
+		"ko"		"내가 순순히 {purple}포위당해줄 것 같아?"
+	}
+	"Twirl_Retreat_8"
+	{
+		"en"		"Don't surround me like that."
+		"ko"		"그렇게 둘러싸지 마."
+	}
+	"Twirl_Retreat_9"
+	{
+		"en"		"When will you learn this,{crimson} DON'T COME NEAR ME"
+		"ko"		"대체 언제쯤 배울래? {crimson}내게 가까이 오지 마!"
+	}
+	"Twirl_Retreat_10"
+	{
+		"en"		"My innocence, you won't get close to it that easily"
+		"ko"		"내 순수함에 손대려면 아직 멀었어."
+	}
+	"Twirl_Retreat_11"
+	{
+		"en"		"Aiya, how rude of you to come close."
+		"ko"		"숙녀에게 이렇게나 가까이 오다니, 무례하네."
+	}
+	"Twirl_Retreat_12"
+	{
+		"en"		"{crimson}Kuru Kuru{snow}~"
+		"ko"		"{crimson}쿠루쿠루{snow}~"
+	}
+	"Twirl_Retreat_13"
+	{
+		"en"		"Oh my, ganging up on someone as {purple}innocent{snow} as me?"
+		"ko"		"어머, 나같이 {purple}무고한{snow} 사람을 여러 명이 둘러싸는 구도라니.."
+	}
+	"Twirl_Retreat_14"
+	{
+		"en"		"Aaa, hai hai~"
+		"ko"		"아, 그럴 줄 알았어~"
+	}
+	
+	"Twirl_Exit_Rage_1"
+	{
+		"en"		"{crimson}Bye."
+		"ko"		"{crimson}잘 있어."
+	}
+	"Twirl_Exit_Rage_2"
+	{
+		"en"		"{crimson}I'm Leaving."
+		"ko"		"{crimson}그럼 이만."
+	}
+	
+	"Twirl_Exit_Wave10_1"
+	{
+		"en"		"Ah, this is great, I have high hopes for our next encounter."
+		"ko"		"아, 정말 좋았어. 다음 만남이 너무 기대되는 걸!"
+	}
+	"Twirl_Exit_Wave10_2"
+	{
+		"en"		"You're strong, I like that, till next time"
+		"ko"		"강하네. 마음에 들어. 다음에 보자."
+	}
+	"Twirl_Exit_Wave10_3"
+	{
+		"en"		"Ahaha, toodles."
+		"ko"		"아하하, 그럼 이만~"
+	}
+	"Twirl_Exit_Wave10_4"
+	{
+		"en"		"Magnificent, just what I was hoping for."
+		"ko"		"훌륭해. 딱 내가 바라던 바야."
+	}
+	"Twirl_Exit_Wave10_5"
+	{
+		"en"		"How interesting.."
+		"ko"		"흥미롭네.."
+	}
+	
+	"Twirl_Exit_Wave20_1"
+	{
+		"en"		"This was great fun, better not let me down and not make it to our next battle!"
+		"ko"		"정말 즐거웠어. 다음 전투까지 실망시키지 말고 꼭 살아남아!"
+	}
+	"Twirl_Exit_Wave20_2"
+	{
+		"en"		"Oh my, I may have underestimated you, this is great news"
+		"ko"		"어머, 내가 너희를 과소평가했을지도 모르겠네. 이거 좋은 소식인걸."
+	}
+	"Twirl_Exit_Wave20_3"
+	{
+		"en"		"I'll have to give {aqua}Stella{snow} a little treat, this has been great fun"
+		"ko"		"{aqua}스텔라{snow}에게 작은 선물을 줘야겠어. 정말 즐거웠거든."
+	}
+	"Twirl_Exit_Wave20_4"
+	{
+		"en"		"Most excellent, you bested me, hope to see you again!"
+		"ko"		"또 너네가 이겼네. 정말 훌륭해. 그럼 다음에 또 만나자!"
+	}
+	"Twirl_Exit_Wave20_5"
+	{
+		"en"		"The simulations seem to be off.."
+		"ko"		"시뮬레이션 결과가 잘못된 것 같은데.."
+	}
+	
+	"Twirl_Exit_Wave30_1"
+	{
+		"en"		"Even with my {purple}''Heavy Equipment''{snow} you bested me, good work"
+		"ko"		"{purple}'중장비'{snow}까지 썼는데 날 이기다니, 잘했어."
+	}
+	"Twirl_Exit_Wave30_2"
+	{
+		"en"		"You're quite strong, can't wait for our next match"
+		"ko"		"꽤 강하네. 다음 대결이 기대되는걸."
+	}
+	"Twirl_Exit_Wave30_3"
+	{
+		"en"		"I hope you all had as much fun as I did."
+		"ko"		"너희 모두 나만큼 즐거웠길 바라."
+	}
+	"Twirl_Exit_Wave30_4"
+	{
+		"en"		"You've all exceeded my expectations, I do believe our next and final battle will be the {crimson}most fun{snow}!"
+		"ko"		"기대 이상이야. 다음이자 마지막 전투는 분명 {crimson}가장 즐거울{snow} 거라고 믿어!"
+	}
+	"Twirl_Exit_Wave30_5"
+	{
+		"en"		"Whoever made those simulations is gonna get fired.."
+		"ko"		"너희가 지는 시뮬레이션이 있었는데, 그거 만든 놈들 전부 해고해야겠어."
+	}
+	
+	"Twirl_Exit_Trio_1"
+	{
+		"en"		"Nice job."
+		"ko"		"잘했어."
+	}
+	"Twirl_Exit_Trio_2"
+	{
+		"en"		"Ehe, this has been quite entertaining, I hope we meet again in the future"
+		"ko"		"에헤, 정말 즐거웠어. 언젠가 다시 만나길 바라."
+	}
+	"Twirl_Exit_Trio_3"
+	{
+		"en"		"Good luck with the rest~"
+		"ko"		"남은 여정에도 행운을 빌어~"
+	}
+	
+	"Twirl_Exit_Final_1"
+	{
+		"en"		"Ehe, this has been quite entertaining, I hope we meet again in the future"
+		"ko"		"에헤, 정말 즐거웠어. 언젠가 다시 만나길 바라."
+	}
+	"Twirl_Exit_Final_2"
+	{
+		"en"		"And so, our battle has ended, you've won this."
+		"ko"		"우리의 싸움은 이걸로 끝났고, 너희의 승리야."
+	}
+	"Twirl_Exit_Final_3"
+	{
+		"en"		"toodles!"
+		"ko"		"그럼 안녕!"
+	}
+	"Twirl_Exit_Final_4"
+	{
+		"en"		"{crimson}How Cute{snow}."
+		"ko"		"{crimson}귀엽기도 해라{snow}."
+	}
+	
+	"Twirl_TimeOver_Rage"
+	{
+		"en"		"Begone. Times Up."
+		"ko"		"꺼져. 시간 다 됐어."
 	}
 	
 	"Twirl_TimeOver_1"
 	{
-		"en"	"You won't defeat {purple}it{default} with that speed."
-		"ko"	"그런 속도로는 {purple}그것을{default} 상대로 따라잡을 수 없어."
+		"en"		"Ahhh, that was a nice walk, {crimson}time to end it"
+		"ko"		"흐아아암.. 산책 잘했네. 이제 {crimson}끝낼 시간{snow}이야."
 	}
 	"Twirl_TimeOver_2"
 	{
-		"en"	"... Don't disappoint {darkblue}Kahmlstein{default} like this..."
-		"ko"	"... {darkblue}카멜슈타인{default}을 이런 식으로 실망시키지는 마..."
+		"en"		"Heh, I suppose that was somewhat fun, now for the cleanup..."
+		"ko"		"헤, 나름 재밌긴 했어. 이제 뒷정리를 해볼까..."
 	}
 	"Twirl_TimeOver_3"
 	{
-		"en"	"As much of an ass{darkblue}Kahmlstein{default} was... he did have something in him."
-		"ko"	"{darkblue}카멜슈타인{default}은 대단한 인간이었지... 그런 그에게도 뭔가 특별한 게 있었고."
+		"en"		"I must say {aqua}Stella{snow} may have overhyped this.. Alass, time to kill you all"
+		"ko"		"{aqua}스텔라{snow}가 좀 과장해서 말한 것 같네.. 아쉽지만, 이제 너희를 죽일 시간이야."
+	}
+	"Twirl_TimeOver_4"
+	{
+		"en"		"Amazingly you were all too slow to die. And I've got a meeting I need to catch."
+		"ko"		"놀랍게도 너희는 죽는 데 너무 오래 걸렸어. 난 가봐야 할 회의가 있는데 말이지."
+	}
+	"Twirl_TimeOver_5"
+	{
+		"en"		"Times up, I’ve got better things to do, so here, {crimson}have this parting gift{snow}!"
+		"ko"		"시간 끝이야. 더 중요한 일이 있으니, 자, {crimson}작별 선물이나 받아{snow}!"
+	}
+	"Twirl_TimeOver_6"
+	{
+		"en"		"Clearly you all lack proper fighting spirit to take this long, that’s it, {crimson}I’m ending this."
+		"ko"		"이렇게 오래 걸리는 걸 보니 싸울 의지가 부족하군. 좋아, {crimson}내가 끝내 주겠어."
+	}
+	"Twirl_TimeOver_7"
+	{
+		"en"		"My oh my, even after having such a large amount of time, you still couldn't do it, shame"
+		"ko"		"이렇게 많은 시간을 줬는데도 해내지 못하다니, 정말 실망이야."
+	}
+	"Twirl_TimeOver_8"
+	{
+		"en"		"There is a difference being slow and being cautious or methodical, clearly you all are the former"
+		"ko"		"신중하거나 체계적일 순 있지. 근데 그런 건 그냥 굼뜬 거하고는 다르거든. 너희는 명백히 후자야."
+	}
+	"Twirl_TimeOver_9"
+	{
+		"en"		"Tell me why you're this slow?"
+		"ko"		"대체 왜 이렇게 느린 거야?"
 	}
 	
-	"Twirl_Anger_1"
+	"Twirl_TimeOver_Freeplay_1"
 	{
-		"en"	"Hey man, you're really hurting me here..."
-		"ko"	"오우야, 좀 세게 때리는데..."
+		"en"		"Well considering you all were just some randoms this was to be expected"
+		"ko"		"너희가 그냥 아무나 모인 집단이라는 걸 생각하면 예상했던 결과네."
 	}
-	"Twirl_Anger_2"
+	"Twirl_TimeOver_Freeplay_2"
 	{
-		"en"	"Ouch ouch! Time out, time out!"
-		"ko"	"어우! 잠깐 타임!"
+		"en"		"Guess my sense of magic's been off lately, this was exceedingly boring."
+		"ko"		"요즘 마력 감각이 무뎌졌나 봐. 너무 지루했어."
 	}
-	
-	"Twirl_Death_1"
+	"Twirl_TimeOver_Freeplay_3"
 	{
-		"en"	"Okay... ouch.. ow..."
-		"ko"	"알겠으니 그만.. 아파라..."
-	}
-	"Twirl_Death_2"
-	{
-		"en"	"Okay Okay you won! For now."
-		"ko"	"알았어, 너희 승리야! ...지금까지는."
-	}
-	"Twirl_Death_3"
-	{
-		"en"	"See you next time.... this hurts.."
-		"ko"	"다음에 보자고.... 좀 아프네.."
-	}
-	"Twirl_Death_4"
-	{
-		"en"	"I was going to insult you, but I asked for this..."
-		"ko"	"너희 좀 골려주려고 했는데 내가 얻어맞았네..."
+		"en"		"{crimson}How Cute{snow}."
+		"ko"		"{crimson}귀엽기도 해라{snow}."
 	}
 	
-	"Twirl_SpecialAttack"
+	"Twirl_Trio_Stella_First_Died"
 	{
-		"en"	"Here's my finest creation at work!"
-		"ko"	"내 걸작을 보라고!"
+		"en"		"{crimson}Karlas{snow}! Switch to me, I'm now your priority"
+		"ko"		"{crimson}칼라스{snow}! 나와 교대해. 이제 내가 최우선 목표야."
 	}
 	
-	"Twirl_Response_SilvesterSupport_1"
+	"Twirl_Trio_Karlas_First_Died_1"
 	{
-		"en"	"Oh? Looks like {gold}Silvester{default} Is finally coming!"
-		"ko"	"어? 드디어 {gold}실베스터{default}가 왔네!"
+		"en"		"Hey, just because hes the only man here doesn't mean he should have died first."
+		"ko"		"야. 쟤가 여기 유일한 남자라고 해서 먼저 죽여야 했던 건 아니잖아."
 	}
-	"Twirl_Response_SilvesterSupport_2"
+	"Twirl_Trio_Karlas_First_Died_2"
 	{
-		"en"	"The lazy ass {gold}cat{default} is coming right up!"
-		"ko"	"저 게을러터진 {gold}고양이{default}가 이제야 왔네!"
+		"en"		"Oh, neat, now {aqua}Stella{snow}'s all mine."
+		"ko"		"오, 좋아. 이제 {aqua}스텔라{snow}는 내 꺼네."
 	}
-	"Twirl_Response_SilvesterSupport_3"
+	"Twirl_Trio_Karlas_First_Died_3"
 	{
-		"en"	"Hey look, traning partner!"
-		"ko"	"어, 저것 봐! 훈련 파트너가 왔어!"
-	}
-	"Twirl_Response_SilvesterSupport_4"
-	{
-		"en"	"New phone who this? Oh, you finally came!"
-		"ko"	"부재중 전화? 뭐야 이건? 아... 드디어 오는구나!"
+		"en"		"Huh, there goes my rival."
+		"ko"		"흠, 내 라이벌이 사라졌군."
 	}
 	
-	"Twirl_Response_SilvesterHere_1"
+	"Twirl_Trio_Both_Died_1"
 	{
-		"en"	"Ah no worries! I'll totally forgive you!"
-		"ko"	"아, 걱정 마! 오늘 늦은 건 봐줄게."
+		"en"		"Ohoh, You think this is gonna end easily, you are {crimson}SORELY MISTAKEN."
+		"ko"		"오호호, 이게 쉽게 끝날 거라고 생각해? 아주 {crimson}크나 큰 착각이야."
 	}
-	"Twirl_Response_SilvesterHere_2"
+	"Twirl_Line_Both_Died_2"
 	{
-		"en"	"You're such a nut you know that right?"
-		"ko"	"너 가끔 가다 좀 과하게 바보 같을 때가 있는거 알고 있지?"
+		"en"		"{crimson}I won't let you win."
+		"ko"		"{crimson}너희가 이기게 두진 않겠어."
 	}
-	"Twirl_Response_SilvesterHere_3"
+	"Twirl_Line_Both_Died_3"
 	{
-		"en"	"Sorry mercs this guy is signed with ''i dont wanna''"
-		"ko"	"미안 용병 친구들. 얘 지금 ''나 이거 안 할래''라고 떼 쓰고 있거든."
-	}
-	"Twirl_Response_SilvesterHere_4"
-	{
-		"en"	"Just don't attack the same guy as me, thats unfair!"
-		"ko"	"나랑 싸우고 있는 사람은 공격하지 마. 그건 불공평해."
+		"en"		"{crimson}This is where your story ends."
+		"ko"		"{crimson}너희 이야기는 여기서 끝이야."
 	}
 	
-	"Twirl_Response_SilvesterSpecialAttack"
-	{
-		"en"	"Guess I'll try harder aswell, or try to."
-		"ko"	"나도 열심히 노력해야겠네. 아니면... 그냥 노력을 안 해야되나?"
-	}
-	
-	// Nemal Weapon Lines.
-	"Twirl_Response_Sensal_Scythe_1"
+	// Twirl Weapon Lines.
+	"Twirl_Response_Lancelot_Wings"
 	{
 		"#format"	"{1:N}"
-		"en"		"Cool Scythe! Can it be yellow though {gold}{1}{default}?"
-		"ko"		"멋진 낫인데! 거기서 더 노란 색만 물들면 센살의 것이 되겠어. 안 그래, {gold}{1}{default}?"
+		"en"		"Pointy stick man. mr {gold}{1}{snow} stole their wings."
+		"ko"		"{gold}{1}{snow}씨가 뾰족한 막대기 양반의 날개를 훔쳤네."
 	}
-	"Twirl_Response_Sensal_Scythe_2"
-	{
-		"en"	"I'll let you in on a secret, {blue}Sensal's{default} weapon isnt even from him... its from {gold}Silvester{default}! .... i think, i may be wrong."
-		"ko"	"하나 알려줄 게 있는데, 사실... 그 무기는 {blue}센살{default} 꺼가 아니라 {gold}실베스터{default}의 물건이래! ... 아님 말고. 나도 어디서 들은거야."
-	}
-	"Twirl_Response_Fusion_1"
-	{
-		"en"	"{gold}Silvester{default} can't stop himself from showing his weapons can't he?"
-		"ko"	"{gold}실베스터{default} 저 웬수는 또 무기를 막 버리고 다니네?"
-	}
-	"Twirl_Response_Fusion_2"
-	{
-		"en"	"{blue}Sensal{default} Wasnt kidding when he said {gold}Silvester{default} loves showing off."
-		"ko"	"{blue}센살{default}이 {gold}실베스터{default}가 무기를 막 버리고 다닌다고 하던데 그 말이 농담이 아닌가 보네."
-	}
-	"Twirl_Response_Siccerino_1"
+	"Twirl_Response_Ruliana_Wings"
 	{
 		"#format"	"{1:N}"
-		"en"		"Nice pair of Siccors {gold}{1}{default}!"
-		"ko"		"가위 한 쌍이 참 멋진데, {gold}{1}{default}!"
+		"en"		"Why. {gold}{1}{snow}. Why do you have her wings?"
+		"ko"		"{gold}{1}{snow}. 왜 그 애의 날개를 가지고 있는 거지?"
 	}
-	"Twirl_Response_Siccerino_2"
+	
+	"Twirl_Response_JDavid_1"
 	{
-		"en"	"Ever tried Snipping slower?"
-		"ko"	"저격 한 번 해보려고?"
+		"en"		"J. Why."
+		"ko"		"J. 왜."
 	}
-	"Twirl_Response_Waldch_Sword_1"
+	"Twirl_Response_JDavid_2"
 	{
-		"en"	"Aha! {darkblue}Waldch{default} DID accept my blade!"
-		"ko"	"아하! {darkblue}왈츠{default}가 내 검을 버리진 않았구나!"
+		"en"		"J. Please, a one-way ticket to heaven."
+		"ko"		"J. 제발, 착하게 살았으니 천국행 편도 티켓 하나만 주세요."
 	}
-	"Twirl_Response_Waldch_Sword_2"
+	"Twirl_Response_Artvin"
 	{
-		"en"	"{darkblue}Waldch{default} You said you HATED IT!!!!!!!!!!!!"
-		"ko"	"{darkblue}왈츠{default}... 너 저 무기 싫다면서!!!!!!!!!"
+		"en"		"Mr. Art. those are the wrong wings."
+		"ko"		"아트빈 씨? 그 날개가 아닌 거 같은데요."
 	}
-	"Twirl_Response_Nearl_Spear_1"
+	"Twirl_Response_Fish"
 	{
-		"en"	"{gold}Silvester{default} went there too?!."
-		"ko"	"{gold}실베스터{default}가 거기도 갔었어?"
+		"en"		"Fish. (of the unknown variety). Tell me, what do you see, do you see gold, rocks, jewls, crystals, diamonds, or maybe.. a friend?"
+		"ko"		"(알 수 없는 종의) 물고기라. 말해 봐요, 지금 뭘 보고 있죠? 금? 바위? 보석? 수정? 다이아몬드? 그것도 아니면... 혹시 친구?"
 	}
-	"Twirl_Response_Nearl_Spear_2"
-	{
-		"en"	"{gold}Silvester{default}... invite me next time to Grunwald..."
-		"ko"	"{gold}실베스터{default}... 다음 번엔 나도 그룬왈드에 초대해줘..."
-	}
-	"Twirl_Response_Kahlm_Fist_1"
-	{
-		"en"	"{darkblue}Kahmlstein{default} was a rude asshole, But atleast he reedemed himself."
-		"ko"	"{darkblue}카멜슈타인{default}은 무례한 사람이었지. 적어도 그는 자신의 잘못을 만회했지만."
-	}
-	"Twirl_Response_Kahlm_Fist_2"
+	
+	"Twirl_Response_Twirl_Wings"
 	{
 		"#format"	"{1:N}"
-		"en"		"Trying to keep his memory going {gold}{1}{default}? I guess {darkblue}Kahmlstein{default} deserves it after what he did at the end."
-		"ko"		"그를 추모하려는 거야, {gold}{1}{default}? 그래 뭐... {darkblue}카멜슈타인{default}이 마지막에 한 일을 생각하면..."
+		"en"		"Bruh {gold}{1}{snow}. THOSE ARE MY WINGS"
+		"ko"		"아니, {gold}{1}{snow}. 그거 내 날개잖아!"
 	}
+	"Twirl_Response_Helia_Wings"
+	{
+		"#format"	"{1:N}"
+		"en"		"Why, how, where, {gold}{1}{snow} did you get Helia's Wings?"
+		"ko"		"{gold}{1}{snow}. 어떻게, 어디서, 왜 헬리아의 날개를 가져온 거지?"
+	}
+	"Twirl_Response_Stella_Wings"
+	{
+		"#format"	"{1:N}"
+		"en"		"Stella? what, no, you're {gold}{1}{snow}, what"
+		"ko"		"스텔라? 아니, 잠깐. 너는 {gold}{1}{snow}잖아. 뭐야?"
+	}
+	"Twirl_Response_Karlas_Wings"
+	{
+		"#format"	"{1:N}"
+		"en"		"Wait when did {crimson}Karlas{snow} start speak-. WAIT YOURE {gold}{1}{snow}, A MERC, NOT HIM"
+		"ko"		"어.. 언제부터 {crimson}카를라스{snow}가 말을 하기 시작했- 잠깐, 넌 카를라스가 아니라 용병 {gold}{1}{snow}잖아!"
+	}
+	
+	"Twirl_Response_Magnesis_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"I've had it up to here MISTER {gold}{1}{snow}."
+		"ko"		"{gold}{1}{snow}, 계속 그렇게 날 만질거야? 나 정말 참을 만큼 참았거든?"
+	}
+	"Twirl_Response_Magnesis_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"How would you feel {gold}{1}{snow} if I grabbed YOU?"
+		"ko"		"{gold}{1}{snow}, 내가 널 그런 식으로 붙잡으면 기분이 어떨 것 같아?"
+	}
+	
+	"Twirl_Response_Yakuza_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Oh god another one. YOUR STRENGTH {gold}{1}{snow} IS FAKE"
+		"ko"		"맙소사, 또 다른 멍청이 납셨군. {gold}{1}{snow}, 너의 힘은 가짜에 불과해!"
+	}
+	"Twirl_Response_Yakuza_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"I would prefer if your arms did not touch me mr {gold}{1}{snow}."
+		"ko"		"{gold}{1}{snow} 씨? 당신 팔을 내 쪽에서 닿지 않도록 치워주셨음 좋겠네요."
+	}
+	
 	"Twirl_Response_Blitzkreig_Kit_1"
 	{
-		"en"	"Always hated the concept of the machine {crimson}Blitzkrieg{default}..."
-		"ko"	"{crimson}블리츠크리그{default}의 컨셉은 항상 마음에 들지 않더라고..."
+		"#format"	"{1:N}"
+		"en"		"Oh my, {gold}{1}{snow}, you're trying to copy the Machine?"
+		"ko"		"어머, {gold}{1}{snow}. 설마 그 기계를 흉내 내려는 거니?"
 	}
 	"Twirl_Response_Blitzkreig_Kit_2"
 	{
 		"#format"	"{1:N}"
-		"en"		"Why are you trying to be like it {gold}{1}{default}? I guess {crimson}Blitzkrieg{default} was cool..."
-		"ko"		"왜 그 기계를 따라하려는 거야, {gold}{1}{default}? {crimson}블리츠크리그{default}가 멋져보여서는 아니라고 해줘..."
+		"en"		"Ah, how foolish {gold}{1}{snow} Blitzkrieg was a poor mistake to copy..."
+		"ko"		"아, 어리석은 {gold}{1}{snow}. 블리츠크리크를 따라하는 건 형편없는 실수라고..."
 	}
-	"Twirl_Response_Guln_Sword_1"
+	
+	"Twirl_Response_Cosmic_Terror_1"
 	{
-		"en"	"I miss {crimson}Guln{default}."
-		"ko"	"그걸 보니까 {crimson}굴른{default}이 그리워."
+		"en"		"Ah, the Cosmic Terror, haven't seen that relic in a long while"
+		"ko"		"아, 코스믹 테러라. 그 유물은 정말 오랜만에 보네."
 	}
-	"Twirl_Response_Guln_Sword_2"
-	{
-		"en"	"The world was too cruel to {crimson}Guln{default}..."
-		"ko"	"{crimson}굴른{default}은 너무 허망하게 가버렸지..."
-	}
-	"Twirl_Response_Lego_1"
-	{
-		"en"	"OW! WHY LEGOS??"
-		"ko"	"아야! 이거 레고야??"
-	}
-	"Twirl_Response_Lego_2"
-	{
-		"en"	"Just cause i can WALK doesnt mean i gotta step on LEGO"
-		"ko"	"내가 발을 딛는 모든 곳에 레고를 둘 필요가 있었어?? 정말??"
-	}
-	"Twirl_Response_Board_1"
+	"Twirl_Response_Cosmic_Terror_2"
 	{
 		"#format"	"{1:N}"
-		"en"		"Big shield {gold}{1}{default}, compensating?"
-		"ko"		"엄청 큰 방패네.. {gold}{1}{default}. 아픈 건 싫은가 보지?"
+		"en"		"The moon is a deadly laser, am I right {gold}{1}{snow}?"
+		"ko"		"달빛은 치명적인 레이저가 될 수 있지. 내 말이 맞지, {gold}{1}{snow}?"
 	}
-	"Twirl_Response_Board_2"
+	
+	"Twirl_Response_Lantean_Staff_1"
 	{
-		"en"	"Parry me right... and you'll be set for {purple}it{default}."
-		"ko"	"이것도 패링해보라고. 그러면 {purple}그것{default} 상대로도 버틸 수 있을거야."
+		"#format"	"{1:N}"
+		"en"		"Ah, {gold}{1}{snow}, Those drones, {crimson}how cute..."
+		"ko"		"아, {gold}{1}{snow}. 저 드론들, {crimson}정말 귀엽단 말이지..."
 	}
+	"Twirl_Response_Lantean_Staff_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"I applaud your efforts {gold}{1}{snow} for trying to use the Lantean staff here..."
+		"ko"		"여기서 랜턴 스태프를 쓰려 하다니, {gold}{1}{snow}. 그 노력에 박수를 보내지..."
+	}
+	
+	"Twirl_Response_Yamato_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Oh, {gold}{1}{snow}'s a little {aqua}Motivated"
+		"ko"		"오, {gold}{1}{snow}. 조금 {aqua}의욕이 넘치나봐?"
+	}
+	"Twirl_Response_Yamato_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Go fourth {gold}{1}{snow}, AND BECOME {aqua}THE STORM THAT IS APROACHING{crimson}!"
+		"ko"		"나아가라, {gold}{1}{snow}. 그리고 {aqua}다가오는 폭풍 그 자체가 되어라{crimson}!"
+	}
+	
+	"Twirl_Response_Beam_Wand_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Ah, dual energy Pylons, nice choice {gold}{1}{snow}."
+		"ko"		"아, 쌍 에너지 파일런이라. 좋은 선택이야, {gold}{1}{snow}."
+	}
+	"Twirl_Response_Beam_Wand_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"So, are you Team {aqua}Particle Cannon{snow} or Team{orange} Particle Beam{gold} {1}{snow}?"
+		"ko"		"{gold}{1}{snow}, 너는 {aqua}입자 포격포{snow}파야? 아니면 {orange}입자 빔{gold}{1}{snow}파야?"
+	}
+	
+	"Twirl_Response_Fantasy_Blade_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Oh how {crimson}cute{gold} {1}{snow} you're using {crimson}Karlas's{snow} Old blade"
+		"ko"		"어머, {gold}{1}{snow}. {crimson}카를라스{snow}가 옛날에 쓰던 검을 쓰다니, 정말 {crimson}귀여운 걸{snow}."
+	}
+	"Twirl_Response_Fantasy_Blade_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"The Fantasy blade is quite the weapon, {gold}{1}{snow} but you're not using it correctly."
+		"ko"		"판타지 블레이드는 꽤 좋은 무기야. {gold}{1}{snow}, 근데 너는 그걸 제대로 쓰는 거 같진 않네."
+	}
+	
+	"Twirl_Response_Quincy_Bow_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Oh, {gold}{1}{snow}'s being a {aqua}Quincy{snow}, quick call the {crimson}Shinigami{snow}!"
+		"ko"		"오, {gold}{1}{snow}. 너 {aqua}퀸시{snow}였구나? 빨리 {crimson}사신{snow}을 불러야 겠는데!"
+	}
+	"Twirl_Response_Quincy_Bow_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Ah, what a shame {gold}{1}{snow} Here I thought you were a true {aqua}Quincy"
+		"ko"		"아, 아쉬운 걸. 난 {gold}{1}{snow}가 진짜 {aqua}퀸시{snow}인 줄 알았는데."
+	}
+	
+	"Twirl_Response_Prismatic_Wand_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"That laser is still quite young {gold}{1}{snow} It needs more upgrades"
+		"ko"		"그 레이저는 아직 한참 약해, {gold}{1}{snow}. 업그레이드가 더 필요해."
+	}
+	"Twirl_Response_Prismatic_Wand_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Your Prismatic Laser has potential {gold}{1}{snow}!"
+		"ko"		"{gold}{1}{snow}, 그 프리즘 레이저는 가능성이 있어!"
+	}
+	
+	"Twirl_Response_Pulse_Cannon_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"I see, {gold}{1}{snow}, You decided to go down the pulse path!"
+		"ko"		"그런건가. {gold}{1}{snow}. 펄스 방식으로 가기로 결정했나 보네!"
+	}
+	"Twirl_Response_Pulse_Cannon_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"I do quite enjoy a faster pulsating laser, just like you {gold}{1}{snow} by the looks of it"
+		"ko"		"나는 더 빠르게 맥동하는 레이저가 더 마음에 들거든. 너도 그런 거 같은데. 맞지, {gold}{1}{snow}?"
+	}
+	
+	"Twirl_Response_Nightmare_Cannon_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Oh my, are you {gold}{1}{snow}, trying to cosplay as {aqua}Stella{snow}?"
+		"ko"		"어머, {gold}{1}{snow}. {aqua}스텔라{snow} 코스프레라도 하려는 거야?"
+	}
+	"Twirl_Response_Nightmare_Cannon_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"That Laser Tickles {gold}{1}{crimson} Get a bigger laser{aqua} NOW!"
+		"ko"		"그 레이저는 간지러울 뿐이야, {gold}{1}{snow}! {crimson}더 큰 레이저를 가져와{aqua}, 당장!"
+	}
+	
+	"Twirl_Response_Feedback_Loop_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"A cascading feedback loop laser, ballsy {gold}{1}"
+		"ko"		"연쇄 피드백 루프 레이저라니, 배짱 한번 좋네, {gold}{1}."
+	}
+	"Twirl_Response_Feedback_Loop_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Prismatic Feedback loop is a very powerful weapon, but its also quite hard to master... {gold}{1}"
+		"ko"		"프리즘 피드백 루프는 아주 강력하지만, 숙달하기도 꽤 어려워. {gold}{1}."
+	}
+	
+	"Twirl_Response_Impact_Lance_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"You’re seriously trying to poke me with that thing {gold}{1}{snow}?"
+		"ko"		"설마 그걸로 날 찌르려는 건 아니지, {gold}{1}{snow}?"
+	}
+	"Twirl_Response_Impact_Lance_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"{gold}{1}{snow}, You don't have the needed skills to properly use the lance."
+		"ko"		"{gold}{1}{snow}, 너는 그 랜스를 제대로 다룰 실력이 없어."
+	}
+	
+	"Twirl_Response_Gravaton_Spell_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"How does it feel to control a fraction of gravity{gold} {1}{snow}?"
+		"ko"		"중력의 일부를 조종하는 기분이 어때, {gold}{1}{snow}?"
+	}
+	"Twirl_Response_Gravaton_Spell_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"The Gravaton wand was only a partial success, and yet {gold}{1}{snow}, you’re using it..."
+		"ko"		"중력 마법은 부분적인 성공작에 불과해. 너가 쓰고 있는 그거 말하는 거 맞아. {gold}{1}{snow}."
+	}
+	
+	"Twirl_Response_Bobs_Sexy_Gun"
+	{
+		"#format"	"{1:N}"
+		"en"		"BOBS GUN?! {crimson}GET AWAY FROM ME!!!!!!!!!! {gold}{1}"
+		"ko"		"밥의 총이라고?! {crimson}{gold}{1}, 당장 내게서 떨어져!!!!!!!!!!"
+	}
+	
+	"Twirl_Response_Reiuji_Wand_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"So {gold}{1}{snow}, you got ahold of Rulianas's Launcher huh?"
+		"ko"		"그러니까 {gold}{1}{snow}, 루리아나의 무기를 손에 넣었다는 거지? 허."
+	}
+	"Twirl_Response_Reiuji_Wand_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Too bad that the weapon your using {gold}{1}{snow}, is primarily meant for horde control."
+		"ko"		"{gold}{1}{snow}, 안됐지만 그 무기는 주로 대규모 적을 제압하는 용도라고."
+	}
+	
+	"Twirl_Response_Passenger_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"I'll be frank {gold}{1}{snow}, even though that wand looks like one of ours, it ain't"
+		"ko"		"{gold}{1}{snow}. 솔직히 말하자면, 그 지팡이는 우리 것처럼 생겼지만 아니야."
+	}
+	"Twirl_Response_Passenger_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"I'm somewhat ashamed to admit that the wand you're using {gold}{1}{snow}, wasn't made by us, which is frankly a shock considering it has all the characteristics of our wands"
+		"ko"		"{gold}{1}{snow}. 너가 쓰는 완드가 우리 작품이 아니라는 건 조금 부끄럽지만 인정해야겠네. 우리 완드의 특징을 전부 갖췄는데도 말이지. 꽤 놀라운 일이야."
+	}
+	
+	"Twirl_Response_Ruina_Drone_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"NICE KNIFE {gold}{1}{snow}."
+		"ko"		"멋진 칼이야, {gold}{1}{snow}!"
+	}
+	"Twirl_Response_Ruina_Drone_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"It's british shanking time {gold}{1}{snow}!"
+		"ko"		"좋아. {gold}{1}{snow}, 런던식 인사를 하자는 거지?"
+	}
+	"Twirl_Response_Ruina_Drone_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"OI, {gold}{1}{snow} YOU GOT A LOISCENCE FOR THAT KNOIFE?"
+		"ko"		"야, {gold}{1}{snow}! 허가증은 받고 그 칼 들고 다니는 거지?"
+	}
+	
+	"Twirl_Response_Sigil_Blade_1"
+	{
+		"#format"	"{1:N}"
+		"en"		"Huh, how did you {gold}{1}{snow} manage to turn that worthless thing into a somwhat competent weapon?"
+		"ko"		"허. {gold}{1}{snow}, 그 쓸모없던 물건을 어떻게 그럭저럭 쓸 만한 무기로 만든 거지?"
+	}
+	"Twirl_Response_Sigil_Blade_2"
+	{
+		"#format"	"{1:N}"
+		"en"		"Wait, isn't that Shard from my Airships's fog-lamps? How, where did you {gold}{1}{snow} find that?"
+		"ko"		"잠깐, 저거 내 비행선 안개등에 달린 파편 아니야? {gold}{1}{snow}, 그걸 대체 어디서 찾았니?"
+	}
+	"Twirl_Response_Sigil_Blade_3"
+	{
+		"#format"	"{1:N}"
+		"en"		"I applaude you {gold}{1}{snow} for turning that \"thing\" into a weapon"
+		"ko"		"그 '물건'을 무기로 만들다니, {gold}{1}{snow}. 정말 감탄스럽군."
+	}
+	
 	"Twirl_Response_Amphi_1"
 	{
 		"#format"	"{1:N}"
-		"en"		"Hey hey thats my good {snow}friends{default} weapon {gold}{1}{default}! She's a very nice Alminan."
-		"ko"		"이봐, 그건 내 소중한 {snow}친구{default}의 물건이잖아? 그녀가 좋은 사람이긴 해."
+		"en"		"Oh, so you know Amphi {gold}{1}{snow}? Do you perchance have a picture of her...?"
+		"ko"		"오, 암피를 아는 거니, {gold}{1}{snow}? 혹시 그 애 사진 가지고 있어?"
 	}
 	"Twirl_Response_Amphi_2"
 	{
 		"#format"	"{1:N}"
-		"en"		"Oh {snow}Amphi{default}, looks like you have a student, their name is {gold}{1}{default}!"
-		"ko"		"오, {snow}임피{default}, 아무래도 전학생 한 명 받아야할 것 같은데? 이름이 {gold}{1}{default}라고 하네!"
+		"en"		"Such an interesting weapon, say {gold}{1}{snow} Where did you get that from?"
+		"ko"		"정말 흥미로운 무기야. {gold}{1}{snow}, 그건 어디서 구한 거니?"
 	}
-	"Twirl_Response_Bobs_Sexy_Gun"
-	{
-		"en"		"We're here to train.... why......"
-		"ko"		"우린 분명 훈련 하러 온건데.... 왜..?"
-	}
-	"Twirl_Response_Angelica_Shotgonnus_1"
+	
+	"Twirl_Response_Raigeki_1"
 	{
 		"#format"	"{1:N}"
-		"en"		"Hey thats my weapon {gold}{1}{default}!"
-		"ko"		"야! 그건 내 무기잖아, {gold}{1}{default}!"
+		"en"		"ITS TIME TO, DU-DU-DU-DU-DUEL {gold}{1}{snow}!"
+		"ko"		"{gold}{1}{snow}, 듀얼 개시!"
 	}
-	"Twirl_Response_Angelica_Shotgonnus_2"
+	"Twirl_Response_Raigeki_2"
 	{
 		"#format"	"{1:N}"
-		"en"		"An one on one battle{gold}{1}{default}?"
-		"ko"		"1:1 결투 좀 해볼까, {gold}{1}{default}?"
+		"en"		"I use pot of greed {gold}{1}{snow}."
+		"ko"		"난 욕망의 항아리를 발동하겠다. {gold}{1}{snow}."
 	}
-	"Twirl_Response_HHH_Axe"
+	
+	"Twirl_Response_Chemical_Thrower_1"
 	{
 		"#format"	"{1:N}"
-		"en"		"You're just a little guy {gold}{1}{default}! wait ow OW that hurts!!!"
-		"ko"		"넌 한낱 애송이에 불과해, {gold}{1}{default}! 잠깐! 그거 너무 아프잖아!!!"
+		"en"		"I'm not quite fond of {gold}{1}{snow} using chemical warfare, quite barbaric if I'm being honest"
+		"ko"		"{gold}{1}{snow}, 너가 화학전을 벌이는 건 별로 마음에 들지 않네. 솔직히 너무 야만적이라고 생각해."
 	}
-	"Twirl_Response_Mlynar_Newspaper_1"
+	"Twirl_Response_Chemical_Thrower_2"
 	{
 		"#format"	"{1:N}"
-		"en"		"Care {gold}{1}{default}, dammit!"
-		"ko"		"아니... 신문 보지말라고! 훈련에 집중해! {gold}{1}{default}, 좀!"
+		"en"		"Spread the chemicals {gold}{1}{snow}, spread the that which will burn the world to nothing but pools of acid!"
+		"ko"		"화학 물질을 퍼뜨려라 {gold}{1}{snow}! 세상에 산성 웅덩이만 남을 때까지 불태울 그 물질을 퍼뜨려라!"
 	}
-	"Twirl_Response_Mlynar_Newspaper_2"
+	
+	"Twirl_Response_Soldine_1"
 	{
 		"#format"	"{1:N}"
-		"en"		"You aren't even fighting me are you {gold}{1}{default}?! Get off your paper!"
-		"ko"		"뭐야, 나랑 싸우는 데 흥미라도 떨어진 거야!? {gold}{1}{default}! 빨리 그 신문 내려놔!"
+		"en"		"uhhh, shouldn't you {gold}{1}{snow}, be on my side? or did {gold}Expidonsa{snow} finally have enough of my \"Twirly Antics\"?"
+		"ko"		"어... {gold}{1}{snow}, 너는 내 편이어야 하는 거 아니야? 아니면 {gold}엑스피돈사{snow}도 드디어 내 '빙글빙글 장난'에 질린 걸까?"
 	}
-	"Twirl_Response_Trash_Cannon_1"
+	"Twirl_Response_Soldine_2"
 	{
 		"#format"	"{1:N}"
-		"en"		"Your Trash doesn't scare me {gold}{1}{default}."
-		"ko"		"그런 쓰레기로 날 위협하진 못해. {gold}{1}{default}."
+		"en"		"{gold}{1}{snow} has just gotta be a broken unit, hope {gold}Expidonsa{snow} won't mind too bad if I bust it up before they get a chance to recover it..."
+		"ko"		"{gold}{1}{snow}는 아무래도 고장 난 유닛인 게 틀림없네. {gold}엑스피돈사{snow}가 회수하기 전에 내가 박살내도 별말 안 하겠지?"
 	}
-	"Twirl_Response_Trash_Cannon_2"
+	
+	"Twirl_Response_Magia_Fractal_1"
 	{
 		"#format"	"{1:N}"
-		"en"		"Why is there a bomb in your trash, {gold}{1}{default}?"
-		"ko"		"왜 쓰레기 안에 폭탄이 들어있는거야, {gold}{1}{default}?"
+		"en"		"Ahhh, so your trying to use my own power's against me {gold}{1}{snow}?"
+		"ko"		"*한숨* {gold}{1}{snow}. 그러니까.. 지금 내 힘을 나에게 써먹어보겠다는 거야?"
 	}
-	"Twirl_Response_Star_Shooter_1"
+	"Twirl_Response_Magia_Fractal_2"
 	{
 		"#format"	"{1:N}"
-		"en"		"Hey you're using my Star Shooter {gold}{1}{default}!"
-		"ko"		"야! 그건 내 유성 발사기잖아, {gold}{1}{default}!"
+		"en"		"Tell me {gold}{1}{snow} Do you take pleasure in stealing other people's belongings?"
+		"ko"		"{gold}{1}{snow}, 손버릇이 좀 나쁜가봐? 남의 물건도 막 훔치고."
 	}
-	"Twirl_Response_Star_Shooter_2"
+	"Twirl_Response_Magia_Fractal_3"
 	{
 		"#format"	"{1:N}"
-		"en"		"Oh how i wanna use that weapon again... can i borrow your Star Shooter, {gold}{1}{default}?"
-		"ko"		"그거 보니까 나도 갑자기 쓰고 싶어지는데.. 니 유성 발사기 좀 빌려줄래, {gold}{1}{default}?"
+		"en"		"So you {gold}{1}{snow} just taught me that the people at the department of anti-theft are complete idiots, I'm firing them when I get home"
+		"ko"		"{gold}{1}{snow}, 너 덕분에 도난 방지 부서 직원들이 완전 바보라는 걸 알게 됐네. 집에 가면 전부 해고할 거야."
 	}
-	"Twirl_Response_Messenger_1"
-	{
-		"en"		"Messenger's Mind was long gone, I pity him, really..."
-		"ko"		"메신저의 정신은 이미 오래 전에 망가진지 오래였지... 그가 안타까워."
-	}
-	"Twirl_Response_Messenger_2"
+	"Twirl_Response_Magia_Fractal_4"
 	{
 		"#format"	"{1:N}"
-		"en"		"If you see Messenger around, tell him I said hi {gold}{1}{default}, okay?"
-		"ko"		"너 나중에 메신저 보면, 걔한테 안녕이라고 전해줘. {gold}{1}{default}, 알았지?"
+		"en"		"Mr {gold}{1}{snow}. I'm coming for you. {crimson}you cannot hide{snow}. You will pay for stealing the {aqua}Fractal{snow}."
+		"ko"		"내가 간다. {gold}{1}{snow}. {crimson}숨을 곳은 없어! {aqua}프랙탈{snow}을 훔친 대가를 치르게 해주마!"
 	}
-	"Twirl_Response_FlameTail_1"
-	{
-		"en"		"Don't Dodge me!"
-		"ko"		"피하지마! 맞서 싸워!"
-	}
-	"Twirl_Response_FlameTail_2"
+	"Twirl_Response_Magia_Fractal_No_Wings"
 	{
 		"#format"	"{1:N}"
-		"en"		"Can't dodge forever, {crimson}{1}{default}."
-		"ko"		"평생 피할 순 없을 걸, {crimson}{1}{default}."
+		"en"		"{gold}{1}{snow} You don't even have the wings, how dare you use that?"
+		"ko"		"{gold}{1}{snow}, 날개도 없는 주제에 감히 그걸 쓰고 있어?"
 	}
-	"Twirl_Response_Leper_1"
+	"Twirl_Response_Magia_Fractal_Ruina_Wings"
 	{
 		"#format"	"{1:N}"
-		"en"		"That sword is cool {gold}{1}{default}! lets fight like... uh... people."
-		"ko"		"그 검 정말 멋진데, {gold}{1}{default}! 그러니까... 어... 묘사를 못 하겠다."
+		"en"		"{gold}{1}{snow} You, you have OUR WINGS???, And your using the {aqua}Fractal{snow}, atleast that makes sense"
+		"ko"		"{gold}{1}{snow}, 너가 우리 날개를 가지고 있어?! 게다가 {aqua}프랙탈{snow}까지 쓰고 있다니! 아니지.. 그럼 말이 되긴 하네."
 	}
-	"Twirl_Response_Leper_2"
+	"Twirl_Response_Magia_Fractal_Silvester_Wings"
 	{
 		"#format"	"{1:N}"
-		"en"		"That amazing pose won't scare me off {gold}{1}{default}!"
-		"ko"		"그 포즈 멋진데, 하지만 날 놀래킬 정도는 아니라고, {gold}{1}{default}!"
+		"en"		"{gold}{1}{snow} Wait a minute, those are {gold}Silvesters{snow} wings, and your using our spells?. That doesn't make sense"
+		"ko"		"잠깐, {gold}{1}{snow}. 지금 등에 {gold}실베스터{snow}의 날개를 달고, 우리의 주문을 쓰고 있잖아. 앞뒤가 안 맞다고!"
 	}
-	"Twirl_Response_Necro_Wand_1"
+	"Twirl_Response_Magia_Fractal_Unknown_Wings"
 	{
 		"#format"	"{1:N}"
-		"en"		"Don't mess with the dead {gold}{1}{default}, dont wan't {green}him{default} bugging us...."
-		"ko"		"충고하는데, 죽은 자들로 계속 장난치지 마, {gold}{1}{default}. 그 {green}해골바가지{default}가 우릴 지켜볼 테니까..."
-	}
-	"Twirl_Response_Necro_Wand_2"
-	{
-		"#format"	"{1:N}"
-		"en"		"if {green}he{default} comes back im blaming {gold}{1}{default}."
-		"ko"		"만약 저걸로 그 {green}해골{default}이 나타난다면, {gold}{1}{default} 전부 네 탓이야."
-	}
-	"Twirl_Response_Dweller_1"
-	{
-		"en"		"Sea creature! Shoo shoo!"
-		"ko"		"바다 괴물!"
-	}
-	"Twirl_Response_Dweller_2"
-	{
-		"#format"	"{1:N}"
-		"en"		"Why are you a Sea Creature {gold}{1}{default}? Shoo shoo!"
-		"ko"		"왜 바다 괴물이 되어있는거야, {gold}{1}{default}?"
+		"en"		"You Mr {gold}{1}{snow} are using MY {aqua}Fractal{snow}, but you're wings aren't known to me.. huh?"
+		"ko"		"흠.. {gold}{1}{snow}씨? 당신은 내 {aqua}프랙탈{snow}을 쓰고 있는데, 그 날개는 내가 아는 게 아니네...?"
 	}
 }
