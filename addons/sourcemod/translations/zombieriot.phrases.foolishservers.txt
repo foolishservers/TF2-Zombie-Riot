@@ -2096,10 +2096,40 @@
 		"en"		"Headshot Damage"
 		"ko"		"헤드샷 피해량"
 	}
+	"TinkerAttrib_BurnDamage"
+	{
+		"en"		"Burn Damage"
+		"ko"		"화상 피해량"
+	}
 	"TinkerAttrib_FlamethrowerAmmoConsumed"
 	{
 		"en"		"Flamethrower Ammo Consumed"
 		"ko"		"화염방사기 탄약 소모량"
+	}
+	"TinkerAttrib_ArmorOnHit"
+	{
+		"en"		"TinkerAttrib_ArmorOnHit"
+		"ko"		"적중 시 아머 회복량"
+	}
+	"TinkerAttrib_AcidRain_BleedDamage"
+	{
+		"en"		"Bleed Damage"
+		"ko"		"출혈 피해량"
+	}
+	"TinkerAttrib_AcidRain_Damage"
+	{
+		"en"		"Acid Rain Damage"
+		"ko"		"산성비 피해량"
+	}
+	"TinkerAttrib_MaxEnemiesHitExplode"
+	{
+		"en"		"Max Enemies Hit Per Explode"
+		"ko"		"폭발 최대 타겟 수"
+	}
+	"TinkerAttrib_ExplosionFalloff"
+	{
+		"en"		"Explosion Falloff"
+		"ko"		"폭발 타겟 당 피해량 감소율"
 	}
 	
 	"Tinker_HasteMage"
@@ -2295,6 +2325,16 @@
 		"ko"		"할로우 포인트 탄환"
 	}
 	
+	"Tinker_FT_HighPressureInjectionUnit"
+	{
+		"en"		"High-Pressure Injection Unit"
+		"ko"		"고압 사출 장치"
+	}
+	"Tinker_FT_LooseValve"
+	{
+		"en"		"Loose Valve"
+		"ko"		"느슨한 밸브"
+	}
 	"Tinker_FT_FaceMelter"
 	{
 		"en"		"Face Melter"
@@ -2304,6 +2344,17 @@
 	{
 		"en"		"Sticky Compound"
 		"ko"		"끈적한 화합물"
+	}
+	
+	"Tinker_AcidRain_HeavyStorm"
+	{
+		"en"		"Heavy Storm"
+		"ko"		"폭풍우"
+	}
+	"Tinker_AcidRain_Pollution"
+	{
+		"en"		"Heavy Metal Pollution"
+		"ko"		"중금속 오염"
 	}
 	
 	// Wave Vote.
@@ -2359,5 +2410,15 @@
 	{
 		"en"		"Combine Army [Omega]"
 		"ko"		"콤바인 군대 [오메가]"
+	}
+	"Combine Army Fast [Omega]"
+	{
+		"en"		"Combine Army Fast [Omega]"
+		"ko"		"콤바인 군대 빠른 버전 [오메가]"
+	}
+	"Omega"
+	{
+		"en"		"Omega"
+		"ko"		"오메가"
 	}
 }

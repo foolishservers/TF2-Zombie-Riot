@@ -85,6 +85,9 @@ enum
 	Attrib_DamageBonusFullCharge = 5006,
 	
 	Attrib_MaxHealthForNecro = 5007,
+	
+	Attrib_FlamethrowerDamageBonus = 5008,
+	
 };
 
 StringMap WeaponAttributes[MAXENTITIES + 1];

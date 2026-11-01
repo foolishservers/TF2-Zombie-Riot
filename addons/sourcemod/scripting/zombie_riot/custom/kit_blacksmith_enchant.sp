@@ -73,8 +73,14 @@ enum {
 	TinkerEnchant_SR_HighSpeedFeedMechanism,
 	TinkerEnchant_SR_HollowPointBullets,
 	
+	TinkerEnchant_FT_HighPressureInjectionUnit,
+	TinkerEnchant_FT_LooseValve,
 	TinkerEnchant_FT_FaceMelter,
 	TinkerEnchant_FT_StickyCompound,
+	
+	TinkerEnchant_AcidRain_HeavyStorm,
+	TinkerEnchant_AcidRain_Pollution,
+	TinkerEnchant_AcidRain_Shower
 };
 
 #define ENCHANT_ROLL_COUNT	4
@@ -316,9 +322,16 @@ static const int Enchant_DMR[] = {
 };
 
 static const int Enchant_FlameThrower[] = {
-	TinkerEnchant_ConcentratedClip_Infinite,
-	TinkerEnchant_HasteNonMage,
-	TinkerEnchant_FT_FaceMelter
+	TinkerEnchant_FT_HighPressureInjectionUnit,
+	TinkerEnchant_FT_LooseValve,
+	TinkerEnchant_FT_FaceMelter,
+	TinkerEnchant_FT_StickyCompound
+};
+
+static const int Enchant_Flagellant_AcidRain[] = {
+	TinkerEnchant_AcidRain_HeavyStorm,
+	TinkerEnchant_AcidRain_Pollution,
+	// TinkerEnchant_AcidRain_Shower
 };
 
 // 유효한 롤이 없거나 대장장이 레벨이 달라졌으면 새로 굴려서 roll에 담아 반환한다.
@@ -359,10 +372,13 @@ static int Query_Enchantment(int weapon) {
 			return Enchant_ProjInfinite[GetURandomInt() % sizeof(Enchant_ProjInfinite)];
 		}
 		case WEAPON_SIGIL_BLADE: {
-			return Enchant_MSSword[GetURandomInt() % sizeof(Enchant_MSSword)];
+			return Enchant_Sigil_Blade[GetURandomInt() % sizeof(Enchant_Sigil_Blade)];
 		}
 		case WEAPON_MINECRAFT_SWORD: {
-			return Enchant_Sigil_Blade[GetURandomInt() % sizeof(Enchant_Sigil_Blade)];
+			return Enchant_MSSword[GetURandomInt() % sizeof(Enchant_MSSword)];
+		}
+		case WEAPON_FLAGELLANT_DAMAGE: {
+			return Enchant_Flagellant_AcidRain[GetURandomInt() % sizeof(Enchant_Flagellant_AcidRain)];
 		}
 	}
 	
@@ -815,6 +831,20 @@ static char[] Query_GetTransList(int SelectInt) {
 			FormatEx(buffer, sizeof(buffer), "Tinker_SR_HighSpeedFeedMechanism");
 		case TinkerEnchant_SR_HollowPointBullets:
 			FormatEx(buffer, sizeof(buffer), "Tinker_SR_HollowPointBullets");
+		
+		case TinkerEnchant_FT_HighPressureInjectionUnit:
+			FormatEx(buffer, sizeof(buffer), "Tinker_FT_HighPressureInjectionUnit");
+		case TinkerEnchant_FT_LooseValve:
+			FormatEx(buffer, sizeof(buffer), "Tinker_FT_LooseValve");
+		case TinkerEnchant_FT_FaceMelter:
+			FormatEx(buffer, sizeof(buffer), "Tinker_FT_FaceMelter");
+		case TinkerEnchant_FT_StickyCompound:
+			FormatEx(buffer, sizeof(buffer), "Tinker_FT_StickyCompound");
+		
+		case TinkerEnchant_AcidRain_HeavyStorm:
+			FormatEx(buffer, sizeof(buffer), "Tinker_AcidRain_HeavyStorm");
+		case TinkerEnchant_AcidRain_Pollution:
+			FormatEx(buffer, sizeof(buffer), "Tinker_AcidRain_Pollution");
 	}
 	
 	return buffer;
@@ -1118,7 +1148,7 @@ void Blacksmith_BuildingUsed_Internal(int weapon, int entity, int client, int ow
 		}
 		
 		int id = Query_Enchantment(weapon);
-		if (id == 0) {
+		if (id < 0) {
 			ClientCommand(client, "playgamesound items/medshotno1.wav");
 			SetDefaultHudPosition(client);
 			SetGlobalTransTarget(client);
@@ -1134,6 +1164,8 @@ void Blacksmith_BuildingUsed_Internal(int weapon, int entity, int client, int ow
 
 static void OnTinkerAnvilUsed(int client, int owner, int anvil, int id, TinkerEnum tinker, int found) {
 	if (id >= 0) {
+		FormatEx(tinker.Name, sizeof(TinkerEnum::Name), "%s", Query_GetTransList(id));
+		
 		switch (id) {
 			case TinkerEnchant_HastyMage:
 				TinkerHastyMage(tinker.Rarity, tinker);
@@ -1148,7 +1180,7 @@ static void OnTinkerAnvilUsed(int client, int owner, int anvil, int id, TinkerEn
 			//case TinkerEnchant_MageFragility:
 			//	TinkerMageFragility(tinker.Rarity, tinker);
 			
-			case TinkerEnchant_MeleeRapidSwing, TinkerEnchant_HasteNonMage:
+			case TinkerEnchant_MeleeRapidSwing, TinkerEnchant_HasteNonMage, TinkerEnchant_FT_LooseValve:
 				TinkerMeleeRapidSwing(tinker.Rarity, tinker);
 			case TinkerEnchant_MeleeHeavySwing:
 				TinkerMeleeHeavySwing(tinker.Rarity, tinker);
@@ -1187,7 +1219,7 @@ static void OnTinkerAnvilUsed(int client, int owner, int anvil, int id, TinkerEn
 				TinkerSmallerSmarterBullets(tinker.Rarity, tinker);
 			case TinkerEnchant_SprayAndPray:
 				TinkerSprayAndPray(tinker.Rarity, tinker);
-			case TinkerEnchant_ConcentratedClip_Infinite:
+			case TinkerEnchant_ConcentratedClip_Infinite, TinkerEnchant_FT_HighPressureInjectionUnit:
 				TinkerConcentratedClipInfinite(tinker.Rarity, tinker);
 			
 			case TinkerEnchant_MS_Sharpness:
@@ -1220,6 +1252,13 @@ static void OnTinkerAnvilUsed(int client, int owner, int anvil, int id, TinkerEn
 			
 			case TinkerEnchant_FT_FaceMelter:
 				Tinker_FT_FaceMelter(tinker.Rarity, tinker);
+			case TinkerEnchant_FT_StickyCompound:
+				Tinker_FT_StickyCompound(tinker.Rarity, tinker);
+			
+			case TinkerEnchant_AcidRain_HeavyStorm:
+				Tinker_AcidRain_HeavyStorm(tinker.Rarity, tinker);
+			case TinkerEnchant_AcidRain_Pollution:
+				Tinker_AcidRain_Pollution(tinker.Rarity, tinker);
 		}
 		
 		SetGlobalTransTarget(client);
@@ -1346,8 +1385,13 @@ void Blacksmith_PrintAttribValue(int client, int attrib, float value, float luck
 	}
 	if(attrib == 41 && CustomMode==1)
 		inverse=true;
-
-	if(((value < (addition ? 0.0 : 1.0)) ^ inverse))
+	
+	float base = addition ? 0.0 : 1.0;
+	
+	if(attrib == Attrib_ExplosionFalloff)
+		inverse_color = value > EXPLOSION_AOE_DAMAGE_FALLOFF ? true : false;
+	
+	if(((value < base) ^ inverse))
 	{
 		if(!inverse_color)
 		{
@@ -1369,6 +1413,7 @@ void Blacksmith_PrintAttribValue(int client, int attrib, float value, float luck
 			Format(buffer, sizeof(buffer), "{crimson}+%s", buffer);
 		}
 	}
+	
 	SetGlobalTransTarget(client);
 	FormatEx(TranslationBuffer, sizeof(TranslationBuffer), "%s", Query_GetTinkerAttrib(attrib, CustomMode));
 	if(TranslationPhraseExists(TranslationBuffer))
@@ -1386,7 +1431,12 @@ static char[] Query_GetTinkerAttrib(int Attrib, int CustomMode)
 		case 1:
 			FormatEx(buffer, sizeof(buffer), "TinkerAttrib_PhysicalDamage");
 		case 2:
-			FormatEx(buffer, sizeof(buffer), "TinkerAttrib_BaseDamage");
+		{
+			if (CustomMode == 3)
+				FormatEx(buffer, sizeof(buffer), "TinkerAttrib_AcidRain_BleedDamage");
+			else
+				FormatEx(buffer, sizeof(buffer), "TinkerAttrib_BaseDamage");
+		}
 		case 3, 4:
 		{
 			if (CustomMode == 1)
@@ -1434,6 +1484,11 @@ static char[] Query_GetTinkerAttrib(int Attrib, int CustomMode)
 			FormatEx(buffer, sizeof(buffer), "TinkerAttrib_ProjectileRange");
 		case 106:
 			FormatEx(buffer, sizeof(buffer), "TinkerAttrib_BulletSpread");
+		case 122:
+		{
+			if (CustomMode == 3)
+				FormatEx(buffer, sizeof(buffer), "TinkerAttrib_AcidRain_Damage");
+		}
 		case 149:
 			FormatEx(buffer, sizeof(buffer), "TinkerAttrib_BleedDuration");
 		case 205:
@@ -1483,6 +1538,11 @@ static char[] Query_GetTinkerAttrib(int Attrib, int CustomMode)
 		case 4002:
 			FormatEx(buffer, sizeof(buffer), "TinkerAttrib_Overheal");
 		
+		case Attrib_MaxEnemiesHitExplode:
+			FormatEx(buffer, sizeof(buffer), "TinkerAttrib_MaxEnemiesHitExplode");
+		case Attrib_ExplosionFalloff:
+			FormatEx(buffer, sizeof(buffer), "TinkerAttrib_ExplosionFalloff");
+		
 		case Attrib_TerrianRes:
 			FormatEx(buffer, sizeof(buffer), "TinkerAttrib_TerrianResistance");
 		case Attrib_ElementalDef:
@@ -1505,8 +1565,12 @@ static char[] Query_GetTinkerAttrib(int Attrib, int CustomMode)
 		case 390:
 			FormatEx(buffer, sizeof(buffer), "TinkerAttrib_HeadshotDamage");
 		
+		case 71:
+			FormatEx(buffer, sizeof(buffer), "TinkerAttrib_BurnDamage");
 		case 173:
 			FormatEx(buffer, sizeof(buffer), "TinkerAttrib_FlamethrowerAmmoConsumed");
+		case Attrib_ArmorOnHit:
+			FormatEx(buffer, sizeof(buffer), "TinkerAttrib_ArmorOnHit");
 	}
 	return buffer;
 }
@@ -1517,7 +1581,6 @@ static char[] Query_GetTinkerAttrib(int Attrib, int CustomMode)
 
 static void TinkerMeleeGlassy(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SharedGlassy");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 205;
 	tinker.Attrib[2] = 206;
@@ -1550,7 +1613,6 @@ static void TinkerMeleeGlassy(int rarity, TinkerEnum tinker)
 
 static void TinkerMeleeRapidSwing(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MeleeRapidSwing");
 	tinker.Attrib[0] = 2; //damage
 	tinker.Attrib[1] = 6; //attackspeed
 	//less damage
@@ -1581,7 +1643,6 @@ static void TinkerMeleeRapidSwing(int rarity, TinkerEnum tinker)
 
 static void TinkerMeleeHeavySwing(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MeleeHeavySwing");
 	tinker.Attrib[0] = 2; //damage
 	tinker.Attrib[1] = 6; //attackspeed
 	//less damage
@@ -1612,7 +1673,6 @@ static void TinkerMeleeHeavySwing(int rarity, TinkerEnum tinker)
 
 static void TinkerMeleeLongSwing(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MeleeLongSwing");
 	tinker.Attrib[0] = 2; //damage
 	tinker.Attrib[1] = 6; //attackspeed
 	tinker.Attrib[2] = 4001; //ExtraMeleeRange
@@ -1646,7 +1706,6 @@ static void TinkerMeleeLongSwing(int rarity, TinkerEnum tinker)
 
 static void TinkerHastyMage(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_HasteMage");
 	tinker.Attrib[0] = 6;
 	tinker.Attrib[1] = 733;
 	float AttackspeedLuck = (0.1 * (tinker.Luck[1]));
@@ -1673,7 +1732,6 @@ static void TinkerHastyMage(int rarity, TinkerEnum tinker)
 }
 static void TinkerHeavyMage(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_HeavyMage");
 	tinker.Attrib[0] = 6;
 	tinker.Attrib[1] = 733;
 	tinker.Attrib[2] = 410;
@@ -1706,7 +1764,6 @@ static void TinkerHeavyMage(int rarity, TinkerEnum tinker)
 
 static void TinkerConcentrationMage(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_ConcentratedMagic");
 	tinker.Attrib[0] = 103;
 	tinker.Attrib[1] = 410;
 	float ProjectileSpeed = (0.1 * (tinker.Luck[0]));
@@ -1735,7 +1792,6 @@ static void TinkerConcentrationMage(int rarity, TinkerEnum tinker)
 
 static void TinkerTankMage(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_TankMage");
 	tinker.Attrib[0] = 733;
 	tinker.Attrib[1] = 410;
 	tinker.Attrib[2] = 205;
@@ -1774,7 +1830,6 @@ static void TinkerTankMage(int rarity, TinkerEnum tinker)
 /*
 static void TinkerFrugalityMage(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_FrugalityMage");
 	tinker.Attrib[0] = 6;
 	tinker.Attrib[1] = 410;
 	tinker.Attrib[2] = 733;
@@ -1809,7 +1864,6 @@ static void TinkerFrugalityMage(int rarity, TinkerEnum tinker)
 /*
 static void TinkerMageFragility(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MageFragility");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 405;
 	tinker.Attrib[2] = 5005;
@@ -1843,7 +1897,6 @@ static void TinkerMageFragility(int rarity, TinkerEnum tinker)
 
 static void TinkerMedigun_FastHeal(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_FastHeal");
 	tinker.Attrib[0] = 8; //more heal rate
 	tinker.Attrib[1] = 9; //Less uber rate
 	tinker.Attrib[2] = 4002; //Less Overheal
@@ -1875,7 +1928,6 @@ static void TinkerMedigun_FastHeal(int rarity, TinkerEnum tinker)
 }
 static void TinkerMedigun_Overhealer(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_Overhealer");
 	tinker.Attrib[0] = 8;
 	tinker.Attrib[1] = 4002; 
 	float LessHealRateLuck = (0.1 * (1.0 + (-1.0*(tinker.Luck[0]))));
@@ -1904,7 +1956,6 @@ static void TinkerMedigun_Overhealer(int rarity, TinkerEnum tinker)
 
 static void TinkerMedigun_Uberer(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_Uberer");
 	tinker.Attrib[0] = 8;
 	tinker.Attrib[1] = 9;
 	float LessHealRate = (0.1 * (1.0 + (-1.0*(tinker.Luck[0]))));
@@ -1933,7 +1984,6 @@ static void TinkerMedigun_Uberer(int rarity, TinkerEnum tinker)
 
 static void TinkerMedicWeapon_GlassyMedic(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SharedGlassy");
 	tinker.Attrib[0] = 8; //more heal rate
 	tinker.Attrib[1] = 6; 
 	tinker.Attrib[2] = 205;
@@ -1971,7 +2021,6 @@ static void TinkerMedicWeapon_GlassyMedic(int rarity, TinkerEnum tinker)
 
 static void TinkerMedicWeapon_BurstHealMedic(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_BurstHeal");
 	tinker.Attrib[0] = 8; //more heal rate
 	tinker.Attrib[1] = 6; 
 	tinker.Attrib[2] = 97; 
@@ -2004,7 +2053,6 @@ static void TinkerMedicWeapon_BurstHealMedic(int rarity, TinkerEnum tinker)
 
 static void TinkerBuilderLongSwing(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_BuilderLongSwing");
 	tinker.Attrib[0] = 6; //attackspeed
 	tinker.Attrib[1] = 264; //ExtraMeleeRange
 	tinker.Attrib[2] = 4001; //ExtraMeleeRange
@@ -2039,7 +2087,6 @@ static void TinkerBuilderLongSwing(int rarity, TinkerEnum tinker)
 
 static void TinkerBuilderRepairMaster(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_BuilderRepairMaster");
 	tinker.Attrib[0] = 95; //RepairRate
 	tinker.Attrib[1] = 107; //movementspeed
 	
@@ -2068,7 +2115,6 @@ static void TinkerBuilderRepairMaster(int rarity, TinkerEnum tinker)
 
 static void TinkerRangedSlowHeavyProj(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SlowHeavyProj");
 	tinker.Attrib[0] = 2; //damage
 	tinker.Attrib[1] = 103; //ProjectileSpeed
 	tinker.Attrib[2] = 6; //attackspeed
@@ -2102,7 +2148,6 @@ static void TinkerRangedSlowHeavyProj(int rarity, TinkerEnum tinker)
 
 static void TinkerRangedFastProj(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_FastProj");
 	tinker.Attrib[0] = 2; //damage
 	tinker.Attrib[1] = 103; //ProjectileSpeed
 	tinker.Attrib[2] = 6; //attackspeed
@@ -2137,7 +2182,6 @@ static void TinkerRangedFastProj(int rarity, TinkerEnum tinker)
 
 static void TinkerIntensiveClip(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_IntensiveClip");
 	tinker.Attrib[0] = 6; //attackspeed
 	tinker.Attrib[1] = 4; //Clipsize
 	tinker.Attrib[2] = 97; //ReloadSpeed
@@ -2171,7 +2215,6 @@ static void TinkerIntensiveClip(int rarity, TinkerEnum tinker)
 
 static void TinkerConcentratedClip(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_ConcentratedClip");
 	tinker.Attrib[0] = 2; //Damage
 	tinker.Attrib[1] = 97; //ReloadSpeed
 	
@@ -2200,7 +2243,6 @@ static void TinkerConcentratedClip(int rarity, TinkerEnum tinker)
 
 static void TinkerConcentratedClipInfinite(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_ConcentratedClip");
 	tinker.Attrib[0] = 2; //Damage
 	tinker.Attrib[1] = 6; //attackspeed
 	
@@ -2229,7 +2271,6 @@ static void TinkerConcentratedClipInfinite(int rarity, TinkerEnum tinker)
 
 static void TinkerHeavyTrigger(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_HeavyTrigger");
 	tinker.Attrib[0] = 2; //Damage
 	tinker.Attrib[1] = 6; //attackspeed
 	tinker.Attrib[2] = 97; //Reload speed
@@ -2263,7 +2304,6 @@ static void TinkerHeavyTrigger(int rarity, TinkerEnum tinker)
 
 static void TinkerSprayAndPray(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SprayAndPray");
 	tinker.Attrib[0] = 45; //BulletsPetShot
 	tinker.Attrib[1] = 2; //damage
 	
@@ -2292,7 +2332,6 @@ static void TinkerSprayAndPray(int rarity, TinkerEnum tinker)
 
 static void TinkerSmallerSmarterBullets(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SmallerSmarterBullets");
 	tinker.Attrib[0] = 2; //Less Damage
 	tinker.Attrib[1] = 6; //Faster Shooting
 	tinker.Attrib[2] = 97; //faster Reload
@@ -2326,7 +2365,6 @@ static void TinkerSmallerSmarterBullets(int rarity, TinkerEnum tinker)
 
 static void Tinker_MS_Sharpness(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MS_Sharpness");
 	tinker.Attrib[0] = 2;
 	float DamageLuck = (0.1 * (tinker.Luck[0]));
 	
@@ -2342,7 +2380,6 @@ static void Tinker_MS_Sharpness(int rarity, TinkerEnum tinker)
 
 static void Tinker_MS_Smite(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MS_Smite");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 410;
 	tinker.Attrib[2] = 41;
@@ -2364,7 +2401,6 @@ static void Tinker_MS_Smite(int rarity, TinkerEnum tinker)
 
 static void Tinker_MS_SweepingEdge(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MS_SweepingEdge");
 	tinker.Attrib[0] = 99;
 	tinker.Attrib[1] = 4;
 	tinker.Attrib[2] = 425;
@@ -2388,7 +2424,6 @@ static void Tinker_MS_SweepingEdge(int rarity, TinkerEnum tinker)
 
 static void Tinker_MS_QuickCharge(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MS_QuickCharge");
 	tinker.Attrib[0] = 41;
 	tinker.Attrib[1] = 6;
 	tinker.Attrib[2] = 425;
@@ -2410,7 +2445,6 @@ static void Tinker_MS_QuickCharge(int rarity, TinkerEnum tinker)
 
 static void Tinker_MS_BaneofArthropods(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MS_BaneofArthropods");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 411;
 	tinker.Addition[1]=true;
@@ -2430,7 +2464,6 @@ static void Tinker_MS_BaneofArthropods(int rarity, TinkerEnum tinker)
 
 static void Tinker_MS_FireAspect(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MS_FireAspect");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 397;
 	tinker.Addition[1]=true;
@@ -2450,7 +2483,6 @@ static void Tinker_MS_FireAspect(int rarity, TinkerEnum tinker)
 
 static void Tinker_MS_CurseofGlassy(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_MS_CurseOfGlassy");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 425;
 	tinker.Attrib[2] = 205;
@@ -2473,7 +2505,6 @@ static void Tinker_MS_CurseofGlassy(int rarity, TinkerEnum tinker)
 
 static void Tinker_SR_ExplosiveHeadshot(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SR_ExplosiveHeadshot");
 	tinker.Attrib[0] = Attrib_ExplosiveHeadshot;
 	tinker.Attrib[1] = 2;
 	tinker.Attrib[2] = 6;
@@ -2490,7 +2521,6 @@ static void Tinker_SR_ExplosiveHeadshot(int rarity, TinkerEnum tinker)
 }
 static void Tinker_SR_KillerFocus(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SR_KillerFocus");
 	tinker.Attrib[0] = 41;
 	tinker.Attrib[1] = 2;
 	float ChargeRate = (0.2 * (tinker.Luck[0]));
@@ -2506,7 +2536,6 @@ static void Tinker_SR_KillerFocus(int rarity, TinkerEnum tinker)
 
 static void Tinker_SR_SuperCoolingChamber(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SR_SuperCoolingChamber");
 	tinker.Attrib[0] = Attrib_DamageBonusFullCharge;
 	tinker.Attrib[1] = 6;
 	tinker.Attrib[2] = 41;
@@ -2524,7 +2553,6 @@ static void Tinker_SR_SuperCoolingChamber(int rarity, TinkerEnum tinker)
 
 static void Tinker_SR_DepletedUranium(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SR_DepletedUranium");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 6;
 	tinker.Attrib[2] = 41;
@@ -2541,7 +2569,6 @@ static void Tinker_SR_DepletedUranium(int rarity, TinkerEnum tinker)
 
 static void Tinker_SR_HighSpeedFeedMechanism(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SR_HighSpeedFeedMechanism");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 6;
 	float DamageLuck = (0.325 * (1.0 + (-1.0*(tinker.Luck[0]))));
@@ -2557,7 +2584,6 @@ static void Tinker_SR_HighSpeedFeedMechanism(int rarity, TinkerEnum tinker)
 
 static void Tinker_SR_HollowPointBullets(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_SR_HollowPointBullets");
 	tinker.Attrib[0] = 2;
 	tinker.Attrib[1] = 390;
 	float DamageLuck = (0.25 * (tinker.Luck[0]));
@@ -2571,26 +2597,128 @@ static void Tinker_SR_HollowPointBullets(int rarity, TinkerEnum tinker)
 	}
 }
 
+/**
+ * Note: Don't use attribute #2 on flamethrower.
+ * It will be increase overall damage include afterburn damage!!!
+ */
 static void Tinker_FT_FaceMelter(int rarity, TinkerEnum tinker)
 {
-	strcopy(tinker.Name, sizeof(tinker.Name), "Tinker_FT_FaceMelter");
-	tinker.Attrib[0] = 2;
+	tinker.Attrib[0] = Attrib_FlamethrowerDamageBonus;
 	tinker.Attrib[1] = 173;
+	tinker.Attrib[2] = 71;
 	float DamageLuck = (0.25 * (tinker.Luck[0]));
-	float AmmoPerSecLuck = (0.3 * (1.0 + (-1.0 * (tinker.Luck[0]))));
+	float AmmoPerSecLuck = (0.15 * (1.0 + (-1.0 * (tinker.Luck[1]))));
+	float BurnDamageLuck = (0.15 * (tinker.Luck[2]));
 	
 	switch (rarity) {
 		case 0: {
 			tinker.Value[0] = 1.2 + DamageLuck;
-			tinker.Value[1] = 1.5 + AmmoPerSecLuck;
+			tinker.Value[1] = 1.75 + AmmoPerSecLuck;
+			tinker.Value[2] = 0.65 + BurnDamageLuck;
 		}
 		case 1: {
 			tinker.Value[0] = 1.35 + DamageLuck;
-			tinker.Value[1] = 1.75 + AmmoPerSecLuck;
+			tinker.Value[1] = 2.0 + AmmoPerSecLuck;
+			tinker.Value[2] = 0.5 + BurnDamageLuck;
 		}
 		case 2: {
 			tinker.Value[0] = 1.5 + DamageLuck;
-			tinker.Value[1] = 2.0 + AmmoPerSecLuck;
+			tinker.Value[1] = 2.25 + AmmoPerSecLuck;
+			tinker.Value[2] = 0.35 + BurnDamageLuck;
+		}
+	}
+}
+
+static void Tinker_FT_StickyCompound(int rarity, TinkerEnum tinker)
+{
+	tinker.Attrib[0] = 71;
+	tinker.Attrib[1] = 4040;
+	tinker.Attrib[2] = Attrib_FlamethrowerDamageBonus;
+	float BurnDamageLuck = (0.2 * (tinker.Luck[0]));
+	float ArmorOnHitLuck = (0.05 * (tinker.Luck[1]));
+	float DamageLuck = (0.1 * (tinker.Luck[2]));
+	
+	switch (rarity) {
+		case 0: {
+			tinker.Value[0] = 1.6 + BurnDamageLuck;
+			tinker.Value[1] = 1.125 + ArmorOnHitLuck;
+			tinker.Value[2] = 0.75 + DamageLuck;
+		}
+		case 1: {
+			tinker.Value[0] = 2.2 + BurnDamageLuck;
+			tinker.Value[1] = 1.25 + ArmorOnHitLuck;
+			tinker.Value[2] = 0.6 + DamageLuck;
+		}
+		case 2: {
+			tinker.Value[0] = 2.8 + BurnDamageLuck;
+			tinker.Value[1] = 1.45 + ArmorOnHitLuck;
+			tinker.Value[2] = 0.45 + DamageLuck;
+		}
+	}
+}
+
+static void Tinker_AcidRain_HeavyStorm(int rarity, TinkerEnum tinker)
+{
+	tinker.Attrib[0] = 122;
+	tinker.Attrib[1] = 4013;
+	tinker.Attrib[2] = 2;
+	
+	tinker.CustomMode[0] = 3;
+	tinker.CustomMode[2] = 3;
+	
+	float DamageLuck = (0.1 * (tinker.Luck[0]));
+	float FalloffLuck = (0.05 * (tinker.Luck[1]));
+	float BleedLuck = (0.1 * (tinker.Luck[2]));
+	
+	switch (rarity) {
+		case 0: {
+			tinker.Value[0] = 1.15 + DamageLuck;
+			tinker.Value[1] = 0.7 + FalloffLuck;
+			tinker.Value[2] = 0.6 + BleedLuck;
+		}
+		case 1: {
+			tinker.Value[0] = 1.25 + DamageLuck;
+			tinker.Value[1] = 0.73 + FalloffLuck;
+			tinker.Value[2] = 0.45 + BleedLuck;
+		}
+		case 2: {
+			tinker.Value[0] = 1.4 + DamageLuck;
+			tinker.Value[1] = 0.75 + FalloffLuck;
+			tinker.Value[2] = 0.35 + BleedLuck;
+		}
+	}
+}
+
+static void Tinker_AcidRain_Pollution(int rarity, TinkerEnum tinker)
+{	
+	tinker.Attrib[0] = 2;
+	tinker.Attrib[1] = 4011;
+	tinker.Attrib[2] = 122;
+	
+	tinker.CustomMode[0] = 3;
+	tinker.CustomMode[2] = 3;
+	
+	tinker.Addition[1] = true;
+	
+	float BleedLuck = (0.5 * (tinker.Luck[0]));
+	float TargetLuck = (1.0 * (tinker.Luck[1]));
+	float DamageLuck = (0.1 * (tinker.Luck[2]));
+	
+	switch (rarity) {
+		case 0: {
+			tinker.Value[0] = 3.0 + BleedLuck;
+			tinker.Value[1] = 4.0 + TargetLuck;
+			tinker.Value[2] = 0.785 + DamageLuck;
+		}
+		case 1: {
+			tinker.Value[0] = 4.0 + BleedLuck;
+			tinker.Value[1] = 5.0 + TargetLuck;
+			tinker.Value[2] = 0.725 + DamageLuck;
+		}
+		case 2: {
+			tinker.Value[0] = 5.0 + BleedLuck;
+			tinker.Value[1] = 6.0 + TargetLuck;
+			tinker.Value[2] = 0.675 + DamageLuck;
 		}
 	}
 }

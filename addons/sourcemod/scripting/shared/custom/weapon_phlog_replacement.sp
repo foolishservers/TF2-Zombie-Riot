@@ -89,6 +89,7 @@ public void Weapon_PHLOG_Attack(int client, int weapon, bool crit, int slot)
 	BEAM_Targets_Hit[client] = 1.0;
 	float damage = 25.0;
 	damage *= Attributes_Get(weapon, 2, 1.0);
+	damage *= Attributes_Get(weapon, Attrib_FlamethrowerDamageBonus, 1.0);
 //	damage *= (1.0 / Attributes_Get(weapon, 6, 1.0)); //already does it, see attribute Attrib_AttackspeedConvertIntoDmg
 
 	float playerPos[3];
