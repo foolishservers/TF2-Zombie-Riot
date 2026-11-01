@@ -821,6 +821,13 @@ public void OnPostThink(int client)
 		if(weapon != -1)
 		{
 			attrib += Attributes_Get(weapon, 57, 0.0);
+			if(i_CurrentEquippedPerk[client] & PERK_ENERGY_DRINK || i_CurrentEquippedPerk[client] & PERK_ENERGY_DRINK_X)
+			{
+				if(TeutonType[client] == TEUTON_NONE)
+				{
+					Saga_ChargeReduction(client, weapon, 0.35);
+				}
+			}
 		}
 		//Players should always have atleast 1 HP regen!
 		attrib += 1.0;

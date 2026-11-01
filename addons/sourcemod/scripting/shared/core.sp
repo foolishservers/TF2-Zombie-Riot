@@ -299,7 +299,7 @@ enum
 	#define DEFAULT_UPDATE_DELAY_FLOAT 0.0151 //rpg needs a bigger delay.
 #endif
 
-#define DEFAULT_HURTDELAY 0.35 //Make it 0 for now
+#define DEFAULT_HURTDELAY 0.3 //Make it 0 for now
 
 
 
@@ -327,8 +327,8 @@ enum
 
 //I put these here so we can change them on fly if we need to, cus zombies can be really loud, or quiet.
 
-#define NORMAL_ZOMBIE_SOUNDLEVEL	 80
-#define NORMAL_ZOMBIE_VOLUME	 0.8
+#define NORMAL_ZOMBIE_SOUNDLEVEL	 85
+#define NORMAL_ZOMBIE_VOLUME	 0.95
 
 #define BOSS_ZOMBIE_SOUNDLEVEL	 90
 #define BOSS_ZOMBIE_VOLUME	 1.0

@@ -1580,10 +1580,10 @@
 	}
 	"Energy Drink Received"
 	{
-		"en" 		"Energy Drink! Gain a 15％ cooldown reduction for Weapons & Extra Gear!"
-		"ru"		"Энергетик! 15％ быстрее перезарядка способности Оружия & Расходников"
-		"it"		"Bevanda energetica! Riduzione del cooldown di 15％ per le armi e gli equipaggiamenti extra!"
-		"ko" 		"에너지 드링크! 무기와 추가 장비들의 능력 쿨타임 15％ 감소!"
+		"en" 		"Energy Drink! Gain a 20％ cooldown reduction for Weapons & Extra Gear!\nCooldown reduces every second by 0.35s additionally"
+		"ru"		"Энергетик! 20％ быстрее перезарядка способности Оружия & Расходников"
+		"it"		"Bevanda energetica! Riduzione del cooldown di 20％ per le armi e gli equipaggiamenti extra!"
+		"ko" 		"에너지 드링크! 무기와 추가 장비들의 능력 쿨타임 20％ 감소!"
 	}
 	"Symbiosis Shot"
 	{
@@ -1597,7 +1597,7 @@
 	}
 	"Energy Drink X Received"
 	{
-		"en" 		"Energy Drink X! Gain a 40％ cooldown reduction for Weapons & Extra Gear!"
+		"en" 		"Energy Drink X! Gain a 40％ cooldown reduction for Weapons & Extra Gear!\nCooldown reduces every second by 0.35s additionally"
 		"ru"		"Энергетик X! 40％ быстрее перезарядка способности Оружия & Расходников"
 		"it"		"Bevanda energetica X! Riduzione del cooldown di 40％ per le armi e gli equipaggiamenti extra!"
 		"ko" 		"에너지 드링크 X! 무기와 추가 장비들의 능력 쿨타임 40％ 감소!"
@@ -4901,7 +4901,7 @@
 		"fr"	"Entrez en combat contre le Moyen-Âge, et leur armure qui leur protège contre les attaques à portée et corps à corps!"
 		"chi"	"对抗中世纪的剑与盾！"
 		"it"	"Combatti contro la mezza età con le loro armature per contrastare gli attacchi in mischia o a distanza!"
-		"ko" 	"알락시오스가 센살과 논의하는 동안, 오시리스와 그의 군단이 훈련을 위해 주력 용병들에게 옵니다. 끝나고 알락시오스가 부활시켜주면 될테니 괜찮겠죠. 밥 2세가 도움을 위해 두 번째 용병 부대도 호출합니다."
+		"ko" 	"알락시오스가 센살과 논의하는 동안, 오시리스와 그의 군단이 훈련을 위해 주력 용병들에게 다가옵니다. 밥 2세가 도움을 위해 두 번째 용병 부대도 호출합니다."
 	}
 	"God Alaxios Wave Desc"
 	{
@@ -4941,7 +4941,7 @@
 		"fr"	"L'infection Dweller attaque avec la Corrosion d'Armure. Guérissez-la avec vos tables d'armure!"
 		"chi"	"海嗣感染将会侵蚀你的盾。"
 		"it"	"L'infezione Dweller è arrivata, gli attacchi di Corrosione dell'Armatura infetteranno la tua armatura, curala con le tabelle dell'armatura!"
-		"ko"	"제노에 감염된 배풍등의 정예병들을 본 후, 그의 전초기지에 남은 병사가 있는지 확인을 하러 갑니다. 그곳엔 드웰러가 된 병사들이 있었고, 내륙을 공격할 준비를 마친 상태였습니다."
+		"ko"	"배풍등의 정예병 잔당을 처리하기 위해 그의 전초기지로 향하게 됩니다. 그곳에서 몇몇을 발견하게 되지만... 드웰러에 감염된 상태였습니다."
 	}
 	"Interitus Desc"
 	{
@@ -5444,8 +5444,8 @@
 	}
 	"Almina Expi Desc"
 	{
-	  "en"	"After the main mercs finish their training, Almina ask the secondary mercs to do more training. Nemal and Silvester are away with Sensal, so they won't be here. So some other Expidonsans volunteer to help."
-	  "ko"	"주요 용병들이 훈련을 마친 후, 알미나가 더 많은 훈련을 위해 보조 용병들을 방문합니다. 네말과 실베스터가 센살과 휴가 중이기에, 다른 몇몇 엑스피돈사인들이 자원하여 참여합니다."
+		"en"	"After the main mercs finish their training, Almina ask the secondary mercs to do more training. Nemal and Silvester are away with Sensal, so they won't be here. So some other Expidonsans volunteer to help."
+		"ko"	"주요 용병들이 훈련을 마친 후, 알미나가 더 많은 훈련을 위해 보조 용병들을 방문합니다. 네말과 실베스터가 센살과 휴가 중이기에, 다른 몇몇 엑스피돈사인들이 자원하여 참여합니다."
 	}
 	"Almina & Nemal"
 	{
@@ -5746,8 +5746,8 @@
 	}
 	"Vesta Survival Desc"
 	{
-		"en" 	"A group of mercs invades a Vestan outpost. This outpost is led by a Chemical Platoon leader."
-		"ko" 	"한 용병 조직이 베스타 전초기지를 습격합니다. 이 전초기지는 화학대대 리더에 의해 이끌어지고 있습니다."
+		"en" 	"During Vesta's war against Ziberia. Ziberia sends out a group of their top guerrilla to hold off this Vestan Outpost, which is led by their Chemical Platoon leader."
+		"ko" 	"베스타와 지베리아 간 전쟁 중, 화학 대대 리더가 이끄는 베스타 전초기지를 막아내기 위해 지베리아 측에서 최고의 게릴라 부대를 파견합니다."
 	}
 	"Vesta Raid Desc"
 	{

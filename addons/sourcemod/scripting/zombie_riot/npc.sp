@@ -1717,8 +1717,8 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 	{
 		CheckHpThreshhold *= npc.m_iHealthBar;
 	}
-	float WhichThreshholdDamageAt = 0.075;
-	//normal enemies need to take atleast 7.5% of their hp as damage in 1 hit so it does the hurt animation
+	float WhichThreshholdDamageAt = 0.05;
+	//normal enemies need to take atleast 0.5% of their hp as damage in 1 hit so it does the hurt animation
 	if(b_thisNpcIsARaid[victim])
 	{
 		WhichThreshholdDamageAt *= 0.025;
@@ -1727,7 +1727,12 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 	{
 		WhichThreshholdDamageAt *= 0.15;
 	}
-	WhichThreshholdDamageAt *= float(flHealth);
+	else
+	{
+		//normal enemies should always
+		WhichThreshholdDamageAt = 0.0;
+	}
+	WhichThreshholdDamageAt *= float(CheckHpThreshhold);
 	if(WhichThreshholdDamageAt >= damage)
 	{
 		PreventHurtsound = true;

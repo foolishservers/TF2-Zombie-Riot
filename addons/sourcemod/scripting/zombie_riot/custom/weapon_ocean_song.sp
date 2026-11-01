@@ -358,6 +358,12 @@ void DoHealingOcean(int client, int target, float range = 160000.0, float extra_
 					{
 						healingMulti = 1.0825;
 					}
+					if(!HordingsBuff)
+					{	
+						Saga_ChargeReduction(ally, weapon, 0.04);
+						if(extra_heal != 0.0)
+							Saga_ChargeReduction(ally, weapon, 2.0);
+					}
 				}
 
 				if(healingMulti > 0.0)

@@ -5,12 +5,9 @@ static float HealthMulti;
 static int HealthBonus;
 static int EnemyChance;
 static int EnemyBosses;
-static int ImmuneNuke;
 static int CashBonus;
 static float KillBonus;
 static float MiniBossChance;
-static int IceDebuff;
-static int TeslarDebuff;
 static int FusionBuff;
 static int OceanBuff;
 static int CrippleDebuff;
@@ -145,12 +142,9 @@ void Freeplay_ResetAll()
 	HealthBonus = 0;
 	EnemyChance = 10;
 	EnemyBosses = 0;
-	ImmuneNuke = 0;
 	CashBonus = 0;
 	KillBonus = 0.0;
 	MiniBossChance = 0.025;
-	IceDebuff = 0;
-	TeslarDebuff = 0;
 	FusionBuff = 0;
 	OceanBuff = 0;
 	CrippleDebuff = 0;
@@ -265,9 +259,9 @@ int Freeplay_GetDangerLevelCurrent(int postWaves)
 	float DefaultChance = 0.02 * float(EnemyChance);
 	DefaultChance += 0.005 * float(postWaves - 41);
 	
-	if(DefaultChance > 0.475)
+	if(DefaultChance > 0.49)
 	{
-		DefaultChance = 0.475;
+		DefaultChance = 0.49;
 	}
 
 	for(int LoopMax = 1; LoopMax < 6 ; LoopMax++)
@@ -351,7 +345,7 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 			case 3:
 			{
 				enemy.Index = NPC_GetByPlugin("npc_xeno_raidboss_silvester");
-				enemy.Health = RoundToFloor((2500000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+				enemy.Health = RoundToFloor((3000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 				enemy.Data = "wave_40";
 			}
 			case 4:
@@ -361,25 +355,25 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 					case 1: // mmmmyes
 					{
 						enemy.Index = NPC_GetByPlugin("npc_sea_god_alaxios");
-						enemy.Health = RoundToFloor((6500000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+						enemy.Health = RoundToFloor((7000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 						enemy.Data = "wave_40;res3;seainfection";
 					}
 					case 2: // mmmmyes
 					{
 						enemy.Index = NPC_GetByPlugin("npc_sea_god_alaxios");
-						enemy.Health = RoundToFloor((6500000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+						enemy.Health = RoundToFloor((7000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 						enemy.Data = "wave_40;res3;seainfection";
 					}
 					case 3: // mmmmno
 					{
 						enemy.Index = NPC_GetByPlugin("npc_toddhoward");
-						enemy.Health = RoundToFloor((6500000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+						enemy.Health = RoundToFloor((7000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 						enemy.Data = "wave_40;res3";
 					}
 					default: // alaxios has no timer in freeplay by default btw
 					{
 						enemy.Index = NPC_GetByPlugin("npc_god_alaxios");
-						enemy.Health = RoundToFloor((6500000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+						enemy.Health = RoundToFloor((7000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 						enemy.Data = "wave_40;res3";
 					}
 				}
@@ -404,13 +398,13 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 			case 8:	
 			{
 				enemy.Index = NPC_GetByPlugin("npc_the_messenger");
-				enemy.Health = RoundToFloor((7500000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+				enemy.Health = RoundToFloor((7000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 				enemy.Data = "wave_40";
 			}
 			case 9:	
 			{
 				enemy.Index = NPC_GetByPlugin("npc_bob_the_first_last_savior");
-				enemy.Health = RoundToFloor((8000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+				enemy.Health = RoundToFloor((9000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 				enemy.ExtraDamage = (f_FreeplayDamageExtra * 0.65);
 				enemy.ExtraMeleeRes *= 0.75;
 				enemy.ExtraRangedRes *= 0.75;
@@ -475,13 +469,13 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 			case 15:
 			{
 				enemy.Index = NPC_GetByPlugin("npc_void_unspeakable");
-				enemy.Health = RoundToFloor((5000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+				enemy.Health = RoundToFloor((6000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 				enemy.Data = "forth";
 			}
 			case 16:
 			{
 				enemy.Index = NPC_GetByPlugin("npc_vhxis");
-				enemy.Health = RoundToFloor((5000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+				enemy.Health = RoundToFloor((6000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 			}
 			case 17:
 			{
@@ -541,12 +535,12 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 			case 26:	
 			{
 				enemy.Index = NPC_GetByPlugin("npc_castellan");
-				enemy.Health = RoundToFloor((7500000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+				enemy.Health = RoundToFloor((8500000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 			}
 			case 27:
 			{
 				enemy.Index = NPC_GetByPlugin("npc_lelouch");
-				enemy.Health = RoundToFloor((5000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+				enemy.Health = RoundToFloor((7500000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 				enemy.ExtraDamage = 0.75;
 			}
 			case 28:
@@ -557,17 +551,17 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 			case 29:
 			{
 				enemy.Index = NPC_GetByPlugin("npc_cat");
-				enemy.Health = RoundToFloor((6000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+				enemy.Health = RoundToFloor((7000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 			}
 			case 30:
 			{
 				enemy.Index = NPC_GetByPlugin("npc_aris");
-				enemy.Health = RoundToFloor((6000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+				enemy.Health = RoundToFloor((7000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 			}
 			case 31:
 			{
 				enemy.Index = NPC_GetByPlugin("npc_chimera");
-				enemy.Health = RoundToFloor((5000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+				enemy.Health = RoundToFloor((6000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 				enemy.ExtraDamage = 0.75;
 			}
 			case 32:	
@@ -577,13 +571,13 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 					case 1: // 
 					{
 						enemy.Index = NPC_GetByPlugin("npc_vincent");
-						enemy.Health = RoundToFloor((6000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+						enemy.Health = RoundToFloor((7000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 						enemy.Data = "forceangry;forcesad";
 					}
 					default: // 
 					{
 						enemy.Index = NPC_GetByPlugin("npc_vincent");
-						enemy.Health = RoundToFloor((6000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+						enemy.Health = RoundToFloor((7000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 					}
 				}
 			}
@@ -608,7 +602,7 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 			{
 				enemy.Index = NPC_GetByPlugin("npc_shadowing_darkness_boss");
 				enemy.Health = RoundToFloor((10000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
-				enemy.Data = "sc20;force_final_battle";
+				enemy.Data = "sc40;force_final_battle";
 				enemy.ExtraThinkSpeed = 1.25;
 				enemy.ExtraSpeed = 0.90;
 				enemy.ExtraDamage = 0.70;
@@ -624,32 +618,32 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 			case 37:
 			{
 				enemy.Index = NPC_GetByPlugin("npc_squad_master");
-				enemy.Health = RoundToFloor((1500000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+				enemy.Health = RoundToFloor((2000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 				enemy.Data = "sc20";
-				enemy.ExtraThinkSpeed = 1.15;
-				enemy.ExtraSpeed = 0.85;
+				enemy.ExtraThinkSpeed = 1.0;
+				enemy.ExtraSpeed = 0.909;
 			}
 			case 38:
 			{
 				enemy.Index = NPC_GetByPlugin("npc_no_random_kranz");
-				enemy.Health = RoundToFloor((1000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+				enemy.Health = RoundToFloor((1250000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 				enemy.Data = "sc40";
-				enemy.ExtraThinkSpeed = 1.15;
-				enemy.ExtraDamage = 0.6;
-				enemy.ExtraSpeed = 0.9;
+				enemy.ExtraThinkSpeed = 1.0;
+				enemy.ExtraDamage = 1.0;
+				enemy.ExtraSpeed = 1.0;
 			}
 			case 39:
 			{
 				enemy.Index = NPC_GetByPlugin("npc_black_heavy_soul");
 				enemy.Health = RoundToFloor((5000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 				enemy.Data = "sc40";
-				enemy.ExtraThinkSpeed = 1.15;
-				enemy.ExtraDamage = 0.7;
+				enemy.ExtraThinkSpeed = 1.0;
+				enemy.ExtraDamage = 1.0;
 			}
 			case 40:
 			{
 				enemy.Index = NPC_GetByPlugin("npc_kevinmery2009");
-				enemy.Health = RoundToFloor((5000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+				enemy.Health = RoundToFloor((6000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 				enemy.ExtraThinkSpeed = 0.60;
 				enemy.ExtraDamage = 1.20;
 				enemy.ExtraSpeed = 1.1;
@@ -657,7 +651,7 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 			default:
 			{
 				enemy.Index = NPC_GetByPlugin("npc_true_fusion_warrior");
-				enemy.Health = RoundToFloor((5000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
+				enemy.Health = RoundToFloor((6000000.0 + HealthBonus) / 70.0 * float(Waves_GetRound() * 2) * MultiGlobalHighHealthBoss);
 				enemy.Data = "wave_40";
 			}
 		}
@@ -1017,9 +1011,6 @@ void Freeplay_AddEnemy(int postWaves, Enemy enemy, int &count, bool alaxios = fa
 			enemy.ExtraRangedRes *= 0.9;
 			enemy.ExtraSpeed *= 1.1;
 		}
-
-		if(ImmuneNuke && !(enemy.Index % ImmuneNuke))
-			enemy.Is_Immune_To_Nuke = true;
 
 		if(KillBonus)
 			enemy.Credits += KillBonus;
@@ -1904,7 +1895,7 @@ void Freeplay_SpawnEnemy(int entity)
 				{
 					b_StaticNPC[entity] = true;
 					AddNpcToAliveList(entity, 1);
-					b_NoHealthbar[entity] = 1; //Makes it so they never have an outline
+					//b_NoHealthbar[entity] = 1; Makes it so they never have an outline
 					GiveNpcOutLineLastOrBoss(entity, false);
 					b_thisNpcHasAnOutline[entity] = true;
 				}
@@ -2020,10 +2011,10 @@ void Freeplay_SpawnEnemy(int entity)
 		}
 
 		if(XenoLabBuff)
-			Freeplay_ApplyStatusEffect(entity, "Xeno's Territory", 999.0);	
+			Freeplay_ApplyStatusEffect(entity, "Xeno's Territory", 30.0);	
 
 		if(SeaLabBuff)
-			Freeplay_ApplyStatusEffect(entity, "Corrupted Godly Power", 999.0);	
+			Freeplay_ApplyStatusEffect(entity, "Corrupted Godly Power", 30.0);	
 	
 		//// DEBUFFS ////
 	
@@ -2047,22 +2038,7 @@ void Freeplay_SpawnEnemy(int entity)
 	
 		if(StrangleDebuff > 0)
 			ApplyStatusEffect(entity, entity, "Stranglation I", 999999.0);	
-	
-		if(IceDebuff > 2)
-			ApplyStatusEffect(entity, entity, "Near Zero", 999999.0);	
-	
-		if(IceDebuff > 1)
-			ApplyStatusEffect(entity, entity, "Cryo", 999999.0);	
-	
-		if(IceDebuff > 0)
-			ApplyStatusEffect(entity, entity, "Freeze", 999999.0);	
-	
-		if(TeslarDebuff > 1)
-			ApplyStatusEffect(entity, entity, "Teslar Electricution", 999999.0);	
-	
-		if(TeslarDebuff > 0)
-			ApplyStatusEffect(entity, entity, "Teslar Shock", 999999.0);	
-	
+
 		if(SpecialistDebuff > 2)
 			ApplyStatusEffect(entity, entity, "Molecular Collapse", 999999.0);	
 	
@@ -2377,7 +2353,7 @@ void Freeplay_SetupStart(bool extra = false)
 
 	int rand = 6;
 	if((++RerollTry) < 12)
-		rand = GetURandomInt() % 72;
+		rand = GetURandomInt() % 66;
 	
 	if(guaranteedraid)
 	{
@@ -2450,37 +2426,22 @@ void Freeplay_SetupStart(bool extra = false)
 			/// HEALTH SKULLS ///
 			case 0:
 			{
-				strcopy(message, sizeof(message), "{red}모든 적의 최대 체력이 2500 만큼 증가!");
-				HealthBonus += 2500;
+				strcopy(message, sizeof(message), "{red}모든 적의 최대 체력이 10000만큼 증가!");
+				HealthBonus += 10000;
 			}
 			case 1:
-			{
-				strcopy(message, sizeof(message), "{red}모든 적의 최대 체력이 5000 만큼 증가!");
-				HealthBonus += 5000;
-			}
-			case 2:
-			{
-				strcopy(message, sizeof(message), "{red}모든 적의 최대 체력이 5% 증가!");
-				HealthMulti *= 1.05;
-			}
-			case 3:
 			{
 				strcopy(message, sizeof(message), "{red}모든 적의 최대 체력이 10% 증가!");
 				HealthMulti *= 1.1;
 			}
-			case 4:
+			case 2:
 			{
 				strcopy(message, sizeof(message), "{green}모든 적의 최대 체력이 5% 감소!");
 				HealthMulti *= 0.95;
 			}
-			case 5:
-			{
-				strcopy(message, sizeof(message), "{green}모든 적의 최대 체력이 2.5% 감소!");
-				HealthMulti *= 0.975;
-			}
 
 			/// BUFF/DEBUFF SKULLS //
-			case 6:
+			case 3:
 			{
 				strcopy(message, sizeof(message), "{darkgray}아무 일도 일어나지 않았습니다. 좋아해야겠군요...");
 				/*
@@ -2496,34 +2457,7 @@ void Freeplay_SetupStart(bool extra = false)
 				}
 				*/
 			}
-			case 7:
-			{
-				if(IceDebuff > 3)
-				{
-					strcopy(message, sizeof(message), "{red}모든 적의 냉동 디버프가 제거됨!");
-					IceDebuff = 0;
-				}
-				else
-				{
-					strcopy(message, sizeof(message), "{green}모든 적에게 냉동 디버프가 부여됨.");
-					IceDebuff++;
-				}
-			}
-			case 8:
-			{
-				if(TeslarDebuff > 1)
-				{
-					strcopy(message, sizeof(message), "{red}모든 적의 테슬라 디버프가 제거됨!");
-					TeslarDebuff = 0;
-				}
-				else
-				{
-					strcopy(message, sizeof(message), "{green}모든 적에게 테슬라 디버프가 부여됨.");
-					TeslarDebuff++;
-				}
-	
-			}
-			case 9:
+			case 4:
 			{
 				if(FusionBuff > 2)
 				{
@@ -2537,7 +2471,7 @@ void Freeplay_SetupStart(bool extra = false)
 				}
 				
 			}
-			case 10:
+			case 5:
 			{
 				if(OceanBuff > 1)
 				{
@@ -2550,22 +2484,22 @@ void Freeplay_SetupStart(bool extra = false)
 					OceanBuff++;
 				}
 			}
-			case 11:
+			case 6:
 			{
 				strcopy(message, sizeof(message), "{green}다음에 등장하는 적 400 마리가 신경 손상 디버프를 보유한 채로 등장.");
 				CrippleDebuff += 400;
 			}
-			case 12:
+			case 7:
 			{
 				strcopy(message, sizeof(message), "{green}다음에 등장하는 적 400 마리가 뇌진탕 디버프를 보유한 채로 등장.");
 				CudgelDebuff += 400;
 			}
-			case 13:
+			case 8:
 			{
 				RandomStats += GetRandomInt(3, 6);
 				strcopy(message, sizeof(message), "{red}무작위 적들의 능력치가 뒤섞입니다!");
 			}
-			case 14:
+			case 9:
 			{
 				if(SpecialistDebuff > 3)
 				{
@@ -2578,7 +2512,7 @@ void Freeplay_SetupStart(bool extra = false)
 					SpecialistDebuff++;
 				}
 			}
-			case 15, 16:
+			case 10, 11:
 			{
 				if(VoidAfflictedBuff)
 				{
@@ -2591,12 +2525,12 @@ void Freeplay_SetupStart(bool extra = false)
 			}
 	
 			/// CREDIT SKULLS //
-			case 17:
+			case 12:
 			{
 				strcopy(message, sizeof(message), "{green}이제 적을 처치할때마다 추가 자금을 5 만큼 획득.");
 				KillBonus += 5;
 			}
-			case 18:
+			case 13:
 			{
 				if(KillBonus < 1)
 				{
@@ -2607,7 +2541,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}적 처치시 얻는 자금이 1 만큼 감소!");
 				KillBonus--;
 			}
-			case 19:
+			case 14:
 			{
 				if(CashBonus < 50)
 				{
@@ -2618,14 +2552,14 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}웨이브마다 얻는 자금이 50 만큼 감소!");
 				CashBonus -= 50;
 			}
-			case 20:
+			case 15:
 			{
 				strcopy(message, sizeof(message), "{green}웨이브마다 얻는 자금이 200 만큼 증가.");
 				CashBonus += 200;
 			}
 	
 			/// PERK SKULLS ///
-			case 21:
+			case 16:
 			{
 				if(PerkMachine == 1)
 				{
@@ -2636,7 +2570,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}이제 모든 적들이 옵시디언 호프 퍽을 사용하여, 저항력이 +20% 증가하고 최대 체력이 +15% 증가!");
 				PerkMachine = 1;
 			}
-			case 22:
+			case 17:
 			{
 				if(PerkMachine == 2)
 				{
@@ -2647,7 +2581,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}이제 모든 적들이 모닝 커피 퍽을 사용하여, 피해량이 35% 증가!");
 				PerkMachine = 2;
 			}
-			case 23: // YOUR ATTEMPTS AT DEATH ARE IN, VAIN
+			case 18: // YOUR ATTEMPTS AT DEATH ARE IN, VAIN
 			{
 				if(PerkMachine == 3)
 				{
@@ -2658,7 +2592,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}이제 모든 적들이 명사수 맥주 퍽을 사용하여, 피해량이 15% 증가!");
 				PerkMachine = 3;
 			}
-			case 24:
+			case 19:
 			{
 				if(PerkMachine == 4)
 				{
@@ -2669,7 +2603,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}이제 모든 적들이 신속 홉 퍽을 사용하여, 둔화 효과에 면역이 되었습니다!");
 				PerkMachine = 4;
 			}
-			case 25:
+			case 20:
 			{
 				if(PerkMachine == 0)
 				{
@@ -2682,7 +2616,7 @@ void Freeplay_SetupStart(bool extra = false)
 			}
 	
 			/// MISCELANEOUS SKULLS ///
-			case 26:
+			case 21:
 			{
 				if(friendunit)
 				{
@@ -2692,12 +2626,12 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{green}아주 강력한 아군 유닛이 참가합니다.");
 				friendunit = true;
 			}
-			case 27:
+			case 22:
 			{
 				strcopy(message, sizeof(message), "{red}미니 보스 생성 확률이 25% 만큼 증가!");
 				MiniBossChance *= 1.25;
 			}
-			case 28:
+			case 23:
 			{
 				if(EnemyBosses == 1)
 				{
@@ -2714,26 +2648,8 @@ void Freeplay_SetupStart(bool extra = false)
 				{
 					EnemyBosses = 6;
 				}
-			}
-			case 29:
-			{
-				if(ImmuneNuke == 1)
-				{
-					Freeplay_SetupStart();
-					return;
-				}
-	
-				strcopy(message, sizeof(message), "{red}특정 적들이 핵 파워업에 면역이 됩니다!");
-				if(ImmuneNuke)
-				{
-					ImmuneNuke--;
-				}
-				else
-				{
-					ImmuneNuke = 4;
-				}
-			}
-			case 30:
+			} 
+			case 24:
 			{
 				//if(EnemyChance > 8)
 				//{
@@ -2744,7 +2660,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}이제 더욱 강력한 적들의 등장 확률이 높아졌습니다!");
 				EnemyChance++;
 			}
-			case 31:
+			case 25:
 			{
 				if(EnemyChance < 3)
 				{
@@ -2757,17 +2673,17 @@ void Freeplay_SetupStart(bool extra = false)
 			}
 	
 			/// SAMU'S SKULLS (new!) ///
-			case 32:
+			case 26:
 			{
 				strcopy(message, sizeof(message), "{green}모든 적들의 근접 피해 저항력이 15% 만큼 감소.");
 				MeleeMult += 0.15;
 			}
-			case 33:
+			case 27:
 			{
 				strcopy(message, sizeof(message), "{green}모든 적들의 근접 피해 저항력이 20% 만큼 감소.");
 				MeleeMult += 0.2;
 			}
-			case 34:
+			case 28:
 			{
 				if(MeleeMult < 0.01) // 95% melee res max
 				{
@@ -2781,7 +2697,7 @@ void Freeplay_SetupStart(bool extra = false)
 					MeleeMult = 0.01;
 				}
 			}
-			case 35:
+			case 29:
 			{
 				if(MeleeMult < 0.01)
 				{
@@ -2795,27 +2711,27 @@ void Freeplay_SetupStart(bool extra = false)
 					MeleeMult = 0.01;
 				}
 			}
-			case 36:
+			case 30:
 			{
 				strcopy(message, sizeof(message), "{green}모든 적들의 원거리 피해 저항력이 15% 만큼 감소.");
 				RangedMult += 0.15;
 			}
-			case 37:
+			case 31:
 			{
 				strcopy(message, sizeof(message), "{green}모든 적들의 원거리 피해 저항력이 20% 만큼 감소.");
 				RangedMult += 0.2;
 			}
-			case 38:
+			case 32:
 			{
 				strcopy(message, sizeof(message), "{red}모든 적들의 공격 속도가 x0.9 만큼 증가!");
 				ExtraAttackspeed *= 0.9;
 			}
-			case 39:
+			case 33:
 			{
 				strcopy(message, sizeof(message), "{green}모든 적들의 공격 속도가 5% 만큼 감소.");
 				ExtraAttackspeed += 0.05;
 			}
-			case 40:
+			case 34:
 			{
 				if(RangedMult < 0.01) // 95% ranged res max
 				{
@@ -2829,7 +2745,7 @@ void Freeplay_SetupStart(bool extra = false)
 					RangedMult = 0.01;
 				}
 			}
-			case 41:
+			case 35:
 			{
 				if(RangedMult < 0.01)
 				{
@@ -2843,7 +2759,7 @@ void Freeplay_SetupStart(bool extra = false)
 					RangedMult = 0.01;
 				}
 			}
-			case 42, 43:
+			case 36, 37:
 			{
 				if(ExplodingNPC)
 				{
@@ -2856,7 +2772,7 @@ void Freeplay_SetupStart(bool extra = false)
 				EmitSoundToAll("ui/mm_medal_silver.wav");
 			}
 			
-			case 44:
+			case 38:
 			{
 				if(VoidBuff > 2)
 				{
@@ -2869,7 +2785,7 @@ void Freeplay_SetupStart(bool extra = false)
 					VoidBuff++;
 				}
 			}
-			case 45:
+			case 39:
 			{
 				if(VestaBuff)
 				{
@@ -2884,7 +2800,7 @@ void Freeplay_SetupStart(bool extra = false)
 					SpeedMult -= 0.15;
 				}
 			}
-			case 46:
+			case 40:
 			{
 				if(StrangleDebuff > 3)
 				{
@@ -2897,7 +2813,7 @@ void Freeplay_SetupStart(bool extra = false)
 					StrangleDebuff++;
 				}
 			}
-			case 47:
+			case 41:
 			{
 				if(ProsperityDebuff > 3)
 				{
@@ -2910,7 +2826,7 @@ void Freeplay_SetupStart(bool extra = false)
 					ProsperityDebuff++;
 				}
 			}
-			case 48:
+			case 42:
 			{
 				if(SilenceDebuff)
 				{
@@ -2923,10 +2839,10 @@ void Freeplay_SetupStart(bool extra = false)
 					SilenceDebuff = true;
 				}
 			}
-			case 49:
+			case 43:
 			{
-				// 25% chance, otherwise retry.
-				if(GetRandomFloat(0.0, 1.0) <= 0.25)
+				// 40% chance, otherwise retry.
+				if(GetRandomFloat(0.0, 1.0) <= 0.4)
 				{
 					strcopy(message, sizeof(message), "{green}!! 새롭고 특별한 무기를 구매할 수 있게 되었습니다 !!");
 					Rogue_RareWeapon_Collect();
@@ -2937,7 +2853,7 @@ void Freeplay_SetupStart(bool extra = false)
 					return;
 				}
 			}
-			case 50:
+			case 44:
 			{
 				if(CheesyPresence)
 				{
@@ -2950,7 +2866,7 @@ void Freeplay_SetupStart(bool extra = false)
 					CheesyPresence = true;
 				}
 			}
-			case 51:
+			case 45:
 			{
 				if(EloquenceBuff > 2)
 				{
@@ -2963,7 +2879,7 @@ void Freeplay_SetupStart(bool extra = false)
 					EloquenceBuff++;
 				}
 			}
-			case 52:
+			case 46:
 			{
 				if(RampartBuff > 2)
 				{
@@ -2976,7 +2892,7 @@ void Freeplay_SetupStart(bool extra = false)
 					RampartBuff++;
 				}
 			}
-			case 53:
+			case 47:
 			{
 				if(zombiecombine)
 				{
@@ -2986,7 +2902,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}이봐, 내가 생각을 좀 해본건데. 만약, {gold}콤바인과, {red}좀비가, {red}합쳐진다면...");
 				zombiecombine = true;
 			}
-			case 54:
+			case 48:
 			{
 				if(moremen)
 				{
@@ -2996,7 +2912,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}대가리 수가 더 많아야되지 않겠냐!");
 				moremen = 1;
 			}
-			case 55:
+			case 49:
 			{
 				if(immutable)
 				{
@@ -3006,7 +2922,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{purple}차원의 틈을 통해 초자연적인 존재들이 다가오고 있다...");
 				immutable = true;
 			}
-			case 56:
+			case 50:
 			{
 				if(EloquenceBuffEnemies > 2)
 				{
@@ -3019,7 +2935,7 @@ void Freeplay_SetupStart(bool extra = false)
 					EloquenceBuffEnemies++;
 				}
 			}
-			case 57:
+			case 51:
 			{
 				if(RampartBuffEnemies > 2)
 				{
@@ -3032,7 +2948,7 @@ void Freeplay_SetupStart(bool extra = false)
 					RampartBuffEnemies++;
 				}
 			}
-			case 58:
+			case 52:
 			{
 				if(HurtleBuffEnemies > 2)
 				{
@@ -3045,7 +2961,7 @@ void Freeplay_SetupStart(bool extra = false)
 					HurtleBuffEnemies++;
 				}
 			}
-			case 59:
+			case 53:
 			{
 				if(HurtleBuff > 2)
 				{
@@ -3058,7 +2974,7 @@ void Freeplay_SetupStart(bool extra = false)
 					HurtleBuff++;
 				}
 			}
-			case 60:
+			case 54:
 			{
 				if(LoveNahTonic)
 				{
@@ -3071,26 +2987,26 @@ void Freeplay_SetupStart(bool extra = false)
 					LoveNahTonic = true;
 				}
 			}
-			case 61:
+			case 55:
 			{
 				strcopy(message, sizeof(message), "{yellow}흠, 내가 생각해본건데, 해골을 더 많이 추가해야할 것 같아.");
 				ExtraSkulls++;
 			}
-			case 62:
+			case 56:
 			{
 				strcopy(message, sizeof(message), "{yellow}흠, 내가 생각해본건데, 해골을 더 많이 추가해야할 것 같아.");
 				ExtraSkulls++;
 			//	strcopy(message, sizeof(message), "{yellow}흠, 지금 생각해본건데, 해골 2개를 더 추가해보면 더 재밌어질 것 같아.");
 			//	ExtraSkulls += 2;
 			}
-			case 63:
+			case 57:
 			{
 				strcopy(message, sizeof(message), "{yellow}흠, 내가 생각해본건데, 해골을 더 많이 추가해야할 것 같아.");
 				ExtraSkulls++;
 			//	strcopy(message, sizeof(message), "{red}쓰읍- {crimson}존나 재밌네!{red} 그럼 해골을 3개씩 추가해보자고!!!");
 			//	ExtraSkulls += 3;
 			}
-			case 64:
+			case 58:
 			{
 				if(Schizophrenia)
 				{
@@ -3100,7 +3016,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}이 해골을 집어들자, 갑자기 당신의 머릿속에 어떤 목소리가 속삭이고 있다...");
 				Schizophrenia = true;
 			}
-			case 65:
+			case 59:
 			{
 				if(DarknessComing)
 				{
@@ -3110,7 +3026,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}어둠이 몰려오고 있어. {crimson}어서 도망가!");
 				DarknessComing = true;
 			}
-			case 66:
+			case 60:
 			{
 				if(thespewer)
 				{
@@ -3120,7 +3036,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}당신의 마지막 상대는... {crimson}부영양의 분출자!");
 				thespewer = true;
 			}
-			case 67:
+			case 61:
 			{
 				if(friendunit)
 				{
@@ -3130,7 +3046,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{green}You will gain a strong, friendly unit.");
 				friendunit = true;
 			}
-			case 68:
+			case 62:
 			{
 				if(portalgalore)
 				{
@@ -3140,7 +3056,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}Here's a gift from {purple}Unspeakable{red}. {purple}Five Hundred Void Portals!!");
 				portalgalore = true;
 			}
-			case 69:
+			case 63:
 			{
 				if(refragportal)
 				{
@@ -3150,7 +3066,7 @@ void Freeplay_SetupStart(bool extra = false)
 				strcopy(message, sizeof(message), "{red}Here's a gift from {darkblue}C.H.I.M.E.R.A.{red}. {darkblue}Five Hundred Portal Gate!");
 				refragportal = true;
 			}
-			case 70:
+			case 64:
 			{
 				if(XenoLabBuff)
 				{
@@ -3163,7 +3079,7 @@ void Freeplay_SetupStart(bool extra = false)
 					XenoLabBuff = true;
 				}
 			}
-			case 71:
+			case 65:
 			{
 				if(SeaLabBuff)
 				{
@@ -3176,7 +3092,7 @@ void Freeplay_SetupStart(bool extra = false)
 					SeaLabBuff = true;
 				}
 			}
-			//case 72:
+			//case 66:
 			//{
 				//if(sigmaller)
 				//{
@@ -3188,9 +3104,9 @@ void Freeplay_SetupStart(bool extra = false)
 			//}
 			default:
 			{
-				strcopy(message, sizeof(message), "{yellow}없음!");
+				strcopy(message, sizeof(message), "{darkgray}아무 일도.. 일어나지 않았습니다?");
 				// If this shows up, FIX YOUR CODE :)
-			}	
+			}
 		}
 
 		RerollTry = 0;
