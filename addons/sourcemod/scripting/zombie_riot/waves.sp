@@ -219,6 +219,9 @@ bool Waves_InSetup()
 	if(Rogue_Mode())
 		return Rogue_InSetup();
 	
+	if(Holdout_Mode())
+		return Holdout_InSetup();
+	
 	return (InSetup || !Waves_Started());
 }
 
@@ -950,6 +953,17 @@ void Waves_SetupVote(KeyValues map, bool modifierOnly = false)
 		if(!modifierOnly)
 			Rogue_SetupVote(kv);
 
+		if(kv != map)
+			delete kv;
+		
+		return;
+	}
+	
+	if(map && kv.GetNum("holdout"))
+	{
+		if(!modifierOnly)
+			Holdout_SetupVote(kv);
+		
 		if(kv != map)
 			delete kv;
 		
@@ -1799,7 +1813,7 @@ void Waves_RoundStart(bool event = false)
 
 	Kit_Fractal_ResetRound();
 	
-	if(Construction_Mode() || Rogue_Mode() || BetWar_Mode() || Dungeon_Mode() || Arena_Mode())
+	if(Construction_Mode() || Rogue_Mode() || BetWar_Mode() || Dungeon_Mode() || Arena_Mode() || Holdout_Mode())
 	{
 		
 	}
@@ -1894,6 +1908,10 @@ void Waves_RoundStart(bool event = false)
 	else if(Rogue_Mode())
 	{
 		Rogue_StartSetup();
+	}
+	else if(Holdout_Mode())
+	{
+		Holdout_StartSetup();
 	}
 
 	Waves_UpdateMvMStats();
@@ -2222,7 +2240,7 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 	int length = Rounds[WaveWhich].Length-1;
 	bool panzer_spawn = false;
 	bool panzer_sound = false;
-	bool subgame = (Rogue_Mode() || Construction_Mode() || Dungeon_Mode() || Arena_Mode());
+	bool subgame = (Rogue_Mode() || Construction_Mode() || Dungeon_Mode() || Arena_Mode() || Holdout_Mode());
 	static int panzer_chance;
 	bool GiveAmmoSupplies = !Dungeon_Mode();
 
@@ -2769,8 +2787,12 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 			}
 			if(round.AmmoBoxExtra)
 			{
-				Ammo_Count_Ready += round.AmmoBoxExtra;	
+				Ammo_Count_Ready += round.AmmoBoxExtra;
 			}
+			
+			// 16명 초과 인원에 따른 동적 탄약 보급
+            Ammo_Count_Ready += GetExtraAmmoForPlayerCount(); // 동적 추가 보급
+			
 			if(round.Custom_Refresh_Npc_Store)
 			{
 				refreshNPCStore = true;
@@ -2997,6 +3019,10 @@ bool Waves_Progress(bool donotAdvanceRound = false,
 						else if(Rogue_Mode())
 						{
 							Rogue_BattleVictory();
+						}
+						else if(Holdout_Mode())
+						{
+							Holdout_BattleVictory();
 						}
 					}
 
@@ -3442,6 +3468,9 @@ bool Waves_Started()
 	if(Rogue_Mode())
 		return Rogue_Started();
 	
+	if(Holdout_Mode())
+		return Holdout_Started();
+	
 	return (CurrentRound[Rounds_Default] || CurrentWave[Rounds_Default] != -1);
 }
 
@@ -3455,6 +3484,9 @@ int Waves_GetRoundScale()
 	
 	if(Rogue_Mode())
 		return Rogue_GetRound();
+	
+	if(Holdout_Mode())
+		return Holdout_GetRound();
 	
 	if(BetWar_Mode())
 		return 1;
@@ -3871,6 +3903,16 @@ void ScalingMultiplyEnemyHpGlobalScale(int iNpc, float modif_hp = 1.0)
 	SetEntProp(iNpc, Prop_Data, "m_iMaxHealth", RoundToNearest(Maxhealth));
 }
 
+stock int GetExtraAmmoForPlayerCount()
+{
+	int iPlayers = CountPlayersOnRed(0);
+	if (iPlayers <= SCALE_PLAYERCOUNT_CUTOFF)
+        return 0;
+	
+	// 16명 초과분 4명당 탄약 상자 1개 추가 (Ceil로 올림 처리)
+	return RoundToCeil(float(iPlayers - SCALE_PLAYERCOUNT_CUTOFF) / 4.0);
+}
+
 void Waves_ForceSetup(float cooldown)
 {
 	Cooldown = GetGameTime() + cooldown;
@@ -3916,7 +3958,10 @@ static void UpdateMvMStatsFrame()
 
 	if(Rogue_UpdateMvMStats())
 		return;
-
+	
+	if(Holdout_UpdateMvMStats())
+		return;
+	
 	float cashLeft, totalCash;
 
 	int activecount, totalcount;
@@ -4440,6 +4485,9 @@ void Waves_SetReadyStatus(int status, bool stopmusic = true)
 
 	if(Arena_Mode())
 		Arena_SetReadyStatus(status);
+	
+	if(Holdout_Mode())
+		Holdout_SetReadyStatus(status);
 }
 
 static void WaveSizeLimit(int objective, int &asize1 = 0, int &asize2 = 0, int &aname1 = 0, int &aname2 = 0)

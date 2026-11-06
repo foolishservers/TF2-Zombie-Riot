@@ -1236,10 +1236,12 @@ void NPC_ConfigSetup()
 	DungeonLoot_MapStart();
 	
 	// Foolish
-	EasyBobTheFirst_OnMapStart();
-	EasyAlaxios_OnMapStart();
+	// EasyBobTheFirst_OnMapStart();
+	// EasyAlaxios_OnMapStart();
 	
 	// Gmod ZS
+	ZSBase_OnMapStart_NPC();
+	
 	ZSZombie_OnMapStart_NPC();
 	ZSHeadcrab_OnMapStart_NPC();
 	Ghoul_OnMapStart_NPC();
@@ -1340,7 +1342,7 @@ void NPC_ConfigSetup()
 	AgentSmithFollower_Setup();
 	KevinmeryFollower_Setup();
 	
-	Dimension_Ripper_Base_OnMapStart_NPC();
+	// Dimension_Ripper_Base_OnMapStart_NPC();
 	
 	AltExtra_Base_MapStart();
 	AltExtra_Mecha_Loader_MapStart();
@@ -1386,13 +1388,14 @@ void NPC_ConfigSetup()
 	//WFCombineRevolver_OnMapStart_NPC();
 	//WFCombineGrenadier_OnMapStart_NPC();
 	//Whiteflower_CombineBazooka_OnMapStart_NPC();
-	//Whiteflower_ExpertFighter_OnMapStart_NPC();
+	
 	Combine_Pretorian_Guard_OnMapStart();
 	CombineSupremeOverlord_OnMapStart_NPC();
 	Anti_Chaos_Robot_OnMapStart_NPC();
 	WhiteFlower_BoltSmasher_OnMapStart_NPC();
 	Combine_Tank_Commander_OnMapStart();
 	Combine_Heavy_Armored_Titan_OnMapStart();
+	Combine_Expert_Fighter_OnMapStart();
 	
 	//RaidbossKnightOfTheCurtain_OnMapStart_NPC();
 	//RaidbossTraitorPrescott_OnMapStart_NPC();
@@ -2936,10 +2939,12 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/construction/npc_dungeon_loot.sp"
 
 // Foolish
-#include "npc/foolish/npc_easy_god_alaxios.sp"
-#include "npc/foolish/npc_easy_bob_the_first_last_savior.sp"
+// #include "npc/foolish/npc_easy_god_alaxios.sp"
+// #include "npc/foolish/npc_easy_bob_the_first_last_savior.sp"
 
 // Gmod ZS
+#include "npc/gmod_zs/npc_zs_base.sp"
+
 #include "npc/gmod_zs/15/npc_zs_zombie.sp"
 #include "npc/gmod_zs/15/npc_zs_headcrab.sp"
 #include "npc/gmod_zs/15/npc_zs_ghoul.sp"
@@ -3013,9 +3018,10 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 // #include "npc/ally/ruina_barracks/npc_barrack_ruliana.sp"
 
 // Dimension ripper
-#include "npc/ally/dimension_ripper/npc_dimension_ripper_base.sp"
+// #include "npc/ally/dimension_ripper/npc_dimension_ripper_base.sp"
 
 // Alt Extra
+// #include "npc/alt_extra/npc_alt_extra_body.sp"
 #include "npc/alt_extra/npc_alt_extra_base.sp"
 #include "npc/alt_extra/npc_alt_extra_mecha_loader.sp"
 #include "npc/alt_extra/npc_alt_extra_mecha_duelist.sp"
@@ -3067,13 +3073,13 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 //#include "npc/wf_survivors/npc_wf_combine_grenadier.sp"
 //#include "npc/wf_survivors/npc_wf_combine_revolver.sp"
 //#include "npc/wf_survivors/npc_wf_combine_bazooka.sp"
-//#include "npc/wf_survivors/npc_wf_combine_expert_fighter.sp"
 #include "npc/wf_survivors/npc_combine_pretorian_guard.sp"
 #include "npc/wf_survivors/npc_combine_supreme_overlord.sp"
 #include "npc/wf_survivors/npc_anti_chaos_robot.sp"
 #include "npc/wf_survivors/npc_boltsmasher.sp"
 #include "npc/wf_survivors/npc_combine_tank_commander.sp"
 #include "npc/wf_survivors/npc_combine_heavy_armored_titan.sp"
+#include "npc/wf_survivors/npc_combine_expert_fighter.sp"
 
 //#include "npc/raidmode_bosses/wf_survivors/npc_knight_of_the_curtain.sp"
 //#include "npc/raidmode_bosses/wf_survivors/npc_traitor_prescott.sp"

@@ -652,6 +652,11 @@ bool Rogue_VoteActive()
 	return view_as<bool>(Voting);
 }
 
+ArrayList Rogue_GetActiveVote()
+{
+	return Voting;
+}
+
 float Rogue_VoteGameTime()
 {
 	return VoteEndTime;
@@ -1106,6 +1111,17 @@ public Action Rogue_RoundStartTimer(Handle timer)
 				}
 			}
 		}
+		else if(Holdout_Mode())
+		{
+			for(int client=1; client<=MaxClients; client++)
+			{
+				if(IsClientInGame(client) && GetClientTeam(client) == 2 && !IsFakeClient(client))
+				{
+					Holdout_Start();
+					return Plugin_Stop;
+				}
+			}
+		}
 		else
 		{
 			PrintToChatAll("ERROR: Unknown custom gametype");
@@ -1450,7 +1466,7 @@ void Rogue_NextProgress()
 			}
 
 			int maxRooms = floor.RoomCount + ExtraStageCount;
-
+			
 			bool removeCurse;
 			switch(RogueTheme)
 			{
@@ -1937,12 +1953,17 @@ bool Rogue_ShowStatus(int client)
 				if(DisplayDo <= 1)
 					DisplayDo = 1;
 				
-				ShowSyncHudText(client, SyncHud_WandMana, "%T", "Rogue Stage Status",client, floor.Name, DisplayDo, (floor.RoomCount + ExtraStageCount) + 2);
+				ShowSyncHudText(client, SyncHud_WandMana, "%T", "Rogue Stage Status", client, floor.Name, DisplayDo, (floor.RoomCount + ExtraStageCount) + 2);
 				return true;
 			}
 		}
 	}
-
+	else if(Holdout_Mode())
+	{
+		if(Holdout_ShowStatus(client))
+			return true;
+	}
+	
 	return false;
 }
 
@@ -2218,7 +2239,7 @@ static void StartStage(const Stage stage)
 	BattleIngots = CurrentFloor > 1 ? 4 : 3;
 	RequiredBattle = false;
 	SetAllCamera();
-
+	
 	if(stage.IntroMusic.Path[0])
 	{
 		for(int client = 1; client <= MaxClients; client++)

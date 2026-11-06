@@ -629,6 +629,7 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "sm_skyboxprops.sp"
 #include "random_pickups.sp"
 #include "arenapvp.sp"
+#include "holdout.sp"
 #include "shared/sound_manualdownload.sp"
 #include "custom/homing_projectile_logic.sp"
 #include "custom/weapon_slug_rifle.sp"
@@ -792,6 +793,8 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "custom/weapon_flare.sp"
 #include "custom/kit_survivalist.sp"
 #include "custom/weapon_operamute.sp"
+#include "custom/addons/weapon_wand_freeze.sp"
+//#include "custom/addons/weapon_charge_beam.sp"
 
 void ZR_PluginLoad()
 {
@@ -879,6 +882,7 @@ void ZR_PluginStart()
 	SkyboxProps_OnPluginStart();
 	Construction_PluginStart();
 	Database_PluginStart();
+	Holdout_PluginStart();
 	Items_PluginStart();
 	Medigun_PluginStart();
 	OnPluginStartMangler();
@@ -972,6 +976,8 @@ void ZR_MapStart()
 	BetWar_MapStart();
 	Dungeon_MapStart();
 	Arena_MapStart();
+	Holdout_MapStart();
+	
 	Zero(TeutonType); //Reset teutons on mapchange
 	f_AllowInstabuildRegardless = 0.0;
 	Zero(i_NormalBarracks_HexBarracksUpgrades);
@@ -1270,7 +1276,7 @@ public Action GlobalTimer(Handle timer)
 		f_AllowInstabuildRegardless = 0.0;
 		ForceMusicStopAndReset = true;
 	}
-	if(Rogue_Mode() || Construction_Mode() || Dungeon_Mode())
+	if(Rogue_Mode() || Construction_Mode() || Dungeon_Mode() || Holdout_Mode())
 	{
 		ForceMusicStopAndReset = false;
 	}
@@ -2420,19 +2426,26 @@ void CheckAlivePlayers(int killed=0, int Hurtviasdkhook = 0, bool TestLastman = 
 		Bob_Exists_Index = -1;
 	}
 
-	bool rogue = Rogue_Mode();
-	if(rogue)
-		rogue = !Rogue_BattleLost();
-
-	if(!rogue)
+	bool subgame_lost = false;
+	
+	if(Rogue_Mode())
+	{
+		subgame_lost = !Rogue_BattleLost();
+	}
+	else if(Holdout_Mode())
+	{
+		subgame_lost = !Holdout_BattleLost();
+	}
+	
+	if(!subgame_lost)
 	{
 		ForcePlayerLoss(false);
 	}
 
 	if(killed)
 	{
-		Music_RoundEnd(killed, !rogue);
-		if(!rogue)
+		Music_RoundEnd(killed, !subgame_lost);
+		if(!subgame_lost)
 		{
 			CreateTimer(5.0, Remove_All, _, TIMER_FLAG_NO_MAPCHANGE);
 		//	RequestFrames(Remove_All, 300);
@@ -2798,7 +2811,7 @@ stock void UpdatePlayerPoints(int client)
 	
 	Points += Healing_done_in_total[client] / 3;
 
-	if(Rogue_Mode())
+	if(Rogue_Mode() || Holdout_Mode())
 	{
 		Points += RoundToCeil(Damage_dealt_in_total[client]) / 250;
 	}
@@ -2813,7 +2826,7 @@ stock void UpdatePlayerPoints(int client)
 	
 	Points += i_BarricadeHasBeenDamaged[client] / 5;
 
-	if(Rogue_Mode())
+	if(Rogue_Mode() || Holdout_Mode())
 	{
 		Points += i_PlayerDamaged[client] / 10;
 	}
@@ -3645,7 +3658,8 @@ void ForcePlayerWin(bool fakeout = false)
 		ZR_GetSpecialMode() == Mode_Rogue2 ||
 		ZR_GetSpecialMode() == Mode_Rogue3 || 
 		ZR_GetSpecialMode() == Mode_Construction || 
-		ZR_GetSpecialMode() == Mode_Construction2)
+		ZR_GetSpecialMode() == Mode_Construction2 ||
+		ZR_GetSpecialMode() == Mode_Holdout)
 		{
 			Artifact artifact;
 			int length = CurrentCollection ? CurrentCollection.Length : 0;
@@ -4048,7 +4062,7 @@ void Copy3DSkyboxFogDataToClientSkybox(int entity, int client)
 
 bool ZR_AllowLastman()
 {
-	if(Rogue_Mode() || Dungeon_Mode())
+	if(Rogue_Mode() || Dungeon_Mode() || Holdout_Mode())
 		return true;
 	if(Classic_Mode() || Construction_Mode() || Arena_Mode())
 		return false;

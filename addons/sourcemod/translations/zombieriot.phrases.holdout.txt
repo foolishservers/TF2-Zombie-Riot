@@ -1,0 +1,92 @@
+"Phrases"
+{
+	"Explain Holdout Mode 1"
+	{
+		"en"		""
+		"ko"		"홀드아웃 모드는 무작위로 오는 공격을 막아내는 모드입니다. 한 층마다 전투, 휴식, 최종 전투의 구조를 가지고 있습니다."
+	}
+	
+	"Explain Holdout Mode 2"
+	{
+		"en"		""
+		"ko"		"휴식 시간에는 우연한 만남 또는 상점을 들어갈 수 있고, 전투와 휴식 시간은 여러 번 진행될 수 있습니다."
+	}
+	
+	"Intermission"
+	{
+		"en"		"Intermission"
+		"ko"		"휴식 시간"
+	}
+	
+	"Holdout Hard Battle Victory"
+	{
+		"en"		""
+		"ko"		"거센 침공의 물결이 멎었습니다. 한동안은 말이죠."
+	}
+	
+	"Holdout Stage Vote"
+	{
+		"en"		""
+		"ko"		"적들의 움직임이 약해졌습니다. 잠시 다른 일을 할 수 있을 것 같습니다."
+	}
+	
+	"Holdout Win"
+	{
+		"en"		""
+		"ko"		"더 이상 침공은 없습니다. 여러분의 승리입니다."
+	}
+	
+	"Holdout Ranout of Battles"
+	{
+		"en"		""
+		"ko"		"적들의 모습이 보이지 않습니다. 다른 할 일이 있을 지 찾아봅시다."
+	}
+	
+	// Artifacts.
+	
+	// Normal Stage.
+	
+	// Special Stage.
+	"Recover Loot"
+	{
+		"en"		"Recover Loot"
+		"ko"		"전리품 회수"
+	}
+	"Zoning Exploration"
+	{
+		"en"		"Zoning Exploration"
+		"ko"		"구역 탐사"
+	}
+	
+	// Encounter.
+	"Solomon's Judgment"
+	{
+		"en"		"Solomon's Judgment"
+		"ko"		"솔로몬의 판결"
+	}
+	"Wandering Merchant"
+	{
+		"en"		"Wandering Merchant"
+		"ko"		"떠돌이 상인"
+	}
+	"Deadlock"
+	{
+		"en"		"Deadlock"
+		"ko"		"교착 상태"
+	}
+	"Good Samaritan"
+	{
+		"en"		"Good Samaritan"
+		"ko"		"착한 사마리아인"
+	}
+	"Followers of Chaos"
+	{
+		"en"		"Followers of Chaos"
+		"ko"		"혼돈 추종자들"
+	}
+	"Magician Witch Trials"
+	{
+		"en"		"Magician Witch Trials"
+		"ko"		"마법사의 마녀 재판"
+	}
+}
