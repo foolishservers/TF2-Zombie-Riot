@@ -674,6 +674,7 @@ static Item LastBoughtWeapon[MAXPLAYERS];
 
 static bool HasMultiInSlot[MAXPLAYERS][6];
 static Function HolsterFunc[MAXPLAYERS] = {INVALID_FUNCTION, ...};
+static bool HasBlacklistOrWhitelist;
 
 bool IsInLoadoutMenu(int client)
 {
@@ -1234,6 +1235,8 @@ static void ConfigSetup(int section, KeyValues kv, int hiddenType, bool noKits, 
 	bool isItem = cost >= 0;
 	
 	char buffer[128], buffers[12][32];
+	
+	HasBlacklistOrWhitelist = false;
 
 	Item item;
 	item.Section = section;
@@ -1284,6 +1287,8 @@ static void ConfigSetup(int section, KeyValues kv, int hiddenType, bool noKits, 
 				}
 			}
 		}
+		
+		HasBlacklistOrWhitelist = true;
 	}
 
 	item.Starter = view_as<bool>(kv.GetNum("starter"));
@@ -1968,6 +1973,10 @@ void Store_BuyNamedItem(int client, const char name[64], bool free)
 				int base = info.Cost;
 				ItemCost(client, item, info.Cost);
 
+				// Don't try to buy an item we already own
+				if (item.Owned[client] > 0)
+					return;
+				
 				if(info.Cost > 0 && free)
 					return;
 				
@@ -5384,7 +5393,7 @@ static void LoadoutPage(int client, bool last = false)
 	
 	char buffer[64];
 	
-	if(!CvarDisableAutoLoadouts.BoolValue)
+	if(AutoLoadouts_IsEnabled())
 	{
 		Format(buffer, sizeof(buffer), "[%T]", "Autoloadout Page", client);
 		menu.AddItem("-123", buffer, ITEMDRAW_DEFAULT);
@@ -8518,4 +8527,9 @@ void LoadoutPage_ResyncSuccess(int client, DBResultSet result)
 	
 	if(InLoadoutMenu[client])
 		LoadoutPage(client, true);
+}
+
+bool Store_HasBlacklistOrWhitelist()
+{
+	return HasBlacklistOrWhitelist;
 }
