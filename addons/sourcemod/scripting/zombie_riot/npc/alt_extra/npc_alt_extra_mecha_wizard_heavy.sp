@@ -43,10 +43,6 @@ methodmap AltExtra_Mecha_Wizard_Heavy < AltExtra_Base {
 	
 	public void UpdateBody() {
 		float gameTime = GetGameTime(this.index);
-		if (this.m_flIdleTime > gameTime) {
-			return;
-		}
-		
 		float flDeltaTime = (this.m_flLastBodyUpdateTime > 0.0) ? (gameTime - this.m_flLastBodyUpdateTime) : 0.05;
 		this.m_flLastBodyUpdateTime = gameTime;
 		
@@ -55,102 +51,17 @@ methodmap AltExtra_Mecha_Wizard_Heavy < AltExtra_Base {
 		
 		bool bCantSeeTarget = !IsValidEnemy(this.index, this.m_iTarget) || !Can_I_See_Enemy_Only(this.index, this.m_iTarget);
 		if (bCantSeeTarget) {
-			if (!this.m_bYawHandedOff && this.m_iBodyYawPoseParameter > -1) {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
-				if (FloatAbs(flYaw) > 0.1) {
-					this.SetPoseParameter(
-						this.m_iBodyYawPoseParameter,
-						ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
-					);
-				}
-				else {
-					this.m_bYawHandedOff = true;
-				}
-			}
-			
-			if (!this.m_bPitchHandedOff && this.m_iBodyPitchPoseParameter > -1) {
-				float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
-				
-				if (FloatAbs(flPitch) > 0.1) {
-					this.SetPoseParameter(
-						this.m_iBodyPitchPoseParameter,
-						ApproachAngle(0.0, flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
-					);
-				}
-				else {
-					this.m_bPitchHandedOff = true;
-				}
-			}
-			
+			this.UntwistBody(flDeltaTime);
 			return;
 		}
+		
+		if (this.m_flIdleTime > gameTime)
+			return;
 		
 		if (this.m_iBodyPitchPoseParameter < 0 && this.m_iBodyYawPoseParameter < 0)
 			return;
 		
-		float vecMe[3], vecTarget[3];
-		WorldSpaceCenter(this.index, vecMe);
-		WorldSpaceCenter(this.m_iTarget, vecTarget);
-		
-		float vecDir[3], vecAng[3];
-		if (this.m_iBodyPitchPoseParameter > -1) {
-			SubtractVectors(vecMe, vecTarget, vecDir);
-			NormalizeVector(vecDir, vecDir);
-			GetVectorAngles(vecDir, vecAng);
-			
-			vecAng[0] = UTIL_AngleNormalize(vecAng[0]);
-			
-			float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
-			
-			this.SetPoseParameter(
-				this.m_iBodyPitchPoseParameter,
-				ApproachAngle(vecAng[0], flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
-			);
-			
-			this.m_bPitchHandedOff = false;
-		}
-		
-		if (this.m_iBodyYawPoseParameter > -1) {
-			SubtractVectors(vecTarget, vecMe, vecDir);
-			NormalizeVector(vecDir, vecDir);
-			GetVectorAngles(vecDir, vecAng);
-			
-			float angRotation[3];
-			GetEntPropVector(this.index, Prop_Data, "m_angRotation", angRotation);
-			
-			float relativeYaw = -MyAngleDiff(vecAng[1], angRotation[1]);
-			
-			if (relativeYaw > 44.0 || relativeYaw < -44.0) {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
-				if (FloatAbs(flYaw) > 0.1) {
-					this.SetPoseParameter(
-						this.m_iBodyYawPoseParameter,
-						ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
-					);
-				}
-				
-				if (!this.m_bPathing)
-					this.GetLocomotionInterface().FaceTowards(vecTarget);
-			}
-			else {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
-				float bodyYaw = clamp(relativeYaw, -44.9, 44.9);
-				
-				this.SetPoseParameter(
-					this.m_iBodyYawPoseParameter,
-					ApproachAngle(bodyYaw, flYaw, ALT_EXTRA_BODY_YAW_TRACK_SPEED * flDeltaTime)
-				);
-			}
-			
-			this.m_bYawHandedOff = false;
-		}
-		else {
-			if (!this.m_bPathing)
-				this.GetLocomotionInterface().FaceTowards(vecTarget);
-		}
+		this.UpkeepBody(flDeltaTime);
 	}
 	
 	property float m_flDelayRapidAttack {

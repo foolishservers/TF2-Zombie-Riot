@@ -211,6 +211,7 @@ methodmap AltExtra_Mecha_Sniper_Main < AltExtra_Base {
 				this.SetActivity("ACT_MP_RUN_SECONDARY");
 				this.m_bisWalking = true;
 				this.m_bAllowBackWalking = false;
+				this.m_bDisallowTurning = false;
 				this.m_flSpeed = 250.0;
 				this.StartPathing();
 			}
@@ -218,6 +219,7 @@ methodmap AltExtra_Mecha_Sniper_Main < AltExtra_Base {
 				this.SetActivity("ACT_MP_STAND_SECONDARY");
 				this.m_bisWalking = false;
 				this.m_bAllowBackWalking = false;
+				this.m_bDisallowTurning = false;
 				this.m_flSpeed = 0.0;
 				this.StopPathing();
 			}
@@ -225,6 +227,7 @@ methodmap AltExtra_Mecha_Sniper_Main < AltExtra_Base {
 				this.SetActivity("ACT_MP_RUN_SECONDARY");
 				this.m_bisWalking = true;
 				this.m_bAllowBackWalking = true;
+				this.m_bDisallowTurning = true;
 				this.m_flSpeed = 210.0;
 				this.StartPathing();
 			}
@@ -232,6 +235,7 @@ methodmap AltExtra_Mecha_Sniper_Main < AltExtra_Base {
 				this.SetActivity("ACT_MP_RUN_MELEE");
 				this.m_bisWalking = true;
 				this.m_bAllowBackWalking = false;
+				this.m_bDisallowTurning = false;
 				this.m_flSpeed = 300.0;
 				this.StartPathing();
 			}
@@ -239,6 +243,7 @@ methodmap AltExtra_Mecha_Sniper_Main < AltExtra_Base {
 				this.SetActivity("ACT_MP_STAND_MELEE");
 				this.m_bisWalking = false;
 				this.m_bAllowBackWalking = false;
+				this.m_bDisallowTurning = false;
 				this.m_flSpeed = 0.0;
 				this.StopPathing();
 			}
@@ -266,6 +271,7 @@ methodmap AltExtra_Mecha_Sniper_Main < AltExtra_Base {
 		npc.m_flNextRangedAttack = 0.0;
 		npc.m_flGetClosestTargetTime = 0.0;
 		
+		npc.m_iChanged_WalkCycle = -1;
 		npc.AdjustWalkCycle(0);
 		
 		npc.m_iAttacksTillReload = 10;

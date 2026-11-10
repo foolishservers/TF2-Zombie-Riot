@@ -106,7 +106,7 @@ methodmap AltExtra_Medic_Master_Mage < AltExtra_Base {
 		int iActivity = npc.LookupActivity("ACT_MP_RUN_MELEE");
 		if (iActivity > 0)
 			npc.StartActivity(iActivity);
-
+		
 		npc.m_iBleedType = BLEEDTYPE_METAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPTYPE_NONE;
