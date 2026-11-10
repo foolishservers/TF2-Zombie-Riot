@@ -4273,6 +4273,248 @@
 		"ko"		"다시 공허 관문으로 돌아가야겠군."
 	}
 	
+	// Wildingen Hitman. 
+	"Wildingen_Hitman_Final"
+	{
+		"en"		"It's inside me."
+		"ko"		"그것이 내 안에 있어."
+	}
+	
+	// Omega.
+	"Omega_Encounter_1"
+	{
+		"en"		"Fuck this, I don't need my weapons to dispose of you."
+		"ko"		"좆까. 너희따위를 처리하는데 무기는 사치지."
+	}
+	"Omega_Encounter_2"
+	{
+		"en"		"We meet once again."
+		"ko"		"또 만나는 군."
+	}
+	"Omega_Encounter_3"
+	{
+		"en"		"A lot of dead bodies on the way here."
+		"ko"		"오는 길에 시체가 많이 있던데."
+	}
+	"Omega_Encounter_Freeplay_1"
+	{
+		"en"		"Apologies for being late, got held up by this guy called {fullblue}Pablo{default}."
+		"ko"		"늦어서 미안. {fullblue}파블로{default}라는 사람때문에 시간이 좀 허비됐어."
+	}
+	"Omega_Encounter_Freeplay_2"
+	{
+		"en"		"Time for a friendly skirmish!"
+		"ko"		"친선전을 시작해보자고!"
+	}
+	"Omega_Encounter_Freeplay_3"
+	{
+		"en"		"So, you called?"
+		"ko"		"그래서, 너가 전화한 거야?"
+	}
+	
+	"Omega_LastMann_1"
+	{
+		"en"		"One shot, one kill."
+		"ko"		"한 방이면 충분하겠군."
+	}
+	"Omega_LastMann_2"
+	{
+		"en"		"Hand him over and I might just let you walk out of here alive."
+		"ko"		"그를 풀어줘. 그러면 여기서 그냥 보내주도록 하지."
+	}
+	"Omega_LastMann_Freeplay_1"
+	{
+		"en"		"You've 'beat' me once before, come on, you can do it a second time."
+		"ko"		"너희 저번에 날 한 번 '이겼잖아'. 한 번 더 보여주라고."
+	}
+	"Omega_LastMann_Freeplay_2"
+	{
+		"en"		"If you can't beat me... I guess I'll get out of retirement to save the world myself."
+		"ko"		"너네가 날 못 이긴다면... 아무래도 세상을 구하기 위해 다시 복귀를 해야겠네."
+	}
+	
+	"Omega_Lose_1"
+	{
+		"en"		"Well {white}Bob{default}, I saved you once again, no need to thank me."
+		"ko"		"뭐.. {white}밥{default}, 내가 너의 목숨을 또 한 번 구했다고. 고마워할 필요는 없어."
+	}
+	"Omega_Lose_2"
+	{
+		"en"		"Wanna grab some beer after this, {white}Bob{default}?"
+		"ko"		"{white}밥{default}, 나중에 맥주나 한 잔하러 갈래?"
+	}
+	"Omega_Lose_3"
+	{
+		"en"		"Survival of the fittest."
+		"ko"		"적자생존이라고. 친구."
+	}
+	"Omega_Lose_4"
+	{
+		"en"		"You gotta do what you gotta do to survive."
+		"ko"		"살고 싶었다면, 해야 할 일을 했어야지."
+	}
+	"Omega_Lose_5"
+	{
+		"en"		"You shouldn't have kept him captive."
+		"ko"		"그를 납치한 건 큰 실수라고."
+	}
+	"Omega_Lose_6"
+	{
+		"en"		"{crimson}Whiteflower {default}must've cut his budget huh?"
+		"ko"		"{crimson}배풍등{default}이 예산을 좀 줄였나보지?"
+	}
+	"Omega_Lose_7"
+	{
+		"en"		"Well, that wasn't nearly as difficult as I was expecting it to be."
+		"ko"		"뭐, 내가 예상했던 것보단 어렵진 않았어."
+	}
+	
+	"Omega_Lose_What"
+	{
+		"en"		"Well... now what?"
+		"ko"		"음... 이제 뭐하지?"
+	}
+	
+	"Omega_TimeOver"
+	{
+		"en"		"Tempus Fugit."
+		"ko"		"시간은 기다리지 않아."
+	}
+	
+	"Omega_ThrowGrenade_1"
+	{
+		"en"		"See this area? I feel like denying it."
+		"ko"		"여기 보이나? 이젠 내 영역이야."
+	}
+	"Omega_ThrowGrenade_2"
+	{
+		"en"		"You didn't think you were the only ones with grenades, did you?"
+		"ko"		"수류탄을 든 사람이 너 혼자라고 생각하지 않았을 거야. 내 말 맞지?"
+	}
+	"Omega_ThrowGrenade_3"
+	{
+		"en"		"I knew these would come in handy."
+		"ko"		"이게 유용할 거라 알고 있었지."
+	}
+	"Omega_ThrowGrenade_4"
+	{
+		"en"		"You've got too much space to maneuver around in, I think I'll restrict some of it."
+		"ko"		"너희가 돌아다닐 공간이 너무 많은 거 같으니, 내가 선을 좀 그어두지."
+	}
+	"Omega_ThrowGrenade_5"
+	{
+		"en"		"I never come unprepared."
+		"ko"		"난 절대 준비 안 한 채로 싸우지 않아."
+	}
+	
+	"Omega_Rollermine_1"
+	{
+		"en"		"Aren't they just the cutest things ever?"
+		"ko"		"이 친구들 너무 귀엽지 않아?"
+	}
+	"Omega_Rollermine_2"
+	{
+		"en"		"Get a load of these uh... rollermines, as I like to call them."
+		"ko"		"한가득 받을 준비나 하라고. 그.. 어.. 롤러마인. 이 이름이 마음에 들더라고."
+	}
+	"Omega_Rollermine_3"
+	{
+		"en"		"Don't underestimate my mechanical expertise."
+		"ko"		"내 기계공학 지식을 얕잡아보지 말라고."
+	}
+	"Omega_Rollermine_4"
+	{
+		"en"		"Rollermines, roll out. Heh, see what I did there?"
+		"ko"		"롤러마인. 하하, 내가 뭘했는지 알겠지?"
+	}
+	"Omega_Rollermine_5"
+	{
+		"en"		"Protect me, zappies."
+		"ko"		"나를 지켜라, 따끔이들."
+	}
+	
+	"Omega_Anger_Freeplay"
+	{
+		"en"		"Alright, time to quit playing around."
+		"ko"		"그래 그래. 이제 제대로 해보자고."
+	}
+	"Omega_Anger"
+	{
+		"en"		"God damn it! Just die already!"
+		"ko"		"젠장! 이제 좀 죽어!"
+	}
+	
+	"Omega_and_Bob_Talk_1"
+	{
+		"en"		"Alright, that's enough of playing around, let's get this done."
+		"ko"		"좋아. 이제 충분히 놀았으니, 슬슬 끝을 보자고."
+	}
+	"Omega_and_Bob_Talk_2"
+	{
+		"en"		""
+		"ko"		"그럴 필요 없어, 오메가."
+	}
+	"Omega_and_Bob_Talk_3"
+	{
+		"en"		"Huh?"
+		"ko"		"뭐?"
+	}
+	"Omega_and_Bob_Talk_4"
+	{
+		"en"		""
+		"ko"		"봐, 난 멀쩡하잖아? 그리고 위협받고 있지도 않아."
+	}
+	"Omega_and_Bob_Talk_5"
+	{
+		"en"		"But {crimson}Whiteflower{default} sent his army to finish you for good!"
+		"ko"		"하지만 {crimson}배풍등{default}이 널 죽이려고 군대를 보냈잖아!"
+	}
+	"Omega_and_Bob_Talk_6"
+	{
+		"en"		""
+		"ko"		"뭐... 널브러져 있는 그놈들 시체더미가 그 결과를 말해주고 있잖아?"
+	}
+	"Omega_and_Bob_Talk_7"
+	{
+		"en"		"So you're saying that all this fighting was for nothing?"
+		"ko"		"그러면 방금 싸움이 의미없었다는 거야?"
+	}
+	"Omega_and_Bob_Talk_8"
+	{
+		"en"		""
+		"ko"		"어... 조금?"
+	}
+	"Omega_and_Bob_Talk_9"
+	{
+		"en"		"Damn...well, at least I'm keeping myself in check, can't become too weak."
+		"ko"		"젠장... 난 그래도 최소한 약해지지 않게 자기 관리는 한다고."
+	}
+	"Omega_and_Bob_Talk_10"
+	{
+		"en"		"Why didn't you just tell me that you weren't in any danger right off the bat?"
+		"ko"		"왜 처음부터 안전하다고 말해주지 않은 건데?"
+	}
+	"Omega_and_Bob_Talk_11"
+	{
+		"en"		""
+		"ko"		"...우정 테스트? 네가 날 위해 어디까지 갈 수 있나 해서."
+	}
+	"Omega_and_Bob_Talk_12"
+	{
+		"en"		"Oh please, you know I would never leave you hanging."
+		"ko"		"제발, 내가 너를 버리지 않을 거라는 거 잘 알잖아."
+	}
+	"Omega_and_Bob_Talk_13"
+	{
+		"en"		"Well, I suppose an apology is owed for attacking you, mercenaries."
+		"ko"		"일단.. 너희를 공격한 것에 사과를 표하지. 용병들."
+	}
+	"Omega_and_Bob_Talk_14"
+	{
+		"en"		"Here, take this. Bob...let's get out of here."
+		"ko"		"여기, 이걸 받아줘. 밥... 이제 이 곳에서 나가자."
+	}
+	
 	// Knight of the Curtain.
 	"KnightOfTheCurtain_Encounter_Text"
 	{
