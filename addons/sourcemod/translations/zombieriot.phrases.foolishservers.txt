@@ -882,6 +882,12 @@
 		"ko"		"프로테시아"
 	}
 	
+	"Icicle Staff"
+	{
+		"en"		"Icicle Staff"
+		"ko"		"고드름 스태프"
+	}
+	
 	//무기 설명
 	"Chaos Infected Launcher desc"
 	{
@@ -1232,6 +1238,38 @@
 	{
 		"en"		"WIP"
 		"ko"		"WIP"
+	}
+	
+	"Icicle Staff Desc"
+	{
+		"en"		"-Initiate small snow storm.\n-Add Freeze elemental damage on hit."
+		"ko"		"-작은 눈보라를 전개합니다.\n-적중 시 한기 원소 피해를 가합니다."
+	}
+	"Icicle Staff Pap 1"
+	{
+		"en"		"-Increase damage and mana cost.\n-Increase initiate speed and Reduced attackspeed.\n-New M2 Abilities."
+		"ko"		"-피해량 및 마나 소모량 증가\n-전개 속도 증가 및 공격 속도 감소\n-신규 우클릭 능력 해금:\n능력 사용 시, 일정 시간 동안 눈보라 발생 횟수가 1 증가합니다."
+	}
+	"Icicle Staff Pap 2"
+	{
+		"en"		"-Increase damage and mana cost.\n-Increase initiate speed."
+		"ko"		"-피해량 및 마나 소모량 증가\n-전개 속도 증가"
+	}
+	"Icicle Staff Pap 3"
+	{
+		"en"		"-Increase damage and mana cost.\n-Increase initiate speed and Reduced attackspeed.\n-Now initiate 2 snow storms.\n-Add Cryo elemental damage on hit."
+		"ko"		"-피해량 및 마나 소모량 증가\n-전개 속도 증가 및 공격 속도 감소\n-착탄 지점에 눈보라가 한 번 더 발생합니다.\n-적중 시 냉동 원소 피해를 가합니다."
+	}
+	"Icicle Staff Pap 4"
+	{
+		"en"		"-Increase damage and mana cost.\n-Increase initiate speed."
+		"ko"		"-피해량 및 마나 소모량 증가\n-전개 속도 증가"
+	}
+	
+	"Icicle Staff Pap Alt"
+	{
+		"en"		"-Increase damage and mana cost.\n-Increase initiate speed.\n-New M2 Abilities."
+		"ko"		"-피해량 및 마나 소모량 증가\n-전개 속도 증가\n-신규 우클릭 능력 해금: 얼음 폭풍\n사용 시, 일정 시간 동안 자기 주변에 광역 피해를 가합니다."
 	}
 	
 	//추가 장비 이름
