@@ -677,7 +677,7 @@
 	"Twirl_Lose_12"
 	{
 		"en"		"And you're all supposed to be strong?"
-		"ko"		"이것보다 더 강한거 아니었니?"
+		"ko"		"나는 너희가 강하다고 들었는데? 실망이야."
 	}
 	
 	"Twirl_Win_1"
@@ -853,12 +853,12 @@
 	"Twirl_Final_Ivocation_Rage_3"	// Fetty Wap 3th track.
 	{
 		"en"		"{crimson}I Got a Glock in my rari."
-		"ko"		"{crimson}내 람보르기니에 글록을 싣고 있지."
+		"ko"		"{crimson}너흴 조질 준비를 마쳐놨지."
 	}
 	"Twirl_Final_Ivocation_Rage_4"
 	{
 		"en"		"{crimson}I'm going to mount your heads on a staff as a warning for others not to fuck with me"
-		"ko"		"{crimson}다른 놈들이 감히 덤비지 못하도록 네 머리를 스태프에 꽂아둬야 겠어."
+		"ko"		"{crimson}다른 놈들이 감히 덤비지 못하도록 네 머리를 스태프에 꽂아둬야겠어."
 	}
 	
 	"Twirl_Final_Ivocation_1"
@@ -874,7 +874,7 @@
 	"Twirl_Final_Ivocation_3"
 	{
 		"en"		"How's your aoe situation?"
-		"ko"		"광역 공격 대책은 좀 세워 뒀어?"
+		"ko"		"광역 공격은 준비해뒀어?"
 	}
 	"Twirl_Final_Ivocation_4"
 	{
@@ -951,7 +951,7 @@
 	"Twirl_Ion_Dance_6"
 	{
 		"en"		"Dance little merc, dance..."
-		"ko"		"춤 출 시간이야, 꼬마 용병들..."
+		"ko"		"어디 한 번 춤 솜씨나 보여주려무나."
 	}
 	"Twirl_Ion_Dance_7"
 	{
@@ -961,7 +961,7 @@
 	"Twirl_Ion_Dance_8"
 	{
 		"en"		"Annihilation in {crimson}F# {snow}Minor"
-		"ko"		"{crimson}F# 단조의 전멸곡{snow}"
+		"ko"		"{crimson}F# 단조의 전멸곡."
 	}
 	"Twirl_Ion_Dance_9"
 	{
@@ -1037,7 +1037,7 @@
 	"Twirl_Retreat_14"
 	{
 		"en"		"Aaa, hai hai~"
-		"ko"		"아, 그럴 줄 알았어~"
+		"ko"		"하하! 그럴 줄 알았지~"
 	}
 	
 	"Twirl_Exit_Rage_1"
@@ -1163,7 +1163,7 @@
 	"Twirl_Exit_Final_4"
 	{
 		"en"		"{crimson}How Cute{snow}."
-		"ko"		"{crimson}귀엽기도 해라{snow}."
+		"ko"		"{crimson}다음에 또 봐. 귀염둥이들{snow}."
 	}
 	
 	"Twirl_TimeOver_Rage"
@@ -1200,7 +1200,7 @@
 	"Twirl_TimeOver_6"
 	{
 		"en"		"Clearly you all lack proper fighting spirit to take this long, that’s it, {crimson}I’m ending this."
-		"ko"		"이렇게 오래 걸리는 걸 보니 싸울 의지가 부족하군. 좋아, {crimson}내가 끝내 주겠어."
+		"ko"		"이렇게나 오래 걸리는 걸 보니 싸울 의지가 부족한 거 같네. 좋아, {crimson}내가 끝내 줄게."
 	}
 	"Twirl_TimeOver_7"
 	{
@@ -1215,7 +1215,7 @@
 	"Twirl_TimeOver_9"
 	{
 		"en"		"Tell me why you're this slow?"
-		"ko"		"대체 왜 이렇게 느린 거야?"
+		"ko"		"왜 이렇게 느릿느릿한지 설명이 필요하겠는 걸."
 	}
 	
 	"Twirl_TimeOver_Freeplay_1"
@@ -1231,13 +1231,13 @@
 	"Twirl_TimeOver_Freeplay_3"
 	{
 		"en"		"{crimson}How Cute{snow}."
-		"ko"		"{crimson}귀엽기도 해라{snow}."
+		"ko"		"{crimson}귀여운 저항이었어. 너무 늦었지만{snow}."
 	}
 	
 	"Twirl_Trio_Stella_First_Died"
 	{
 		"en"		"{crimson}Karlas{snow}! Switch to me, I'm now your priority"
-		"ko"		"{crimson}칼라스{snow}! 나와 교대해. 이제 내가 최우선 목표야."
+		"ko"		"{crimson}칼라스{snow}! 나와 교대해. 이제 나를 지켜."
 	}
 	
 	"Twirl_Trio_Karlas_First_Died_1"
@@ -1253,7 +1253,7 @@
 	"Twirl_Trio_Karlas_First_Died_3"
 	{
 		"en"		"Huh, there goes my rival."
-		"ko"		"흠, 내 라이벌이 사라졌군."
+		"ko"		"흠, 내 라이벌이 사라졌네?"
 	}
 	
 	"Twirl_Trio_Both_Died_1"
@@ -1355,7 +1355,7 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"I would prefer if your arms did not touch me mr {gold}{1}{snow}."
-		"ko"		"{gold}{1}{snow} 씨? 당신 팔을 내 쪽에서 닿지 않도록 치워주셨음 좋겠네요."
+		"ko"		"저기.. {gold}{1}{snow}? 니 팔이 나한테 닿지 않도록 치워줬으면 좋겠어."
 	}
 	
 	"Twirl_Response_Blitzkreig_Kit_1"
@@ -1373,7 +1373,7 @@
 	
 	"Twirl_Response_Cosmic_Terror_1"
 	{
-		"en"		"Ah, the Cosmic Terror, haven't seen that relic in a long while"
+		"en"		"Ah, the Cosmic Terror, haven't seen that relic in a long while."
 		"ko"		"아, 코스믹 테러라. 그 유물은 정말 오랜만에 보네."
 	}
 	"Twirl_Response_Cosmic_Terror_2"
@@ -1406,7 +1406,7 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"Go fourth {gold}{1}{snow}, AND BECOME {aqua}THE STORM THAT IS APROACHING{crimson}!"
-		"ko"		"나아가라, {gold}{1}{snow}. 그리고 {aqua}다가오는 폭풍 그 자체가 되어라{crimson}!"
+		"ko"		"{gold}{1}{snow}. {aqua}버질{snow} 코스프레라도 하나보지?"
 	}
 	
 	"Twirl_Response_Beam_Wand_1"
@@ -1419,7 +1419,7 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"So, are you Team {aqua}Particle Cannon{snow} or Team{orange} Particle Beam{gold} {1}{snow}?"
-		"ko"		"{gold}{1}{snow}, 너는 {aqua}입자 포격포{snow}파야? 아니면 {orange}입자 빔{gold}{1}{snow}파야?"
+		"ko"		"{gold}{1}{snow}, 너는 {aqua}입자 포격포{snow}파야? 아니면 {orange}입자 빔{snow}파야?"
 	}
 	
 	"Twirl_Response_Fantasy_Blade_1"
@@ -1530,7 +1530,7 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"BOBS GUN?! {crimson}GET AWAY FROM ME!!!!!!!!!! {gold}{1}"
-		"ko"		"밥의 총이라고?! {crimson}{gold}{1}, 당장 내게서 떨어져!!!!!!!!!!"
+		"ko"		"그거 밥의 총이야?! {gold}{1}{snow}, {crimson}당장 내게서 떨어져!!!!!!!!!!"
 	}
 	
 	"Twirl_Response_Reiuji_Wand_1"
@@ -1633,14 +1633,14 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"Spread the chemicals {gold}{1}{snow}, spread the that which will burn the world to nothing but pools of acid!"
-		"ko"		"화학 물질을 퍼뜨려라 {gold}{1}{snow}! 세상에 산성 웅덩이만 남을 때까지 불태울 그 물질을 퍼뜨려라!"
+		"ko"		"화학 물질을 퍼뜨리겠다고, {gold}{1}{snow}? 그러면 세상에 산성 웅덩이만 남을 때까지 불태워 보라고!"
 	}
 	
 	"Twirl_Response_Soldine_1"
 	{
 		"#format"	"{1:N}"
 		"en"		"uhhh, shouldn't you {gold}{1}{snow}, be on my side? or did {gold}Expidonsa{snow} finally have enough of my \"Twirly Antics\"?"
-		"ko"		"어... {gold}{1}{snow}, 너는 내 편이어야 하는 거 아니야? 아니면 {gold}엑스피돈사{snow}도 드디어 내 '빙글빙글 장난'에 질린 걸까?"
+		"ko"		"어... {gold}{1}{snow}, 너는 내 편이어야 하는 거 아니야? 아니면 {gold}엑스피돈사{snow}도 드디어 내 '장난'에 질린 걸까?"
 	}
 	"Twirl_Response_Soldine_2"
 	{
@@ -1671,7 +1671,7 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"Mr {gold}{1}{snow}. I'm coming for you. {crimson}you cannot hide{snow}. You will pay for stealing the {aqua}Fractal{snow}."
-		"ko"		"내가 간다. {gold}{1}{snow}. {crimson}숨을 곳은 없어! {aqua}프랙탈{snow}을 훔친 대가를 치르게 해주마!"
+		"ko"		"각오해. {gold}{1}{snow}. {crimson}숨을 곳은 없어! {aqua}프랙탈{snow}을 훔친 대가를 치르게 해주마!"
 	}
 	"Twirl_Response_Magia_Fractal_No_Wings"
 	{
@@ -1689,12 +1689,28 @@
 	{
 		"#format"	"{1:N}"
 		"en"		"{gold}{1}{snow} Wait a minute, those are {gold}Silvesters{snow} wings, and your using our spells?. That doesn't make sense"
-		"ko"		"잠깐, {gold}{1}{snow}. 지금 등에 {gold}실베스터{snow}의 날개를 달고, 우리의 주문을 쓰고 있잖아. 앞뒤가 안 맞다고!"
+		"ko"		"잠깐, {gold}{1}{snow}. 지금 등에 {gold}실베스터{snow}의 날개를 달고, 거기에 우리의 마법까지 쓰고 있잖아. 앞뒤가 안 맞다고!"
 	}
 	"Twirl_Response_Magia_Fractal_Unknown_Wings"
 	{
 		"#format"	"{1:N}"
 		"en"		"You Mr {gold}{1}{snow} are using MY {aqua}Fractal{snow}, but you're wings aren't known to me.. huh?"
 		"ko"		"흠.. {gold}{1}{snow}씨? 당신은 내 {aqua}프랙탈{snow}을 쓰고 있는데, 그 날개는 내가 아는 게 아니네...?"
+	}
+	
+	"Twirl_Response_Icicle_Staff_1"
+	{
+		"en"		""
+		"ko"		"아무리 봐도 우리 쪽 물건은 아닌데... {crimson}배풍등{default}의 병사들이 사용하던 것도 아니고.. {crimson}불쾌하네."
+	}
+	"Twirl_Response_Icicle_Staff_2"
+	{
+		"en"		""
+		"ko"		"냉기로 이 정도의 살상력을 보일 줄이야.. 엄청 정교하게 만들었네. 요즘 어떤 기업에서 마법 무기를 만든다는 소문이 있던데.. {crimson}명백히 불법이거든."
+	}
+	"Twirl_Response_Icicle_Staff_3"
+	{
+		"en"		""
+		"ko"		"그 무기.. 마나를 사용하지만 살상력은 과학적 원리에 기반하고 있어. {crimson}누가 이런 걸 만들었지?"
 	}
 }
