@@ -1870,8 +1870,11 @@ enum struct Player_Laser_Logic
 		FinishLagCompensation_Base_boss(.client = this.client);
 	}
 
-	void Detect_Targets(Function Attack_Function)
+	void Detect_Targets(Function Attack_Function, TraceEntityFilter Func_Trace = INVALID_FUNCTION)
 	{
+		if(Func_Trace==INVALID_FUNCTION)
+			Func_Trace = Player_Laser_BEAM_TraceUsers;
+	
 		if(this.max_targets)
 			i_maxtargets_hit = this.max_targets;
 		else
@@ -1884,7 +1887,7 @@ enum struct Player_Laser_Logic
 
 		b_LagCompNPC_No_Layers = true;
 		StartLagCompensation_Base_Boss(this.client);
-		Handle trace = TR_TraceHullFilterEx(this.Start_Point, this.End_Point, hullMin, hullMax, 1073741824, Player_Laser_BEAM_TraceUsers, this.client);	// 1073741824 is CONTENTS_LADDER?
+		Handle trace = TR_TraceHullFilterEx(this.Start_Point, this.End_Point, hullMin, hullMax, 1073741824, Func_Trace, this.client);	// 1073741824 is CONTENTS_LADDER?
 		delete trace;
 		FinishLagCompensation_Base_boss(.client = this.client);
 
@@ -2080,6 +2083,30 @@ public bool RayCastTraceEnemies(int entity, int contentsMask, int client)
 	}
 	return !entity;
 }
+
+public bool RayCastTraceAllys(int entity, int contentsMask, int client)
+{
+	if(IsValidEntity(entity))
+	{
+		if(IsValidAlly(client, entity) && entity != client)
+		{
+			for(int i=0 ; i < i_maxtargets_hit ; i++)
+			{
+				//don't retrace the same entity!
+				if(i_Ruina_Laser_BEAM_HitDetected[i] == entity)
+					break;
+
+				if(!i_Ruina_Laser_BEAM_HitDetected[i])
+				{
+					i_Ruina_Laser_BEAM_HitDetected[i] = entity;
+					break;
+				}
+			}
+		}
+	}
+	return !entity;
+}
+
 public bool RayCastTraceEverything(int entity, int contentsMask, int client)
 {
 	if (IsValidEntity(entity))

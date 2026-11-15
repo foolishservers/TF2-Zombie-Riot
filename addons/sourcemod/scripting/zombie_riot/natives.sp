@@ -250,8 +250,8 @@ public any Native_GetSpecialMode(Handle plugin, int numParams)
 		return Mode_Construction2;
 	if(Waves_InFreeplay())
 		return Mode_Freeplay;
-	if(Holdout_Mode())
-		return Mode_Holdout;
+	/*if(Holdout_Mode())
+		return Mode_Holdout;*/
 	
 	if(Rogue_Mode())
 	{

@@ -1240,7 +1240,7 @@ void NPC_ConfigSetup()
 	// EasyAlaxios_OnMapStart();
 	
 	// Gmod ZS
-	ZSBase_OnMapStart_NPC();
+	//ZSBase_OnMapStart_NPC();
 	
 	ZSZombie_OnMapStart_NPC();
 	ZSHeadcrab_OnMapStart_NPC();
@@ -1395,7 +1395,7 @@ void NPC_ConfigSetup()
 	WhiteFlower_BoltSmasher_OnMapStart_NPC();
 	Combine_Tank_Commander_OnMapStart();
 	Combine_Heavy_Armored_Titan_OnMapStart();
-	Combine_Expert_Fighter_OnMapStart();
+	//Combine_Expert_Fighter_OnMapStart();
 	
 	//RaidbossKnightOfTheCurtain_OnMapStart_NPC();
 	//RaidbossTraitorPrescott_OnMapStart_NPC();
@@ -2943,7 +2943,7 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 // #include "npc/foolish/npc_easy_bob_the_first_last_savior.sp"
 
 // Gmod ZS
-#include "npc/gmod_zs/npc_zs_base.sp"
+//#include "npc/gmod_zs/npc_zs_base.sp"
 
 #include "npc/gmod_zs/15/npc_zs_zombie.sp"
 #include "npc/gmod_zs/15/npc_zs_headcrab.sp"
@@ -3079,7 +3079,7 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/wf_survivors/npc_boltsmasher.sp"
 #include "npc/wf_survivors/npc_combine_tank_commander.sp"
 #include "npc/wf_survivors/npc_combine_heavy_armored_titan.sp"
-#include "npc/wf_survivors/npc_combine_expert_fighter.sp"
+//#include "npc/wf_survivors/npc_combine_expert_fighter.sp"
 
 //#include "npc/raidmode_bosses/wf_survivors/npc_knight_of_the_curtain.sp"
 //#include "npc/raidmode_bosses/wf_survivors/npc_traitor_prescott.sp"

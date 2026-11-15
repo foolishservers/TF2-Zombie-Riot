@@ -30,8 +30,13 @@ void AddHealthToUbersaw(int client, int healthvalue, float autoscale = 0.0)
 			float Healing_Value = Attributes_GetOnWeapon(client, weapon, 8, true);
 
 			float MaxValue = SUPERUBERSAW_MAXHEALTILLFULL * Healing_Value;
+			
+			Healing_Value = Attributes_GetOnWeapon(client, weapon, 41, true);
+			
+			if(Store_HasNamedItem(client, "Inv UberSaw Armor Booster"))
+				MaxValue*=1.5;
 
-			f_PercentageHealTillUbersaw[client] += (float(healthvalue) / MaxValue);
+			f_PercentageHealTillUbersaw[client] += ((float(healthvalue)*Healing_Value) / MaxValue);
 		}
 	}
 
@@ -86,17 +91,39 @@ void SuperUbersaw_Post(int client)
 stock void Superubersaw_OnTakeDamage(int victim, int &attacker, float &damage, int weapon)
 {
 	float Ratio = SuperUbersawPercentage(attacker);
+	float AttributeRate;
 	if(Ratio >= 1.0)
 	{
+		if(Store_HasNamedItem(attacker, "Inv UberSaw Armor Booster"))
+		{
+			damage*=0.33;
+			GiveArmorViaPercentage(attacker, 0.5, 1.0);
+		}
+	
 		if (b_thisNpcIsARaid[victim])
 		{
 			damage *= 2.5;
 		}
 		damage *= 12.0;
 		DisplayCritAboveNpc(victim, attacker, true);
-		SensalCauseKnockback(attacker, victim, 1.5);
+		AttributeRate = 1.5;
+		AttributeRate *= Attributes_Get(weapon, 103, 1.0);
+		SensalCauseKnockback(attacker, victim, AttributeRate, .ExtraStun=Attributes_Get(weapon, 73, 1.0));
+		int iMedigun = IsValidMedigun(attacker);
+		if(IsValidEntity(iMedigun))
+		{
+			AttributeRate = Attributes_Get(weapon, 9, 1.0)-1.0;
+			if(AttributeRate>0.0)
+			{
+				float flChargeLevel = GetEntPropFloat(iMedigun, Prop_Send, "m_flChargeLevel");
+				flChargeLevel += AttributeRate/100.0;
+				if(flChargeLevel > 1.0)
+					flChargeLevel = 1.0;
+				SetEntPropFloat(iMedigun, Prop_Send, "m_flChargeLevel", flChargeLevel);
+			}
+		}
 	}
-	float AttributeRate = Attributes_GetOnPlayer(attacker, 8, true, true);
+	AttributeRate = Attributes_GetOnPlayer(attacker, 8, true, true);
 	AttributeRate *= Attributes_Get(weapon, 7, 1.0); //Extra damage
 	damage *= AttributeRate; // We have to make it more exponential, damage scales much harder.
 }

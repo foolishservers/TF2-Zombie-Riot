@@ -207,3 +207,21 @@ char g_RobotDemo_IdleAlertedSounds[][] = {
 char g_RobotDemo_AngerSounds[][] = {
 	"vo/mvm/norm/taunts/demoman_mvm_taunts10.mp3",
 };
+
+char g_RobotDemo_LaughSounds[][] = {
+	"vo/mvm/norm/taunts/demoman_mvm_laughevil01.mp3",
+	"vo/mvm/norm/taunts/demoman_mvm_laughevil02.mp3",
+	"vo/mvm/norm/taunts/demoman_mvm_laughevil03.mp3",
+	"vo/mvm/norm/taunts/demoman_mvm_laughevil04.mp3",
+	"vo/mvm/norm/taunts/demoman_mvm_laughevil05.mp3",
+	"vo/mvm/norm/taunts/demoman_mvm_laughhappy01.mp3",
+	"vo/mvm/norm/taunts/demoman_mvm_laughhappy02.mp3",
+	"vo/mvm/norm/taunts/demoman_mvm_laughlong01.mp3",
+	"vo/mvm/norm/taunts/demoman_mvm_laughlong02.mp3",
+	"vo/mvm/norm/taunts/demoman_mvm_laughshort01.mp3",
+	"vo/mvm/norm/taunts/demoman_mvm_laughshort02.mp3",
+	"vo/mvm/norm/taunts/demoman_mvm_laughshort03.mp3",
+	"vo/mvm/norm/taunts/demoman_mvm_laughshort04.mp3",
+	"vo/mvm/norm/taunts/demoman_mvm_laughshort05.mp3",
+	"vo/mvm/norm/taunts/demoman_mvm_laughshort06.mp3"
+};

@@ -357,6 +357,8 @@ enum
 	WEAPON_IS_AUTOSHOTGUN = 1006,
 	WEAPON_KIT_SURVIVALIST = 1007,
 	WEAPON_ADAPTIVE_MEDIGUN = 1008,
+	WEAPON_CRUSADER_CROSSBOW = 1009,
+	WEAPON_Health_Hose = 1010,
 };
 
 enum
@@ -793,7 +795,7 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "custom/weapon_flare.sp"
 #include "custom/kit_survivalist.sp"
 #include "custom/weapon_operamute.sp"
-#include "custom/addons/weapon_wand_freeze.sp"
+//#include "custom/addons/weapon_wand_freeze.sp"
 //#include "custom/addons/weapon_charge_beam.sp"
 
 void ZR_PluginLoad()
@@ -3658,8 +3660,8 @@ void ForcePlayerWin(bool fakeout = false)
 		ZR_GetSpecialMode() == Mode_Rogue2 ||
 		ZR_GetSpecialMode() == Mode_Rogue3 || 
 		ZR_GetSpecialMode() == Mode_Construction || 
-		ZR_GetSpecialMode() == Mode_Construction2 ||
-		ZR_GetSpecialMode() == Mode_Holdout)
+		ZR_GetSpecialMode() == Mode_Construction2/* ||
+		ZR_GetSpecialMode() == Mode_Holdout*/)
 		{
 			Artifact artifact;
 			int length = CurrentCollection ? CurrentCollection.Length : 0;
