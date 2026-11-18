@@ -131,23 +131,15 @@ public void Weapon_Wand_Freeze_M2(int client, int weapon, bool crit, int slot)
 	SDKhooks_SetManaRegenDelayTime(client, 2.0);
 	
 	Rogue_OnAbilityUse(client, weapon);
-	Ability_Apply_Cooldown(client, slot, 20.0);
+	Ability_Apply_Cooldown(client, slot, 30.0);
 	
 	char buffer[64];
 	FormatEx(buffer, sizeof(buffer), WEAPON_WAND_FREEZE_M2_SOUND, GetRandomInt(1, 5));
 	EmitSoundToAll(buffer, client);
 	
-	float time = 4.0;
+	float time = 5.0;
 	switch(Wand_Freeze_CurrentPap[client])
 	{
-		case 1:
-		{
-			time = 4.5;
-		}
-		case 2:
-		{
-			time = 5.0;
-		}
 		case 3:
 		{
 			time = 5.5;
@@ -171,6 +163,7 @@ public void Weapon_Wand_Freeze_M2(int client, int weapon, bool crit, int slot)
 	particle = ParticleEffectAt(flPos, "utaunt_snowring_space_parent", time);
 	if(IsValidEntity(particle))
 	{
+		AddEntityToThirdPersonTransitMode(client, particle);
 		SetParent(client, particle);
 		Wand_Freeze_ParticleRef[client] = EntIndexToEntRef(particle);
 	}
@@ -179,10 +172,15 @@ public void Weapon_Wand_Freeze_M2(int client, int weapon, bool crit, int slot)
 	if(gameTime < Wand_Freeze_M2_Expire[client])
 	{
 		Wand_Freeze_M2_Expire[client] += time;
+		
+		time += (Wand_Freeze_M2_Expire[client] - gameTime);
+		TF2_RemoveCondition(client, TFCond_FocusBuff);
+		TF2_AddCondition(client, TFCond_FocusBuff, time);
 	}
 	else
 	{
 		Wand_Freeze_M2_Expire[client] = gameTime + time;
+		TF2_AddCondition(client, TFCond_FocusBuff, time);
 	}
 }
 
@@ -369,24 +367,24 @@ static void Weapon_Wand_Freeze_SharedAttack(int client, int weapon, int count)
 	
 	delete swingTrace;
 	
-	float castTime = 1.1;
+	float castTime = 1.25;
 	switch (Wand_Freeze_CurrentPap[client])
 	{
 		case 1:
 		{
-			castTime = 1.0;
+			castTime = 1.15;
 		}
 		case 2:
 		{
-			castTime = 0.95;
+			castTime = 1.1;
 		}
 		case 3:
 		{
-			castTime = 0.9;
+			castTime = 1.0;
 		}
 		case 4:
 		{
-			castTime = 0.85;
+			castTime = 0.95;
 		}
 	}
 	
@@ -464,7 +462,7 @@ static void Weapon_Wand_Freeze_Spawn(int client, int weapon, int countMax, int c
 	else
 	{
 		// ParticleEffectAt(pos, "utaunt_snowflakesaura_rings", castTime);
-		TE_SetupBeamRingPoint(pos, radius * 1.15, 0.0, g_Ruina_Laser_BEAM, g_Ruina_Laser_BEAM, 0, 1, castTime, 3.0, 0.1, { 120, 120, 240, 120 }, 1, 0);
+		TE_SetupBeamRingPoint(pos, radius, 0.0, g_Ruina_Laser_BEAM, g_Ruina_Laser_BEAM, 0, 1, castTime, 3.0, 0.1, { 120, 120, 240, 120 }, 1, 0);
 		TE_SendToClient(client);
 		
 		// Increase radius and decrease damage each explode.
@@ -475,8 +473,8 @@ static void Weapon_Wand_Freeze_Spawn(int client, int weapon, int countMax, int c
 		pack.WriteCell(GetClientUserId(client));
 		pack.WriteCell(EntIndexToEntRef(weapon));
 		pack.WriteCell(countMax);
-		pack.WriteFloat(radius * 1.15);
-		pack.WriteFloat(damage * 0.75);
+		pack.WriteFloat(radius);
+		pack.WriteFloat(damage * 0.6);
 		pack.WriteFloatArray(pos, 3);
 		pack.WriteFloat(castTime);
 	}

@@ -122,6 +122,7 @@ enum struct ItemInfo
 	Function Func_CustomTraceMelee;
 	Function Func_OnInteractAlly;
 	Function Func_OnEntityBuild;
+	Function Func_MeleeDamageCalc;
 
 	Function FuncOnPap;
 
@@ -434,13 +435,15 @@ enum struct ItemInfo
 		{
 			Call_StartFunction(null, this.Func_MapStart);
 			Call_Finish();
-
 		}
-
 
 		Format(buffer, sizeof(buffer), "%sfunc_onpap", prefix);
 		kv.GetString(buffer, buffer, sizeof(buffer));
 		this.FuncOnPap = GetFunctionByName(null, buffer);
+		
+		Format(buffer, sizeof(buffer), "%sfunc_meleedamagecalc", prefix);
+		kv.GetString(buffer, buffer, sizeof(buffer));
+		this.Func_MeleeDamageCalc = GetFunctionByName(null, buffer);
 		
 		Format(buffer, sizeof(buffer), "%sint_ability_onequip", prefix);
 		this.CustomWeaponOnEquip 		= kv.GetNum(buffer);
@@ -6503,6 +6506,7 @@ int Store_GiveItem(int client, int index, bool &use=false, bool &found=false, bo
 					EntityOnAllyInteract[entity]  		= info.Func_OnInteractAlly;
 					EntityCustomTraceMelee[entity] = info.Func_CustomTraceMelee;
 					EntityOnBuildObject[entity] = info.Func_OnEntityBuild;
+					EntityMeleeDamageCalc[entity] = info.Func_MeleeDamageCalc;
 					
 					b_Do_Not_Compensate[entity] 				= info.NoLagComp;
 					b_Only_Compensate_CollisionBox[entity] 		= info.OnlyLagCompCollision;
