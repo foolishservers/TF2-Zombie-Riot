@@ -165,9 +165,9 @@ methodmap ZsMalfuncHeavy < CClotBody
 
 		int skin = 5;
 		SetEntProp(npc.index, Prop_Send, "m_nSkin", skin);
-		npc.m_iWearable2 = npc.EquipItem("head", "models/player/items/heavy/heavy_zombie.mdl", "", skin);
-		npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/player/items/heavy/hwn2022_road_block/hwn2022_road_block.mdl", "", 1);
-		npc.m_iWearable4 = npc.EquipItem("head", "models/workshop/player/items/heavy/sum22_combat_casual/sum22_combat_casual.mdl", "", 1);
+		npc.m_iWearable1 = npc.EquipItem("head", "models/player/items/heavy/heavy_zombie.mdl", "", skin);
+		npc.m_iWearable2 = npc.EquipItem("head", "models/workshop/player/items/heavy/hwn2022_road_block/hwn2022_road_block.mdl", "", 1);
+		npc.m_iWearable3 = npc.EquipItem("head", "models/workshop/player/items/heavy/sum22_combat_casual/sum22_combat_casual.mdl", "", 1);
 		npc.m_iWearable4 = npc.EquipItem("head", "models/workshop/player/items/heavy/dec22_heavy_heating_style3/dec22_heavy_heating_style3.mdl", "", 1);//breaks
 		npc.m_iWearable5 = npc.EquipItem("head", "models/workshop/player/items/heavy/hwn2022_horror_shawl_style2/hwn2022_horror_shawl_style2.mdl", "", 1);
 		npc.m_iWearable6 = npc.EquipItem("head", "models/workshop/weapons/c_models/c_fists_of_steel/c_fists_of_steel.mdl", "", 1);

@@ -1342,8 +1342,6 @@ void NPC_ConfigSetup()
 	AgentSmithFollower_Setup();
 	KevinmeryFollower_Setup();
 	
-	// Dimension_Ripper_Base_OnMapStart_NPC();
-	
 	AltExtra_Base_MapStart();
 	AltExtra_Mecha_Loader_MapStart();
 	AltExtra_Mecha_Duelist_MapStart();
@@ -3012,13 +3010,6 @@ Action NpcSpecificOnTakeDamage(int victim, int &attacker, int &inflictor, float 
 #include "npc/gmod_zs/npc_zs_ally_soldier.sp"
 #include "npc/gmod_zs/npc_zs_ally_heavy.sp"
 #include "npc/gmod_zs/npc_zs_ally_sniper.sp"
-
-// Ruina Barracks
-// #include "npc/ally/ruina_barracks/npc_barrack_iana.sp"
-// #include "npc/ally/ruina_barracks/npc_barrack_ruliana.sp"
-
-// Dimension ripper
-// #include "npc/ally/dimension_ripper/npc_dimension_ripper_base.sp"
 
 // Alt Extra
 // #include "npc/alt_extra/npc_alt_extra_body.sp"
