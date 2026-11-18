@@ -1167,44 +1167,65 @@
 	
 	"Fractal Isomer Desc"
 	{
-		"en"		""
+		"en"		"Reverse-engineered from the weapon you provided, then modified to meet your requested specifications.\nBurst: Fires fast, homing projectiles. Press R to consume Crystals and fire piercing projectiles instead.\nLance: Has a long, narrow range. Gain Crystals upon hitting an enemy."
 		"ko"		"귀하가 제공한 무기를 역설계하여 요구하신 성능에 맞게 만들었습니다.\n버스트: 빠르고 유도가 되는 탄환을 발사. R키로 수정을 소모하는 대신 관통 탄환을 발사\n랜스: 길고 좁은 사거리를 보유. 적중 시 수정을 얻음"
 	}
 	"Fractal Isomer Burst Desc"
 	{
-		"en"		""
+		"en"		"Fires fast, homing projectiles. Press R to consume Crystals and fire piercing projectiles instead."
 		"ko"		"빠르고 유도가 되는 탄환을 발사. R키로 수정을 소모하는 대신 관통 탄환을 발사"
 	}
 	"Fractal Isomer Lance Desc"
 	{
-		"en"		""
+		"en"		"Has a long, narrow range. Gain Crystals upon hitting an enemy."
 		"ko"		"길고 좁은 사거리를 보유. 적중 시 수정을 얻음"
 	}
-	
-	"Fractal Isomer Pap 1"
+
+	"Fractal Isomer Burst Pap Shared"	// 1, 3, 5
 	{
-		"en"		""
-		"ko"		""
+		"en"		"Increased damage"
+		"ko"		"피해량 증가"
 	}
-	"Fractal Isomer Pap 2"
+	"Fractal Isomer Burst Pap 2"
 	{
-		"en"		""
-		"ko"		"전반적인 능력치 증가.\n새로운 무기 - 프랙탈 아이소머 캐논: 다량의 마나와 수정 20개를 소모해 강력한 레이저를 발사."
+		"en"		"Increased damage, attack speed, projectile speed, and Mana cost"
+		"ko"		"피해량, 공격 속도, 투사체 속도, 마나 소모량 증가"
 	}
-	"Fractal Isomer Pap 3"
+	"Fractal Isomer Burst Pap Shared 2"	// 4, 6
 	{
-		"en"		""
-		"ko"		""
+		"en"		"Increased damage and Mana cost"
+		"ko"		"피해량, 마나 소모량 증가"
 	}
-	"Fractal Isomer Pap 4"
+	"Fractal Isomer Burst Pap 7"
 	{
-		"en"		""
-		"ko"		"전반적인 능력치 증가.\n프랙탈 아이소머 캐논 새 능력: 우클릭으로 수정 전부를 소모해 안전한 곳으로 텔레포트합니다."
+		"en"		"Increased damage, attack speed, projectile speed, and Mana cost"
+		"ko"		"피해량, 공격 속도, 투사체 속도, 마나 소모량 증가"
 	}
-	"Fractal Isomer Pap 5"
+
+	"Fractal Isomer Lance Pap 1"
 	{
-		"en"		""
-		"ko"		""
+		"en"		"Increased damage, range, and Mana cost. Decreased attack speed.\nNew Ability: Press R to consume 10 Crystals and gain a shield that restores Mana when hit."
+		"ko"		"피해량, 사거리, 마나 소모량 증가, 공격 속도 감소\n새 능력: R키로 수정 10개를 소모해서 피격 시 마나를 충전하는 보호막을 얻을 수 있음."
+	}
+	"Fractal Isomer Lance Pap 2"
+	{
+		"en"		"Increased damage and Mana cost. Decreased attack speed."
+		"ko"		"피해량, 마나 소모량 증가, 공격 속도 감소"
+	}
+	"Fractal Isomer Lance Pap 3"
+	{
+		"en"		"Increased damage, range, and Mana cost"
+		"ko"		"피해량, 사거리, 마나 소모량 증가"
+	}
+	"Fractal Isomer Lance Pap Shared"	// 4, 6, 7
+	{
+		"en"		"Increased damage and Mana cost"
+		"ko"		"피해량, 마나 소모량 증가"
+	}
+	"Fractal Isomer Lance Pap 5"
+	{
+		"en"		"Increased damage, range, attack speed, and Mana cost"
+		"ko"		"피해량, 사거리, 공격 속도, 마나 소모량 증가"
 	}
 	
 	"Fractal Isomer Crystal Burst On"
