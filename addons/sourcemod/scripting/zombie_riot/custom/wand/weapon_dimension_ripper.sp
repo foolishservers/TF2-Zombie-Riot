@@ -275,19 +275,19 @@ public void Weapon_Dimension_Summon_Normal(int client, int weapon, bool &result,
 		case 4:
 			Dimension_Summon_Npc(client, "npc_medival_man_at_arms" ,weapon, 1.3, 1.2, "ghost_appearation");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_seaslider" ,weapon, 1.3, 1.2, "ghost_appearation");
+			Dimension_Summon_Npc(client, "npc_seaslider" ,weapon, 1.3, 1.4, "ghost_appearation");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_pental" ,weapon, 1.3, 1.2, "ghost_appearation");
+			Dimension_Summon_Npc(client, "npc_siccerino" ,weapon, 1.3, 1.2, "ghost_appearation");
 		case 7:
-			Dimension_Summon_Npc(client, "npc_atilla" ,weapon, 1.3, 1.2, "ghost_appearation");
+			Dimension_Summon_Npc(client, "npc_atilla" ,weapon, 1.3, 2.0, "ghost_appearation");
 		case 8:
-			Dimension_Summon_Npc(client, "npc_ealing" ,weapon, 1.3, 1.2, "ghost_appearation");
+			Dimension_Summon_Npc(client, "npc_ealing" ,weapon, 1.3, 1.8, "ghost_appearation");
 		case 9:
-			Dimension_Summon_Npc(client, "npc_irani" ,weapon, 1.3, 1.2, "ghost_appearation");
+			Dimension_Summon_Npc(client, "npc_irani" ,weapon, 1.3, 1.5, "ghost_appearation");
 		case 10:
-			Dimension_Summon_Npc(client, "npc_ruina_lanius" ,weapon, 1.3, 1.2, "ghost_appearation");
+			Dimension_Summon_Npc(client, "npc_ruina_lanius" ,weapon, 1.3, 2.0, "ghost_appearation");
 		case 11:
-			Dimension_Summon_Npc(client, "npc_batter" ,weapon, 1.3, 1.2, "ghost_appearation");
+			Dimension_Summon_Npc(client, "npc_batter" ,weapon, 1.3, 1.7, "ghost_appearation");
 		case 12:
 			Dimension_Summon_Npc(client, "npc_aperture_jumper" ,weapon, 1.3, 1.2, "ghost_appearation");
 		default: //This should not happen
@@ -302,17 +302,17 @@ public void Weapon_Dimension_Summon_Normal_PAP(int client, int weapon, bool &res
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_combine_police_smg" ,weapon, 1.2, 1.4, "utaunt_arcane_yellow_lights");
+			Dimension_Summon_Npc(client, "npc_combine_police_smg" ,weapon, 1.3, 2.0, "utaunt_arcane_yellow_lights");
 		case 2:
 			Dimension_Summon_Npc(client, "npc_combine_soldier_swordsman" ,weapon, 1.3, 1.2, "utaunt_arcane_yellow_lights");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_combine_soldier_elite" ,weapon, 1.3, 1.5, "utaunt_arcane_yellow_lights");	
+			Dimension_Summon_Npc(client, "npc_combine_soldier_elite" ,weapon, 1.3, 2.0, "utaunt_arcane_yellow_lights");	
 		case 4:
 			Dimension_Summon_Npc(client, "npc_combine_soldier_overlord" ,weapon, 1.75, 1.3, "utaunt_arcane_yellow_lights");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_combine_soldier_ar2" ,weapon, 1.3, 1.5, "utaunt_arcane_yellow_lights");
+			Dimension_Summon_Npc(client, "npc_combine_soldier_ar2" ,weapon, 1.3, 2.0, "utaunt_arcane_yellow_lights");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_combine_soldier_collos_swordsman" ,weapon, 1.5, 1.3, "utaunt_arcane_yellow_lights");
+			Dimension_Summon_Npc(client, "npc_combine_soldier_collos_swordsman" ,weapon, 1.5, 1.4, "utaunt_arcane_yellow_lights");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -325,17 +325,17 @@ public void Weapon_Dimension_Summon_Normal_PAP_PAP(int client, int weapon, bool 
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_kamikaze_demo" ,weapon, 0.5, 2.5, "utaunt_arcane_yellow_lights");
+			Dimension_Summon_Npc(client, "npc_whiteflower_ekas_piloteer" ,weapon, 1.3, 0.75, "utaunt_arcane_yellow_lights");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_sniper_main" ,weapon, 1.3, 1.3, "utaunt_arcane_yellow_lights");
+			Dimension_Summon_Npc(client, "npc_whiteflower_acclaimed_swordsman" ,weapon, 1.3, 0.8, "utaunt_arcane_yellow_lights");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_combine_soldier_deutsch_ritter" ,weapon, 1.4, 1.3, "utaunt_arcane_yellow_lights");
+			Dimension_Summon_Npc(client, "npc_combine_soldier_deutsch_ritter" ,weapon, 1.4, 1.7, "utaunt_arcane_yellow_lights");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_zombie_pyro_giant_main" ,weapon, 1.4, 1.3, "utaunt_arcane_yellow_lights");	
+			Dimension_Summon_Npc(client, "npc_whiteflower_extreme_knight_giant" ,weapon, 1.5, 0.6, "utaunt_arcane_yellow_lights");	
 		case 5:
-			Dimension_Summon_Npc(client, "npc_spy_boss" ,weapon, 1.75, 1.2, "utaunt_arcane_yellow_lights");
+			Dimension_Summon_Npc(client, "npc_whiteflower_flowering_darkness" ,weapon, 1.7, 0.25, "utaunt_arcane_yellow_lights");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_medic_main" ,weapon, 1.4, 1.2, "utaunt_arcane_yellow_lights");
+			Dimension_Summon_Npc(client, "npc_whiteflower_raging_blader" ,weapon, 0.6, 0.5, "utaunt_arcane_yellow_lights");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -349,17 +349,17 @@ public void Weapon_Dimension_Summon_Blitz(int client, int weapon, bool &result, 
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_alt_mecha_soldier_barrager" ,weapon, 1.2, 1.4, "teleporter_red_exit_level3");
+			Dimension_Summon_Npc(client, "npc_alt_mecha_soldier_barrager" ,weapon, 1.2, 2.0, "teleporter_red_exit_level3");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_alt_medic_charger" ,weapon, 1.3, 1.2, "teleporter_red_exit_level3");
+			Dimension_Summon_Npc(client, "npc_alt_medic_charger" ,weapon, 1.3, 1.5, "teleporter_red_exit_level3");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_alt_sniper_railgunner" ,weapon, 1.0, 1.5, "teleporter_red_exit_level3");
+			Dimension_Summon_Npc(client, "npc_alt_sniper_railgunner" ,weapon, 1.0, 2.2, "teleporter_red_exit_level3");
 		case 4:
 			Dimension_Summon_Npc(client, "npc_alt_medic_supperior_mage" ,weapon, 1.5, 1.3, "teleporter_red_exit_level3");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_alt_mecha_scout" ,weapon, 1.2, 1.3, "teleporter_red_exit_level3");
+			Dimension_Summon_Npc(client, "npc_alt_mecha_scout" ,weapon, 1.3, 1.3, "teleporter_red_exit_level3");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_alt_the_shit_slapper" ,weapon, 1.5, 1.2, "teleporter_red_exit_level3");
+			Dimension_Summon_Npc(client, "npc_alt_the_shit_slapper" ,weapon, 1.5, 2.2, "teleporter_red_exit_level3");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -372,17 +372,17 @@ public void Weapon_Dimension_Summon_Blitz_PAP(int client, int weapon, bool &resu
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_alt_medic_berserker" ,weapon, 1.5, 1.5, "teleporter_red_exit_level3");
+			Dimension_Summon_Npc(client, "npc_alt_medic_berserker" ,weapon, 1.5, 2.5, "teleporter_red_exit_level3");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_alt_soldier_barrager" ,weapon, 1.4, 2.0, "teleporter_red_exit_level3");
+			Dimension_Summon_Npc(client, "npc_alt_soldier_barrager" ,weapon, 1.2, 2.1, "teleporter_red_exit_level3");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_alt_combine_soldier_deutsch_ritter" ,weapon, 1.4, 1.2, "teleporter_red_exit_level3");
+			Dimension_Summon_Npc(client, "npc_alt_combine_soldier_deutsch_ritter" ,weapon, 1.4, 1.5, "teleporter_red_exit_level3");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_alt_ikunagae" ,weapon, 2.0, 1.75, "teleporter_red_exit_level3");
+			Dimension_Summon_Npc(client, "npc_alt_ikunagae" ,weapon, 1.7, 1.5, "teleporter_red_exit_level3");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_alt_schwertkrieg" ,weapon, 1.5, 1.3, "teleporter_red_exit_level3");
+			Dimension_Summon_Npc(client, "npc_alt_schwertkrieg" ,weapon, 1.6, 1.2, "teleporter_red_exit_level3");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_alt_mecha_pyro_giant" ,weapon, 1.5, 1.5, "teleporter_red_exit_level3");
+			Dimension_Summon_Npc(client, "npc_alt_mecha_pyro_giant" ,weapon, 1.5, 1.3, "teleporter_red_exit_level3");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -395,15 +395,15 @@ public void Weapon_Dimension_Summon_Xeno(int client, int weapon, bool &result, i
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_xeno_combine_soldier_shotgun" ,weapon, 1.2, 1.5, "peejar_impact_cloud_gas");
+			Dimension_Summon_Npc(client, "npc_xeno_combine_soldier_shotgun" ,weapon, 1.3, 1.6, "peejar_impact_cloud_gas");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_xeno_combine_soldier_giant_swordsman" ,weapon, 1.5, 1.4, "peejar_impact_cloud_gas");
+			Dimension_Summon_Npc(client, "npc_xeno_combine_soldier_giant_swordsman" ,weapon, 1.5, 1.7, "peejar_impact_cloud_gas");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_xeno_zombie_soldier_grave" ,weapon, 1.3, 1.4, "peejar_impact_cloud_gas");
+			Dimension_Summon_Npc(client, "npc_xeno_zombie_soldier_grave" ,weapon, 1.1, 2.0, "peejar_impact_cloud_gas");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_xeno_last_survivor" ,weapon, 1.75, 1.5, "peejar_impact_cloud_gas");
+			Dimension_Summon_Npc(client, "npc_xeno_last_survivor" ,weapon, 1.75, 2.0, "peejar_impact_cloud_gas");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_xeno_poisonzombie_fortified_giant" ,weapon, 1.5, 1.3, "peejar_impact_cloud_gas");
+			Dimension_Summon_Npc(client, "npc_xeno_poisonzombie_fortified_giant" ,weapon, 1.3, 1.5, "peejar_impact_cloud_gas");
 		case 6:
 			Dimension_Summon_Npc(client, "npc_xeno_combine_soldier_overlord" ,weapon, 1.5, 1.35, "peejar_impact_cloud_gas");
 		default: //This should not happen
@@ -415,20 +415,20 @@ public void Weapon_Dimension_Summon_Xeno(int client, int weapon, bool &result, i
 
 public void Weapon_Dimension_Summon_Xeno_PAP(int client, int weapon, bool &result, int slot, int pap_logic)
 {
-	switch(GetRandomInt(1, 5))
+	switch(GetRandomInt(1, 6))
 	{
 		case 1:
 			Dimension_Summon_Npc(client, "npc_xeno_medic_main" ,weapon, 1.3, 1.4, "peejar_impact_cloud_gas");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_xeno_early_infected" ,weapon, 1.4, 1.3, "peejar_impact_cloud_gas");
+			Dimension_Summon_Npc(client, "npc_xeno_early_infected" ,weapon, 1.4, 1.0, "peejar_impact_cloud_gas");
 		case 3:
 			Dimension_Summon_Npc(client, "npc_xeno_spy_trickstabber" ,weapon, 1.3, 1.2, "peejar_impact_cloud_gas");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_xeno_spy_boss" ,weapon, 1.4, 1.3, "peejar_impact_cloud_gas");
+			Dimension_Summon_Npc(client, "npc_xeno_spy_boss" ,weapon, 1.4, 1.1, "peejar_impact_cloud_gas");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_xeno_zombie_pyro_giant_main" ,weapon, 1.4, 1.4, "peejar_impact_cloud_gas");
+			Dimension_Summon_Npc(client, "npc_xeno_zombie_pyro_giant_main" ,weapon, 1.4, 1.2, "peejar_impact_cloud_gas");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_xeno_acclaimed_swordsman" ,weapon, 1.5, 1.3, "peejar_impact_cloud_gas");
+			Dimension_Summon_Npc(client, "npc_xeno_acclaimed_swordsman" ,weapon, 1.5, 0.8, "peejar_impact_cloud_gas");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -440,17 +440,17 @@ public void Weapon_Dimension_Summon_Medeival(int client, int weapon, bool &resul
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_medival_swordsman" ,weapon, 1.3, 1.2, "npc_boss_bomb_alert");
+			Dimension_Summon_Npc(client, "npc_medival_swordsman" ,weapon, 1.3, 1.3, "npc_boss_bomb_alert");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_medival_crossbow" ,weapon, 1.0, 1.6, "npc_boss_bomb_alert");
+			Dimension_Summon_Npc(client, "npc_medival_crossbow" ,weapon, 1.0, 2.5, "npc_boss_bomb_alert");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_medival_brawler" ,weapon, 1.4, 1.3, "npc_boss_bomb_alert");
+			Dimension_Summon_Npc(client, "npc_medival_brawler" ,weapon, 1.4, 1.0, "npc_boss_bomb_alert");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_medival_construct" ,weapon, 1.5, 1.4, "npc_boss_bomb_alert");
+			Dimension_Summon_Npc(client, "npc_medival_construct" ,weapon, 1.75, 1.5, "npc_boss_bomb_alert");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_medival_pikeman" ,weapon, 1.4, 1.3, "npc_boss_bomb_alert");
+			Dimension_Summon_Npc(client, "npc_medival_pikeman" ,weapon, 1.3, 1.4, "npc_boss_bomb_alert");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_medival_light_cav" ,weapon, 1.2, 1.5, "npc_boss_bomb_alert");
+			Dimension_Summon_Npc(client, "npc_medival_light_cav" ,weapon, 1.3, 2.75, "npc_boss_bomb_alert");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -463,17 +463,17 @@ public void Weapon_Dimension_Summon_Medeival_PAP(int client, int weapon, bool &r
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_medival_crossbow_giant" ,weapon, 1.4, 1.5, "npc_boss_bomb_alert");
+			Dimension_Summon_Npc(client, "npc_medival_crossbow_giant" ,weapon, 1.3, 1.75, "npc_boss_bomb_alert");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_medival_swordsman_giant" ,weapon, 1.7, 1.3, "npc_boss_bomb_alert");
+			Dimension_Summon_Npc(client, "npc_medival_swordsman_giant" ,weapon, 1.5, 1.3, "npc_boss_bomb_alert");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_medival_achilles" ,weapon, 1.2, 1.4, "npc_boss_bomb_alert");
+			Dimension_Summon_Npc(client, "npc_medival_achilles" ,weapon, 1.5, 1.2, "npc_boss_bomb_alert");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_medival_son_of_osiris" ,weapon, 1.5, 0.9, "npc_boss_bomb_alert");
+			Dimension_Summon_Npc(client, "npc_medival_son_of_osiris" ,weapon, 1.5, 0.25, "npc_boss_bomb_alert");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_medival_halbadeer" ,weapon, 1.4, 1.3, "npc_boss_bomb_alert");
+			Dimension_Summon_Npc(client, "npc_medival_halbadeer" ,weapon, 1.3, 1.4, "npc_boss_bomb_alert");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_medival_knight" ,weapon, 1.5, 1.3, "npc_boss_bomb_alert");
+			Dimension_Summon_Npc(client, "npc_medival_knight" ,weapon, 1.3, 2.25, "npc_boss_bomb_alert");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -489,13 +489,13 @@ public void Weapon_Dimension_Summon_Dweller(int client, int weapon, bool &result
 		case 2:
 			Dimension_Summon_Npc(client, "npc_abyssreefbreaker" ,weapon, 1.3, 1.4, "utaunt_spirit_winter_rings");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_abyssspewer" ,weapon, 1.0, 1.4, "utaunt_spirit_winter_rings");
+			Dimension_Summon_Npc(client, "npc_abyssspewer" ,weapon, 1.1, 2.5, "utaunt_spirit_winter_rings");
 		case 4:
 			Dimension_Summon_Npc(client, "npc_dweller_grunwald_beserker" ,weapon, 1.6, 1.5, "utaunt_spirit_winter_rings");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_abyssswarmcaller" ,weapon, 1.0, 1.3, "utaunt_spirit_winter_rings");
+			Dimension_Summon_Npc(client, "npc_seapiercer" ,weapon, 1.2, 1.5, "utaunt_spirit_winter_rings");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_dweller_scout" ,weapon, 1.2, 1.3, "utaunt_spirit_winter_rings");
+			Dimension_Summon_Npc(client, "npc_seaspitter" ,weapon, 1.2, 2.5, "utaunt_spirit_winter_rings");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -507,17 +507,17 @@ public void Weapon_Dimension_Summon_Dweller_PAP(int client, int weapon, bool &re
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_dweller_guard" ,weapon, 1.5, 1.3, "utaunt_spirit_winter_rings");
+			Dimension_Summon_Npc(client, "npc_dweller_guard" ,weapon, 1.5, 0.7, "utaunt_spirit_winter_rings");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_dweller_caster" ,weapon, 1.3, 1.0, "utaunt_spirit_winter_rings");
+			Dimension_Summon_Npc(client, "npc_dweller_caster" ,weapon, 1.3, 0.6, "utaunt_spirit_winter_rings");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_dweller_grunwald_knight" ,weapon, 1.4, 1.3, "utaunt_spirit_winter_rings");
+			Dimension_Summon_Npc(client, "npc_dweller_grunwald_knight" ,weapon, 1.4, 2.5, "utaunt_spirit_winter_rings");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_dweller_specialist" ,weapon, 1.3, 1.4, "utaunt_spirit_winter_rings");
+			Dimension_Summon_Npc(client, "npc_dweller_specialist" ,weapon, 1.3, 1.3, "utaunt_spirit_winter_rings");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_dwellerhybrid" ,weapon, 1.8, 1.75, "utaunt_spirit_winter_rings");
+			Dimension_Summon_Npc(client, "npc_dwellerhybrid" ,weapon, 1.7, 3.0, "utaunt_spirit_winter_rings");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_dweller_vanguard" ,weapon, 1.5, 1.3, "utaunt_spirit_winter_rings");
+			Dimension_Summon_Npc(client, "npc_dweller_vanguard" ,weapon, 1.3, 1.3, "utaunt_spirit_winter_rings");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -529,17 +529,17 @@ public void Weapon_Dimension_Summon_Expidonsa(int client, int weapon, bool &resu
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_dualrea" ,weapon, 1.4, 1.2, "eyeboss_death_vortex");
+			Dimension_Summon_Npc(client, "npc_dualrea" ,weapon, 1.4, 1.3, "eyeboss_death_vortex");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_protecta" ,weapon, 1.5, 1.3, "eyeboss_death_vortex");
+			Dimension_Summon_Npc(client, "npc_protecta" ,weapon, 1.4, 1.4, "eyeboss_death_vortex");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_rifal_manu" ,weapon, 1.2, 1.6, "eyeboss_death_vortex");
+			Dimension_Summon_Npc(client, "npc_rifal_manu" ,weapon, 1.2, 3.0, "eyeboss_death_vortex");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_sergeant_ideal" ,weapon, 2.25, 1.3, "eyeboss_death_vortex");
+			Dimension_Summon_Npc(client, "npc_sergeant_ideal" ,weapon, 2.0, 2.25, "eyeboss_death_vortex");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_vaus_magica" ,weapon, 1.3, 1.3, "eyeboss_death_vortex");
+			Dimension_Summon_Npc(client, "npc_vaus_magica" ,weapon, 1.3, 1.75, "eyeboss_death_vortex");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_heavy_punuel" ,weapon, 1.5, 1.3, "eyeboss_death_vortex");
+			Dimension_Summon_Npc(client, "npc_heavy_punuel" ,weapon, 1.4, 1.6, "eyeboss_death_vortex");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -552,17 +552,17 @@ public void Weapon_Dimension_Summon_Expidonsa_PAP(int client, int weapon, bool &
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_ega_bunar" ,weapon, 1.5, 1.2, "eyeboss_death_vortex");
+			Dimension_Summon_Npc(client, "npc_ega_bunar" ,weapon, 1.0, 2.0, "eyeboss_death_vortex");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_minigun_assisa" ,weapon, 1.3, 1.3, "eyeboss_death_vortex");
+			Dimension_Summon_Npc(client, "npc_minigun_assisa" ,weapon, 1.3, 1.4, "eyeboss_death_vortex");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_armsa_manu" ,weapon, 1.2, 1.5, "eyeboss_death_vortex");
+			Dimension_Summon_Npc(client, "npc_armsa_manu" ,weapon, 1.2, 2.5, "eyeboss_death_vortex");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_soldine" ,weapon, 1.5, 1.4, "eyeboss_death_vortex");
+			Dimension_Summon_Npc(client, "npc_soldine" ,weapon, 1.5, 1.5, "eyeboss_death_vortex");
 		case 5:
 			Dimension_Summon_Npc(client, "npc_haltera" ,weapon, 1.4, 1.3, "eyeboss_death_vortex");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_vaus_shaldus" ,weapon, 1.2, 1.3, "eyeboss_death_vortex");
+			Dimension_Summon_Npc(client, "npc_vaus_shaldus" ,weapon, 1.2, 1.6, "eyeboss_death_vortex");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -575,17 +575,17 @@ public void Weapon_Dimension_Summon_Interitus(int client, int weapon, bool &resu
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_khazaan" ,weapon, 1.3, 1.2, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_khazaan" ,weapon, 1.2, 1.3, "teleported_blue");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_skin_hunter" ,weapon, 1.0, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_skin_hunter" ,weapon, 1.0, 1.6, "teleported_blue");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_rajul" ,weapon, 1.5, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_frost_hunter" ,weapon, 1.3, 1.5, "teleported_blue");
 		case 4:
 			Dimension_Summon_Npc(client, "npc_airborn_explorer" ,weapon, 1.3, 1.5, "teleported_blue");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_qanaas" ,weapon, 1.3, 1.5, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_qanaas" ,weapon, 1.3, 2.5, "teleported_blue");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_snowey_gunner" ,weapon, 1.2, 1.5, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_snowey_gunner" ,weapon, 1.3, 2.0, "teleported_blue");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -598,15 +598,15 @@ public void Weapon_Dimension_Summon_Interitus_PAP(int client, int weapon, bool &
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_perro" ,weapon, 1.5, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_perro" ,weapon, 1.3, 1.4, "teleported_blue");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_irritated_person" ,weapon, 2.2, 1.5, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_irritated_person" ,weapon, 1.7, 1.5, "teleported_blue");
 		case 3:
 			Dimension_Summon_Npc(client, "npc_enforcer" ,weapon, 1.0, 2.0, "teleported_blue");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_dimension_abomination", weapon, 1.3, 1.2, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_absolute_incinirator", weapon, 1.3, 2.0, "teleported_blue");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_braindead" ,weapon, 1.4, 1.6, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_braindead" ,weapon, 1.2, 1.9, "teleported_blue");
 		case 6:
 			Dimension_Summon_Npc(client, "npc_cautus" ,weapon, 1.0, 1.4, "teleported_blue");
 		default: //This should not happen
@@ -621,17 +621,17 @@ public void Weapon_Dimension_Summon_Twirl(int client, int weapon, bool &result, 
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_ruina_laniun" ,weapon, 1.2, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_ruina_laniun" ,weapon, 1.2, 1.0, "teleported_blue");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_ruina_astriana" ,weapon, 1.3, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_ruina_astriana" ,weapon, 1.5, 2.5, "teleported_blue");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_ruina_ruianus" ,weapon, 1.4, 1.2, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_ruina_ruianus" ,weapon, 1.4, 1.5, "teleported_blue");
 		case 4:
 			Dimension_Summon_Npc(client, "npc_ruina_heliara" ,weapon, 1.4, 1.3, "teleported_blue");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_ruina_lex" ,weapon, 1.7, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_ruina_iana" ,weapon, 1.6, 0.5, "teleported_blue");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_ruina_dronian" ,weapon, 1.3, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_ruina_dronian" ,weapon, 1.3, 1.3, "teleported_blue");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -644,17 +644,17 @@ public void Weapon_Dimension_Summon_Twirl_PAP(int client, int weapon, bool &resu
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_ruina_aetherianus" ,weapon, 1.5, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_ruina_aetherianus" ,weapon, 1.5, 1.75, "teleported_blue");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_ruina_malianius" ,weapon, 1.4, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_ruina_malianius" ,weapon, 1.5, 2.0, "teleported_blue");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_ruina_loonarionus" ,weapon, 1.4, 1.6, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_ruina_loonarionus" ,weapon, 1.4, 1.4, "teleported_blue");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_ruina_draconia" ,weapon, 1.5, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_ruina_draconia" ,weapon, 1.5, 1.5, "teleported_blue");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_ruina_lancelot" ,weapon, 1.5, 1.75, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_ruina_lancelot" ,weapon, 1.5, 0.9, "teleported_blue");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_ruina_rulianius" ,weapon, 1.4, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_ruina_rulianius" ,weapon, 1.4, 1.5, "teleported_blue");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -667,17 +667,17 @@ public void Weapon_Dimension_Summon_Void(int client, int weapon, bool &result, i
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_blood_pollutor" ,weapon, 1.3, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_blood_pollutor" ,weapon, 1.3, 1.75, "utaunt_headless_glow");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_voided_expidonsan_fortifier" ,weapon, 1.1, 1.2, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_growing_exat" ,weapon, 1.5, 1.5, "utaunt_headless_glow");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_growing_exat" ,weapon, 1.5, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_blobbing_monster" ,weapon, 1.5, 1.5, "utaunt_headless_glow");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_void_sprayer" ,weapon, 1.2, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_void_sprayer" ,weapon, 1.2, 1.4, "utaunt_headless_glow");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_void_ixufan" ,weapon, 1.75, 1.5, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_void_ixufan" ,weapon, 1.75, 1.75, "utaunt_headless_glow");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_enframed_voider" ,weapon, 1.0, 1.2, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_enframed_voider" ,weapon, 1.0, 1.2, "utaunt_headless_glow");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -690,17 +690,17 @@ public void Weapon_Dimension_Summon_Void_PAP(int client, int weapon, bool &resul
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_void_expidonsan_cleaner" ,weapon, 1.3, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_void_expidonsan_cleaner" ,weapon, 1.1, 2.0, "utaunt_headless_glow");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_void_erasus" ,weapon, 1.0, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_void_erasus" ,weapon, 1.1, 1.4, "utaunt_headless_glow");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_void_total_growth" ,weapon, 1.6, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_void_total_growth" ,weapon, 1.6, 1.4, "utaunt_headless_glow");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_void_sacraficer" ,weapon, 1.2, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_void_speechless" ,weapon, 0.7, 0.3, "utaunt_headless_glow");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_void_kunul" ,weapon, 1.4, 1.2, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_void_kunul" ,weapon, 1.4, 2.0, "utaunt_headless_glow");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_void_encasulator" ,weapon, 1.5, 2.0, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_void_encasulator" ,weapon, 1.6, 2.5, "utaunt_headless_glow");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -713,17 +713,17 @@ public void Weapon_Dimension_Summon_Almina(int client, int weapon, bool &result,
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_speedus_instantus" ,weapon, 1.3, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_speedus_instantus" ,weapon, 1.3, 2.0, "teleported_blue");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_almina_morato" ,weapon, 1.0, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_almina_morato" ,weapon, 1.0, 1.5, "teleported_blue");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_sea_xploder" ,weapon, 1.2, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_kinat" ,weapon, 1.3, 1.6, "teleported_blue");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_kumbai" ,weapon, 1.2, 1.5, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_vivintu" ,weapon, 1.2, 1.5, "teleported_blue");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_inqusitor_iidutas" ,weapon, 1.5, 1.5, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_inqusitor_iidutas" ,weapon, 1.5, 1.75, "teleported_blue");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_anania" ,weapon, 1.5, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_anania" ,weapon, 1.5, 2.0, "teleported_blue");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -736,17 +736,17 @@ public void Weapon_Dimension_Summon_Almina_PAP(int client, int weapon, bool &res
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_runaka" ,weapon, 1.5, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_runaka" ,weapon, 1.5, 1.25, "teleported_blue");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_speedus_elitus" ,weapon, 1.3, 1.5, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_speedus_elitus" ,weapon, 1.3, 2.0, "teleported_blue");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_sea_dryer" ,weapon, 1.2, 1.5, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_death_marker" ,weapon, 1.4, 2.0, "teleported_blue");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_elite_kinat" ,weapon, 1.3, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_elite_kinat" ,weapon, 1.3, 2.8, "teleported_blue");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_anti_sea_robot" ,weapon, 1.75, 1.2, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_anti_sea_robot" ,weapon, 1.75, 0.75, "teleported_blue");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_combastia" ,weapon, 1.75, 1.5, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_combastia" ,weapon, 1.5, 2.0, "teleported_blue");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -759,17 +759,17 @@ public void Weapon_Dimension_Summon_Vesta(int client, int weapon, bool &result, 
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_shotgunner" ,weapon, 1.2, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_shotgunner" ,weapon, 1.2, 2.5, "teleported_blue");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_mechafist" ,weapon, 1.2, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_raider" ,weapon, 1.3, 1.8, "teleported_blue");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_assaulter" ,weapon, 1.2, 1.5, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_assaulter" ,weapon, 1.2, 3.0, "teleported_blue");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_scorcher" ,weapon, 1.4, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_scorcher" ,weapon, 1.4, 1.5, "teleported_blue");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_squadleader" ,weapon, 1.75, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_squadleader" ,weapon, 1.75, 2.0, "teleported_blue");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_payback" ,weapon, 1.6, 1.5, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_payback" ,weapon, 1.5, 1.75, "teleported_blue");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -782,17 +782,17 @@ public void Weapon_Dimension_Summon_Vesta_PAP(int client, int weapon, bool &resu
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_mortar" ,weapon, 1.1, 1.1, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_vestan_artillerist" ,weapon, 1.0, 1.3, "teleported_blue");
 		case 2:
 			Dimension_Summon_Npc(client, "npc_mowdown" ,weapon, 1.5, 1.3, "teleported_blue");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_antiarmor_infantry" ,weapon, 1.1, 1.5, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_antiarmor_infantry" ,weapon, 1.3, 2.5, "teleported_blue");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_zapmarker" ,weapon, 1.2, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_zapmarker" ,weapon, 1.2, 0.75, "teleported_blue");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_taser" ,weapon, 1.3, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_headhunter" ,weapon, 1.0, 2.25, "teleported_blue");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_demolitionist" ,weapon, 1.5, 1.1, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_demolitionist" ,weapon, 1.5, 1.0, "teleported_blue");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -805,17 +805,17 @@ public void Weapon_Dimension_Summon_Aperture(int client, int weapon, bool &resul
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_aperture_combatant_v2" ,weapon, 1.2, 1.2, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_combatant_v2" ,weapon, 1.2, 0.6, "eyeboss_tp_vortex");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_aperture_halter" ,weapon, 1.65, 1.2, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_collector" ,weapon, 1.5, 0.75, "eyeboss_tp_vortex");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_aperture_minigunner_v2" ,weapon, 1.2, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_minigunner_v2" ,weapon, 1.2, 0.8, "eyeboss_tp_vortex");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_aperture_huntsman_v2" ,weapon, 1.2, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_huntsman_v2" ,weapon, 1.2, 1.4, "eyeboss_tp_vortex");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_last_survivor_science" ,weapon, 1.5, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_last_survivor_science" ,weapon, 1.7, 1.5, "eyeboss_tp_vortex");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_aperture_repulsor" ,weapon, 1.2, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_specialist_v2" ,weapon, 1.2, 1.3, "eyeboss_tp_vortex");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
@@ -828,17 +828,17 @@ public void Weapon_Dimension_Summon_Aperture_PAP(int client, int weapon, bool &r
 	switch(GetRandomInt(1, 6))
 	{
 		case 1:
-			Dimension_Summon_Npc(client, "npc_aperture_combatant_perfected" ,weapon, 1.2, 1.0, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_combatant_perfected" ,weapon, 1.2, 0.4, "eyeboss_tp_vortex");
 		case 2:
-			Dimension_Summon_Npc(client, "npc_aperture_huntsman_perfected" ,weapon, 1.2, 1.6, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_specialist_perfected" ,weapon, 1.2, 1.2, "eyeboss_tp_vortex");
 		case 3:
-			Dimension_Summon_Npc(client, "npc_aperture_minigunner_perfected" ,weapon, 1.5, 1.3, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_minigunner_perfected" ,weapon, 1.5, 1.3, "eyeboss_tp_vortex");
 		case 4:
-			Dimension_Summon_Npc(client, "npc_aperture_sniper_perfected" ,weapon, 1.0, 2.0, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_sniper_perfected" ,weapon, 1.0, 2.0, "eyeboss_tp_vortex");
 		case 5:
-			Dimension_Summon_Npc(client, "npc_aperture_fueler" ,weapon, 1.6, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_fueler" ,weapon, 1.6, 1.2, "eyeboss_tp_vortex");
 		case 6:
-			Dimension_Summon_Npc(client, "npc_aperture_suppressor" ,weapon, 1.6, 1.4, "teleported_blue");
+			Dimension_Summon_Npc(client, "npc_aperture_suppressor" ,weapon, 1.6, 1.75, "eyeboss_tp_vortex");
 		default: //This should not happen
 		{
 			ShowSyncHudText(client,  SyncHud_Notifaction, "Summon Failed. Scream at devs");//none
