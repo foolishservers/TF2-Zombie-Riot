@@ -638,8 +638,18 @@
 	}
 	"Crystal Shield Desc"
 	{
-		"en"	"Reduces the damage received by 25％. You will receive back mana equal to the reduced damage taken."
-		"ko"	"받는 피해를 25％ 경감시킵니다. 경감한 피해량만큼 마나로 돌려받습니다."
+		"en"	"Reduces the damage received by 25％. You will receive back mana to the 2x reduced damage taken."
+		"ko"	"받는 피해를 25％ 경감시킵니다. 경감한 피해량의 2배만큼 마나로 돌려받습니다."
+	}
+	"Ruina's Nimbleness"
+	{
+		"en"	"Ruina's Nimbleness"
+		"ko"	"루이나의 날렵함"
+	}
+	"Ruina's Nimbleness Desc"
+	{
+		"en"	"Changed movement players and NPC's speed by a certain amount."
+		"ko"	"플레이어와 NPC의 이동 속도가 일정한 수치만큼 변경됩니다."
 	}
 	
 	//무기 이름
@@ -775,6 +785,11 @@
 	{
 		"en"		"Fractal Isomer"
 		"ko"		"프랙탈 아이소머"
+	}
+	"Fractal Isomer Cannon"
+	{
+		"en"		"Fractal Isomer Cannon"
+		"ko"		"프랙탈 아이소머 캐논"
 	}
 	"Fractal Isomer Burst"
 	{
@@ -1170,6 +1185,11 @@
 		"en"		"Reverse-engineered from the weapon you provided, then modified to meet your requested specifications.\nBurst: Fires fast, homing projectiles. Press R to consume Crystals and fire piercing projectiles instead.\nLance: Has a long, narrow range. Gain Crystals upon hitting an enemy."
 		"ko"		"귀하가 제공한 무기를 역설계하여 요구하신 성능에 맞게 만들었습니다.\n버스트: 빠르고 유도가 되는 탄환을 발사. R키로 수정을 소모하는 대신 관통 탄환을 발사\n랜스: 길고 좁은 사거리를 보유. 적중 시 수정을 얻음"
 	}
+	"Fractal Isomer Cannon Desc"
+	{
+		"en"		"So.. this weapon's name is Cosmic Gaze? Come on.\nConsume a large amount of mana and crystals to fire a powerful laser forward."
+		"ko"		"그러니까.. 이 무기 이름이 코즈믹 게이즈라고요? 나 참.\n다량의 마나와 수정을 소모하여 전방에 강력한 레이저를 발사합니다."
+	}
 	"Fractal Isomer Burst Desc"
 	{
 		"en"		"Fires fast, homing projectiles. Press R to consume Crystals and fire piercing projectiles instead."
@@ -1183,23 +1203,23 @@
 
 	"Fractal Isomer Burst Pap Shared"	// 1, 3, 5
 	{
-		"en"		"Increased damage"
-		"ko"		"피해량 증가"
+		"en"		"-Increased damage"
+		"ko"		"-피해량 증가"
 	}
 	"Fractal Isomer Burst Pap 2"
 	{
-		"en"		"Increased damage, attack speed, projectile speed, and Mana cost"
-		"ko"		"피해량, 공격 속도, 투사체 속도, 마나 소모량 증가"
+		"en"		"-Increased damage, attack speed, projectile speed, and Mana cost\n-Unlock new weapon - Isomer Cannon:\nConsume a large amount of mana and crystals to fire a powerful laser forward."
+		"ko"		"-피해량, 공격 속도, 투사체 속도, 마나 소모량 증가\n-새 무기 - 아이소머 캐논 해금:\n다량의 마나와 수정을 소모하여 전방에 강력한 레이저를 발사"
 	}
 	"Fractal Isomer Burst Pap Shared 2"	// 4, 6
 	{
-		"en"		"Increased damage and Mana cost"
-		"ko"		"피해량, 마나 소모량 증가"
+		"en"		"-Increased damage and Mana cost"
+		"ko"		"-피해량, 마나 소모량 증가"
 	}
 	"Fractal Isomer Burst Pap 7"
 	{
-		"en"		"Increased damage, attack speed, projectile speed, and Mana cost"
-		"ko"		"피해량, 공격 속도, 투사체 속도, 마나 소모량 증가"
+		"en"		"-Increased damage, attack speed, projectile speed, and Mana cost"
+		"ko"		"-피해량, 공격 속도, 투사체 속도, 마나 소모량 증가"
 	}
 
 	"Fractal Isomer Lance Pap 1"
@@ -1209,8 +1229,8 @@
 	}
 	"Fractal Isomer Lance Pap 2"
 	{
-		"en"		"Increased damage and Mana cost. Decreased attack speed."
-		"ko"		"피해량, 마나 소모량 증가, 공격 속도 감소"
+		"en"		"Increased damage and Mana cost. Decreased attack speed.\n-Unlock new weapon - Isomer Cannon:\nConsume a large amount of mana and crystals to fire a powerful laser forward."
+		"ko"		"피해량, 마나 소모량 증가, 공격 속도 감소\n-새 무기 - 아이소머 캐논 해금:\n다량의 마나와 수정을 소모하여 전방에 강력한 레이저를 발사"
 	}
 	"Fractal Isomer Lance Pap 3"
 	{
@@ -1228,15 +1248,38 @@
 		"ko"		"피해량, 사거리, 공격 속도, 마나 소모량 증가"
 	}
 	
+	"Fractal Isomer Cannon Pap Shared"
+	{
+		"en"		"-Increased damage and Mana cost"
+		"ko"		"-피해량 및 마나 소모량 증가"
+	}
+	"Fractal Isomer Cannon Pap 7"
+	{
+		"en"		"-Increased damage and Mana cost\n-Increased laser length and Reduced crystal consume"
+		"ko"		"-피해량 및 마나 소모량 증가\n-사거리 증가 및 수정 소모량 감소"
+	}
+	
 	"Fractal Isomer Crystal Burst On"
 	{
-		"en"		"Penetrate: On [R]"
-		"ko"		"관통 모드: 활성화 [R]"
+		"en"		"Laser Mode: On [R]"
+		"ko"		"레이저 모드: 활성화 [R]"
 	}
 	"Fractal Isomer Crystal Burst Off"
 	{
-		"en"		"Penetrate: Off [R]"
-		"ko"		"관통 모드: 비활성화 [R]"
+		"en"		"Laser Mode: Off [R]"
+		"ko"		"레이저 모드: 비활성화 [R]"
+	}
+	"Fractal Isomer Crystal Cannon"
+	{
+		"#format"	"{1:d}"
+		"en"		"[M1] Isomer cannon firing with {1} crystal"
+		"ko"		"[M1] 수정 {1}개로 아이소머 캐논 발사"
+	}
+	"Fractal Isomer Crystal Lance"
+	{
+		"#format"	"{1:d}"
+		"en"		"[R] Gain Crystal Shield with {1} crystal"
+		"ko"		"[R] 수정 {1}개로 수정 보호막 획득"
 	}
 	"Fractal Isomer Crystal Recharge"
 	{
@@ -1847,8 +1890,8 @@
 	}
 	"Special_LastMann_Fractal_Isomer"
 	{
-		"en"		"Blood seeps into the weapon from the wound, {crimson}revealing the hidden side of mana."
-		"ko"		"상처에서 나온 피가 무기로 스며들고, {crimson}마나의 이면이 드러난다."
+		"en"		"{purple}Blood seeps into the weapon from the wound, {crimson}revealing the hidden side of mana."
+		"ko"		"{purple}상처에서 나온 피가 무기로 스며들고, {crimson}마나의 이면이 드러난다."
 	}
 	
 	"Special_Before_LastMann_Merc"
@@ -1859,7 +1902,7 @@
 	"Special_Only_Merc_And_NurseFather"
 	{
 		"en"		"{blue}The Nursefather lets out an agitated 'tsk'{crimson}The ''Mercenary'' seems to be in heavy distress, need of comfort from the only remaining {blue}ally{crimson}."
-		"ko"		"{blue}검지 아비{crimson}가 못마땅한 듯 '쯧' 하고 혀를 찹니다. {crimson}''용병''은 몹시 불안해 보입니다. 이제 남은 유일한 {blue}아군{crimson}에게 위로를 구할 수밖에 없나 보군요."
+		"ko"		"{blue}검지 아비{crimson}가 못마땅한 듯 '쯧' 하고 혀를 찹니다. {crimson}''용병''은 몹시 불안해 보입니다. 이제 유일하게 남은 {blue}아군{crimson}에게 위로를 구할 수밖에 없겠군요."
 	}
 	
 	//Auto Loadout.

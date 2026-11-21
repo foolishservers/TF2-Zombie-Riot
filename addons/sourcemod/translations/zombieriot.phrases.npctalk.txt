@@ -4515,6 +4515,83 @@
 		"ko"		"여기, 이걸 받아줘. 밥... 이제 이 곳에서 나가자."
 	}
 	
+	// Reila.
+	"Reila_Win_Talk_1"
+	{
+		"en"		"{pink}Reila {snow}tries to talk but you understand nothing.."
+		"ko"		"{pink}레일라{snow}가 대화를 시도하지만, 여러분은 한 마디도 알아들을 수 없었습니다.."
+	}
+	"Reila_Win_Talk_2"
+	{
+		"en"		"∴╎ᒷᓭ𝙹 ⍊ᒷ∷ᓭ⚍ᓵ⍑ᓭℸ ̣ ↸⚍ ᒲ╎ᓵ⍑ ᔑ⚍⎓⨅⚍⍑ꖎℸ ̣ᒷリ??..."
+		"ko"		"∴╎ᒷᓭ𝙹 ⍊ᒷ∷ᓭ⚍ᓵ⍑ᓭℸ ̣ ↸⚍ ᒲ╎ᓵ⍑ ᔑ⚍⎓⨅⚍⍑ꖎℸ ̣ᒷリ??..."
+	}
+	"Reila_Win_Talk_3"
+	{
+		"en"		"∴ᔑ∷ℸ ̣ᒷ ᒲᔑꖎ, ʖ╎ᓭℸ ̣ ↸⚍ üʖᒷ∷⍑ᔑ!¡ℸ ̣ ⍊𝙹リ Almagest? ↸⚍ ꖌᔑリリᓭℸ ̣ ᒲ╎ᓵ⍑ リ╎ᓵ⍑ℸ ̣ ⍊ᒷ∷ᓭℸ ̣ᒷ⍑ᒷリ 𝙹↸ᒷ∷?."
+		"ko"		"∴ᔑ∷ℸ ̣ᒷ ᒲᔑꖎ, ʖ╎ᓭℸ ̣ ↸⚍ üʖᒷ∷⍑ᔑ!¡ℸ ̣ ⍊𝙹リ 알마게스트? ↸⚍ ꖌᔑリリᓭℸ ̣ ᒲ╎ᓵ⍑ リ╎ᓵ⍑ℸ ̣ ⍊ᒷ∷ᓭℸ ̣ᒷ⍑ᒷリ 𝙹↸ᒷ∷?."
+	}
+	"Reila_Win_Talk_4"
+	{
+		"en"		"{black}Izan{default}: ...Great, language barrier."
+		"ko"		"{black}이잔{default}: ...그래, 말이 안 통하는군."
+	}
+	"Reila_Win_Talk_5_1"
+	{
+		"en"		"{gold}Omega{default}: Does anyone here speak Vestan?"
+		"ko"		"{gold}오메가{default}: 혹시 여기 베스타어 할 줄 아는 사람?"
+	}
+	"Reila_Win_Talk_5_2"
+	{
+		"en"		"{gold}Omega{default}: Everyone speaks nonsense nowadays."
+		"ko"		"{gold}오메가{default}: 요즘 다들 헛소리만 내뱉는 게 유행인가봐."
+	}
+	"Reila_Win_Talk_5_3"
+	{
+		"en"		"{gold}Omega{default}: Vhxis, use the power of the void to decipher that!"
+		"ko"		"{gold}Omega{default}: 비히시스. 공허의 힘으로 저 말을 해독해봐!"
+	}
+	"Reila_Win_Talk_6"
+	{
+		"en"		"{black}Izan {snow}shakes his head and points at his ears, then shrugs."
+		"ko"		"{black}이잔{snow}은 고개를 저으며 귀를 가리키더니, 어깨를 으쓱 들어올렸다."
+	}
+	"Reila_Win_Talk_7_1"
+	{
+		"en"		"{purple}Vhxis{default}: Why are we here? This isn't what we're here for."
+		"ko"		"{purple}비히시스{default}: 근데 여기엔 왜 온 거야? 여긴 우리 목적지가 아니였다고."
+	}
+	"Reila_Win_Talk_7_2"
+	{
+		"en"		"{purple}Vhxis{default}: This was an enormous waste of time."
+		"ko"		"{purple}비히시스{default}: 정말 대단한 시간 낭비였군."
+	}
+	"Reila_Win_Talk_7_3"
+	{
+		"en"		"{purple}Vhxis{default}: We shouldn't be here. We must get to the {purple} Throne."
+		"ko"		"{purple}비히시스{default}: 여기로 오면 안됐어. 우린 {purple}왕좌{default}로 가야했다고."
+	}
+	"Reila_Win_Talk_8"
+	{
+		"en"		""
+		"ko"		"{snow}그녀는 무언가를 건네주고는 여기서 떠나도 되는지 손짓으로 묻고 있습니다...."
+	}
+	"Reila_Win_Talk_9"
+	{
+		"en"		"{black}Izan {snow}allows her to leave."
+		"ko"		"{black}이잔{snow}은 그녀에게 떠나도 좋다고 길을 비켜주었습니다."
+	}
+	"Reila_Win_Talk_10"
+	{
+		"en"		"{gold}Omega{default} and{purple} Vhxis{default} leave."
+		"ko"		"{gold}오메가{default}와 {purple}비히시스{default}도 방을 떠났습니다."
+	}
+	"Reila_Win_Talk_11"
+	{
+		"en"		"{black}Izan{default}: Now we have a whole other group to worry about."
+		"ko"		"{black}이잔{default}: 이제 신경써야 할 다른 그룹이 생겼군."
+	}
+	
 	// Knight of the Curtain.
 	"KnightOfTheCurtain_Encounter_Text"
 	{
