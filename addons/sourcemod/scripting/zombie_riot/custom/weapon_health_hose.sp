@@ -490,7 +490,7 @@ public void Hose_UpdateText(int owner)
 	}
 	else
 	{
-		PrintHintText(owner, "[%t %.2f％]", "Health Hose Charged", Hose_Uber[owner]*100.0);
+		PrintHintText(owner, "[%t %.1f％]", "Health Hose Charged", Hose_Uber[owner]*100.0);
 	}
 }
 
@@ -636,16 +636,16 @@ public void Weapon_Syringe_Gun_Fire_M1(int client, int weapon, bool crit, int sl
 			HealAmmount = float(Health_To_Max);
 		}
 		
-		int HealedFor = HealEntityGlobal(client, target, HealAmmount, 1.15, 1.0, .AddUberCharge = Attributes_GetOnWeapon(client, weapon, Attrib_AddUberChargeOnHeal, true));
+		HealEntityGlobal(client, target, HealAmmount, 1.15, 1.0, .AddUberCharge = Attributes_GetOnWeapon(client, weapon, Attrib_AddUberChargeOnHeal, true));
 		
 		ClientCommand(client, "playgamesound items/smallmedkit1.wav");
 
 		if(target <= MaxClients)
 			ClientCommand(target, "playgamesound items/smallmedkit1.wav");
 
-		SetGlobalTransTarget(client);
-		if(target <= MaxClients)
-			PrintHintText(client, "%t", "You healed for", target, HealedFor);
+		//SetGlobalTransTarget(client);
+		//if(target <= MaxClients)
+		//	PrintHintText(client, "%t", "You healed for", target, HealedFor);
 
 		ApplyStatusEffect(client, target, "Healing Resolve", 5.0);
 		ApplyStatusEffect(client, client, "Healing Resolve", 5.0);

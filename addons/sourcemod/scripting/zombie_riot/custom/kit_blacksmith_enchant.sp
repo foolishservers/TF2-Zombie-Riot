@@ -459,7 +459,7 @@ static int Query_Enchantment(int weapon) {
 				return Enchant_Crusader_Crossbow[GetURandomInt() % sizeof(Enchant_Crusader_Crossbow)];
 			}
 		}
-		case WEAPON_Health_Hose: {
+		case WEAPON_HEALTH_HOSE: {
 			if(RoundToCeil(Attributes_Get(weapon, Attrib_IsSniperRifle, 0.0)) == IS_SNIPERRIFLE)	{
 				return Enchant_Health_HoseUber[GetURandomInt() % sizeof(Enchant_Health_HoseUber)];
 			}
@@ -3453,28 +3453,28 @@ static void Tinker_UberSaw_FEInverter(int rarity, TinkerEnum tinker)
 	tinker.CustomMode[2] = 1;
 	
 	float MeleeChargeLuck = (0.1 * (tinker.Luck[0]));
-	float DamageLuck = (0.15 * (tinker.Luck[2]));
-	float KnockbackLuck = (0.1 *(tinker.Luck[3]));
+	float DamageLuck = (0.15 * (tinker.Luck[1]));
+	float KnockbackLuck = (0.1 *(tinker.Luck[2]));
 
 	switch(rarity)
 	{
 		case 0:
 		{
 			tinker.Value[0] = 1.1 + MeleeChargeLuck;
-			tinker.Value[2] = 0.85 + DamageLuck;
-			tinker.Value[3] = 0.7 + KnockbackLuck;
+			tinker.Value[1] = 0.85 + DamageLuck;
+			tinker.Value[2] = 0.7 + KnockbackLuck;
 		}
 		case 1:
 		{
 			tinker.Value[0] = 1.15 + MeleeChargeLuck;
-			tinker.Value[2] = 0.8 + DamageLuck;
-			tinker.Value[3] = 0.65 + KnockbackLuck;
+			tinker.Value[1] = 0.8 + DamageLuck;
+			tinker.Value[2] = 0.65 + KnockbackLuck;
 		}
 		case 2:
 		{
 			tinker.Value[0] = 1.22 + MeleeChargeLuck;
-			tinker.Value[2] = 0.75 + DamageLuck;
-			tinker.Value[3] = 0.6 + KnockbackLuck;
+			tinker.Value[1] = 0.75 + DamageLuck;
+			tinker.Value[2] = 0.6 + KnockbackLuck;
 		}
 	}
 }
@@ -3525,7 +3525,7 @@ static void Tinker_UberSaw_HeavySmash(int rarity, TinkerEnum tinker)
 	
 	float DamageLuck = (0.1 * (tinker.Luck[0]));
 	float MeleeChargeLuck = (0.1 * (1.0 + (-1.0*(tinker.Luck[1]))));
-	float KnockbackLuck = (0.1 *(tinker.Luck[3]));
+	float KnockbackLuck = (0.1 *(tinker.Luck[2]));
 
 	switch(rarity)
 	{
@@ -3539,13 +3539,13 @@ static void Tinker_UberSaw_HeavySmash(int rarity, TinkerEnum tinker)
 		{
 			tinker.Value[0] = 1.3 + DamageLuck;
 			tinker.Value[1] = 1.2 + MeleeChargeLuck;
-			tinker.Value[3] = 1.2 + KnockbackLuck;
+			tinker.Value[2] = 1.2 + KnockbackLuck;
 		}
 		case 2:
 		{
 			tinker.Value[0] = 1.4 + DamageLuck;
 			tinker.Value[1] = 1.25 + MeleeChargeLuck;
-			tinker.Value[4] = 1.25 + KnockbackLuck;
+			tinker.Value[2] = 1.25 + KnockbackLuck;
 		}
 	}
 }

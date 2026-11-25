@@ -358,7 +358,8 @@ enum
 	WEAPON_KIT_SURVIVALIST = 1007,
 	WEAPON_ADAPTIVE_MEDIGUN = 1008,
 	WEAPON_CRUSADER_CROSSBOW = 1009,
-	WEAPON_Health_Hose = 1010,
+	WEAPON_HEALTH_HOSE = 1010,
+	WEAPON_Medikit = 1011,
 };
 
 enum
@@ -768,11 +769,6 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "custom/wand/weapon_wand_nymph.sp"
 #include "custom/weapon_castlebreaker.sp"
 #include "custom/addons/cw_base.sp"
-#include "custom/addons/weapon_majorsteam_launcher.sp"
-#include "custom/addons/weapon_mostima.sp"
-#include "custom/addons/weapon_minecraft_sword.sp"
-#include "custom/addons/weapon_mini_semi_gun.sp"
-#include "custom/addons/weapon_wand_shield_mage.sp"
 #include "custom/kit_soldine.sp"
 #include "custom/weapon_kritzkrieg.sp"
 #include "custom/wand/weapon_bubble_wand.sp"

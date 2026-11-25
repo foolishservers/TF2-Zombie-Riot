@@ -441,14 +441,15 @@ public void Weapon_SeaHealingPap_M1(int client, int weapon, bool crit, int slot)
 			if(cooldown > 15.0)
 				cooldown = 15.0;
 			
+			cooldown*=CooldownReductionAmount(client);
+			
 			if(AllowHealing == 1)
-				PrintHintText(client, "대상 %N 의 체력을 %d 만큼 회복시켰습니다! 회복 쿨타임이 %.0f 만큼 추가됩니다.", target, healing, cooldown);
+				PrintHintText(client, "%t\n%t", "You healed for", target, healing, "Medi-Kit Cooldown", cooldown);
 			else
-				PrintHintText(client, "대상 %s 의 체력을 %d 만큼 회복시켰습니다! 회복 쿨타임이 %.0f 만큼 추가됩니다.", NpcStats_ReturnNpcName(target), healing, cooldown);
+				PrintHintText(client, "%t\n%t", "You healed for NpcName", NpcStats_ReturnNpcName(target), healing, "Medi-Kit Cooldown", cooldown);
 
-
-			Ability_Apply_Cooldown(client, 1, cooldown);
-			Ability_Apply_Cooldown(client, 2, cooldown);
+			Ability_Apply_Cooldown(client, 1, cooldown, weapon, true);
+			Ability_Apply_Cooldown(client, 2, cooldown, weapon, true);
 
 			int BeamIndex = ConnectWithBeam(client, target, 70, 200, 70, 2.0, 2.0, 1.1, "sprites/laserbeam.vmt");
 			SetEntityRenderFx(BeamIndex, RENDERFX_FADE_FAST);
@@ -456,10 +457,7 @@ public void Weapon_SeaHealingPap_M1(int client, int weapon, bool crit, int slot)
 
 			return;
 		}
-		if(AllowHealing == 1)
-			PrintHintText(client, "%N 의 체력이 꽉 찬 상태입니다.", target);
-		else
-			PrintHintText(client, "%s 의 체력이 꽉 찬 상태입니다.", NpcStats_ReturnNpcName(target));
+		PrintHintText(client, "%t", "Is already at full hp");
 	}
 
 	ClientCommand(client, "playgamesound items/medshotno1.wav");
@@ -475,6 +473,7 @@ public void Weapon_SeaHealingPap_M2(int client, int weapon, bool crit, int slot)
 		ShowSyncHudText(client,  SyncHud_Notifaction, "%t", "Ability has cooldown", Ability_Check_Cooldown(client, slot));
 		return;
 	}
+	
 	int health = GetEntProp(client, Prop_Send, "m_iHealth");
 	int maxHealth = SDKCall_GetMaxHealth(client);
 	
@@ -510,8 +509,8 @@ public void Weapon_SeaHealingPap_M2(int client, int weapon, bool crit, int slot)
 	
 	HealEntityGlobal(client, client, float(healing), 1.0, 0.5, _);
 	ClientCommand(client, "playgamesound items/smallmedkit1.wav");
-
-	PrintHintText(client,"당신 자신의 체력을 %d 만큼 회복했습니다!, 회복 쿨타임이 25 추가됩니다.", healing);
+	SetGlobalTransTarget(client);
+	PrintHintText(client,"%t\n%t", "Medikit Healing Self", healing, "Medi-Kit Cooldown", 25.0*CooldownReductionAmount(client));
 
 	Ability_Apply_Cooldown(client, 1, 25.0);
 	Ability_Apply_Cooldown(client, 2, 25.0);
