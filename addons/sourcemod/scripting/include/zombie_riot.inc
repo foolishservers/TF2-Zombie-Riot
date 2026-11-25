@@ -16,6 +16,7 @@ enum ZRSpecialMode
 	Mode_Survival,
 	Mode_Construction2,
 	Mode_Freeplay,
+	Mode_Holdout,
 }
 
 enum ZRLifeState
