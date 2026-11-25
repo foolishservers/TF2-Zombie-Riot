@@ -3,17 +3,12 @@
 만약 *특별한* 기능을 제작할 예정이면
 
 행운을 빕니다.
-*/
 
-/*
-이제 컨픽 선에서 거의 완벽하게 펑션을 연결 할 수 있어서 이 파일은 유물이 되었습니다.
+
+ps. 이제 컨픽 선에서 거의 완벽하게 펑션을 연결 할 수 있어서 이 파일은 유물이 되었습니다.
+
+여전히 lms 사운드 및 효과를 설정할 수 있습니다.
 */
-#include "weapon_majorsteam_launcher.sp"
-#include "weapon_mostima.sp"
-#include "weapon_minecraft_sword.sp"
-#include "weapon_mini_semi_gun.sp"
-#include "weapon_wand_shield_mage.sp"
-#include "weapon_medikit.sp"
 
 static int GetLastManPlayer;
 
