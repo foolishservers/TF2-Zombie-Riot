@@ -1107,29 +1107,30 @@ float Cybergrind_EX_Hard_SpeedFunc(int victim, StatusEffect Apply_MasterStatusEf
 
 static int AltExtraMachineStatusID;
 static int CrystalShieldBuffID;
+static int RuinaBuffSpeedPlayerID;
 void StatusEffects_BlackOak()
 {
 	StatusEffect data;
+	
+	data.Blank();
+	
 	strcopy(data.BuffName, sizeof(data.BuffName), "Identifying Targets");
 	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "IT");
 	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
 	//-1.0 means unused
 	data.DamageTakenMulti 			= 0.2;
-	data.DamageDealMulti			= -1.0;
-	data.AttackspeedBuff			= -1.0;
-	data.MovementspeedModif			= -1.0;
 	data.Positive 					= false;
 	data.ShouldScaleWithPlayerCount	= false;
 	data.Slot						= 0;
 	data.SlotPriority				= 0;
 	StatusEffect_AddGlobal(data);
 	
+	data.Blank();
+	
 	strcopy(data.BuffName, sizeof(data.BuffName), "Crystal Shield");
 	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "CS");
 	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
 	data.DamageTakenMulti 			= 0.0;
-	data.DamageDealMulti			= -1.0;
-	data.MovementspeedModif			= -1.0;
 	data.Positive 					= true;
 	data.ShouldScaleWithPlayerCount = false;
 	data.Slot						= 0;
@@ -1138,13 +1139,11 @@ void StatusEffects_BlackOak()
 	data.HudDisplay_Func 			= CrystalShield_Hud;
 	CrystalShieldBuffID = StatusEffect_AddGlobal(data);
 	
+	data.Blank();
+	
 	strcopy(data.BuffName, sizeof(data.BuffName), "Extra Damage Indicator");
 	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "⚔");
 	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
-	data.DamageTakenMulti 			= -1.0;
-	data.DamageDealMulti			= -1.0;
-	data.AttackspeedBuff			= -1.0;
-	data.MovementspeedModif			= -1.0;
 	data.Positive 					= true;
 	data.ShouldScaleWithPlayerCount = false;
 	data.ElementalLogic				= true;
@@ -1153,11 +1152,11 @@ void StatusEffects_BlackOak()
 	data.HudDisplay_Func			= ExtraDamage_Indicator_Hud_Func;
 	StatusEffect_AddGlobal(data);
 	
+	data.Blank();
+	
 	strcopy(data.BuffName, sizeof(data.BuffName), "Machine Overclock");
 	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "Ω");
 	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
-	data.DamageTakenMulti 			= -1.0;
-	data.DamageDealMulti			= -1.0;
 	data.AttackspeedBuff			= 0.5;
 	data.MovementspeedModif			= 1.25;
 	data.Positive 					= true;
@@ -1166,19 +1165,31 @@ void StatusEffects_BlackOak()
 	data.SlotPriority				= 0;
 	StatusEffect_AddGlobal(data);
 	
+	data.Blank();
+	
 	strcopy(data.BuffName, sizeof(data.BuffName), "Alt Extra Machine");
 	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "");
 	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
-	data.DamageTakenMulti 			= -1.0;
-	data.DamageDealMulti			= -1.0;
-	data.AttackspeedBuff			= -1.0;
-	data.MovementspeedModif			= -1.0;
 	data.Positive 					= true;
 	data.ShouldScaleWithPlayerCount = false;
 	data.ElementalLogic				= true;
 	data.Slot						= 0;
 	data.SlotPriority				= 0;
 	AltExtraMachineStatusID = StatusEffect_AddGlobal(data);
+	
+	data.Blank();
+	
+	strcopy(data.BuffName, sizeof(data.BuffName), "Ruina's Nimbleness");
+	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "♝");
+	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
+	data.MovementspeedModif			= 0.0;
+	data.MovementspeedModifPlayer 	= 1.0;
+	data.Positive 					= true;
+	data.ShouldScaleWithPlayerCount = true;
+	data.Slot						= 0;
+	data.SlotPriority				= 0;
+	data.Status_SpeedFunc 			= RuinasNimbleness_Func;
+	RuinaBuffSpeedPlayerID = StatusEffect_AddGlobal(data);
 }
 
 void ExtraDamage_Indicator_Hud_Func(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int SizeOfChar, char[] HudToDisplay)
@@ -1258,7 +1269,7 @@ float CrystalShield_DamageTakenFunc(int attacker, int victim, StatusEffect Apply
 			float current_mana = float(Current_Mana[victim]);
 			if(current_mana < max_mana[victim])
 			{
-				current_mana += float(dmg_through_armour);
+				current_mana += (float(dmg_through_armour) * 2.0);
 				if(current_mana > max_mana[victim])
 					current_mana = max_mana[victim];
 				
@@ -1277,7 +1288,7 @@ float CrystalShield_DamageTakenFunc(int attacker, int victim, StatusEffect Apply
 			float current_mana = float(Current_Mana[victim]);
 			if(current_mana < max_mana[victim])
 			{
-				current_mana += damage;
+				current_mana += (damage * 2.0);
 				if(current_mana > max_mana[victim])
 					current_mana = max_mana[victim];
 				
@@ -1328,6 +1339,38 @@ float CrystalShield_DamageTakenFunc(int attacker, int victim, StatusEffect Apply
 void CrystalShield_Hud(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int SizeOfChar, char[] HudToDisplay)
 {
 	Format(HudToDisplay, SizeOfChar, "CS[%i]", RoundToNearest(Apply_StatusEffect.DataForUse));
+}
+
+stock void NpcStats_RuinaNimblenessStengthen(int victim, float NewBuffValue, bool AddMode = false)
+{
+	if(!E_AL_StatusEffects[victim])
+		return;
+	
+	static StatusEffect Apply_MasterStatusEffect;
+	static E_StatusEffect Apply_StatusEffect;
+	int ArrayPosition = E_AL_StatusEffects[victim].FindValue(RuinaBuffSpeedPlayerID, E_StatusEffect::BuffIndex);
+	if(ArrayPosition != -1)
+	{
+		E_AL_StatusEffects[victim].GetArray(ArrayPosition, Apply_StatusEffect);
+		AL_StatusEffects.GetArray(Apply_StatusEffect.BuffIndex, Apply_MasterStatusEffect);
+		if(Apply_StatusEffect.TimeUntillOver >= GetGameTime())
+		{
+			//Buffs the damgae for casino, and saves it, as its random somewhat
+			if(Apply_StatusEffect.DataForUse == 0.0 || NewBuffValue >= Apply_StatusEffect.DataForUse || AddMode)
+			{
+				if(!AddMode)
+					Apply_StatusEffect.DataForUse = NewBuffValue;
+				else
+					Apply_StatusEffect.DataForUse += NewBuffValue;
+				E_AL_StatusEffects[victim].SetArray(ArrayPosition, Apply_StatusEffect);
+			}
+		}
+	}	
+}
+
+float RuinasNimbleness_Func(int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect)
+{
+	return Apply_StatusEffect.DataForUse;
 }
 #endif
 
