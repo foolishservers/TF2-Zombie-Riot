@@ -74,17 +74,17 @@ void Weapon_Hose_Precache()
 
 public void Weapon_Health_Hose(int client, int weapon, bool crit, int slot)
 {
-	Weapon_Hose_Shoot(client, weapon, crit, slot, Hose_Velocity, Hose_BaseHeal, Hose_LossPerHit, Hose_Min, 1, 1.0, HOSE_PARTICLE, false, true);
+	Weapon_Hose_Shoot(client, weapon, Hose_Velocity, Hose_BaseHeal, Hose_LossPerHit, Hose_Min, 1, 1.0, HOSE_PARTICLE, false, true);
 }
 
 public void Weapon_Health_Hose_Shotgun(int client, int weapon, bool crit, int slot)
 {
-	Weapon_Hose_Shoot(client, weapon, crit, slot, Hose_Velocity, Hose_BaseHeal * 2.0, Hose_LossPerHit, Hose_Min, 3, 2.0, HOSE_PARTICLE, false, false);
+	Weapon_Hose_Shoot(client, weapon, Hose_Velocity, Hose_BaseHeal * 2.0, Hose_LossPerHit, Hose_Min, 3, 2.0, HOSE_PARTICLE, false, false);
 }
 
 public void Weapon_Health_Hose_GiveUber(int client, int weapon, bool crit, int slot)
 {
-	Weapon_Hose_Shoot(client, weapon, crit, slot, Hose_Velocity, Hose_BaseHeal, Hose_LossPerHit, Hose_Min, 1, 1.0, HOSE_PARTICLE, true, true);
+	Weapon_Hose_Shoot(client, weapon, Hose_Velocity, Hose_BaseHeal, Hose_LossPerHit, Hose_Min, 1, 1.0, HOSE_PARTICLE, true, true);
 }
 
 public void Weapon_Health_Hose_Shotgun_GiveUber(int client, int weapon, bool crit, int slot)
@@ -169,7 +169,7 @@ public Action Hose_RemoveUber(Handle remove, int id)
 	return Plugin_Stop;
 }
 
-static void Weapon_Hose_Shoot(int client, int weapon, bool crit, int slot, float speed, float baseHeal, float loss, float minHeal, int NumParticles, float spread, char ParticleName[255], bool giveUber, bool Assist)
+static void Weapon_Hose_Shoot(int client, int weapon, float speed, float baseHeal, float loss, float minHeal, int NumParticles, float spread, char ParticleName[255], bool giveUber, bool Assist)
 {
 	float healmult = 1.0;
 	healmult = Attributes_GetOnWeapon(client, weapon, 8, true);
@@ -231,12 +231,6 @@ static void Weapon_Hose_Shoot(int client, int weapon, bool crit, int slot, float
 			Hose_Homing=-1;
 		//	if(GetEntProp(weapon, Prop_Send, "m_nKillComboCount"))
 		//	{
-			b_LagCompNPC_No_Layers = true;
-			StartPlayerOnlyLagComp(client, true);
-			Handle trace = TR_TraceRayFilterEx(eyePos, Angles, MASK_SOLID, RayType_Infinite, Syringe_Shot_BulletAndMeleeTraceAlly,client);
-			int target = TR_GetEntityIndex(trace);	
-			EndPlayerOnlyLagComp(client);
-			
 			Player_Laser_Logic Laser;
 			Laser.client = client;
 			Laser.max_targets = 1;

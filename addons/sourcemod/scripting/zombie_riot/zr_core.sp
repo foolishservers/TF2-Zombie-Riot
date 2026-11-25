@@ -3688,8 +3688,8 @@ void ForcePlayerWin(bool fakeout = false)
 		ZR_GetSpecialMode() == Mode_Rogue2 ||
 		ZR_GetSpecialMode() == Mode_Rogue3 || 
 		ZR_GetSpecialMode() == Mode_Construction || 
-		ZR_GetSpecialMode() == Mode_Construction2/* ||
-		ZR_GetSpecialMode() == Mode_Holdout*/)
+		ZR_GetSpecialMode() == Mode_Construction2||
+		ZR_GetSpecialMode() == Mode_Holdout)
 		{
 			Artifact artifact;
 			int length = CurrentCollection ? CurrentCollection.Length : 0;

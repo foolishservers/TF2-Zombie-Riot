@@ -26,15 +26,15 @@ public void Weapon_Medikit_M1(int client, int weapon, bool crit, int slot)
 	int maxHealth = ReturnEntityMaxHealth(target);
 	
 	float healing = 35.0;
-	float overheal = 1.15 *= Attributes_Get(weapon, 4002, 1.0);
+	float overheal = 1.15 * Attributes_Get(weapon, 4002, 1.0);
 	
 	if(health<maxHealth/2)
-		healing*=1.15
+		healing*=1.15;
 	
 	healing *= Attributes_GetOnWeapon(client, weapon, 8, true);
 	
-	float healing += float(maxHealth)*0.025;
-		
+	healing += float(maxHealth)*0.025;
+	
 	int Health_To_Max=HealEntityGlobal(client, target, healing, overheal, 0.5);
 	
 	if(Health_To_Max <= 0)
@@ -76,7 +76,7 @@ public void Weapon_Medikit_M1(int client, int weapon, bool crit, int slot)
 	SetEntityRenderFx(BeamIndex, RENDERFX_FADE_FAST);
 	CreateTimer(0.6, Timer_RemoveEntity, EntIndexToEntRef(BeamIndex), TIMER_FLAG_NO_MAPCHANGE);
 	
-	ApplyStatusEffect(client, victim, "Healing Resolve", 10.0);
+	ApplyStatusEffect(client, target, "Healing Resolve", 10.0);
 	ApplyStatusEffect(client, client, "Healing Resolve", 10.0);
 	
 	Ability_Apply_Cooldown(client, slot, cooldown, weapon, true);
@@ -98,15 +98,15 @@ public void Weapon_Medikit_M2(int client, int weapon, bool crit, int slot)
 	int maxHealth = ReturnEntityMaxHealth(client);
 
 	float healing = 35.0;
-	float overheal = 1.15 *= Attributes_Get(weapon, 4002, 1.0);
+	float overheal = 1.15 * Attributes_Get(weapon, 4002, 1.0);
 	
 	if(health<maxHealth/2)
-		healing*=1.15
+		healing*=1.15;
 	
 	healing *= Attributes_GetOnWeapon(client, weapon, 8, true);
 	
-	float healing += float(maxHealth)*0.025;
-		
+	healing += float(maxHealth)*0.025;
+	
 	int Health_To_Max=HealEntityGlobal(client, client, healing, overheal, 0.5);
 	
 	if(Health_To_Max <= 0)
