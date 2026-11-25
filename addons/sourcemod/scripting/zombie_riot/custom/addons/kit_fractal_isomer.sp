@@ -218,7 +218,7 @@ static Action Kit_Fractal_Isomer_Timer(Handle timer, DataPack pack)
 		{
 			fractal_isomer_crystal[client]++;
 			
-			float cooldown = IsValidEntity(RaidBossActive) ? 1.0 : 4.0;
+			float cooldown = IsValidEntity(RaidBossActive) ? 2.0 : 4.0;
 			cooldown *= CooldownReductionAmount(client);
 			fractal_isomer_crystal_timer[client] = gameTime + cooldown;
 		}
@@ -335,7 +335,7 @@ public void Kit_Fractal_Isomer_Cannon_M1(int client, int weapon, bool crit, int 
 	fractal_isomer_crystal[client] -= crystal;
 	
 	// And gives cooldown.
-	Ability_Apply_Cooldown(client, slot, 25.0);
+	Ability_Apply_Cooldown(client, slot, 30.0);
 	
 	EmitSoundToClient(client, SOUND_FRACTAL_ISOMER_CANNON);
 	Client_Shake(client, 0, 35.0, 90.0, 0.6);
@@ -353,11 +353,13 @@ public void Kit_Fractal_Isomer_Cannon_M1(int client, int weapon, bool crit, int 
 	
 	float radius = 15.0;
 	
+	int max_target_hits = 10 + ((fractal_isomer_pap[client] - 2) * 5);
+	
 	Player_Laser_Logic laser;
 	laser.client = client;
 	laser.Radius = radius;
 	laser.Damage = damage;
-	laser.max_targets = 35;
+	laser.max_targets = max_target_hits;
 	laser.target_hitfalloff = 1.0;
 	laser.damagetype = DMG_PLASMA;
 	laser.DoForwardTrace_Basic(distance);
@@ -631,14 +633,14 @@ static void Kit_Fractal_Isomer_Burst_PenetrateTouch(int entity, int target)
 			float damage = f_WandDamage[entity];
 			if(b_thisNpcIsARaid[target])
 			{
-				damage *= 1.35;
+				damage *= 1.7;
 			}
 			else if(b_thisNpcIsABoss[target]
 				|| b_thisNpcHasAnOutline[target]
 				|| b_StaticNPC[target]
 				|| b_ThisNpcIsImmuneToNuke[target])
 			{
-				damage *= 1.2;
+				damage *= 1.35;
 			}
 			
 			SDKHooks_TakeDamage(target, owner, owner, damage, DMG_PLASMA, weapon, vecDamageForce, vecTarget);	// 2048 is DMG_NOGIB?
@@ -691,14 +693,14 @@ static void Kit_Fractal_Isomer_Burst_ProjectileTouch(int entity, int target)
 		float damage = f_WandDamage[entity];
 		if(b_thisNpcIsARaid[target])
 		{
-			damage *= 1.4;
+			damage *= 1.7;
 		}
 		else if(b_thisNpcIsABoss[target]
 			|| b_thisNpcHasAnOutline[target]
 			|| b_StaticNPC[target]
 			|| b_ThisNpcIsImmuneToNuke[target])
 		{
-			damage *= 1.25;
+			damage *= 1.35;
 		}
 		
 		SDKHooks_TakeDamage(target, owner, owner, damage, DMG_PLASMA, weapon, vecDamageForce, vecTarget);	// 2048 is DMG_NOGIB?
@@ -713,7 +715,7 @@ static void Kit_Fractal_Isomer_Burst_ProjectileTouch(int entity, int target)
 
 static bool Kit_Fractal_Isomer_Burst_FireLaser(int client, int weapon)
 {
-	float damage = 81.0;
+	float damage = 78.0;
 	damage *= Attributes_Get(weapon, 410, 1.0);
 	
 	float speed = 1500.0;
@@ -813,7 +815,7 @@ static void Kit_Fractal_Isomer_Burst_LaserTouch(int entity, int target)
 					|| b_StaticNPC[target]
 					|| b_ThisNpcIsImmuneToNuke[target])
 				{
-					damage *= 1.35;
+					damage *= 1.3;
 				}
 				
 				SDKHooks_TakeDamage(target, owner, owner, damage, DMG_PLASMA, weapon, vecDamageForce, vecTarget);	// 2048 is DMG_NOGIB?
@@ -1176,7 +1178,7 @@ static void HaloManagment(int client)
 	GetEntPropVector(client, Prop_Data, "m_vecAbsOrigin", pos);
 	pos[2] += 2.0;
 	
-	int particle = ParticleEffectAt(pos, "utaunt_treespiral_red_base", -1.0);
+	int particle = ParticleEffectAt(pos, "utaunt_poison_floorrays_o", -1.0);
 	SetParent(client, particle);
 	
 	fractal_isomer_cosmetic[client] = EntIndexToEntRef(particle);
