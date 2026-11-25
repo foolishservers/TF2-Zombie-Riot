@@ -8714,10 +8714,10 @@
 		"en"	"Servant of the Curtain"
 		"ko"	"장막의 하수인"
 	}
-	"Traitor Prescott"
+	"Prescott The Fugitive"
 	{
-		"en"	"Prescott The Traitor"
-		"ko"	"배신자 '프레스콧'"
+		"en"	"Prescott The Fugitive"
+		"ko"	"도망자 '프레스콧'"
 	}
 	
 	"Revived Knight"

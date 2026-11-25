@@ -2567,7 +2567,7 @@
 		"fr" 	"Soigne les alliés proches et améliore leur dégats par 10％.\nAttaquez pour soigner directement vos alliés.\nAppuyez sur M2 pour améliorer les dégats de tous vos alliés par 25％, pour 15 secondes.\nCet arme s'améliore avec les améliorations Medigun."
 		"chi"	"缓慢治疗你附近的队友，提供+10％伤害buff。\n随着医疗枪升级。\nM1提供更多治疗，M2提供15秒的+25％伤害buff。"
 		"it"	"Cura lentamente gli alleati intorno a te e dà loro un buff di 10％ dmg.\nScala con i potenziamenti della medigun.\nM1 Lancia una guarigione extra sugli alleati.\nM2 Applica un buff più forte di 25％ dmg a tutti gli alleati per 15 sec."
-		"ko"	"-주변 아군을 서서히 치유하며 10％ 피해 증가를 부여\n-메디건 업그레이드로 효과가 향상\n-M1은 추가 치유 발동\n-우클릭 능력은 15초 동안 주위의 모든 아군에게 25％ 피해 증가 버프를 적용"
+		"ko"	"-주변 아군을 서서히 치유하며 10％ 피해량 증가를 부여 및 들고 있는 무기의 능력 쿨타임 감소\n-메디건 업그레이드로 효과가 향상\n-M1은 추가 치유를 발동하며 능력 쿨타임을 더 많이 감소\n-우클릭 능력은 15초 동안 주위의 모든 아군에게 25％ 피해량 증가 버프를 적용"
 	}
 	"Song Of The Ocean Desc 2"
 	{
@@ -4507,6 +4507,11 @@
 		"chi"	"''Carbon foot on the pedal, I AM TRASH METAL!''\n获得两个新的发射物，加强基础属性。\n垃圾桶里出现一个不可名状之物……"
 		"it"	"''Piede sul pedale, SONO TRASH METAL!''\nSblocca altri due proiettili e migliora ulteriormente le statistiche di base.\nUn oggetto di indicibile pericolo si nasconde in questo bidone della spazzatura..."
 		"ko"	"-새로운 투사체 종류 2개 추가\n-피해량, 재장전 속도 증가\n-이 통에는 말로 표현할 수 없을만큼 위험한 것이 숨겨져있습니다..."
+	}
+	"Dim Desc"
+	{
+		"en"	"''A forbidden weapon that somehow made it back to this relm.''\nCharge up meter by hitting enemies with M1.\n-M2: Summon your trustworthy minions.\nWARNING. THIS WEAPON IS NOT RELATED TO LORE.\n''Don't let Bladedance figure out this weapon'' -???-"
+		"ko"	"''이 세상에 다시 돌아온 추방된 무기.'' \nM1으로 투사체를 날려 미터를 충전 \n이후 M2로 충직한 하수인들을 소환. \n''절대 칼춤이 이걸 찾게 두지 마'' -???-"
 	}
 	"Telekinesis Desc"
 	{

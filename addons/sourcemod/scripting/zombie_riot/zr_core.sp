@@ -359,7 +359,11 @@ enum
 	WEAPON_ADAPTIVE_MEDIGUN = 1008,
 	WEAPON_CRUSADER_CROSSBOW = 1009,
 	WEAPON_HEALTH_HOSE = 1010,
-	WEAPON_Medikit = 1011,
+	WEAPON_FREEZE_WAND = 1011,
+	WEAPON_KIT_FRACTAL_ISOMER_BURST = 1012,
+	WEAPON_KIT_FRACTAL_ISOMER_LANCE = 1013,
+	WEAPON_KIT_FRACTAL_ISOMER_CANNON = 1014,
+	WEAPON_Medikit = 1015,
 };
 
 enum
@@ -769,6 +773,14 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "custom/wand/weapon_wand_nymph.sp"
 #include "custom/weapon_castlebreaker.sp"
 #include "custom/addons/cw_base.sp"
+#include "custom/addons/weapon_majorsteam_launcher.sp"
+#include "custom/addons/weapon_mostima.sp"
+#include "custom/addons/weapon_minecraft_sword.sp"
+#include "custom/addons/weapon_mini_semi_gun.sp"
+#include "custom/addons/weapon_wand_shield_mage.sp"
+#include "custom/addons/weapon_wand_freeze.sp"
+#include "custom/addons/kit_fractal_isomer.sp"
+#include "custom/addons/weapon_medikit.sp"
 #include "custom/kit_soldine.sp"
 #include "custom/weapon_kritzkrieg.sp"
 #include "custom/wand/weapon_bubble_wand.sp"
@@ -791,8 +803,6 @@ char s_MissionClient[64]; // Who hired us for the current job
 #include "custom/weapon_flare.sp"
 #include "custom/kit_survivalist.sp"
 #include "custom/weapon_operamute.sp"
-//#include "custom/addons/weapon_wand_freeze.sp"
-//#include "custom/addons/weapon_charge_beam.sp"
 
 void ZR_PluginLoad()
 {
@@ -3266,6 +3276,28 @@ void ReviveAll(bool raidspawned = false,
 	{
 		Const2_ReviveAllBuildings(true);
 	}
+}
+
+void ReviveAll_Delayed(bool raidspawned = false,
+ bool setmusicfalse = false,
+  bool ForceFullHealth = false,
+   bool Const2_DontRespawnBuildings = false,
+  bool IsSetupRevive = false)
+{
+	DataPack pack = new DataPack();
+	pack.WriteCell(raidspawned);
+	pack.WriteCell(setmusicfalse);
+	pack.WriteCell(ForceFullHealth);
+	pack.WriteCell(Const2_DontRespawnBuildings);
+	pack.WriteCell(IsSetupRevive);
+	RequestFrame(Frame_ReviveAll, pack);
+}
+
+void Frame_ReviveAll(DataPack pack)
+{
+	pack.Reset();
+	ReviveAll(pack.ReadCell(), pack.ReadCell(), pack.ReadCell(), pack.ReadCell(), pack.ReadCell());
+	delete pack;
 }
 
 float XpFloatGive[MAXPLAYERS];

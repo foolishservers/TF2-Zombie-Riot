@@ -106,6 +106,9 @@ methodmap ZSNightmare < CClotBody
 	{
 		ZSNightmare npc = view_as<ZSNightmare>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "1.15", "15000", ally, false));
 		
+		SetVariantInt(ZS_MODEL_CHARPLE);
+		AcceptEntityInput(npc.index, "SetBodyGroup");
+		
 		i_NpcWeight[npc.index] = 4;
 		
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
@@ -120,12 +123,8 @@ methodmap ZSNightmare < CClotBody
 		func_NPCDeath[npc.index] = ZSNightmare_NPCDeath;
 		func_NPCThink[npc.index] = ZSNightmare_ClotThink;
 		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;
-
-		npc.m_flSpeed = 350.0;
-		npc.m_flNextMeleeAttack = 0.0;
-        npc.m_flWhyCry = 0.0;
-        npc.m_flMeleeArmor = 0.8;
-		npc.m_flRangedArmor = 0.8;
+		
+		npc.m_bThisNpcIsABoss = true;
 		
 		if(!IsValidEntity(RaidBossActive))
 		{
@@ -135,15 +134,23 @@ methodmap ZSNightmare < CClotBody
 			RaidAllowsBuildings = true;
 		}
 		
+		npc.m_flSpeed = 350.0;
+		npc.m_flNextMeleeAttack = 0.0;
+        npc.m_flWhyCry = 0.0;
+        npc.m_flMeleeArmor = 0.8;
+		npc.m_flRangedArmor = 0.8;
+		
 		npc.StartPathing();
 		
-		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);	
-		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);	
-		for(int client_check=1; client_check<=MaxClients; client_check++)
+		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);
+		EmitSoundToAll("npc/zombie_poison/pz_alert1.wav", _, _, _, _, 1.0);
+		
+		for(int client_check = 1; client_check <= MaxClients; client_check++)
 		{
 			if(IsClientInGame(client_check) && !IsFakeClient(client_check))
 			{
-				ShowGameText(client_check, "voice_player", 1, "%t", "Nightmare Spawned");
+				ShowGameText(client_check, "voice_player", 1, "%T", "Nightmare Spawned", client_check);
+				UTIL_ScreenFade(client_check, 180, 1, FFADE_OUT, 0, 0, 0, 255);
 			}
 		}
 		
@@ -158,10 +165,6 @@ static void ZSNightmare_ClotThink(int iNPC)
 	float GameTime = GetGameTime(npc.index);
 	if(npc.m_flNextDelayTime > GameTime)
 		return;
-	
-	SetEntProp(npc.index, Prop_Send, "m_nBody", GetEntProp(npc.index, Prop_Send, "m_nBody"));
-	SetVariantInt(32768);
-	AcceptEntityInput(iNPC, "SetBodyGroup");
 	
 	npc.m_flNextDelayTime = GameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
@@ -235,12 +238,10 @@ static void ZSNightmare_ClotThink(int iNPC)
 						TR_GetEndPosition(vecHit, swingTrace);
 						if(target > 0) 
 						{
-							{
-								if(!ShouldNpcDealBonusDamage(target))
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 1000.0, DMG_CLUB, -1, _, vecHit);
-								else
-									SDKHooks_TakeDamage(target, npc.index, npc.index, 2500.0, DMG_CLUB, -1, _, vecHit);					
-							}
+							if(!ShouldNpcDealBonusDamage(target))
+								SDKHooks_TakeDamage(target, npc.index, npc.index, 1000.0, DMG_CLUB, -1, _, vecHit);
+							else
+								SDKHooks_TakeDamage(target, npc.index, npc.index, 2500.0, DMG_CLUB, -1, _, vecHit);
 							
 							npc.PlayMeleeHitSound();
 						}

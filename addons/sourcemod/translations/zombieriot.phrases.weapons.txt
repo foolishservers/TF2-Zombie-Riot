@@ -3686,6 +3686,132 @@
 		"ru"		"Жезл Призмы"
 		"ko"		"프리즘 완드"
 	}
+	"Dimension Ripper"
+	{
+		"en"		"Dimension Ripper"
+		"ko"		"차원 찢개"
+	}
+	"Dimension: W.F."
+	{
+		"en"		"Dimension: W.F."
+		"ko"		"차원: 배풍등의 군사들"
+	}
+	"Dimension: Blitz"
+	{
+		"en"		"Dimension: Blitz"
+		"ko"		"차원: 블리츠크리그의 군대"
+	}
+	"Dimension: Xeno"
+	{
+		"en"		"Dimension: Xeno"
+		"ko"		"차원: 제노 감염"
+	}
+	"Dimension: Medieval"
+	{
+		"en"		"Dimension: Medieval"
+		"ko"		"차원: 중세"
+	}
+	"Dimension: Deep Sea"
+	{
+		"en"		"Dimension: Deep Sea"
+		"ko"		"차원: 심해"
+	}
+	"Dimension: Expidonsa"
+	{
+		"en"		"Dimension: Expidonsa"
+		"ko"		"차원: 엑스피돈사"
+	}
+	"Dimension: Interitus"
+	{
+		"en"		"Dimension: Interitus"
+		"ko"		"차원: 인테리투스"
+	}
+	"Dimension: Ruina"
+	{
+		"en"		"Dimension: Ruina"
+		"ko"		"차원: 루이나"
+	}
+	"Dimension: Void"
+	{
+		"en"		"Dimension: Void"
+		"ko"		"차원: 공허의 유산"
+	}
+	"Dimension: Almina"
+	{
+		"en"		"Dimension: Almina"
+		"ko"		"차원: 알미나"
+	}
+	"Dimension: Vesta"
+	{
+		"en"		"Dimension: Vesta"
+		"ko"		"차원: 베스타"
+	}
+	"Dimension: Lab"
+	{
+		"en"		"Dimension: Lab"
+		"ko"		"차원: 연구소"
+	}
+	
+	"Dimension: W.F. - Elites"
+	{
+		"en"		"Dimension: W.F. - Elites"
+		"ko"		"차원: 배풍등의 정예군"
+	}
+	"Dimension: Blitz - Hardcore"
+	{
+		"en"		"Dimension: Blitz - Hardcore"
+		"ko"		"차원: 블리츠크리그의 군대 - 하드코어"
+	}
+	"Dimension: Xeno - Hardcore"
+	{
+		"en"		"Dimension: Xeno - Hardcore"
+		"ko"		"차원: 제노 감염 - 하드코어"
+	}
+	"Dimension: Medieval - Hardcore"
+	{
+		"en"		"Dimension: Medieval - Hardcore"
+		"ko"		"차원: 중세 - 하드코어"
+	}
+	"Dimension: Dweller - Hardcore"
+	{
+		"en"		"Dimension: Dweller - Hardcore"
+		"ko"		"차원: 드웰러 - 하드코어"
+	}
+	"Dimension: Expidonsa - Rogue"
+	{
+		"en"		"Dimension: Expidonsa - Rogue"
+		"ko"		"차원: 엑스피돈사 - 이탈자"
+	}
+	"Dimension: Interitus - Hardcore"
+	{
+		"en"		"Dimension: Interitus - Hardcore"
+		"ko"		"차원: 인테리투스 - 하드코어"
+	}
+	"Dimension: Ruina - Hardcore"
+	{
+		"en"		"Dimension: Ruina - Hardcore"
+		"ko"		"차원: 루이나 - 하드코어"
+	}
+	"Dimension: Void - Hardcore"
+	{
+		"en"		"Dimension: Void - Hardcore"
+		"ko"		"차원: 공허의 유산 - 하드코어"
+	}
+	"Dimension: Almina - Hardcore"
+	{
+		"en"		"Dimension: Almina - Hardcore"
+		"ko"		"차원: 알미나 - 하드코어"
+	}
+	"Dimension: Vesta - Chemical"
+	{
+		"en"		"Dimension: Vesta - Chemical"
+		"ko"		"차원: 베스타 - 화학 부대"
+	}
+	"Dimension: Lab - Genocide"
+	{
+		"en"		"Dimension: Lab - Genocide"
+		"ko"		"차원: 연구소 - 몰살 루트"
+	}
 	"Wand of Osmosis"
 	{
 		"en"		"Wand of Osmosis"

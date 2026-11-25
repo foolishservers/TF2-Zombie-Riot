@@ -635,18 +635,32 @@ public void Timer_Do_Melee_Attack_Internal(DataPack pack)
 			return;
 		}
 #if defined ZR
-		float damage_test_validity = 1.0; 
-		switch(i_CustomWeaponEquipLogic[weapon])
+		float damage_test_validity = 1.0;
+		
+		if(EntityMeleeDamageCalc[weapon] && EntityMeleeDamageCalc[weapon] != INVALID_FUNCTION)
 		{
-			case WEAPON_IMPACT_LANCE: //yes, if we miss, then we do other stuff.
+			Call_StartFunction(null, EntityMeleeDamageCalc[weapon]);
+			Call_PushCell(client);
+			Call_PushCell(weapon);
+			Call_PushFloatRef(damage_test_validity);
+			Call_PushCell(true);
+			Call_Finish();
+		}
+		else
+		{
+			switch(i_CustomWeaponEquipLogic[weapon])
 			{
-				LanceDamageCalc(client, weapon, damage_test_validity, true);
-			}
-			case WEAPON_OPERAMUTE: //yes, if we miss, then we do other stuff.
-			{
-				OperaMute_DmgCalc(client, weapon, damage_test_validity, true);
+				case WEAPON_IMPACT_LANCE: //yes, if we miss, then we do other stuff.
+				{
+					LanceDamageCalc(client, weapon, damage_test_validity, true);
+				}
+				case WEAPON_OPERAMUTE: //yes, if we miss, then we do other stuff.
+				{
+					OperaMute_DmgCalc(client, weapon, damage_test_validity, true);
+				}
 			}
 		}
+		
 		if(damage_test_validity == 0.0) //here we put weapons that have special rules regarding attacking via a melee, can they even attack? etc etc.
 		{
 			delete pack;
@@ -794,22 +808,34 @@ public void Timer_Do_Melee_Attack_Internal(DataPack pack)
 		}
 
 #if defined ZR
-		switch(i_CustomWeaponEquipLogic[weapon])
+		if(EntityMeleeDamageCalc[weapon] && EntityMeleeDamageCalc[weapon] != INVALID_FUNCTION)
 		{
-			case WEAPON_IMPACT_LANCE: //yes, if we miss, then we do other stuff.
+			Call_StartFunction(null, EntityMeleeDamageCalc[weapon]);
+			Call_PushCell(client);
+			Call_PushCell(weapon);
+			Call_PushFloatRef(damage);
+			Call_PushCell(false);
+			Call_Finish();
+		}
+		else
+		{
+			switch(i_CustomWeaponEquipLogic[weapon])
 			{
-				LanceDamageCalc(client, weapon, damage);
-			}
-			case WEAPON_KIT_BLITZKRIEG_CORE:
-			{
-				Blitzkrieg_Kit_ModifyMeleeDmg(client, damage);
-			}
-			case WEAPON_KAHMLFIST:
-			{
-				//recoded, prevent abuse
-				float Attrib = Attributes_Get(weapon, 1, 1.0);
-				if(Attrib >= 2.75)
-					Attributes_Set(weapon, 1, 1.0);
+				case WEAPON_IMPACT_LANCE: //yes, if we miss, then we do other stuff.
+				{
+					LanceDamageCalc(client, weapon, damage);
+				}
+				case WEAPON_KIT_BLITZKRIEG_CORE:
+				{
+					Blitzkrieg_Kit_ModifyMeleeDmg(client, damage);
+				}
+				case WEAPON_KAHMLFIST:
+				{
+					//recoded, prevent abuse
+					float Attrib = Attributes_Get(weapon, 1, 1.0);
+					if(Attrib >= 2.75)
+						Attributes_Set(weapon, 1, 1.0);
+				}
 			}
 		}
 #endif

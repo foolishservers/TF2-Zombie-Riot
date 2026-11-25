@@ -1,6 +1,9 @@
 #pragma semicolon 1
 #pragma newdecls required
 
+#define ZSSPHYNX_RANGE 600.0
+#define ZSSPHYNX_RANGE_SQ 360000.0
+
 static const char g_DeathSounds[][] = {
 	"npc/antlion_guard/antlion_guard_die1.wav",
 	"npc/antlion_guard/antlion_guard_die2.wav"
@@ -113,7 +116,7 @@ methodmap ZSSphynx < CClotBody
 		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][0] = TempValueForProperty; }
 	}
 	
-	property float m_flNextAllyCheckTime
+	property float m_flAuraBuffAllies
 	{
 		public get()							{ return fl_AbilityOrAttack[this.index][1]; }
 		public set(float TempValueForProperty) 	{ fl_AbilityOrAttack[this.index][1] = TempValueForProperty; }
@@ -125,15 +128,9 @@ methodmap ZSSphynx < CClotBody
 		public set(bool value) 	{ this.m_bFUCKYOU = value; }
 	}
 	
-	property bool m_bArmorGiven
-	{
-		public get()			{ return this.m_bFUCKYOU_move_anim; }
-		public set(bool value) 	{ this.m_bFUCKYOU_move_anim = value; }
-	}
-	
 	public ZSSphynx(float vecPos[3], float vecAng[3], int ally, const char[] data)
 	{
-		ZSSphynx npc = view_as<ZSSphynx>(CClotBody(vecPos, vecAng, "models/antlion_guard.mdl", "1.0", "30000", ally));
+		ZSSphynx npc = view_as<ZSSphynx>(CClotBody(vecPos, vecAng, "models/antlion_guard.mdl", "1.0", "30000", ally, false, true));
 		
 		i_NpcWeight[npc.index] = 4;
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
@@ -143,19 +140,29 @@ methodmap ZSSphynx < CClotBody
 			npc.StartActivity(iActivity);
 		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
-		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
+		npc.m_iStepNoiseType = STEPSOUND_GIANT;	
 		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
 		
 		func_NPCDeath[npc.index] = ZSSphynx_NPCDeath;
 		func_NPCOnTakeDamage[npc.index] = ZSSphynx_OnTakeDamage;
 		func_NPCThink[npc.index] = ZSSphynx_ClotThink;
 		
+		npc.m_bThisNpcIsABoss = true;
+		
+		if(!IsValidEntity(RaidBossActive))
+		{
+			RaidBossActive = EntIndexToEntRef(npc.index);
+			RaidModeTime = GetGameTime(npc.index) + 9000.0;
+			RaidModeScaling = 0.0;
+			RaidAllowsBuildings = true;
+		}
+		
 		npc.m_iState = 0;
 		npc.m_flNextMeleeAttack = 0.0;
 		
 		float gameTime = GetGameTime(npc.index);
 		npc.m_flNextBuffTime = gameTime + 16.0;
-		npc.m_flNextAllyCheckTime = gameTime + 16.0;
+		npc.m_flAuraBuffAllies = 1.0;
 		
 		npc.m_flSpeed = 330.0;
 		npc.StartPathing();
@@ -163,7 +170,6 @@ methodmap ZSSphynx < CClotBody
 		npc.Anger = false;
 		npc.m_bDissapearOnDeath = false;
 		npc.m_bDropMoney = true;
-		npc.m_bArmorGiven = false;
 		
 		if(StrContains(data, "nomoney") != -1)
 		{
@@ -183,14 +189,6 @@ methodmap ZSSphynx < CClotBody
 			}
 		}
 		
-		if(!IsValidEntity(RaidBossActive))
-		{
-			RaidBossActive = EntIndexToEntRef(npc.index);
-			RaidModeTime = GetGameTime(npc.index) + 9000.0;
-			RaidModeScaling = 0.0;
-			RaidAllowsBuildings = true;
-		}
-		
 		return npc;
 	}
 }
@@ -206,12 +204,6 @@ static void ZSSphynx_ClotThink(int iNPC)
 	
 	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
-	
-	if(!npc.m_bArmorGiven)
-	{
-		npc.m_bArmorGiven = true;
-		GrantEntityArmor(npc.index, false, 0.2, 0.8, 0);
-	}
 	
 	if(npc.m_blPlayHurtAnimation)
 	{
@@ -250,22 +242,25 @@ static void ZSSphynx_ClotThink(int iNPC)
 		}
 	}
 	
+	if(npc.m_flAuraBuffAllies)
+	{
+		if(npc.m_flAuraBuffAllies < gameTime)
+		{
+			float vecMe[3];
+			GetEntPropVector(npc.index, Prop_Data, "m_vecAbsOrigin", vecMe);
+			ZSSphynx_ApplyBuffInLocation_Optimized(npc.index, vecMe, GetTeam(npc.index), npc.index, _, true);
+			
+			float Range = ZSSPHYNX_RANGE;
+			spawnRing_Vectors(vecMe, Range * 2.0, 0.0, 0.0, 15.0, "materials/sprites/combineball_trail_black_1.vmt", 255, 255, 255, 200, 1, /*duration*/ 0.12, 10.0, 1.0, 1);	
+			
+			npc.m_flAuraBuffAllies = gameTime + 0.1;
+		}
+	}
+	
 	if(npc.m_flNextThinkTime > gameTime)
 		return;
 	
 	npc.m_flNextThinkTime = gameTime + 0.1;
-	
-	if(!npc.Anger && npc.m_flNextAllyCheckTime < gameTime)
-	{
-		if(!IsValidAlly(npc.index, GetClosestAlly(npc.index)))
-		{
-			npc.Anger = true;
-		}
-		else
-		{
-			npc.m_flNextAllyCheckTime = gameTime + 4.0;
-		}
-	}
 	
 	if(npc.m_flGetClosestTargetTime < gameTime)
 	{
@@ -304,22 +299,21 @@ static void ZSSphynx_ClotThink(int iNPC)
 	npc.PlayIdleAlertSound();
 }
 
-#define ZSSPHYNX_RANGE 600.0
-#define ZSSPHYNX_RANGE_SQ 360000.0
-
-static void ZSSphynx_ApplyBuffInLocation_Optimized(int me, float myPos[3], int team, int ignoreEntity = 0, float duration = 10.0)
+static void ZSSphynx_ApplyBuffInLocation_Optimized(int me, float myPos[3], int team, int ignoreEntity = 0, float duration = 10.0, bool type = false)
 {
 	float targetPos[3];
 	
-	for(int ally = 1; ally <= MaxClients; ally++)
-	{
-		if(IsClientInGame(ally) && IsPlayerAlive(ally) && GetTeam(ally) == team)
+	if (!type) {
+		for(int ally = 1; ally <= MaxClients; ally++)
 		{
-			GetClientAbsOrigin(ally, targetPos);
-			
-			if (GetVectorDistance(myPos, targetPos, true) <= ZSSPHYNX_RANGE_SQ)
+			if(IsClientInGame(ally) && IsPlayerAlive(ally) && GetTeam(ally) == team)
 			{
-				ApplyStatusEffect(me, ally, "Godly Motivation", duration);
+				GetClientAbsOrigin(ally, targetPos);
+				
+				if(GetVectorDistance(myPos, targetPos, true) <= ZSSPHYNX_RANGE_SQ)
+				{
+					ApplyStatusEffect(me, ally, "Godly Motivation", duration);
+				}
 			}
 		}
 	}
@@ -327,13 +321,26 @@ static void ZSSphynx_ApplyBuffInLocation_Optimized(int me, float myPos[3], int t
 	for(int i = 0; i < i_MaxcountNpcTotal; i++)
 	{
 		int ally = EntRefToEntIndexFast(i_ObjectsNpcsTotal[i]);
-		if (ally != -1 && IsValidEntity(ally) && !b_NpcHasDied[ally] && GetTeam(ally) == team && ignoreEntity != ally)
+		if(ally != -1 && IsValidEntity(ally)
+			&& !b_NpcHasDied[ally]
+			&& GetTeam(ally) == team
+			&& ignoreEntity != ally)
 		{
+			if(type && (b_thisNpcIsABoss[ally] || b_thisNpcIsAMiniboss[ally] || b_thisNpcIsARaid[ally]))
+				continue;
+			
 			GetEntPropVector(ally, Prop_Data, "m_vecAbsOrigin", targetPos);
 			
-			if (GetVectorDistance(myPos, targetPos, true) <= ZSSPHYNX_RANGE_SQ)
+			if(GetVectorDistance(myPos, targetPos, true) <= ZSSPHYNX_RANGE_SQ)
 			{
-				ApplyStatusEffect(me, ally, "Godly Motivation", duration);
+				if(type)
+				{
+					ApplyStatusEffect(ally, ally, "Infinite Will", 2.0);
+				}
+				else
+				{
+					ApplyStatusEffect(me, ally, "Godly Motivation", duration);
+				}
 			}
 		}
 	}
@@ -352,7 +359,17 @@ static Action ZSSphynx_OnTakeDamage(int victim, int &attacker, int &inflictor, f
 		npc.m_blPlayHurtAnimation = true;
 	}
 	
-	return Plugin_Changed;
+	int health = GetEntProp(victim, Prop_Data, "m_iHealth");
+	if(!npc.Anger)
+	{
+		if(health <= (ReturnEntityMaxHealth(npc.index) / 2))
+		{	
+			npc.Anger = true;
+			npc.m_flNextBuffTime = GetGameTime(npc.index) + 0.5;
+		}
+	}
+	
+	return Plugin_Continue;
 }
 
 static void ZSSphynx_NPCDeath(int entity)

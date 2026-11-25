@@ -87,15 +87,15 @@ methodmap ZS_Pukepus < CClotBody
 	
 	public ZS_Pukepus(float vecPos[3], float vecAng[3], int ally)
 	{
-		ZS_Pukepus npc = view_as<ZS_Pukepus>(CClotBody(vecPos, vecAng, "models/zombie_riot/gmod_zs/zs_zombie_models_1_1.mdl", "2.0", "19500", ally, false));
+		ZS_Pukepus npc = view_as<ZS_Pukepus>(CClotBody(vecPos, vecAng, ZS_CUSTOM_MODEL_1, "2.0", "19500", ally, false));
 		
 		i_NpcWeight[npc.index] = 4;
 		
 		FormatEx(c_HeadPlaceAttachmentGibName[npc.index], sizeof(c_HeadPlaceAttachmentGibName[]), "head");
 		
 		int iActivity = npc.LookupActivity("ACT_WALK");
-		if(iActivity > 0) npc.StartActivity(iActivity);
-
+		if (iActivity > 0) npc.StartActivity(iActivity);
+		
 		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		npc.m_iStepNoiseType = STEPSOUND_NORMAL;	
 		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
@@ -104,15 +104,28 @@ methodmap ZS_Pukepus < CClotBody
 		func_NPCThink[npc.index] = ZS_Pukepus_ClotThink;
 		func_NPCOnTakeDamage[npc.index] = Generic_OnTakeDamage;
 		
+		npc.m_bThisNpcIsABoss = true;
+		
+		if(!IsValidEntity(RaidBossActive))
+		{
+			RaidBossActive = EntIndexToEntRef(npc.index);
+			RaidModeTime = GetGameTime(npc.index) + 9000.0;
+			RaidModeScaling = 0.0;
+			RaidAllowsBuildings = true;
+		}
+		
 		npc.m_flMeleeArmor = 1.0;
 		npc.m_flRangedArmor = 0.5;
 		
-		SetVariantInt(65536);
+		SetVariantInt(ZS_MODEL_PUKEPUS);
 		AcceptEntityInput(npc.index, "SetBodyGroup");
+		
 		npc.m_iChanged_WalkCycle = -1;
 		npc.m_flNextRangedAttack = 0.0;
-		npc.m_flSpeed = 110.0;
+		npc.m_flSpeed = 160.0;
+		
 		f_MaxAnimationSpeed[npc.index] = 1.5;
+		
 		npc.m_bisWalking = true;
 		npc.StartPathing();
 		
@@ -212,34 +225,41 @@ static int ZS_Pukepus_AttackLogic(ZS_Pukepus npc, float GameTime, float Distance
 {
 	if(GameTime > npc.m_flNextRangedAttack)
 	{
-		if(Distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 12.0))
+		// 130 * 6 = 780HU
+		if(Distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 36.0))
 		{
 			if(IsValidEnemy(npc.index, Can_I_See_Enemy(npc.index, npc.m_iTarget)))
 			{
 				if(npc.m_iOverlordComboAttack==0)
 					npc.PlayRangeSound();
+				
 				float vecDest[3];
 				vecDest = vecTarget;
 				vecDest[0] += GetRandomFloat(-50.0, 50.0);
 				vecDest[1] += GetRandomFloat(-50.0, 50.0);
 				vecDest[2] += GetRandomFloat(-50.0, 50.0);
-				int Projectile = npc.FireParticleRocket(vecTarget, 35.0, 1000.0, 0.0, "blood_impact_green_01", true, .bonusdmg=3.0);
+				
+				int Projectile = npc.FireParticleRocket(vecTarget, 35.0, 1000.0, 0.0, "blood_impact_green_01", true, .bonusdmg = 3.0);
 				if(IsValidEntity(Projectile))
 				{
 					SetEntityGravity(Projectile, 1.0);
+					
 					float SpeedReturn[3];
 					ArcToLocationViaSpeedProjectile(Projectile, vecDest, SpeedReturn, GetRandomFloat(0.8, 1.35), GetRandomFloat(0.8, 1.0));
 					Better_Gravity_Rocket(Projectile, 55.0);
 					TeleportEntity(Projectile, NULL_VECTOR, NULL_VECTOR, SpeedReturn);
+					
 					WandProjectile_ApplyFunctionToEntity(Projectile, PukepusProjectile_StartTouch);
+					
 					int Particle = EntRefToEntIndex(i_WandParticle[Projectile]);
 					CreateTimer(8.0, Timer_RemoveEntity, EntIndexToEntRef(Projectile), TIMER_FLAG_NO_MAPCHANGE);
 					CreateTimer(8.0, Timer_RemoveEntity, EntIndexToEntRef(Particle), TIMER_FLAG_NO_MAPCHANGE);
 				}
 				npc.m_iOverlordComboAttack++;
-				if(npc.m_iOverlordComboAttack>12)
+				
+				if(npc.m_iOverlordComboAttack > 12)
 				{
-					npc.m_flNextRangedAttack = GameTime + 5.0;
+					npc.m_flNextRangedAttack = GameTime + 2.5;
 					npc.m_iOverlordComboAttack = 0;
 				}
 			}
@@ -276,18 +296,20 @@ static void PukepusProjectile_StartTouch(int entity, int target)
 		int inflictor = h_ArrowInflictorRef[entity];
 		if(inflictor != -1)
 			inflictor = EntRefToEntIndex(h_ArrowInflictorRef[entity]);
-
+		
 		if(inflictor == -1)
 			inflictor = owner;
-			
+		
 		float ProjectileLoc[3];
 		GetEntPropVector(entity, Prop_Data, "m_vecAbsOrigin", ProjectileLoc);
+		
 		float DamageDeal = fl_rocket_particle_dmg[entity];
+		
 		if(ShouldNpcDealBonusDamage(target))
 			DamageDeal *= h_BonusDmgToSpecialArrow[entity];
 		else
 			Elemental_AddPheromoneDamage(target, owner, 15);
-
+		
 		SDKHooks_TakeDamage(target, owner, inflictor, DamageDeal, DMG_BULLET|DMG_PREVENT_PHYSICS_FORCE, -1);
 		
 		int particle = EntRefToEntIndex(i_WandParticle[entity]);

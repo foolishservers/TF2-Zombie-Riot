@@ -91,95 +91,19 @@ methodmap AltExtra_Mecha_Killing_Order < AltExtra_Base {
 		if (flDeltaTime <= 0.0 || flDeltaTime > 0.5)
 			flDeltaTime = 0.05;
 		
-		bool bHasValidTarget = IsValidEnemy(this.index, this.m_iTarget) && Can_I_See_Enemy_Only(this.index, this.m_iTarget);
-		
-		if (this.m_bPathing || !bHasValidTarget) {
-			if (this.m_iBodyYawPoseParameter > -1) {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
-				this.SetPoseParameter(
-					this.m_iBodyYawPoseParameter,
-					ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
-				);
-			}
-			
-			if (this.m_iBodyPitchPoseParameter > -1) {
-				float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
-				
-				this.SetPoseParameter(
-					this.m_iBodyPitchPoseParameter,
-					ApproachAngle(0.0, flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
-				);
-			}
-			
+		bool bCantSeeTarget = !IsValidEnemy(this.index, this.m_iTarget) || !Can_I_See_Enemy_Only(this.index, this.m_iTarget);
+		if (bCantSeeTarget) {
+			this.UntwistBody(flDeltaTime);
 			return;
 		}
 		
-		if (this.m_flAttackHappens > gameTime && this.m_flDoingAnimation < gameTime) {
+		if (this.m_flAttackHappens > gameTime && this.m_flDoingAnimation < gameTime)
 			return;
-		}
 		
 		if (this.m_iBodyPitchPoseParameter < 0 && this.m_iBodyYawPoseParameter < 0)
 			return;
 		
-		float vecMe[3], vecTarget[3];
-		WorldSpaceCenter(this.index, vecMe);
-		WorldSpaceCenter(this.m_iTarget, vecTarget);
-		
-		float vecDir[3], vecAng[3];
-		if (this.m_iBodyPitchPoseParameter > -1) {
-			SubtractVectors(vecMe, vecTarget, vecDir);
-			NormalizeVector(vecDir, vecDir);
-			GetVectorAngles(vecDir, vecAng);
-			
-			float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
-			
-			this.SetPoseParameter(
-				this.m_iBodyPitchPoseParameter,
-				ApproachAngle(vecAng[0], flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
-			);
-			
-			this.m_bPitchHandedOff = false;
-		}
-		
-		if (this.m_iBodyYawPoseParameter > -1) {
-			SubtractVectors(vecTarget, vecMe, vecDir);
-			NormalizeVector(vecDir, vecDir);
-			GetVectorAngles(vecDir, vecAng);
-			
-			float angRotation[3];
-			GetEntPropVector(this.index, Prop_Data, "m_angRotation", angRotation);
-			
-			float relativeYaw = -MyAngleDiff(vecAng[1], angRotation[1]);
-			
-			if (relativeYaw > 44.0 || relativeYaw < -44.0) {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
-				if (FloatAbs(flYaw) > 0.1) {
-					this.SetPoseParameter(
-						this.m_iBodyYawPoseParameter,
-						ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
-					);
-				}
-				
-				this.GetLocomotionInterface().FaceTowards(vecTarget);
-			}
-			else {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
-				float bodyYaw = clamp(relativeYaw, -44.9, 44.9);
-				
-				this.SetPoseParameter(
-					this.m_iBodyYawPoseParameter,
-					ApproachAngle(bodyYaw, flYaw, ALT_EXTRA_BODY_YAW_TRACK_SPEED * flDeltaTime)
-				);
-			}
-			
-			this.m_bYawHandedOff = false;
-		}
-		else {
-			this.GetLocomotionInterface().FaceTowards(vecTarget);
-		}
+		this.UpkeepBody(flDeltaTime);
 	}
 	
 	public void AimTowardsToPos(float vecTarget[3]) {

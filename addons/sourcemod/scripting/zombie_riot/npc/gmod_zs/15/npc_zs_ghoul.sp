@@ -210,7 +210,7 @@ static void Ghoul_ClotThink(int iNPC)
 								Elemental_AddPheromoneDamage(target, npc.index, (npc.m_bFUCKYOU ? 45 : 30));
 								int flagsStun = 0;
 								if(!HasSpecificBuff(target, "Fluid Movement"))
-											flagsStun |= TF_STUNFLAG_SLOWDOWN;
+									flagsStun |= TF_STUNFLAG_SLOWDOWN;
 								if(target <= MaxClients)
 									TF2_StunPlayer(target, 2.0, 0.5, flagsStun);
 								ApplyStatusEffect(npc.index, target, "Cellular Breakdown", 8.0);

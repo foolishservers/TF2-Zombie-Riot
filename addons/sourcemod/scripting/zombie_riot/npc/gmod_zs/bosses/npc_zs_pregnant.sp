@@ -105,20 +105,22 @@ methodmap Pregnant < CClotBody
 	{
 		Pregnant npc = view_as<Pregnant>(CClotBody(vecPos, vecAng, "models/zombie/poison.mdl", "1.75", "35000", ally, false, true));
 
-		SetVariantInt(31);
+		SetVariantInt(15);
 		AcceptEntityInput(npc.index, "SetBodyGroup");
 		KillFeed_SetKillIcon(npc.index, "warrior_spirit");
 
 		i_NpcWeight[npc.index] = 4;
 		npc.SetActivity("ACT_WALK");
 		
-		npc.m_iBleedType = BLEEDTYPE_DWELLER;
+		npc.m_iBleedType = BLEEDTYPE_NORMAL;
 		npc.m_iStepNoiseType = STEPSOUND_GIANT;
-		npc.m_iNpcStepVariation = STEPTYPE_DWELLER;
+		npc.m_iNpcStepVariation = STEPTYPE_NORMAL;
 
 		func_NPCDeath[npc.index] = Pregnant_NPCDeath;
 		func_NPCOnTakeDamage[npc.index] = Pregnant_OnTakeDamage;
 		func_NPCThink[npc.index] = Pregnant_ClotThink;
+		
+		npc.m_bThisNpcIsABoss = true;
 		
 		if(!IsValidEntity(RaidBossActive))
 		{

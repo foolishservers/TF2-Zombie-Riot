@@ -134,20 +134,9 @@ methodmap Combine_Base < CClotBody {
 		SubtractVectors(vecTarget, vecMe, vecToTarget);
 		NormalizeVector(vecToTarget, vecToTarget);
 		
-		float angRotation[3];
-		GetEntPropVector(this.index, Prop_Data, "m_angRotation", angRotation);
-		
 		// --- Yaw ---
-		float flViewYaw = angRotation[1];
-		
-		if (this.m_iBodyYawPoseParameter > -1) {
-			flViewYaw += this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-		}
-		
-		flViewYaw = UTIL_AngleNormalize(flViewYaw);
-		
+		float flViewYaw = this.GetViewYaw();
 		float flTargetYaw = this.UTIL_VecToYaw(vecToTarget);
-		
 		float flYawDiff = MyAngleDiff(flTargetYaw, flViewYaw);
 		
 		if (FloatAbs(flYawDiff) > maxYawAngle) {
@@ -155,7 +144,7 @@ methodmap Combine_Base < CClotBody {
 		}
 		
 		// --- Pitch ---
-		if (!ignorePitch && this.m_iBodyPitchPoseParameter > -1) {
+		if (this.m_iBodyPitchPoseParameter > -1) {
 			float vecDir[3], vecAng[3];
 			SubtractVectors(vecMe, vecTarget, vecDir);
 			NormalizeVector(vecDir, vecDir);
@@ -189,8 +178,60 @@ methodmap Combine_Base < CClotBody {
 		this.m_iBodyYawPoseParameter = -1;
 		this.m_iBodyPitchPoseParameter = -1;
 		
-		this.m_bPitchHandedOff = true;
-		this.m_bYawHandedOff = true;
+		this.m_bHeadYawValid = false;
+		this.m_bBodyTurning = false;
+		this.m_bBodyHandedOff = false;
+	}
+	
+	// -----------------------------------------------------------------------
+	// 현재 몸통 yaw 기준 "시선 yaw(월드)"를 pose parameter용 로컬 값으로 변환
+	// -----------------------------------------------------------------------
+	public float WorldYawToPose(float flWorldYaw, float flBodyYaw) {
+		return MyAngleDiff(flWorldYaw, flBodyYaw);
+	}
+	
+	// -----------------------------------------------------------------------
+	// pose parameter 값을 월드 yaw로 역변환 (헤드 초기화용)
+	// -----------------------------------------------------------------------
+	public float PoseToWorldYaw(float flPose, float flBodyYaw) {
+		return UTIL_AngleNormalize(flBodyYaw + flPose);
+	}
+	
+	// -----------------------------------------------------------------------
+	// 이번 틱의 몸통 yaw 읽기
+	// -----------------------------------------------------------------------
+	public float GetBodyYaw() {
+		float angRotation[3];
+		GetEntPropVector(this.index, Prop_Data, "m_angRotation", angRotation);
+		return angRotation[1];
+	}
+	
+	// -----------------------------------------------------------------------
+	// 이번 틱의 pose yaw를 읽고, World Yaw로 변환
+	// -----------------------------------------------------------------------
+	public float GetViewYaw() {
+		float flPose = 0.0;
+		if (this.m_iBodyYawPoseParameter > -1) {
+			flPose = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
+		}
+		return this.PoseToWorldYaw(flPose, this.GetBodyYaw());
+	}
+	
+	// -----------------------------------------------------------------------
+	// 헤드 월드 yaw가 아직 없으면 현재 pose parameter로부터 복원
+	// -----------------------------------------------------------------------
+	public void EnsureHeadYaw(float flBodyYaw) {
+		if (this.m_bHeadYawValid) {
+			return;
+		}
+
+		float flPose = 0.0;
+		if (this.m_iBodyYawPoseParameter > -1) {
+			flPose = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
+		}
+
+		this.m_flHeadYawWorld = this.PoseToWorldYaw(flPose, flBodyYaw);
+		this.m_bHeadYawValid = true;
 	}
 	
 	public void Update()
@@ -451,6 +492,261 @@ methodmap Combine_Base < CClotBody {
 		}
 	}
 	
+	// -----------------------------------------------------------------------
+	// 경로 이동 중 타겟이 없을 때: 목표를 "몸 정면"으로 두고 풀어줌
+	// -----------------------------------------------------------------------
+	public void UntwistBody(float flDeltaTime = 0.05) {
+		if (!this.m_bPathing || this.m_bBodyHandedOff) {
+			return;
+		}
+
+		bool bSettled = true;
+		float flBodyYaw = this.GetBodyYaw();
+
+		if (this.m_iBodyYawPoseParameter > -1) {
+			// 목표 = pose parameter 0.0 (몸 정면). pose 공간에서 직접 접근한다.
+			// 월드 yaw를 목표로 쓰면 클램프 전 값이 한계를 넘는 동안
+			// 화면상 변화 없이 시간만 흘러가는 구간이 생긴다.
+			float flPose = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
+
+			if (FloatAbs(flPose) > TF2_BODY_SETTLE_EPSILON) {
+				this.SetPoseParameter(
+					this.m_iBodyYawPoseParameter,
+					MyApproachAngle(0.0, flPose, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
+				);
+				bSettled = false;
+			}
+
+			// 추적 재개 시 현재 pose로부터 시선을 다시 복원하도록 무효화
+			this.m_bHeadYawValid = false;
+		}
+
+		if (this.m_iBodyPitchPoseParameter > -1) {
+			float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
+
+			if (FloatAbs(flPitch) > TF2_BODY_SETTLE_EPSILON) {
+				this.SetPoseParameter(
+					this.m_iBodyPitchPoseParameter,
+					MyApproachAngle(0.0, flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
+				);
+				bSettled = false;
+			}
+		}
+
+		if (bSettled) {
+			this.m_bBodyHandedOff = true;
+			this.m_bHeadYawValid = false;   // 다음 추적 시 pose로부터 다시 복원
+			this.m_bBodyTurning = false;
+		}
+	}
+	
+	// -----------------------------------------------------------------------
+	// 타겟 추적
+	// -----------------------------------------------------------------------
+	public void UpkeepBody(float flDeltaTime = 0.05) {
+		float vecMe[3], vecTarget[3];
+		WorldSpaceCenter(this.index, vecMe);
+		WorldSpaceCenter(this.m_iTarget, vecTarget);
+
+		this.m_bBodyHandedOff = false;
+
+		float vecDir[3], vecAng[3];
+
+		// ---------------- Pitch ----------------
+		// pitch는 몸통 회전과 무관하므로 pose parameter 자체를 상태로 사용
+		if (this.m_iBodyPitchPoseParameter > -1) {
+			SubtractVectors(vecMe, vecTarget, vecDir);
+			NormalizeVector(vecDir, vecDir);
+			GetVectorAngles(vecDir, vecAng);
+
+			float flAimPitch = -clamp(UTIL_AngleNormalize(vecAng[0]), -56.2, 88.9);
+			float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
+
+			this.SetPoseParameter(
+				this.m_iBodyPitchPoseParameter,
+				MyApproachAngle(flAimPitch, flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
+			);
+		}
+
+		// ---------------- Yaw ----------------
+		float flBodyYaw = this.GetBodyYaw();
+
+		// 목표 월드 yaw (이번 틱 타겟 방향)
+		SubtractVectors(vecTarget, vecMe, vecDir);
+		NormalizeVector(vecDir, vecDir);
+		GetVectorAngles(vecDir, vecAng);
+		float flAimYawWorld = vecAng[1];
+
+		// 몸통 기준 목표 각도 (몸통 회전 판단용)
+		float flAimRelative = this.WorldYawToPose(flAimYawWorld, flBodyYaw);
+
+		// 히스테리시스: START 초과 시 회전 시작, STOP 미만이 되면 종료
+		if (this.m_bBodyTurning) {
+			if (FloatAbs(flAimRelative) < TF2_BODY_TURN_STOP) {
+				this.m_bBodyTurning = false;
+			}
+		}
+		else if (FloatAbs(flAimRelative) > TF2_BODY_TURN_START) {
+			this.m_bBodyTurning = true;
+		}
+
+		bool bCanTurnBody = (!this.m_bPathing || this.m_bAllowBackWalking);
+
+		if (this.m_bBodyTurning && bCanTurnBody) {
+			this.GetLocomotionInterface().FaceTowards(vecTarget);
+		}
+
+		// 시선은 항상 "월드 기준"으로 목표에 수렴 (몸통이 돌든 말든 흔들리지 않음)
+		if (this.m_iBodyYawPoseParameter > -1) {
+			this.EnsureHeadYaw(flBodyYaw);
+
+			this.m_flHeadYawWorld = MyApproachAngle(
+				flAimYawWorld,
+				this.m_flHeadYawWorld,
+				ALT_EXTRA_BODY_YAW_TRACK_SPEED * flDeltaTime
+			);
+
+			// 마지막에 한 번만 로컬(pose) 값으로 변환
+			float flPose = clamp(
+				this.WorldYawToPose(this.m_flHeadYawWorld, flBodyYaw),
+				-TF2_BODY_YAW_LIMIT, TF2_BODY_YAW_LIMIT
+			);
+			this.SetPoseParameter(this.m_iBodyYawPoseParameter, flPose);
+		}
+		else if (bCanTurnBody) {
+			// pose parameter가 없는 모델은 기존처럼 몸통만 회전
+			this.GetLocomotionInterface().FaceTowards(vecTarget);
+		}
+	}
+	
+	public void UpdateBody() {
+		float gameTime = GetGameTime(this.index);
+		float flDeltaTime = (this.m_flLastBodyUpdateTime > 0.0) ? (gameTime - this.m_flLastBodyUpdateTime) : 0.05;
+		this.m_flLastBodyUpdateTime = gameTime;
+		
+		// 업데이트 간격이 길게 벌어졌으면(공격 중 등) 저장된 월드 시선은 신뢰할 수 없다.
+		// 그 사이 몸이 돌았을 수 있으므로 현재 pose로부터 다시 복원한다.
+		if (flDeltaTime > 0.25)
+			this.m_bHeadYawValid = false;
+		
+		if (flDeltaTime <= 0.0 || flDeltaTime > 0.5)
+			flDeltaTime = 0.05;
+		
+		bool bCantSeeTarget = !IsValidEnemy(this.index, this.m_iTarget) || !Can_I_See_Enemy_Only(this.index, this.m_iTarget);
+		if (bCantSeeTarget) {
+			// 추적하지 않은 틱에는 시선을 항상 무효화한다.
+			// (Untwist가 early return하는 경우에도 몸은 계속 돌기 때문)
+			this.m_bHeadYawValid = false;
+			this.UntwistBody(flDeltaTime);
+			return;
+		}
+		
+		if (this.m_iBodyPitchPoseParameter < 0 && this.m_iBodyYawPoseParameter < 0)
+			return;
+		
+		this.UpkeepBody(flDeltaTime);
+	}
+	
+	public void HackMaxYawRate(bool reset) {
+		if (this.m_bAllowBackWalking) {
+			if (reset) {
+				this.GetBaseNPC().flMaxYawRate = 0.0;
+			}
+			else {
+				this.GetBaseNPC().flMaxYawRate = (NPC_DEFAULT_YAWRATE * this.GetDebuffPercentage() * f_NpcTurnPenalty[this.index]);
+			}
+		}
+	}
+	
+	property int m_iBodyYawPoseParameter {
+		public get()			{ return this.GetProp(Prop_Data, "m_iBodyYawPoseParameter"); }
+		public set(int value)	{ this.SetProp(Prop_Data, "m_iBodyYawPoseParameter", value); }
+	}
+	
+	property int m_iBodyPitchPoseParameter {
+		public get()			{ return this.GetProp(Prop_Data, "m_iBodyPitchPoseParameter"); }
+		public set(int value)	{ this.SetProp(Prop_Data, "m_iBodyPitchPoseParameter", value); }
+	}
+	
+	property float m_flLastBodyUpdateTime {
+		public get()			{ return this.GetPropFloat(Prop_Data, "m_flLastBodyUpdateTime"); }
+		public set(float value)	{ this.SetPropFloat(Prop_Data, "m_flLastBodyUpdateTime", value); }
+	}
+	
+	property float m_flHeadYawWorld {
+		public get()			{ return this.GetPropFloat(Prop_Data, "m_flHeadYawWorld"); }
+		public set(float value)	{ this.SetPropFloat(Prop_Data, "m_flHeadYawWorld", value); }
+	}
+	
+	property bool m_bHeadYawValid {
+		public get()			{ return view_as<bool>(this.GetProp(Prop_Data, "m_bHeadYawValid")); }
+		public set(bool value)	{ this.SetProp(Prop_Data, "m_bHeadYawValid", value); }
+	}
+	
+	property bool m_bBodyTurning {
+		public get()			{ return view_as<bool>(this.GetProp(Prop_Data, "m_bBodyTurning")); }
+		public set(bool value)	{ this.SetProp(Prop_Data, "m_bBodyTurning", value); }
+	}
+	
+	property bool m_bBodyHandedOff {
+		public get()			{ return view_as<bool>(this.GetProp(Prop_Data, "m_bBodyHandedOff")); }
+		public set(bool value)	{ this.SetProp(Prop_Data, "m_bBodyHandedOff", value); }
+	}
+}
+
+/**
+ * This is literally same as ArcToLocationViaSpeedProjectile.
+ * But this one require vecStart instead projectile. So you can simulate speed.
+ */
+stock void ArcToLocationViaSpeedSimulation(const float vecStart[3], float vecEnd[3], float vecVelocity[3], float flTimeUntilReachToDest = 1.0, float flGravityChange = 1.0) {
+	float vecJumpVel[3];
+	
+	float gravity;
+	if (gravity <= 0.0)
+		gravity = FindConVar("sv_gravity").FloatValue;
+	
+	gravity *= flGravityChange;
+	
+	// How fast does the headcrab need to travel to reach the position given gravity?
+	float flActualHeight = vecEnd[2] - vecStart[2];
+	float height = flActualHeight;
+	
+	if (height < 0.0) {
+		//tickrate gravity downwards is bad.
+		gravity *= TickrateModify;
+		if (height >= -20.0) {
+			height = -20.0;
+		}
+	}
+	else {
+		//invert for gravity the otherway
+		gravity *= (((TickrateModify - 1.0) * -1.0) + 1.0);
+		if (height <= 20.0) {
+			height = 20.0;
+		}
+	}
+	
+	float speed = SquareRoot( 2.0 * gravity * fabs(height) );
+	float time = speed / gravity;
+	
+	time += SquareRoot( (2.0 * fabs(height)) / gravity );
+	
+	time *= flTimeUntilReachToDest;
+	speed *= flTimeUntilReachToDest;
+	
+	// Scale the sideways velocity to get there at the right time
+	SubtractVectors( vecEnd, vecStart, vecJumpVel );
+	vecJumpVel[0] /= time;
+	vecJumpVel[1] /= time;
+	vecJumpVel[2] /= time;
+	
+	// Speed to offset gravity at the desired height.
+	vecJumpVel[2] = speed;
+	
+	vecVelocity = vecJumpVel;
+}
+
+/*
 	public void UpdateBody() {
 		float gameTime = GetGameTime(this.index);
 		float flDeltaTime = (this.m_flLastBodyUpdateTime > 0.0) ? (gameTime - this.m_flLastBodyUpdateTime) : 0.05;
@@ -557,44 +853,6 @@ methodmap Combine_Base < CClotBody {
 			}
 			
 			this.m_bYawHandedOff = false;
-			
-			/*
-			if (this.m_bPathing && !this.m_bAllowBackWalking) {
-				if (-60.0 < relativeYaw && relativeYaw < 60.0) {
-					this.SetPoseParameter(
-						this.m_iBodyYawPoseParameter,
-						ApproachAngle(relativeYaw, flYaw, ALT_EXTRA_BODY_YAW_TRACK_SPEED * flDeltaTime)
-					);
-					
-					this.m_bYawHandedOff = false;
-					this.m_flAimTargetSetTime = gameTime + 0.2;
-				}
-				else if (this.m_flAimTargetSetTime < gameTime) {
-					if (FloatAbs(flYaw) > 0.1) {
-						this.SetPoseParameter(
-							this.m_iBodyYawPoseParameter,
-							ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
-						);
-					}
-					else {
-						this.m_bYawHandedOff = true;
-					}
-				}
-			}
-			else {
-				float bodyYaw = clamp(relativeYaw, -60.0, 60.0);
-				
-				this.SetPoseParameter(
-					this.m_iBodyYawPoseParameter,
-					ApproachAngle(bodyYaw, flYaw, ALT_EXTRA_BODY_YAW_TRACK_SPEED * flDeltaTime)
-				);
-				
-				this.m_bYawHandedOff = false;
-				this.m_flAimTargetSetTime = gameTime + 0.2;
-				
-				this.GetLocomotionInterface().FaceTowards(vecTarget);
-			}
-			*/
 		}
 		else {
 			if (!this.m_bPathing || this.m_bAllowBackWalking) {
@@ -602,218 +860,7 @@ methodmap Combine_Base < CClotBody {
 			}
 		}
 	}
-	
-	/*
-	public void UpdateBody() {
-		float gameTime = GetGameTime(this.index);
-		float flDeltaTime = (this.m_flLastBodyUpdateTime > 0.0) ? (gameTime - this.m_flLastBodyUpdateTime) : 0.05;
-		this.m_flLastBodyUpdateTime = gameTime;
-		
-		if (flDeltaTime <= 0.0 || flDeltaTime > 0.5)
-			flDeltaTime = 0.05;
-		
-		bool bCantSeeTarget = !IsValidEnemy(this.index, this.m_iTarget) || !Can_I_See_Enemy_Only(this.index, this.m_iTarget);
-		if (this.m_bPathing && bCantSeeTarget) {
-			if (!this.m_bYawHandedOff && this.m_iBodyYawPoseParameter > -1) {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
-				if (FloatAbs(flYaw) > 0.1) {
-					this.SetPoseParameter(
-						this.m_iBodyYawPoseParameter,
-						ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
-					);
-				}
-				else {
-					this.m_bYawHandedOff = true;
-				}
-			}
-			
-			if (!this.m_bPitchHandedOff && this.m_iBodyPitchPoseParameter > -1) {
-				float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
-				
-				if (FloatAbs(flPitch) > 0.1) {
-					this.SetPoseParameter(
-						this.m_iBodyPitchPoseParameter,
-						ApproachAngle(0.0, flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
-					);
-				}
-				else {
-					this.m_bPitchHandedOff = true;
-				}
-			}
-			
-			return;
-		}
-		
-		if (this.m_iBodyPitchPoseParameter < 0 && this.m_iBodyYawPoseParameter < 0)
-			return;
-		
-		float vecMe[3], vecTarget[3];
-		WorldSpaceCenter(this.index, vecMe);
-		WorldSpaceCenter(this.m_iTarget, vecTarget);
-		
-		float vecDir[3], vecAng[3];
-		if (this.m_iBodyPitchPoseParameter > -1) {
-			SubtractVectors(vecMe, vecTarget, vecDir);
-			NormalizeVector(vecDir, vecDir);
-			GetVectorAngles(vecDir, vecAng);
-			
-			vecAng[0] = UTIL_AngleNormalize(vecAng[0]);
-			
-			float flPitch = this.GetPoseParameter(this.m_iBodyPitchPoseParameter);
-			
-			float flBodyPitch = -clamp(vecAng[0], -56.2, 88.9);
-			
-			this.SetPoseParameter(
-				this.m_iBodyPitchPoseParameter,
-				ApproachAngle(flBodyPitch, flPitch, ALT_EXTRA_BODY_PITCH_TRACK_SPEED * flDeltaTime)
-			);
-			
-			this.m_bPitchHandedOff = false;
-		}
-		
-		if (this.m_iBodyYawPoseParameter > -1) {
-			SubtractVectors(vecTarget, vecMe, vecDir);
-			NormalizeVector(vecDir, vecDir);
-			GetVectorAngles(vecDir, vecAng);
-			
-			float angRotation[3];
-			GetEntPropVector(this.index, Prop_Data, "m_angRotation", angRotation);
-			
-			// Yeah. combine pose param is inverted.
-			float relativeYaw = MyAngleDiff(vecAng[1], angRotation[1]);
-			
-			if (relativeYaw > 45.0 || relativeYaw < -45.0) {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
-				if (FloatAbs(flYaw) > 0.1) {
-					this.SetPoseParameter(
-						this.m_iBodyYawPoseParameter,
-						ApproachAngle(0.0, flYaw, ALT_EXTRA_BODY_YAW_UNTWIST_SPEED * flDeltaTime)
-					);
-				}
-				
-				// We don't wanna set aim target while moving.
-				if (!this.m_bPathing || this.m_bAllowBackWalking) {
-					this.SetAimTarget(vecTarget);
-					this.GetLocomotionInterface().FaceTowards(vecTarget);
-				}
-			}
-			else {
-				float flYaw = this.GetPoseParameter(this.m_iBodyYawPoseParameter);
-				
-				float bodyYaw = clamp(relativeYaw, -44.9, 44.9);
-				
-				this.SetPoseParameter(
-					this.m_iBodyYawPoseParameter,
-					ApproachAngle(bodyYaw, flYaw, ALT_EXTRA_BODY_YAW_TRACK_SPEED * flDeltaTime)
-				);
-			}
-			
-			this.m_bYawHandedOff = false;
-		}
-		else {
-			if (!this.m_bPathing || this.m_bAllowBackWalking) {
-				this.SetAimTarget(vecTarget);
-				this.GetLocomotionInterface().FaceTowards(vecTarget);
-			}
-		}
-	}
-	*/
-	
-	public void HackMaxYawRate(bool reset) {
-		if (this.m_bAllowBackWalking) {
-			if (reset) {
-				this.GetBaseNPC().flMaxYawRate = 0.0;
-			}
-			else {
-				this.GetBaseNPC().flMaxYawRate = (NPC_DEFAULT_YAWRATE * this.GetDebuffPercentage() * f_NpcTurnPenalty[this.index]);
-			}
-		}
-	}
-	
-	property int m_iBodyYawPoseParameter {
-		public get()			{ return this.GetProp(Prop_Data, "m_iBodyYawPoseParameter"); }
-		public set(int value)	{ this.SetProp(Prop_Data, "m_iBodyYawPoseParameter", value); }
-	}
-	
-	property int m_iBodyPitchPoseParameter {
-		public get()			{ return this.GetProp(Prop_Data, "m_iBodyPitchPoseParameter"); }
-		public set(int value)	{ this.SetProp(Prop_Data, "m_iBodyPitchPoseParameter", value); }
-	}
-	
-	property float m_flLastBodyUpdateTime {
-		public get()			{ return this.GetPropFloat(Prop_Data, "m_flLastBodyUpdateTime"); }
-		public set(float value)	{ this.SetPropFloat(Prop_Data, "m_flLastBodyUpdateTime", value); }
-	}
-	
-	property float m_flAimTargetSetTime {
-		public get()			{ return this.GetPropFloat(Prop_Data, "m_flAimTargetSetTime"); }
-		public set(float value)	{ this.SetPropFloat(Prop_Data, "m_flAimTargetSetTime", value); }
-	}
-	
-	property bool m_bYawHandedOff {
-		public get()			{ return view_as<bool>(this.GetProp(Prop_Data, "m_bYawHandedOff")); }
-		public set(bool value)	{ this.SetProp(Prop_Data, "m_bYawHandedOff", value); }
-	}
-	
-	property bool m_bPitchHandedOff {
-		public get()			{ return view_as<bool>(this.GetProp(Prop_Data, "m_bPitchHandedOff")); }
-		public set(bool value)	{ this.SetProp(Prop_Data, "m_bPitchHandedOff", value); }
-	}
-}
-
-/**
- * This is literally same as ArcToLocationViaSpeedProjectile.
- * But this one require vecStart instead projectile. So you can simulate speed.
- */
-stock void ArcToLocationViaSpeedSimulation(const float vecStart[3], float vecEnd[3], float vecVelocity[3], float flTimeUntilReachToDest = 1.0, float flGravityChange = 1.0) {
-	float vecJumpVel[3];
-	
-	float gravity;
-	if (gravity <= 0.0)
-		gravity = FindConVar("sv_gravity").FloatValue;
-	
-	gravity *= flGravityChange;
-	
-	// How fast does the headcrab need to travel to reach the position given gravity?
-	float flActualHeight = vecEnd[2] - vecStart[2];
-	float height = flActualHeight;
-	
-	if (height < 0.0) {
-		//tickrate gravity downwards is bad.
-		gravity *= TickrateModify;
-		if (height >= -20.0) {
-			height = -20.0;
-		}
-	}
-	else {
-		//invert for gravity the otherway
-		gravity *= (((TickrateModify - 1.0) * -1.0) + 1.0);
-		if (height <= 20.0) {
-			height = 20.0;
-		}
-	}
-	
-	float speed = SquareRoot( 2.0 * gravity * fabs(height) );
-	float time = speed / gravity;
-	
-	time += SquareRoot( (2.0 * fabs(height)) / gravity );
-	
-	time *= flTimeUntilReachToDest;
-	speed *= flTimeUntilReachToDest;
-	
-	// Scale the sideways velocity to get there at the right time
-	SubtractVectors( vecEnd, vecStart, vecJumpVel );
-	vecJumpVel[0] /= time;
-	vecJumpVel[1] /= time;
-	vecJumpVel[2] /= time;
-	
-	// Speed to offset gravity at the desired height.
-	vecJumpVel[2] = speed;
-	
-	vecVelocity = vecJumpVel;
-}
+*/
 
 /*
 			SubtractVectors(vecTarget, vecMe, vecDir);

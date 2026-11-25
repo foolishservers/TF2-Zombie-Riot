@@ -699,6 +699,7 @@ Function EntityOnAllyInteract[MAXENTITIES];
 Function EntityOnBuildObject[MAXENTITIES];
 Function EntityFuncTakeDamage[MAXENTITIES][3];
 Function EntityCustomTraceMelee[MAXENTITIES];
+Function EntityMeleeDamageCalc[MAXENTITIES];
 //Function EntityFuncReloadSingular5[MAXENTITIES];
 
 float f_ClientMusicVolume[MAXPLAYERS];

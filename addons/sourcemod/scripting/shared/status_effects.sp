@@ -1106,6 +1106,7 @@ float Cybergrind_EX_Hard_SpeedFunc(int victim, StatusEffect Apply_MasterStatusEf
 }
 
 static int AltExtraMachineStatusID;
+static int CrystalShieldBuffID;
 void StatusEffects_BlackOak()
 {
 	StatusEffect data;
@@ -1122,6 +1123,20 @@ void StatusEffects_BlackOak()
 	data.Slot						= 0;
 	data.SlotPriority				= 0;
 	StatusEffect_AddGlobal(data);
+	
+	strcopy(data.BuffName, sizeof(data.BuffName), "Crystal Shield");
+	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "CS");
+	strcopy(data.AboveEnemyDisplay, sizeof(data.AboveEnemyDisplay), "");
+	data.DamageTakenMulti 			= 0.0;
+	data.DamageDealMulti			= -1.0;
+	data.MovementspeedModif			= -1.0;
+	data.Positive 					= true;
+	data.ShouldScaleWithPlayerCount = false;
+	data.Slot						= 0;
+	data.SlotPriority				= 0;
+	data.OnTakeDamage_TakenFunc 	= CrystalShield_DamageTakenFunc;
+	data.HudDisplay_Func 			= CrystalShield_Hud;
+	CrystalShieldBuffID = StatusEffect_AddGlobal(data);
 	
 	strcopy(data.BuffName, sizeof(data.BuffName), "Extra Damage Indicator");
 	strcopy(data.HudDisplay, sizeof(data.HudDisplay), "⚔");
@@ -1177,6 +1192,142 @@ void ExtraDamage_Indicator_Hud_Func(int attacker, int victim, StatusEffect Apply
 
 bool NpcStats_AltExtraMachine(int entity) {
 	return CheckBuffIndex(entity, AltExtraMachineStatusID);
+}
+
+stock void CrystalShield_Add(int victim, int valuetoadd)
+{
+	if(!E_AL_StatusEffects[victim])
+		return;
+	
+	static StatusEffect Apply_MasterStatusEffect;
+	static E_StatusEffect Apply_StatusEffect;
+	int ArrayPosition = E_AL_StatusEffects[victim].FindValue(CrystalShieldBuffID, E_StatusEffect::BuffIndex);
+	if(ArrayPosition != -1)
+	{
+		E_AL_StatusEffects[victim].GetArray(ArrayPosition, Apply_StatusEffect);
+		AL_StatusEffects.GetArray(Apply_StatusEffect.BuffIndex, Apply_MasterStatusEffect);
+		if(Apply_StatusEffect.TimeUntillOver >= GetGameTime())
+		{
+			Apply_StatusEffect.DataForUse += float(valuetoadd);
+			E_AL_StatusEffects[victim].SetArray(ArrayPosition, Apply_StatusEffect);
+		}
+	}
+}
+
+stock void CrystalShield_CapAt(int victim, int ValueCap)
+{
+	if(!E_AL_StatusEffects[victim])
+		return;
+
+	static StatusEffect Apply_MasterStatusEffect;
+	static E_StatusEffect Apply_StatusEffect;
+	int ArrayPosition = E_AL_StatusEffects[victim].FindValue(CrystalShieldBuffID, E_StatusEffect::BuffIndex);
+	if(ArrayPosition != -1)
+	{
+		E_AL_StatusEffects[victim].GetArray(ArrayPosition, Apply_StatusEffect);
+		AL_StatusEffects.GetArray(Apply_StatusEffect.BuffIndex, Apply_MasterStatusEffect);
+		if(Apply_StatusEffect.TimeUntillOver >= GetGameTime())
+		{
+			if(Apply_StatusEffect.DataForUse >= float(ValueCap))
+				Apply_StatusEffect.DataForUse = float(ValueCap);
+
+			E_AL_StatusEffects[victim].SetArray(ArrayPosition, Apply_StatusEffect);
+		}
+	}
+}
+
+float CrystalShield_DamageTakenFunc(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int damagetype, float &damage)
+{
+	if(CheckInHud())
+		return 1.0;
+	
+	float CurrentShield = Apply_StatusEffect.DataForUse;
+	
+	int ArrayPosition = E_AL_StatusEffects[victim].FindValue(Apply_StatusEffect.BuffIndex, E_StatusEffect::BuffIndex);
+	
+	float ArmorDmgRes = 0.25;
+	int dmg_through_armour = RoundToCeil(damage * (1.0 - ArmorDmgRes));
+	if(RoundToCeil(damage * ArmorDmgRes) >= CurrentShield)
+	{
+		int damage_received_after_calc;
+		damage_received_after_calc = RoundToCeil(damage - CurrentShield);
+		CurrentShield = 0.0;
+		damage = float(damage_received_after_calc);
+		if(victim <= MaxClients)
+		{
+			float current_mana = float(Current_Mana[victim]);
+			if(current_mana < max_mana[victim])
+			{
+				current_mana += float(dmg_through_armour);
+				if(current_mana > max_mana[victim])
+					current_mana = max_mana[victim];
+				
+				Current_Mana[victim] = RoundToCeil(current_mana);
+			}
+		}
+	}
+	else
+	{
+		CurrentShield -= damage * 0.5;
+		damage = 0.0;
+		damage += float(dmg_through_armour);
+		
+		if(victim <= MaxClients)
+		{
+			float current_mana = float(Current_Mana[victim]);
+			if(current_mana < max_mana[victim])
+			{
+				current_mana += damage;
+				if(current_mana > max_mana[victim])
+					current_mana = max_mana[victim];
+				
+				Current_Mana[victim] = RoundToCeil(current_mana);
+			}
+		}
+	}
+	
+	if(f_AniSoundSpam[victim] < GetGameTime())
+	{
+		f_AniSoundSpam[victim] = GetGameTime() + 0.2;
+		switch(GetRandomInt(1, 4))
+		{
+			case 1:
+			{
+				EmitSoundToAll("player/resistance_light1.wav", victim, _, 70);
+				EmitSoundToAll("player/resistance_light1.wav", victim, _, 70);
+			}
+			case 2:
+			{
+				EmitSoundToAll("player/resistance_light2.wav", victim, _, 70);
+				EmitSoundToAll("player/resistance_light2.wav", victim, _, 70);
+			}
+			case 3:
+			{
+				EmitSoundToAll("player/resistance_light3.wav", victim, _, 70);
+				EmitSoundToAll("player/resistance_light3.wav", victim, _, 70);
+			}
+			case 4:
+			{
+				EmitSoundToAll("player/resistance_light4.wav", victim, _, 70);
+				EmitSoundToAll("player/resistance_light4.wav", victim, _, 70);
+			}
+		}
+	}
+	
+	Apply_StatusEffect.DataForUse = CurrentShield;
+	
+	if(CurrentShield <= 0.0)
+	{
+		Apply_StatusEffect.TimeUntillOver = 0.0;
+	}
+	
+	E_AL_StatusEffects[victim].SetArray(ArrayPosition, Apply_StatusEffect);
+	return 1.0;
+}
+
+void CrystalShield_Hud(int attacker, int victim, StatusEffect Apply_MasterStatusEffect, E_StatusEffect Apply_StatusEffect, int SizeOfChar, char[] HudToDisplay)
+{
+	Format(HudToDisplay, SizeOfChar, "CS[%i]", RoundToNearest(Apply_StatusEffect.DataForUse));
 }
 #endif
 

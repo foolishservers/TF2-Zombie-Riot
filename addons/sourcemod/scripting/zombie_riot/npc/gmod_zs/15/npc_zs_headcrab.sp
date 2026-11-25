@@ -95,7 +95,7 @@ static char[] GetHeadcrabHealth(int SelectInt)
 	return buffer;
 }
 
-methodmap ZSHeadcrab < CSeaBody
+methodmap ZSHeadcrab < ZSZmainBase
 {
 	public void PlayIdleSound()
 	{
@@ -139,9 +139,10 @@ methodmap ZSHeadcrab < CSeaBody
 		
 		npc.m_flGetClosestTargetTime = 0.0;
 		npc.m_flNextMeleeAttack = 0.0;
+		npc.m_flNextRangedSpecialAttack = 0.0;
 		npc.m_flAttackHappens = 0.0;
 		npc.m_flRangedArmor = 1.0;
-		npc.m_flMeleeArmor = (Alt==2 ? 1.0 : 3.0);
+		npc.m_flMeleeArmor = (Alt==2 ? 1.0 : 2.0);
 		f_ExtraOffsetNpcHudAbove[npc.index] = -65.0;
 		
 		switch(Alt)
@@ -150,23 +151,16 @@ methodmap ZSHeadcrab < CSeaBody
 			{
 				SetEntityRenderMode(npc.index, RENDER_TRANSCOLOR);
 				SetEntityRenderColor(npc.index, 255, 0, 0, 255);
-				npc.m_flSpeed = 475.0;
+				npc.m_flSpeed = 400.0;
 			}
 			case 2:
 			{
-				fl_AbilityOrAttack[npc.index][0] = 0.0;
-				fl_AbilityOrAttack[npc.index][1] = 0.0;
-				fl_AbilityOrAttack[npc.index][2] = 0.0;
-				fl_AbilityOrAttack[npc.index][3] = 1.0 + GetGameTime(npc.index);
-				fl_AbilityOrAttack[npc.index][4] = 30.0 + GetGameTime(npc.index);
-				fl_AbilityOrAttack[npc.index][5] = 0.0;
-				npc.m_iOverlordComboAttack = 0;
 				f_MaxAnimationSpeed[npc.index] = 1.5;
-				b_AvoidBuildingsAtAllCosts[npc.index] = true;
-				npc.m_flSpeed = 400.0;
+				npc.m_flSpeed = 340.0;
 			}
 			default:npc.m_flSpeed = 260.0;
 		}
+		
 		npc.m_iState = Alt;
 		npc.StartPathing();
 
@@ -177,14 +171,14 @@ methodmap ZSHeadcrab < CSeaBody
 static void ZSHeadcrab_ClotThink(int iNPC)
 {
 	ZSHeadcrab npc = view_as<ZSHeadcrab>(iNPC);
-
+	
 	float gameTime = GetGameTime(npc.index);
 	if(npc.m_flNextDelayTime > gameTime)
 		return;
 	
 	npc.m_flNextDelayTime = gameTime + DEFAULT_UPDATE_DELAY_FLOAT;
 	npc.Update();
-
+	
 	if(npc.m_blPlayHurtAnimation)
 	{
 		npc.PlayHurtSound();
@@ -195,7 +189,7 @@ static void ZSHeadcrab_ClotThink(int iNPC)
 		return;
 	
 	npc.m_flNextThinkTime = gameTime + 0.1;
-
+	
 	if(npc.m_flGetClosestTargetTime < gameTime)
 	{
 		npc.m_iTarget = GetClosestTarget(npc.index);
@@ -208,234 +202,113 @@ static void ZSHeadcrab_ClotThink(int iNPC)
 		float VecSelfNpc[3]; WorldSpaceCenter(npc.index, VecSelfNpc);
 		float distance = GetVectorDistance(vecTarget, VecSelfNpc, true);	
 		
-		if(npc.m_iState==2)
+		if(npc.m_iState == 2)
 		{
-			ZSZmain_SelfDefense(npc, gameTime, vecTarget, distance);
-			ZSZmain npcGetInfo = view_as<ZSZmain>(npc.index);
-			switch(ZSZmain_AnnoyingLogic(npcGetInfo, gameTime, vecTarget, distance))
+			ZSZmainHeadcrab_SelfDefense(npc, gameTime, vecTarget, distance);
+			return;
+		}
+		
+		if(distance < npc.GetLeadRadius())
+		{
+			float vPredictedPos[3]; PredictSubjectPosition(npc, npc.m_iTarget,_,_, vPredictedPos);
+			npc.SetGoalVector(vPredictedPos);
+		}
+		else 
+		{
+			npc.SetGoalEntity(npc.m_iTarget);
+		}
+		npc.StartPathing();
+		
+		if(npc.m_flAttackHappens)
+		{
+			if(npc.m_flAttackHappens < gameTime)
 			{
-				case 0:
+				float fDamage = 100.0;
+				switch(npc.m_iState)
 				{
-					if(npc.m_iChanged_WalkCycle != 0)
-					{
-						npc.m_bPathing = false;
-						npc.m_bisWalking = false;
-						npc.m_bAllowBackWalking = false;
-						npc.m_iChanged_WalkCycle = 0;
-						npc.m_flSpeed = 0.0;
-						npc.StopPathing();
-					}
+					case 1:fDamage=150.0;
+					default:fDamage=100.0;
 				}
-				case 1:
+				npc.m_flAttackHappens = 0.0;
+				
+				Handle swingTrace;
+				npc.FaceTowards(vecTarget, 15000.0);
+				npc.m_bAllowBackWalking = false;
+				if(npc.DoSwingTrace(swingTrace, npc.m_iTarget))
 				{
-					if(npc.m_iChanged_WalkCycle != 1)
-					{
-						npc.m_bPathing = true;
-						npc.m_bisWalking = true;
-						npc.m_bAllowBackWalking = false;
-						npc.m_iChanged_WalkCycle = 1;
-						npc.m_flSpeed = 400.0;
-						npc.StartPathing();
-					}
-					if(distance < npc.GetLeadRadius()) 
-					{
-						float vPredictedPos[3];
-						b_TryToAvoidTraverse[npc.index] = false;
-						PredictSubjectPosition(npc, npc.m_iTarget,_,_, vPredictedPos);
-						vPredictedPos = GetBehindTarget(npc.m_iTarget, 30.0 ,vPredictedPos);
-						int AntiCheeseReply = DiversionAntiCheese(npc.m_iTarget, npc.index, vPredictedPos);
-						b_TryToAvoidTraverse[npc.index] = true;
-						if(AntiCheeseReply == 0)
-							npc.SetGoalVector(vPredictedPos, true);
-						else if(AntiCheeseReply == 1)
-						{
-							if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 2.5))
-							{
-								npc.m_bAllowBackWalking = true;
-								float vBackoffPos[3];
-								BackoffFromOwnPositionAndAwayFromEnemy(npc, npc.m_iTarget,_,vBackoffPos);
-								npc.SetGoalVector(vBackoffPos, true);
-							}
-							else
-							{
-								npc.SetGoalEntity(npc.m_iTarget);
-							}
-						}
-					}
-					else 
-					{
-						DiversionCalmDownCheese(npc.index);
-						if(!npc.m_bPathing)
-							npc.StartPathing();
+					int target = TR_GetEntityIndex(swingTrace);
+					float vecHit[3];
+					TR_GetEndPosition(vecHit, swingTrace);
 
-						npc.SetGoalEntity(npc.m_iTarget);
+					if(target > 0) 
+					{
+						if(ShouldNpcDealBonusDamage(target))
+							fDamage*=5.0;
+						npc.PlayMeleeHitSound();
+						SDKHooks_TakeDamage(target, npc.index, npc.index, fDamage, DMG_CLUB, -1, _, vecHit);
+						if(npc.m_iState==1)
+							StartBleedingTimer(target, npc.index, 5.0, 2, -1, DMG_TRUEDAMAGE, 0);
 					}
 				}
-				case 2:
-				{
-					if(npc.m_iChanged_WalkCycle != 2)
-					{
-						npc.m_bPathing = true;
-						npc.m_bisWalking = true;
-						npc.m_bAllowBackWalking = false;
-						npc.m_iChanged_WalkCycle = 2;
-						npc.m_flSpeed = 400.0;
-						npc.StartPathing();
-					}
-					if(distance < npc.GetLeadRadius()) 
-					{
-						float vPredictedPos[3];
-						PredictSubjectPosition(npc, npc.m_iTarget,_,_, vPredictedPos);
-						npc.SetGoalVector(vPredictedPos);
-					}
-					else 
-					{
-						npc.SetGoalEntity(npc.m_iTarget);
-					}
-				}
-				case 3:
-				{
-					if(npc.m_iChanged_WalkCycle != 3)
-					{
-						npc.m_bPathing = true;
-						npc.m_bisWalking = true;
-						npc.m_bAllowBackWalking = false;
-						npc.m_iChanged_WalkCycle = 3;
-						npc.m_flSpeed = 400.0;
-						npc.StartPathing();
-					}
-					if(distance < npc.GetLeadRadius()) 
-					{
-						float vPredictedPos[3];
-						PredictSubjectPosition(npc, npc.m_iTarget,_,_, vPredictedPos);
-						npc.SetGoalVector(vPredictedPos);
-					}
-					else 
-					{
-						npc.SetGoalEntity(npc.m_iTarget);
-					}
-				}
-				case 4:
-				{
-					if(npc.m_iChanged_WalkCycle != 4)
-					{
-						npc.m_bPathing = true;
-						npc.m_bisWalking = true;
-						npc.m_bAllowBackWalking = true;
-						npc.m_iChanged_WalkCycle = 4;
-						npc.m_flSpeed = 400.0;
-						npc.StartPathing();
-					}
-					float vBackoffPos[3];
-					BackoffFromOwnPositionAndAwayFromEnemy(npc, npc.m_iTarget,_,vBackoffPos);
-					npc.SetGoalVector(vBackoffPos, true);
-				}
+				delete swingTrace;
 			}
 		}
-		else
+
+		if(distance < 10000.0 && npc.m_flNextMeleeAttack < gameTime)
 		{
-			if(distance < npc.GetLeadRadius())
+			if(npc.m_iState==1)
 			{
-				float vPredictedPos[3]; PredictSubjectPosition(npc, npc.m_iTarget,_,_, vPredictedPos);
-				npc.SetGoalVector(vPredictedPos);
-			}
-			else 
-			{
-				npc.SetGoalEntity(npc.m_iTarget);
-			}
-			npc.StartPathing();
-
-			if(npc.m_flAttackHappens)
-			{
-				if(npc.m_flAttackHappens < gameTime)
+				npc.m_bAllowBackWalking = false;
+				int target = Can_I_See_Enemy(npc.index, npc.m_iTarget);
+				if(IsValidEnemy(npc.index, target))
 				{
-					float fDamage = 100.0;
-					switch(npc.m_iState)
-					{
-						case 1:fDamage=150.0;
-						default:fDamage=100.0;
-					}
-					npc.m_flAttackHappens = 0.0;
-					
-					Handle swingTrace;
-					npc.FaceTowards(vecTarget, 15000.0);
-					npc.m_bAllowBackWalking = false;
-					if(npc.DoSwingTrace(swingTrace, npc.m_iTarget))
-					{
-						int target = TR_GetEntityIndex(swingTrace);
-						float vecHit[3];
-						TR_GetEndPosition(vecHit, swingTrace);
+					npc.m_iTarget = target;
 
-						if(target > 0) 
-						{
-							if(ShouldNpcDealBonusDamage(target))
-								fDamage*=5.0;
-							npc.PlayMeleeHitSound();
-							SDKHooks_TakeDamage(target, npc.index, npc.index, fDamage, DMG_CLUB, -1, _, vecHit);
-							if(npc.m_iState==1)
-								StartBleedingTimer(target, npc.index, 5.0, 2, -1, DMG_TRUEDAMAGE, 0);
-						}
-					}
-					delete swingTrace;
+					npc.AddGesture("ACT_RANGE_ATTACK1");
+
+					npc.PlayMeleeSound();
+					
+					npc.m_flAttackHappens = gameTime + 0.45;
+					npc.m_flNextMeleeAttack = gameTime + 1.25;
+					npc.m_flHeadshotCooldown = gameTime + 1.25;
 				}
 			}
-
-			if(distance < 10000.0 && npc.m_flNextMeleeAttack < gameTime)
+			else
 			{
-				if(npc.m_iState==1)
+				npc.m_bAllowBackWalking = true;
+				int PrimaryThreatIndex = npc.m_iTarget;
+				float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
+				if(flDistanceToTarget < 6000.0) //too close, back off!! Now!
 				{
-					npc.m_bAllowBackWalking = false;
-					int target = Can_I_See_Enemy(npc.index, npc.m_iTarget);
-					if(IsValidEnemy(npc.index, target))
+					npc.StartPathing();
+					
+					int Enemy_I_See;
+				
+					Enemy_I_See = Can_I_See_Enemy(npc.index, PrimaryThreatIndex);
+					//Target close enough to hit
+					if(IsValidEnemy(npc.index, Enemy_I_See)) //Check if i can even see.
 					{
-						npc.m_iTarget = target;
-
-						npc.AddGesture("ACT_RANGE_ATTACK1");
-
-						npc.PlayMeleeSound();
-						
-						npc.m_flAttackHappens = gameTime + 0.45;
-						npc.m_flNextMeleeAttack = gameTime + 1.25;
-						npc.m_flHeadshotCooldown = gameTime + 1.25;
+						float vBackoffPos[3];
+						npc.m_flSpeed = 600.0;
+						BackoffFromOwnPositionAndAwayFromEnemy(npc, PrimaryThreatIndex, 300.0, vBackoffPos);
+						npc.SetGoalVector(vBackoffPos, true);
 					}
 				}
 				else
 				{
-					npc.m_bAllowBackWalking = true;
-					int PrimaryThreatIndex = npc.m_iTarget;
-					float flDistanceToTarget = GetVectorDistance(vecTarget, VecSelfNpc, true);
-					if(flDistanceToTarget < 6000.0) //too close, back off!! Now!
+					int target = Can_I_See_Enemy(npc.index, npc.m_iTarget);
+					if(IsValidEnemy(npc.index, target))
 					{
-						npc.StartPathing();
+						npc.m_iTarget = target;
+						npc.m_flSpeed = 231.0;
+						npc.AddGesture("ACT_RANGE_ATTACK1");
+						PluginBot_Jump(npc.index, vecTarget);
 						
-						int Enemy_I_See;
-					
-						Enemy_I_See = Can_I_See_Enemy(npc.index, PrimaryThreatIndex);
-						//Target close enough to hit
-						if(IsValidEnemy(npc.index, Enemy_I_See)) //Check if i can even see.
-						{
-							float vBackoffPos[3];
-							npc.m_flSpeed = 600.0;
-							BackoffFromOwnPositionAndAwayFromEnemy(npc, PrimaryThreatIndex, 300.0, vBackoffPos);
-							npc.SetGoalVector(vBackoffPos, true);
-						}
-					}
-					else
-					{
-						int target = Can_I_See_Enemy(npc.index, npc.m_iTarget);
-						if(IsValidEnemy(npc.index, target))
-						{
-							npc.m_iTarget = target;
-							npc.m_flSpeed = 231.0;
-							npc.AddGesture("ACT_RANGE_ATTACK1");
-							PluginBot_Jump(npc.index, vecTarget);
+						npc.PlayMeleeSound();
 
-							npc.PlayMeleeSound();
-
-							npc.m_flAttackHappens = gameTime + 0.08;
-							npc.m_flNextMeleeAttack = gameTime + 0.8;
-							npc.m_flHeadshotCooldown = gameTime + 0.8;
-						}
+						npc.m_flAttackHappens = gameTime + 0.08;
+						npc.m_flNextMeleeAttack = gameTime + 0.8;
+						npc.m_flHeadshotCooldown = gameTime + 0.8;
 					}
 				}
 			}
@@ -451,71 +324,119 @@ static void ZSHeadcrab_ClotThink(int iNPC)
 	npc.PlayIdleSound();
 }
 
-static void ZSZmain_SelfDefense(ZSHeadcrab npc, float gameTime, float VecEnemy[3], float distance)
-{
-	npc.FaceTowards(VecEnemy, (500.0 * npc.GetDebuffPercentage() * f_NpcTurnPenalty[npc.index]), true);
-	if(npc.m_flAttackHappens)
+static void ZSZmainHeadcrab_SelfDefense(ZSHeadcrab npc, float gameTime, float vecEnemy[3], float distance)
+{	
+	if(gameTime > npc.m_flNextRangedSpecialAttack && npc.IsOnGround())
 	{
-		if(npc.m_flAttackHappens < gameTime)
+		if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED * 9.0))
 		{
-			npc.m_flAttackHappens = 0.0;
+			int Enemy_I_See = Can_I_See_Enemy(npc.index, npc.m_iTarget);
+			if(IsValidEnemy(npc.index, Enemy_I_See))
+			{
+				npc.m_iTarget = Enemy_I_See;
+				npc.AddGesture("ACT_RANGE_ATTACK1");
+				
+				WorldSpaceCenter(npc.m_iTarget, vecEnemy);
+				npc.FaceTowards(vecEnemy, 15000.0);
+				
+				PluginBot_Jump(npc.index, vecEnemy);
+				
+				float vecVel[3];
+				npc.GetVelocity(vecVel);
+				if(vecVel[2] > 400.0)
+					vecVel[2] = 400.0;
+				npc.SetVelocity(vecVel);
+				
+				npc.PlayMeleeSound();
+				
+				npc.m_flAttackHappens = gameTime;
+				npc.m_flNextMeleeAttack = gameTime + 1.25;
+				npc.m_flNextRangedSpecialAttack = gameTime + 1.8;
+				npc.m_flHeadshotCooldown = gameTime + 1.8;
+			}
+		}
+	}
+	
+	if(distance < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED)
+	{
+		npc.StartPathing();
+		
+		int Enemy_I_See = Can_I_See_Enemy(npc.index, npc.m_iTarget);
+		if(IsValidEnemy(npc.index, Enemy_I_See))
+		{
+			npc.m_bAllowBackWalking = true;
+			
+			float vecPos[3];
+			WorldSpaceCenter(Enemy_I_See, vecPos);
+			npc.FaceTowards(vecPos, 350.0);
+			
+			BackoffFromOwnPositionAndAwayFromEnemy(npc, Enemy_I_See, 300.0, vecPos);
+			npc.SetGoalVector(vecPos, true);
+		}
+	}
+	else
+	{
+		if(distance < npc.GetLeadRadius())
+		{
+			float vPredictedPos[3];
+			PredictSubjectPosition(npc, npc.m_iTarget, _, _, vPredictedPos);
+			npc.SetGoalVector(vPredictedPos);
+		}
+		else 
+		{
+			npc.SetGoalEntity(npc.m_iTarget);
+		}
+		
+		npc.m_bAllowBackWalking = false;
+		npc.StartPathing();
+	}
+	
+	// check we are in the air
+	// and can melee attack
+	if(npc.m_flNextMeleeAttack > gameTime
+		&& gameTime >= npc.m_flAttackHappens
+		&& !npc.IsOnGround())
+	{
+		if(distance < NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED)
+		{
+			// WorldSpaceCenter(npc.m_iTarget, vecEnemy);
+			// npc.FaceTowards(vecEnemy, 15000.0);
+			
 			Handle swingTrace;
-			WorldSpaceCenter(npc.m_iTarget, VecEnemy);
-			npc.FaceTowards(VecEnemy, 15000.0);
 			if(npc.DoSwingTrace(swingTrace, npc.m_iTarget, _, _, _, 1))
 			{
 				int target = TR_GetEntityIndex(swingTrace);
 				float vecHit[3];
 				TR_GetEndPosition(vecHit, swingTrace);
+				
 				if(IsValidEnemy(npc.index, target))
 				{
 					if(!ShouldNpcDealBonusDamage(target))
 						SDKHooks_TakeDamage(target, npc.index, npc.index, 50.0, DMG_CLUB, -1, _, vecHit);
 					else
 						SDKHooks_TakeDamage(target, npc.index, npc.index, 80.0, DMG_CLUB, -1, _, vecHit);
+					
 					npc.PlayMeleeHitSound();
+					
+					// Hit & Run evasion trigger on non-structure target
+					if(!ShouldNpcDealBonusDamage(target)) {
+						float pitch = 23.5 + GetRandomFloat(-5.0, 5.0);
+						float yawOffset = (GetRandomInt(1, 4) >= 3) ? 30.0 : -30.0;
+						npc.PerformLeap(pitch, -200.0, 300.0, yawOffset);
+					}
+					
+					npc.m_flNextMeleeAttack = 0.0;
 				}
-				if(!ShouldNpcDealBonusDamage(target))
+				else
 				{
-					fl_AbilityOrAttack[npc.index][2] = gameTime + 1.0;
-					npc.Anger = true;
-					float vecBuffer[3], vecForward[3], vecPos[3];
-					GetAbsOrigin(npc.index, vecPos);
-					GetEntPropVector(npc.index, Prop_Send, "m_angRotation", VecEnemy);
-					VecEnemy[0] = 23.5+GetRandomFloat(-5.0, 5.0);
-					if(GetRandomInt(1, 4) >=3)
-						VecEnemy[1] += 30.0;
-					else
-						VecEnemy[1] -= 30.0;
-					GetAngleVectors(VecEnemy, vecForward, NULL_VECTOR, NULL_VECTOR);
-					NormalizeVector(vecForward, vecForward);
-					ScaleVector(vecForward, -282.5);
-					AddVectors(vecPos, vecForward, vecBuffer);
-					PluginBot_Jump(npc.index, vecBuffer);
-					if(fl_AbilityOrAttack[npc.index][3] < gameTime)
-						npc.m_iOverlordComboAttack+=5;
+					npc.m_flAttackHappens = gameTime + 0.1;
 				}
+			}
+			else
+			{
+				npc.m_flAttackHappens = gameTime + 0.1;
 			}
 			delete swingTrace;
-		}
-	}
-
-	if(gameTime > npc.m_flNextMeleeAttack)
-	{
-		if(distance < (NORMAL_ENEMY_MELEE_RANGE_FLOAT_SQUARED*1.1))
-		{
-			int Enemy_I_See;
-			Enemy_I_See = Can_I_See_Enemy(npc.index, npc.m_iTarget);
-			if(IsValidEnemy(npc.index, Enemy_I_See))
-			{
-				npc.m_iTarget = Enemy_I_See;
-				npc.PlayMeleeSound();
-				npc.AddGesture("ACT_RANGE_ATTACK1");
-				
-				npc.m_flAttackHappens = gameTime + 0.08;
-				npc.m_flNextMeleeAttack = gameTime + 0.8;
-				npc.m_flHeadshotCooldown = gameTime + 0.8;
-			}
 		}
 	}
 }
@@ -542,4 +463,3 @@ static void Angryheadcrab_ExplodePost(int attacker, int victim, float damage, in
 {
 	StartBleedingTimer(victim, attacker, 5.0, 2, -1, DMG_TRUEDAMAGE, 0);
 }
-

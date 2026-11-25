@@ -1947,7 +1947,7 @@
 	{
 		"en"	"A barely functioning Expidonsan shield.\n- {green}Every 10 seconds, gain a shield that blocks one instance of damage."
 		"it"	"Uno scudo di Expidonsan appena funzionante.\n- {green}Ogni 10 secondi, ottieni uno scudo che blocca un'istanza di danno."
-		"ko"	"겨우 작동하는 엑스피돈사제 방패.\n- {green}매 10 초마다, 받은 피해를 1회 무효화시키는 보호막이 생성됩니다."
+		"ko"	"겨우 작동하는 엑스피돈사제 방패.\n- {green}매 10초마다, 받은 피해를 1회 무효화시키는 보호막이 생성됩니다."
 	}
 	"Bob's Exchange Money"
 	{
@@ -2085,7 +2085,7 @@
 		"en"	"Still good and tasty as ever. Yummers.\n- {green}Players gain +15％ max health."
 		"ru"	"Всё так же хорошо и вкусно.\n- +15％ к здоровью."
 		"it"	"Sempre buoni e gustosi come sempre. Gnammer.\n- {green}I giocatori guadagnano +15％ salute massima."
-		"ko"	"여전히 좋고, 여전히 맛있다. 쩝쩝.\n- {green}최대 체력 +15％ ."
+		"ko"	"여전히 좋고, 여전히 맛있다. 쩝쩝.\n- {green}최대 체력 +15％."
 	}
 	"Fizzy Drink"
 	{
