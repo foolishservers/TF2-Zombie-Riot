@@ -660,6 +660,18 @@
 		"en"	""
 		"ko"	"이 효과를 받는 적은 특수한 버프를 받을 수 있습니다."
 	}
+	"Battle StimPacks"
+	{
+		"en"	"StimPacks"
+		"ko"	"각성제"
+	}
+	"Battle StimPacks Desc"
+	{
+		"en"	"Decreases damage taken by 15％, Increases damage dealt by 25％\nIncreases attack/reload speed & healrate by a 20％."
+		"es"	"Reduce el daño recibido en un 15％.\nAumenta el daño hecho en un 25％.\nAumenta la velocidad de ataque/recarga y curacion medica en un 20％."
+		"it"	"Diminuisce i danni subiti di 15％\nAumenta i danni inflitti di 25％\nAumenta la velocità di attacco/ricarica e la velocità di guarigione di 20％."
+		"ko"	"받는 피해량이 15％ 감소합니다.\n공격 피해량이 25％ 증가합니다.\n공격 속도, 재장전 속도, 치유 속도가 20％ 증가합니다."
+	}
 	
 	"Crystal Shield"
 	{
@@ -851,6 +863,27 @@
 	{
 		"en"		"Fractal Isomer Lance"
 		"ko"		"프랙탈 아이소머 랜스"
+	}
+	
+	"Custom Medikit: IFAK"
+	{
+		"en"		"IFAK"
+		"ko"		"IFAK"
+	}
+	"Custom Medikit: Stim Packs"
+	{
+		"en"		"StimPacks"
+		"ko"		"각성제"
+	}
+	"Custom Medikit: Mana Injector"
+	{
+		"en"		"Mana Injector"
+		"ko"		"마나 주입기"
+	}
+	"Custom Medikit: Armor Pack"
+	{
+		"en"		"Armor Pack"
+		"ko"		"아머 팩"
 	}
 	
 	//무기 설명
@@ -1207,7 +1240,7 @@
 		"chi"       "4次射击后将发射垃圾...."
 		"ko"		"4발을 한번에...\n피해량및 재장전 속도 증가\n레이드 보스에게 주는 피해량 +1.5배"
 	}
-	"Quad Launcher Pap 1 Desc"
+	"Shared Increased All Stats Desc"
 	{
 		"en"		"Improved stats."
 		"ko"		"전반적인 능력치 증가"
@@ -1386,6 +1419,45 @@
 		"#format"	"{1:d}"
 		"en"		"Not Enough Crystal! You need {1} Crystal!"
 		"ko"		"수정이 부족합니다! {1}만큼의 수정이 필요합니다!"
+	}
+	
+	"Custom Medikit: IFAK Pap 1 Desc"
+	{
+		"en"		"When Used, Stops bleeding and Grants Temporary Immune to Slowness Effects\nReduced Cooldown\nIncreased Healing and Overhealing"
+		"ko"		"사용시, 출혈을 막고, 잠시동안 모든 둔화 효과에 면역이 됩니다\n쿨다운 소폭 감소\n치료량및 과치료량 증가"
+	}
+	"Custom Medikit: Stim Packs Pap 1 Desc"
+	{
+		"en"		"When Used, Grants Increase Resistance, Damage, Attack/Reload/Healing Speed\nIncrease Cooldown and Healing"
+		"ko"		"사용시, 피해저항및 피해량, 공속,장속,치료속도가 증가하는 효과를 부여합니다\n쿨다운 및 치료량 증가"
+	}
+	"Custom Medikit: Stim Packs Pap 2 Desc"
+	{
+		"en"		"When Used, Applies an 'Auto Revive' Effect to Target\nReduced Cooldown\nIncreased Healing and Overhealing"
+		"ko"		"다운 대상에게 사용시 '자동 소생' 효과를 부여합니다.\n쿨다운 감소\n치료량및 과치료량 증가"
+	}
+	
+	"Custom Medikit: Mana Injector Pap 1 Desc"
+	{
+		"en"		"Transfers a portion of your mana to the target being healed.\nIncrease Max Mana \nIncrease Cooldown and Healing\nM2 Disactivate"
+		"ko"		"자신의 마나 일부를 치료 대상에게 넘겨줍니다.\n최대 마나량 증가\n쿨다운 및 치료량 증가\nM2 비활성화"
+	}
+	"Custom Medikit: Mana Injector Pap 2 Desc"
+	{
+		"en"		"Max Mana and Mana Transfer Capacity Increase\nReduced Cooldown\nIncreased Healing and Overhealing"
+		"ko"		"최대 마나및 마나 전송량 증가\n쿨다운 감소\n치료량및 과치료량 증가"
+	}
+	
+	"Custom Medikit: Armor Pack Pap 1 Desc"
+	{
+		"en"		"Medikit now regenerates YOUR and your patient's armor while healing.\nScales with Support upgrades.\nCures elemental damage 2x as fast.\nIncrease Cooldown and Healing"
+		"ko"		"치유 대상과 당신의 아머를 회복시킴.\n회복량은 지원 개선의 영향을 받음\n원소 피해를 2배 더 빨리 치유함.\n쿨다운 및 치료량 증가"
+	}
+	
+	"Custom Medikit: Shared Desc"
+	{
+		"en"		"Reduced Cooldown\nIncreased Healing and Overhealing"
+		"ko"		"쿨다운 감소\n치료량및 과치료량 증가"
 	}
 	
 	//추가 장비 이름
@@ -2643,6 +2715,12 @@
 	{
 		"en"		"Heavy Smash"
 		"ko"		"강력한 강타"
+	}
+	
+	"Tinker_MediKit_ReserveMedicalSupplies"
+	{
+		"en"		"Reserve Medical Supplies"
+		"ko"		"예비 의약품"
 	}
 	
 	// Wave Vote.

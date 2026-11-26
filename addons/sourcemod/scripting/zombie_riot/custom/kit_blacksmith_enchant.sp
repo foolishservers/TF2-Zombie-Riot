@@ -99,7 +99,11 @@ enum {
 	TinkerEnchant_UberSaw_FEInverter,
 	TinkerEnchant_UberSaw_LongMelee,
 	TinkerEnchant_UberSaw_HeavySmash,
-	TinkerEnchant_UberSaw_GlassySaw
+	TinkerEnchant_UberSaw_GlassySaw,
+	
+	TinkerEnchant_MediKit_ReserveMedicalSupplies,
+	TinkerEnchant_MediKit_BurstHeal,
+	TinkerEnchant_MediKit_GlassyKit
 };
 
 #define ENCHANT_ROLL_COUNT	4
@@ -402,6 +406,13 @@ static const int Enchant_Super_UberSaw[] = {
 	TinkerEnchant_UberSaw_GlassySaw,
 };
 
+static const int Enchant_MediKit[] = {
+	TinkerEnchant_MediKit_BurstHeal,
+	TinkerEnchant_Overhealer,
+	TinkerEnchant_MediKit_ReserveMedicalSupplies,
+	TinkerEnchant_MediKit_GlassyKit,
+};
+
 // 유효한 롤이 없거나 대장장이 레벨이 달라졌으면 새로 굴려서 roll에 담아 반환한다.
 static void EnchantRoll_GetOrCreate(int account, int storeIndex, int weapon, int smithLevel, EnchantRollEnum roll) {
 	int index = EnchantRoll_Find(account, storeIndex);
@@ -466,6 +477,9 @@ static int Query_Enchantment(int weapon) {
 			else {
 				return Enchant_Health_Hose[GetURandomInt() % sizeof(Enchant_Health_Hose)];
 			}
+		}
+		case WEAPON_Medikit: {
+			return Enchant_MediKit[GetURandomInt() % sizeof(Enchant_MediKit)];
 		}
 	}
 	
@@ -967,6 +981,13 @@ static char[] Query_GetTransList(int SelectInt) {
 			FormatEx(buffer, sizeof(buffer), "Tinker_UberSaw_HeavySmash");
 		case TinkerEnchant_UberSaw_GlassySaw:
 			FormatEx(buffer, sizeof(buffer), "Tinker_SharedGlassy");
+			
+		case TinkerEnchant_MediKit_BurstHeal:
+			FormatEx(buffer, sizeof(buffer), "Tinker_BurstHeal");
+		case TinkerEnchant_MediKit_ReserveMedicalSupplies:
+			FormatEx(buffer, sizeof(buffer), "Tinker_MediKit_ReserveMedicalSupplies");
+		case TinkerEnchant_MediKit_GlassyKit:
+			FormatEx(buffer, sizeof(buffer), "Tinker_SharedGlassy");
 	}
 	return buffer;
 }
@@ -1415,6 +1436,13 @@ static void OnTinkerAnvilUsed(int client, int owner, int anvil, int id, TinkerEn
 				Tinker_UberSaw_HeavySmash(tinker.Rarity, tinker);
 			case TinkerEnchant_UberSaw_GlassySaw:
 				Tinker_UberSaw_GlassySaw(tinker.Rarity, tinker);
+
+			case TinkerEnchant_MediKit_BurstHeal:
+				TinkerMediKit_BurstHeal(tinker.Rarity, tinker);
+			case TinkerEnchant_MediKit_ReserveMedicalSupplies:
+				TinkerMediKit_ReserveMedicalSupplies(tinker.Rarity, tinker);
+			case TinkerEnchant_MediKit_GlassyKit:
+				TinkerMediKit_GlassyKit(tinker.Rarity, tinker);
 		}
 		
 		SetGlobalTransTarget(client);
@@ -1537,7 +1565,7 @@ void Blacksmith_PrintAttribValue(int client, int attrib, float value, float luck
 	bool inverse_color = false;
 	if(attrib == 733 || attrib == Attrib_MediBag)
 		inverse_color = true;
-	if(attrib == 41 && CustomMode==1||attrib == 178)
+	if(attrib == 41 && (CustomMode==1 || CustomMode==2)||attrib == 178)
 		inverse=true;
 	
 	float base = addition ? 0.0 : 1.0;
@@ -3449,6 +3477,7 @@ static void Tinker_UberSaw_FEInverter(int rarity, TinkerEnum tinker)
 	tinker.Attrib[1] = 7;
 	tinker.Attrib[2] = 103;
 
+	tinker.CustomMode[0] = 2;
 	tinker.CustomMode[1] = 1;
 	tinker.CustomMode[2] = 1;
 	
@@ -3486,6 +3515,7 @@ static void Tinker_UberSaw_LongMelee(int rarity, TinkerEnum tinker)
 	tinker.Attrib[2] = 4001;
 	
 	tinker.CustomMode[0] = 1;
+	tinker.CustomMode[1] = 2;
 	
 	float DamageLuck = (0.1 * (tinker.Luck[0]));
 	float MeleeChargeLuck = (0.1 * (1.0 + (-1.0*(tinker.Luck[1]))));
@@ -3521,6 +3551,7 @@ static void Tinker_UberSaw_HeavySmash(int rarity, TinkerEnum tinker)
 	tinker.Attrib[2] = 103;
 	
 	tinker.CustomMode[0] = 1;
+	tinker.CustomMode[1] = 2;
 	tinker.CustomMode[2] = 1;
 	
 	float DamageLuck = (0.1 * (tinker.Luck[0]));
@@ -3581,6 +3612,111 @@ static void Tinker_UberSaw_GlassySaw(int rarity, TinkerEnum tinker)
 		{
 			tinker.Value[0] = 1.15 + DamageLuck;
 			tinker.Value[1] = 0.84 - AttackRateLuck;
+			tinker.Value[2] = 1.10 + RangedDmgVulLuck;
+			tinker.Value[3] = 1.10 + MeleeDmgVulLuck;
+		}
+	}
+}
+
+static void TinkerMediKit_BurstHeal(int rarity, TinkerEnum tinker)
+{
+	tinker.Attrib[0] = 8;
+	tinker.Attrib[1] = 41;
+	
+	tinker.CustomMode[1] = 2;
+	
+	tinker.Attrib[2] = 4002;
+	float HealRateLuck = (0.2 * (tinker.Luck[0]));
+	float CooldownRateLuck = (0.12 * (tinker.Luck[1]));
+	float OverhealLuck = (0.1 * (tinker.Luck[2]));
+
+	switch(rarity)
+	{
+		case 0:
+		{
+			tinker.Value[0] = 1.75 + HealRateLuck;
+			tinker.Value[1] = 1.75 - CooldownRateLuck;
+			tinker.Value[2] = 0.8 + OverhealLuck;
+		}
+		case 1:
+		{
+			tinker.Value[0] = 1.9 + HealRateLuck;
+			tinker.Value[1] = 1.85 - CooldownRateLuck;
+			tinker.Value[2] = 0.85 + OverhealLuck;
+		}
+		case 2:
+		{
+			tinker.Value[0] = 2.1 + HealRateLuck;
+			tinker.Value[1] = 1.95 - CooldownRateLuck;
+			tinker.Value[2] = 0.95 + OverhealLuck;
+		}
+	}
+}
+
+static void TinkerMediKit_ReserveMedicalSupplies(int rarity, TinkerEnum tinker)
+{
+	tinker.Attrib[0] = 8;
+	tinker.Attrib[1] = 41;
+	
+	tinker.CustomMode[1]=2;
+	
+	float HealRateLuck = (0.1 * (tinker.Luck[0]));
+	float CooldownRateLuck = (0.1 * (tinker.Luck[1]));
+
+	switch(rarity)
+	{
+		case 0:
+		{
+			tinker.Value[0] = 0.9 + HealRateLuck;
+			tinker.Value[1] = 0.9 - CooldownRateLuck;
+		}
+		case 1:
+		{
+			tinker.Value[0] = 0.85 + HealRateLuck;
+			tinker.Value[1] = 0.85 - CooldownRateLuck;
+		}
+		case 2:
+		{
+			tinker.Value[0] = 0.8 + HealRateLuck;
+			tinker.Value[1] = 0.8 - CooldownRateLuck;
+		}
+	}
+}
+
+static void TinkerMediKit_GlassyKit(int rarity, TinkerEnum tinker)
+{
+	tinker.Attrib[0] = 8;
+	tinker.Attrib[1] = 41;
+	tinker.Attrib[2] = 205;
+	tinker.Attrib[3] = 206;
+	
+	tinker.CustomMode[1]=2;
+
+	float HealRateLuck = (0.2 * (tinker.Luck[0]));
+	float CooldownRateLuck = (0.15 * (tinker.Luck[1]));
+	float RangedDmgVulLuck = (0.1 * (1.0 + (-1.0*(tinker.Luck[2]))));
+	float MeleeDmgVulLuck = (0.1 * (1.0 + (-1.0*(tinker.Luck[3]))));
+
+	switch(rarity)
+	{
+		case 0:
+		{
+			tinker.Value[0] = 1.05 + HealRateLuck;
+			tinker.Value[1] = 0.9 - CooldownRateLuck;
+			tinker.Value[2] = 1.05 + RangedDmgVulLuck;
+			tinker.Value[3] = 1.05 + MeleeDmgVulLuck;
+		}
+		case 1:
+		{
+			tinker.Value[0] = 1.1 + HealRateLuck;
+			tinker.Value[1] = 0.86 - CooldownRateLuck;
+			tinker.Value[2] = 1.075 + RangedDmgVulLuck;
+			tinker.Value[3] = 1.075 + MeleeDmgVulLuck;
+		}
+		case 2:
+		{
+			tinker.Value[0] = 1.15 + HealRateLuck;
+			tinker.Value[1] = 0.84 - CooldownRateLuck;
 			tinker.Value[2] = 1.10 + RangedDmgVulLuck;
 			tinker.Value[3] = 1.10 + MeleeDmgVulLuck;
 		}

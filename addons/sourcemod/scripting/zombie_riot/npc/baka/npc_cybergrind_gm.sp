@@ -1054,7 +1054,7 @@ static void CyberGrindGM_ClotThink(int iNPC)
 					if(CyberGrind_Difficulty==4)
 						NPC_CreateByName("npc_invisible_trigger_man", -1, SelfPos, AllyAng, TFTeam_Stalkers, "cybergrind_ex_hard");
 					else
-						NPC_CreateByName("npc_invisible_trigger_man", -1, SelfPos, AllyAng, TFTeam_Stalkers, "fast_building_cooldown");
+						NPC_CreateByName("npc_invisible_trigger_man", -1, SelfPos, AllyAng, TFTeam_Red, "fast_building_cooldown");
 					Spawn_Cured_Grigori();
 					//CyberGrindGM_Talk("Rebels Arrive", true);
 					/*if(CyberGrind_Difficulty!=4)

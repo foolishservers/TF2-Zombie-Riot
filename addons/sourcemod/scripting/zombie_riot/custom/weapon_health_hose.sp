@@ -79,7 +79,7 @@ public void Weapon_Health_Hose(int client, int weapon, bool crit, int slot)
 
 public void Weapon_Health_Hose_Shotgun(int client, int weapon, bool crit, int slot)
 {
-	Weapon_Hose_Shoot(client, weapon, Hose_Velocity, Hose_BaseHeal * 2.0, Hose_LossPerHit, Hose_Min, 3, 2.0, HOSE_PARTICLE, false, false);
+	Weapon_Hose_Shoot(client, weapon, Hose_Velocity, Hose_BaseHeal * 2.0, Hose_LossPerHit, Hose_Min, 3, 2.0, HOSE_PARTICLE, false, true);
 }
 
 public void Weapon_Health_Hose_GiveUber(int client, int weapon, bool crit, int slot)
@@ -89,7 +89,7 @@ public void Weapon_Health_Hose_GiveUber(int client, int weapon, bool crit, int s
 
 public void Weapon_Health_Hose_Shotgun_GiveUber(int client, int weapon, bool crit, int slot)
 {
-	Weapon_Hose_Shoot(client, weapon, crit, slot, Hose_Velocity, Hose_BaseHeal * 2.0, Hose_LossPerHit, Hose_Min, 3, 2.0, HOSE_PARTICLE, true, false);
+	Weapon_Hose_Shoot(client, weapon, Hose_Velocity, Hose_BaseHeal * 2.0, Hose_LossPerHit, Hose_Min, 3, 2.0, HOSE_PARTICLE, true, true);
 }
 
 public void Weapon_Health_Hose_Uber_Sprayer(int client, int weapon, bool crit, int slot)
@@ -312,7 +312,7 @@ static void Weapon_Hose_Shoot(int client, int weapon, float speed, float baseHea
 	}
 }
 
-static void DoAllysExlosionTraceCheck(const float pos1[3], float radius, int entity, ArrayList HitEntitiesSphereExplosionTrace)
+/*static void DoAllysExlosionTraceCheck(const float pos1[3], float radius, int entity, ArrayList HitEntitiesSphereExplosionTrace)
 {
 	DataPack packFilter = new DataPack();
 	packFilter.WriteCell(HitEntitiesSphereExplosionTrace);
@@ -320,9 +320,9 @@ static void DoAllysExlosionTraceCheck(const float pos1[3], float radius, int ent
 	TR_EnumerateEntitiesSphere(pos1, radius, PARTITION_NON_STATIC_EDICTS, TraceEntityAllyInRange, packFilter);
 
 	delete packFilter;
-}
+}*/
 
-static bool TraceEntityAllyInRange(int entity, DataPack packFilter)
+/*static bool TraceEntityAllyInRange(int entity, DataPack packFilter)
 {
 	packFilter.Reset();
 	ArrayList HitEntitiesSphereExplosionTrace = packFilter.ReadCell();
@@ -330,7 +330,7 @@ static bool TraceEntityAllyInRange(int entity, DataPack packFilter)
 	if(IsValidAlly(filterentity, entity))
 		HitEntitiesSphereExplosionTrace.Push(entity);
 	return true;
-}
+}*/
 
 //If you use SearchDamage (above), convert this timer to a void method and rename it to Cryo_DealDamage:
 public void Hose_Touch(int entity, int other)
@@ -423,7 +423,7 @@ public bool Hose_Heal(int owner, int entity, float amt, float adduber, float add
 		amt *= 1.65;
 		addarmor *= 1.65;
 	}
-		
+	
 	int HealedFor = HealEntityGlobal(owner, entity, amt, 1.0, 0.0, .AddUberCharge = adduber);	
 	if(addarmor>0.0)
 	{
