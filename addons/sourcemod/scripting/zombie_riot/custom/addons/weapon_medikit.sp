@@ -3,7 +3,7 @@
 
 public void Weapon_Medikit_M1(int client, int weapon, bool crit, int slot)
 {
-	if(Ability_Check_Cooldown(client, slot) > 0.0)
+	if(Ability_Check_Cooldown(client, slot) > 0.0 && !CvarInfiniteCash.BoolValue)
 	{
 		ClientCommand(client, "playgamesound items/medshotno1.wav");
 		SetDefaultHudPosition(client);
@@ -227,7 +227,7 @@ public void Weapon_Medikit_M1(int client, int weapon, bool crit, int slot)
 
 public void Weapon_Medikit_M2(int client, int weapon, bool crit, int slot)
 {
-	if(Ability_Check_Cooldown(client, slot) > 0.0)
+	if(Ability_Check_Cooldown(client, slot) > 0.0 && !CvarInfiniteCash.BoolValue)
 	{
 		ClientCommand(client, "playgamesound items/medshotno1.wav");
 		SetDefaultHudPosition(client);
