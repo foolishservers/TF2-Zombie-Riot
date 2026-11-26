@@ -46,7 +46,7 @@ public void Weapon_Medikit_M1(int client, int weapon, bool crit, int slot)
 	{
 		//none
 	}
-	else if(health>=(maxHealth*overheal))
+	else if(health>=RoundToCeil(float(maxHealth)*overheal))
 	{
 		ClientCommand(client, "playgamesound items/medshotno1.wav");
 		return;
@@ -242,7 +242,12 @@ public void Weapon_Medikit_M2(int client, int weapon, bool crit, int slot)
 	if(overheal < 1.0)
 		overheal = 1.0;
 	
-	if(health>=RoundToCeil(float(maxHealth)*overheal))
+	int PapNumber = RoundToCeil(Attributes_Get(weapon, Attrib_PapNumber, 1.0));
+	if(PapNumber==4||PapNumber==6||PapNumber==5||PapNumber==7)
+	{
+		//none
+	}
+	else if(health>=RoundToCeil(float(maxHealth)*overheal))
 	{
 		ClientCommand(client, "playgamesound items/medshotno1.wav");
 		return;
@@ -284,8 +289,6 @@ public void Weapon_Medikit_M2(int client, int weapon, bool crit, int slot)
 		HealEntityGlobal(client, client, healing, overheal, 0.5);
 		Health_To_Max=RoundToNearest(healing);
 	}
-	
-	int PapNumber = RoundToCeil(Attributes_Get(weapon, Attrib_PapNumber, 1.0));
 	
 	float cooldown;
 	cooldown = float(Health_To_Max) / 5.0;
