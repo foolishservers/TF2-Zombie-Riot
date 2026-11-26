@@ -242,7 +242,7 @@ public void Weapon_Medikit_M2(int client, int weapon, bool crit, int slot)
 	if(overheal < 1.0)
 		overheal = 1.0;
 	
-	if(health>=(maxHealth*overheal))
+	if(health>=RoundToCeil(float(maxHealth)*overheal))
 	{
 		ClientCommand(client, "playgamesound items/medshotno1.wav");
 		return;
