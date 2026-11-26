@@ -1264,7 +1264,7 @@
 	
 	"Medikit Healing Self"
 	{
-		"#format"	"{2:d}"
+		"#format"	"{1:d}"
 		"en"		"You Healed yourself for {1} HP!"
 		"ko"		"당신 자신의 체력을 {1} 만큼 회복했습니다!"
 	}
