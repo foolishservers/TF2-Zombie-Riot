@@ -3477,7 +3477,6 @@ static void Tinker_UberSaw_FEInverter(int rarity, TinkerEnum tinker)
 	tinker.Attrib[1] = 7;
 	tinker.Attrib[2] = 103;
 
-	tinker.CustomMode[0] = 2;
 	tinker.CustomMode[1] = 1;
 	tinker.CustomMode[2] = 1;
 	
