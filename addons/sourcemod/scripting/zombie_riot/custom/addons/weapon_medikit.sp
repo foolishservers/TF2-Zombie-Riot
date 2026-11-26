@@ -136,13 +136,13 @@ public void Weapon_Medikit_M1(int client, int weapon, bool crit, int slot)
 						mana_cost = Current_Mana[client];
 					if(mana_cost > 2000)
 						mana_cost = 2000;
+					int Max_mana = RoundToCeil((400.0*Mana_Regen_Level[target]));
+					if(mana_cost > Max_mana)
+						mana_cost = Max_mana;
 					Current_Mana[client] -= mana_cost;
 					SDKhooks_SetManaRegenDelayTime(client, 5.0);
 					
 					mana_cost = RoundToCeil(float(mana_cost)*2.0);
-					int Max_mana = RoundToCeil((400.0*Mana_Regen_Level[target]));
-					if(mana_cost > Max_mana)
-						mana_cost = Max_mana;
 					Current_Mana[target] += mana_cost;
 					cooldown = 15.0;
 				}
