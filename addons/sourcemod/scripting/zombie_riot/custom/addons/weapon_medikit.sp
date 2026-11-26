@@ -114,6 +114,22 @@ public void Weapon_Medikit_M1(int client, int weapon, bool crit, int slot)
 			ApplyStatusEffect(client, client, "Thick Blood", 5.0);
 			ApplyStatusEffect(client, target, "Fluid Movement", 5.0);
 			ApplyStatusEffect(client, client, "Fluid Movement", 5.0);
+			if(!HasSpecificBuff(target, "Black Flames") && IgniteFor[target] > 0)
+			{
+				int savelive = IgniteFor[target];
+				savelive -= 15;
+				if(savelive < 1)
+					savelive = 1;
+				IgniteFor[target]=savelive;
+			}
+			if(!HasSpecificBuff(client, "Black Flames") && IgniteFor[client] > 0)
+			{
+				int savelive = IgniteFor[client];
+				savelive -= 15;
+				if(savelive < 1)
+					savelive = 1;
+				IgniteFor[client]=savelive;
+			}
 		}
 		case 4,6://Stim Packs
 		{
@@ -311,6 +327,14 @@ public void Weapon_Medikit_M2(int client, int weapon, bool crit, int slot)
 			ApplyStatusEffect(client, client, "Healing Resolve", 5.0);
 			ApplyStatusEffect(client, client, "Thick Blood", 2.5);
 			ApplyStatusEffect(client, client, "Fluid Movement", 2.5);
+			if(!HasSpecificBuff(client, "Black Flames") && IgniteFor[client] > 0)
+			{
+				int savelive = IgniteFor[client];
+				savelive -= 15;
+				if(savelive < 1)
+					savelive = 1;
+				IgniteFor[client]=savelive;
+			}
 		}
 		case 4,6://Stim Packs
 		{

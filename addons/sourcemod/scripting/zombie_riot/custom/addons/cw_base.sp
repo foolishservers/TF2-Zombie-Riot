@@ -28,7 +28,6 @@ public void Weapon_AddonsCustom_OnMapStart()
 	/*초기화*/
 	PrecacheSoundCustom("#baka_zr/metal_pipe.mp3");
 	MajorSteam_Launcher_OnMapStart();
-	LockDown_Wand_MapStart();
 	MSword_OnMapStart();
 	GetLastManPlayer=-1;
 }

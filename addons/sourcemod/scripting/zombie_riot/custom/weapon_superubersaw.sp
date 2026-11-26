@@ -34,7 +34,7 @@ void AddHealthToUbersaw(int client, int healthvalue, float autoscale = 0.0)
 			Healing_Value = Attributes_GetOnWeapon(client, weapon, 41, true);
 			
 			if(Store_HasNamedItem(client, "Inv UberSaw Armor Booster"))
-				MaxValue*=1.5;
+				MaxValue*=1.25;
 
 			f_PercentageHealTillUbersaw[client] += ((float(healthvalue)*Healing_Value) / MaxValue);
 		}

@@ -254,6 +254,13 @@ public void Custom_Inventory_Attribute(int client, int weapon)
 		Attributes_Set(weapon, 119, 0.0);
 	if(i_CustomWeaponEquipLogic[weapon]==WEAPON_VESTAN_LAUNCHER && Inv_CompressedExplosive[client])
 		Attributes_SetMulti(weapon, 99, 1.33);
+	if(i_CustomWeaponEquipLogic[weapon]==WEAPON_SUPERUBERSAW && Store_HasNamedItem(client, "Inv UberSaw Uber Charger"))
+	{
+		Attributes_SetMulti(weapon, 9, 1.25);
+		Attributes_SetMulti(weapon, 73, 0.75);
+		Attributes_SetMulti(weapon, 7, 0.75);
+		Attributes_SetMulti(weapon, 41, 0.5);
+	}
 }
 
 public void Custom_Inventory_WaveEnd(int client)
@@ -444,7 +451,7 @@ bool Custom_Inventory_IsShotgun(int weapon, int client=-1)
 	{
 		switch(i_CustomWeaponEquipLogic[weapon])
 		{
-			case WEAPON_BOOMSTICK, WEAPON_IS_SHOTGUN, WEAPON_NAILGUN_SHOTGUN, WEAPON_ANGELIC_SHOTGUN, WEAPON_IS_AUTOSHOTGUN:return true;
+			case WEAPON_BOOMSTICK, WEAPON_IS_SHOTGUN, WEAPON_NAILGUN_SHOTGUN, WEAPON_IS_AUTOSHOTGUN:return true;
 			case WEAPON_RIOT_SHIELD:
 			{
 				if(Attributes_Has(weapon, 45))

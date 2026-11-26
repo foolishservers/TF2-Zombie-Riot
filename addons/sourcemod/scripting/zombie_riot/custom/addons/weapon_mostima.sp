@@ -58,7 +58,7 @@ public void LockDown_Enable(int client, int weapon)
 	}
 }
 
-public Action Timer_LockDown_Wand(Handle timer, DataPack pack)
+static Action Timer_LockDown_Wand(Handle timer, DataPack pack)
 {
 	pack.Reset();
 	int client = pack.ReadCell();
@@ -78,7 +78,7 @@ public Action Timer_LockDown_Wand(Handle timer, DataPack pack)
 		{
 			LockDown_Wand_Hud(client, GameTime);
 			
-			KeyofOrdered_charges_Max[client]=110*(1.0/Attributes_Get(weapon, 41, 1.0))*CooldownReductionAmount(client);
+			KeyofOrdered_charges_Max[client] = 110*(1.0/Attributes_Get(weapon, 41, 1.0))*CooldownReductionAmount(client);
 			if(KeyofOrdered_charges[client] < KeyofOrdered_charges_Max[client])KeyofOrdered_charges[client] += 0.1;
 			if(KeyofOrdered_charges[client] > KeyofOrdered_charges_Max[client])KeyofOrdered_charges[client] = KeyofOrdered_charges_Max[client];
 			if(i_Current_Pap[client]>=2 && Passive_delay[client] < GameTime)
@@ -109,7 +109,7 @@ public Action Timer_LockDown_Wand(Handle timer, DataPack pack)
 
 public void LockDown_Wand_Secondary_Attack(int client, int weapon, bool crit, int slot)
 {
-	int mana_cost = RoundToCeil(400.0*Mana_Regen_Level[client]);
+	int mana_cost = RoundToCeil(float(max_mana[client])*0.9);
 
 	if(mana_cost <= Current_Mana[client])
 	{
@@ -284,7 +284,7 @@ public void LockDown_Wand_Primary_Attack(int client, int weapon, bool crit, int 
 	}
 }
 
-public Action KeyofOrdered_Is_Back(Handle timer, int ref)
+static Action KeyofOrdered_Is_Back(Handle timer, int ref)
 {
 	int client = GetClientOfUserId(ref);
 	if(IsValidClient(client))
@@ -292,7 +292,7 @@ public Action KeyofOrdered_Is_Back(Handle timer, int ref)
 	return Plugin_Stop;
 }
 
-public Action Secondary_Is_End(Handle timer, DataPack pack)
+static Action Secondary_Is_End(Handle timer, DataPack pack)
 {
 	pack.Reset();
 	int client = GetClientOfUserId(pack.ReadCell());
@@ -310,7 +310,7 @@ public Action Secondary_Is_End(Handle timer, DataPack pack)
 	return Plugin_Stop;
 }
 
-void UGotSlowDown(int attacker, int victim, float damage, int weapon)
+static void UGotSlowDown(int attacker, int victim, float damage, int weapon)
 {
 	if(!IsValidEntity(victim) || GetTeam(victim) == TFTeam_Red)
 		return;
@@ -407,7 +407,7 @@ stock bool IsAbleToSee(int client, int target, float angle=90.0, float distance=
 	return false;
 }
 
-bool IsRectangleVisible(const float start[3], const float end[3], const float mins[3], const float maxs[3], float scale=1.0)
+stock bool IsRectangleVisible(const float start[3], const float end[3], const float mins[3], const float maxs[3], float scale=1.0)
 {
     float ZpozOffset = maxs[2];
     float ZnegOffset = mins[2];
@@ -532,7 +532,7 @@ bool IsRectangleVisible(const float start[3], const float end[3], const float mi
     return false;
 }
 
-public void Laser_Key_of_Ordered(DataPack pack)
+static void Laser_Key_of_Ordered(DataPack pack)
 {
 	pack.Reset();
 	int client = 	GetClientOfUserId(pack.ReadCell());
@@ -640,7 +640,7 @@ public void Laser_Key_of_Ordered(DataPack pack)
 	delete pack;
 }
 
-public void Key_of_Ordered_DeleteLaserAndParticle(DataPack pack)
+static void Key_of_Ordered_DeleteLaserAndParticle(DataPack pack)
 {
 	pack.Reset();
 	int Projectile = EntRefToEntIndex(pack.ReadCell());
@@ -661,7 +661,7 @@ public void Key_of_Ordered_DeleteLaserAndParticle(DataPack pack)
 	delete pack;
 }
 
-public bool TraceKey_of_Ordered(int entity, int filterentity)
+static bool TraceKey_of_Ordered(int entity, int filterentity)
 {
 	if(IsValidEnemy(filterentity, entity, true, true)) //Must detect camo.
 	{
@@ -679,19 +679,19 @@ public bool TraceKey_of_Ordered(int entity, int filterentity)
 	return true;
 }
 
-bool IsPointVisible(const float start[3], const float end[3])
+stock bool IsPointVisible(const float start[3], const float end[3])
 {
     TR_TraceRayFilter(start, end, MASK_VISIBLE, RayType_EndPoint, Filter_NoPlayers);
 
     return TR_GetFraction() == 1.0;
 }
 
-public bool Filter_NoPlayers(int entity, int contentsMask, any data)
+static bool Filter_NoPlayers(int entity, int contentsMask, any data)
 {
     return (entity > MaxClients && !(0 < GetEntPropEnt(entity, Prop_Data, "m_hOwnerEntity") <= MaxClients));
 }
 
-bool IsFwdVecVisible(const float start[3], const float angles[3], const float end[3])
+stock bool IsFwdVecVisible(const float start[3], const float angles[3], const float end[3])
 {
     float fwd[3];
     

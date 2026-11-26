@@ -95,7 +95,6 @@ enum {
 	TinkerEnchant_HH_UberBalancer,
 
 	TinkerEnchant_UberSaw_Stunner,
-	TinkerEnchant_UberSaw_UberCharger,
 	TinkerEnchant_UberSaw_FEInverter,
 	TinkerEnchant_UberSaw_LongMelee,
 	TinkerEnchant_UberSaw_HeavySmash,
@@ -399,7 +398,6 @@ static const int Enchant_Health_HoseUber[] = {
 
 static const int Enchant_Super_UberSaw[] = {
 	TinkerEnchant_UberSaw_Stunner,
-	TinkerEnchant_UberSaw_UberCharger,
 	TinkerEnchant_UberSaw_FEInverter,
 	TinkerEnchant_UberSaw_LongMelee,
 	TinkerEnchant_UberSaw_HeavySmash,
@@ -971,8 +969,6 @@ static char[] Query_GetTransList(int SelectInt) {
 
 		case TinkerEnchant_UberSaw_Stunner:
 			FormatEx(buffer, sizeof(buffer), "Tinker_UberSaw_Stunner");
-		case TinkerEnchant_UberSaw_UberCharger:
-			FormatEx(buffer, sizeof(buffer), "Tinker_UberSaw_UberCharger");
 		case TinkerEnchant_UberSaw_FEInverter:
 			FormatEx(buffer, sizeof(buffer), "Tinker_UberSaw_FEInverter");
 		case TinkerEnchant_UberSaw_LongMelee:
@@ -1426,8 +1422,6 @@ static void OnTinkerAnvilUsed(int client, int owner, int anvil, int id, TinkerEn
 
 			case TinkerEnchant_UberSaw_Stunner:
 				Tinker_UberSaw_Stunner(tinker.Rarity, tinker);
-			case TinkerEnchant_UberSaw_UberCharger:
-				Tinker_UberSaw_UberCharger(tinker.Rarity, tinker);
 			case TinkerEnchant_UberSaw_FEInverter:
 				Tinker_UberSaw_FEInverter(tinker.Rarity, tinker);
 			case TinkerEnchant_UberSaw_LongMelee:
@@ -3424,49 +3418,6 @@ static void Tinker_UberSaw_Stunner(int rarity, TinkerEnum tinker)
 			tinker.Value[0] = 1.15 + StunLuck;
 			tinker.Value[1] = 0.8 + DamageLuck;
 			tinker.Value[2] = 0.7 + KnockbackLuck;
-		}
-	}
-}
-
-static void Tinker_UberSaw_UberCharger(int rarity, TinkerEnum tinker)
-{
-	tinker.Attrib[0] = 9;
-	tinker.Attrib[1] = 73;
-	tinker.Attrib[2] = 7;	
-	tinker.Attrib[3] = 103;
-
-	tinker.CustomMode[0] = 1;
-	tinker.CustomMode[1] = 1;
-	tinker.CustomMode[2] = 1;
-	tinker.CustomMode[3] = 1;
-	
-	float UberLuck = (0.1 * (tinker.Luck[0]));
-	float StunLuck = (0.1 * (tinker.Luck[1]));
-	float DamageLuck = (0.15 * (tinker.Luck[2]));
-	float KnockbackLuck = (0.1 *(tinker.Luck[3]));
-
-	switch(rarity)
-	{
-		case 0:
-		{
-			tinker.Value[0] = 1.05 + UberLuck;
-			tinker.Value[1] = 0.9 + StunLuck;
-			tinker.Value[2] = 0.75 + DamageLuck;
-			tinker.Value[3] = 0.65 + KnockbackLuck;
-		}
-		case 1:
-		{
-			tinker.Value[0] = 1.15 + UberLuck;
-			tinker.Value[1] = 0.8 + StunLuck;
-			tinker.Value[2] = 0.8 + DamageLuck;
-			tinker.Value[3] = 0.7 + KnockbackLuck;
-		}
-		case 2:
-		{
-			tinker.Value[0] = 1.2 + UberLuck;
-			tinker.Value[1] = 0.75 + StunLuck;
-			tinker.Value[2] = 0.8 + DamageLuck;
-			tinker.Value[3] = 0.8 + KnockbackLuck;
 		}
 	}
 }
