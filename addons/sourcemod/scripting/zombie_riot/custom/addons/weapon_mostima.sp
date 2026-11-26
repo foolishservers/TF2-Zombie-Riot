@@ -109,7 +109,7 @@ static Action Timer_LockDown_Wand(Handle timer, DataPack pack)
 
 public void LockDown_Wand_Secondary_Attack(int client, int weapon, bool crit, int slot)
 {
-	int mana_cost = RoundToCeil(float(max_mana[client])*0.9);
+	int mana_cost = RoundToCeil(max_mana[client]*0.9);
 
 	if(mana_cost <= Current_Mana[client])
 	{
