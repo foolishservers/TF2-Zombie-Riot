@@ -686,7 +686,7 @@ stock bool IsPointVisible(const float start[3], const float end[3])
     return TR_GetFraction() == 1.0;
 }
 
-static bool Filter_NoPlayers(int entity, int contentsMask, any data)
+public bool Filter_NoPlayers(int entity, int contentsMask, any data)
 {
     return (entity > MaxClients && !(0 < GetEntPropEnt(entity, Prop_Data, "m_hOwnerEntity") <= MaxClients));
 }
