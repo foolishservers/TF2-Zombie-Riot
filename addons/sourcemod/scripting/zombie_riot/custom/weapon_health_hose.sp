@@ -577,6 +577,7 @@ public void Weapon_Syringe_Gun_Fire_M1(int client, int weapon, bool crit, int sl
 		Player_Laser_Logic Laser;
 		Laser.client = client;
 		Laser.weapon = weapon;
+		Laser.max_targets = 2;
 		Laser.Radius = 5.0;
 		Laser.Damage = 1.0;
 		Laser.damagetype = DMG_PLASMA;
