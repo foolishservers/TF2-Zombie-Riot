@@ -147,7 +147,7 @@ public void Weapon_Medikit_M1(int client, int weapon, bool crit, int slot)
 			{
 				if(Current_Mana[client] > 0)
 				{
-					int mana_cost = RoundToCeil((max_mana[client])*(PapNumber==7 ? 1.0 : 0.75));
+					int mana_cost = RoundToCeil(max_mana[client]*(PapNumber==7 ? 1.0 : 0.75));
 					if(mana_cost > Current_Mana[client])
 						mana_cost = Current_Mana[client];
 					if(mana_cost > 2000)
