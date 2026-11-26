@@ -155,14 +155,14 @@ public void Weapon_Medikit_M1(int client, int weapon, bool crit, int slot)
 			healing = 86.96;
 			if(target <= MaxClients)
 			{
-				float nerfcuredarmor = Attributes_GetOnWeapon(client, weapon, 8, true)/2.5;
+				float nerfcuredarmor = Attributes_GetOnWeapon(client, weapon, 8, true)/6.5;
 				if(nerfcuredarmor < 1.0)
 					nerfcuredarmor = 1.0;
 				healing *= nerfcuredarmor;
 				int Armor_Max = MaxArmorCalculation(Armor_Level[target], target, 1.0);
 				if(Armor_Charge[target]<float(Armor_Max)/2.0)
 					healing *= 1.15;
-				healing *= (PapNumber == 9 ? 1.5 : 1.22);
+				healing *= (PapNumber == 9 ? 1.25 : 1.0);
 				healing += (float(Armor_Max)*0.2);
 				
 				bool JustCuredArmor = false;
@@ -178,8 +178,11 @@ public void Weapon_Medikit_M1(int client, int weapon, bool crit, int slot)
 			}
 			else
 			{
-				healing *= Attributes_GetOnWeapon(client, weapon, 8, true);
-				healing *= (PapNumber == 9 ? 1.5 : 1.22);
+				float nerfcuredarmor = Attributes_GetOnWeapon(client, weapon, 8, true)/6.5;
+				if(nerfcuredarmor < 1.0)
+					nerfcuredarmor = 1.0;
+				healing *= nerfcuredarmor;
+				healing *= (PapNumber == 9 ? 1.25 : 1.0);
 				CClotBody npc = view_as<CClotBody>(target);
 				if(npc.m_flArmorCount<float(maxHealth)/2.0)
 					healing *= 1.22;
@@ -318,7 +321,10 @@ public void Weapon_Medikit_M2(int client, int weapon, bool crit, int slot)
 		case 8,9://Armor Pack
 		{
 			healing = 86.96;
-			healing *= Attributes_GetOnWeapon(client, weapon, 8, true);
+			float nerfcuredarmor = Attributes_GetOnWeapon(client, weapon, 8, true)/6.5;
+			if(nerfcuredarmor < 1.0)
+				nerfcuredarmor = 1.0;
+			healing *= nerfcuredarmor;
 			int Armor_Max = MaxArmorCalculation(Armor_Level[client], client, 1.0);
 			if(Armor_Charge[client]<float(Armor_Max)/2.0)
 				healing *= 1.15;
