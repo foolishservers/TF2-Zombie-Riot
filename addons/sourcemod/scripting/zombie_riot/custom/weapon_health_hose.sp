@@ -1,14 +1,16 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-static float Hose_Velocity = 1000.0;
-static float Hose_BaseHeal = 3.0;
-static float Hose_UberGain = 0.0150;
-static float Hose_UberTime = 6.0;
-static float Hose_ShotgunChargeMult = 3.0;
-static float SelfHealMult = 0.33;
-static float Hose_LossPerHit = 2.0;
-static float Hose_Min = 1.0;
+static int iMedigunID[MAXPLAYERS + 1] = {-1, ...};
+
+#define Hose_Velocity	1000.0
+#define Hose_BaseHeal	3.0
+#define Hose_UberGain	0.0150
+#define Hose_UberTime	6.0
+#define Hose_ShotgunChargeMult	3.0
+#define SelfHealMult	0.33
+#define Hose_LossPerHit	2.0
+#define Hose_Min	1.0
 
 static float Hose_Healing[MAXENTITIES] = { 0.0, ... };
 static float Hose_HealLoss[MAXENTITIES] = { 0.0, ... };
@@ -19,6 +21,7 @@ static float Hose_Uber[MAXPLAYERS + 1] = { 0.0, ... };
 static float Hose_NextHealSound[MAXPLAYERS + 1] = { 0.0, ... };
 static bool Hose_Charged[MAXPLAYERS + 1] = { false, ... };
 static bool Hose_ShotgunCharge[MAXPLAYERS + 1] = { false, ... };
+static int Hose_Homing;
 
 #define SOUND_HOSE_UBER_END		"player/invuln_off_vaccinator.wav"
 #define SOUND_HOSE_UBER_ACTIVATE	"player/invuln_on_vaccinator.wav"
@@ -35,6 +38,28 @@ static bool Hose_ShotgunCharge[MAXPLAYERS + 1] = { false, ... };
 
 #define PLACE_MEDKIT		"weapons/fx/rics/arrow_impact_crossbow_heal.wav"
 
+public void ResetMapStartMedigun()
+{
+	Zero(iMedigunID);
+}
+
+public void SetUpMedigun(int client, int weapon)
+{
+	if(IsValidEntity(weapon))
+		iMedigunID[client]=EntIndexToEntRef(weapon);
+}
+
+public int IsValidMedigun(int client)
+{
+	int iMedigun = EntRefToEntIndex(iMedigunID[client]);
+	if(!IsValidEntity(iMedigun))
+		return -1;
+	char classname[64];
+	if(GetEntityClassname(iMedigun, classname, sizeof(classname)) && StrContains(classname, "tf_weapon_medigun") != -1)
+		return iMedigun;
+	return -1;
+}
+
 void Weapon_Hose_Precache()
 {
 	PrecacheSound(SOUND_HOSE_HEALED);
@@ -49,22 +74,22 @@ void Weapon_Hose_Precache()
 
 public void Weapon_Health_Hose(int client, int weapon, bool crit, int slot)
 {
-	Weapon_Hose_Shoot(client, weapon, crit, slot, Hose_Velocity, Hose_BaseHeal, Hose_LossPerHit, Hose_Min, 1, 1.0, HOSE_PARTICLE, false);
+	Weapon_Hose_Shoot(client, weapon, Hose_Velocity, Hose_BaseHeal, Hose_LossPerHit, Hose_Min, 1, 1.0, HOSE_PARTICLE, false, true);
 }
 
 public void Weapon_Health_Hose_Shotgun(int client, int weapon, bool crit, int slot)
 {
-	Weapon_Hose_Shoot(client, weapon, crit, slot, Hose_Velocity, Hose_BaseHeal * 2.0, Hose_LossPerHit, Hose_Min, 3, 2.0, HOSE_PARTICLE, false);
+	Weapon_Hose_Shoot(client, weapon, Hose_Velocity, Hose_BaseHeal * 2.0, Hose_LossPerHit, Hose_Min, 3, 2.0, HOSE_PARTICLE, false, true);
 }
 
 public void Weapon_Health_Hose_GiveUber(int client, int weapon, bool crit, int slot)
 {
-	Weapon_Hose_Shoot(client, weapon, crit, slot, Hose_Velocity, Hose_BaseHeal, Hose_LossPerHit, Hose_Min, 1, 1.0, HOSE_PARTICLE, true);
+	Weapon_Hose_Shoot(client, weapon, Hose_Velocity, Hose_BaseHeal, Hose_LossPerHit, Hose_Min, 1, 1.0, HOSE_PARTICLE, true, true);
 }
 
 public void Weapon_Health_Hose_Shotgun_GiveUber(int client, int weapon, bool crit, int slot)
 {
-	Weapon_Hose_Shoot(client, weapon, crit, slot, Hose_Velocity, Hose_BaseHeal * 2.0, Hose_LossPerHit, Hose_Min, 3, 2.0, HOSE_PARTICLE, true);
+	Weapon_Hose_Shoot(client, weapon, Hose_Velocity, Hose_BaseHeal * 2.0, Hose_LossPerHit, Hose_Min, 3, 2.0, HOSE_PARTICLE, true, true);
 }
 
 public void Weapon_Health_Hose_Uber_Sprayer(int client, int weapon, bool crit, int slot)
@@ -79,7 +104,8 @@ public void Weapon_Health_Hose_Uber_Sprayer(int client, int weapon, bool crit, i
 		Hose_Uber[client] = 0.0;
 		Hose_Charged[client] = true;
 		
-		float dur = Hose_UberTime + Attributes_GetOnPlayer(client, 314, true, true,0.0);
+		float dur = Attributes_GetOnPlayer(client, 314, true, true,0.0)-1.0;
+		dur += Hose_UberTime;
 		EmitSoundToClient(client, SOUND_HOSE_UBER_ACTIVATE, _, _, 120);
 		
 		CreateTimer(dur, Hose_RemoveUber, GetClientUserId(client), TIMER_FLAG_NO_MAPCHANGE);
@@ -105,7 +131,8 @@ public void Weapon_Health_Hose_Uber_Shotgun(int client, int weapon, bool crit, i
 		Hose_Charged[client] = true;
 		Hose_ShotgunCharge[client] = true;
 		
-		float dur = Hose_UberTime + Attributes_GetOnPlayer(client, 314, true, true,0.0);
+		float dur = Attributes_GetOnPlayer(client, 314, true, true,0.0)-1.0;
+		dur += Hose_UberTime;
 		EmitSoundToClient(client, SOUND_HOSE_UBER_ACTIVATE, _, _, 120);
 		
 		CreateTimer(dur, Hose_RemoveUber, GetClientUserId(client), TIMER_FLAG_NO_MAPCHANGE);
@@ -115,6 +142,17 @@ public void Weapon_Health_Hose_Uber_Shotgun(int client, int weapon, bool crit, i
 		Hose_UpdateText(client);
 	}
 }
+
+/*public void Weapon_Health_Hose_Reload(int client, int weapon, bool crit, int slot)
+{
+	SetEntProp(weapon, Prop_Send, "m_nKillComboCount",
+	GetEntProp(weapon, Prop_Send, "m_nKillComboCount") ? 0 : 1);
+	//ClientCommand(client, "playgamesound weapons/vaccinator_toggle.wav");
+	if(GetEntProp(weapon, Prop_Send, "m_nKillComboCount"))
+		ClientCommand(client, "playgamesound misc/halloween/spelltick_01.wav");
+	else
+		ClientCommand(client, "playgamesound misc/halloween/spelltick_02.wav");
+}*/
 
 public Action Hose_RemoveUber(Handle remove, int id)
 {
@@ -131,15 +169,13 @@ public Action Hose_RemoveUber(Handle remove, int id)
 	return Plugin_Stop;
 }
 
-public void Weapon_Hose_Shoot(int client, int weapon, bool crit, int slot, float speed, float baseHeal, float loss, float minHeal, int NumParticles, float spread, char ParticleName[255], bool giveUber)
+static void Weapon_Hose_Shoot(int client, int weapon, float speed, float baseHeal, float loss, float minHeal, int NumParticles, float spread, char ParticleName[255], bool giveUber, bool Assist)
 {
 	float healmult = 1.0;
 	healmult = Attributes_GetOnWeapon(client, weapon, 8, true);
 
-	if (Hose_ShotgunCharge[client])
-	{
+	if(Hose_ShotgunCharge[client])
 		healmult *= Hose_ShotgunChargeMult;
-	}
 		
 	speed *= Attributes_Get(weapon, 103, 1.0);
 		
@@ -147,20 +183,23 @@ public void Weapon_Hose_Shoot(int client, int weapon, bool crit, int slot, float
 
 	speed *= Attributes_Get(weapon, 475, 1.0);
 	
-		
 	float FinalHeal = baseHeal * healmult;
-		
+	float AddArmor = 0.4 * healmult;
+	
+	if(Store_HasNamedItem(client, "Inv Iron Skin Injection"))
+		FinalHeal *= 0.66;
+	else
+		AddArmor *= 0.0;
 	float Angles[3];
 
-	for (int i = 0; i < NumParticles; i++)
+	for(int i = 0; i < NumParticles; i++)
 	{
 		GetClientEyeAngles(client, Angles);
-			
-		for (int j = 0; j < 3; j++)
-		{
+		
+		for(int j = 0; j < 3; j++){
 			Angles[j] += GetRandomFloat(-spread, spread);
 		}
-			
+		
 		//This spawns the projectile, this is a return int, if you want, you can do extra stuff with it, otherwise, it can be used as a void.
 		int projectile = Wand_Projectile_Spawn(client, speed, 1.66, 0.0, 19, weapon, Hose_Charged[client] ? HOSE_PARTICLE_CHARGED : ParticleName, Angles);
 
@@ -171,6 +210,9 @@ public void Weapon_Hose_Shoot(int client, int weapon, bool crit, int slot, float
 		Hose_HealMin[projectile] = minHeal;
 		Hose_Owner[projectile] = GetClientUserId(client);
 		Hose_GiveUber[projectile] = giveUber && !Hose_Charged[client];
+		fl_Dead_Ringer_Invis[projectile]=Attributes_GetOnWeapon(client, weapon, Attrib_AddUberChargeOnHeal, true);
+		fl_Charge_delay[projectile]=Hose_UberGain*Attributes_GetOnWeapon(client, weapon, 9, true);
+		fl_Charge_Duration[projectile] = AddArmor;
 
 		//Remove unused hook.
 		//SDKUnhook(projectile, SDKHook_StartTouch, Wand_Base_StartTouch);
@@ -181,13 +223,114 @@ public void Weapon_Hose_Shoot(int client, int weapon, bool crit, int slot, float
 		SetEntityGravity(projectile, 0.2);
 		//allow self hitting,
 		b_NpcIsTeamkiller[projectile] = true;
+		if(Assist)
+		{
+			float eyePos[3];
+			GetClientEyePosition(client, eyePos);
+			GetClientEyeAngles(client, Angles);
+			Hose_Homing=-1;
+		//	if(GetEntProp(weapon, Prop_Send, "m_nKillComboCount"))
+		//	{
+			Player_Laser_Logic Laser;
+			Laser.client = client;
+			Laser.max_targets = 1;
+			Laser.Radius = 3.8;
+			Laser.Damage = 0.0;
+			Laser.damagetype = DMG_PLASMA;
+			Laser.DoForwardTrace_Basic();
+			Laser.Detect_Targets(PlayerLaserDoHoming, RayCastTraceAllys);
+		//	}
+		//	else
+		//	{
+		/* 		ArrayList HitEntitiesSphereExplosionTrace = new ArrayList();
+				DoAllysExlosionTraceCheck(eyePos, AutoHomingRange, client, HitEntitiesSphereExplosionTrace);
+				int length = HitEntitiesSphereExplosionTrace.Length;
+				if(length > 0)
+				{
+					static float distance[MAXENTITIES];
+					static float VicPos[MAXENTITIES][3];
+					for(int ii = length - 1; ii >= 0; ii--)
+					{
+						int entity_traced = HitEntitiesSphereExplosionTrace.Get(ii);
+						
+						WorldSpaceCenter(entity_traced, VicPos[entity_traced]);
+						distance[entity_traced] = GetVectorDistance(VicPos[entity_traced], eyePos, true);
+						if(distance[entity_traced] > (AutoHomingRange * AutoHomingRange) || client==entity_traced)
+						{
+							HitEntitiesSphereExplosionTrace.Erase(ii);
+							continue;
+						}
+					}
+				}
+
+				length = HitEntitiesSphereExplosionTrace.Length;
+				if(length > 0)
+				{
+					float ClosestLowHp;
+					int LowHpIndex;
+					for(int ii = 0; ii < length; ii++)
+					{
+						int entity_traced = HitEntitiesSphereExplosionTrace.Get(ii);
+						float HPer = float(GetEntProp(entity_traced, Prop_Data, "m_iHealth"))/float(ReturnEntityMaxHealth(entity_traced));
+						if(ClosestLowHp) 
+						{
+							if(HPer < ClosestLowHp) 
+							{
+								LowHpIndex = ii; 
+								ClosestLowHp = HPer;  
+							}
+						} 
+						else 
+						{
+							LowHpIndex = ii; 
+							ClosestLowHp = HPer;
+						}
+					}
+					Hose_Homing = HitEntitiesSphereExplosionTrace.Get(LowHpIndex);
+					delete HitEntitiesSphereExplosionTrace;
+				}
+			} */
+			
+			if(IsValidAlly(client, Hose_Homing))
+			{
+				GetEntPropVector(projectile, Prop_Send, "m_angRotation", Angles);
+				Initiate_HomingProjectile(projectile,
+					client,
+					120.0,
+					4.0,
+					true,
+					false,
+					Angles,
+					Hose_Homing);
+			}
+		}
 	}
 	
-	if (Hose_ShotgunCharge[client])
+	if(Hose_ShotgunCharge[client])
 	{
 		EmitSoundToClient(client, SOUND_SHOOT_SHOTCHARGE, _, _, _, _, _, GetRandomInt(80, 110));
 	}
 }
+
+/*static void DoAllysExlosionTraceCheck(const float pos1[3], float radius, int entity, ArrayList HitEntitiesSphereExplosionTrace)
+{
+	DataPack packFilter = new DataPack();
+	packFilter.WriteCell(HitEntitiesSphereExplosionTrace);
+	packFilter.WriteCell(entity);
+	TR_EnumerateEntitiesSphere(pos1, radius, PARTITION_NON_STATIC_EDICTS, TraceEntityAllyInRange, packFilter);
+
+	delete packFilter;
+}*/
+
+/*static bool TraceEntityAllyInRange(int entity, DataPack packFilter)
+{
+	packFilter.Reset();
+	ArrayList HitEntitiesSphereExplosionTrace = packFilter.ReadCell();
+	int filterentity = packFilter.ReadCell();
+	if(IsValidAlly(filterentity, entity))
+		HitEntitiesSphereExplosionTrace.Push(entity);
+	return true;
+}*/
 
 //If you use SearchDamage (above), convert this timer to a void method and rename it to Cryo_DealDamage:
 public void Hose_Touch(int entity, int other)
@@ -221,7 +364,7 @@ public void Hose_Touch(int entity, int other)
 
 	if (IsValidAlly(other, owner))	
 	{	
-		if(!Hose_Heal(owner, other, Hose_Healing[entity]))
+		if(!Hose_Heal(owner, other, Hose_Healing[entity], fl_Dead_Ringer_Invis[entity], fl_Charge_Duration[entity]))
 		{
 			return;
 		}
@@ -243,7 +386,7 @@ public void Hose_Touch(int entity, int other)
 			
 			if (!Hose_Charged[owner] && Hose_Uber[owner] < 1.0)
 			{
-				Hose_Uber[owner] += Hose_UberGain;
+				Hose_Uber[owner] += fl_Charge_delay[entity];
 				if (Hose_Uber[owner] >= 1.0)
 				{
 					Hose_Uber[owner] = 1.0;
@@ -260,7 +403,7 @@ public void Hose_Touch(int entity, int other)
 	}
 }
 
-public bool Hose_Heal(int owner, int entity, float amt)
+public bool Hose_Heal(int owner, int entity, float amt, float adduber, float addarmor)
 {
 	//prevent healing downed enemies
 	if(entity <= MaxClients && (TeutonType[entity] != TEUTON_NONE || dieingstate[entity] != 0))
@@ -270,6 +413,7 @@ public bool Hose_Heal(int owner, int entity, float amt)
 	if (f_TimeUntillNormalHeal[entity] > GetGameTime())
 	{
 		amt *= 0.35;
+		addarmor *= 0.35;
 	}
 	
 	float flMaxHealth = float(ReturnEntityMaxHealth(entity));
@@ -277,14 +421,40 @@ public bool Hose_Heal(int owner, int entity, float amt)
 	if(flHealth <= flMaxHealth * 0.5)
 	{
 		amt *= 1.65;
+		addarmor *= 1.65;
 	}
-		
-	int HealedFor = HealEntityGlobal(owner, entity, amt, 1.0, 0.0);	
+	
+	int HealedFor = HealEntityGlobal(owner, entity, amt, 1.0, 0.0, .AddUberCharge = adduber);	
+	if(addarmor>0.0)
+	{
+		if(entity <= MaxClients)
+		{
+			bool JustCuredArmor = false;
+			if(Armor_Charge[entity] < 0)
+			{
+				JustCuredArmor = true;
+				addarmor *= 4.0;
+			}
+			GiveArmorViaPercentage(entity, addarmor, 1.0, true,_,owner);
+
+			if(JustCuredArmor && Armor_Charge[entity] > 0)
+			{
+				Armor_Charge[entity] = 0;
+			}
+
+		}
+		else
+		{
+			addarmor *= 1.5;
+			GrantEntityArmor(entity, false, 0.25, 0.25, 0,
+				addarmor, owner);
+		}
+	}
 
 	if(HealedFor <= 0)
 		return false;
 	//fail, did not heal, do nothing. dont allow self heal either.
-
+	
 	if(flHealth <= flMaxHealth * 0.5)
 	{
 		bool PlaySound = false;
@@ -301,24 +471,36 @@ public bool Hose_Heal(int owner, int entity, float amt)
 
 public void Hose_UpdateText(int owner)
 {
-	if (!IsValidClient(owner))
+	if(!IsValidClient(owner))
 		return;
-		
+	SetGlobalTransTarget(owner);
 	if (Hose_Charged[owner])
 	{
-		PrintHintText(owner, "[충전 발동중]");
+		PrintHintText(owner, "[%t]", "Health Hose Charged In");
 	}
 	else if (Hose_Uber[owner] >= 1.0)
 	{
-		PrintHintText(owner, "[충전 준비됨! 보조 발사 버튼으로 사용하세요!]");
+		PrintHintText(owner, "[%t]", "Health Hose Charged Ready");
 	}
 	else
 	{
-		PrintHintText(owner, "[충전: %.2f]", Hose_Uber[owner]);
+		PrintHintText(owner, "[%t %.1f％]", "Health Hose Charged", Hose_Uber[owner]*100.0);
 	}
 }
 
-
+public void Weapon_Crusader_Crossbow_Deploy(int client, int weapon)
+{
+	float Attrib = Attributes_GetOnWeapon(client, weapon, 391, true);
+	if(Attrib>1.0)
+	{
+		if(Ability_Check_Cooldown(client, 2) > 0.0 && !CvarInfiniteCash.BoolValue)
+			return;
+			
+		ApplyTempAttrib(weapon, 8, Attrib, 4.0);
+		
+		Ability_Apply_Cooldown(client, 2, Attributes_GetOnWeapon(client, weapon, 401, true));
+	}
+}
 
 //Syringe gun Pap Stuff
 public void Weapon_Syringe_Gun_Fire_M2(int client, int weapon, bool crit, int slot)
@@ -362,7 +544,8 @@ public void Weapon_Syringe_Gun_Fire_M2(int client, int weapon, bool crit, int sl
 		}
 		else
 		{
-			Ability_Apply_Cooldown(client, slot, 60.0); //Semi long cooldown, this is a strong buff.
+			float flCooldown = 60.0*Attributes_GetOnWeapon(client, weapon, Attrib_MediBag, true);
+			Ability_Apply_Cooldown(client, slot, flCooldown); //Semi long cooldown, this is a strong buff.
 		}
 		EmitSoundToAll(PLACE_MEDKIT, client, SNDCHAN_STATIC, 90, _, 0.6);
 		int color[4];
@@ -389,11 +572,31 @@ public void Weapon_Syringe_Gun_Fire_M1(int client, int weapon, bool crit, int sl
 	
 	GetClientEyePosition(client, eyePos);
 	GetClientEyeAngles(client, eyeAng);
-
+	if(Store_HasNamedItem(client, "Inv Crusader 9000"))
+	{
+		Player_Laser_Logic Laser;
+		Laser.client = client;
+		Laser.weapon = weapon;
+		Laser.max_targets = 2;
+		Laser.Radius = 5.0;
+		Laser.Damage = 1.0;
+		Laser.damagetype = DMG_PLASMA;
+		Laser.DoForwardTrace_Basic();
+		Laser.Detect_Targets(PlayerLaserDoHealCombined, RayCastTraceAllys);
+		if(Laser.trace_hit_enemy)
+		{
+			ClientCommand(client, "playgamesound items/smallmedkit1.wav");
+			ApplyStatusEffect(client, client, "Healing Resolve", 5.0);
+		}
+		Offset_Vector({0.0, -8.0, -10.0}, Laser.Angles, Laser.Start_Point);
+		int color[4] = {255, 0, 0, 60};
+		DoPlayerLaserEffectsSmall(Laser, color);
+		return;
+	}
 	b_LagCompNPC_No_Layers = true;
 	StartPlayerOnlyLagComp(client, true);
 	Handle trace = TR_TraceRayFilterEx(eyePos, eyeAng, MASK_SOLID, RayType_Infinite, Syringe_Shot_BulletAndMeleeTraceAlly,client);
-				
+	
 	int target = TR_GetEntityIndex(trace);	
 	EndPlayerOnlyLagComp(client);
 	if(IsValidAlly(client, target))
@@ -427,20 +630,19 @@ public void Weapon_Syringe_Gun_Fire_M1(int client, int weapon, bool crit, int sl
 		{
 			HealAmmount = float(Health_To_Max);
 		}
-
-		int HealedFor = HealEntityGlobal(client, target, HealAmmount, 1.15, 1.0, _);
+		
+		HealEntityGlobal(client, target, HealAmmount, 1.15, 1.0, .AddUberCharge = Attributes_GetOnWeapon(client, weapon, Attrib_AddUberChargeOnHeal, true));
 		
 		ClientCommand(client, "playgamesound items/smallmedkit1.wav");
 
 		if(target <= MaxClients)
 			ClientCommand(target, "playgamesound items/smallmedkit1.wav");
 
-		SetGlobalTransTarget(client);
-		if(target <= MaxClients)
-			PrintHintText(client, "%t", "You healed for", target, HealedFor);
+		//SetGlobalTransTarget(client);
+		//if(target <= MaxClients)
+		//	PrintHintText(client, "%t", "You healed for", target, HealedFor);
 
-		
-		ApplyStatusEffect(client, client, "Healing Resolve", 5.0);
+		ApplyStatusEffect(client, target, "Healing Resolve", 5.0);
 		ApplyStatusEffect(client, client, "Healing Resolve", 5.0);
 		static float belowBossEyes[3];
 		belowBossEyes[0] = 0.0;
@@ -467,6 +669,53 @@ public void Weapon_Syringe_Gun_Fire_M1(int client, int weapon, bool crit, int sl
 		} 
 	}
 	delete trace;
+}
+
+static void PlayerLaserDoHealCombined(int client, int victim, int damagetype, float &damage)
+{
+	if(IsValidAlly(client, victim))
+	{
+		int weapon = GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon");
+		float HealAmmount = 17.65;
+		if(GetEntPropFloat(weapon, Prop_Send, "m_flChargedDamage") >= 149.0)
+			HealAmmount *= 3.0;
+
+		HealAmmount *= Attributes_GetOnWeapon(client, weapon, 8, true);
+
+		if(f_TimeUntillNormalHeal[victim] > GetGameTime())
+			HealAmmount *= 0.25;
+		
+		float flHealth = float(GetEntProp(victim, Prop_Data, "m_iHealth"));
+		float flMaxHealth;
+		
+		flMaxHealth = float(ReturnEntityMaxHealth(victim));
+
+		flMaxHealth *= 1.15;
+		
+		int Health_To_Max;
+		
+		Health_To_Max = RoundToNearest(flMaxHealth) - RoundToNearest(flHealth);
+
+		if(Health_To_Max < RoundToCeil(HealAmmount))
+			HealAmmount = float(Health_To_Max);
+		
+		if(damage<0.0)
+			damage=0.0;
+		
+		HealEntityGlobal(client, victim, HealAmmount*damage, 1.15, 1.0, .AddUberCharge = Attributes_GetOnWeapon(client, weapon, Attrib_AddUberChargeOnHeal, true));
+		if(victim <= MaxClients)
+			ClientCommand(victim, "playgamesound items/smallmedkit1.wav");
+		
+		ApplyStatusEffect(client, victim, "Healing Resolve", 5.0);
+		
+		damage *= 0.5;
+	}
+}
+
+static void PlayerLaserDoHoming(int client, int victim, int damagetype, float &damage)
+{
+	if(IsValidAlly(client, victim))
+		Hose_Homing = victim;
 }
 
 public bool Syringe_Shot_BulletAndMeleeTraceAlly(int entity, int contentsMask, any iExclude)

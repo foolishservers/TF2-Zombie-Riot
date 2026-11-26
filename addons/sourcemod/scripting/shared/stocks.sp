@@ -1387,7 +1387,8 @@ stock int HealEntityGlobal(int healer,
     float HealOverThisDuration = 0.0,
 	 int flag_extrarules = HEAL_NO_RULES,
 	  int MaxHealPermitted = 99999999,
-	  float &HealPenalty = 1.0)
+	  float &HealPenalty = 1.0,
+	  float AddUberCharge = 0.0)
 {
 	if(receiver <= 0)
 		return 0;
@@ -1508,6 +1509,18 @@ stock int HealEntityGlobal(int healer,
 						AddHealthToUbersaw(healer, HealingDoneInt, 0.0);
 						HealPointToReinforce(healer, HealingDoneInt, 0.0);
 						GiveRageOnDamage(healer, float(HealingDoneInt) * 2.0);
+						if(AddUberCharge)
+						{
+							int iMedigun = IsValidMedigun(healer);
+							if(IsValidEntity(iMedigun))
+							{
+								float flChargeLevel = GetEntPropFloat(iMedigun, Prop_Send, "m_flChargeLevel");
+								flChargeLevel += ((float(HealingDoneInt)*AddUberCharge)/MedigunGetUberDuration(healer))/100.0;
+								if(flChargeLevel > 1.0)
+									flChargeLevel = 1.0;
+								SetEntPropFloat(iMedigun, Prop_Send, "m_flChargeLevel", flChargeLevel);
+							}
+						}
 					}
 				}
 			}
@@ -1530,8 +1543,9 @@ stock int HealEntityGlobal(int healer,
 			pack.WriteCell(0);
 		pack.WriteCell(EntIndexToEntRef(receiver));
 		pack.WriteFloat(HealTotal / HealTotalTimer);
+		pack.WriteFloat(AddUberCharge);
 		pack.WriteCell(Maxhealth);
-		pack.WriteCell(RoundToNearest(HealTotalTimer));		
+		pack.WriteCell(RoundToNearest(HealTotalTimer));
 		return 0; //this is a timer, we cant really quantify this.
 	}
 }
@@ -1582,6 +1596,7 @@ public Action Timer_Healing(Handle timer, DataPack pack)
 	}
 	// Our Current Health + Leftover Float Health + New Health Gained
 	float HealthToGive = pack.ReadFloat();
+	float AddUberCharge = pack.ReadFloat();
 	float HealthMaxPercentage = pack.ReadCell();
 	int HealthHealed = HealEntityViaFloat(entity, HealthToGive, HealthMaxPercentage);
 	if(HealthHealed > 0)
@@ -1596,6 +1611,18 @@ public Action Timer_Healing(Handle timer, DataPack pack)
 				AddHealthToUbersaw(healer, HealthHealed, 0.0);
 				HealPointToReinforce(healer, HealthHealed, 0.0);
 				GiveRageOnDamage(healer, float(HealthHealed) * 2.0);
+				if(AddUberCharge>0.0)
+				{
+					int iMedigun = IsValidMedigun(healer);
+					if(IsValidEntity(iMedigun))
+					{
+						float flChargeLevel = GetEntPropFloat(iMedigun, Prop_Send, "m_flChargeLevel");
+						flChargeLevel += ((float(HealthHealed)*AddUberCharge)/MedigunGetUberDuration(healer))/100.0;
+						if(flChargeLevel > 1.0)
+							flChargeLevel = 1.0;
+						SetEntPropFloat(iMedigun, Prop_Send, "m_flChargeLevel", flChargeLevel);
+					}
+				}
 			}
 #endif
 		}

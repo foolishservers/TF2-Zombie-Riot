@@ -750,6 +750,11 @@
 		"ru"		"Старая Доска"
 		"ko"		"낡은 나무 방패"
 	}
+	"Messenger's Launcher"
+	{
+		"en"		"Messenger's Launcher"
+		"ko"		"메신저의 발사기"
+	}
 	"Angered Messenger's Launcher"
 	{
 		"en"		"Angered Messenger's Launcher"

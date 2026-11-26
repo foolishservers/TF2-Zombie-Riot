@@ -88,6 +88,9 @@ enum
 	
 	Attrib_FlamethrowerDamageBonus = 5008,
 	
+	Attrib_AddUberChargeOnHeal = 5009,
+	
+	Attrib_MediBag = 5010,
 };
 
 StringMap WeaponAttributes[MAXENTITIES + 1];

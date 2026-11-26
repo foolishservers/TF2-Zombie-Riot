@@ -1787,7 +1787,7 @@ public MRESReturn OnHealingBoltImpactTeamPlayer(int healingBolt, Handle hParams)
 	}
 	else
 	{
-		HealEntityGlobal(owner, target, HealAmmount, 1.0, 1.0, _);
+		HealEntityGlobal(owner, target, HealAmmount, 1.0, 1.0, .AddUberCharge = Attributes_GetOnWeapon(owner, originalLauncher, Attrib_AddUberChargeOnHeal, true));
 		
 		ClientCommand(owner, "playgamesound items/smallmedkit1.wav");
 		ClientCommand(target, "playgamesound items/smallmedkit1.wav");

@@ -3,7 +3,13 @@
 만약 *특별한* 기능을 제작할 예정이면
 
 행운을 빕니다.
+
+
+ps. 이제 컨픽 선에서 거의 완벽하게 펑션을 연결 할 수 있어서 이 파일은 유물이 되었습니다.
+
+여전히 lms 사운드 및 효과를 설정할 수 있습니다.
 */
+
 static int GetLastManPlayer;
 
 stock int CWPlayer_Lastman(int client = -1)
@@ -22,7 +28,6 @@ public void Weapon_AddonsCustom_OnMapStart()
 	/*초기화*/
 	PrecacheSoundCustom("#baka_zr/metal_pipe.mp3");
 	MajorSteam_Launcher_OnMapStart();
-	LockDown_Wand_MapStart();
 	MSword_OnMapStart();
 	GetLastManPlayer=-1;
 }

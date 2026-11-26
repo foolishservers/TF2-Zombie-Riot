@@ -289,12 +289,12 @@
 		"en"	"You cannot be revived by another person.\nNormally, no one would equip this."
 		"ko"	"다른 이에게 소생 받을 수 없습니다.\n보통은 이걸 장착하는 사람은 없을껍니다.."
 	}
-	"Grigori's Special Antidote"
+	"Inv Grigori's Special Atropine"
 	{
-		"en"	"Grigori's Special Antidote"
-		"ko"	"그리고리의 특별 해독제"
+		"en"	"Grigori's Special Atropine"
+		"ko"	"그리고리의 특별 아드로핀"
 	}
-	"Inv Grigori's Special Antidote desc"
+	"Inv Grigori's Special Atropine desc"
 	{
 		"en"	"Grigori Now Aggressively.\nIt will only be applied if the person who purchased his ammunition is equipped."
 		"ko"	"그리고리가 공격적으로 행동합니다.\n그의 탄약을 구매한 본인이 장착 해야합니다."
@@ -306,7 +306,7 @@
 	}
 	"Inv Super Focus Lens desc"
 	{
-		"en"	"Lasering Beamstick Only\nDamage increases by +1000％\nInstead, it becomes Single Laser\Laser Dist -75％, Laser Range -50％"
+		"en"	"Lasering Beamstick Only\nDamage increases by +1000％\nInstead, it becomes Single Laser\nLaser Dist -75％, Laser Range -50％"
 		"ko"	"레이저 빔스틱 전용\n피해량이 10배 증가합니다.\n대신 레이져는 직선으로 하나만 발사됩니다.\n사거리 -75％, 범위 -50％"
 	}
 	"Barricade Stabilizer"
@@ -331,7 +331,7 @@
 	}
 	"Inv Experimental Reactor desc"
 	{
-		"en"	"Heavy Particle Rifle Only\nDamage increases by +1000％\nInstead, it becomes Single Laser\Laser Dist -50％, Laser Range -50％"
+		"en"	"Heavy Particle Rifle Only\nAmmo required to reach the maximum -25％\nIncreased damage based on charge level +35％\ndamage -65％"
 		"ko"	"중입자 소총 전용\n최대치 도달에 필요한 탄약수 -25％\n충전량에 따른 피해량 증가 +35％\n피해량 -65％"
 	}
 	"Sticky Full Burst"
@@ -393,6 +393,36 @@
 	{
 		"en"	"The Commander Kit Only\nBarracks units’ max HP increases by 15％ and Barracks units Overheal by 50％\nResource Regen increase by 15％"
 		"ko"	"지휘관 킷 전용\n배럭 유닛 최대 체력 15％ 증가, 배럭 유닛은 50％ 과치료되서 나옵니다\n자원 수급량 15％ 증가"
+	}
+	"Inv Crusader 9000"
+	{
+		"en"	"Crusader 9000"
+		"ko"	"십자군 9000"
+	}
+	"Inv Crusader 9000 desc"
+	{
+		"en"	"Hitscan changed to Laserbeam, now capable of healing up to Two targets\nHealing rate slightly reduced"
+		"ko"	"히트 스캔이 레이저 형식으로 변경, 최대 2 명을 치료할 수 있게 됨\n힐량 소폭 감소"
+	}
+	"Inv Iron Skin Injection"
+	{
+		"en"	"Iron Skin Injection"
+		"ko"	"철 피부 주사기"
+	}
+	"Inv Iron Skin Injection desc"
+	{
+		"en"	"On Hit, Charges Armor of the healed target\nHealing rate reduced"
+		"ko"	"적중시, 치료된 대상의 아머를 충전함\n힐량 감소"
+	}
+	"Inv UberSaw Armor Booster"
+	{
+		"en"	"Armor Booster"
+		"ko"	"아머 부스터"
+	}
+	"Inv UberSaw Armor Booster desc"
+	{
+		"en"	"On FullCharge Melee Hit, Gain Armor\nCharge Speed and damage Reduction"
+		"ko"	"완충 적중시, 아머 흭득\n충전 속도및 피해량 감소"
 	}
 	
 	//인벤토리 첼린지
@@ -630,6 +660,18 @@
 		"en"	""
 		"ko"	"이 효과를 받는 적은 특수한 버프를 받을 수 있습니다."
 	}
+	"Battle StimPacks"
+	{
+		"en"	"StimPacks"
+		"ko"	"각성제"
+	}
+	"Battle StimPacks Desc"
+	{
+		"en"	"Decreases damage taken by 15％, Increases damage dealt by 25％\nIncreases attack/reload speed & healrate by a 20％."
+		"es"	"Reduce el daño recibido en un 15％.\nAumenta el daño hecho en un 25％.\nAumenta la velocidad de ataque/recarga y curacion medica en un 20％."
+		"it"	"Diminuisce i danni subiti di 15％\nAumenta i danni inflitti di 25％\nAumenta la velocità di attacco/ricarica e la velocità di guarigione di 20％."
+		"ko"	"받는 피해량이 15％ 감소합니다.\n공격 피해량이 25％ 증가합니다.\n공격 속도, 재장전 속도, 치유 속도가 20％ 증가합니다."
+	}
 	
 	"Crystal Shield"
 	{
@@ -769,6 +811,27 @@
 		"ko"		"공성전"
 	}
 	
+	"Quad Launcher"
+	{
+		"en"		"Quad Launcher"
+		"fr"		"Quad-Lanceur"
+		"ru"		"Счетверённая ракетница"
+		"chi"       "四管榴弹炮"
+		"it"		"Lanciatore quadruplo"
+		"ko"		"4연장 발사기"
+	}
+	"Ten Launcher"
+	{
+		"en"		"Ten Launcher"
+		"ko"		"10연장 발사기"
+	}
+	
+	"Health Hose Mk.II"
+	{
+		"en"		"Health Hose Mk.II"
+		"ko"		"치유의 호스 Mk.II"
+	}
+	
 	"Protethia"
 	{
 		"en"		"Protethia"
@@ -800,6 +863,27 @@
 	{
 		"en"		"Fractal Isomer Lance"
 		"ko"		"프랙탈 아이소머 랜스"
+	}
+	
+	"Custom Medikit: IFAK"
+	{
+		"en"		"IFAK"
+		"ko"		"IFAK"
+	}
+	"Custom Medikit: Stim Packs"
+	{
+		"en"		"StimPacks"
+		"ko"		"각성제"
+	}
+	"Custom Medikit: Mana Injector"
+	{
+		"en"		"Mana Injector"
+		"ko"		"마나 주입기"
+	}
+	"Custom Medikit: Armor Pack"
+	{
+		"en"		"Armor Pack"
+		"ko"		"아머 팩"
 	}
 	
 	//무기 설명
@@ -1075,8 +1159,8 @@
 	
 	"Custom Mini Semi Gun: Overheating FeedBack Desc"
 	{
-		"en"		"The longer you hold down fire, the more damage and tighter spread your weapon deals\nWhen used, if the maximum overheating value reaches 200%, damage is tripled according to the overheating value, and if the overheating is below 100%, the overheating value increases faster"
-		"ko"		"공격 버튼을 오래 누르고 있을수록, 이 무기의 피해량및 집탄율 증가\nM2: 사용 시, 사용 시, 최대 과열 수치 200%, 과열 수치에 따른 피해량 3배, 과열이 100％ 미만인 경우 과열 수치가 더 빨리 증가"
+		"en"		"The longer you hold down fire, the more damage your weapon deals\nWhen used, if the maximum overheating value reaches 200%, damage is Doubled according to the overheating value, and if the overheating is below 100%, the overheating value increases faster"
+		"ko"		"공격 버튼을 오래 누르고 있을수록, 이 무기의 피해량 증가\nM2: 사용 시, 사용 시, 최대 과열 수치 200％, 과열 수치에 따른 피해량 2배, 과열이 100％ 미만인 경우 과열 수치가 더 빨리 증가"
 	}
 	"Custom Mini Semi Gun: Overheating FeedBack - MAX"
 	{
@@ -1106,8 +1190,8 @@
 	}
 	"Custom Mini Semi Gun: Bullet Storm Desc"
 	{
-		"en"		"+300％ bullets per shot\ncannot move while firing, consumes 4 ammo per shot."
-		"ko"		"발사되는 탄환수 +300％증가\n사격중 이동 불가, 발사당 4발의 탄약을 소모."
+		"en"		"+300％ bullets per shot\ncannot move while firing, consumes 3 ammo per shot."
+		"ko"		"발사되는 탄환수 +300％증가\n사격중 이동 불가, 발사당 3발의 탄약을 소모."
 	}
 	
 	"Custom Sniper Rifle: Diligence - Desc"
@@ -1122,8 +1206,8 @@
 	}
 	"Custom Sniper Rifle: Heavy Caliber RSASS - Desc"
 	{
-		"en"		"Increased damage, Increased Damage while Zoom, Increased headshot damage\nIncreased magazine capacity, decreased reload speed\nYour aim will be fixed to nearby enemy and Always Headshot\nApply vulnerability to the victim, 40s cooldown\n-This is the weapon used by the legendary mercenary who once swept through all enemies.\n''Enemy contact''"
-		"ko"		"피해량 증가, 조준중 피해량 증가, 헤드샷 피해량 증가\n장탄수 증가, 재장전 속도 감소\nR:사용시 바라본 적에게 에임이 고정되며 항상 헤드샷 판정이 됨.\n피해자에게 피해 취약을 적용, 40초 쿨다운\n-한때 모든 적을 휩쓸던 전설의 용병이 사용하던 무기입니다.\n''적과 조우했다.''"
+		"en"		"Increased damage, Increased Damage while Zoom, Increased headshot damage\nIncreased magazine capacity, decreased reload speed\nR key: When in use, every shot always Headshot\nApply vulnerability to the victim, 40s cooldown\n-This is the weapon used by the legendary mercenary who once swept through all enemies.\n''Enemy contact''"
+		"ko"		"피해량 증가, 조준중 피해량 증가, 헤드샷 피해량 증가\n장탄수 증가, 재장전 속도 감소\nR: 사용시, 모든 사격이 항상 헤드샷 판정이 됨.\n피해자에게 피해 취약을 적용, 40초 쿨다운\n-한때 모든 적을 휩쓸던 전설의 용병이 사용하던 무기입니다.\n''적과 조우했다.''"
 	}
 
 	"Custom Barracks Kit: The CastleSiege Desc"
@@ -1146,6 +1230,43 @@
 	{
 		"en"		"WIP"
 		"ko"		"WIP"
+	}
+	
+	"Quad Launcher Desc"
+	{
+		"en"		"4 shots into 1 spam.../nIncreased Damage and Reload Speed\nDeals 1.5x DMG Against Raids"
+		"fr"		"4 tirs par spam..." 
+		"ru"		"4 выстрела за один выстрел."
+		"chi"       "4次射击后将发射垃圾...."
+		"ko"		"4발을 한번에...\n피해량및 재장전 속도 증가\n레이드 보스에게 주는 피해량 +1.5배"
+	}
+	"Shared Increased All Stats Desc"
+	{
+		"en"		"Improved stats."
+		"ko"		"전반적인 능력치 증가"
+	}
+	
+	"Health Hose Charged"
+	{
+		"en"		"CHARGE:"
+		"ko"		"충전:"
+	}
+	"Health Hose Charged Ready"
+	{
+		"en"		"CHARGE IS READY! ALT-FIRE TO USE!"
+		"ko"		"충전 준비됨! 보조 발사 버튼으로 사용하세요!"
+	}
+	"Health Hose Charged In"
+	{
+		"en"		"CHARGE IS ACTIVE"
+		"ko"		"충전 발동중"
+	}
+	
+	"Medikit Healing Self"
+	{
+		"#format"	"{1:d}"
+		"en"		"You Healed yourself for {1} HP!"
+		"ko"		"당신 자신의 체력을 {1} 만큼 회복했습니다!"
 	}
 	
 	"Icicle Staff Desc"
@@ -1298,6 +1419,45 @@
 		"#format"	"{1:d}"
 		"en"		"Not Enough Crystal! You need {1} Crystal!"
 		"ko"		"수정이 부족합니다! {1}만큼의 수정이 필요합니다!"
+	}
+	
+	"Custom Medikit: IFAK Pap 1 Desc"
+	{
+		"en"		"When Used, Stops bleeding and Grants Temporary Immune to Slowness Effects\nReduced Cooldown\nIncreased Healing and Overhealing"
+		"ko"		"사용시, 출혈을 막고, 잠시동안 모든 둔화 효과에 면역이 됩니다\n쿨다운 소폭 감소\n치료량및 과치료량 증가"
+	}
+	"Custom Medikit: Stim Packs Pap 1 Desc"
+	{
+		"en"		"When Used, Grants Increase Resistance, Damage, Attack/Reload/Healing Speed\nIncrease Cooldown and Healing"
+		"ko"		"사용시, 피해저항및 피해량, 공속,장속,치료속도가 증가하는 효과를 부여합니다\n쿨다운 및 치료량 증가"
+	}
+	"Custom Medikit: Stim Packs Pap 2 Desc"
+	{
+		"en"		"When Used, Applies an 'Auto Revive' Effect to Target\nReduced Cooldown\nIncreased Healing and Overhealing"
+		"ko"		"다운 대상에게 사용시 '자동 소생' 효과를 부여합니다.\n쿨다운 감소\n치료량및 과치료량 증가"
+	}
+	
+	"Custom Medikit: Mana Injector Pap 1 Desc"
+	{
+		"en"		"Transfers a portion of your mana to the target being healed.\nIncrease Max Mana \nIncrease Cooldown and Healing\nM2 Disactivate"
+		"ko"		"자신의 마나 일부를 치료 대상에게 넘겨줍니다.\n최대 마나량 증가\n쿨다운 및 치료량 증가\nM2 비활성화"
+	}
+	"Custom Medikit: Mana Injector Pap 2 Desc"
+	{
+		"en"		"Max Mana and Mana Transfer Capacity Increase\nReduced Cooldown\nIncreased Healing and Overhealing"
+		"ko"		"최대 마나및 마나 전송량 증가\n쿨다운 감소\n치료량및 과치료량 증가"
+	}
+	
+	"Custom Medikit: Armor Pack Pap 1 Desc"
+	{
+		"en"		"Medikit now regenerates YOUR and your patient's armor while healing.\nScales with Support upgrades.\nCures elemental damage 2x as fast.\nIncrease Cooldown and Healing"
+		"ko"		"치유 대상과 당신의 아머를 회복시킴.\n회복량은 지원 개선의 영향을 받음\n원소 피해를 2배 더 빨리 치유함.\n쿨다운 및 치료량 증가"
+	}
+	
+	"Custom Medikit: Shared Desc"
+	{
+		"en"		"Reduced Cooldown\nIncreased Healing and Overhealing"
+		"ko"		"쿨다운 감소\n치료량및 과치료량 증가"
 	}
 	
 	//추가 장비 이름
@@ -2213,6 +2373,51 @@
 		"en"		"Explosion Falloff"
 		"ko"		"폭발 타겟 당 피해량 감소율"
 	}
+	"TinkerAttrib_DeployHealRate"
+	{
+		"en"		"Temp Healing Rate By Draw"
+		"ko"		"꺼내들었을때 임시 힐량"
+	}
+	"TinkerAttrib_EnchantCooldownReduced"
+	{
+		"en"		"s Enchantment effect cooldown"
+		"ko"		"초 동안 인첸트 효과 쿨다운"
+	}
+	"TinkerAttrib_WeaponSwitch"
+	{
+		"en"		"Weapon Switch Speed"
+		"ko"		"무기 전환 속도"
+	}
+	"TinkerAttrib_HPKitCD"
+	{
+		"en"		"R key Cooldown"
+		"ko"		"R능력 쿨다운"
+	}
+	"TinkerAttrib_ReviveSpeedBonus"
+	{
+		"en"		"Revive Speed"
+		"ko"		"소생 속도"
+	}
+	"TinkerAttrib_UberDuration"
+	{
+		"en"		"Uber Duration"
+		"ko"		"우버 지속 시간"
+	}
+	"TinkerAttrib_StunDuration"
+	{
+		"en"		"Stun Duration"
+		"ko"		"기절 지속 시간"
+	}
+	"TinkerAttrib_KnockbackBonus"
+	{
+		"en"		"Knockback"
+		"ko"		"넉백"
+	}
+	"TinkerAttrib_AddUberCharge_Saw"
+	{
+		"en"		"Add UberCharge On FullChargeMelee Hit"
+		"ko"		"완전 충전 적중시, 얻는 우버차지"
+	}
 	
 	"Tinker_HasteMage"
 	{
@@ -2437,6 +2642,85 @@
 	{
 		"en"		"Heavy Metal Pollution"
 		"ko"		"중금속 오염"
+	}
+	
+	"Tinker_CC_QuickFix"
+	{
+		"en"		"QuickFix"
+		"ko"		"응급 조치"
+	}
+	"Tinker_CC_SpeedTrigger"
+	{
+		"en"		"Speed Trigger"
+		"ko"		"긴박한 방아쇠"
+	}
+	"Tinker_CC_LightWeight"
+	{
+		"en"		"Light Weight"
+		"ko"		"가벼운 무게"
+	}
+	"Tinker_CC_MedicBag"
+	{
+		"en"		"Medic Bag"
+		"ko"		"메디백"
+	}
+	
+	"Tinker_HH_RescueRanger"
+	{
+		"en"		"Rescue Ranger"
+		"ko"		"구조대원"
+	}
+	"Tinker_HH_FastProjectile"
+	{
+		"en"		"Rapid Injection"
+		"ko"		"빠른 투여"
+	}
+	"Tinker_HH_SlowHeavyProjectile"
+	{
+		"en"		"Maximum Infusion"
+		"ko"		"최대용량주입"
+	}
+	"Tinker_HH_SuperCharger"
+	{
+		"en"		"Super Charger"
+		"ko"		"슈퍼 충전"
+	}
+	"Tinker_HH_HighCapacitor"
+	{
+		"en"		"High-Capacitor"
+		"ko"		"고용량 축전기"
+	}
+	"Tinker_HH_UberBalancer"
+	{
+		"en"		"Uber Balancer"
+		"ko"		"우버 밸런서"
+	}
+	
+	"Tinker_UberSaw_Stunner"
+	{
+		"en"		"Stunner"
+		"ko"		"스터너"
+	}
+	"Tinker_UberSaw_UberCharger"
+	{
+		"en"		"Uber Charger"
+		"ko"		"우버 차저"
+	}
+	"Tinker_UberSaw_FEInverter"
+	{
+		"en"		"FE Inverter"
+		"ko"		"FE 인버터"
+	}
+	"Tinker_UberSaw_HeavySmash"
+	{
+		"en"		"Heavy Smash"
+		"ko"		"강력한 강타"
+	}
+	
+	"Tinker_MediKit_ReserveMedicalSupplies"
+	{
+		"en"		"Reserve Medical Supplies"
+		"ko"		"예비 의약품"
 	}
 	
 	// Wave Vote.
