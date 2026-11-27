@@ -807,20 +807,8 @@ public void ReconstructiveTeleporter(int client)
 			{
 				char npc_classname[60];
 				NPC_GetPluginById(i_NpcInternalId[ally], npc_classname, sizeof(npc_classname));
-				if(BarrackOwner[ally] == GetClientUserId(client) && !(StrEqual(npc_classname, "npc_barrack_building"))
-				&& !(StrEqual(npc_classname, "npc_barrack_villager")))
-				{
-					IsLiveBarrackUnits=true;
-					WorldSpaceCenter(ally, WorldSpaceVec);
-					ParticleEffectAt(WorldSpaceVec, "teleported_red", 0.5);
-					SetEntProp(ally, Prop_Data, "m_iHealth", RoundToCeil(float(ReturnEntityMaxHealth(ally)) * 1.5));
-					IncreaseEntityDamageTakenBy(ally, 0.05, 2.0);
-					WorldSpaceCenter(client, WorldSpaceVec);
-					TeleportEntity(ally, WorldSpaceVec, NULL_VECTOR, NULL_VECTOR);
-				}
-				else if(i_NpcInternalId[ally] == NecroCombine_GetID()
-					&& IsEntityAlive(ally, true)
-					&& GetEntPropEnt(ally, Prop_Send, "m_hOwnerEntity") == client)
+				if((EntRefToEntIndex(i_NpcOverrideAttacker[ally]) == client) || (BarrackOwner[ally] == GetClientUserId(client) && !(StrEqual(npc_classname, "npc_barrack_building"))
+				&& !(StrEqual(npc_classname, "npc_barrack_villager"))))
 				{
 					IsLiveBarrackUnits=true;
 					WorldSpaceCenter(ally, WorldSpaceVec);
