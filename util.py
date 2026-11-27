@@ -57,7 +57,7 @@ def music_modal(wave_entry_data: str | dict[str,str]) -> dict[str,str|bool] | No
 
         mfilename = wave_entry_data["file"].replace("#","")
 
-    file = f"https://raw.githubusercontent.com/artvin01/TF2-Zombie-Riot/refs/heads/master/sound/{mfilename}"
+    file = f"https://raw.githubusercontent.com/foolishservers/TF2-Zombie-Riot/refs/heads/master/sound/{mfilename}"
     return {
         "type": "music",
         "musicpre": "",
@@ -231,6 +231,7 @@ def abslink_to_display(abslink: str, name: str) -> str:
     if not (abslink.startswith("zr_deepforest") \
             or abslink.startswith("zr_integratedstrategies") \
             or abslink.startswith("zr_rift_between_fates") \
+            or abslink.startswith("zr_holdout") \
             or abslink.startswith("zr_const")): # const 1&2
         return f"ZR: Special Maps|{name}"
     return name

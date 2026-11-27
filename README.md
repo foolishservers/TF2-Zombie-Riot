@@ -1,6 +1,6 @@
 # tf2_zr_wikigen
-*https://artvin01.github.io/TF2-Zombie-Riot/*  
-Automatic encyclopedia generator for https://github.com/artvin01/TF2-Zombie-Riot.  
+*https://foolishservers.github.io/TF2-Zombie-Riot/*  
+Automatic encyclopedia generator for https://github.com/foolishservers/TF2-Zombie-Riot.  
 Icon source: https://github.com/feathericons/feather  
 
 # Running locally
@@ -22,9 +22,9 @@ The file structure should look like this:
 ## Installation
 Recommended Python version: 3.14
 ```bash
-git clone https://github.com/artvin01/TF2-Zombie-Riot -b wiki_gen; cd TF2-Zombie-Riot
+git clone https://github.com/foolishservers/TF2-Zombie-Riot -b wiki_gen; cd TF2-Zombie-Riot
 python -m venv .venv
-git clone https://github.com/artvin01/TF2-Zombie-Riot --depth 1
+git clone https://github.com/foolishservers/TF2-Zombie-Riot --depth 1
 # Linux
 ./.venv/bin/pip install -r requirements.txt
 # Windows

@@ -11,5 +11,6 @@
 # weapon.py
 - zombieriot.phrases.weapons.description.txt
 - zombieriot.phrases.weapons.txt
+- zombieriot.phrases.foolishservers.txt
 # skilltree.py
 - zombieriot.phrases.skilltree.txt

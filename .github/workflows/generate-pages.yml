@@ -21,7 +21,7 @@ jobs:
         run: python -m venv venv; venv\Scripts\pip.exe install -r requirements_decompile.txt
 
       - name: Clone ZR repo
-        run: git clone https://github.com/artvin01/TF2-Zombie-Riot --depth 1
+        run: git clone https://github.com/foolishservers/TF2-Zombie-Riot --depth 1
 
       - name: Download CLI mdl decompiler
         run: |
@@ -63,7 +63,7 @@ jobs:
       run: python -m venv venv; ./venv/bin/pip install -r requirements.txt
 
     - name: Clone ZR repo
-      run: git clone https://github.com/artvin01/TF2-Zombie-Riot --depth 1
+      run: git clone https://github.com/foolishservers/TF2-Zombie-Riot --depth 1
 
     - name: Restore cached source
       uses: actions/cache/restore@v5

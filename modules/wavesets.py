@@ -515,7 +515,7 @@ def parse_waveset_list_cfg(filename: str, html_mapsets: str, html_otherset: dict
     WAVESETLIST_DATA: dict[str,Any] = vdf.loads(WAVESETLIST_RAW) # type:ignore[w]
     WAVESETLIST_TYPE = list(WAVESETLIST_DATA.keys())[0]
 
-    if (WAVESETLIST_TYPE not in util.WAVESETS_TYPESCOPE) or "maps/zr_holdout.cfg" == filename or (filename.endswith("_.cfg") and filename != "maps/vsh_.cfg"): # Unsupported waveset cfg (Bunker, etc.)
+    if (WAVESETLIST_TYPE not in util.WAVESETS_TYPESCOPE) or (filename.endswith("_.cfg") and filename != "maps/vsh_.cfg"): # Unsupported waveset cfg (Bunker, etc.)
         util.log(f"Unsupported waveset cfg {filename}!","WARNING")
         return html_mapsets, html_otherset
 
@@ -1275,6 +1275,6 @@ for name, html in html_otherset.items():
     util.write(f"gh-pages/{name.lower()}.html", util.fill_template(util.read("templates/waveset/mapset_list.html"),context))
 
 context = {
-    "parse_run": f"\n<sub>Code parsed at {datetime.now().strftime('%H:%M:%S %d.%m.%Y')} H:M:S D.M.Y {time.tzname[time.daylight]}</sub><br><sub>Source repository commit <a href=\"https://github.com/artvin01/TF2-Zombie-Riot/commit/{COMMIT_SHA}\">artvin01/TF2-Zombie-Riot@{COMMIT_SHA_SHORT}</a></sub>",
+    "parse_run": f"\n<sub>Code parsed at {datetime.now().strftime('%H:%M:%S %d.%m.%Y')} H:M:S D.M.Y {time.tzname[time.daylight]}</sub><br><sub>Source repository commit <a href=\"https://github.com/foolishservers/TF2-Zombie-Riot/commit/{COMMIT_SHA}\">foolishservers/TF2-Zombie-Riot@{COMMIT_SHA_SHORT}</a></sub>",
 }
 util.write("gh-pages/index.html", util.fill_template(util.read("templates/index.html"),context))

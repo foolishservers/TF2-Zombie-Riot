@@ -103,7 +103,7 @@ class BaseNPC:
                 util.debug(f"NPC:__init__:music_cutouts\n{json.dumps(music_cutouts,indent=2)}","npcs", "OKBLUE")
                 for i, code in enumerate(music_cutouts):
                     mfilename = self._get_music_val(code,"Path").replace("#","")
-                    filepath = f"https://raw.githubusercontent.com/artvin01/TF2-Zombie-Riot/refs/heads/master/sound/{mfilename}"
+                    filepath = f"https://raw.githubusercontent.com/foolishservers/TF2-Zombie-Riot/refs/heads/master/sound/{mfilename}"
                     file_exists = os.path.isfile(f"./TF2-Zombie-Riot/sound/{mfilename}")
                     music_entry = {
                         "musicpre": "",
