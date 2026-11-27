@@ -102,6 +102,11 @@ stock bool Weapon_AddonsStartCustomSoundForLastMan(int client, int WhatSoundPlay
 				}
 			}
 		}
+		case 101:
+		{
+			EmitCustomToClient(client, "#zombiesurvival/ruina/ruler_of_ruina_decends.mp3",client, SNDCHAN_STATIC, SNDLEVEL_NONE, _, 1.8);
+			SetMusicTimer(client, GetTime() + 172);
+		}
 		default:CompleteFailure=true;
 	}
 	/*무엇도 해당 안되면 기본 라스맨 브금 재생*/
@@ -124,6 +129,10 @@ stock void Weapon_AddonsStopCustomSoundForLastMan(int client, int WhatSoundPlay)
 			StopCustomSound(client, SNDCHAN_STATIC, "#zombiesurvival/altwaves_and_blitzkrieg/music/wave60_2.mp3", 2.0);
 			StopCustomSound(client, SNDCHAN_STATIC, "#zombiesurvival/iberia/wave_30.mp3", 2.0);
 			StopCustomSound(client, SNDCHAN_STATIC, "#zombiesurvival/xeno_raid/xeno_shared_bossmusic.mp3", 2.0);
+		}
+		case 101:
+		{
+			StopCustomSound(client, SNDCHAN_STATIC, "#zombiesurvival/ruina/ruler_of_ruina_decends.mp3", 1.8);
 		}
 	}
 }

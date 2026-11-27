@@ -2261,8 +2261,7 @@ void CheckLastMannStanding(int killed)
 		LastMann_BeforeLastman = true;
 			
 		if(Gunsaw_IsMerc(testLast) && Gunsaw_LastmanSecret())
-			CPrintToChatAll("? - Sense of impending doom\n{crimson}You can't help but feel sudden, overwhelming fear. Your skin has goosebumps all over. It's as if the nature around you abruptly fell silent...");
-
+			CPrintToChatAll("%t", "Special_Before_LastMann_Merc");
 	}
 	if(PlayersLeftNotDowned == 2)
 	{
@@ -2282,7 +2281,7 @@ void CheckLastMannStanding(int killed)
 		{
 			if(IndexExpi_LastmanSecret())
 			{
-				CPrintToChatAll("{blue}The Nursefather lets out an agitated 'tsk'{crimson}The ''Mercenary'' seems to be in heavy distress, need of comfort from the only remaining {blue}ally{crimson}.");
+				CPrintToChatAll("%t", "Special_Only_Merc_And_NurseFather");
 			}
 		}
 
@@ -2700,6 +2699,12 @@ void TriggerLastmanLogic(int killed, int Hurtviasdkhook)
 					CPrintToChatAll("%t", "Special_LastMann_Survivalist");
 					// Yakuza_Lastman(100);
 					KitSurvivalist_LastmanBuff(client);
+				}
+				if(Kit_Fractal_Isomer_IsEnabled(client))
+				{
+					CPrintToChatAll("%t", "Special_LastMann_Fractal_Isomer");
+					Yakuza_Lastman(101);
+					Kit_Fractal_Isomer_LastmanBuff(client);
 				}
 				
 				for(int i=1; i<=MaxClients; i++)
