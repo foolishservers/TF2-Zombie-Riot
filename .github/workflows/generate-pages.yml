@@ -1,8 +1,9 @@
 name: Generate wiki [wiki update]
 on:
+  workflow_dispatch:
   push:
     branches:
-    - 'wiki_gen'
+      - 'wiki_gen'
 
 concurrency:
   group: "pages"
