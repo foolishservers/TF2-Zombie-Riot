@@ -416,13 +416,23 @@
 	}
 	"Inv UberSaw Armor Booster"
 	{
-		"en"	"Armor Booster"
-		"ko"	"아머 부스터"
+		"en"	"Super Rare Armor Booster"
+		"ko"	"슈퍼 레어 아머 부스터"
 	}
 	"Inv UberSaw Armor Booster desc"
 	{
-		"en"	"On FullCharge Melee Hit, Gain Armor\nCharge Speed and damage Reduction"
-		"ko"	"완충 적중시, 아머 흭득\n충전 속도및 피해량 감소"
+		"en"	"On FullCharge Melee Hit, Gain Armor\nCharge Speed and Damage Reduced"
+		"ko"	"완충 적중시, 아머 흭득\n충전 속도 -25％ 감소 및 피해량 -67％ 감소"
+	}
+	"Inv UberSaw Uber Charger desc"
+	{
+		"en"	"Ultra Rare Uber Charger"
+		"ko"	"울트라 레어 우버 차져"
+	}
+	"Inv UberSaw Uber Charger desc"
+	{
+		"en"	"On FullCharge Melee Hit, Medigen Ubercharge +25%\nCharge Speed and Damage Reduced\nStun Duration Reduced"
+		"ko"	"완충 적중시, 얻는 우버차지 +25％\n충전 속도 -50％ 감소\n스턴 지속 시간 및 피해량 -25％ 감소"
 	}
 	
 	//인벤토리 첼린지
