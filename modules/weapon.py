@@ -23,7 +23,7 @@ if os.path.isdir(".venv/lib/python3.14/site-packages/pyassimp/"): # local
                         setattr(target, name, [obj[i] for i in range(length)])""","""elif obj:
                         setattr(target, name, [obj[i] for i in range(length)])"""))
 import pyassimp # noqa: E402
-
+from pyassimp.errors import AssimpError
 
 # https://github.com/f3d-app/f3d/blob/master/examples/libf3d/python/offscreen-thumbnail/offscreen_thumbnail.py
 f3d.Engine.autoload_plugins()
@@ -72,8 +72,12 @@ def generate_weapon_icon(weapon_data: WeaponData, weapon_name:str, pure_filename
 
     # Convert SMD => OBJ
     #  # <class 'contextlib._GeneratorContextManager'> must have storage info
-    with pyassimp.load(smd_path) as assimp_scene:
-        pyassimp.export(assimp_scene, f"{prefix}decompiled/{pure_filename}_{mdl_bodygroup}.obj", "obj")
+    try:
+        with pyassimp.load(smd_path) as assimp_scene:
+            pyassimp.export(assimp_scene, f"{prefix}decompiled/{pure_filename}_{mdl_bodygroup}.obj", "obj")
+    except AssimpError as e:
+        print(f"[WARN] Failed to load SMD for '{weapon_name}': {smd_path} (exists={os.path.exists(smd_path)}) -> {e}")
+        return ""
 
     # Generate thumbnail using F3D
     util.log(f"Generating thumbnail of {prefix}decompiled/{pure_filename}_{mdl_bodygroup}.obj")
