@@ -127,11 +127,9 @@ class BaseNPC:
 
             self.obtain_item = None
             if "Items_GiveNamedItem(" in self.FILE_DATA:
-                if len(p1:=self.FILE_DATA.split('Items_GiveNamedItem(client, "'))>1:
-                    self.obtain_item = p1[1].split('");')[0]
-                else:
-                    self.obtain_item = self.FILE_DATA.split('Items_GiveNamedItem(client_repat, "')[1].split('");')[0] # Corrupted Barney's Chainsaw
-
+                match = re.search(r'Items_GiveNamedItem\(\s*[^,]+,\s*"([^"]+)"', self.FILE_DATA)
+                if match:
+                    self.obtain_item = match.group(1)
 
     def _get_name(self):
         try:
