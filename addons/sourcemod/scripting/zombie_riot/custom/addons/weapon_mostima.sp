@@ -535,10 +535,12 @@ stock bool IsRectangleVisible(const float start[3], const float end[3], const fl
 static void Laser_Key_of_Ordered(DataPack pack)
 {
 	pack.Reset();
-	int client = 	GetClientOfUserId(pack.ReadCell());
-	int weapon = EntRefToEntIndex(pack.ReadCell());
+	
+	int client   = GetClientOfUserId(pack.ReadCell());
+	int weapon   = EntRefToEntIndex(pack.ReadCell());
 	float damage = pack.ReadFloat();
-	float range = pack.ReadFloat();
+	float range  = pack.ReadFloat();
+	
 	if(IsValidClient(client) && IsValidCurrentWeapon(client, weapon))
 	{
 		//This melee is too unique, we have to code it in a different way.
@@ -572,28 +574,29 @@ static void Laser_Key_of_Ordered(DataPack pack)
 			RequestFrames(Key_of_Ordered_DeleteLaserAndParticle, 46, pack2);
 			AngEffect[1] += (180.0 / float(MaxRepeats));
 		}
-
+		
 		float vecSwingForward[3];
 		GetAngleVectors(ang2, vecSwingForward, NULL_VECTOR, NULL_VECTOR);
 		ang2[0] = fixAngle(ang2[0]);
 		ang2[1] = fixAngle(ang2[1]);
-
+		
 		b_LagCompNPC_No_Layers = true;
 		StartLagCompensation_Base_Boss(client);
 			
 		for(int i=0; i < MAXENTITIES; i++)
 		{
-			Key_HitEntities[i] = false;
+			Key_HitEntities[i] = 0;
 		}
 		TR_EnumerateEntitiesSphere(pos2, range, PARTITION_NON_STATIC_EDICTS, TraceKey_of_Ordered, client);
-
-	//	bool Hit = false;
-		for (int entity_traced = 0; entity_traced < 8; entity_traced++)
+		
+		int entity_traced = 0;
+		
+		while (entity_traced < 8)
 		{
 			if(Key_HitEntities[entity_traced] > 0)
 			{
 				static float ang3[3];
-
+				
 				float pos1[3];
 				WorldSpaceCenter(Key_HitEntities[entity_traced], pos1);
 				GetVectorAnglesTwoPoints(pos2, pos1, ang3);
@@ -601,33 +604,28 @@ static void Laser_Key_of_Ordered(DataPack pack)
 				// fix all angles
 				ang3[0] = fixAngle(ang3[0]);
 				ang3[1] = fixAngle(ang3[1]);
-
+				
 				// verify angle validity
 				if(!(fabs(ang2[0] - ang3[0]) <= 90.0 ||
 				(fabs(ang2[0] - ang3[0]) >= (360.0-90.0))))
 					continue;
-
+				
 				if(!(fabs(ang2[1] - ang3[1]) <= 90.0 ||
 				(fabs(ang2[1] - ang3[1]) >= (360.0-90.0))))
 					continue;
-
+				
 				// ensure no wall is obstructing
 				if(Can_I_See_Enemy_Only(client, Key_HitEntities[entity_traced]))
 				{
 					// success
-			//		Hit = true;
-					float damage_force[3]; CalculateDamageForce(vecSwingForward, 100000.0, damage_force);
+					float damage_force[3];
+					CalculateDamageForce(vecSwingForward, 100000.0, damage_force);
+					
 					SDKHooks_TakeDamage(Key_HitEntities[entity_traced], client, client, damage, DMG_PLASMA, weapon, damage_force, pos1);
-					GetEntPropVector(Key_HitEntities[entity_traced], Prop_Send, "m_vecOrigin", damage_force);
-					damage_force[2]+=30.0;
+					
 					ApplyStatusEffect(client, Key_HitEntities[entity_traced], "Power Slowdown", 2.0);
-					/*GetVectorAnglesTwoPoints(pos2, damage_force, ang2);
-					static float vel[3];
-					GetAngleVectors(ang2, vel, NULL_VECTOR, NULL_VECTOR);
-					ScaleVector(vel, 400.0);
-					if((GetEntityFlags(Key_HitEntities[entity_traced]) & FL_ONGROUND) && vel[2]<300.0)
-						vel[2]=300.0;
-					TeleportEntity(Key_HitEntities[entity_traced], NULL_VECTOR, NULL_VECTOR, vel);*/
+					
+					entity_traced++;
 				}
 			}
 			else
@@ -635,6 +633,7 @@ static void Laser_Key_of_Ordered(DataPack pack)
 				break;
 			}
 		}
+		
 		FinishLagCompensation_Base_boss(.client = client);
 	}
 	delete pack;
