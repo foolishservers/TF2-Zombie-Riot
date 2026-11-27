@@ -1,6 +1,7 @@
 import util
 import json
 import os
+import re
 
 FLAG_MAPPINGS = {
     "MVM_CLASS_FLAG_NONE": "", #// Show Nothing
