@@ -424,7 +424,7 @@
 		"en"	"On FullCharge Melee Hit, Gain Armor\nCharge Speed and Damage Reduced"
 		"ko"	"완충 적중시, 아머 흭득\n충전 속도 -25％ 감소 및 피해량 -67％ 감소"
 	}
-	"Inv UberSaw Uber Charger desc"
+	"Inv UberSaw Uber Charger"
 	{
 		"en"	"Ultra Rare Uber Charger"
 		"ko"	"울트라 레어 우버 차져"
@@ -1311,7 +1311,7 @@
 		"ko"		"-피해량 및 마나 소모량 증가\n-전개 속도 증가\n-신규 우클릭 능력 해금: 얼음 폭풍\n사용 시, 일정 시간 동안 자기 주변에 광역 피해를 가합니다."
 	}
 	
-	"Fractal Isomer Desc"
+	"Fractal Isomer Kit Desc"
 	{
 		"en"		"Reverse-engineered from the weapon you provided, then modified to meet your requested specifications.\nBurst: Fires fast, homing projectiles. Press R to consume Crystals and fire piercing projectiles instead.\nLance: Has a long, narrow range. Gain Crystals upon hitting an enemy."
 		"ko"		"귀하가 제공한 무기를 역설계하여 요구하신 성능에 맞게 만들었습니다.\n버스트: 빠르고 유도가 되는 탄환을 발사. R키로 수정을 소모하는 대신 관통 탄환을 발사\n랜스: 길고 좁은 사거리를 보유. 적중 시 수정을 얻음"
