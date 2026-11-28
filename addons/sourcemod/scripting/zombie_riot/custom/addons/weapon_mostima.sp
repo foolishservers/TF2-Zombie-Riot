@@ -2,7 +2,6 @@
 #pragma newdecls required
 
 static Handle LockDownTimer[MAXPLAYERS] = {null, ...};
-static int Key_HitEntities[MAXENTITIES];
 static float KeyofOrdered_charges[MAXPLAYERS];
 static float KeyofOrdered_charges_Max[MAXPLAYERS];
 static int i_Current_Pap[MAXPLAYERS];
@@ -24,7 +23,6 @@ public void LockDown_Wand_MapStart()
 	PrecacheSoundArray(Energy_Sound);
 
 	Zero(fl_hud_timer);
-	Zero(Key_HitEntities);
 	Zero(KeyofOrdered_duration);
 	Zero(KeyofOrdered_charges);
 	Zero(KeyofOrdered_charges_Max);
@@ -582,55 +580,55 @@ static void Laser_Key_of_Ordered(DataPack pack)
 		
 		b_LagCompNPC_No_Layers = true;
 		StartLagCompensation_Base_Boss(client);
-			
-		for(int i=0; i < MAXENTITIES; i++)
-		{
-			Key_HitEntities[i] = 0;
-		}
-		TR_EnumerateEntitiesSphere(pos2, range, PARTITION_NON_STATIC_EDICTS, TraceKey_of_Ordered, client);
+		
+		ArrayList targetList = new ArrayList();
+		targetList.Push(client);
+		
+		TR_EnumerateEntitiesSphere(pos2, range, PARTITION_NON_STATIC_EDICTS, TraceKey_of_Ordered, targetList);
+		
+		int length = targetList.Length;
+		targetList.SwapAt(0, length - 1);
+		targetList.Erase(--length);
 		
 		int entity_traced = 0;
 		
-		while (entity_traced < 8)
-		{
-			if(Key_HitEntities[entity_traced] > 0)
-			{
-				static float ang3[3];
-				
-				float pos1[3];
-				WorldSpaceCenter(Key_HitEntities[entity_traced], pos1);
-				GetVectorAnglesTwoPoints(pos2, pos1, ang3);
-
-				// fix all angles
-				ang3[0] = fixAngle(ang3[0]);
-				ang3[1] = fixAngle(ang3[1]);
-				
-				// verify angle validity
-				if(!(fabs(ang2[0] - ang3[0]) <= 90.0 ||
-				(fabs(ang2[0] - ang3[0]) >= (360.0-90.0))))
-					continue;
-				
-				if(!(fabs(ang2[1] - ang3[1]) <= 90.0 ||
-				(fabs(ang2[1] - ang3[1]) >= (360.0-90.0))))
-					continue;
-				
-				// ensure no wall is obstructing
-				if(Can_I_See_Enemy_Only(client, Key_HitEntities[entity_traced]))
-				{
-					// success
-					float damage_force[3];
-					CalculateDamageForce(vecSwingForward, 100000.0, damage_force);
-					
-					SDKHooks_TakeDamage(Key_HitEntities[entity_traced], client, client, damage, DMG_PLASMA, weapon, damage_force, pos1);
-					
-					ApplyStatusEffect(client, Key_HitEntities[entity_traced], "Power Slowdown", 2.0);
-					
-					entity_traced++;
-				}
-			}
-			else
-			{
+		for (int i = 0; i < length; i++) {
+			if (entity_traced >= 10)
 				break;
+						
+			int target = targetList.Get(i);
+			
+			static float ang3[3];
+			
+			float pos1[3];
+			WorldSpaceCenter(target, pos1);
+			GetVectorAnglesTwoPoints(pos2, pos1, ang3);
+			
+			// fix all angles
+			ang3[0] = fixAngle(ang3[0]);
+			ang3[1] = fixAngle(ang3[1]);
+			
+			// verify angle validity
+			if(!(fabs(ang2[0] - ang3[0]) <= 90.0 ||
+			(fabs(ang2[0] - ang3[0]) >= (360.0-90.0))))
+				continue;
+			
+			if(!(fabs(ang2[1] - ang3[1]) <= 90.0 ||
+			(fabs(ang2[1] - ang3[1]) >= (360.0-90.0))))
+					continue;
+			
+			// ensure no wall is obstructing
+			if(Can_I_See_Enemy_Only(client, target))
+			{
+				// success
+				float damage_force[3];
+				CalculateDamageForce(vecSwingForward, 100000.0, damage_force);
+				
+				SDKHooks_TakeDamage(target, client, client, damage, DMG_PLASMA, weapon, damage_force, pos1);
+				
+				ApplyStatusEffect(client, target, "Power Slowdown", 2.0);
+				
+				entity_traced++;
 			}
 		}
 		
@@ -660,20 +658,16 @@ static void Key_of_Ordered_DeleteLaserAndParticle(DataPack pack)
 	delete pack;
 }
 
-static bool TraceKey_of_Ordered(int entity, int filterentity)
+static bool TraceKey_of_Ordered(int entity, ArrayList list)
 {
-	if(IsValidEnemy(filterentity, entity, true, true)) //Must detect camo.
+	if(IsValidEnemy(list.Get(0), entity, true, true)) //Must detect camo.
 	{
-		//This will automatically take care of all the checks, very handy. force it to also target invul enemies.
-		for(int i=0; i < MAXENTITIES; i++)
-		{
-			if(!Key_HitEntities[i])
-			{
-				Key_HitEntities[i] = entity;
-				break;
-			}
+		list.Push(entity);
+		if (list.Length > 50) {
+			return false;
 		}
 	}
+	
 	//always keep going!
 	return true;
 }
